@@ -85,7 +85,7 @@ Chassis Partitions
 
 Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation in addition to tenancy (similar to vCMP guests) that VIPRION didn’t support. Within a VELOS chassis an administrator can group together 2 or more blades to form a chassis partition. A chassis may contain multiple chassis partitions and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade and the maximum is 8 blades within the CX410 chassis.
  
-*Note: Chassis partitions are not related to TMOS admin partitions which are typically used to provide admin separation within a TMOS instance.* 
+**Note: Chassis partitions are not related to TMOS admin partitions which are typically used to provide admin separation within a TMOS instance.** 
  
 A chassis partition runs its own unique F5OS software, has a unique set of users/authentication, and is accessed via its own GUI, CLI and API. The chassis partition can be further divided to support multiple BIG-IP tenants. A tenant operates in a similar manner to how vCMP guests operated within the VIPRION chassis. It is assigned dedicated vCPU and memory resources and is restricted to specific VLANs for network connectivity. 
 
@@ -93,7 +93,7 @@ Below is an example of a VELOS CX410 chassis divided into 3 chassis partitions (
 
 .. image:: images/velos_introduction/image8.png
   :align: center
-  :scale: 60%
+  :scale: 40%
 
 Tenants
 ========
