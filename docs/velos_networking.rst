@@ -9,7 +9,8 @@ The new F5OS platform layer is completely isolated from in-band traffic networki
 
 This allows customers to run a secure/locked-down out-of-band management network where access is tightly restricted. The diagram below shows the out-of-band management access entering the chassis through the system controllers on the left. They bridge those external out-of-band connections to an internal out-of-band network that connects to all chassis partitions and tenants within the VELOS chassis. 
 
-.. image:: images/VELOSNetworking/image1.png
+.. image:: images/velos_networking/image1.png
+ :align: center
 
 Out-of-Band Management Network
 ==============================
@@ -18,39 +19,46 @@ All out-of-band networking is handled through the system controllers. Each syste
 
 Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (primary/secondary) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the primary system controller so that an admin using API, CLI or GUI can always connect to the primary system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
-.. image:: images/VELOSNetworking/image2.png
+.. image:: images/velos_networking/image2.png
+ :align: center
 
 Chassis Partitions and Networking
 =================================
 
 Each chassis partition is a unique entity that has its own set of (local/remote) users and authentication, it is managed via a dedicated out-of-band IP address with its own CLI, GUI, and API access. A chassis partition can be dedicated to a specific group, and that group will only be able to access networking and tenants within their partition. They will not be able to access or share resources within other chassis partitions in the system. This is an added level of isolation that VIPRION did not have. Below are some examples:
 
-.. image:: images/VELOSNetworking/image3.png
+.. image:: images/velos_networking/image3.png
+ :align: center
 
 *Note: The environment above would require external networking connections between the chassis partitions if tenants in one chassis partition needs to communicate with tenants in another chassis partition.*
 
-.. image:: images/VELOSNetworking/image4.png
+.. image:: images/velos_networking/image4.png
+ :align: center
 
 In addition to management access being completely isolated and unique, in-band networking is configured in and completely contained within the chassis partition. Each chassis partition will have its own set of networking components such as PortGroups, VLANs, LAGs, and interfaces. This means that networking within one chassis partition is not accessible or viewable from another chassis partition. 
 
 Isolation at the network level is also enforced via the centralized switch fabrics that reside in the dual system controllers. In the VELOS system each blade has multiple connections into the centralized switch fabrics for redundancy and added bandwidth. Each BX110 blade has 2 100Gb backplane connections (one to each system controller), that are bonded together in a static LAG (Link Aggregation Group). This star-wired topology provides fast and reliable backplane connections between all the blades, and also allows for complete isolation at the networking layer.
 
-.. image:: images/VELOSNetworking/image5.png
+.. image:: images/velos_networking/image5.png
+ :align: center
 
 
 When chassis partitions are created the administrator will assign one or more blades which are then isolated from all other blades in the chassis. The centralized switch fabrics are automatically configured with port based VLANs and VLAN tagging to enforce network isolation between chassis partitions. The diagram below provides a visual of how this is enforced.
 
 
-.. image:: images/VELOSNetworking/image6.png
+.. image:: images/velos_networking/image6.png
+ :align: center
 
-.. image:: images/VELOSNetworking/image7.png
+.. image:: images/velos_networking/image7.png
+ :align: center
 
 Network Isolation
 =================
 
 To illustrate the point of how isolated chassis partitions are, the diagram below shows two VELOS chassis with multiple chassis partitions in each. Since there is no sharing of in-band network resources each chassis partition must have its own network connectivity to the in-band networks, and for HA interconnects between the two chassis. There is no way to share interfaces, VLANs, or LAGs between chassis partitions. 
 
-.. image:: images/VELOSNetworking/image8.png
+.. image:: images/velos_networking/image8.png
+ :align: center
 
 Port Groups
 ===========
@@ -58,16 +66,18 @@ Port Groups
 The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. Both ports on the BX110 blade must be configured in the same mode in release 1.0. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, GUI or API.
 
 
-.. image:: images/VELOSNetworking/image9.png
+.. image:: images/velos_networking/image9.png
+  :width: 45%
 
-.. image:: images/VELOSNetworking/image10.png
-
+.. image:: images/velos_networking/image10.png
+  :width: 45%
 
 **Note: In the initial release of F5OS both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB, there is no support for mixing modes on the same blade. More granular options will be added in future F5OS software releases.**
 
 Below is an example of the chassis partition GUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
 
-.. image:: images/VELOSNetworking/image11.png
+.. image:: images/velos_networking/image11.png
+ :align: center
 
 
 Interfaces
@@ -77,7 +87,8 @@ Interface numbering will vary depending on the current portgroup configuration. 
 
 If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Breakout cables will be needed to support the unbundled 25Gb or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number.
 
-.. image:: images/VELOSNetworking/image12.png
+.. image:: images/velos_networking/image12.png
+ :align: center
 
 Supported Optics
 ================
