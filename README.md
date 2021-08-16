@@ -1,1 +1,1 @@
-# velos-training
+# f5-velos-training
