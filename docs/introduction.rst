@@ -48,7 +48,7 @@ A VIPRION chassis in comparison does not have a centralized switch fabric, and a
 
 .. image:: images/velos_introduction/image4.png
   :align: center
-  :scale: 60%
+  :scale: 50%
 
 The system controllers in VELOS are also the central point of management for the entire chassis. VIPRION required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. This meant more cabling, layer2 switch ports, and external terminal servers in order to fully manage the VIPRION chassis as seen below:
 
@@ -60,9 +60,8 @@ The system controllers in VELOS are also the central point of management for the
 With VELOS only the system controllers need to be cabled for out-of-band management and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis management as seen below:
 
 .. image:: images/velos_introduction/image6.png
-    :align: center
-
-
+   :align: center
+   :scale: 50%
 
 Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together
 
@@ -75,7 +74,7 @@ A combination of Docker Compose and Kubernetes is used within the F5OS layer.  D
 
 .. image:: images/velos_introduction/image7.png
   :align: center
-  :scale: 60%
+  :scale: 40%
 
 The diagram above is somewhat simplified as it shows a single software stack for the Kubernetes control plane. In reality there are multiple instances that run on the system controllers. There is a software stack for the system controllers themselves which provides CLI, GUI, and API management for the controllers as well chassis partition (A grouping of blades) lifecycle management. There is also a unique stack for every chassis partition in the system. This software stack resides on the system controllers and can fail over from one controller to the other for added redundancy. It provides the CLI, GUI, and API functions for the chassis partition, as well as support for the networking services such as stpd, lldpd, lacpd, that get deployed as workloads on the blades.
 
@@ -96,10 +95,10 @@ Below is an example of a VELOS CX410 chassis divided into 3 chassis partitions (
   :align: center
   :scale: 60%
 
-  Tenants
-  ========
+Tenants
+========
 
-  Tenancy is required to deploy any BIG-IP resources. VELOS is a multitenant chassis by default, there is no bare-metal mode, although it can be configured to emulate this mode with a single large tenant. You can configure one big chassis partition and assign all blades in the system to this resource. In fact, there is a “Default” partition that all blades are part of when inserted. You may change the slots assigned to the chassis partition by removing it from default and assigning to a new or existing chassis partition. A tenant could then be assigned to utilize all CPU and memory across that chassis partition. This would emulate a VIPRION system running “bare metal” where vCMP is not provisioned. 
+Tenancy is required to deploy any BIG-IP resources. VELOS is a multitenant chassis by default, there is no bare-metal mode, although it can be configured to emulate this mode with a single large tenant. You can configure one big chassis partition and assign all blades in the system to this resource. In fact, there is a “Default” partition that all blades are part of when inserted. You may change the slots assigned to the chassis partition by removing it from default and assigning to a new or existing chassis partition. A tenant could then be assigned to utilize all CPU and memory across that chassis partition. This would emulate a VIPRION system running “bare metal” where vCMP is not provisioned. 
 
 When configuring HA between two VELOS chassis, there is no HA relationship across chassis at the F5OS layer where the system controllers or chassis partitions are configured. All HA is configured at the tenant level using Device Service Clustering, similar to how HA is configured between vCMP guests in separate VIPRION chassis. 
 
