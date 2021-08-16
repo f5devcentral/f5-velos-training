@@ -46,7 +46,7 @@ The PSU controllers are accessible in the upper left-hand corner of the back of 
 
 
 .. image:: images/velos_components/image7.png
-:width: 45%
+  :width: 45%
 
 
 A DC power version of the CX410 chassis will be made available mid CY21. 
