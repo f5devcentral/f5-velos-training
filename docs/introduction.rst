@@ -54,13 +54,12 @@ The system controllers in VELOS are also the central point of management for the
 
 .. image:: images/image5.png
     :align: center
-    :scale: 60%
+
 
 With VELOS only the system controllers need to be cabled for out-of-band management and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis management as seen below:
 
 .. image:: images/image6.png
     :align: center
-    :scale: 60%
 
 
 
@@ -76,9 +75,6 @@ A combination of Docker Compose and Kubernetes is used within the F5OS layer.  D
 .. image:: images/image7.png
   :align: center
   :scale: 60%
-  
- 
-
 
 The diagram above is somewhat simplified as it shows a single software stack for the Kubernetes control plane. In reality there are multiple instances that run on the system controllers. There is a software stack for the system controllers themselves which provides CLI, GUI, and API management for the controllers as well chassis partition (A grouping of blades) lifecycle management. There is also a unique stack for every chassis partition in the system. This software stack resides on the system controllers and can fail over from one controller to the other for added redundancy. It provides the CLI, GUI, and API functions for the chassis partition, as well as support for the networking services such as stpd, lldpd, lacpd, that get deployed as workloads on the blades.
 
