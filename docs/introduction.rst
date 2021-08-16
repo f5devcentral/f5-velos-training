@@ -1,24 +1,3 @@
-Hands-On Labs
--------------
-
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
-   Introduction.rst
-   class1/class1
-   class2/class2
-   class3/class3
-   class4/class4
-   class5/class5
-   class6/class6
-   class7/class7
-   class8/class8
-   class9/class9
-   class10/class10
-   class11/class11
-   class12/class12
-   
 =============
 Introduction
 =============
@@ -68,19 +47,21 @@ While both system controllers are active, they provide a non-blocking 1.6Tbs bac
 A VIPRION chassis in comparison does not have a centralized switch fabric, and all blades are connected across the passive backplane in a full mesh fashion. The backplane in VIPRION was blocking, meaning the front panel bandwidth of a blade was greater than the blades backplane connectivity. Below is an example of the VIPRION C2400 chassis with B2250 blades. Each blade had a single 40Gb connection to every other blade.
 
 .. image:: images/image4.png
- :width: 200
+  :align: center
+  :scale: 60%
 
 The system controllers in VELOS are also the central point of management for the entire chassis. VIPRION required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. This meant more cabling, layer2 switch ports, and external terminal servers in order to fully manage the VIPRION chassis as seen below:
 
 .. image:: images/image5.png
- :width: 200
+    :align: center
+    :scale: 60%
 
 With VELOS only the system controllers need to be cabled for out-of-band management and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis management as seen below:
 
 .. image:: images/image6.png
-   :width: 100px
-   :align: center
-   :height: 100px
+    :align: center
+    :scale: 60%
+
 
 
 Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together
