@@ -42,11 +42,11 @@ In the back of the chassis are 4 separate AC power inputs, and 2 redundant PSU c
 The PSU controllers are accessible in the upper left-hand corner of the back of the system.
 
 .. image:: images/velos_components/image6.png
-  :align: left
+  :width: 45%
 
 
 .. image:: images/velos_components/image7.png
-  :align: right
+:width: 45%
 
 
 A DC power version of the CX410 chassis will be made available mid CY21. 
@@ -103,13 +103,14 @@ All out-of-band management and console access for the chassis is proxied through
 
 .. image:: images/velos_components/image15.png
   :align: center
+    :scale: 60%
 
 
 Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric interconnecting all blades in the system. Note there are 2 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the current generation of BX110 blades.
 
 .. image:: images/velos_components/image16.png
   :align: center
-  :scale: 60%
+  :scale: 50%
 
 BX110 Blade
 ===========
@@ -124,7 +125,7 @@ The BX110 has 14 physical cores which are hyperthreaded into 28 vCPU’s. 6 of t
 
 .. image:: images/velos_components/image18.png
   :align: center
-  :scale: 60%
+  :scale: 50%
 
 The SSD is removable, but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
 
