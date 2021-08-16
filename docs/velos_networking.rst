@@ -21,6 +21,7 @@ Below is an example deployment where each system controller has its own unique I
 
 .. image:: images/velos_networking/image2.png
  :align: center
+ :scale: 50%
 
 Chassis Partitions and Networking
 =================================
@@ -29,11 +30,13 @@ Each chassis partition is a unique entity that has its own set of (local/remote)
 
 .. image:: images/velos_networking/image3.png
  :align: center
+  :scale: 70%
 
 *Note: The environment above would require external networking connections between the chassis partitions if tenants in one chassis partition needs to communicate with tenants in another chassis partition.*
 
 .. image:: images/velos_networking/image4.png
  :align: center
+ :scale: 50%
 
 In addition to management access being completely isolated and unique, in-band networking is configured in and completely contained within the chassis partition. Each chassis partition will have its own set of networking components such as PortGroups, VLANs, LAGs, and interfaces. This means that networking within one chassis partition is not accessible or viewable from another chassis partition. 
 
@@ -48,9 +51,11 @@ When chassis partitions are created the administrator will assign one or more bl
 
 .. image:: images/velos_networking/image6.png
  :align: center
+  :scale: 50%
 
 .. image:: images/velos_networking/image7.png
  :align: center
+  :scale: 50%
 
 Network Isolation
 =================
