@@ -64,6 +64,7 @@ To illustrate the point of how isolated chassis partitions are, the diagram belo
 
 .. image:: images/velos_networking/image8.png
  :align: center
+   :scale: 60%
 
 Port Groups
 ===========
@@ -83,6 +84,7 @@ Below is an example of the chassis partition GUI Port Groups screen. Note that a
 
 .. image:: images/velos_networking/image11.png
  :align: center
+   :scale: 70%
 
 
 Interfaces
