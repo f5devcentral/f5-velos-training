@@ -5,10 +5,10 @@
 # ------------
 #
 # REQUIRED: Your class/lab name
-classname = "F5 BIG-IQ Centralized Management Lab"
+classname = "F5 VELOS Training Guide"
 
 # OPTIONAL: The URL to the GitHub Repository for this class
-github_repo = "https://github.com/f5devcentral/f5-big-iq-lab"
+github_repo = "https://github.com/f5devcentral/f5-velos-training"
 
 #
 # END CONFIG
@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.abspath('.'))
 import f5_sphinx_theme
 
 year = time.strftime("%Y")
-eventname = "%s Hands-on Lab Guide" % (year)
+eventname = "%s" % (year)
 
 rst_prolog = """
 .. |classname| replace:: %s
