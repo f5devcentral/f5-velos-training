@@ -26,11 +26,11 @@ Power Supplies & Controllers
 The VELOS CX410 ships with 2 power supplies. Additional power supplies can be added to provide N+1 or N+N redundancy. The initial version of VELOS supports AC power, and up to 4 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis will be available in mid-CY21. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
 
 .. image:: images/velos_components/image3.png
-  :align: left
+  :width: 45%
 
 
 .. image:: images/velos_components/image4.png
-  :align: right
+  :width: 45%
 
 
 In the back of the chassis are 4 separate AC power inputs, and 2 redundant PSU controllers which are removable.
