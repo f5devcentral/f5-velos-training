@@ -522,7 +522,7 @@ If you want to utilize other chassis partitions so that you can isolate all the 
 
 .. image:: images/initial_setup_of_velos/image12.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 For this configuration we will remove slots 1, 2, & 3 from the default chassis partition first. Once they are removed from default partition they can be assigned to a new partition. Select the checkbox next to the default partition and then click **Edit**.
 
@@ -571,7 +571,7 @@ You’ll then see a summary of all 3 partitions each with a unique **partition I
 
 .. image:: images/initial_setup_of_velos/image20.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to:
 
@@ -1099,6 +1099,16 @@ The chassis partition will have a default username/password of admin/admin. When
       ]
   }
 
+System Controller Configuration Options
+=======================================
 
+You can go back and review or edit various settings for the system controllers. 
+
+Network Settings -> Management Interfaces
+-----------------------------------------
+
+Under Network Settings you can view/edit the IP addresses both floating and static for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. It has been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
+
+NOTE: For the initial VELOS release only IPv4 IP addressing is supported for the F5OS platform layer. IPv4/IPv6 support will be added in a subsequent release. This limitation is only for the platform layer, tenants are capable of IPv4/v6 addressing. 
 
 
