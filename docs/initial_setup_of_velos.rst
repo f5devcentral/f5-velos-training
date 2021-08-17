@@ -112,4 +112,155 @@ syscon-2-active(config)# system network config network-range-type RFC1918 prefix
 	syscon-2-active(config)# commit
 Commit complete.
 
-Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.
+**Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
+
+IP Address Assignment & Routing
+===============================
+
+Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined or acquired via DHCP. In addition to the IP addresses a default route and subnet mask/prefix length is defined. For the initial release of VELOS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support is slated to be added in the mid CY21 release. Note the tenants themselves support IPv4/IPv6 management today.
+
+.. image:: images/intial_setup_of_velos/image1.png
+  :align: center
+  :scale: 70%
+
+Once logged in you will configure the static IP addresses (unless DHCP is preferred).
+
+syscon-2-active(config)# system mgmt-ip config ipv4 controller-1 address 10.255.0.212
+syscon-2-active(config)# system mgmt-ip config ipv4 controller-2 address 10.255.0.213
+syscon-2-active(config)# system mgmt-ip config ipv4 floating address 10.255.0.214
+syscon-2-active(config)# system mgmt-ip config ipv4 prefix-length 24
+syscon-2-active(config)# system mgmt-ip config ipv4 gateway 10.255.0.1
+
+In order to make these changes active you must commit the changes. No configuration changes are executed until the commit command is issued. 
+
+syscon-2-active(config)# commit
+
+Now that the out-of-band addresses and routing are configured you can attempt to access the system controller GUI via the floating IP address that has been defined. You should see a screen similar to the one below, and you can verify your management interface settings.
+
+.. image:: images/intial_setup_of_velos/image2.png
+  :align: center
+  :scale: 70%
+
+
+Interface Aggregation for System Controllers (Optional)
+=======================================================
+
+As seen in previous diagrams each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency which is recommended. This would allow direct access to either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers OOB interface bonded together in a single LAG:
+
+.. image:: images/intial_setup_of_velos/image3.png
+  :align: center
+  :scale: 70%
+
+To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, GUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG configure as follows:
+
+On the active controller create an LACP interface:
+ 
+lacp interfaces interface mgmt-aggr
+ config name mgmt-aggr
+!
+ 
+Next create a management aggregate interface and set the **config type** to **ieee8023adLag** and set the **lag-type** to **LACP**.
+ 
+interfaces interface mgmt-aggr
+ config name mgmt-aggr
+ config type ieee8023adLag
+ aggregation config lag-type LACP
+!
+
+Finally add the aggregate that you created by name to each of the management interfaces on the two controllers: 
+ 
+!
+interfaces interface 1/mgmt0
+ config name 1/mgmt0
+ config type ethernetCsmacd
+ ethernet config aggregate-id mgmt-aggr
+!
+ 
+ 
+interfaces interface 2/mgmt0
+ config name 2/mgmt0
+ config type ethernetCsmacd
+ ethernet config aggregate-id mgmt-aggr
+
+System Settings
+===============
+
+Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, GUI, or API
+
+From the CLI:
+
+syscon-2-active# config
+Entering configuration mode terminal
+syscon-2-active(config)# system dns servers server 192.168.19.1 config address 192.168.10.1
+syscon-2-active(config-server-192.168.19.1)# exit
+syscon-2-active(config)# system ntp config enabled 
+syscon-2-active(config)# system ntp servers server time.f5net.com config address time.f5net.com
+syscon-2-active(config-server-time.f5net.com)# exit
+syscon-2-active(config)# system logging remote-servers remote-server 10.255.0.142 selectors selector LOCAL0 WARNING
+syscon-2-active(config-remote-server-10.255.0.142)# exit
+syscon-2-active(config)# commit
+
+From the GUI:
+
+You can configure the DNS and Time setting from the GUI if preferred. DNS is configured under Network Settings > DNS. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
+
+.. image:: images/intial_setup_of_velos/image4.png
+  :align: center
+  :scale: 70%
+
+  Configuring Network Time Protocol is highly recommended so that the VELOS systems clock is sync’d and accurate. In addition to configure NTP time sources, you can set the local timezone for this chassis location.
+
+.. image:: images/intial_setup_of_velos/image5.png
+  :align: center
+  :scale: 70%
+
+  It’s also a good idea to have the VELOS system send logs to an external syslog server. This can be configured in the System Settings > Log Settings screen. Here you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem level individually. The remote logging severity level will override and component logging levels if they are higher, but only for logs sent remotely. Local logging levels will follow however the component levels are configured here.
+
+.. image:: images/intial_setup_of_velos/image6.png
+  :align: center
+  :scale: 70%
+
+**From the API:**
+
+If you would prefer to automate the setup of the VELOS chassis, there are API calls for all of the examples above. To set the DNS configuration for the system controllers use the following API call:
+
+
+PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+
+{
+    "openconfig-system:system": {
+        "clock": {
+            "config": {
+                "timezone-name": "America/New_York"
+            }
+        },
+        "dns": {
+            "config": {
+                "search": "olympus.f5net.com"
+            },
+            "servers": {
+                "server": [
+                    {
+                        "address": "8.8.8.8",
+                        "config": {
+                            "address": "8.8.8.8"
+                        }
+                    },
+                    {
+                        "address": "192.168.10.1",
+                        "config": {
+                            "address": "192.168.10.1"
+                        }
+                    },
+                    {
+                        "address": "192.168.11.1",
+                        "config": {
+                            "address": "192.168.11.1"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+
