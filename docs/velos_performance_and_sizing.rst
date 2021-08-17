@@ -14,36 +14,54 @@ https://devcentral.f5.com/s/articles/F5-Fast-L4-Acceleration-and-the-F5-Smart-Co
 
 In VELOS there are now two distinct FPGA’s, the Application Traffic Services Engine (ATSE), and the VELOS Queuing FPGA (VQF). In addition to supporting previous functions done by the ePVA there are also additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGA’s.
 
-.. image:: images/VELOSPerformanceandSizing/image1.png
+.. image:: images/velos_performance_and_sizing/image1.png
+  :align: center
+  :scale: 70%
 
 **Note: In the initial F5OS GA release, not all HW functions are enabled. Many will be added in the subsequent TMOS 15.1/F5OS 1.2 release scheduled for mid CY21. AFM DDoS mitigation in hardware is not fully supported and will run in software similar to how it would run in a BIG-IP VE, for the initial release. V15.1 support will add AFM hardware acceleration. SSL & Compression HW offload are fully supported in the initial release, as is FASTL4 HW offload.**
 
 When comparing VELOS to VIPRION C2400 it is important to note that VELOS is more scalable as it has double the number of slots (8 in VELOS vs. 4 in VIPRION), so the amount of performance in the same RU (Rack Unit) is significantly increased. The VELOS blades are half the width of the current B2250 blades in VIPRION. Looking at comparisons of VIPRION B2150 & B2250 vs. a single VELOS BX110 blade you can see 1.5x-3x increase in Layer 7 RPS performance depending on which blade a customer may be migrating from. From an SSL perspective the increase is 2.3x-10x for RSA based ciphers, and for Elliptical Curve the BX110 can now offload that to hardware, whereas the B2150 & B2250 had to process those ciphers in software consuming more CPU.
 
-.. image:: images/VELOSPerformanceandSizing/image2.png
+.. image:: images/velos_performance_and_sizing/image2.png
+  :align: center
+  :scale: 70%
 
 The real value of VELOS is the ability to scale from 3-6x for Layer 7 RPS and up to 20x for SSL (RSA) when comparing fully loaded chassis (4 VIPRION blades vs. 8 VELOS blades) in the same 4RU footprint.
 
-.. image:: images/VELOSPerformanceandSizing/image3.png
+.. image:: images/velos_performance_and_sizing/image3.png
+  :align: center
+  :scale: 70%
 
 When comparing VELOS to VIPRION C4480/4800 it is important to note that the current VELOS BX110 blade is not a dense CPU-wise as the current generation B4450 blade. In many cases it may take 2 BX110 blades to provide similar CPU density/performance as a single B4450 blade. The sizing will be dependent on the configuration of the current generation blades, how utilized they are, and how vCMP is configured. Note in the case of DNS, responses per second are significantly higher on the B4450 (6.4m rps) vs BX110 (2.5m rps). Below are some single blade comparisons of the B4340N, B4450N and a single VELOS BX110 blade. And then single blade comparisons of the B4300, B4450 and a single VELOS BX110 blade.
 
 
-.. image:: images/VELOSPerformanceandSizing/image4.png
+.. image:: images/velos_performance_and_sizing/image4.png
+  :align: center
+  :scale: 70%
 
-.. image:: images/VELOSPerformanceandSizing/image5.png
+.. image:: images/velos_performance_and_sizing/image5.png
+  :align: center
+  :scale: 70%
 
 The VELOS CX410 chassis is only 4U compared to the VIPRION 4480 (7RU) and VIPRION 4800 (16RU) chassis so comparing performance per RU may be a more important metric. The other important factor is cost, a single BX110 blade is half the price of the VIPRION B4450 blade so an apples-to-apples comparisons would be two BX110 blades to a single B4450 blade. 2 BX110 blades will compare very well to a single B4450 blade with some metrics being higher, and some slightly lower than the B4450 but at the same pricepoint. 
 
-.. image:: images/VELOSPerformanceandSizing/image6.png
+.. image:: images/velos_performance_and_sizing/image6.png
+  :align: center
+  :scale: 70%
 
-.. image:: images/VELOSPerformanceandSizing/image7.png
+.. image:: images/velos_performance_and_sizing/image7.png
+  :align: center
+  :scale: 70%
 
 Below is an example of a B4450 configuration (excluding chassis) with 4 blades and an identical priced VELOS BX110 solution (excluding chassis) with 8 blades. For the same price the VELOS configuration will provide higher performance at a lower footprint.
 
-.. image:: images/VELOSPerformanceandSizing/image8.png
+.. image:: images/velos_performance_and_sizing/image8.png
+  :align: center
+  :scale: 70%
 
-.. image:: images/VELOSPerformanceandSizing/image9.png
+.. image:: images/velos_performance_and_sizing/image9.png
+  :align: center
+  :scale: 70%
 
 The performance numbers for VELOS already include any overhead for multitenancy as the platform is multitenant by default. There is nothing to switch on to enable multitenancy. VIPRION on the other hand has the option of running multitenancy by enabling vCMP. Published data sheet numbers for VIPRION are for bare-metal mode, where no virtualization (vCMP) is enabled. Enabling vCMP on VIPRION has overhead and will reduce to overall performance of a blade as the hypervisor takes up CPU and memory resources.
 
@@ -55,16 +73,22 @@ vCPU Sizing
 Each VELOS BX110 blade has 28 vCPU’s, but 6 of those vCPU’s are reserved for use by the F5OS platform layer. This is different than VIPRION where each vCPU gave a portion of its processing and memory to the hypervisor. In VELOS 22 vCPU’s are available per blade to be assigned to tenants since the other 6 are reserved. The diagram below depicts the BX110 blade vCPU allocation: 
 
 
-.. image:: images/VELOSPerformanceandSizing/image10.png
+.. image:: images/velos_performance_and_sizing/image10.png
+  :align: center
+  :scale: 70%
 
 
 When sizing, removing the 6 dedicated vCPU’s from the equation will give a better representation of what the per vCPU performance will be. Comparing the performance of a single vCPU can be important for control plane sizing and also for extrapolation of what a tenant’s performance may be. Below is a comparison on the CPU’s on the VIPRION B2250, VELOS BX110, and VIPRION B4450. Note that the VELOS sizing is more complex because of the way the CPU’s are used. Since 3 physical / 6 vCPU’s are dedicated for use by the platform layer overall CPU performance can be misleading. 
 
 The graphs below compare 1 and 2 blade configurations of the B2250 vs. a single B4450 blade, and one and two blade VELOS BX110 configurations. There are comparisons which includes all the vCPU’s on a BX110, and another set which removes the 6 vCPU’s used for the platform layer. Instead of showing 14 physical cores and 28 vCPU’s, VELOS is sized using 11 physical cores and 22 vCPU’s listed as (Minus platform Layer CPU).
 
-.. image:: images/VELOSPerformanceandSizing/image11.png
+.. image:: images/velos_performance_and_sizing/image11.png
+  :align: center
+  :scale: 70%
 
-.. image:: images/VELOSPerformanceandSizing/image12.png
+.. image:: images/velos_performance_and_sizing/image12.png
+  :align: center
+  :scale: 70%
 
 To compare performance of VIPRION vs. VELOS you can first look at overall CPU capacity of the system, and then break that down to per vCPU performance to get an apples-to-apples comparison. In a typical sizing exercise, it is normal to look at the overall number of vCPUs / the # of vCPUs in the system and consider the speed/performance at the per vCPU metric to come up with a sizing metric. Because VELOS dedicates some of its processing to the F5OS platform layer, we remove them from the overall sizing metric so that numbers don’t get skewed. As an example, take the overall BX110 blade performance metrics then divide by the total vCPU’s on the blades minus the 6 vCPU’s for the platform layer. You also have to consider that VELOS has more modern processors which are more efficient and can boost to higher rates than previous generation processors so looking at aggregate processor speed (total Ghz) only is not sufficient to get accurate sizing. 
 
@@ -73,17 +97,23 @@ To compare performance of VIPRION vs. VELOS you can first look at overall CPU ca
 In the graph below you can see that a B2250 blade has 10x more aggregate CPU capacity than the 2000s.  A VELOS BX110 blade will have either 8.7x (Minus platform CPU’s) or 11.1x (Including platform CPU’s) and a 4450 blade has 22x. What may be deceiving here is how this translates into performance because the BX110 has next generation processors, and a different architecture where some CPU’s are dedicated to the platform layer.
 
 
-.. image:: images/VELOSPerformanceandSizing/image13.png
+.. image:: images/velos_performance_and_sizing/image13.png
+  :align: center
+  :scale: 70%
 
 To see how this translates into performance, it is good to look at a Layer7 metric as that is something that will use a lot of CPU resource. If you look at the per blade Layer7 (Inf-Inf) numbers, you’ll notice VELOS provides higher numbers than a B2250 even though its rating is lower in the chart above. This is likely due to the newer generation of processors, the fact that some processing is dedicated to the platform layer, and the fact that the CPU’s can boost higher than previous generations. Generally, a BX110 blade is going to be faster than a B2250 blade (each metric will vary), but it’s safe to propose BX110 blades as direct replacements for B2250 blades. Also keep in mind BX110 has the latest Intel processing and crypto support so things like ECC ciphers are now accelerated in hardware which was not the case with VIPRION B2xxx blades. 
 
 Note a BX110 blade is not intended to replace a single B4450 blade. The B4450 has ~2x the processing power and vCPU count of a BX110 blade. In most cases it would take 2 BX110 blades to handle the workload of a B4450. 
 
-.. image:: images/VELOSPerformanceandSizing/image14.png
+.. image:: images/velos_performance_and_sizing/image14.png
+  :align: center
+  :scale: 70%
 
 Because each blade has a different number of CPU’s, a common sizing exercise is to look at the per vCPU performance by using the formulas above to come up with a per vCPU metric. In the graph below it is done for Layer7 RPS (Inf-Inf) but you could use the same math for any metric. Note the graph below is not derived from a per vCPU test, it is taking a published blade metric and dividing it by the number of vCPU’s to come up with a per vCPU metric. As mentioned above using the VELOS metric which is (minus the platform CPU’s) is the most realistic. As expected, the BX110 provides a better per vCPU RPS than the B2250, but what may be surprising is that it has a higher RPS than the B4450 as well. This is because the B4450 gets its overall speed due to the number of vCPU’s and it has 2x more than the BX110. Even though the BX110 CPUs run slower (1.9Ghz vs. 2.2Ghz) than the B4450, the changes in architecture, more modern CPU etc... make it perform faster at the per vCPU metric.
 
-.. image:: images/VELOSPerformanceandSizing/image15.png
+.. image:: images/velos_performance_and_sizing/image15.png
+  :align: center
+  :scale: 70%
 
 **NOTE: The per vCPU charts above are based on extrapolations, not per vCPU testing, so results may vary. This is generally acceptable for sizing use, as this is more a means of comparison of platform differences than a guarantee of a certain metric.**
 
@@ -94,11 +124,15 @@ Memory Sizing
 
 Each VELOS BX110 blade has 128GB of memory, which is double the current memory support of the B2250 blade (64GB) but half the current B4450 blade (256GB). Generally, a BX110 will have more than enough memory to replace a B2250 blade and will actually provide more memory which may help vCMP guests which are pushing memory limits.  Just like sizing based on L7 it will likely take 2 BX110 blades to replace a B4450 blade when looking at memory only. 
 
-.. image:: images/VELOSPerformanceandSizing/image16.png
+.. image:: images/velos_performance_and_sizing/image16.png
+  :align: center
+  :scale: 70%
 
 Breaking down memory to get per vCPU numbers will help when dealing with current vCMP guest configurations where memory is allocated based on the number of vCPU’s assigned to the guest. Because VELOS has a different architecture than VIPRION there is a formula for calculating how much memory a vCPU will receive. The chart below shows the default RAM per vCPU allocation with 1vCPU tenant. 
 
-.. image:: images/VELOSPerformanceandSizing/image17.png
+.. image:: images/velos_performance_and_sizing/image17.png
+  :align: center
+  :scale: 70%
 
 With VELOS the amount of RAM per vCPU will change slightly as more vCPU’s are added to the tenant. Below are the default values for total RAM, and RAM per vCPU for the VELOS tenants. These are Recommended values, but VELOS provides  Advanced options where memory per tenant can be customized to allocate more memory. See the Multitennancy section for more details on memory customization.
 
