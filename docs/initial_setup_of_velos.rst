@@ -210,9 +210,9 @@ Finally add the aggregate that you created by name to each of the management int
 System Settings
 ===============
 
-Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, GUI, or API
+Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, GUI, or API.
 
-From the CLI:
+**From the CLI:**
 
 .. code-block:: bash
 
@@ -227,9 +227,9 @@ From the CLI:
   syscon-2-active(config-remote-server-10.255.0.142)# exit
   syscon-2-active(config)# commit
 
-From the GUI:
+**From the GUI:**
 
-You can configure the DNS and Time setting from the GUI if preferred. DNS is configured under Network Settings > DNS. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time setting from the GUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos/image4.png
   :align: center
@@ -292,5 +292,102 @@ PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
           }
       }
   }
+
+
+To set System Time settings use the following API call as an example:
+
+PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+  {
+      "openconfig-system:system": {
+          "clock": {
+              "config": {
+                  "timezone-name": "America/New_York"
+              }
+          },
+          "ntp": {
+              "config": {
+                  "enabled": "true"
+              },
+              "servers": {
+                  "server": [
+                      {
+                          "address": "time.f5net.com",
+                          "config": {
+                              "address": "time.f5net.com"
+                          }
+                      }
+                  ]
+              }
+          }
+      }
+  }
+
+To set a Remote Logging destination:
+
+PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+  {
+      "openconfig-system:system": {
+          "logging": {
+              "remote-servers": {
+                  "remote-server": [
+                      {
+                          "host": "10.255.0.142",
+                          "config": {
+                              "host": "10.255.0.142",
+                              "remote-port": "514"
+                          },
+                          "selectors": {
+                              "selector": [
+                                  {
+                                      "facility": "LOCAL0",
+                                      "severity": "INFORMATIONAL",
+                                      "config": {
+                                          "facility": "LOCAL0",
+                                          "severity": "INFORMATIONAL"
+                                      }
+                                  }
+                              ]
+                          }
+                      }
+                  ]
+              }
+          }
+      }
+  }
+
+Licensing the VELOS Chassis
+===========================
+
+Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
+
+Licenses can be applied via CLI, GUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. Licensing is accessible under the System Settings > Licensing page. Automatic will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server use the manual method.
+
+.. image:: images/initial_setup_of_velos/image7.png
+  :width 45%
+
+.. image:: images/initial_setup_of_velos/image8.png
+  :width: 45%
+
+You can activate and display the current license in the GUI, CLI or API. To license the VELOS chassis automatically from the CLI:
+
+.. code-block:: bash
+
+  syscon-1-active(config)# system licensing install registration-key I1234-12345-12345-12345-1234567
+  result License installed successfully.
+
+To license the VELOS chassis manually you’ll need to get the dossier first:
+
+.. code-block:: bash
+
+  syscon-2-active(config)# system licensing get-dossier
+  b9a9936886bada077d93843a281ce4c34bf78db0d6c32c40adea3a5329db15edd413fe7d7f8143fd128ebe2d97642b4ed9192b530788fe3965593e3b42131c66220401b16843476159414ceeba8af5fb67a39fe2a2f408b9…
+
+You can then access F5’s licensing server (license.f5.com) and paste in the dossier when prompted:
 
 
