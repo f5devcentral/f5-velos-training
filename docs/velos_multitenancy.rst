@@ -6,7 +6,7 @@ In previous generation chassis and appliances F5 supported vCMP as a means of pr
 
 Unlike VIPRION, where vCMP is an option that can added on to the chassis, VELOS is multitenant by default. There is no option for a “bare metal” configuration. You may configure one large tenant to emulate a “bare-metal” type BIG-IP configuration if required. Below is a depiction of BIG-IP tenants running on top of the F5OS layer. 
 
-.. image:: images/VELOSMultitenancy/image1.png
+.. image:: images/velos_multitenancy/image1.png
   :align: center
   :scale: 50%
 
@@ -14,7 +14,7 @@ Each tenant will run as a Virtual Machine via a technology called Kubevirt which
 
 Creating a tenant is nearly identical to creating a vCMP guest with a few exceptions. When creating a VELOS tenant, you’ll provide a name, a TMOS image to run inside the tenant, which slots (blades) the tenant will be configured to run on, out-of-band IP addressing/mask and gateway, and which VLANs the tenant should inherit. Just like a vCMP guest the VLANs are configured at provision time and not within the tenant itself, the tenant will inherit what is configured at the F5OS platform layer.
 
-.. image:: images/VELOSMultitenancy/image2.png
+.. image:: images/velos_multitenancy/image2.png
   :align: center
   :scale: 50%
 
@@ -54,7 +54,7 @@ Each BX110 blade has 128GB of memory. The F5OS layer takes about 33GB of RAM lea
 
 Each BX110 blade has 28 vCPU’s, however 6 of those vCPU’s are dedicated to the F5OS layer. This leaves 22 vCPU’s left over for use by tenants.  You can dedicate all 22 vCPU’s to one large tenant, or you can allocate smaller numbers of VCPU’s per tenant so that you can deploy many tenants.
 
-.. image:: images/VELOSMultitenancy/image3.png
+.. image:: images/velos_multitenancy/image3.png
   :align: center
   :scale: 70%
 
