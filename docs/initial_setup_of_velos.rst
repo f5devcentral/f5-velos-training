@@ -228,41 +228,42 @@ If you would prefer to automate the setup of the VELOS chassis, there are API ca
 PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
 
 .. code-block:: json
-{
-    "openconfig-system:system": {
-        "clock": {
-            "config": {
-                "timezone-name": "America/New_York"
-            }
-        },
-        "dns": {
-            "config": {
-                "search": "olympus.f5net.com"
-            },
-            "servers": {
-                "server": [
-                    {
-                        "address": "8.8.8.8",
-                        "config": {
-                            "address": "8.8.8.8"
-                        }
-                    },
-                    {
-                        "address": "192.168.10.1",
-                        "config": {
-                            "address": "192.168.10.1"
-                        }
-                    },
-                    {
-                        "address": "192.168.11.1",
-                        "config": {
-                            "address": "192.168.11.1"
-                        }
-                    }
-                ]
-            }
-        }
-    }
-}
+
+  {
+      "openconfig-system:system": {
+          "clock": {
+              "config": {
+                  "timezone-name": "America/New_York"
+              }
+          },
+          "dns": {
+              "config": {
+                  "search": "olympus.f5net.com"
+              },
+              "servers": {
+                  "server": [
+                      {
+                          "address": "8.8.8.8",
+                          "config": {
+                              "address": "8.8.8.8"
+                          }
+                      },
+                      {
+                          "address": "192.168.10.1",
+                          "config": {
+                              "address": "192.168.10.1"
+                          }
+                      },
+                      {
+                          "address": "192.168.11.1",
+                          "config": {
+                              "address": "192.168.11.1"
+                          }
+                      }
+                  ]
+              }
+          }
+      }
+  }
 
 
