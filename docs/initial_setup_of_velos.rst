@@ -227,7 +227,7 @@ If you would prefer to automate the setup of the VELOS chassis, there are API ca
 
 PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
 
-{
+''{
     "openconfig-system:system": {
         "clock": {
             "config": {
@@ -262,5 +262,5 @@ PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
             }
         }
     }
-}
+}''
 
