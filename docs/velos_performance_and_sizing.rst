@@ -30,38 +30,38 @@ The real value of VELOS is the ability to scale from 3-6x for Layer 7 RPS and up
 
 .. image:: images/velos_performance_and_sizing/image3.png
   :align: center
-  :scale: 30%
+  :scale: 40%
 
 When comparing VELOS to VIPRION C4480/4800 it is important to note that the current VELOS BX110 blade is not a dense CPU-wise as the current generation B4450 blade. In many cases it may take 2 BX110 blades to provide similar CPU density/performance as a single B4450 blade. The sizing will be dependent on the configuration of the current generation blades, how utilized they are, and how vCMP is configured. Note in the case of DNS, responses per second are significantly higher on the B4450 (6.4m rps) vs BX110 (2.5m rps). Below are some single blade comparisons of the B4340N, B4450N and a single VELOS BX110 blade. And then single blade comparisons of the B4300, B4450 and a single VELOS BX110 blade.
 
 
 .. image:: images/velos_performance_and_sizing/image4.png
   :align: center
-  :scale: 50%
+  :scale: 40%
 
 .. image:: images/velos_performance_and_sizing/image5.png
   :align: center
-  :scale: 50%
+  :scale: 40%
 
 The VELOS CX410 chassis is only 4U compared to the VIPRION 4480 (7RU) and VIPRION 4800 (16RU) chassis so comparing performance per RU may be a more important metric. The other important factor is cost, a single BX110 blade is half the price of the VIPRION B4450 blade so an apples-to-apples comparisons would be two BX110 blades to a single B4450 blade. 2 BX110 blades will compare very well to a single B4450 blade with some metrics being higher, and some slightly lower than the B4450 but at the same pricepoint. 
 
 .. image:: images/velos_performance_and_sizing/image6.png
   :align: center
-  :scale: 50%
+  :scale: 40%
 
 .. image:: images/velos_performance_and_sizing/image7.png
   :align: center
-  :scale: 50%
+  :scale: 40%
 
 Below is an example of a B4450 configuration (excluding chassis) with 4 blades and an identical priced VELOS BX110 solution (excluding chassis) with 8 blades. For the same price the VELOS configuration will provide higher performance at a lower footprint.
 
 .. image:: images/velos_performance_and_sizing/image8.png
   :align: center
-  :scale: 50%
+  :scale: 40%
 
 .. image:: images/velos_performance_and_sizing/image9.png
   :align: center
-  :scale: 50%
+  :scale: 40%
 
 The performance numbers for VELOS already include any overhead for multitenancy as the platform is multitenant by default. There is nothing to switch on to enable multitenancy. VIPRION on the other hand has the option of running multitenancy by enabling vCMP. Published data sheet numbers for VIPRION are for bare-metal mode, where no virtualization (vCMP) is enabled. Enabling vCMP on VIPRION has overhead and will reduce to overall performance of a blade as the hypervisor takes up CPU and memory resources.
 
