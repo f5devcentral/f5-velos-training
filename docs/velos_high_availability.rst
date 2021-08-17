@@ -59,13 +59,13 @@ Incoming traffic will go through a disaggregation (DAG) process where connection
 
 .. image:: images/velos_high_availability/image6.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 This approach is better than terminating a LAG on a single blade. Incoming connections will DAG in a similar manner as described above; however, all egress traffic will only be able to go out on the same blade as where it initially ingresses. This will cause an extra backplane traversal. The LAG will provide link redundancy, but if the blade fails, there is no redundancy within the chassis to deal with this, you’ll need to configure HA groups or some other failover mechanism in the tenant to fail over to the remaining chassis. 
 
 .. image:: images/velos_high_availability/image7.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 Tenant Level HA Across Chassis
 ==============================
@@ -102,7 +102,7 @@ Inside the tenant, one **Cluster Member IP Address** will need to be configured 
 
 .. image:: images/velos_high_availability/image11.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 For planning purposes for a single large tenant “SuperVip” spanning 8 total blades would require 13 out-of-band management IP addresses for each chassis. In-band Self-IP & Virtual addresses are not included in this calculation.
 
