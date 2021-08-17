@@ -9,27 +9,28 @@ Connect a console or terminal server to each of the system controllers console p
 
 Once logged in you can display the current running configuration by issuing the command **show running-config**.
 
+.. code-block:: bash
 
-syscon-2-active# show running-config
-image controller config os os 1.2.0-0333
-!
-image controller config services service 1.2.0-0333
-!
-image controller config iso iso 1.2.0-0333
-    service 1.2.0-0333
-    os      1.2.0-0333
-!
-image partition config os os 1.2.0-0333
-!
-image partition config services service 1.2.0-0333
-!
-image partition config iso iso 1.2.0-0333
-    service 1.2.0-0333
-    os      1.2.0-0333
-!
-partitions partition bigpart
-config enabled
-…
+  syscon-2-active# show running-config
+  image controller config os os 1.2.0-0333
+  !
+  image controller config services service 1.2.0-0333
+  !
+  image controller config iso iso 1.2.0-0333
+      service 1.2.0-0333
+      os      1.2.0-0333
+  !
+  image partition config os os 1.2.0-0333
+  !
+  image partition config services service 1.2.0-0333
+  !
+  image partition config iso iso 1.2.0-0333
+      service 1.2.0-0333
+      os      1.2.0-0333
+  !
+  partitions partition bigpart
+  config enabled
+  …
 
 Configuration is automatically synchronized between the primary and standby system controllers. The configuration of both controllers can be defined from the primary system controller, there is no need to login to the secondary system controller to configure an IP address. You’ll know which system controller is primary by the prompt:
 
