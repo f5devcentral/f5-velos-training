@@ -54,7 +54,7 @@ If you are logged into the standby system controller then you will not be able t
   Aborted: node is in readonly mode
 
 Interface Configuration
-======================= 
+-----------------------
 
 The out-of-band Ethernet interfaces on each system controller can be configured to run independently, or they may be put into a common Link Aggregation Group to provide added redundancy. To alter any configuration, you must enter config mode:
 
@@ -65,7 +65,7 @@ The out-of-band Ethernet interfaces on each system controller can be configured 
   syscon-2-active(config)#
 
 Internal Chassis IP Ranges
-==========================
+--------------------------
 
 The VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/12. This should be sufficient for most production environments. You can verify this with the following command.
 
@@ -131,7 +131,7 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
 **Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
 
 IP Address Assignment & Routing
-===============================
+-------------------------------
 
 Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined or acquired via DHCP. In addition to the IP addresses a default route and subnet mask/prefix length is defined. For the initial release of VELOS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support is slated to be added in the mid CY21 release. Note the tenants themselves support IPv4/IPv6 management today.
 
@@ -163,7 +163,7 @@ Now that the out-of-band addresses and routing are configured you can attempt to
 
 
 Interface Aggregation for System Controllers (Optional)
-=======================================================
+-------------------------------------------------------
 
 As seen in previous diagrams each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency which is recommended. This would allow direct access to either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers OOB interface bonded together in a single LAG:
 
@@ -208,7 +208,7 @@ Finally add the aggregate that you created by name to each of the management int
   ethernet config aggregate-id mgmt-aggr
 
 System Settings
-===============
+---------------
 
 Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, GUI, or API.
 
@@ -580,7 +580,7 @@ If you click on the **Dashboard**, you’ll see a graphical representation that 
   :scale: 70%
 
 Creating a Chassis Partition via the CLI
-========================================
+----------------------------------------
 
 Before creating a chassis partition via the CLI you must first ensure that there are available slots in order to create a partition. You can issue the command show running-config slots to see what slots are available.  If all the slots are assigned to a partition like default, then you’ll need to move some of the slots to the partition none before they can be added to a new partition. 
 
@@ -682,7 +682,7 @@ You can use the command show running-config partitions to see how each partition
   !
 
 Creating a Chassis Partition via the API
-=========================================
+----------------------------------------
 
 Before creating any new chassis partitions you should ensure you have the proper F5OS partition images loaded onto the system controller. You can query the system controller to see what images are currently available on the system:
 
