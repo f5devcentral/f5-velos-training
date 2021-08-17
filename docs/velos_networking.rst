@@ -51,11 +51,11 @@ When chassis partitions are created the administrator will assign one or more bl
 
 .. image:: images/velos_networking/image6.png
   :align: center
-  :scale: 50%
+  :scale: 60%
 
 .. image:: images/velos_networking/image7.png
   :align: center
-  :scale: 50%
+  :scale: 60%
 
 Network Isolation
 =================
