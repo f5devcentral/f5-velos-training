@@ -30,7 +30,7 @@ The real value of VELOS is the ability to scale from 3-6x for Layer 7 RPS and up
 
 .. image:: images/velos_performance_and_sizing/image3.png
   :align: center
-  :scale: 50%
+  :scale: 30%
 
 When comparing VELOS to VIPRION C4480/4800 it is important to note that the current VELOS BX110 blade is not a dense CPU-wise as the current generation B4450 blade. In many cases it may take 2 BX110 blades to provide similar CPU density/performance as a single B4450 blade. The sizing will be dependent on the configuration of the current generation blades, how utilized they are, and how vCMP is configured. Note in the case of DNS, responses per second are significantly higher on the B4450 (6.4m rps) vs BX110 (2.5m rps). Below are some single blade comparisons of the B4340N, B4450N and a single VELOS BX110 blade. And then single blade comparisons of the B4300, B4450 and a single VELOS BX110 blade.
 
