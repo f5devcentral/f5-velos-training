@@ -10,29 +10,38 @@ The system controllers perform two main functions for the VELOS chassis. They ar
 The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX110 blade is dual homed with a 100Gb backplane connection to each system controller (200Gb total). On the BX110 blade the two 100Gb ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
 
 
-.. image:: images/VELOSHighAvailability/image1.png
+.. image:: images/velos_high_availability/image1.png
+  :align: center
+  :scale: 70%
 
 While both switch fabrics are active there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane and each blade will be limited to 100Gbs of backplane capacity. Not that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity.
 
 The second function the system controllers perform is the management of the new Kubernetes platform layer. At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, GUI services etc…. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
 
-.. image:: images/VELOSHighAvailability/image2.png
+.. image:: images/velos_high_availability/image2.png
+  :align: center
+  :scale: 70%
 
 You may view the current high availability status in the dashboard of the system controller GUI. It will show which controllers is primary and standby, the preferred node and status.
 
-.. image:: images/VELOSHighAvailability/image3.png
+.. image:: images/velos_high_availability/image3.png
+  :align: center
+  :scale: 70%
 
 You can view and configure the High Availability options for the system controllers in the GUI **Systems Settings > Controller Management** screen. You can force a failover, configure auto failback, as well as set the preferred node:
 
-.. image:: images/VELOSHighAvailability/image4.png
+.. image:: images/velos_high_availability/image4.png
+  :align: center
+  :scale: 70%
 
 Failover Behavior
 =================
 
 The failover behavior will depend on the type of outage encountered at the system controller. You can perform a manual failover from one system controller to the other vi the system controller GUI:
 
-.. image:: images/VELOSHighAvailability/image5.png
-
+.. image:: images/velos_high_availability/image5.png
+  :align: center
+  :scale: 70%
 
 This will fail the K8s control plane services from the Active system controller to the Standby, and the floating IP address will move to the new Active controller. This type of outage will be non-disruptive to client traffic flowing through the tenants and layer2 switch fabrics running on the system controllers which will continue to run in an Active/Active manner. Any management connections to the system controller or chassis partition GUI, CLI, or API’s or will be disconnected, and will have to be re-established through the new Active system controller. 
 
@@ -48,22 +57,30 @@ From a design standpoint it is best to spread in-band network connections across
 
 Incoming traffic will go through a disaggregation (DAG) process where connections are spread across all processors within the VELOS tenant. Again, a hash-based distribution will decide which blade/processor should handle the incoming connection. Given enough connections the expectation is that half are processed locally on the incoming blade, and the other half will be sent across the backplane to another blade. If the return traffic going outbound can egress on the same blade that processed the connection, then a backplane traversal is saved, it doesn’t have to go back to the incoming blade. If a blade fails, or one of the links in the LAG should fail, then all traffic will ingress and egress on the remaining blade. There are more granular configuration options within the tenant to determine how failover cases should be handled if. Blade should fail. Of course, additional blades/links can be added to a chassis partition, but they follow this forwarding behavior:
 
-.. image:: images/VELOSHighAvailability/image6.png
+.. image:: images/velos_high_availability/image6.png
+  :align: center
+  :scale: 70%
 
 This approach is better than terminating a LAG on a single blade. Incoming connections will DAG in a similar manner as described above; however, all egress traffic will only be able to go out on the same blade as where it initially ingresses. This will cause an extra backplane traversal. The LAG will provide link redundancy, but if the blade fails, there is no redundancy within the chassis to deal with this, you’ll need to configure HA groups or some other failover mechanism in the tenant to fail over to the remaining chassis. 
 
-.. image:: images/VELOSHighAvailability/image7.png
+.. image:: images/velos_high_availability/image7.png
+  :align: center
+  :scale: 70%
 
 Tenant Level HA Across Chassis
 ==============================
 
 F5 does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis with identically configured tenants and maintaining HA relationships at the tenant level as seen below. This mimics the VIPRION HA behavior between vCMP guests. There is no redundancy between chassis at the F5OS platform layer. The chassis’ themselves are unaware of the other chassis and there is no HA communication at this level, it’s the tenants that form the HA relationship.
 
-.. image:: images/VELOSHighAvailability/image8.png
+.. image:: images/velos_high_availability/image8.png
+  :align: center
+  :scale: 70%
 
 Tenants on different chassis, should have the same number of vCPU’s and be configured to run on the same slots. HA interconnection VLANs would be configured between chassis partitions in the two chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
 
-.. image:: images/VELOSHighAvailability/image9.png
+.. image:: images/velos_high_availability/image9.png
+  :align: center
+  :scale: 70%
 
 Tenant Level HA within the Chassis
 ==================================
@@ -77,11 +94,15 @@ F5 does not support configuring HA relationships between tenants within the same
 Below is an example of a “SuperVIP” tenant that spans all 8 blades. Each system controller will have one static IP address, and then there is a floating IP address. The chassis partition will require an out-of-band management address, as will the tenant. If the chassis partition is comprised of all 8 blades and the tenant will be spread across all 8 blades, then the tenant will need to have an IP address configured for each blade for proper HA failover and synchronization.
 
 
-.. image:: images/VELOSHighAvailability/image10.png
+.. image:: images/velos_high_availability/image10.png
+  :align: center
+  :scale: 70%
 
 Inside the tenant, one **Cluster Member IP Address** will need to be configured for each blade. If using IPv4 & IPv6 (dual stack management) then **Alternate Management** & **Cluster Member IP addresses** can be configured.
 
-.. image:: images/VELOSHighAvailability/image11.png
+.. image:: images/velos_high_availability/image11.png
+  :align: center
+  :scale: 70%
 
 For planning purposes for a single large tenant “SuperVip” spanning 8 total blades would require 13 out-of-band management IP addresses for each chassis. In-band Self-IP & Virtual addresses are not included in this calculation.
 
