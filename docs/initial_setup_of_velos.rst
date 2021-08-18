@@ -1107,8 +1107,138 @@ You can go back and review or edit various settings for the system controllers.
 Network Settings -> Management Interfaces
 -----------------------------------------
 
-Under Network Settings you can view/edit the IP addresses both floating and static for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. It has been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
+Under **Network Settings** you can view/edit the IP addresses both floating and static for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. It has been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
 
-NOTE: For the initial VELOS release only IPv4 IP addressing is supported for the F5OS platform layer. IPv4/IPv6 support will be added in a subsequent release. This limitation is only for the platform layer, tenants are capable of IPv4/v6 addressing. 
+NOTE: For the initial VELOS release only IPv4 IP addressing is supported for the F5OS platform layer. IPv4/IPv6 dual stack support has been added in the F5OS 1.2.x release. This limitation is only for the F5OS platform layer v1.1.x versions, BIG-IP tenants are capable of IPv4/v6 dual stack management. 
+
+.. image:: images/initial_setup_of_velos/image22.png
+  :align: center
+  :scale: 70%
+
+Network Settings -> DNS
+-----------------------
+
+External **DNS Lookup Servers** and **Search Domains** can be configured. This will be required for things like automatic license activation, NTP server domain resolution, and iHealth integration and it is recommended to be configured. 
+
+.. image:: images/initial_setup_of_velos/image23.png
+  :align: center
+  :scale: 70%
+
+Software Management -> Partition Images
+---------------------------------------
+
+Each chassis partition will require an F5OS software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** GUI page. F5OS releases are available on downloads.f5.com.
+
+.. image:: images/initial_setup_of_velos/image24.png
+  :align: center
+  :scale: 70%
+
+Software Management -> Controller Images
+----------------------------------------
+
+System controllers also run a unique F5OS software version. Both system controllers will need to run the same SW version. You can upload new F5 OS controller images via the **Software Management > Controller Images** GUI screen.
+
+.. image:: images/initial_setup_of_velos/image25.png
+  :align: center
+  :scale: 70%
+
+System Settings -> Alarms & Events
+----------------------------------
+
+Alarms and Events can be viewed via the **System Settings > Alarms & Events** GUI page. You may optionally choose different severity levels to see more or less events. 
+
+.. image:: images/initial_setup_of_velos/image26.png
+  :align: center
+  :scale: 70%
+
+You may also change timeframe to see historical events, and optional refresh the screen via the controls on the right-hand side of the page:
+
+.. image:: images/initial_setup_of_velos/image27.png
+  :align: center
+
+System Settings -> Controller Management
+----------------------------------------
+
+System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** GUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
+
+An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the OS, will be more disruptive timewise vs. an upgrade that only updates the F5 services. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently tin the long term than the F5 Services. For the initial releases of F5OS updating the full ISO may be recommended.
+
+**NOTE: Intial v1.1.x F5OS versions do not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades and updating the standby chassis first is recommended if possible. Rolling upgrade support has been added to the 1.2.x release of F5OS. Once the system controllers are starting from a 1.2.x release rolling upgrade is supported.** 
+
+.. image:: images/initial_setup_of_velos/image28.png
+  :align: center
+  :scale: 70% 
+
+System Settings -> System Inventory
+-----------------------------------
+
+The **System Settings > System Inventory** page provides status, part numbers and serial numbers for the different physical components including controllers, blades, fan trays, power supply controller units, power supplies, and LCD.
+
+.. image:: images/initial_setup_of_velos/image29.png
+  :align: center
+  :scale: 70% 
+
+System Settings -> Log Settings
+-------------------------------
+
+Under **System Settings > Log Settings** you may add remote log servers for the F5OS system controllers. You can also specify the **Software Component Log Levels** which may be useful when troubleshooting specific issues.
+
+.. image:: images/initial_setup_of_velos/image30.png
+  :align: center
+  :scale: 70% 
+
+System Settings -> File Utilities
+---------------------------------
+
+The **System Settings > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from /var/log can be exported, cores and qkviews can be imported/exported from /var/shared and system controller and chassis partition SW images can be imported into /var/import/staging.
+
+.. image:: images/initial_setup_of_velos/image31.png
+  :align: center
+  :scale: 70% 
+
+The Import/Export utility requires an external HTTPS server to copy to/from. A pop-up will be displayed asking for remote HTTPS server information. The utility does not currently support downloading directly through a browser to your desktop. Download directly to a browser is planned for a future release.
+
+.. image:: images/initial_setup_of_velos/image32.png
+  :align: center
+  :scale: 70% 
+
+System Settings -> Time Settings
+--------------------------------
+
+Under the **System Settings > Time Settings** page Network Time Protocol servers can be added so that the system controller time sources are sync’d to a reliable time source. The Time Zone may also be set.
+
+.. image:: images/initial_setup_of_velos/image33.png
+  :align: center
+  :scale: 70% 
+
+
+System Settings -> Device Certificate
+-------------------------------------
+
+Device certificates and keys can be uploaded via the **Systems Settings > Device Certificates** page.
+
+.. image:: images/initial_setup_of_velos/image34.png
+  :align: center
+  :scale: 70% 
+
+System Settings -> System Reports
+---------------------------------
+
+The **System Settings > System Reports** page allows an admin to generate QKViews and optionally upload them to iHealth. 
+
+.. image:: images/initial_setup_of_velos/image35.png
+  :align: center
+  :scale: 70% 
+
+To generate a QKView click on the button in the upper right-hand corner. It will take some time for the QKview to be generated.  Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if entered them previously and be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
+
+.. image:: images/initial_setup_of_velos/image36.png
+  :width: 45%
+
+.. image:: images/initial_setup_of_velos/image37.png
+  :width: 45%
+
+  
+
 
 
