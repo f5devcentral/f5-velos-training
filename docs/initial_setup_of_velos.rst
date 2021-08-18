@@ -1352,3 +1352,212 @@ Local Users may be defined, passwords set or changed, and then assigned to speci
   :align: center
   :scale: 70% 
 
+Configuration Within the Chassis Partition
+==========================================
+
+Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own CLI, GUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band interfaces. 
+
+.. image:: images/initial_setup_of_velos/image52.png
+  :align: center
+  :scale: 70% 
+
+Chassis Partition Dashboard
+---------------------------
+
+The chassis partition Dashboard will provide a visual system summary of partition and which slots it is assigned to. It will also list the total number of vCPU’s available for multitenancy and how many are currently in use. If there are any active-alarms they will be displayed on this page. There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly there is a high availability status display.
+
+.. image:: images/initial_setup_of_velos/image53.png
+  :align: center
+  :scale: 70% 
+
+Chassis Partition Networking
+----------------------------
+
+Before configuring any tenant, you’ll need to setup networking for the chassis partition. All in-band networking is configured within the chassis partition layer, and all chassis partitions are completely isolated from each other. You cannot share any in-band networking internally between different chassis partitions.
+
+Network Settings - > Port Groups
+--------------------------------
+
+Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure the portgroups so that physical interfaces on the blade are configured for the proper speed and bundling. The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. The term portgroup is used rather than simply Port because some front panel sockets may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly (this will require a reboot of the blade). The portgroup components are created by the system, based on the type of the blades installed. The user can modify the portgroup mode.
+
+.. image:: images/initial_setup_of_velos/image54.png
+  :width: 45%
+
+
+.. image:: images/initial_setup_of_velos/image55.png
+  :width: 45%
+
+**NOTE: Both ports on the BX110 blade must be configured in the same mode in release 1.0. i.e. both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
+
+Configuring PortGroups from the GUI
+-----------------------------------
+
+To configure Portgroups go to Network Settings > Port Groups in the chassis partition GUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the GUI page:
+
+.. image:: images/initial_setup_of_velos/image56.png
+  :align: center
+  :scale: 70% 
+
+If you do make a change the blade will be forced to reboot to load a new bitstream image into the FPGA.
+
+Configuring PortGroups from the CLI
+-----------------------------------
+
+Portgroups can be configured from the chassis partition CLI using the portgroups command on config mode. The following command will set interface 1/1 for 100GB:
+
+.. code-block: bash
+
+  bigpartition-2# config
+  Entering configuration mode terminal
+  bigpartition-2(config)# portgroups portgroup 1/1 config mode MODE_100GB
+
+You must commit for any changes to take affect:
+
+.. code-block: bash
+
+  bigpartition-2(config)# commit
+
+
+Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command show running-config portgroups:
+
+.. code-block: bash
+
+  bigpartition-2# show running-config portgroups 
+  portgroups portgroup 1/1
+  config name 1/1
+  config mode MODE_100GB
+  config ddm ddm-poll-frequency 30
+  !
+  portgroups portgroup 1/2
+  config name 1/2
+  config mode MODE_100GB
+  config ddm ddm-poll-frequency 30
+  !
+  portgroups portgroup 2/1
+  config name 2/1
+  config mode MODE_100GB
+  config ddm ddm-poll-frequency 30
+  !
+  portgroups portgroup 2/2
+  config name 2/2
+  config mode MODE_100GB
+  config ddm ddm-poll-frequency 30
+  !
+  bigpartition-2# 
+
+Configuring PortGroups from the API
+
+To list the current portgroup configuration issue the following API call:
+
+.. code-block: bash
+
+GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgroups
+
+.. code-block: json
+
+  {
+      "f5-portgroup:portgroups": {
+          "portgroup": [
+              {
+                  "portgroup_name": "1/1",
+                  "config": {
+                      "name": "1/1",
+                      "mode": "MODE_100GB",
+                      "f5-ddm:ddm": {
+                          "ddm-poll-frequency": 30
+                      }
+                  },
+                  "state": {
+                      "vendor-name": "F5 NETWORKS INC.",
+                      "vendor-oui": "009065",
+                      "vendor-partnum": "OPT-0031        ",
+                      "vendor-revision": "A0",
+                      "vendor-serialnum": "X3CAU5A         ",
+                      "transmitter-technology": "850 nm VCSEL",
+                      "media": "100GBASE-SR4",
+                      "optic-state": "QUALIFIED",
+                      "f5-ddm:ddm": {
+                          "rx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-14.0",
+                                  "warn": "-11.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.01",
+                                  "val-lane2": "0.23",
+                                  "val-lane3": "-0.18",
+                                  "val-lane4": "0.11"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.4",
+                                  "warn": "2.4"
+                              }
+                          },
+                          "tx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-10.0",
+                                  "warn": "-8.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "-0.33",
+                                  "val-lane2": "-0.08",
+                                  "val-lane3": "-0.28",
+                                  "val-lane4": "-0.2"
+                              },
+                              "high-threshold": {
+                                  "alarm": "5.0",
+                                  "warn": "3.0"
+                              }
+                          },
+                          "temp": {
+                              "low-threshold": {
+                                  "alarm": "-5.0",
+                                  "warn": "0.0"
+                              },
+                              "instant": {
+                                  "val": "23.8828"
+                              },
+                              "high-threshold": {
+                                  "alarm": "75.0",
+                                  "warn": "70.0"
+                              }
+                          },
+                          "bias": {
+                              "low-threshold": {
+                                  "alarm": "0.003",
+                                  "warn": "0.005"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.007576",
+                                  "val-lane2": "0.00746",
+                                  "val-lane3": "0.007592",
+                                  "val-lane4": "0.007484"
+                              },
+                              "high-threshold": {
+                                  "alarm": "0.013",
+                                  "warn": "0.011"
+                              }
+                          },
+                          "vcc": {
+                              "low-threshold": {
+                                  "alarm": "2.97",
+                                  "warn": "3.135"
+                              },
+                              "instant": {
+                                  "val": "3.2565"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.63",
+                                  "warn": "3.465"
+                              }
+                          }
+                      }
+                  }
+              },
+              {
+                  "portgroup_name": "1/2",
+
+Network Settings -> Interfaces
+------------------------------
+
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be 1/1.0 & 1/2.0 for slot 1, and 2/1.0 & 2/2.0 for slot 2 etc…. If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
