@@ -1557,7 +1557,16 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                   }
               },
               {
-                  "portgroup_name": "1/2",
+                  "portgroup_name": "1/2"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 Network Settings -> Interfaces
 ------------------------------
