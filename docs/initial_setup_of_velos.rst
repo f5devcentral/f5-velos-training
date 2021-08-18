@@ -1474,7 +1474,7 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                       "vendor-oui": "009065",
                       "vendor-partnum": "OPT-0031        ",
                       "vendor-revision": "A0",
-                      "vendor-serialnum": "X3CAU5A         ",
+                      "vendor-serialnum": "X3CAU1J         ",
                       "transmitter-technology": "850 nm VCSEL",
                       "media": "100GBASE-SR4",
                       "optic-state": "QUALIFIED",
@@ -1485,10 +1485,10 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                                   "warn": "-11.0"
                               },
                               "instant": {
-                                  "val-lane1": "0.01",
-                                  "val-lane2": "0.23",
-                                  "val-lane3": "-0.18",
-                                  "val-lane4": "0.11"
+                                  "val-lane1": "-0.08",
+                                  "val-lane2": "-0.61",
+                                  "val-lane3": "-0.19",
+                                  "val-lane4": "-0.73"
                               },
                               "high-threshold": {
                                   "alarm": "3.4",
@@ -1501,10 +1501,10 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                                   "warn": "-8.0"
                               },
                               "instant": {
-                                  "val-lane1": "-0.33",
-                                  "val-lane2": "-0.08",
-                                  "val-lane3": "-0.28",
-                                  "val-lane4": "-0.2"
+                                  "val-lane1": "-0.77",
+                                  "val-lane2": "-1.01",
+                                  "val-lane3": "-1.01",
+                                  "val-lane4": "-0.82"
                               },
                               "high-threshold": {
                                   "alarm": "5.0",
@@ -1517,7 +1517,7 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                                   "warn": "0.0"
                               },
                               "instant": {
-                                  "val": "23.8828"
+                                  "val": "23.4609"
                               },
                               "high-threshold": {
                                   "alarm": "75.0",
@@ -1530,9 +1530,105 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                                   "warn": "0.005"
                               },
                               "instant": {
-                                  "val-lane1": "0.007576",
-                                  "val-lane2": "0.00746",
-                                  "val-lane3": "0.007592",
+                                  "val-lane1": "0.007526",
+                                  "val-lane2": "0.007484",
+                                  "val-lane3": "0.00752",
+                                  "val-lane4": "0.006914"
+                              },
+                              "high-threshold": {
+                                  "alarm": "0.013",
+                                  "warn": "0.011"
+                              }
+                          },
+                          "vcc": {
+                              "low-threshold": {
+                                  "alarm": "2.97",
+                                  "warn": "3.135"
+                              },
+                              "instant": {
+                                  "val": "3.2555"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.63",
+                                  "warn": "3.465"
+                              }
+                          }
+                      }
+                  }
+              },
+              {
+                  "portgroup_name": "1/2",
+                  "config": {
+                      "name": "1/2",
+                      "mode": "MODE_100GB",
+                      "f5-ddm:ddm": {
+                          "ddm-poll-frequency": 30
+                      }
+                  },
+                  "state": {
+                      "vendor-name": "F5 NETWORKS INC.",
+                      "vendor-oui": "009065",
+                      "vendor-partnum": "OPT-0031        ",
+                      "vendor-revision": "A0",
+                      "vendor-serialnum": "X3CAU7H         ",
+                      "transmitter-technology": "850 nm VCSEL",
+                      "media": "100GBASE-SR4",
+                      "optic-state": "QUALIFIED",
+                      "f5-ddm:ddm": {
+                          "rx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-14.0",
+                                  "warn": "-11.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.95",
+                                  "val-lane2": "0.84",
+                                  "val-lane3": "0.82",
+                                  "val-lane4": "1.17"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.4",
+                                  "warn": "2.4"
+                              }
+                          },
+                          "tx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-10.0",
+                                  "warn": "-8.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "-0.29",
+                                  "val-lane2": "-0.52",
+                                  "val-lane3": "-0.08",
+                                  "val-lane4": "-0.34"
+                              },
+                              "high-threshold": {
+                                  "alarm": "5.0",
+                                  "warn": "3.0"
+                              }
+                          },
+                          "temp": {
+                              "low-threshold": {
+                                  "alarm": "-5.0",
+                                  "warn": "0.0"
+                              },
+                              "instant": {
+                                  "val": "23.4218"
+                              },
+                              "high-threshold": {
+                                  "alarm": "75.0",
+                                  "warn": "70.0"
+                              }
+                          },
+                          "bias": {
+                              "low-threshold": {
+                                  "alarm": "0.003",
+                                  "warn": "0.005"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.00749",
+                                  "val-lane2": "0.007632",
+                                  "val-lane3": "0.00747",
                                   "val-lane4": "0.007484"
                               },
                               "high-threshold": {
@@ -1546,7 +1642,7 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                                   "warn": "3.135"
                               },
                               "instant": {
-                                  "val": "3.2565"
+                                  "val": "3.2668"
                               },
                               "high-threshold": {
                                   "alarm": "3.63",
@@ -1557,16 +1653,200 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
                   }
               },
               {
-                  "portgroup_name": "1/2"
-                }
+                  "portgroup_name": "2/1",
+                  "config": {
+                      "name": "2/1",
+                      "mode": "MODE_100GB",
+                      "f5-ddm:ddm": {
+                          "ddm-poll-frequency": 30
+                      }
+                  },
+                  "state": {
+                      "vendor-name": "F5 NETWORKS INC.",
+                      "vendor-oui": "009065",
+                      "vendor-partnum": "OPT-0031        ",
+                      "vendor-revision": "A0",
+                      "vendor-serialnum": "X3CAU16         ",
+                      "transmitter-technology": "850 nm VCSEL",
+                      "media": "100GBASE-SR4",
+                      "optic-state": "QUALIFIED",
+                      "f5-ddm:ddm": {
+                          "rx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-14.0",
+                                  "warn": "-11.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "-0.74",
+                                  "val-lane2": "-0.82",
+                                  "val-lane3": "-0.94",
+                                  "val-lane4": "-1.07"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.4",
+                                  "warn": "2.4"
+                              }
+                          },
+                          "tx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-10.0",
+                                  "warn": "-8.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "-0.81",
+                                  "val-lane2": "-0.52",
+                                  "val-lane3": "-0.99",
+                                  "val-lane4": "-0.54"
+                              },
+                              "high-threshold": {
+                                  "alarm": "5.0",
+                                  "warn": "3.0"
+                              }
+                          },
+                          "temp": {
+                              "low-threshold": {
+                                  "alarm": "-5.0",
+                                  "warn": "0.0"
+                              },
+                              "instant": {
+                                  "val": "25.1601"
+                              },
+                              "high-threshold": {
+                                  "alarm": "75.0",
+                                  "warn": "70.0"
+                              }
+                          },
+                          "bias": {
+                              "low-threshold": {
+                                  "alarm": "0.003",
+                                  "warn": "0.005"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.007464",
+                                  "val-lane2": "0.0075",
+                                  "val-lane3": "0.007408",
+                                  "val-lane4": "0.007494"
+                              },
+                              "high-threshold": {
+                                  "alarm": "0.013",
+                                  "warn": "0.011"
+                              }
+                          },
+                          "vcc": {
+                              "low-threshold": {
+                                  "alarm": "2.97",
+                                  "warn": "3.135"
+                              },
+                              "instant": {
+                                  "val": "3.2564"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.63",
+                                  "warn": "3.465"
+                              }
+                          }
+                      }
+                  }
+              },
+              {
+                  "portgroup_name": "2/2",
+                  "config": {
+                      "name": "2/2",
+                      "mode": "MODE_100GB",
+                      "f5-ddm:ddm": {
+                          "ddm-poll-frequency": 30
+                      }
+                  },
+                  "state": {
+                      "vendor-name": "F5 NETWORKS INC.",
+                      "vendor-oui": "009065",
+                      "vendor-partnum": "OPT-0031        ",
+                      "vendor-revision": "A0",
+                      "vendor-serialnum": "X3DA16Y         ",
+                      "transmitter-technology": "850 nm VCSEL",
+                      "media": "100GBASE-SR4",
+                      "optic-state": "QUALIFIED",
+                      "f5-ddm:ddm": {
+                          "rx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-14.0",
+                                  "warn": "-11.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.09",
+                                  "val-lane2": "0.23",
+                                  "val-lane3": "0.2",
+                                  "val-lane4": "0.36"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.4",
+                                  "warn": "2.4"
+                              }
+                          },
+                          "tx-pwr": {
+                              "low-threshold": {
+                                  "alarm": "-10.0",
+                                  "warn": "-8.0"
+                              },
+                              "instant": {
+                                  "val-lane1": "-0.49",
+                                  "val-lane2": "-0.69",
+                                  "val-lane3": "-0.49",
+                                  "val-lane4": "-0.48"
+                              },
+                              "high-threshold": {
+                                  "alarm": "5.0",
+                                  "warn": "3.0"
+                              }
+                          },
+                          "temp": {
+                              "low-threshold": {
+                                  "alarm": "-5.0",
+                                  "warn": "0.0"
+                              },
+                              "instant": {
+                                  "val": "23.8632"
+                              },
+                              "high-threshold": {
+                                  "alarm": "75.0",
+                                  "warn": "70.0"
+                              }
+                          },
+                          "bias": {
+                              "low-threshold": {
+                                  "alarm": "0.003",
+                                  "warn": "0.005"
+                              },
+                              "instant": {
+                                  "val-lane1": "0.007494",
+                                  "val-lane2": "0.007448",
+                                  "val-lane3": "0.00747",
+                                  "val-lane4": "0.007494"
+                              },
+                              "high-threshold": {
+                                  "alarm": "0.013",
+                                  "warn": "0.011"
+                              }
+                          },
+                          "vcc": {
+                              "low-threshold": {
+                                  "alarm": "2.97",
+                                  "warn": "3.135"
+                              },
+                              "instant": {
+                                  "val": "3.2558"
+                              },
+                              "high-threshold": {
+                                  "alarm": "3.63",
+                                  "warn": "3.465"
+                              }
+                          }
+                      }
+                  }
               }
-            }
-          }
-        }
+          ]
       }
-    }
   }
-
 
 Network Settings -> Interfaces
 ------------------------------
