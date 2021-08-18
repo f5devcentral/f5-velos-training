@@ -1233,7 +1233,7 @@ The **System Settings > System Reports** page allows an admin to generate QKView
 To generate a QKView click on the button in the upper right-hand corner. It will take some time for the QKview to be generated.  
 
 .. image:: images/initial_setup_of_velos/image36.png
-   :align: center
+  :align: center
   :scale: 70% 
 
 .. image:: images/initial_setup_of_velos/image37.png
@@ -1246,5 +1246,109 @@ Once the QKView is generated, you can click the checkbox next to it, and then se
   :align: center
   :scale: 70% 
 
+If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter config mode, and then use the system diagnostics ihealth config command to configure a username and password.
 
+.. code-block:: bash
+
+  syscon-1-active(config)# system diagnostics ihealth config ?
+  Possible completions:
+    authserver   Server for Authentication server of iHealth ex:- https://api.f5.com/auth/pub/sso/login/ihealth-api
+    password     password to login to iHealth
+    server       Server for iHealth ex:- https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_gui=True
+    username     username to login to iHealth
+  syscon-1-active(config)# system diagnostics ihealth config 
+
+
+System Settings -> Configuration Backup
+---------------------------------------
+
+You may backup the confd configuration databases for the system controller via the GUI. The backups can then be copied off-box using the file utilities GUI option. Currently the GUI does not support the restoration of confd backups, this must be done via the CLI. 
+
+.. image:: images/initial_setup_of_velos/image39.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image40.png
+  :align: center
+  :scale: 70% 
+
+
+System Settings -> Licensing
+----------------------------
+
+Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is handled, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS licensing is applied at the system controller and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to add-on license for MAX SSL/Compression or for tenancy. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost.
+
+Licenses can be applied via CLI, GUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. 
+
+.. image:: images/initial_setup_of_velos/image41.png
+  :align: center
+  :scale: 70% 
+
+
+System Settings -> Software Install Status
+------------------------------------------
+
+The **System Settings -> Software Install Status** is used to verify and observe software updates of the system controllers and the chassis partitions. You can view the various stages of the install process.
+
+.. image:: images/initial_setup_of_velos/image42.png
+  :align: center
+  :scale: 70% 
+
+System Settings -> General
+--------------------------
+
+The **System Settings > General** page allows you to configure Appliance mode for the system controllers. Appliance mode is a security feature where all root and bash shell access are disabled. A user will only be able to utilize the F5OS CLI when Appliance mode is enabled. The page also displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partitions.
+
+.. image:: images/initial_setup_of_velos/image43.png
+  :align: center
+  :scale: 70% 
+
+User Management -> Auth Settings
+--------------------------------
+
+Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP & RADIUS. Active Directory and TACACS remote auth are not currently supported in the v1.1.x versions of the F5OS layer. These have been added to the v1.2.x F5OS release and are currently configurable via the CLI only. GUI configuration support for TACACS and Active Directory will be added in a subsequent release. 
+
+**Note: VELOS tenants running TMOS support Active Directory and TACACS for remote auth. The limitation is only for the F5OS v1.1.x platform layer. **
+
+.. image:: images/initial_setup_of_velos/image44.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image45.png
+  :align: center
+  :scale: 70% 
+
+User Management -> Server Groups
+--------------------------------
+
+You may define Server Groups which are collections of remote auth servers that the VELOS platform layer will use to authenticate against. Currently LDAP and RADIUS are supported. For LDAP you may choose to authenticate of TCP or SSL. You can configure the remote host’s IP address and port. 
+
+.. image:: images/initial_setup_of_velos/image46.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image47.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image48.png
+  :align: center
+  :scale: 70% 
+
+User Management -> Users
+------------------------
+
+Local Users may be defined, passwords set or changed, and then assigned to specific roles (Admin or Operator). An account may also be locked, and that may be changed here.
+
+.. image:: images/initial_setup_of_velos/image49.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image50.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image51.png
+  :align: center
+  :scale: 70% 
 
