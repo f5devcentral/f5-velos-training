@@ -1382,10 +1382,12 @@ Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure 
 
 .. image:: images/initial_setup_of_velos/image54.png
   :width: 45%
+   :scale: 70% 
 
 
 .. image:: images/initial_setup_of_velos/image55.png
   :width: 45%
+   :scale: 70% 
 
 **NOTE: Both ports on the BX110 blade must be configured in the same mode in release 1.0. i.e. both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
 
@@ -1561,3 +1563,4 @@ Network Settings -> Interfaces
 ------------------------------
 
 Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be 1/1.0 & 1/2.0 for slot 1, and 2/1.0 & 2/2.0 for slot 2 etc…. If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
+
