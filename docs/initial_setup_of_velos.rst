@@ -1230,15 +1230,21 @@ The **System Settings > System Reports** page allows an admin to generate QKView
   :align: center
   :scale: 70% 
 
-To generate a QKView click on the button in the upper right-hand corner. It will take some time for the QKview to be generated.  Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if entered them previously and be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
+To generate a QKView click on the button in the upper right-hand corner. It will take some time for the QKview to be generated.  
 
 .. image:: images/initial_setup_of_velos/image36.png
-  :width: 45%
+   :align: center
+  :scale: 70% 
 
 .. image:: images/initial_setup_of_velos/image37.png
-  :width: 45%
+  :align: center
+  :scale: 70% 
 
-  
+Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if entered them previously and be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
+
+.. image:: images/initial_setup_of_velos/image38.png
+  :align: center
+  :scale: 70% 
 
 
 
