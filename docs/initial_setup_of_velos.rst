@@ -1566,7 +1566,7 @@ GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgro
       }
     }
   }
-}
+
 
 Network Settings -> Interfaces
 ------------------------------
