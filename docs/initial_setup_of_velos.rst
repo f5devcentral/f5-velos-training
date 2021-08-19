@@ -1853,3 +1853,381 @@ Network Settings -> Interfaces
 
 Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be 1/1.0 & 1/2.0 for slot 1, and 2/1.0 & 2/2.0 for slot 2 etc…. If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
+.. image:: images/initial_setup_of_velos/image57.png
+  :align: center
+  :scale: 70% 
+
+Configuring Interfaces from the GUI
+-----------------------------------
+
+Within the chassis partition GUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
+
+.. image:: images/initial_setup_of_velos/image58.png
+  :align: center
+  :scale: 70%  
+
+You can click on any interface to view its settings or edit them. You can currently change the interface State via the GUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG then the VLAN configuration is done within the LAG rather than the interface.
+
+.. image:: images/initial_setup_of_velos/image59.png
+  :align: center
+  :scale: 70% 
+
+Configuring Interfaces from the CLI
+-----------------------------------
+
+Interfaces can be configured in the chassis partition CLI. As mentioned previously portgroups should be configured for their desired state before configuring any interfaces as the interface numbering may change. In the CLI enter config mode and then specify the interface you want to configure. If the interface is going to be part of a LAG, then most of the configuration is done within the LAG. Use the command show running-config interfaces to see the current configuration:
+
+
+.. code-block:: bash
+
+  bigpartition-2# show running-config interfaces 
+  interfaces interface 1/1.0
+  config name 1/1.0
+  config type ethernetCsmacd
+  config enabled
+  config tpid TPID_0X8100
+  ethernet config aggregate-id ha
+  !
+  interfaces interface 1/2.0
+  config name 1/2.0
+  config type ethernetCsmacd
+  config enabled
+  config tpid TPID_0X8100
+  ethernet config aggregate-id Arista
+  !
+  interfaces interface 2/1.0
+  config name 2/1.0
+  config type ethernetCsmacd
+  config enabled
+  config tpid TPID_0X8100
+  ethernet config aggregate-id Arista
+  !
+  interfaces interface 2/2.0
+  config name 2/2.0
+  config type ethernetCsmacd
+  config enabled
+  config tpid TPID_0X8100
+  ethernet config aggregate-id ha
+  !
+  interfaces interface Arista
+  config name Arista
+  config type ieee8023adLag
+  config tpid TPID_0X8100
+  aggregation config lag-type LACP
+  aggregation config distribution-hash src-dst-ipport
+  aggregation switched-vlan config trunk-vlans [ 444 555 ]
+  !
+  interfaces interface ha
+  config name ha
+  config type ieee8023adLag
+  config tpid TPID_0X8100
+  aggregation config lag-type LACP
+  aggregation config distribution-hash src-dst-ipport
+  aggregation switched-vlan config trunk-vlans [ 500 ]
+  !
+
+To make any changes you will need to enter config mode and then enter the interface to make changes. Be sure to commit any changes as they don’t take effect until the commit is issues.
+
+.. code-block:: bash
+
+  bigpartition-1# config
+  Entering configuration mode terminal
+  bigpartition-1(config)# interfaces interface 1/1.0
+  bigpartition-1(config-interface-1/1.0)# ethernet switched-vlan config trunk-vlans 500
+  bigpartition-1(config-interface-1/1.0)# commit
+
+Configuring Interfaces from the API
+
+The following API command will list all the current interfaces within the current chassis partition with their configuration and status: 
+
+.. code-block:: bash
+
+  GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+.. code-block:: json
+
+    {
+      "openconfig-interfaces:interfaces": {
+          "interface": [
+              {
+                  "name": "3/1.0",
+                  "config": {
+                      "name": "3/1.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "enabled": true,
+                      "openconfig-vlan:tpid": "openconfig-vlan-types:TPID_0X8100"
+                  },
+                  "state": {
+                      "name": "3/1.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "counters": {
+                          "in-octets": "0",
+                          "in-unicast-pkts": "0",
+                          "in-broadcast-pkts": "0",
+                          "in-multicast-pkts": "0",
+                          "in-discards": "0",
+                          "in-errors": "0",
+                          "in-fcs-errors": "0",
+                          "out-octets": "2820",
+                          "out-unicast-pkts": "0",
+                          "out-broadcast-pkts": "0",
+                          "out-multicast-pkts": "30",
+                          "out-discards": "0",
+                          "out-errors": "0"
+                      },
+                      "f5-interface:forward-error-correction": "auto",
+                      "f5-lacp:lacp_state": "LACP_DEFAULTED"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "state": {
+                          "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                          "hw-mac-address": "00:94:a1:8e:d1:00",
+                          "counters": {
+                              "in-mac-control-frames": "0",
+                              "in-mac-pause-frames": "0",
+                              "in-oversize-frames": "0",
+                              "in-jabber-frames": "0",
+                              "in-fragment-frames": "0",
+                              "in-8021q-frames": "0",
+                              "in-crc-errors": "0",
+                              "out-mac-control-frames": "0",
+                              "out-mac-pause-frames": "0",
+                              "out-8021q-frames": "0"
+                          },
+                          "f5-if-ethernet:flow-control": {
+                              "rx": "on"
+                          }
+                      },
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  500
+                              ]
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "3/2.0",
+                  "config": {
+                      "name": "3/2.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "enabled": true,
+                      "openconfig-vlan:tpid": "openconfig-vlan-types:TPID_0X8100"
+                  },
+                  "state": {
+                      "name": "3/2.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "counters": {
+                          "in-octets": "62245397142",
+                          "in-unicast-pkts": "152194827",
+                          "in-broadcast-pkts": "62238",
+                          "in-multicast-pkts": "297616",
+                          "in-discards": "18882",
+                          "in-errors": "0",
+                          "in-fcs-errors": "0",
+                          "out-octets": "61962689001",
+                          "out-unicast-pkts": "167540438",
+                          "out-broadcast-pkts": "855",
+                          "out-multicast-pkts": "60",
+                          "out-discards": "0",
+                          "out-errors": "0"
+                      },
+                      "f5-interface:forward-error-correction": "auto",
+                      "f5-lacp:lacp_state": "LACP_DEFAULTED"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "state": {
+                          "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                          "hw-mac-address": "00:94:a1:8e:d1:01",
+                          "counters": {
+                              "in-mac-control-frames": "0",
+                              "in-mac-pause-frames": "0",
+                              "in-oversize-frames": "0",
+                              "in-jabber-frames": "0",
+                              "in-fragment-frames": "0",
+                              "in-8021q-frames": "0",
+                              "in-crc-errors": "0",
+                              "out-mac-control-frames": "0",
+                              "out-mac-pause-frames": "0",
+                              "out-8021q-frames": "0"
+                          },
+                          "f5-if-ethernet:flow-control": {
+                              "rx": "on"
+                          }
+                      },
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  444,
+                                  555
+                              ]
+                          }
+                      }
+                  }
+              }
+          ]
+      }
+  }
+
+
+To configure interfaces (that are not part of a LAG), use the following PATCH API call. In the example below VLANs are being assigned to the physical interfaces.
+
+.. code-block:: bash
+
+  PATCH https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+.. code-block:: json
+
+  {
+      "openconfig-interfaces:interfaces": {
+          "interface": [
+              {
+                  "name": "3/1.0",
+                  "openconfig-if-ethernet:ethernet": {
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  500
+                              ]
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "3/2.0",
+                  "openconfig-if-ethernet:ethernet": {
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  444,
+                                  555
+                              ]
+                          }
+                      }
+                  }
+              }
+          ]
+      }
+  }
+
+
+Network Settings -> VLANs
+--------------------------
+
+All in-band networking including VLANs are configured in the VELOS chassis partition layer, and just like vCMP guests inherit VLANs, VLANs will be inherited by VELOS tenants. This allows administrators to assign the VLANs that are authorized for use by the tenant at the chassis partition layer, and then within the tenant there is no ability to configure lower-level networking like interfaces, LAG’s and VLANs. 
+
+VELOS supports both tagged (802.1Q) and untagged VLAN interfaces externally. VLANs can be configured from the CLI, GUI, or API.
+
+**Note: 802.1Q-in-Q (double VLAN tagging) is not currently supported on the VELOS platform.**
+
+**Note: VLAN names configured at the F5OS layer will be autogenerated as “vlan-<ID#>” inside the tenant itself in early versions of F5OS. This is different behavior than a vCMP guest. The Journey’s migration tool will handle this workflow by restoring a UCS which has the original VLAN names. You can change the VLAN name inside the tenant by deleting them and recreating them with the same VLAN ID configured in the F5OS platform layer, but with the desired name. This difference with vCMP has been corrected in v1.?.? versions of F5OS, and now VLAN names are passed onto the tenant.**
+
+Configuring VLANs from the GUI
+------------------------------
+
+VLANs can be created in the chassis partition GUI under Network Settings > VLANs. VLANs are not shared across chassis partitions, and each partition must configure its own set of VLANs. When adding a new VLAN you will define a Name and a VLAN ID. When you assign this VLAN to an interface or LAG you will determine if you want it to be untagged by configuring it as a Native VLAN or tagged by adding it as a Trunked VLAN.
+
+.. image:: images/initial_setup_of_velos/image60.png
+  :align: center
+  :scale: 70% 
+
+  .. image:: images/initial_setup_of_velos/image61.png
+  :align: center
+  :scale: 70% 
+
+Configuring VLANs from the CLI
+------------------------------
+
+VLANs can be configured within the chassis partition CLI. Once VLANs are created they can either be assigned to a physical interfaces or LAGs within the chassis partition. VLANs must be given a name and a VLAN ID. You can choose if a VLAN is tagged or untagged within the physical interface or LAG configuration.
+
+To show the current configured VLANs and their options use the command show running-config vlans.
+
+.. code-block:: bash
+
+  bigpartition-2# show running-config vlans
+  vlans vlan 444
+  config vlan-id 444
+  config name Internal
+  !
+  vlans vlan 500
+  config vlan-id 500
+  config name ha
+  !
+  vlans vlan 555
+  config vlan-id 555
+  config name External
+  !
+  bigpartition-2# 
+
+You can also see configured state of VLANs by running the show vlans command:
+
+.. code-block:: bash
+
+  bigpartition-2# show vlans
+  VLAN             
+  ID    INTERFACE  
+  -----------------
+  444   Arista     
+  500   ha         
+  555   Arista     
+
+  bigpartition-2# 
+
+There are a few other VLAN related commands to show the configuration and running state of vlan-listeners. show running-config vlan-listeners will show the current configuration. A VLAN listener is created for each VLAN and is responsible for rebroadcasting traffic within the VLAN.
+
+NOTE: For Shared VLANs amongst different tenants, the VLAN must be tied to an external interface or LAG in order for the VLAN listener to be created. 
+
+.. code-block:: bash
+
+  bigpartition-2# show running-config vlan-listeners 
+  vlan-listeners vlan-listener Arista 444
+  config entry-type RBCAST-LISTENER
+  config owner rbcast
+  config ifh-fields ndi-id 4095
+  config ifh-fields svc 5
+  config ifh-fields vtc 32
+  config ifh-fields sep 15
+  config ifh-fields mirroring disabled
+  config service-ids [ 8 10 ]
+  !
+  vlan-listeners vlan-listener Arista 555
+  config entry-type RBCAST-LISTENER
+  config owner rbcast
+  config ifh-fields ndi-id 4095
+  config ifh-fields svc 5
+  config ifh-fields vtc 32
+  config ifh-fields sep 15
+  config ifh-fields mirroring disabled
+  config service-ids [ 8 10 ]
+  !
+  vlan-listeners vlan-listener ha 500
+  config entry-type RBCAST-LISTENER
+  config owner rbcast
+  config ifh-fields ndi-id 4095
+  config ifh-fields svc 5
+  config ifh-fields vtc 32
+  config ifh-fields sep 15
+  config ifh-fields mirroring disabled
+  config service-ids [ 8 10 ]
+  !
+
+The show vlan-listeners command will show the current state:
+
+.. code-block:: bash
+
+  bigpartition-1# show vlan-listeners 
+                                                  NDI                                             SERVICE  
+  INTERFACE        VLAN  ENTRY TYPE       OWNER    ID    SVC  VTC  SEP  DMS  DID  CMDS  MIRRORING  IDS      
+  ----------------------------------------------------------------------------------------------------------
+  Arista           444   RBCAST-LISTENER  rbcast   4095  5    32   15   -    -    -     disabled   [ 8 9 ]  
+  Arista           555   RBCAST-LISTENER  rbcast   4095  5    32   15   -    -    -     disabled   [ 8 9 ]  
+  HA-Interconnect  500   VLAN-LISTENER    tenant2  4095  9    -    15   -    -    -     disabled   -        
+  HA-Interconnect  501   VLAN-LISTENER    tenant1  4095  8    -    15   -    -    -     disabled   -     
+
