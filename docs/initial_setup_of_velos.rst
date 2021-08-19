@@ -2242,96 +2242,102 @@ Configuring VLANs from the API
 
 To configure VLANs use the following API command and JSON body. This will configure 3 VLANs (Interna-VLAN, External-VLAN, & HA-VLAN) along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
 
-PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+.. code-block:: bash
+  PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
 
-{
-    "openconfig-vlan:vlans": {
-        "vlan": [
-            {
-                "vlan-id": "444",
-                "config": {
-                    "vlan-id": 444,
-                    "name": "Internal-VLAN"
-                }
-            },
-            {
-                "vlan-id": "555",
-                "config": {
-                    "vlan-id": 555,
-                    "name": "External-VLAN"
-                }
-            },
-            {
-                "vlan-id": "500",
-                "config": {
-                    "vlan-id": 500,
-                    "name": "HA-VLAN"
-                }
-            }
-        ]
-    }
-}
+.. code-block:: json
+
+  {
+      "openconfig-vlan:vlans": {
+          "vlan": [
+              {
+                  "vlan-id": "444",
+                  "config": {
+                      "vlan-id": 444,
+                      "name": "Internal-VLAN"
+                  }
+              },
+              {
+                  "vlan-id": "555",
+                  "config": {
+                      "vlan-id": 555,
+                      "name": "External-VLAN"
+                  }
+              },
+              {
+                  "vlan-id": "500",
+                  "config": {
+                      "vlan-id": 500,
+                      "name": "HA-VLAN"
+                  }
+              }
+          ]
+      }
+  }
 
 
 The following command will list the configuration and status of all VLANs within the current chassis partition:
 
+.. code-block:: bash
 
-GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/openconfig-vlan:vlans
+  GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/openconfig-vlan:vlans
 
-{
-    "openconfig-vlan:vlans": {
-        "vlan": [
-            {
-                "vlan-id": 444,
-                "config": {
-                    "vlan-id": 444,
-                    "name": "Internal-VLAN"
-                },
-                "members": {
-                    "member": [
-                        {
-                            "state": {
-                                "interface": "Arista"
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "vlan-id": 500,
-                "config": {
-                    "vlan-id": 500,
-                    "name": "HA-VLAN"
-                },
-                "members": {
-                    "member": [
-                        {
-                            "state": {
-                                "interface": "HA-Interconnect"
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "vlan-id": 555,
-                "config": {
-                    "vlan-id": 555,
-                    "name": "External-VLAN"
-                },
-                "members": {
-                    "member": [
-                        {
-                            "state": {
-                                "interface": "Arista"
-                            }
-                        }
-                    ]
-                }
-            }
-        ]
-    }
-}
+.. code-block:: json
+
+  {
+      "openconfig-vlan:vlans": {
+          "vlan": [
+              {
+                  "vlan-id": 444,
+                  "config": {
+                      "vlan-id": 444,
+                      "name": "Internal-VLAN"
+                  },
+                  "members": {
+                      "member": [
+                          {
+                              "state": {
+                                  "interface": "Arista"
+                              }
+                          }
+                      ]
+                  }
+              },
+              {
+                  "vlan-id": 500,
+                  "config": {
+                      "vlan-id": 500,
+                      "name": "HA-VLAN"
+                  },
+                  "members": {
+                      "member": [
+                          {
+                              "state": {
+                                  "interface": "HA-Interconnect"
+                              }
+                          }
+                      ]
+                  }
+              },
+              {
+                  "vlan-id": 555,
+                  "config": {
+                      "vlan-id": 555,
+                      "name": "External-VLAN"
+                  },
+                  "members": {
+                      "member": [
+                          {
+                              "state": {
+                                  "interface": "Arista"
+                              }
+                          }
+                      ]
+                  }
+              }
+          ]
+      }
+  }
 
 Network Settings -> LAGs
 ------------------------
@@ -2343,7 +2349,7 @@ Configuring LAGs from the GUI
 
 Link Aggregation Groups (LAGs) can be configured in the chassis partition GUI via the **Network Settings > LAGs** page:
 
-  .. image:: images/initial_setup_of_velos/image62.png
+.. image:: images/initial_setup_of_velos/image62.png
   :align: center
   :scale: 70% 
 
@@ -2360,7 +2366,7 @@ https://support.f5.com/csp/article/K33431212
 
 Once you have configured the LAG Type and LACP options, you can add any physical interfaces within this chassis partition to be part of a LAG. Note you cannot add physical interfaces that reside in other chassis partitions as they are completely isolated from each other. Finally, you can configure the **Native VLAN** (for untagged VLAN), and what **Trunked VLANs** (tagged) you’d like to add to this LAG interface.
 
-  .. image:: images/initial_setup_of_velos/image63.png
+.. image:: images/initial_setup_of_velos/image63.png
   :align: center
   :scale: 70% 
 
