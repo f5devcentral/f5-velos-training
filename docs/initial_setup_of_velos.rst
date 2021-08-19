@@ -2486,3 +2486,415 @@ To see that status of the LACP interfaces run the command **show lacp**. It is b
                                                                       2/2.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  3     0:94:a1:8e:58:28   3        8448  4224     714155  713959  0       0       0        0       
 
   bigpartition-1# 
+
+
+If you have shorter width terminal, then the output above may be condensed as seen below:
+
+.. code-block:: bash
+
+  bigpartition-1# show lacp
+  lacp state system-id-mac 00:94:a1:8e:d0:08
+  lacp interfaces interface Arista
+  state name    Arista
+  state interval FAST
+  state lacp-mode ACTIVE
+  state system-id-mac 0:94:a1:8e:d0:8
+  members member 1/2.0
+    state activity   ACTIVE
+    state timeout    SHORT
+    state synchronization IN_SYNC
+    state aggregatable true
+    state collecting true
+    state distributing true
+    state system-id  0:94:a1:8e:d0:8
+    state oper-key   2
+    state partner-id 98:5d:82:1d:2c:a9
+    state partner-key 10
+    state port-num   4352
+    state partner-port-num 125
+    state counters lacp-in-pkts 714408
+    state counters lacp-out-pkts 714471
+    state counters lacp-rx-errors 0
+    state counters lacp-tx-errors 0
+    state counters lacp-unknown-errors 0
+    state counters lacp-errors 0
+  members member 2/1.0
+    state activity   ACTIVE
+    state timeout    SHORT
+    state synchronization IN_SYNC
+    state aggregatable true
+    state collecting true
+    state distributing true
+    state system-id  0:94:a1:8e:d0:8
+    state oper-key   2
+    state partner-id 98:5d:82:1d:2c:a9
+    state partner-key 10
+    state port-num   8320
+    state partner-port-num 129
+    state counters lacp-in-pkts 714428
+    state counters lacp-out-pkts 714469
+    state counters lacp-rx-errors 0
+    state counters lacp-tx-errors 0
+    state counters lacp-unknown-errors 0
+    state counters lacp-errors 0
+  lacp interfaces interface HA-Interconnect
+  state name    HA-Interconnect
+  state interval FAST
+  state lacp-mode ACTIVE
+  state system-id-mac 0:94:a1:8e:d0:8
+  members member 1/1.0
+    state activity   ACTIVE
+    state timeout    SHORT
+    state synchronization IN_SYNC
+    state aggregatable true
+    state collecting true
+    state distributing true
+    state system-id  0:94:a1:8e:d0:8
+    state oper-key   3
+    state partner-id 0:94:a1:8e:58:28
+    state partner-key 3
+    state port-num   4224
+    state partner-port-num 8448
+    state counters lacp-in-pkts 714647
+    state counters lacp-out-pkts 714493
+    state counters lacp-rx-errors 0
+    state counters lacp-tx-errors 0
+    state counters lacp-unknown-errors 0
+    state counters lacp-errors 0
+  members member 2/2.0
+    state activity   ACTIVE
+    state timeout    SHORT
+    state synchronization IN_SYNC
+    state aggregatable true
+    state collecting true
+    state distributing true
+    state system-id  0:94:a1:8e:d0:8
+    state oper-key   3
+    state partner-id 0:94:a1:8e:58:28
+    state partner-key 3
+    state port-num   8448
+    state partner-port-num 4224
+    state counters lacp-in-pkts 714689
+    state counters lacp-out-pkts 714492
+    state counters lacp-rx-errors 0
+    state counters lacp-tx-errors 0
+    state counters lacp-unknown-errors 0
+    state counters lacp-errors 0
+  bigpartition-1# 
+
+Configuring LAGs from the API
+-----------------------------
+
+To create a LAG and add interfaces & proper LACP configuration will take a few different API calls. First a Link Aggregation Group (LAG) interface must be created. You will define a Name, specify the state, the LAG-type of LACP, and define which VLANs will use this LAG interface. In the Example below two LAG interfaces are being created (Arista & HA-Interconnect):
+
+.. code-block:: bash
+
+  PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+  {
+      "openconfig-interfaces:interfaces": {
+          "interface": [
+              {
+                  "name": "Arista",
+                  "config": {
+                      "name": "Arista",
+                      "type": "iana-if-type:ieee8023adLag",
+                      "enabled": true,
+                      "openconfig-vlan:tpid": "openconfig-vlan-types:TPID_0X8100"
+                  },
+                  "openconfig-if-aggregate:aggregation": {
+                      "config": {
+                          "lag-type": "LACP",
+                          "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                      },
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  444,
+                                  555
+                              ]
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "HA-Interconnect",
+                  "config": {
+                      "name": "HA-Interconnect",
+                      "type": "iana-if-type:ieee8023adLag",
+                      "enabled": true,
+                      "openconfig-vlan:tpid": "openconfig-vlan-types:TPID_0X8100"
+                  },
+                  "openconfig-if-aggregate:aggregation": {
+                      "config": {
+                          "lag-type": "LACP",
+                          "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                      },
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  500
+                              ]
+                          }
+                      }
+                  }
+              }
+          ]
+      }
+  }
+
+
+The next step is to add physical interfaces into the LAG group. Interfaces will be added to the aggregate-id that was created in the previous step:
+
+.. code-block:: bash
+
+  PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+    {
+      "openconfig-interfaces:interfaces": {
+          "interface": [
+              {
+                  "name": "1/2.0",
+                  "config": {
+                      "name": "1/2.0"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "Arista"
+                      }
+                  }
+              },
+              {
+                  "name": "2/1.0",
+                  "config": {
+                      "name": "2/1.0"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "Arista"
+                      }
+                  }
+              },
+              {
+                  "name": "1/1.0",
+                  "config": {
+                      "name": "1/1.0"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                      }
+                  }
+              },
+              {
+                  "name": "2/2.0",
+                  "config": {
+                      "name": "2/2.0"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                      }
+                  }
+              }
+          ]
+      }
+  }
+
+The final step is adding LACP configuration for each LAG:
+
+.. code-block:: bash
+
+  PATCH https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+  {
+      "ietf-restconf:data": {
+          "openconfig-lacp:lacp": {
+              "interfaces": {
+                  "interface": [
+                      {
+                          "name": "Arista",
+                          "config": {
+                              "name": "Arista",
+                              "interval": "FAST",
+                              "lacp-mode": "ACTIVE"
+                          }
+                      },
+                      {
+                          "name": "HA-Interconnect",
+                          "config": {
+                              "name": "HA-Interconnect",
+                              "interval": "FAST",
+                              "lacp-mode": "ACTIVE"
+                          }
+                      }
+                  ]
+              }
+          }
+      }
+  }
+
+To view the final LAG configuration via the API use the following API call:
+
+.. code-block:: bash
+
+	GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/openconfig-lacp:lacp
+
+.. code-block:: json
+
+    {
+      "openconfig-lacp:lacp": {
+          "config": {
+              "system-priority": 32768
+          },
+          "state": {
+              "f5-lacp:system-id-mac": "00:94:a1:8e:58:18"
+          },
+          "interfaces": {
+              "interface": [
+                  {
+                      "name": "Arista",
+                      "config": {
+                          "name": "Arista",
+                          "interval": "FAST",
+                          "lacp-mode": "ACTIVE"
+                      },
+                      "state": {
+                          "name": "Arista",
+                          "interval": "FAST",
+                          "lacp-mode": "ACTIVE",
+                          "system-id-mac": "0:94:a1:8e:58:18"
+                      },
+                      "members": {
+                          "member": [
+                              {
+                                  "interface": "1/2.0",
+                                  "state": {
+                                      "activity": "ACTIVE",
+                                      "timeout": "SHORT",
+                                      "synchronization": "IN_SYNC",
+                                      "aggregatable": true,
+                                      "collecting": true,
+                                      "distributing": true,
+                                      "system-id": "0:94:a1:8e:58:18",
+                                      "oper-key": 2,
+                                      "partner-id": "44:4c:a8:fc:cc:23",
+                                      "partner-key": 11,
+                                      "port-num": 4352,
+                                      "partner-port-num": 469,
+                                      "counters": {
+                                          "lacp-in-pkts": "2481",
+                                          "lacp-out-pkts": "2031",
+                                          "lacp-rx-errors": "0",
+                                          "lacp-tx-errors": "0",
+                                          "lacp-unknown-errors": "0",
+                                          "lacp-errors": "0"
+                                      }
+                                  }
+                              },
+                              {
+                                  "interface": "2/1.0",
+                                  "state": {
+                                      "activity": "ACTIVE",
+                                      "timeout": "SHORT",
+                                      "synchronization": "IN_SYNC",
+                                      "aggregatable": true,
+                                      "collecting": true,
+                                      "distributing": true,
+                                      "system-id": "0:94:a1:8e:58:18",
+                                      "oper-key": 2,
+                                      "partner-id": "44:4c:a8:fc:cc:23",
+                                      "partner-key": 11,
+                                      "port-num": 8320,
+                                      "partner-port-num": 457,
+                                      "counters": {
+                                          "lacp-in-pkts": "2498",
+                                          "lacp-out-pkts": "2031",
+                                          "lacp-rx-errors": "0",
+                                          "lacp-tx-errors": "0",
+                                          "lacp-unknown-errors": "0",
+                                          "lacp-errors": "0"
+                                      }
+                                  }
+                              }
+                          ]
+                      }
+                  },
+                  {
+                      "name": "HA-Interconnect",
+                      "config": {
+                          "name": "HA-Interconnect",
+                          "interval": "FAST",
+                          "lacp-mode": "ACTIVE"
+                      },
+                      "state": {
+                          "name": "HA-Interconnect",
+                          "interval": "FAST",
+                          "lacp-mode": "ACTIVE",
+                          "system-id-mac": "0:94:a1:8e:58:18"
+                      },
+                      "members": {
+                          "member": [
+                              {
+                                  "interface": "1/1.0",
+                                  "state": {
+                                      "activity": "ACTIVE",
+                                      "timeout": "SHORT",
+                                      "synchronization": "IN_SYNC",
+                                      "aggregatable": true,
+                                      "collecting": true,
+                                      "distributing": true,
+                                      "system-id": "0:94:a1:8e:58:18",
+                                      "oper-key": 3,
+                                      "partner-id": "0:94:a1:8e:d0:18",
+                                      "partner-key": 3,
+                                      "port-num": 4224,
+                                      "partner-port-num": 8448,
+                                      "counters": {
+                                          "lacp-in-pkts": "2230",
+                                          "lacp-out-pkts": "2030",
+                                          "lacp-rx-errors": "0",
+                                          "lacp-tx-errors": "0",
+                                          "lacp-unknown-errors": "0",
+                                          "lacp-errors": "0"
+                                      }
+                                  }
+                              },
+                              {
+                                  "interface": "2/2.0",
+                                  "state": {
+                                      "activity": "ACTIVE",
+                                      "timeout": "SHORT",
+                                      "synchronization": "IN_SYNC",
+                                      "aggregatable": true,
+                                      "collecting": true,
+                                      "distributing": true,
+                                      "system-id": "0:94:a1:8e:58:18",
+                                      "oper-key": 3,
+                                      "partner-id": "0:94:a1:8e:d0:18",
+                                      "partner-key": 3,
+                                      "port-num": 8448,
+                                      "partner-port-num": 4224,
+                                      "counters": {
+                                          "lacp-in-pkts": "2236",
+                                          "lacp-out-pkts": "2030",
+                                          "lacp-rx-errors": "0",
+                                          "lacp-tx-errors": "0",
+                                          "lacp-unknown-errors": "0",
+                                          "lacp-errors": "0"
+                                      }
+                                  }
+                              }
+                          ]
+                      }
+                  }
+              ]
+          }
+      }
+  }
