@@ -2898,3 +2898,820 @@ To view the final LAG configuration via the API use the following API call:
           }
       }
   }
+
+You can get more granular information down to the interface level using the following API command:
+
+.. code-block:: bash
+
+	GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+.. code-block:: json
+
+  {
+      "openconfig-interfaces:interfaces": {
+          "interface": [
+              {
+                  "name": "1/1.0",
+                  "config": {
+                      "name": "1/1.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "enabled": true
+                  },
+                  "state": {
+                      "name": "1/1.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "counters": {
+                          "in-octets": "91534528",
+                          "in-unicast-pkts": "0",
+                          "in-broadcast-pkts": "1",
+                          "in-multicast-pkts": "715113",
+                          "in-discards": "0",
+                          "in-errors": "0",
+                          "in-fcs-errors": "0",
+                          "out-octets": "91515778",
+                          "out-unicast-pkts": "0",
+                          "out-broadcast-pkts": "0",
+                          "out-multicast-pkts": "714971",
+                          "out-discards": "0",
+                          "out-errors": "0"
+                      },
+                      "f5-interface:forward-error-correction": "auto",
+                      "f5-lacp:lacp_state": "LACP_UP"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                      },
+                      "state": {
+                          "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                          "hw-mac-address": "00:94:a1:8e:d0:02",
+                          "counters": {
+                              "in-mac-control-frames": "0",
+                              "in-mac-pause-frames": "0",
+                              "in-oversize-frames": "0",
+                              "in-jabber-frames": "0",
+                              "in-fragment-frames": "0",
+                              "in-8021q-frames": "0",
+                              "in-crc-errors": "0",
+                              "out-mac-control-frames": "0",
+                              "out-mac-pause-frames": "0",
+                              "out-8021q-frames": "0"
+                          },
+                          "f5-if-ethernet:flow-control": {
+                              "rx": "on"
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "1/2.0",
+                  "config": {
+                      "name": "1/2.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "enabled": true
+                  },
+                  "state": {
+                      "name": "1/2.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "counters": {
+                          "in-octets": "124919687",
+                          "in-unicast-pkts": "0",
+                          "in-broadcast-pkts": "1869",
+                          "in-multicast-pkts": "956957",
+                          "in-discards": "0",
+                          "in-errors": "0",
+                          "in-fcs-errors": "0",
+                          "out-octets": "91513088",
+                          "out-unicast-pkts": "0",
+                          "out-broadcast-pkts": "0",
+                          "out-multicast-pkts": "714946",
+                          "out-discards": "0",
+                          "out-errors": "0"
+                      },
+                      "f5-interface:forward-error-correction": "auto",
+                      "f5-lacp:lacp_state": "LACP_UP"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "Arista"
+                      },
+                      "state": {
+                          "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                          "hw-mac-address": "00:94:a1:8e:d0:03",
+                          "counters": {
+                              "in-mac-control-frames": "0",
+                              "in-mac-pause-frames": "0",
+                              "in-oversize-frames": "0",
+                              "in-jabber-frames": "0",
+                              "in-fragment-frames": "0",
+                              "in-8021q-frames": "0",
+                              "in-crc-errors": "0",
+                              "out-mac-control-frames": "0",
+                              "out-mac-pause-frames": "0",
+                              "out-8021q-frames": "0"
+                          },
+                          "f5-if-ethernet:flow-control": {
+                              "rx": "on"
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "2/1.0",
+                  "config": {
+                      "name": "2/1.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "enabled": true
+                  },
+                  "state": {
+                      "name": "2/1.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "counters": {
+                          "in-octets": "115515500",
+                          "in-unicast-pkts": "0",
+                          "in-broadcast-pkts": "7873",
+                          "in-multicast-pkts": "879353",
+                          "in-discards": "0",
+                          "in-errors": "0",
+                          "in-fcs-errors": "0",
+                          "out-octets": "91518344",
+                          "out-unicast-pkts": "0",
+                          "out-broadcast-pkts": "0",
+                          "out-multicast-pkts": "715003",
+                          "out-discards": "0",
+                          "out-errors": "0"
+                      },
+                      "f5-interface:forward-error-correction": "auto",
+                      "f5-lacp:lacp_state": "LACP_UP"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "Arista"
+                      },
+                      "state": {
+                          "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                          "hw-mac-address": "00:94:a1:8e:d0:82",
+                          "counters": {
+                              "in-mac-control-frames": "0",
+                              "in-mac-pause-frames": "0",
+                              "in-oversize-frames": "0",
+                              "in-jabber-frames": "0",
+                              "in-fragment-frames": "0",
+                              "in-8021q-frames": "0",
+                              "in-crc-errors": "0",
+                              "out-mac-control-frames": "0",
+                              "out-mac-pause-frames": "0",
+                              "out-8021q-frames": "0"
+                          },
+                          "f5-if-ethernet:flow-control": {
+                              "rx": "on"
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "2/2.0",
+                  "config": {
+                      "name": "2/2.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "enabled": true
+                  },
+                  "state": {
+                      "name": "2/2.0",
+                      "type": "iana-if-type:ethernetCsmacd",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "counters": {
+                          "in-octets": "136475840",
+                          "in-unicast-pkts": "0",
+                          "in-broadcast-pkts": "702127",
+                          "in-multicast-pkts": "715154",
+                          "in-discards": "0",
+                          "in-errors": "0",
+                          "in-fcs-errors": "0",
+                          "out-octets": "91515522",
+                          "out-unicast-pkts": "0",
+                          "out-broadcast-pkts": "0",
+                          "out-multicast-pkts": "714969",
+                          "out-discards": "0",
+                          "out-errors": "0"
+                      },
+                      "f5-interface:forward-error-correction": "auto",
+                      "f5-lacp:lacp_state": "LACP_UP"
+                  },
+                  "openconfig-if-ethernet:ethernet": {
+                      "config": {
+                          "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                      },
+                      "state": {
+                          "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                          "hw-mac-address": "00:94:a1:8e:d0:83",
+                          "counters": {
+                              "in-mac-control-frames": "0",
+                              "in-mac-pause-frames": "0",
+                              "in-oversize-frames": "0",
+                              "in-jabber-frames": "0",
+                              "in-fragment-frames": "0",
+                              "in-8021q-frames": "0",
+                              "in-crc-errors": "0",
+                              "out-mac-control-frames": "0",
+                              "out-mac-pause-frames": "0",
+                              "out-8021q-frames": "0"
+                          },
+                          "f5-if-ethernet:flow-control": {
+                              "rx": "on"
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "Arista",
+                  "config": {
+                      "name": "Arista",
+                      "type": "iana-if-type:ieee8023adLag",
+                      "enabled": true
+                  },
+                  "state": {
+                      "name": "Arista",
+                      "type": "iana-if-type:ieee8023adLag",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "f5-interface:forward-error-correction": "auto"
+                  },
+                  "openconfig-if-aggregate:aggregation": {
+                      "config": {
+                          "lag-type": "LACP",
+                          "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                      },
+                      "state": {
+                          "lag-type": "LACP",
+                          "lag-speed": 200,
+                          "f5-if-aggregate:distribution-hash": "src-dst-ipport",
+                          "f5-if-aggregate:mac-address": "00:94:a1:8e:d0:09",
+                          "f5-if-aggregate:lagid": 1
+                      },
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  3010,
+                                  3011
+                              ]
+                          }
+                      }
+                  }
+              },
+              {
+                  "name": "HA-Interconnect",
+                  "config": {
+                      "name": "HA-Interconnect",
+                      "type": "iana-if-type:ieee8023adLag",
+                      "enabled": true
+                  },
+                  "state": {
+                      "name": "HA-Interconnect",
+                      "type": "iana-if-type:ieee8023adLag",
+                      "mtu": 9600,
+                      "enabled": true,
+                      "oper-status": "UP",
+                      "f5-interface:forward-error-correction": "auto"
+                  },
+                  "openconfig-if-aggregate:aggregation": {
+                      "config": {
+                          "lag-type": "LACP",
+                          "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                      },
+                      "state": {
+                          "lag-type": "LACP",
+                          "lag-speed": 200,
+                          "f5-if-aggregate:distribution-hash": "src-dst-ipport",
+                          "f5-if-aggregate:mac-address": "00:94:a1:8e:d0:0a",
+                          "f5-if-aggregate:lagid": 2
+                      },
+                      "openconfig-vlan:switched-vlan": {
+                          "config": {
+                              "trunk-vlans": [
+                                  500,
+                                  501,
+                                  502,
+                                  503
+                              ]
+                          }
+                      }
+                  }
+              }
+          ]
+      }
+  }
+
+Deploying a Tenant
+==================
+
+
+Tenant Image Types
+------------------
+
+VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. The only release supported at launch is 14.1.4, it can be found on downloads.f5.com:
+
+.. image:: images/initial_setup_of_velos/image64.png
+  :align: center
+  :scale: 70% 
+
+Ensure you choose the option labeled 14.1.4_Tenant_VELOS:
+
+.. image:: images/initial_setup_of_velos/image65.png
+  :align: center
+  :scale: 70% 
+
+There are 4 different types of tenant images to choose from as seen below, please read the rest of this section to determine the best image type for your environment:
+
+.. image:: images/initial_setup_of_velos/image66.png
+  :align: center
+  :scale: 70% 
+
+The **T1-VELOS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software meaning it does not support upgrades (not even for hotfixes). This type of image is geared towards more modern environments where pave & nuke strategies are preferred over in place upgrades.   
+
+.. image:: images/initial_setup_of_velos/image67.png
+  :align: center
+  :scale: 70% 
+
+The remaining images (T2, ALL, T4) all support in place upgrades; however, they may limit the amount of disk space that can be used by the tenant and currently there is no utility to expand an image once it is full. A tenant expansion utility is something that is being considered for a future release.
+
+The **T2-VELOS** image is intended for a tenant that will run LTM and or DNS only, it is not suitable for tenants needing other modules provisioned (AVR may be an exception). This type of image is best suited in a high density tenant environment where the number of tenants is going to be high per blade and using minimum CPU resources (1 or 2 vCPU’s per tenant). You may want to limit the amount of disk space each tenant can use as a means of ensuring the filesystem on the blade does not become full. As an example, there is 1TB of disk per blade, and 22 tenants each using the 142GB T4 image would lead to an over provisioning situation. Because tenants are deployed in sparse mode which allows over provisioning, this may not be an issue initially, but could become a problem later in the tenant’s lifespan as it writes more data to disk. To keep the tenants in check, you can deploy smaller T2 images which can consume 45GB each. LTM/DNS deployments use much less disk than other BIG-IP modules which do extensive local logging and utilize databases on disk.
+
+The **All-VELOS** image is suitable for any module configuration and supports a maximum of 76GB for the tenant. It is expected that the number of tenants per blade would be much less, as the module combinations that drive the need for more disk typically require more CPU/Memory which will artificially reduce the tenant count per blade. Having a handful of 76GB or 156GB images per blade should not lead to an out of space condition. There are some environments where some tenants may need more disk space and the T4 image can provide for that. Until expansion utilities are made available, it may be best to default using the T4 image as that is essentially the default size for vCMP deployments today. 
+
+The **T4-VELOS** image also supports any module combination but has additional disk capacity. If you intend to have lots of software images, databases for modules, run modules like SWG which utilize a lot of disk, and local logging then the added capacity is recommended. More detail on the image types can be found in the following solution article.
+
+https://support.f5.com/csp/article/K45191957
+
+**Note: In the initial VELOS release it is not possible to re-size an existing image. For this reason, F5 recommends using the T2 image only for LTM/DNS deployments when high tenant densities are expected on a blade. Otherwise using the T4 image would be the best choice until such time that tenant expansion utilities are supported. All images support sparse mode meaning they will not consume all space allocated to them at initial deployment.**
+
+Note that the image sizes in the chart are the maximum amount of space a tenant could use, not necessarily what it will consume on the physical disk. VELOS tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but in reality, most of the space that is unutilized is zeroed-out and not consuming any space on the disk. 
+
+.. image:: images/initial_setup_of_velos/image68.png
+  :align: center
+  :scale: 70% 
+
+This means the disk consumption on the chassis partition disk is actually much smaller than what appears inside the tenant. In the example below the tenant believes it has 77GB of disk allocated:
+
+.. image:: images/initial_setup_of_velos/image69.png
+  :align: center
+  :scale: 70% 
+
+However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs and on the filesystem of the blade it is actually consuming only 11GB on the disk:
+
+.. image:: images/initial_setup_of_velos/image70.png
+  :align: center
+  :scale: 70% 
+
+This is analogous to thin provisioning in a hypervisor where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4 image. There may be rare instances where tenant running in production for a long time can end up with lots of extra space consumed on disk. This could be due to many in place software upgrades, local logging, core files, database use etc…There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over utilized, you could backup the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
+
+Tenant Deployment via CLI
+-------------------------
+
+Tenant lifecycle can be fully managed via the CLI using the **tenants** command in config mode. Using command tab completion and question marks will help display all the tenant options. Enter **config** mode and enter the command tenants **tenant <tenant-name>** where <tenant-name> is the name of the tenant you would like to create. This will put you into a mode for that tenant and you will be prompted for some basic information to create the tenant via a CLI wizard. After answering basic information you may configure additional tenant parameters by entering config ? within the tenant mode that will provide all the available options:
+
+.. code-block:: bash
+
+  bigpartition-2(config)# tenants tenant tenant2                        
+  Value for 'config image' (<string>): BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
+  Value for 'config mgmt-ip' (<IPv4 address>): 10.255.0.205
+  Value for 'config prefix-length' (<unsignedByte, 1 .. 32>): 24
+  Value for 'config gateway' (<IPv4 address>): 10.255.0.1
+
+
+When you are inside the tenant mode you can enter each configuration item one line at a time using tab completion and question mark for help. 
+
+.. code-block:: bash
+
+  bigpartition-2# config
+  Entering configuration mode terminal
+  bigpartition-2(config)# tenants tenant tenant2 
+  bigpartition-2(config-tenant-tenant2)# config ?
+  Possible completions:
+    appliance-mode        
+    cryptos               Crypto devices for the tenant.
+    gateway               User-specified gateway for the tenant mgmt-ip.
+    image                 User-specified image for tenant.
+    memory                User-specified memory in MBs for the tenant.
+    mgmt-ip               User-specified mgmt-ip for the tenant management access.
+    name                  User-specified name for tenant.
+    nodes                 User-specified node-number(s) in the partition to schedule the tenant.
+    prefix-length         User-specified prefix-length for the tenant mgmt-ip.
+    running-state         User-specified desired state for the tenant.
+    type                  Tenant type.
+    vcpu-cores-per-node   User-specified number of logical cpu cores for the tenant.
+    vlans                 User-specified vlan-id from partition vlan table for the tenant.
+  bigpartition-2(config-tenant-tenant2)# config cryptos enabled 
+  bigpartition-2(config-tenant-tenant2)# config vcpu-cores-per-node 4
+  bigpartition-2(config-tenant-tenant2)# config type BIG-IP 
+  bigpartition-2(config-tenant-tenant2)# config nodes 2
+  bigpartition-2(config-tenant-tenant2)# config vlans 444        
+  bigpartition-2(config-tenant-tenant2)# config vlans 500
+  bigpartition-2(config-tenant-tenant2)# config vlans 555
+  bigpartition-2(config-tenant-tenant2)# config running-state deployed
+  bigpartition-2(config-tenant-tenant2)# config memory 14848
+
+Any changes must be committed for them to be executed:
+
+.. code-block:: bash
+
+  bigpartition-2(config-tenant-tenant2)# commit
+	
+You may also put all the parameters on one line:
+
+.. code-block:: bash
+
+  bigpartition-2(config)# tenants tenant tenant2 config image BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle vcpu-cores-per-node 2 nodes [ 1 2 ] vlans [ 2001 3001 ] mgmt-ip 10.144.140.107 prefix-length 24 gateway 10.144.140.254 name cbip3 running-state configured
+  bigpartition-2 (tenant2)# commit
+  Commit complete.
+
+After the tenant is created you can run the command **show running-config tenant** to see what has been configured:
+
+.. code-block:: bash
+
+  bigpartition-2# show run tenant
+  tenants tenant bigtenant
+  config name         bigtenant
+  config type         BIG-IP
+  config image        BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
+  config nodes        [ 1 2 ]
+  config mgmt-ip      10.255.0.149
+  config prefix-length 24
+  config gateway      10.255.0.1
+  config vlans        [ 444 500 555 ]
+  config cryptos      enabled
+  config vcpu-cores-per-node 6
+  config memory       22016
+  config running-state deployed
+  config appliance-mode disabled
+  !
+
+To see the actual status of the tenants, issue the CLI command **show tenants**.
+
+.. code-block:: bash
+
+  bigpartition-2# show tenants 
+  tenants tenant bigtenant
+  state name          bigtenant
+  state type          BIG-IP
+  state mgmt-ip       10.255.0.149
+  state prefix-length 24
+  state gateway       10.255.0.1
+  state vlans         [ 444 500 555 ]
+  state cryptos       enabled
+  state vcpu-cores-per-node 6
+  state memory        22016
+  state running-state deployed
+  state mac-data base-mac 00:94:a1:8e:d0:0b
+  state mac-data mac-pool-size 1
+  state appliance-mode disabled
+  state status        Running
+  state primary-slot  1
+  state image-version "BIG-IP 14.1.4 0.0.619"
+  NDI      MAC                
+  ----------------------------
+  default  00:94:a1:8e:d0:09  
+
+        INSTANCE                                                                                                                                                    
+  NODE  ID        PHASE    IMAGE NAME                                       CREATION TIME         READY TIME            STATUS                   MGMT MAC           
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1     1         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:15:00Z  Started tenant instance  0a:27:45:20:90:c4  
+  2     2         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:14:59Z  Started tenant instance  52:02:73:bf:ee:ac  
+
+  tenants tenant tenant2
+  state name          tenant2
+  state type          BIG-IP
+  state mgmt-ip       10.255.0.205
+  state prefix-length 24
+  state gateway       10.255.0.1
+  state vlans         [ 444 500 555 ]
+  state cryptos       enabled
+  state vcpu-cores-per-node 4
+  state memory        14848
+  state running-state deployed
+  state mac-data base-mac 00:94:a1:8e:d0:0d
+  state mac-data mac-pool-size 1
+  state appliance-mode disabled
+  state status        Starting
+  NDI      MAC                
+  ----------------------------
+  default  00:94:a1:8e:d0:0e  
+
+        INSTANCE                                                                                                  CREATION  READY          MGMT  
+  NODE  ID        PHASE                                          IMAGE NAME                                       TIME      TIME   STATUS  MAC   
+  -----------------------------------------------------------------------------------------------------------------------------------------------
+  2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                           -     
+
+
+Tenant Deployment via GUI
+-------------------------
+
+Uploading a Tenant Image
+------------------------
+
+You can upload a tenant image via the GUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the Add button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is no option to upload direct from a computer via the browser, but this functionality will be added in a subsequent release.
+
+.. image:: images/initial_setup_of_velos/image71.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/initial_setup_of_velos/image72.png
+  :align: center
+  :scale: 70% 
+
+After the image is uploaded you need to wait until it shows **Replicated** status before deploying a tenant.
+
+Creating a Tenant
+-----------------
+
+You can deploy a tenant from the GUI using the Add button in the Tenant Management > Tenant Deployments screen.
+
+.. image:: images/initial_setup_of_velos/image73.png
+  :align: center
+  :scale: 70% 
+
+The tenant deployment options are almost identical to deploying a vCMP guest, with a few minor differences. You’ll supply the tenant a name and choose the image for it to run. Next you will pick what slots (blades) within the chassis partition you want the tenant to run on and assign an out-of-band management address, prefix and gateway. There are **Recommended** and **Advanced** options for resource provisioning, choosing Recommended will automatically adjust memory based on the vCPU’s allocated to the tenant. Choosing Advanced will allow you to over-allocate memory which is something VIPRION did not support. You can choose different states (Configured, Provisioned, Deployed) just like vCMP and there is an option to enable/disable HW crypto acceleration (Recommended this is enabled). And finally, there is an option to enable Appliance mode which will disable root/bash access to the tenant.
+
+**Note: Configured mode in VELOS operates differently than vCMP. It will not preserve existing tenant disk configuration and should be used with caution.**
+
+.. image:: images/initial_setup_of_velos/image74.png
+  :align: center
+  :scale: 70% 
+
+
+Tenant Deployment via API
+-------------------------
+
+The VELOS tenant lifecycle is fully supported in the F5OS API. This section will cover common examples.
+
+Uploading a Tenant Image
+------------------------
+
+The upload utility requires a remote HTTPS server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition.
+
+.. code-block:: bash
+
+P OST https://{{Chassis_Partition_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+
+.. code-block:: json
+
+  {
+      "input": [
+          {
+              "remote-host": "10.255.0.142",
+              "remote-file": "{{Tenant_Image}}",
+              "local-file": "IMAGES",
+              "insecure": ""
+          }
+      ]
+  }
+
+Once the image transfer is initiated you can check on its status with the following API call. You cannot start to deploy a tenant until the image shows replicated status:
+
+.. code-block:: bash
+
+  GET https://{{Chassis_Partition_IP}}:8888/restconf/data/f5-tenant-images:images
+
+.. code-block:: json
+
+  {
+      "f5-tenant-images:images": {
+          "image": [
+              {
+                  "name": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
+                  "in-use": true,
+                  "status": "replicated"
+              },
+              {
+                  "name": "BIGIP-14.1.4.1-0.0.1.ALL-VELOS.qcow2.zip.bundle",
+                  "in-use": false,
+                  "status": "replicated"
+              }
+          ]
+      }
+  }
+
+Creating a Tenant
+
+Tenant creation via the API is as simple as defining the parameters below and sending the POST to the chassis partition.
+
+.. code-block:: bash
+
+  POST https://{{Chassis_Partition_IP}}:8888/restconf/data/f5-tenants:tenants
+
+.. code-block:: json
+
+  {
+      "tenant": [
+          {
+              "name": "{{New_Tenant1_Name}}",
+              "config": {
+                  "image": "{{Tenant_Image}}",
+                  "nodes": [
+                      1
+                  ],
+                  "mgmt-ip": "{{Chassis2_Tenant1_IP}}",
+                  "gateway": "{{OutofBand_DFGW}}",
+                  "prefix-length": 24,
+                  "vlans": [
+                      444,
+                      501,
+                      555
+                  ],
+                  "vcpu-cores-per-node": 2,
+                  "memory": 7680,
+                  "cryptos": "enabled",
+                  "running-state": "configured"
+              }
+          }
+      ]
+  }
+
+Validating Tenant Status
+
+.. code-block:: bash
+
+  GET https://{{Chassis_Partition_IP}}:8888/restconf/data/f5-tenants:tenants
+
+.. code-block:: json
+
+  {
+      "f5-tenants:tenants": {
+          "tenant": [
+              {
+                  "name": "tenant1",
+                  "config": {
+                      "name": "tenant1",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "10.255.0.207",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "vlans": [
+                          444,
+                          501,
+                          555
+                      ],
+                      "cryptos": "enabled",
+                      "vcpu-cores-per-node": "4",
+                      "memory": "14848",
+                      "running-state": "deployed",
+                      "appliance-mode": {
+                          "enabled": false
+                      }
+                  },
+                  "state": {
+                      "name": "tenant1",
+                      "type": "BIG-IP",
+                      "mgmt-ip": "10.255.0.207",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "mac-ndi-set": [
+                          {
+                              "ndi": "default",
+                              "mac": "00:94:a1:8e:58:29"
+                          }
+                      ],
+                      "vlans": [
+                          444,
+                          501,
+                          555
+                      ],
+                      "cryptos": "enabled",
+                      "vcpu-cores-per-node": "4",
+                      "memory": "14848",
+                      "running-state": "deployed",
+                      "mac-data": {
+                          "base-mac": "00:94:a1:8e:58:2b",
+                          "mac-pool-size": 1
+                      },
+                      "appliance-mode": {
+                          "enabled": false
+                      },
+                      "status": "Running",
+                      "primary-slot": 1,
+                      "image-version": "BIG-IP 14.1.4 0.0.11",
+                      "instances": {
+                          "instance": [
+                              {
+                                  "node": 1,
+                                  "instance-id": 1,
+                                  "phase": "Running",
+                                  "image-name": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
+                                  "creation-time": "2021-03-15T19:42:43Z",
+                                  "ready-time": "2021-03-15T19:42:57Z",
+                                  "status": "Started tenant instance",
+                                  "mgmt-mac": "62:e3:b2:ef:9d:66"
+                              }
+                          ]
+                      }
+                  }
+              },
+              {
+                  "name": "tenant2",
+                  "config": {
+                      "name": "tenant2",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
+                      "nodes": [
+                          1,
+                          2
+                      ],
+                      "mgmt-ip": "10.255.0.208",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "vlans": [
+                          444,
+                          502,
+                          555
+                      ],
+                      "cryptos": "enabled",
+                      "vcpu-cores-per-node": "6",
+                      "memory": "22016",
+                      "running-state": "deployed",
+                      "appliance-mode": {
+                          "enabled": false
+                      }
+                  },
+                  "state": {
+                      "name": "tenant2",
+                      "type": "BIG-IP",
+                      "mgmt-ip": "10.255.0.208",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "mac-ndi-set": [
+                          {
+                              "ndi": "default",
+                              "mac": "00:94:a1:8e:58:2a"
+                          }
+                      ],
+                      "vlans": [
+                          444,
+                          502,
+                          555
+                      ],
+                      "cryptos": "enabled",
+                      "vcpu-cores-per-node": "6",
+                      "memory": "22016",
+                      "running-state": "deployed",
+                      "mac-data": {
+                          "base-mac": "00:94:a1:8e:58:2c",
+                          "mac-pool-size": 1
+                      },
+                      "appliance-mode": {
+                          "enabled": false
+                      },
+                      "status": "Running",
+                      "primary-slot": 1,
+                      "image-version": "BIG-IP 14.1.4 0.0.11",
+                      "instances": {
+                          "instance": [
+                              {
+                                  "node": 1,
+                                  "instance-id": 1,
+                                  "phase": "Running",
+                                  "image-name": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
+                                  "creation-time": "2021-03-16T13:25:10Z",
+                                  "ready-time": "2021-03-16T13:25:07Z",
+                                  "status": "Started tenant instance",
+                                  "mgmt-mac": "aa:b8:c3:ce:23:87"
+                              },
+                              {
+                                  "node": 2,
+                                  "instance-id": 2,
+                                  "phase": "Running",
+                                  "image-name": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
+                                  "creation-time": "2021-03-16T13:25:03Z",
+                                  "ready-time": "2021-03-16T13:24:58Z",
+                                  "status": "Started tenant instance",
+                                  "mgmt-mac": "62:ce:c9:75:15:e0"
+                              }
+                          ]
+                      }
+                  }
+              }
+          ]
+      }
+  }
+
+
+
+
+
+
+
