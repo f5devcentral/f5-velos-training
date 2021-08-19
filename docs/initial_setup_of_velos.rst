@@ -1407,7 +1407,7 @@ Configuring PortGroups from the CLI
 
 Portgroups can be configured from the chassis partition CLI using the portgroups command on config mode. The following command will set interface 1/1 for 100GB:
 
-.. code-block: bash
+.. code-block:: bash
 
   bigpartition-2# config
   Entering configuration mode terminal
@@ -1415,14 +1415,14 @@ Portgroups can be configured from the chassis partition CLI using the portgroups
 
 You must commit for any changes to take affect:
 
-.. code-block: bash
+.. code-block:: bash
 
   bigpartition-2(config)# commit
 
 
 Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command show running-config portgroups:
 
-.. code-block: bash
+.. code-block:: bash
 
   bigpartition-2# show running-config portgroups 
   portgroups portgroup 1/1
@@ -1451,11 +1451,11 @@ Configuring PortGroups from the API
 
 To list the current portgroup configuration issue the following API call:
 
-.. code-block: bash
+.. code-block:: bash
 
   GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgroups
 
-.. code-block: json
+.. code-block:: json
 
   {
       "f5-portgroup:portgroups": {
