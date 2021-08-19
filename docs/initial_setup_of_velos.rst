@@ -2238,3 +2238,245 @@ The **show vlan-listeners** command will show the current state:
   HA-Interconnect  500   VLAN-LISTENER    tenant2  4095  9    -    15   -    -    -     disabled   -        
   HA-Interconnect  501   VLAN-LISTENER    tenant1  4095  8    -    15   -    -    -     disabled   -     
 
+Configuring VLANs from the API
+
+To configure VLANs use the following API command and JSON body. This will configure 3 VLANs (Interna-VLAN, External-VLAN, & HA-VLAN) along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
+
+PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+
+{
+    "openconfig-vlan:vlans": {
+        "vlan": [
+            {
+                "vlan-id": "444",
+                "config": {
+                    "vlan-id": 444,
+                    "name": "Internal-VLAN"
+                }
+            },
+            {
+                "vlan-id": "555",
+                "config": {
+                    "vlan-id": 555,
+                    "name": "External-VLAN"
+                }
+            },
+            {
+                "vlan-id": "500",
+                "config": {
+                    "vlan-id": 500,
+                    "name": "HA-VLAN"
+                }
+            }
+        ]
+    }
+}
+
+
+The following command will list the configuration and status of all VLANs within the current chassis partition:
+
+
+GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/openconfig-vlan:vlans
+
+{
+    "openconfig-vlan:vlans": {
+        "vlan": [
+            {
+                "vlan-id": 444,
+                "config": {
+                    "vlan-id": 444,
+                    "name": "Internal-VLAN"
+                },
+                "members": {
+                    "member": [
+                        {
+                            "state": {
+                                "interface": "Arista"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "vlan-id": 500,
+                "config": {
+                    "vlan-id": 500,
+                    "name": "HA-VLAN"
+                },
+                "members": {
+                    "member": [
+                        {
+                            "state": {
+                                "interface": "HA-Interconnect"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "vlan-id": 555,
+                "config": {
+                    "vlan-id": 555,
+                    "name": "External-VLAN"
+                },
+                "members": {
+                    "member": [
+                        {
+                            "state": {
+                                "interface": "Arista"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
+
+Network Settings -> LAGs
+------------------------
+
+All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. You can add up to eight members for each LAG.
+
+Configuring LAGs from the GUI
+-----------------------------
+
+Link Aggregation Groups (LAGs) can be configured in the chassis partition GUI via the **Network Settings > LAGs** page:
+
+  .. image:: images/initial_setup_of_velos/image62.png
+  :align: center
+  :scale: 70% 
+
+You can add a new LAG or edit an existing one. For **LAG Type** the options are **LACP** or **STATIC**. If you choose LACP then you have additional options for **LACP Interval** (**SLOW** or **FAST**) and **LACP Mode** (**ACTIVE** or **PASSIVE**). LACP best practices should follow previous BIG-IP examples as outlined in the links below. Note in BIG-IP the term Trunks is used in place of LAG which is used in VELOS: 
+
+https://support.f5.com/csp/article/K1689
+
+https://support.f5.com/csp/article/K13142
+
+The following solution article provides guidance for setting up VELOS LAG interfaces and LACP with Cisco Nexus 9000 series switches:
+
+https://support.f5.com/csp/article/K33431212
+
+
+Once you have configured the LAG Type and LACP options, you can add any physical interfaces within this chassis partition to be part of a LAG. Note you cannot add physical interfaces that reside in other chassis partitions as they are completely isolated from each other. Finally, you can configure the **Native VLAN** (for untagged VLAN), and what **Trunked VLANs** (tagged) you’d like to add to this LAG interface.
+
+  .. image:: images/initial_setup_of_velos/image63.png
+  :align: center
+  :scale: 70% 
+
+Configuring LAGs from the CLI
+-----------------------------
+
+Within the GUI LAGs and LACP parameters are configured within the LAG GUI pages. In the CLI they are broken out into sperate areas. First enter **config** mode and then use the following lacp commands to configure the lacp interfaces:
+
+.. code-block:: bash
+
+  bigpartition-1# config
+  Entering configuration mode terminal
+  bigpartition-1(config)# lacp interfaces interface Arista config name Arista
+  bigpartition-1(config-interface-Arista)# config interval FAST 
+  bigpartition-1(config-interface-Arista)# config lacp-mode ACTIVE 
+  bigpartition-1(config-interface-Arista)# commit 
+
+
+Next configure the interface aggregation:
+
+.. code-block:: bash
+
+  bigpartition-1(config)# interfaces interface Arista aggregation config distribution-hash src-dst-ipport  
+  bigpartition-1(config-interface-Arista)#  aggregation config lag-type LACP
+  bigpartition-1(config-interface-Arista)#  aggregation switched-vlan config trunk-vlans [ 444 555 ]
+  bigpartition-1(config-interface-Arista)#  commit
+
+
+You can view the current interface aggregation configurations in the CLI by running the command **show running-config interfaces interface aggregation** command. This will show the current aggregation interfaces, lag-type, distribution hash, and VLANs assigned to each lag:
+
+.. code-block:: bash
+
+  bigpartition-1# show running-config interfaces interface aggregation 
+  interfaces interface Arista
+  aggregation config lag-type LACP
+  aggregation config distribution-hash src-dst-ipport
+  aggregation switched-vlan config trunk-vlans [ 3010 3011 ]
+  !
+  interfaces interface HA-Interconnect
+  aggregation config lag-type LACP
+  aggregation config distribution-hash src-dst-ipport
+  aggregation switched-vlan config trunk-vlans [ 500 501 502 503 ]
+  !
+  bigpartition-1#
+
+Finally, you must configure interfaces to be part of the LAG. Below are examples of interface 1/1.0 and 2/2.0 being added to the aggregate-id **HA-Interconnect**, and interfaces 1/2.0 and 2/1.0 being added to the aggregate **Arista**.
+
+.. code-block:: bash
+
+  bigpartition-1# show running-config interfaces 
+  interfaces interface 1/1.0
+  config type ethernetCsmacd
+  config enabled
+  ethernet config aggregate-id HA-Interconnect
+  !
+  interfaces interface 1/2.0
+  config type ethernetCsmacd
+  config enabled
+  ethernet config aggregate-id Arista
+  !
+  interfaces interface 2/1.0
+  config type ethernetCsmacd
+  config enabled
+  ethernet config aggregate-id Arista
+  !
+  interfaces interface 2/2.0
+  config type ethernetCsmacd
+  config enabled
+  ethernet config aggregate-id HA-Interconnect
+  !
+  interfaces interface Arista
+  config type ieee8023adLag
+  aggregation config lag-type LACP
+  aggregation config distribution-hash src-dst-ipport
+  aggregation switched-vlan config trunk-vlans [ 3010 3011 ]
+  !
+  interfaces interface HA-Interconnect
+  config type ieee8023adLag
+  aggregation config lag-type LACP
+  aggregation config distribution-hash src-dst-ipport
+  aggregation switched-vlan config trunk-vlans [ 500 501 502 503 ]
+  !
+
+
+You can also view the current lacp configuration for each LAG by issuing the **show running-config lacp** CLI command. This will show all the LACP parameters such as the system priority, name, interval, and lacp-mode for each LAG. 
+
+.. code-block:: bash
+
+  bigpartition-1# show running-config lacp
+  lacp config system-priority 32768
+  lacp interfaces interface Arista
+  config name Arista
+  config interval FAST
+  config lacp-mode ACTIVE
+  !
+  lacp interfaces interface HA-Interconnect
+  config name HA-Interconnect
+  config interval FAST
+  config lacp-mode ACTIVE
+  !
+  bigpartition-1# 
+
+
+To see that status of the LACP interfaces run the command **show lacp**. It is best to widen your terminal screen as the output is dynamic and will display better on a wider terminal screen in more of a table format:
+
+.. code-block:: bash
+
+  bigpartition-1# show lacp
+  lacp state system-id-mac 00:94:a1:8e:d0:08
+                                                                                                                                                                                                                                  PARTNER  LACP    LACP    LACP    LACP    LACP             
+                                              LACP                                                                                                                                        OPER                     PARTNER  PORT  PORT     IN      OUT     RX      TX      UNKNOWN  LACP    
+  NAME             NAME             INTERVAL  MODE    SYSTEM ID MAC    INTERFACE  INTERFACE  ACTIVITY  TIMEOUT  SYNCHRONIZATION  AGGREGATABLE  COLLECTING  DISTRIBUTING  SYSTEM ID        KEY   PARTNER ID         KEY      NUM   NUM      PKTS    PKTS    ERRORS  ERRORS  ERRORS   ERRORS  
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Arista           Arista           FAST      ACTIVE  0:94:a1:8e:d0:8  1/2.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  2     98:5d:82:1d:2c:a9  10       4352  125      713887  713949  0       0       0        0       
+                                                                      2/1.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  2     98:5d:82:1d:2c:a9  10       8320  129      713906  713948  0       0       0        0       
+  HA-Interconnect  HA-Interconnect  FAST      ACTIVE  0:94:a1:8e:d0:8  1/1.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  3     0:94:a1:8e:58:28   3        4224  8448     714114  713959  0       0       0        0       
+                                                                      2/2.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  3     0:94:a1:8e:58:28   3        8448  4224     714155  713959  0       0       0        0       
+
+  bigpartition-1# 
