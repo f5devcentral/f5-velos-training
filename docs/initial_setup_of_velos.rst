@@ -1875,7 +1875,7 @@ You can click on any interface to view its settings or edit them. You can curren
 Configuring Interfaces from the CLI
 -----------------------------------
 
-Interfaces can be configured in the chassis partition CLI. As mentioned previously portgroups should be configured for their desired state before configuring any interfaces as the interface numbering may change. In the CLI enter config mode and then specify the interface you want to configure. If the interface is going to be part of a LAG, then most of the configuration is done within the LAG. Use the command show running-config interfaces to see the current configuration:
+Interfaces can be configured in the chassis partition CLI. As mentioned previously portgroups should be configured for their desired state before configuring any interfaces as the interface numbering may change. In the CLI enter config mode and then specify the interface you want to configure. If the interface is going to be part of a LAG, then most of the configuration is done within the LAG. Use the command **show running-config interfaces** to see the current configuration:
 
 
 .. code-block:: bash
@@ -2147,42 +2147,49 @@ Configuring VLANs from the CLI
 
 VLANs can be configured within the chassis partition CLI. Once VLANs are created they can either be assigned to a physical interfaces or LAGs within the chassis partition. VLANs must be given a name and a VLAN ID. You can choose if a VLAN is tagged or untagged within the physical interface or LAG configuration.
 
-To show the current configured VLANs and their options use the command show running-config vlans.
+To show the current configured VLANs and their options use the command **show running-config vlans**.
 
 .. code-block:: bash
 
-  bigpartition-2# show running-config vlans
-  vlans vlan 444
-  config vlan-id 444
-  config name Internal
-  !
+  bigpartition-1# show running-config vlans
   vlans vlan 500
-  config vlan-id 500
-  config name ha
+  config name HA-VLAN
   !
-  vlans vlan 555
-  config vlan-id 555
-  config name External
+  vlans vlan 501
+  config name HA-VLAN-Tenant1
   !
-  bigpartition-2# 
+  vlans vlan 502
+  config name HA-VLAN-Tenant2
+  !
+  vlans vlan 503
+  config name HA-VLAN-Tenant3
+  !
+  vlans vlan 3010
+  config name Internal-VLAN
+  !
+  vlans vlan 3011
+  config name External-VLAN
+  !
 
-You can also see configured state of VLANs by running the show vlans command:
+
+You can also see configured state of VLANs by running the **show vlans** command:
 
 .. code-block:: bash
 
-  bigpartition-2# show vlans
-  VLAN             
-  ID    INTERFACE  
-  -----------------
-  444   Arista     
-  500   ha         
-  555   Arista     
+  bigpartition-1# show vlans
+  VLAN                   
+  ID    INTERFACE        
+  -----------------------
+  500   HA-Interconnect  
+  501   HA-Interconnect  
+  502   HA-Interconnect  
+  503   HA-Interconnect  
+  3010  Arista           
+  3011  Arista  
 
-  bigpartition-2# 
+There are a few other VLAN related commands to show the configuration and running state of **vlan-listeners**. **show running-config vlan-listeners** will show the current configuration. A VLAN listener is created for each VLAN and is responsible for rebroadcasting traffic within the VLAN.
 
-There are a few other VLAN related commands to show the configuration and running state of vlan-listeners. show running-config vlan-listeners will show the current configuration. A VLAN listener is created for each VLAN and is responsible for rebroadcasting traffic within the VLAN.
-
-NOTE: For Shared VLANs amongst different tenants, the VLAN must be tied to an external interface or LAG in order for the VLAN listener to be created. 
+**NOTE: For Shared VLANs amongst different tenants, the VLAN must be tied to an external interface or LAG in order for the VLAN listener to be created.** 
 
 .. code-block:: bash
 
@@ -2218,7 +2225,7 @@ NOTE: For Shared VLANs amongst different tenants, the VLAN must be tied to an ex
   config service-ids [ 8 10 ]
   !
 
-The show vlan-listeners command will show the current state:
+The **show vlan-listeners** command will show the current state:
 
 .. code-block:: bash
 
