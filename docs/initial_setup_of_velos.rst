@@ -1453,7 +1453,7 @@ To list the current portgroup configuration issue the following API call:
 
 .. code-block: bash
 
-GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgroups
+  GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgroups
 
 .. code-block: json
 
