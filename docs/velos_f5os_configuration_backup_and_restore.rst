@@ -135,3 +135,130 @@ If you don’t have an external HTTPS server that allows uploads, then you can l
     controller-backup-08-17-21                                                       100%   77KB  28.8MB/s   00:00    
     [root@controller-2 ~]# 
 
+Backing Up Chassis Partition Databases
+======================================
+
+In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below there are two chassis partitions currently in use; **bigpartition** and **smallpartition**. Both must be backed up and archived off of the VELOS system.
+
+Log directly into the chassis partition bigpartitions management IP address and enter config mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
+
+.. code-block:: bash
+
+    bigpartition-1# config
+    Entering configuration mode terminal
+    bigpartition-1(config)# system database config-backup name chassis-partition-bigbartition-08-17-2021
+    result Database backup successful.
+    bigpartition-1(config)# exit
+    bigpartition-1# file list path configs/
+    entries {
+        name 
+    chassis-partition-bigbartition-08-17-2021
+    }
+    bigpartition-1# 
+
+
+Log directly into the chassis partition smallpartition's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
+
+.. code-block:: bash
+
+    smallpartition-1# config
+    Entering configuration mode terminal
+    smallpartition-1(config)# system database config-backup name chassis-partition-smallpartition-08-17-2021
+    result Database backup successful.
+    smallpartition-1(config)# exit
+    smallpartition-1# file list path configs/
+    entries {
+        name 
+    chassis-partition-smallpartition-08-17-2021
+    }
+    smallpartition-1# 
+
+
+Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, GUI, or API. In the current release you need an external HTTPS server configured to allow uploads in order to export database backups from VELOS. 
+
+Export Backup From the Chassis Partition GUI
+--------------------------------------------
+
+You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the GUI. Use the Base Directory drop down menu to select /configs directory, and you should see a copy of the file created there:
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/image5.png
+  :align: center
+  :scale: 70%
+
+Note: In the current release the exporting and importing the system database requires an external HTTPS server. Future releases will add more options for import/export that don’t rely on an external HTTPS server.
+
+Export Backup From the Chassis Partition CLI
+--------------------------------------------
+
+To transfer a file using the CLI use the **file list** command to see the contents of the configs directory. Note the previously saved file is listed. You will need to do this for all chassis partitions.
+
+To backup chassis partition bigpartition:
+
+.. code-block:: bash
+
+    bigpartition-1# file list path configs/
+    entries {
+        name 
+    chassis-partition-bigpartition-08-17-2021
+    }
+    bigpartition-1# 
+
+To transfer the file from the CLI you can use the **file export** command. Note that the file export command requires a remote HTTPS server that the file can be posted to. 
+
+.. code-block:: bash
+
+    bigpartition-1# file export local-file configs/3-20-2021-bigpartition-backup remote-host 10.255.0.142 remote-file /backup/3-20-2021-bigpartition-backup username jim insecure 
+    Value for 'password' (<string>): ***
+    result File transfer is initiated.(configs/3-20-2021-bigpartition-backup)
+
+You can use the CLI command **file transfer-status** to see if the file was copied successfully or not:
+
+.. code-block:: bash
+
+    bigpartition-1# file transfer-status 
+    result 
+    S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            
+    1    |Export file|HTTPS   |/configs/3-20-2021-bigpartition-backup     |10.255.0.142        |/backup                                                     |Method Not Allowed, HTTP Error 405
+
+    bigpartition-1# 
+
+If you do not have a remote HTTPS server with the proper access to POST files then you can copy the chassis partition backups from the system controller shell. You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice partition<ID> directories, where <ID> equals the ID assigned to each partition.
+
+.. code-block:: bash
+
+    [root@controller-2 ~]# ls -al /var/F5/
+    total 36
+    drwxr-xr-x. 10 root root 4096 Mar 10 21:43 .
+    drwxr-xr-x. 40 root root 4096 Mar  3 04:17 ..
+    drwxr-xr-x.  3 root root 4096 Feb  8 19:58 controller
+    drwxr-xr-x.  5 root root 4096 Feb  8 19:58 diagnostics
+    drwxr-xr-x.  2 root root 4096 Feb  8 19:58 fips
+    drwxr-xr-x. 24 root root 4096 Mar  3 04:27 partition1
+    drwxr-xr-x.  3 root root   20 Mar 10 17:54 partition2
+    drwxr-xr-x. 24 root root 4096 Mar  4 15:52 partition3
+    drwxr-xr-x. 22 root root 4096 Mar 10 21:45 partition4
+    drwxr-xr-x.  3 root root 4096 Feb  9 16:08 sirr
+    [root@controller-2 ~]# 
+
+The backup files for each partition are stored in the **/var/F5/partition<ID>/configs** directory. You will need to copy off each chassis partitions backup file. You can use SCP to do this from the shell.
+
+.. code-block:: bash
+
+    [root@controller-2 ~]# ls -al /var/F5/partition4/configs
+    total 52
+    drwxrwxr-x.  2 root admin    43 Mar 20 06:10 .
+    drwxr-xr-x. 22 root root   4096 Mar 10 21:45 ..
+    -rw-r--r--.  1 root root  46954 Mar 20 06:10 3-20-2021-bigpartition-backup
+    [root@controller-2 ~]# 
+
+Below is an example using SCP to copy off the backup file from partition ID 4, you should do this for each of the partitions:
+
+.. code-block:: bash
+
+    [root@controller-2 ~]# scp /var/F5/partition4/configs/3-20-2021-bigpartition-backup root@10.255.0.142:/var/www/server/1/.
+    root@10.255.0.142's password: 
+    3-20-2021-bigpartition-backup                                                             100%   46KB  23.7MB/s   00:00    
+    [root@controller-2 ~]# 
+    
+Now repeat the same steps for chassis partition smallpartition. 
+
