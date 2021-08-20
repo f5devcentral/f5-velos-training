@@ -89,11 +89,11 @@ In the GUI use the **System Settings -> File Utilities** page and from the dropd
 
 **Note: In the current release the exporting and importing the system database requires an external HTTPS server. Future releases will add more options for import/export that don’t rely on an external HTTPS server.**
 
-To transfer a file using the CLI use the file list command to see the contents of the /mnt/var/confd/configs directory. Note the previously saved file is listed.
+To transfer a file using the CLI use the file list command to see the contents of the /configs directory. Note the previously saved file is listed.
 
 .. code-block:: bash
 
-    syscon-2-active# file list path /mnt/var/confd/configs/
+    syscon-2-active# file list path configs/
     entries {
         name 
     chassis2-sys-controller-backup-2-26-21
