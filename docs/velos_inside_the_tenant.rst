@@ -3,7 +3,7 @@ Inside the Tenant
 =================
 
 
-Once a tenant is deployed you can connect/communicate directly to one of its CLI, GUI, or API interfaces. At this layer you are interacting with TMOS, i.e. the experience should be almost identical to a vCMP guest with some minor exceptions.
+Once a tenant is deployed you can connect/communicate directly to one of its CLI, GUI, or API interfaces. At this layer you are interacting with TMOS, i.e. the experience should be almost identical to a vCMP guest with some minor exceptions. Day to day management of the tenant will use the same CLI (tmsh), API (iControl) and GUI as TMOS instances or hardware devices running within customer envronments today.
 
 VLAN Behavior
 =============
