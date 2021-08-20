@@ -119,7 +119,7 @@ To check on status of the export use the file transfer-status command:
     2    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |chassis1-sys-controller-backup-2-26-21                      |Failed to open/read local data from file/application
     3    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |/backup                                                     |Failed to open/read local data from file/application
 
-If you don’t have an external HTTPS server that allows uploads, then you can log into the system controllers floating IP address with root access to scp the file from the shell. Go to the **/var/confd/configs** directory and scp the file to an external location. Note in the cli and GUI the path is simplified to configs, but in the underlying file system it is actually stored in the /var/confd/confd directory.
+If you don’t have an external HTTPS server that allows uploads, then you can log into the system controllers floating IP address with root access and scp the file from the shell. Go to the **/var/confd/configs** directory and scp the file to an external location. Note in the cli and GUI the path is simplified to configs, but in the underlying file system it is actually stored in the /var/confd/confd directory.
 
 .. code-block:: bash
 
