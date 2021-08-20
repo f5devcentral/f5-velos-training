@@ -70,12 +70,27 @@ Using the system controller GUI you can backup the confd configuration database 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image2.png
    :width: 45%
 
+**Using the API:**
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
+
+.. code-block:: json
+
+    {
+        "f5-database:name": "CONTROLLER-API-DB-BACKUP{{currentdate}}"
+    }
+
+
 **Note: In the current F5OS releases the confd system database can be backed up via CLI/GUI/API but it cannot be restored using the F5OS GUI. This will be added in a subsequent release.**
 
 Copying System Controller Database Backup to an External Location
 =================================================================
 
 Once the database backup has been completed, you should copy the file to an external location so that the system can be restored in the case of a total failure. You can download the database configuration backup using the CLI, GUI, or API. 
+
+**From the GUI:**
 
 In the GUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can import or export configuration files. Note that the current transfer of files to and from the GUI requires an external HTTPS server. 
 
@@ -88,6 +103,8 @@ In the GUI use the **System Settings -> File Utilities** page and from the dropd
   :scale: 70%
 
 **Note: In the current release the exporting and importing the system database requires an external HTTPS server. Future releases will add more options for import/export that don’t rely on an external HTTPS server.**
+
+**From the CLI:**
 
 To transfer a file using the CLI use the file list command to see the contents of the /configs directory. Note the previously saved file is listed.
 
@@ -134,6 +151,27 @@ If you don’t have an external HTTPS server that allows uploads, then you can l
     root@10.255.0.142's password: 
     controller-backup-08-17-21                                                       100%   77KB  28.8MB/s   00:00    
     [root@controller-2 ~]# 
+
+**From the API:**
+
+To copy a confd configuration backup file from the system controller to a remote https server use the following API call:
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-utils-file-transfer:file/export
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:insecure": "",
+        "f5-utils-file-transfer:protocol": "https",
+        "f5-utils-file-transfer:username": "jim",
+        "f5-utils-file-transfer:password": "PassW0rd!!",
+        "f5-utils-file-transfer:remote-host": "10.255.0.142",
+        "f5-utils-file-transfer:remote-file": "/upload",
+        "f5-utils-file-transfer:local-file": "configs/CONTROLLER-API-DB-BACKUP{{currentdate}}"
+    }
+
 
 Backing Up Chassis Partition Databases
 ======================================
@@ -261,4 +299,7 @@ Below is an example using SCP to copy off the backup file from partition ID 4, y
     [root@controller-2 ~]# 
     
 Now repeat the same steps for chassis partition smallpartition. 
+
+Export Files From the Chassis Partition API
+-------------------------------------------
 
