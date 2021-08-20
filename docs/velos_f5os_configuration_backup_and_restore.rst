@@ -2,7 +2,7 @@
 F5OS Configuration Backup and Restore
 =====================================
 
-To completely backup the VELOS system, you’ll need to backup each tenant TMOS configuration, each F5OS chassis partition configuration, as well as the F5OS system controller configuration. Tenant backup utilizes the same backup and recovery procedures as existing BIG-IP devices/guests because the tenants themselves are running TMOS. For the F5OS layer (system controllers and chassis partitions) a different backup mechanism is utilized because F5OS is based on ConfD.  
+To completely backup the VELOS system, you’ll need to backup each tenant TMOS configuration, each F5OS chassis partition configuration, as well as the F5OS system controller configuration. Tenant backup utilizes the same backup and recovery procedures as existing BIG-IP devices/guests because the tenants themselves are running TMOS. For the F5OS layer (system controllers and chassis partitions) a different backup mechanism is utilized because F5OSc configuration management is based on ConfD.  
 
 The confd process manages the F5OS configuration on a VELOS system. The system stores the configuration in its configuration database (CDB). There are separate Confd databases for the system controller layer, and for each chassis partition.
 
