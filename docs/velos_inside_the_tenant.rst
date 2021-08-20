@@ -28,7 +28,7 @@ You can delete the VLAN inside the tenant and then recreate it with a new name, 
 
 
 Interface Behavior
-------------------
+==================
 
 The number of interfaces within a tenant will be based upon the number of vCPU’s assigned to the tenant and the number of slots the tenant is running on. The screenshot below show the interfaces inside the tenant lining up with the number of physical cores per slot. In the first example there are 6 vCPU’s on a single slot tenant, this will equate to 3 physical CPU’s. Likewise for a dual slot tenant with 10 vCPU’s per slot. You’ll see 5 physical CPU’s per slot.
 
@@ -37,7 +37,7 @@ The number of interfaces within a tenant will be based upon the number of vCPU�
   :scale: 70%
 
 Trunk / HA Group Behavior
--------------------------
+=========================
 
 Within a vCMP guest Trunks can be used as part of the **HA Group** functionality to determine when a guest should fail over to its peer. 
 
