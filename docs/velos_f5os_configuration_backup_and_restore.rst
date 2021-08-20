@@ -40,7 +40,7 @@ Backing Up the System Controller Database
 
 **Using the CLI:**
 
-You can back up the system controller configuration database using the system database config-backup command when in config mode. The file will be saved in the path of /configs automatically. You can then list the contents of that directory to ensure the file is there using the file list path command.
+You can back up the system controller configuration database using the **system database config-backup** command when in config mode. The file will be saved in the path of **/configs** automatically. You can then list the contents of that directory to ensure the file is there using the **file list path** command.
 
 .. code-block:: bash
 
