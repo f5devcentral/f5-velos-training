@@ -1,6 +1,7 @@
-================
+=================
 Inside the Tenant
 =================
+
 
 Once a tenant is deployed you can connect/communicate directly to one of its CLI, GUI, or API interfaces. At this layer you are interacting with TMOS, i.e. the experience should be almost identical to a vCMP guest with some minor exceptions.
 
