@@ -79,7 +79,7 @@ Using the system controller GUI you can backup the confd configuration database 
 .. code-block:: json
 
     {
-        "f5-database:name": "CONTROLLER-API-DB-BACKUP{{currentdate}}"
+        "f5-database:name": "SYSTEM-CONTROLLER-DB-BACKUP{{currentdate}}"
     }
 
 
@@ -113,17 +113,21 @@ To transfer a file using the CLI use the file list command to see the contents o
     syscon-2-active# file list path configs/
     entries {
         name 
-    chassis2-sys-controller-backup-2-26-21
+    CONTROLLER-API-DB-BACKUP2021-08-19
+    SYSTEM-CONTROLLER-DB-BACKUP2021-08-27
+    controller-backup-08-17-21
+    my-backup
     }
-    syscon-2-active# 
+
 
 To transfer the file from the CLI you can use the file export command. 
 
 .. code-block:: bash
 
-    syscon-1-active# file export local-file configs/chassis2-sys-controller-backup-2-26-21 remote-host 10.255.0.142 remote-file /backup username jim insecure 
-    Value for 'password' (<string>): ***
-    result File transfer is initiated.(configs/chassis2-sys-controller-backup-2-26-21)
+    syscon-2-active# file export local-file configs/SYSTEM-CONTROLLER-DB-BACKUP2021-08-27 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure 
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(configs/SYSTEM-CONTROLLER-DB-BACKUP2021-08-27)
+    syscon-2-active#
 
 To check on status of the export use the file transfer-status command:
 
@@ -132,7 +136,7 @@ To check on status of the export use the file transfer-status command:
     syscon-1-active# file transfer-status                                                                                                                                   
     result 
     S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            
-    1    |Export file|HTTPS   |/mnt/var/confd/configs/chassis2-sys-controller-backup-2-26-21|10.255.0.142        |/backup                                                     |Method Not Allowed, HTTP Error 405
+    1    |Export file|HTTPS   |configs/SYSTEM-CONTROLLER-DB-BACKUP2021-08-27                |10.255.0.142        |/upload/upload.php                                          |Completed|Fri Aug 27 19:48:41 2021
     2    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |chassis1-sys-controller-backup-2-26-21                      |Failed to open/read local data from file/application
     3    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |/backup                                                     |Failed to open/read local data from file/application
 
@@ -165,11 +169,11 @@ To copy a confd configuration backup file from the system controller to a remote
     {
         "f5-utils-file-transfer:insecure": "",
         "f5-utils-file-transfer:protocol": "https",
-        "f5-utils-file-transfer:username": "jim",
-        "f5-utils-file-transfer:password": "PassW0rd!!",
+        "f5-utils-file-transfer:username": "corpuser",
+        "f5-utils-file-transfer:password": "Passw0rd!!",
         "f5-utils-file-transfer:remote-host": "10.255.0.142",
-        "f5-utils-file-transfer:remote-file": "/upload",
-        "f5-utils-file-transfer:local-file": "configs/CONTROLLER-API-DB-BACKUP{{currentdate}}"
+        "f5-utils-file-transfer:remote-file": "/upload/upload.php",
+        "f5-utils-file-transfer:local-file": "configs/SYSTEM-CONTROLLER-DB-BACKUP{{currentdate}}"
     }
 
 
@@ -245,20 +249,23 @@ To transfer the file from the CLI you can use the **file export** command. Note 
 
 .. code-block:: bash
 
-    bigpartition-1# file export local-file configs/3-20-2021-bigpartition-backup remote-host 10.255.0.142 remote-file /backup/3-20-2021-bigpartition-backup username jim insecure 
-    Value for 'password' (<string>): ***
-    result File transfer is initiated.(configs/3-20-2021-bigpartition-backup)
+    bigpartition-2# file export local-file configs/chassis-partition-bigbartition-08-17-2021 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(configs/chassis-partition-bigbartition-08-17-2021)
+    bigpartition-2#
 
 You can use the CLI command **file transfer-status** to see if the file was copied successfully or not:
 
 .. code-block:: bash
 
-    bigpartition-1# file transfer-status 
+    bigpartition-2# file transfer-status                                                                                                                                       
     result 
-    S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            
-    1    |Export file|HTTPS   |/configs/3-20-2021-bigpartition-backup     |10.255.0.142        |/backup                                                     |Method Not Allowed, HTTP Error 405
+    S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                
+    1    |Export file|HTTPS   |configs/3-20-2021-bigpartition-backup                       |10.255.0.142        |/upload/upload.php                                          |Failed to open/read local data from file/application|Fri Aug 27 20:05:34 2021
+    2    |Export file|HTTPS   |configs/chassis-partition-bigbartition-08-17-2021           |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:06:22 2021
 
-    bigpartition-1# 
+    bigpartition-2# 
+
 
 If you do not have a remote HTTPS server with the proper access to POST files then you can copy the chassis partition backups from the system controller shell. You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice partition<ID> directories, where <ID> equals the ID assigned to each partition.
 
@@ -302,4 +309,42 @@ Now repeat the same steps for chassis partition smallpartition.
 
 Export Files From the Chassis Partition API
 -------------------------------------------
+Each chassis partition in the system needs to be backed up independently. Below is an API example of backing up the chassis partition smallpartition. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS server is required to export the copy of the configuration backup.
 
+.. code-block:: bash
+
+    POST https://{{Chassis1_SmallPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/export
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:insecure": "",
+        "f5-utils-file-transfer:username": "corpuser",
+        "f5-utils-file-transfer:password": "Passw0rd1!",
+        "f5-utils-file-transfer:local-file": "configs/smallpartition-DB-BACKUP{{currentdate}}",
+        "f5-utils-file-transfer:remote-host": "10.255.0.142",
+        "f5-utils-file-transfer:remote-port": 0,
+        "f5-utils-file-transfer:remote-file": "/upload/upload.php"
+    }
+
+  To check on the status of the file export you can use the following API call to check the transfer-status:
+
+.. code-block:: bash
+
+  POST https://{{Chassis1_SmallPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:file-name": "configs/smallpartition-DB-BACKUP{{currentdate}}"
+    }
+
+You will end up seeing a status similar to the output below.
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:output": {
+            "result": "\nS.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                \n1    |Export file|HTTPS   |configs/smallpartition-DB-BACKUP2021-08-27                  |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:18:12 2021"
+        }
+    }
