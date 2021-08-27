@@ -348,3 +348,6 @@ You will end up seeing a status similar to the output below.
             "result": "\nS.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                \n1    |Export file|HTTPS   |configs/smallpartition-DB-BACKUP2021-08-27                  |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:18:12 2021"
         }
     }
+
+Repeat this for other partitions in the system.
+
