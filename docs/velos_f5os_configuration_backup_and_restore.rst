@@ -345,9 +345,13 @@ You will end up seeing a status similar to the output below.
 
     {
         "f5-utils-file-transfer:output": {
-            "result": "\nS.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                \n1    |Export file|HTTPS   |configs/smallpartition-DB-BACKUP2021-08-27                  |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:18:12 2021"
+            "result": "\nS.No.|Operation  |Protocol|Local File Path |Remote Host  |Remote File Path   |Status  |Time  \n1    |Export file|HTTPS   |configs/smallpartition-DB-BACKUP2021-08-27 |10.255.0.142 |/upload/upload.php | Completed|Fri Aug 27 20:18:12 2021"
         }
     }
 
 Repeat this for other partitions in the system.
 
+Backing up Tenants
+==================
+
+Backup all tenants using a UCS archive or other mechanism so that they can be restored after the system controller and chassis partitions are restored. Another alternative to UCS backup/restore of tenants is using Declarative Onboarding and AS3. If tenants are configured using DO and AS3 initially, and the declarations are saved, they can be replayed to restore a tenant. BIG-IQ could be used for this purpose.
