@@ -327,7 +327,7 @@ Each chassis partition in the system needs to be backed up independently. Below 
         "f5-utils-file-transfer:remote-file": "/upload/upload.php"
     }
 
-  To check on the status of the file export you can use the following API call to check the transfer-status:
+To check on the status of the file export you can use the following API call to check the transfer-status:
 
 .. code-block:: bash
 
