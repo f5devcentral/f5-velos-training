@@ -11,7 +11,7 @@ The CX410 is a 4RU chassis, that has eight ¼ width slots for the BX110 line car
   :align: center
   :scale: 60%
 
-.. image:: images/velos_components/dc_chassis_image.png
+.. image:: images/velos_components/image_dc_chassis.png
   :align: center
   :scale: 60%
 
