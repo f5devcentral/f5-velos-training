@@ -2,7 +2,7 @@
 Points of Management in VELOS
 =============================
 
-There are three main points of management within the VELOS chassis. The **system controllers**, the **chassis partitions**, and the individual **tenants**. Each support their own CLI, GUI, and API access and have their own authentications and users. Additionally, they each run their own versino of software; Tenants are able to run specific versions of TMOS which have been approved to run on the VELOS platform, and system controllers and chassis partitions each have their own version of F5OS.
+There are three main points of management within the VELOS chassis. The **system controllers**, the **chassis partitions**, and the individual **tenants**. Each support their own CLI, GUI, and API access and have their own authentications and users. Additionally, they each run their own version of software; tenants are able to run specific versions of TMOS which have been approved to run on the VELOS platform, and system controllers and chassis partitions each have their own version of F5OS.
 
 .. image:: images/velos_points_of_management/image1.png
   :align: center
