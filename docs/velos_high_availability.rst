@@ -37,7 +37,7 @@ You can view and configure the High Availability options for the system controll
 Failover Behavior
 =================
 
-The failover behavior will depend on the type of outage encountered at the system controller. You can perform a manual failover from one system controller to the other vi the system controller GUI:
+The failover behavior will depend on the type of outage encountered at the system controller. You can perform a manual failover from one system controller to the other via the system controller GUI:
 
 .. image:: images/velos_high_availability/image5.png
   :align: center
@@ -47,7 +47,7 @@ This will fail the K8s control plane services from the Active system controller 
 
 A physical reboot of the active system controller will cause all backplane traffic to temporarily use only the previously standby system controller. In the initial 1.1.x versions of F5OS tenant traffic may be disrupted during the reboot process as the system controllers shut down and reload. 
 
-If a software upgrade is being performed, then both system controllers are upgraded in parallel resulting in an outage for the entire chassis for the initial release. Rolling upgrade support for the system controllers has been added in the F5OS 1.2.x release. This will allow for a serial rolling upgrade to take place for the system controllers and minimal downtime to the tenants when controllers are upgraded.
+If a software upgrade is being performed, then both system controllers are upgraded in parallel resulting in an outage for the entire chassis for the initial 1.1.x versions of F5OS. Rolling upgrade support for the system controllers has been added in the F5OS 1.2.x release. This will allow for a serial rolling upgrade to take place for the system controllers and minimal downtime to the tenants when controllers are upgraded.
 
 
 Blade Level HA
@@ -55,7 +55,7 @@ Blade Level HA
 
 From a design standpoint it is best to spread in-band network connections across multiple blades if possible. Assuming there is more than one blade within a chassis partition spreading network connections via LAG’s will give the best resiliency and performance. Consider the diagram below where a LAG is split across two different BX110 blades. Incoming traffic should hash across both links and statistically should provide fairly even distribution given enough connections. Performance can still be lumpy, as the upstream switch is likely performing a hash-based distribution, and not distributing based on load. 
 
-Incoming traffic will go through a disaggregation (DAG) process where connections are spread across all processors within the VELOS tenant. Again, a hash-based distribution will decide which blade/processor should handle the incoming connection. Given enough connections the expectation is that half are processed locally on the incoming blade, and the other half will be sent across the backplane to another blade. If the return traffic going outbound can egress on the same blade that processed the connection, then a backplane traversal is saved, it doesn’t have to go back to the incoming blade. If a blade fails, or one of the links in the LAG should fail, then all traffic will ingress and egress on the remaining blade. There are more granular configuration options within the tenant to determine how failover cases should be handled if. Blade should fail. Of course, additional blades/links can be added to a chassis partition, but they follow this forwarding behavior:
+Incoming traffic will go through a disaggregation (DAG) process where connections are spread across all processors within the VELOS tenant. Again, a hash-based distribution will decide which blade/processor should handle the incoming connection. Given enough connections the expectation is that half are processed locally on the incoming blade, and the other half will be sent across the backplane to another blade assuming a tenant is configured to utilize more than one blade. If the return traffic going outbound can egress on the same blade that processed the connection, then a backplane traversal is saved, it doesn’t have to go back to the incoming blade. If a blade fails, or one of the links in the LAG should fail, then all traffic will ingress and egress on the remaining blade. There are more granular configuration options within the tenant to determine how failover cases should be handled if a blade should fail. Of course, additional blades/links can be added to a chassis partition, but they follow this forwarding behavior:
 
 .. image:: images/velos_high_availability/image6.png
   :align: center
@@ -70,7 +70,7 @@ This approach is better than terminating a LAG on a single blade. Incoming conne
 Tenant Level HA Across Chassis
 ==============================
 
-F5 does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis with identically configured tenants and maintaining HA relationships at the tenant level as seen below. This mimics the VIPRION HA behavior between vCMP guests. There is no redundancy between chassis at the F5OS platform layer. The chassis’ themselves are unaware of the other chassis and there is no HA communication at this level, it’s the tenants that form the HA relationship.
+VELOS does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis with identically configured tenants and maintaining HA relationships at the tenant level as seen below. This mimics the VIPRION HA behavior between vCMP guests. There is no redundancy between chassis at the F5OS platform layer. The chassis’ themselves are unaware of the other chassis and there is no HA communication at this level, it’s the tenants that form the HA relationship.
 
 .. image:: images/velos_high_availability/image8.png
   :align: center
@@ -85,9 +85,9 @@ Tenants on different chassis, should have the same number of vCPU’s and be con
 Tenant Level HA within the Chassis
 ==================================
 
-F5 does not support configuring HA relationships between tenants within the same VELOS chassis. You can configure tenants to span multiple blades, and then depending on what failover behavior you want, you can have the tenant run with less capacity within the same chassis if a blade fails or fail over to the tenant in the other chassis. This is controlled within the tenant itself, just like vCMP guests HA failover was configured. HA groups allow an administrator to fail over based on pool, or blade availability. 
+VELOS does not support configuring HA relationships between tenants within the same chassis. You can configure tenants to span multiple blades, and then depending on what failover behavior you want, you can have the tenant run with less capacity within the same chassis if a blade fails or fail over to the tenant in the other chassis. This is controlled within the tenant itself, just like vCMP guests HA failover was configured. HA groups allow an administrator to fail over based on pool, trunk, or blade availability. 
 
-**Note: The HA Groups failover option based on trunks is not currently supported in VELOS tenants. The Tenants do not have visibility into the F5OS layer Link Aggregation Groups. This is being considered for a future release.**
+**Note: The HA Groups failover option based on trunks is not supported in VELOS tenants running 14.1.4.x and F5OS v1.1.x. The Tenants do not have visibility into the F5OS layer Link Aggregation Groups. F5OS 1.2.x and later along with VELOS tenant running 15.1.4 or later support trunks within an HA Group.**
 
 **NOTE: Expanding a tenant across two or more blades will require additional configuration and IP addresses within the tenant. A tenant will require one out-of-band IP address for each slot it is hosted on plus one floating IP address. This is similar to how vCMP addressing is configured for HA.**
 
@@ -104,7 +104,7 @@ Inside the tenant, one **Cluster Member IP Address** will need to be configured 
   :align: center
   :scale: 90%
 
-For planning purposes for a single large tenant “SuperVip” spanning 8 total blades would require 13 out-of-band management IP addresses for each chassis. In-band Self-IP & Virtual addresses are not included in this calculation.
+For planning purposes a single large tenant “SuperVip” spanning 8 total blades would require 13 out-of-band management IP addresses for each chassis. In-band Self-IP & Virtual addresses are not included in this calculation.
 
 +------------------------------+----------------------------------+--------------------+
 | **IP Addresses Required**    | **Single Chassis**               | **HA Environment** | 
@@ -129,4 +129,4 @@ HA Group Configuration to Control Tenant Failover
 
 An active tenant will naturally failover to the standby tenant in another VELOS chassis if the tenant is not healthy and the standby detects it has failed. Ideally you should also configure HA Groups or some other mechanism within the tenant to detect external conditions that you will want to trigger a failover for. As an example, HA groups can monitor blades in the VELOS chassis, and failover if a minimum number of active blades is not met. You can also monitor pool member reachability to trigger a failover.
 
-**Note: The HA Groups failover option based on trunks is not currently supported in VELOS tenants. The Tenants do not have visibility into the F5OS layer Link Aggregation Groups. This is being considered for a future release.**
+**Note: The HA Groups failover option based on trunks is not supported in F5OS v1.1.x cersions with VELOS tenants running 14.1.4.x. The Tenants do not have visibility into the F5OS layer Link Aggregation Groups. F5OS v1.2.x and later along with tenants running 15.4.4 or later support this functionality..**
