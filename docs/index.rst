@@ -19,5 +19,5 @@ VELOS Training Guide
    velos_software_upgrades.rst
    velos_diagnostics.rst
    bigiq_support_for_velos.rst
-   monitroing_velos.rst
+   monitoring_velos.rst
    migration_to_velos.rst
