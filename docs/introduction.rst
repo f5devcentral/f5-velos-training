@@ -20,7 +20,8 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
 •	In the future the possibility of running approved 3rd party tenants 
 
 .. image:: images/velos_introduction/image1.png
-
+  :align: center
+  :scale: 70%
 
 
 * specific software releases
@@ -35,12 +36,16 @@ Smaller Footprint, Higher Density
 The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades and now support double the number of slots in the same 4RU chassis footprint. The VELOS CX410 chassis supports 8 slots vs. only 4 on the VIPRION C2400 chassis.
 
 .. image:: images/velos_introduction/image2.png
+  :align: center
+  :scale: 70%
 
 The second major difference vs. VIPRION is the introduction of centralized/redundant SX410 system controllers. The picture below shows the two redundant system controllers that ship by default with the VELOS 4U CX410 chassis:
 
 The system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot.  Each line card on the BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Future generation line cards may leverage additional connections. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
 
 .. image:: images/velos_introduction/image3.png
+  :align: center
+  :scale: 70%
 
 While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots. Note that the BX110 linecards currently have a L4/L7 throughput rating of 95Gbs, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. The backplane ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG) thus utilizing both controllers for forwarding between slots.
 
@@ -48,20 +53,20 @@ A VIPRION chassis in comparison does not have a centralized switch fabric, and a
 
 .. image:: images/velos_introduction/image4.png
   :align: center
-  :scale: 50%
+  :scale: 70%
 
 The system controllers in VELOS are also the central point of management for the entire chassis. VIPRION required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. This meant more cabling, layer2 switch ports, and external terminal servers in order to fully manage the VIPRION chassis as seen below:
 
 .. image:: images/velos_introduction/image5.png
-   :align: center
-   :scale: 50%
+  :align: center
+  :scale: 70%
 
 
 With VELOS only the system controllers need to be cabled for out-of-band management and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis management as seen below:
 
 .. image:: images/velos_introduction/image6.png
-   :align: center
-   :scale: 50%
+  :align: center
+  :scale: 70%
 
 Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together
 
