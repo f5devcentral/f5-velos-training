@@ -9,5 +9,6 @@ F5 understands migrating configurations to new platforms can be a challenge and 
 
 The Journeys app is available for download at F5’s DevCentral Github site. It will be enhanced to add additional migration use cases such as per-app migration and AS3 conversion in future releases:
 
-https://github.com/f5devcentral/f5-bigip-journeys-app
+https://github.com/f5devcentral/f5-journeys
+
 
