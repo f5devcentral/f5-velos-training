@@ -45,7 +45,7 @@ The system controllers are responsible for providing non-blocking connections an
 
 .. image:: images/velos_introduction/image3.png
   :align: center
-  :scale: 70%
+  :scale: 40%
 
 While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots. Note that the BX110 linecards currently have a L4/L7 throughput rating of 95Gbs, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. The backplane ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG) thus utilizing both controllers for forwarding between slots.
 
@@ -53,7 +53,7 @@ A VIPRION chassis in comparison does not have a centralized switch fabric, and a
 
 .. image:: images/velos_introduction/image4.png
   :align: center
-  :scale: 70%
+  :scale: 40%
 
 The system controllers in VELOS are also the central point of management for the entire chassis. VIPRION required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. This meant more cabling, layer2 switch ports, and external terminal servers in order to fully manage the VIPRION chassis as seen below:
 
