@@ -2,7 +2,7 @@
 Multitenancy
 ============
 
-In previous generation chassis and appliances F5 supported vCMP as a means of providing multitenancy and virtualization. vCMP allowed for configuration of Guests which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience, however it is not based on vCMP.  Instead VELOS will allow for Tenants to be created which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
+In previous generation chassis and appliances F5 supported **vCMP** as a means of providing multitenancy and virtualization. vCMP allowed for configuration of **Guests** which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience, however it is not based on vCMP.  Instead VELOS will allow for **Tenants** to be created which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
 
 Unlike VIPRION, where vCMP is an option that can added on to the chassis, VELOS is multitenant by default. There is no option for a “bare metal” configuration. You may configure one large tenant to emulate a “bare-metal” type BIG-IP configuration if required. Below is a depiction of BIG-IP tenants running on top of the F5OS layer. 
 
@@ -78,7 +78,7 @@ Moves the tenant into the Provisioned state, which causes the system to install 
 Changes the tenant to the Deployed state. The tenant is set up, resources are allocated to the tenant, the image is moved onto the blade, the software is installed, and after those tasks are complete, the tenant is fully deployed and running. If you choose this option, it takes a few minutes to complete the deployment and bring up the system.
 
 
-You may also configure **Crypto/Compression Acceleration**. This option may be enabled, meaning the tenant will utilize and offload to crypto (SSL/TLS) and compression hardware, or it can be disabled meaning all crypto and compression will be done in software. It is highly recommended to use the enabled option for best performance. 
+You may also configure **Crypto/Compression Acceleration**. This option is enabled by default, meaning the tenant will utilize and offload to crypto (SSL/TLS) and compression hardware, or it can be disabled meaning all crypto and compression will be done in software. It is highly recommended to use the default enabled option for best performance. 
 
 In some VIPRION blades there is an option to configure an **SSL Mode** for vCMP guests. This option is not available in VELOS, and the behavior may be different:
 
