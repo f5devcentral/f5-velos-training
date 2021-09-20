@@ -1044,6 +1044,14 @@ Repeat similar steps for remaining chassis partitions:
         "f5-utils-file-transfer:local-file": "configs/bigpartition-DB-BACKUP2021-09-10"
     }
 
+Importing Archived Chassis Partition Configs via GUI
+----------------------------------------------------
+
+You can use the System Settings -> File Utilities page to import archives from a remote HTTPS server. 
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/image13.png
+  :align: center
+  :scale: 70%
 
 Restoring Chassis Partitions from Database Backups
 ==================================================
@@ -1077,7 +1085,7 @@ To restore a configuration database backup within a chassis partition, use the *
 The tenant is properly restored and deployed; however, its status is pending waiting on image:
 
 
-.. image:: images/velos_f5os_configuration_backup_and_restore/image13.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/image14.png
   :align: center
   :scale: 70%
 
