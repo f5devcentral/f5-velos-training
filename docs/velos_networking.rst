@@ -15,9 +15,9 @@ This allows customers to run a secure/locked-down out-of-band management network
 Out-of-Band Management Network
 ==============================
 
-All out-of-band networking is handled through the system controllers. Each system controller has its own static IP address and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network and the OOB management VLAN inside the chassis. There is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. VLAN tagging is not supported on the out-of-band management ports on the system controllers.
+All out-of-band networking is handled through the system controllers. Each system controller has its own static IP address and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network and the out-of-band management VLAN inside the chassis. There is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. VLAN tagging is not supported on the out-of-band management ports on the system controllers.
 
-Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (primary/secondary) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the primary system controller so that an admin using API, CLI or GUI can always connect to the primary system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
+Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the active system controller so that an admin using API, CLI, or GUI can always connect to the active system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
 .. image:: images/velos_networking/image2.png
   :align: center
@@ -32,7 +32,7 @@ Each chassis partition is a unique entity that has its own set of (local/remote)
   :align: center
   :scale: 70%
 
-*Note: The environment above would require external networking connections between the chassis partitions if tenants in one chassis partition needs to communicate with tenants in another chassis partition.*
+*Note: The environment above would require external networking connections between the chassis partitions if a tenant in one chassis partition needed to communicate with a tenant in another chassis partition.*
 
 .. image:: images/velos_networking/image4.png
   :align: center
@@ -69,7 +69,7 @@ To illustrate the point of how isolated chassis partitions are, the diagram belo
 Port Groups
 ===========
 
-The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. Both ports on the BX110 blade must be configured in the same mode in release 1.0. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, GUI or API.
+The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. Both ports on the BX110 blade must be configured in the same mode currently. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, GUI or API.
 
 
 .. image:: images/velos_networking/image9.png
@@ -78,7 +78,7 @@ The portgroup component is used to control the mode of the physical port. This c
 .. image:: images/velos_networking/image10.png
   :width: 45%
 
-**Note: In the initial release of F5OS both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB, there is no support for mixing modes on the same blade. More granular options will be added in future F5OS software releases.**
+**Note: In the current releases of F5OS both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB, there is no support for mixing modes on the same blade. More granular options will be added in future F5OS software releases.**
 
 Below is an example of the chassis partition GUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
 
@@ -90,9 +90,9 @@ Below is an example of the chassis partition GUI Port Groups screen. Note that a
 Interfaces
 ==========
 
-Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by <blade#>/<port#>. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be 1/1.0 & 1/2.0 for slot 1, and 2/1.0 & 2/2.0 for slot 2. 
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** & **1/2.0** for slot 1, and **2/1.0** & **2/2.0** for slot 2. 
 
-If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Breakout cables will be needed to support the unbundled 25Gb or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number.
+If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, & 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, & 1/2.4** for the second physical port. Breakout cables will be needed to support the unbundled 25Gb or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number.
 
 .. image:: images/velos_networking/image12.png
   :align: center
@@ -169,7 +169,7 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 VLANs
 =====
 
-VELOS supports both 802.1Q tagged and untagged VLAN interfaces. In the initial GA release, double VLAN tagging (802.1Q-in-Q) is not supported. Any port within a chassis partition even across blades can be added to a VLAN, and VLANs are specific to that chassis partition. VLANs can be re-used across different chassis partitions, and tenants within and across chassis partitions can share the same VLANs. Any VLANs that are configured on different chassis partitions will not be able to communicate inside the chassis, they will need to be connected via and external switch to facilitate communication between them.
+VELOS supports both 802.1Q tagged and untagged VLAN interfaces. In the current F5OS releases, double VLAN tagging (802.1Q-in-Q) is not supported. Any port within a chassis partition, even across blades can be added to a VLAN and VLANs are specific to that chassis partition. VLANs can be re-used across different chassis partitions, and tenants within and across chassis partitions can share the same VLANs. Any VLANs that are configured on different chassis partitions will not be able to communicate inside the chassis, they will need to be connected via and external switch to facilitate communication between them.
 
 
 Link Aggregation Groups
