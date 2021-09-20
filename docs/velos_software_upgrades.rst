@@ -506,5 +506,56 @@ You can view the current tenant images and their status in the chassis partition
     BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                            true   replicated  
     BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle  false  replicated
 
+To copy a tenant image into a chassis partition, use the following API call to the chassis partition IP address:
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_BigPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+
+.. code-block:: json
+
+    {
+        "input": [
+            {
+                "remote-host": "10.255.0.142",
+                "remote-file": "upload/{{Tenant_Image}}",
+                "local-file": "images/{{Tenant_Image}}",
+                "insecure": "",
+                "f5-utils-file-transfer:username": "corpuser",
+                "f5-utils-file-transfer:password": "Passw0rd!!"
+            }
+        ]
+    }
+
+To list the current tenant images available on the chassis partition use the following API Call:
+
+.. code-block:: bash
+
+    GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-tenant-images:images
+
+Below is output generated from the previous command:
+
+.. code-block:: json
+
+    {
+        "f5-tenant-images:images": {
+            "image": [
+                {
+                    "name": "BIGIP-15.1.4-0.0.46.ALL-VELOS.qcow2.zip.bundle",
+                    "in-use": true,
+                    "status": "replicated"
+                },
+                {
+                    "name": "BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle",
+                    "in-use": false,
+                    "status": "replicated"
+                }
+            ]
+        }
+    }
+
+
+
+
 **NOTE: Currently VELOS does not provide a shared image repository for all tenants to upgrade from. With vCMP guests, VIPRION allowed for an image to be loaded once into the host layer, and all tenants had access to that repository to use to upgrade. VELOS has a shared repository f**
 
