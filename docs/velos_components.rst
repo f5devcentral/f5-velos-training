@@ -11,9 +11,6 @@ The CX410 is a 4RU chassis, that has eight ¼ width slots for the BX110 line car
   :align: center
   :scale: 60%
 
-.. image:: images/velos_components/image_dc_chassis.png
-  :align: center
-  :scale: 60%
 
 Rack Mounting the Chassis
 =========================
@@ -27,7 +24,7 @@ An ideal environment for VELOS is to use a minimum of a 30” rack. The rackmoun
 Power Supplies & Controllers
 ============================
 
-The VELOS CX410 ships with 2 power supplies. Additional power supplies can be added to provide N+1 or N+N redundancy. The initial version of VELOS supports AC power, and up to 4 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis will be available in mid-CY21. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
+The VELOS CX410 ships with 2 power supplies. Additional power supplies can be added to provide N+1 or N+N redundancy. The initial version of VELOS supports AC power, and up to 4 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis is also available. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
 
 .. image:: images/velos_components/image3.png
   :width: 45%
@@ -53,7 +50,7 @@ The PSU controllers are accessible in the upper left-hand corner of the back of 
   :width: 45%
 
 
-A DC power version of the CX410 chassis will be made available mid CY21. 
+A DC power version of the CX410 chassis is also avilable, and runs the same system controllers and line cards.
 
 .. image:: images/velos_components/image8.png
   :align: center
