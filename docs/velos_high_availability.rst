@@ -14,7 +14,7 @@ The layer2 switch fabric function performed by the system controllers runs in an
   :align: center
   :scale: 70%
 
-While both switch fabrics are active there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane and each blade will be limited to 100Gbs of backplane capacity. Not that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity.
+While both switch fabrics are active there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane and each blade will be limited to 100Gbs of backplane capacity. Note that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity.
 
 The second function the system controllers perform is the management of the new Kubernetes platform layer. At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, GUI services etc…. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
 
@@ -45,9 +45,9 @@ The failover behavior will depend on the type of outage encountered at the syste
 
 This will fail the K8s control plane services from the Active system controller to the Standby, and the floating IP address will move to the new Active controller. This type of outage will be non-disruptive to client traffic flowing through the tenants and layer2 switch fabrics running on the system controllers which will continue to run in an Active/Active manner. Any management connections to the system controller or chassis partition GUI, CLI, or API’s or will be disconnected, and will have to be re-established through the new Active system controller. 
 
-A physical reboot of the active system controller will cause all backplane traffic to temporarily use only the previously standby system controller. In the current F5OS version tenant traffic may be disrupted during the reboot process as the system controller shuts down and reloads. 
+A physical reboot of the active system controller will cause all backplane traffic to temporarily use only the previously standby system controller. In the initial 1.1.x versions of F5OS tenant traffic may be disrupted during the reboot process as the system controllers shut down and reload. 
 
-If a software upgrade is being performed, then both system controllers are upgraded in parallel resulting in an outage for the entire chassis for the initial release. Rolling upgrade support for the system controllers will be added in the F5OS 1.2 release targeted for mid-year CY21. That will allow a serial upgrade to take place and a minimal downtime to tenants when the controllers are upgraded.
+If a software upgrade is being performed, then both system controllers are upgraded in parallel resulting in an outage for the entire chassis for the initial release. Rolling upgrade support for the system controllers has been added in the F5OS 1.2.x release. This will allow for a serial rolling upgrade to take place for the system controllers and minimal downtime to the tenants when controllers are upgraded.
 
 
 Blade Level HA

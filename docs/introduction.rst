@@ -39,9 +39,9 @@ The physical architecture of VELOS differs from the VIPRION platform in several 
   :align: center
   :scale: 70%
 
-The second major difference vs. VIPRION is the introduction of centralized/redundant SX410 system controllers. The picture below shows the two redundant system controllers that ship by default with the VELOS 4U CX410 chassis:
+The second major difference vs. VIPRION is the introduction of centralized/redundant SX410 system controllers. The picture above shows the two redundant system controllers that ship by default with the VELOS 4U CX410 chassis:
 
-The system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot.  Each line card on the BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Future generation line cards may leverage additional connections. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
+The system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot.  Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Future generation line cards may leverage additional connections. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
 
 .. image:: images/velos_introduction/image3.png
   :align: center
@@ -88,7 +88,7 @@ The Kubernetes (K8S) control plane is responsible for deploying workloads to the
 Chassis Partitions
 ==================
 
-Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation in addition to tenancy (similar to vCMP guests) that VIPRION didn’t support. Within a VELOS chassis an administrator can group together 2 or more blades to form a chassis partition. A chassis may contain multiple chassis partitions and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade and the maximum is 8 blades within the CX410 chassis.
+Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation in addition to tenancy (similar to vCMP guests) that VIPRION didn’t support. Within a VELOS chassis an administrator can group together one or more blades to form a chassis partition. A chassis may contain multiple chassis partitions and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade and the maximum is 8 blades within the CX410 chassis.
  
 **Note: Chassis partitions are not related to TMOS admin partitions which are typically used to provide admin separation within a TMOS instance.** 
  
