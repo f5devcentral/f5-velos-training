@@ -4,7 +4,7 @@ Initial Setup Within the Chassis Partition
 
 Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own CLI, GUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band interfaces. 
 
-.. image:: images/initial_setup_of_velos/image52.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image52.png
   :align: center
   :scale: 70% 
 
@@ -13,7 +13,7 @@ Chassis Partition Dashboard
 
 The chassis partition Dashboard will provide a visual system summary of partition and which slots it is assigned to. It will also list the total number of vCPU’s available for multitenancy and how many are currently in use. If there are any active-alarms they will be displayed on this page. There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly there is a high availability status display.
 
-.. image:: images/initial_setup_of_velos/image53.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image53.png
   :align: center
   :scale: 70% 
 
@@ -27,12 +27,12 @@ Network Settings - > Port Groups
 
 Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure the portgroups so that physical interfaces on the blade are configured for the proper speed and bundling. The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. The term portgroup is used rather than simply Port because some front panel sockets may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly (this will require a reboot of the blade). The portgroup components are created by the system, based on the type of the blades installed. The user can modify the portgroup mode.
 
-.. image:: images/initial_setup_of_velos/image54.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image54.png
   :width: 45%
   :scale: 70% 
 
 
-.. image:: images/initial_setup_of_velos/image55.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image55.png
   :width: 45%
   :scale: 70% 
 
@@ -43,7 +43,7 @@ Configuring PortGroups from the GUI
 
 To configure Portgroups go to Network Settings > Port Groups in the chassis partition GUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the GUI page:
 
-.. image:: images/initial_setup_of_velos/image56.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image56.png
   :align: center
   :scale: 70% 
 
@@ -500,7 +500,7 @@ Network Settings -> Interfaces
 
 Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be 1/1.0 & 1/2.0 for slot 1, and 2/1.0 & 2/2.0 for slot 2 etc…. If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
-.. image:: images/initial_setup_of_velos/image57.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image57.png
   :align: center
   :scale: 70% 
 
@@ -509,13 +509,13 @@ Configuring Interfaces from the GUI
 
 Within the chassis partition GUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
 
-.. image:: images/initial_setup_of_velos/image58.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image58.png
   :align: center
   :scale: 70%  
 
 You can click on any interface to view its settings or edit them. You can currently change the interface State via the GUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG then the VLAN configuration is done within the LAG rather than the interface.
 
-.. image:: images/initial_setup_of_velos/image59.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image59.png
   :align: center
   :scale: 70% 
 
@@ -781,11 +781,11 @@ Configuring VLANs from the GUI
 
 VLANs can be created in the chassis partition GUI under Network Settings > VLANs. VLANs are not shared across chassis partitions, and each partition must configure its own set of VLANs. When adding a new VLAN you will define a Name and a VLAN ID. When you assign this VLAN to an interface or LAG you will determine if you want it to be untagged by configuring it as a Native VLAN or tagged by adding it as a Trunked VLAN.
 
-.. image:: images/initial_setup_of_velos/image60.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image60.png
   :align: center
   :scale: 70% 
 
-  .. image:: images/initial_setup_of_velos/image61.png
+  .. image:: images/initial_setup_of_velos_chassis_partitions/image61.png
   :align: center
   :scale: 70% 
 
@@ -996,7 +996,7 @@ Configuring LAGs from the GUI
 
 Link Aggregation Groups (LAGs) can be configured in the chassis partition GUI via the **Network Settings > LAGs** page:
 
-.. image:: images/initial_setup_of_velos/image62.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image62.png
   :align: center
   :scale: 70% 
 
@@ -1013,7 +1013,7 @@ https://support.f5.com/csp/article/K33431212
 
 Once you have configured the LAG Type and LACP options, you can add any physical interfaces within this chassis partition to be part of a LAG. Note you cannot add physical interfaces that reside in other chassis partitions as they are completely isolated from each other. Finally, you can configure the **Native VLAN** (for untagged VLAN), and what **Trunked VLANs** (tagged) you’d like to add to this LAG interface.
 
-.. image:: images/initial_setup_of_velos/image63.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image63.png
   :align: center
   :scale: 70% 
 
@@ -1870,25 +1870,25 @@ Tenant Image Types
 
 VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. The only release supported at launch is 14.1.4, it can be found on downloads.f5.com:
 
-.. image:: images/initial_setup_of_velos/image64.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image64.png
   :align: center
   :scale: 70% 
 
 Ensure you choose the option labeled 14.1.4_Tenant_VELOS:
 
-.. image:: images/initial_setup_of_velos/image65.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image65.png
   :align: center
   :scale: 70% 
 
 There are 4 different types of tenant images to choose from as seen below, please read the rest of this section to determine the best image type for your environment:
 
-.. image:: images/initial_setup_of_velos/image66.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image66.png
   :align: center
   :scale: 70% 
 
 The **T1-VELOS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software meaning it does not support upgrades (not even for hotfixes). This type of image is geared towards more modern environments where pave & nuke strategies are preferred over in place upgrades.   
 
-.. image:: images/initial_setup_of_velos/image67.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image67.png
   :align: center
   :scale: 70% 
 
@@ -1906,19 +1906,19 @@ https://support.f5.com/csp/article/K45191957
 
 Note that the image sizes in the chart are the maximum amount of space a tenant could use, not necessarily what it will consume on the physical disk. VELOS tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but in reality, most of the space that is unutilized is zeroed-out and not consuming any space on the disk. 
 
-.. image:: images/initial_setup_of_velos/image68.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image68.png
   :align: center
   :scale: 70% 
 
 This means the disk consumption on the chassis partition disk is actually much smaller than what appears inside the tenant. In the example below the tenant believes it has 77GB of disk allocated:
 
-.. image:: images/initial_setup_of_velos/image69.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image69.png
   :align: center
   :scale: 70% 
 
 However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs and on the filesystem of the blade it is actually consuming only 11GB on the disk:
 
-.. image:: images/initial_setup_of_velos/image70.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image70.png
   :align: center
   :scale: 70% 
 
@@ -2070,11 +2070,11 @@ Uploading a Tenant Image
 
 You can upload a tenant image via the GUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the Add button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is no option to upload direct from a computer via the browser, but this functionality will be added in a subsequent release.
 
-.. image:: images/initial_setup_of_velos/image71.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image71.png
   :align: center
   :scale: 70% 
 
-.. image:: images/initial_setup_of_velos/image72.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image72.png
   :align: center
   :scale: 70% 
 
@@ -2085,7 +2085,7 @@ Creating a Tenant
 
 You can deploy a tenant from the GUI using the Add button in the Tenant Management > Tenant Deployments screen.
 
-.. image:: images/initial_setup_of_velos/image73.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image73.png
   :align: center
   :scale: 70% 
 
@@ -2093,7 +2093,7 @@ The tenant deployment options are almost identical to deploying a vCMP guest, wi
 
 **Note: Configured mode in VELOS operates differently than vCMP. It will not preserve existing tenant disk configuration and should be used with caution.**
 
-.. image:: images/initial_setup_of_velos/image74.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image74.png
   :align: center
   :scale: 70% 
 
@@ -2368,27 +2368,27 @@ Expanding a Tenant within the Same Blade via GUI
 
 Below is GUI output of a single tenant that is in the deployed and running state configured with 2 vCPU’s per slot, 7680 memory per slot, and the tenant is allowed to run on only slot1. The workflow below will cover expanding the tenant from 2 to 4 vCPU’s and the memory from 7680 to 14848 per slot. Click the check box next to the tenant, and then select the **Provision** button. 
 
-.. image:: images/initial_setup_of_velos/image75.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image75.png
   :align: center
   :scale: 70% 
 
 Click **OK**. This will move the tenant from **deployed** to **provisioned** state. You will see the tenant go from **running**, to **stopping** to **stopped**.
 
-.. image:: images/initial_setup_of_velos/image76.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image76.png
   :align: center
   :scale: 70% 
 
-.. image:: images/initial_setup_of_velos/image77.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image77.png
   :align: center
   :scale: 70% 
 
 Next click on the hyperlink for tenant1. This will bring you into the configuration page for that tenant.  Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848**, and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
 
-.. image:: images/initial_setup_of_velos/image78.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image78.png
   :align: center
   :scale: 70% 
 
-.. image:: images/initial_setup_of_velos/image79.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image79.png
   :align: center
   :scale: 70% 
 
@@ -2588,31 +2588,31 @@ VELOS tenants can be configured to expand across multiple blades. You can pre-co
 
 One consideration when expanding a tenant across more than one blade is that you will need to configure additional out-of-band IP addresses for each blade that the tenant will reside on. This is required for proper HA communication and failover to cover specific cases around blade failures. Below is a GUI screenshot inside a VELOS tenant that shows the out-of-band management IP address along with the **Cluster Member IP Addresses**. You should configure a Cluster Member IP Address for each slot that a tenant will span. The **Alternate Management** and **Alternate Cluster Member IP addresses** are for dual stack IPv4/IPv6 support and you would configure IPv6 addresses here, if the primary addresses were IPv4.
 
-.. image:: images/initial_setup_of_velos/image80.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image80.png
   :align: center
   :scale: 70% 
 
 Next a tenant that currently exists on a single blade will be expanded to span two blades using the GUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 6 vCPU’s and 22016 MB of memory on slot1.
 
-.. image:: images/initial_setup_of_velos/image81.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image81.png
   :align: center
   :scale: 70% 
 
 Click the check-mark next to tenant2 and then click the Provision button to move the tenant to the **provisioned** state so that configuration changes can occur. A pop-up will appear asking you to confirm. After confirming it will take a few seconds for the tenant to spin down into the provisioned state.
 
-.. image:: images/initial_setup_of_velos/image82.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image82.png
   :align: center
   :scale: 70% 
 
 Next click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted confirm, and then watch the tenant startup.
 
-.. image:: images/initial_setup_of_velos/image83.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image83.png
   :align: center
   :scale: 70% 
 
 Note the tenant is now configured for both. Slots 1 & 2 for **Allowed Slots**.
 
-.. image:: images/initial_setup_of_velos/image84.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image84.png
   :align: center
   :scale: 70% 
 
