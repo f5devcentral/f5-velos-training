@@ -66,8 +66,6 @@ A VELOS tenant supports 3 states: (**Configured, Provisioned, and Deployed**):
 
 The tenant configuration exists on the chassis partition, but the tenant is not running, and no hardware resources (CPU, memory) are allocated to it. This is the initial state and the default.
 
-**Note: Configured mode in VELOS operates differently than vCMP. It will not preserve existing tenant disk configuration and should be used with caution.**
-
 
 •	**Provisioned**
 
