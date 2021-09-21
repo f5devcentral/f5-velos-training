@@ -18,13 +18,13 @@ Creating a tenant is nearly identical to creating a vCMP guest with a few except
   :align: center
   :scale: 50%
 
-For resource provisioning you can use Recommended settings or Advanced settings. Recommended will allocate memory in proportion the number of vCPU’s assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
+For resource provisioning you can use **Recommended** settings or **Advanced** settings. Recommended will allocate memory in proportion the number of vCPU’s assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
 
 +----------------------+---------------------+--------------------------+-----------------+-----------------+
 | **Tenant Size**      | **Physical Cores**  | **Logical Cores (vCPU)** | **Min GB RAM**  | **RAM/vCPU**    |
 +======================+=====================+==========================+=================+=================+
 | BX110 1vCPU Tenant   | 0.5                 |  1                       | 4,096,000,000   | 4,096,000,000   |
-+----------------------+---------------------+--------------------------+----------------+------------------+
++----------------------+---------------------+--------------------------+-----------------+-----------------+
 | BX110 2vCPU Tenant   | 1                   |  2                       | 7,680,000,000   | 3,840,000,000   |
 +----------------------+---------------------+--------------------------+-----------------+-----------------+
 | BX110 4vCPU Tenant   | 2                   |  4                       | 14,848,000,000  | 3,712,000,000   |
