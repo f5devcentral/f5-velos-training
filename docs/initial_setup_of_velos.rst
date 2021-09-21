@@ -94,7 +94,7 @@ If there is the potential for conflict with external devices that fall within th
     RFC6598   VELOS system uses 100.64/10 as specified by RFC6598
   syscon-2-active(config)# system network config network-range-type RFC1918
 
-If changing to one of the RFC1918 address spaces, you will need to choose from one of 16 prefix ranges as seen below. You should ensure that this will not overlap with a customer’s current address space:
+If changing to one of the RFC1918 address spaces, you will need to choose from one of 16 prefix ranges as seen below. You should ensure that this will not overlap with current address space deployed within the environment:
 
 .. code-block:: bash
 
@@ -133,7 +133,7 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
 IP Address Assignment & Routing
 -------------------------------
 
-Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined or acquired via DHCP. In addition to the IP addresses a default route and subnet mask/prefix length is defined. For the initial release of VELOS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support is slated to be added in the mid CY21 release. Note the tenants themselves support IPv4/IPv6 management today.
+Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined or acquired via DHCP. In addition to the IP addresses a default route and subnet mask/prefix length is defined. For the initial 1.1.x versions of F5OS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support requires F5OS be running 1.2.x or later. Note the tenants themselves support IPv4/IPv6 management today.
 
 .. image:: images/initial_setup_of_velos/image1.png
   :align: center
@@ -173,22 +173,30 @@ As seen in previous diagrams each system controller has its own independent out-
 
 To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, GUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG configure as follows:
 
-On the active controller create an LACP interface:
+On the active controller create a new mgmt-aggr interface and a managment LACP interface:
 
 .. code-block:: bash
 
-  lacp interfaces interface mgmt-aggr
-  config name mgmt-aggr
-  !
+    config
+    interfaces interface mgmt-aggr
+    ieee8023adLag
+    config name mgmt-aggr
+    aggregation config lag-type LACP 
+    exit
+
  
 Next create a management aggregate interface and set the **config type** to **ieee8023adLag** and set the **lag-type** to **LACP**.
 
 .. code-block:: bash 
+
   interfaces interface mgmt-aggr
   config name mgmt-aggr
   config type ieee8023adLag
   aggregation config lag-type LACP
-  !
+
+  lacp interfaces interface mgmt-aggr
+  config name mgmt-aggr
+
 
 Finally add the aggregate that you created by name to each of the management interfaces on the two controllers: 
 
