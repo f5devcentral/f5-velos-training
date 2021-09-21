@@ -18,7 +18,7 @@ In VELOS there are now two distinct FPGA’s, the Application Traffic Services E
   :align: center
   :scale: 70%
 
-**Note: In the initial F5OS GA release, not all HW functions are enabled. Many will be added in the subsequent TMOS 15.1/F5OS 1.2 release scheduled for mid CY21. AFM DDoS mitigation in hardware is not fully supported and will run in software similar to how it would run in a BIG-IP VE, for the initial release. V15.1 support will add AFM hardware acceleration. SSL & Compression HW offload are fully supported in the initial release, as is FASTL4 HW offload.**
+**Note: In the initial 1.1.x versions of F5OS, not all HW functions were enabled. Many have been added in the subsequent TMOS 15.1/F5OS 1.2.1 release. AFM DDoS mitigation offload is not fully supported in v1.1.x versions of F5OS and will run in software similar to how it would run in a BIG-IP VE. v15.1.4 tenants deployed ontop of F5OS v.1.2.x or later now support additional AFM hardware acceleration. SSL & Compression HW offload are fully supported in the initial v1.1.x F5OS releases, as is FASTL4 HW offload.**
 
 When comparing VELOS to VIPRION C2400 it is important to note that VELOS is more scalable as it has double the number of slots (8 in VELOS vs. 4 in VIPRION), so the amount of performance in the same RU (Rack Unit) is significantly increased. The VELOS blades are half the width of the current B2250 blades in VIPRION. Looking at comparisons of VIPRION B2150 & B2250 vs. a single VELOS BX110 blade you can see 1.5x-3x increase in Layer 7 RPS performance depending on which blade a customer may be migrating from. From an SSL perspective the increase is 2.3x-10x for RSA based ciphers, and for Elliptical Curve the BX110 can now offload that to hardware, whereas the B2150 & B2250 had to process those ciphers in software consuming more CPU.
 
@@ -33,7 +33,7 @@ The real value of VELOS is the ability to scale from 3-6x for Layer 7 RPS and up
   :scale: 40%
 
 
-When comparing VELOS to VIPRION C4480/4800 it is important to note that the current VELOS BX110 blade is not a dense CPU-wise as the current generation B4450 blade. In many cases it may take 2 BX110 blades to provide similar CPU density/performance as a single B4450 blade. The sizing will be dependent on the configuration of the current generation blades, how utilized they are, and how vCMP is configured. Note in the case of DNS, responses per second are significantly higher on the B4450 (6.4m rps) vs BX110 (2.5m rps). Below are some single blade comparisons of the B4340N, B4450N and a single VELOS BX110 blade. And then single blade comparisons of the B4300, B4450 and a single VELOS BX110 blade.
+When comparing VELOS to VIPRION C4480/4800 it is important to note that the current VELOS BX110 blade is not as dense CPU-wise as the current generation B4450 blade. In many cases it may take 2 BX110 blades to provide similar CPU density/performance as a single B4450 blade. The sizing will be dependent on the configuration of the current generation blades, how utilized they are, and how vCMP is configured. Note in the case of DNS, responses per second are significantly higher on the B4450 (6.4m rps) vs BX110 (2.5m rps). Below are some single blade comparisons of the B4340N, B4450N and a single VELOS BX110 blade. And then single blade comparisons of the B4300, B4450 and a single VELOS BX110 blade.
 
 
 .. image:: images/velos_performance_and_sizing/image4.png
@@ -70,7 +70,7 @@ Below is an example of a B4450 configuration (excluding chassis) with 4 blades a
   :scale: 40%
 
 
-The performance numbers for VELOS already include any overhead for multitenancy as the platform is multitenant by default. There is nothing to switch on to enable multitenancy. VIPRION on the other hand has the option of running multitenancy by enabling vCMP. Published data sheet numbers for VIPRION are for bare-metal mode, where no virtualization (vCMP) is enabled. Enabling vCMP on VIPRION has overhead and will reduce to overall performance of a blade as the hypervisor takes up CPU and memory resources.
+The performance numbers for VELOS already include any overhead for multitenancy as the platform is multitenant by default. There is nothing to switch on to enable multitenancy. VIPRION on the other hand has the option of running multitenancy by enabling vCMP. Published data sheet numbers for VIPRION are for bare-metal mode, where no virtualization (vCMP) is enabled. Enabling vCMP on VIPRION has overhead and will reduce the overall performance of a blade as the hypervisor takes up CPU and memory resources.
 
 How much performance drops can vary for different metrics, but F5 has always sized environments using a rule-of-thumb of ~20% hit on performance for enabling virtualization/vCMP. With VELOS the published data sheet numbers are with multitenancy enabled, so there is no need to calculate in an additional 20% drop due to virtualization being enabled.  
 
@@ -152,7 +152,7 @@ With VELOS the amount of RAM per vCPU will change slightly as more vCPU’s are 
 | **Tenant Size**      | **Physical Cores**  | **Logical Cores (vCPU)** | **Min GB RAM**  | **RAM/vCPU**    |
 +======================+=====================+==========================+=================+=================+
 | BX110 1vCPU Tenant   | 0.5                 |  1                       | 4,096,000,000   | 4,096,000,000   |
-+----------------------+---------------------+--------------------------+----------------+-----------------+
++----------------------+---------------------+--------------------------+-----------------+-----------------+
 | BX110 2vCPU Tenant   | 1                   |  2                       | 7,680,000,000   | 3,840,000,000   |
 +----------------------+---------------------+--------------------------+-----------------+-----------------+
 | BX110 4vCPU Tenant   | 2                   |  4                       | 14,848,000,000  | 3,712,000,000   |
