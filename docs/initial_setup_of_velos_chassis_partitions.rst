@@ -36,12 +36,12 @@ Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure 
   :width: 45%
 
 
-**NOTE: Both ports on the BX110 blade must be configured in the same mode in release 1.0. i.e. both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
+**NOTE: Both ports on the BX110 blade must be configured in the same mode in current F5OS versions i.e. both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
 
 Configuring PortGroups from the GUI
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To configure Portgroups go to Network Settings > Port Groups in the chassis partition GUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the GUI page:
+To configure Portgroups go to **Network Settings > Port Groups** in the chassis partition GUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the GUI page:
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image56.png
   :align: center
@@ -50,9 +50,9 @@ To configure Portgroups go to Network Settings > Port Groups in the chassis part
 If you do make a change the blade will be forced to reboot to load a new bitstream image into the FPGA.
 
 Configuring PortGroups from the CLI
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Portgroups can be configured from the chassis partition CLI using the portgroups command on config mode. The following command will set interface 1/1 for 100GB:
+Portgroups can be configured from the chassis partition CLI using the **portgroups** command in **config** mode. The following command will set interface 1/1 for 100GB:
 
 .. code-block:: bash
 
@@ -67,7 +67,7 @@ You must commit for any changes to take affect:
   bigpartition-2(config)# commit
 
 
-Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command show running-config portgroups:
+Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command **show running-config portgroups**:
 
 .. code-block:: bash
 
@@ -95,6 +95,7 @@ Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100G
   bigpartition-2# 
 
 Configuring PortGroups from the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To list the current portgroup configuration issue the following API call:
 
@@ -214,291 +215,12 @@ To list the current portgroup configuration issue the following API call:
                   },
                   "state": {
                       "vendor-name": "F5 NETWORKS INC.",
-                      "vendor-oui": "009065",
-                      "vendor-partnum": "OPT-0031        ",
-                      "vendor-revision": "A0",
-                      "vendor-serialnum": "X3CAU7H         ",
-                      "transmitter-technology": "850 nm VCSEL",
-                      "media": "100GBASE-SR4",
-                      "optic-state": "QUALIFIED",
-                      "f5-ddm:ddm": {
-                          "rx-pwr": {
-                              "low-threshold": {
-                                  "alarm": "-14.0",
-                                  "warn": "-11.0"
-                              },
-                              "instant": {
-                                  "val-lane1": "0.95",
-                                  "val-lane2": "0.84",
-                                  "val-lane3": "0.82",
-                                  "val-lane4": "1.17"
-                              },
-                              "high-threshold": {
-                                  "alarm": "3.4",
-                                  "warn": "2.4"
-                              }
-                          },
-                          "tx-pwr": {
-                              "low-threshold": {
-                                  "alarm": "-10.0",
-                                  "warn": "-8.0"
-                              },
-                              "instant": {
-                                  "val-lane1": "-0.29",
-                                  "val-lane2": "-0.52",
-                                  "val-lane3": "-0.08",
-                                  "val-lane4": "-0.34"
-                              },
-                              "high-threshold": {
-                                  "alarm": "5.0",
-                                  "warn": "3.0"
-                              }
-                          },
-                          "temp": {
-                              "low-threshold": {
-                                  "alarm": "-5.0",
-                                  "warn": "0.0"
-                              },
-                              "instant": {
-                                  "val": "23.4218"
-                              },
-                              "high-threshold": {
-                                  "alarm": "75.0",
-                                  "warn": "70.0"
-                              }
-                          },
-                          "bias": {
-                              "low-threshold": {
-                                  "alarm": "0.003",
-                                  "warn": "0.005"
-                              },
-                              "instant": {
-                                  "val-lane1": "0.00749",
-                                  "val-lane2": "0.007632",
-                                  "val-lane3": "0.00747",
-                                  "val-lane4": "0.007484"
-                              },
-                              "high-threshold": {
-                                  "alarm": "0.013",
-                                  "warn": "0.011"
-                              }
-                          },
-                          "vcc": {
-                              "low-threshold": {
-                                  "alarm": "2.97",
-                                  "warn": "3.135"
-                              },
-                              "instant": {
-                                  "val": "3.2668"
-                              },
-                              "high-threshold": {
-                                  "alarm": "3.63",
-                                  "warn": "3.465"
-                              }
-                          }
-                      }
-                  }
-              },
-              {
-                  "portgroup_name": "2/1",
-                  "config": {
-                      "name": "2/1",
-                      "mode": "MODE_100GB",
-                      "f5-ddm:ddm": {
-                          "ddm-poll-frequency": 30
-                      }
-                  },
-                  "state": {
-                      "vendor-name": "F5 NETWORKS INC.",
-                      "vendor-oui": "009065",
-                      "vendor-partnum": "OPT-0031        ",
-                      "vendor-revision": "A0",
-                      "vendor-serialnum": "X3CAU16         ",
-                      "transmitter-technology": "850 nm VCSEL",
-                      "media": "100GBASE-SR4",
-                      "optic-state": "QUALIFIED",
-                      "f5-ddm:ddm": {
-                          "rx-pwr": {
-                              "low-threshold": {
-                                  "alarm": "-14.0",
-                                  "warn": "-11.0"
-                              },
-                              "instant": {
-                                  "val-lane1": "-0.74",
-                                  "val-lane2": "-0.82",
-                                  "val-lane3": "-0.94",
-                                  "val-lane4": "-1.07"
-                              },
-                              "high-threshold": {
-                                  "alarm": "3.4",
-                                  "warn": "2.4"
-                              }
-                          },
-                          "tx-pwr": {
-                              "low-threshold": {
-                                  "alarm": "-10.0",
-                                  "warn": "-8.0"
-                              },
-                              "instant": {
-                                  "val-lane1": "-0.81",
-                                  "val-lane2": "-0.52",
-                                  "val-lane3": "-0.99",
-                                  "val-lane4": "-0.54"
-                              },
-                              "high-threshold": {
-                                  "alarm": "5.0",
-                                  "warn": "3.0"
-                              }
-                          },
-                          "temp": {
-                              "low-threshold": {
-                                  "alarm": "-5.0",
-                                  "warn": "0.0"
-                              },
-                              "instant": {
-                                  "val": "25.1601"
-                              },
-                              "high-threshold": {
-                                  "alarm": "75.0",
-                                  "warn": "70.0"
-                              }
-                          },
-                          "bias": {
-                              "low-threshold": {
-                                  "alarm": "0.003",
-                                  "warn": "0.005"
-                              },
-                              "instant": {
-                                  "val-lane1": "0.007464",
-                                  "val-lane2": "0.0075",
-                                  "val-lane3": "0.007408",
-                                  "val-lane4": "0.007494"
-                              },
-                              "high-threshold": {
-                                  "alarm": "0.013",
-                                  "warn": "0.011"
-                              }
-                          },
-                          "vcc": {
-                              "low-threshold": {
-                                  "alarm": "2.97",
-                                  "warn": "3.135"
-                              },
-                              "instant": {
-                                  "val": "3.2564"
-                              },
-                              "high-threshold": {
-                                  "alarm": "3.63",
-                                  "warn": "3.465"
-                              }
-                          }
-                      }
-                  }
-              },
-              {
-                  "portgroup_name": "2/2",
-                  "config": {
-                      "name": "2/2",
-                      "mode": "MODE_100GB",
-                      "f5-ddm:ddm": {
-                          "ddm-poll-frequency": 30
-                      }
-                  },
-                  "state": {
-                      "vendor-name": "F5 NETWORKS INC.",
-                      "vendor-oui": "009065",
-                      "vendor-partnum": "OPT-0031        ",
-                      "vendor-revision": "A0",
-                      "vendor-serialnum": "X3DA16Y         ",
-                      "transmitter-technology": "850 nm VCSEL",
-                      "media": "100GBASE-SR4",
-                      "optic-state": "QUALIFIED",
-                      "f5-ddm:ddm": {
-                          "rx-pwr": {
-                              "low-threshold": {
-                                  "alarm": "-14.0",
-                                  "warn": "-11.0"
-                              },
-                              "instant": {
-                                  "val-lane1": "0.09",
-                                  "val-lane2": "0.23",
-                                  "val-lane3": "0.2",
-                                  "val-lane4": "0.36"
-                              },
-                              "high-threshold": {
-                                  "alarm": "3.4",
-                                  "warn": "2.4"
-                              }
-                          },
-                          "tx-pwr": {
-                              "low-threshold": {
-                                  "alarm": "-10.0",
-                                  "warn": "-8.0"
-                              },
-                              "instant": {
-                                  "val-lane1": "-0.49",
-                                  "val-lane2": "-0.69",
-                                  "val-lane3": "-0.49",
-                                  "val-lane4": "-0.48"
-                              },
-                              "high-threshold": {
-                                  "alarm": "5.0",
-                                  "warn": "3.0"
-                              }
-                          },
-                          "temp": {
-                              "low-threshold": {
-                                  "alarm": "-5.0",
-                                  "warn": "0.0"
-                              },
-                              "instant": {
-                                  "val": "23.8632"
-                              },
-                              "high-threshold": {
-                                  "alarm": "75.0",
-                                  "warn": "70.0"
-                              }
-                          },
-                          "bias": {
-                              "low-threshold": {
-                                  "alarm": "0.003",
-                                  "warn": "0.005"
-                              },
-                              "instant": {
-                                  "val-lane1": "0.007494",
-                                  "val-lane2": "0.007448",
-                                  "val-lane3": "0.00747",
-                                  "val-lane4": "0.007494"
-                              },
-                              "high-threshold": {
-                                  "alarm": "0.013",
-                                  "warn": "0.011"
-                              }
-                          },
-                          "vcc": {
-                              "low-threshold": {
-                                  "alarm": "2.97",
-                                  "warn": "3.135"
-                              },
-                              "instant": {
-                                  "val": "3.2558"
-                              },
-                              "high-threshold": {
-                                  "alarm": "3.63",
-                                  "warn": "3.465"
-                              }
-                          }
-                      }
-                  }
-              }
-          ]
-      }
-  }
+   ....
 
 Network Settings -> Interfaces
 ------------------------------
 
-Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be 1/1.0 & 1/2.0 for slot 1, and 2/1.0 & 2/2.0 for slot 2 etc…. If ports are unbundled then the port numbering will be 1/1.1, 1/1.2, 1/1.3, & 1/1.4 for the first physical port and 1/2.1, 1/2.2, 1/2.3, & 1/2.4 for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** & **1/2.0** for slot 1, and **2/1.0** & **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, & 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, & 1/2.4** for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image57.png
   :align: center
