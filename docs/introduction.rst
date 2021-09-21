@@ -4,12 +4,13 @@ Introduction
 
 VELOS is F5’s next generation chassis-based solution that will replace the current VIPRION platforms. Specifically, the new CX410 chassis will be a direct replacement for the current VIPRION c2400/c2200 chassis families. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures and then provide details on how to configure, monitor and troubleshoot the new platform so that customers considering adoption understand how VELOS will fit within their environment. 
 
-===============
+
 VELOS Overview
 ===============
 
+-------------------------------
 Kubernetes Based Platform Layer
-=================================
+-------------------------------
 
 The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer (called F5OS) that will allow for some exciting new capabilities. Luckily customers won’t need to learn Kubernetes in order to manage the new chassis, it will be abstracted from the administrator who will be able to manage the new platform layer via familiar F5 CLI, GUI, or API interfaces. 
 
@@ -30,8 +31,9 @@ Customers will be able to migrate existing BIG-IP devices, or vCMP guests into a
 
 In the future BIG-IP MA tenants will be able to be provisioned within the same chassis, which will allow customers to leverage the next generation of BIG-IP software side-by-side with the existing BIG-IP software. What will differ from an administrator’s perspective is the initial setup of the F5OS platform layer. We’ll look at some additional architecture differences between VELOS and VIPRION before getting into how to manage and monitor the new F5OS platform layer. 
 
+---------------------------------
 Smaller Footprint, Higher Density
-==================================
+---------------------------------
 
 The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades and now support double the number of slots in the same 4RU chassis footprint. The VELOS CX410 chassis supports 8 slots vs. only 4 on the VIPRION C2400 chassis.
 
@@ -70,8 +72,9 @@ With VELOS only the system controllers need to be cabled for out-of-band managem
 
 Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together
 
+----------------------------
 The Kubernetes Control Plane
-============================
+----------------------------
 
 In addition to being the centralized layer2 switch fabric for the entire chassis, the system controllers also host the Kubernetes control plane that is responsible for provisioning resources/workloads within the chassis. VELOS utilizes an opensource distribution of Kubernetes called OpenShift, and specifically it uses the OKD project/distribution. This is largely abstracted away from the administrator as they won’t be configuring or monitoring containers or Kubernetes components. In the future some Kubernetes like features will start to be exposed, but it will likely be done through the VELOS CLI, GUI, or API’s. 
 
@@ -85,8 +88,9 @@ The diagram above is somewhat simplified as it shows a single software stack for
 
 The Kubernetes (K8S) control plane is responsible for deploying workloads to the blades. This would happen when tenants or **chassis partitions** (see next section) are configured. We won’t get too deep into the Kubernetes architecture as its not required to manage the VELOS chassis.  Knowing that there is a Kubernetes platform layer will help you understand as F5 introduces exciting new features in the future. By leveraging microservices and containers, F5 may be able to introduce new options such as shared multitenancy and dynamic scaling in the future. This is something that was not supported on VIPRION.
 
+------------------
 Chassis Partitions
-==================
+------------------
 
 Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation in addition to tenancy (similar to vCMP guests) that VIPRION didn’t support. Within a VELOS chassis an administrator can group together one or more blades to form a chassis partition. A chassis may contain multiple chassis partitions and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade and the maximum is 8 blades within the CX410 chassis.
  
@@ -100,8 +104,9 @@ Below is an example of a VELOS CX410 chassis divided into 3 chassis partitions (
   :align: center
   :scale: 40%
 
+-------
 Tenants
-========
+-------
 
 Tenancy is required to deploy any BIG-IP resources. VELOS is a multitenant chassis by default, there is no bare-metal mode, although it can be configured to emulate this mode with a single large tenant. You can configure one big chassis partition and assign all blades in the system to this resource. In fact, there is a “Default” partition that all blades are part of when inserted. You may change the slots assigned to the chassis partition by removing it from default and assigning to a new or existing chassis partition. A tenant could then be assigned to utilize all CPU and memory across that chassis partition. This would emulate a VIPRION system running “bare metal” where vCMP is not provisioned. 
 
