@@ -53,6 +53,7 @@ If you are logged into the standby system controller then you will not be able t
   syscon-1-standby# config 
   Aborted: node is in readonly mode
 
+-----------------------
 Interface Configuration
 -----------------------
 
@@ -64,6 +65,7 @@ The out-of-band Ethernet interfaces on each system controller can be configured 
   Entering configuration mode terminal
   syscon-2-active(config)#
 
+--------------------------
 Internal Chassis IP Ranges
 --------------------------
 
@@ -130,6 +132,7 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
 
 **Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
 
+-------------------------------
 IP Address Assignment & Routing
 -------------------------------
 
@@ -161,7 +164,7 @@ Now that the out-of-band addresses and routing are configured you can attempt to
   :align: center
   :scale: 70%
 
-
+-------------------------------------------------------
 Interface Aggregation for System Controllers (Optional)
 -------------------------------------------------------
 
@@ -208,6 +211,7 @@ Finally add the aggregate that you created by name to each of the management int
   config type ethernetCsmacd
   ethernet config aggregate-id mgmt-aggr
 
+---------------
 System Settings
 ---------------
 
@@ -367,8 +371,9 @@ To set a Remote Logging destination:
       }
   }
 
+---------------------------
 Licensing the VELOS Chassis
-===========================
+---------------------------
 
 Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
 
@@ -512,8 +517,9 @@ To get the current licensing status via API use the following API call. Issue a 
       }
   }
 
+--------------------------
 Chassis Partition Creation
-==========================
+--------------------------
 
 Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition and they can be restricted to specific vCPU’s as well as restricted to a single blade or be allowed to span across multiple blades. Conceptually this is similar to how vCMP guests are defined, but the underlying technology is different. 
 
