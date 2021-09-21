@@ -227,7 +227,7 @@ Interface numbering will vary depending on the current portgroup configuration. 
   :scale: 70% 
 
 Configuring Interfaces from the GUI
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Within the chassis partition GUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
 
@@ -242,7 +242,7 @@ You can click on any interface to view its settings or edit them. You can curren
   :scale: 70% 
 
 Configuring Interfaces from the CLI
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Interfaces can be configured in the chassis partition CLI. As mentioned previously portgroups should be configured for their desired state before configuring any interfaces as the interface numbering may change. In the CLI enter config mode and then specify the interface you want to configure. If the interface is going to be part of a LAG, then most of the configuration is done within the LAG. Use the command **show running-config interfaces** to see the current configuration:
 
@@ -306,6 +306,7 @@ To make any changes you will need to enter config mode and then enter the interf
   bigpartition-1(config-interface-1/1.0)# commit
 
 Configuring Interfaces from the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following API command will list all the current interfaces within the current chassis partition with their configuration and status: 
 
