@@ -24,7 +24,6 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
   :align: center
   :scale: 70%
 
-
 * specific software releases
 
 Customers will be able to migrate existing BIG-IP devices, or vCMP guests into a tenant running on VELOS. A tenant is conceptually similar to a vCMP guest on the VIPRION platform. Once inside the tenant, the management experience will be similar to the experience on existing BIG-IP platforms. The BIG-IP tenant will be managed just as a vCMP guest is managed today on VIPRION. The administrator can connect directly to the tenant’s GUI, CLI, or API and have the same experience as they have with their existing platforms. 
