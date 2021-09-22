@@ -441,8 +441,12 @@ An upgrade of the system controllers should automatically start after the above 
     syscon-2-active# 
 
 
-Tenant Upgrades
-===============
+Tenant Images and Upgrades
+==========================
+
+-------------------------------------
+Loading Tenant Images for New Tenants
+-------------------------------------
 
 Tenant software images are loaded directly into each chassis partition. If you have more than one chassis partition, you’ll need to load tenant images for each one independently. The first release of VELOS only supported TMOS v14.1.4, and 15.1.4 support has been added with the release of F5OS v1.2.1. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software. 
 
@@ -554,8 +558,11 @@ Below is output generated from the previous command:
         }
     }
 
+---------------
+Tenant Upgrades
+---------------
 
-
+Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release, and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant form the F5OS layer, you must perfrom the upgrade from inside the tenant.
 
 **NOTE: Currently VELOS does not provide a shared image repository for all tenants to upgrade from. With vCMP guests, VIPRION allowed for an image to be loaded once into the host layer, and all tenants had access to that repository to use to upgrade. VELOS has a shared repository f**
 
