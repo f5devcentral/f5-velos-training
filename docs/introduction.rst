@@ -22,7 +22,7 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
 
 .. image:: images/velos_introduction/image1.png
   :align: center
-  :scale: 70%
+  :scale: 40%
 
 * specific software releases
 
