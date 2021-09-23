@@ -22,4 +22,5 @@ VELOS Training Guide
    velos_diagnostics.rst
    bigiq_support_for_velos.rst
    monitoring_velos.rst
+   velos_monitoring_snmp.rst
    migration_to_velos.rst
