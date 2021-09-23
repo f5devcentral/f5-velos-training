@@ -130,7 +130,7 @@ Below is an example output:
         }
     }
 
-To import images, use the following API examples for controller and partition images. To import the controller image:
+To import images, use the following API examples for controller and partition images. To import the **controller** image:
 
 .. code-block:: bash
 
@@ -151,7 +151,7 @@ To import images, use the following API examples for controller and partition im
         ]
     }
 
-To import the partition image:
+To import the **partition** image:
 
 .. code-block:: bash
 
@@ -256,11 +256,19 @@ Once the new images are loaded you can perform the upgrade from the **System Set
 Chassis Partition Upgrades
 ==========================
 
+-----------------------------------------
+Upgrading a Chassis Partition via the GUI
+-----------------------------------------
+
 Upgrade of chassis partitions is performed from the system controller GUI **Partition Management** screen. You must first click the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. At this time a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
 
 .. image:: images/velos_software_upgrades/image8.png
   :align: center
   :scale: 70%
+
+-----------------------------------------
+Upgrading a Chassis Partition via the CLI
+-----------------------------------------
 
 In the system controller CLI you can use the **show image** command to see the currently installed software versions for each chassis partition.
 
@@ -440,6 +448,12 @@ An upgrade of the system controllers should automatically start after the above 
 
     syscon-2-active# 
 
+-----------------------------------------
+Upgrading a Chassis Partition via the API
+-----------------------------------------
+
+
+
 
 Tenant Images and Upgrades
 ==========================
@@ -564,5 +578,5 @@ Tenant Upgrades
 
 Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release, and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant form the F5OS layer, you must perfrom the upgrade from inside the tenant.
 
-**NOTE: Currently VELOS does not provide a shared image repository for all tenants to upgrade from. With vCMP guests, VIPRION allowed for an image to be loaded once into the host layer, and all tenants had access to that repository to use to upgrade. VELOS has a shared repository f**
+**NOTE: Currently VELOS does not provide a shared image repository for all tenants to upgrade from. With vCMP guests, VIPRION allowed for an image to be loaded once into the host layer, and all tenants had access to that repository to use to upgrade.**
 
