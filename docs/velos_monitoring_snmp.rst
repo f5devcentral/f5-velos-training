@@ -8,9 +8,9 @@ SNMP Support for F5OS will vary by release. In the intial v1.1.x versions of F5O
 Enabling SNMP via CLI
 =============================
 
-Setting up SNMP can de done form the CLI by enabling an SNMP community. Below is an example of enabling SNMP monitroing on a chassis partition:
+Setting up SNMP can de done from the CLI by enabling an SNMP community. Below is an example of enabling SNMP monitroing on a chassis partition:
 
-.. :code-block: bash
+.. code-block:: bash
 
     bigpartition-2(config)# SNMP-COMMUNITY-MIB snmpCommunityTable snmpCommunityEntry boyapati snmpCommunityName boyapati snmpCommunitySecurityName boyapati
     bigpartition-2(config-snmpCommunityEntry-boyapati)# exit
@@ -25,7 +25,7 @@ Setting up SNMP can de done form the CLI by enabling an SNMP community. Below is
 
 You can configure the SNMP System paramters including the System Contact, System Location, and System Name as seen below:
 
-.. :code-block: bash
+.. code-block:: bash
 
     bigpartition-2(config)# SNMPv2-MIB system sysContact jim@f5.com sysLocation Boston sysName VELOS-bigpartition
     bigpartition-2(config)# commit
@@ -34,7 +34,7 @@ You can configure the SNMP System paramters including the System Contact, System
 
 It is highly recommend that you put Interface descriptions in your configuration so that this will showup when using SNMP polling:
 
-.. :code-block: bash
+.. code-block:: bash
 
     bigpartition-2(config)# interfaces interface 1/1.0
     bigpartition-2(config-interface-1/1.0)# config description "Interface-1/1.0"
@@ -54,7 +54,7 @@ It is highly recommend that you put Interface descriptions in your configuration
 
 If LAGs are configured decriptions should be added to the LAG interfaces as well:
 
-.. :code-block: bash
+.. code-block:: bash
 
     bigpartition-2(config)# interfaces interface Arista 
     bigpartition-2(config-interface-Arista)# config description "Arista LAG"
@@ -65,9 +65,9 @@ If LAGs are configured decriptions should be added to the LAG interfaces as well
     bigpartition-2(config)# commit
     Commit complete.
 
----------------------
+
 Poling SNMP Endpoints
----------------------
+=====================
 
 
 You can then poll the chassis partiton via SNMP to get stats from the system using the following SNMP OID's:
@@ -76,7 +76,7 @@ SNMP System OID: .1.3.6.1.2.1.1
 
 Exmaple output:
 
-.. :code-block: bash
+.. code-block:: bash
 
     sysDescr.0	Linux 3.10.0-862.14.4.el7.centos.plus.x86_64 : Partition services version 1.2.1-10781	OctetString	10.255.0.148:161
     sysObjectID.0	system	OID	10.255.0.148:161
@@ -108,10 +108,11 @@ SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 +-----------+---------------------+----------------+-------+------------+--------------------+---------------+---------------+---------------+------------+---------------+----------------+--------------+-----------+-------------------+-------------+----------------+-----------------+---------------+-------------+-----------+------------+-------------+
 
 
-=================
+
 
 
 Enabling SNMP Traps in the CLI
+==============================
 
 
 
