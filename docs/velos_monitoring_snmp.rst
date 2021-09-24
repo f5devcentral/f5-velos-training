@@ -122,6 +122,8 @@ SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 Chassis Partition CPU
 --------------------- 
 
+The CPU Processor Stats Table provides details on the Intel CPU processors which are running in the BX100 line card. It deals the Core & Thread Counts, as well as the Cache Size, Frequency and Model Number.
+
 SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.1
 
 +-----------+--------------+------------------+----------------+---------------+-----------------+------------------+------------------------------------------+-----------------------------+
@@ -136,7 +138,7 @@ SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1
 CPU Utilization Stats Table
 ---------------------------
 
-The table below shows the total CPU Utilization per blade within a chassis parition over 5 seconds, 1 minute, and 5 minutes averages.
+The table below shows the total CPU Utilization per blade within a chassis parition over 5 seconds, 1 minute, and 5 minutes averagesas well as the current value.
 
 SNMP CPU Utilization Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.2
 
