@@ -2,7 +2,7 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP Support for F5OS will vary by release. In the intial v1.1.x versions of F5OS SNMP support is limited to SNMP Trap support from the System Controllers & Chassis Partitions, and IF-MIB support for the chassis partitions. F5OS v1.2.x added addtional SNMP support including Link Up/Down Traps for chassis partittions, and support for  IF-MIB, EtherLike-MIB, & the PLATFORM-STATS-MIB.
+SNMP Support for F5OS will vary by release. In the intial v1.1.x versions of F5OS SNMP support is limited to SNMP Trap support from the System Controllers & Chassis Partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, & the **PLATFORM-STATS-MIB**.
 
 
 Enabling SNMP via CLI
@@ -72,6 +72,10 @@ Poling SNMP Endpoints
 
 You can then poll the chassis partiton via SNMP to get stats from the system using the following SNMP OID's:
 
+-----------
+SNMP System
+-----------
+
 SNMP System OID: .1.3.6.1.2.1.1
 
 Exmaple output:
@@ -88,6 +92,12 @@ Exmaple output:
     .1.3.6.1.2.1.1.8.0	190 milliseconds (19)	TimeTicks	10.255.0.148:161
     .1.3.6.1.2.1.1.9.1.2.1	platform	OID	10.255.0.148:161
     .1.3.6.1.2.1.1.9.1.2.2	.1.3.6.1.2.1.31	OID	10.255.0.148:161
+
+------------
+SNMP ifIndex
+------------
+
+You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX100 blades and also for Link Aggregation Groups that have been configured. Note that you will only ses interfaces and LAG's that are configured within the chassis partition you are monitoring. You will not have visibility into other chasssi partition interfaces of LAG's unless you poll them directly.
 
 SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 
@@ -108,6 +118,19 @@ SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 | 67108866    | HA-Interconnect LAG | ieee8023adLag  | 9600      | 4294967295  | 00-94-A1-8E-D0-0C  | up                | up               | 0                | 0              | 0                 | 0                  | 33554441         |                |                       |                 |                    |                     |                   |                 |               |                |                 |
 +-------------+---------------------+----------------+-----------+-------------+--------------------+-------------------+------------------+------------------+----------------+-------------------+--------------------+------------------+----------------+-----------------------+-----------------+--------------------+---------------------+-------------------+-----------------+---------------+----------------+-----------------+
 
+---------------------
+Chassis Partition CPU
+--------------------- 
+
+SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.1
+
++------------+---------------+------------------+----------------+---------------+-----------------+-------------------+-----------------------------------------+-----------------------------+
+| **index**	 | **cpuIndex**	 | **cpuCacheSize**	| **cpuCoreCnt** | **cpuFreq**   | **cpuStepping** | **cpuThreadCnt**  | **cpuModelName**                        | **Index Value**             |
++============+===============+==================+================+===============+=================+===================+=========================================+=============================+ 
+| blade-1    | 0             | 19712(KB)        | 14             | 2552.893(MHz) | 4               | 28                | Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz | 7.98.108.97.100.101.45.49.0 |
++------------+---------------+------------------+----------------+---------------+-----------------+-------------------+-----------------------------------------+-----------------------------+
+| blade-2	 | 0             | 19712(KB)        | 14             | 2370.593(MHz) | 4               | 28                | Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz | 7.98.108.97.100.101.45.50.0 |
++------------+---------------+------------------+----------------+---------------+-----------------+-------------------+-----------------------------------------+-----------------------------+
 
 
 Enabling SNMP Traps in the CLI
