@@ -143,6 +143,8 @@ The table below shows the total CPU Utilization per blade within a chassis parit
 SNMP CPU Utilization Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.2
 
 
+
+
 +-------------+----------------+---------------------+---------------------+---------------------+---------------------------+
 | **cpuCore** |	**cpuCurrent** | **cpuTotal5secAvg** | **cpuTotal1minAvg** | **cpuTotal5minAvg** | **Index Value**           |
 +=============+================+=====================+=====================+=====================+===========================+
