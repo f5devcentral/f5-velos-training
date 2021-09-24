@@ -9631,6 +9631,7 @@ You can use the built-in filtering in the CLI to just get the top level state he
 
 use the output modifier after the **show system health** command to **include "state health"**.
 
+.. code-block:: bash
 
     syscon-1-active# show system health | include "state health"
     state health ok
