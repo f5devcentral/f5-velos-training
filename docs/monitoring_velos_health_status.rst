@@ -13,6 +13,56 @@ The VELOS system has an alerting system where certain known issues will raise al
 Checking Active Alerts via CLI
 ------------------------------
 
+The **show system alarms** CLI command will display any active alrms on the VELOS system if any exist. If the system is healthy then no entries will be found:
+
+.. code-block:: bash
+
+    syscon-1-active# show system alarms 
+    % No entries found.
+    syscon-1-active# 
+
+To see past events use the command **show system events**.
+
+.. code-block:: bash
+
+    syscon-1-active# show system events            
+    LOG                                                                                                                                                                     
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    66048 controller-2 arbitration-state EVENT NA "Deasserted: peer arbitration health state" "2021-05-24 15:53:18.820164630 UTC"                                           
+    66048 controller-2 arbitration-state EVENT NA "Deasserted: peer arbitration request-active state" "2021-05-24 15:53:19.967579072 UTC"                                   
+    66048 controller-2 arbitration-state EVENT NA "Deasserted: peer arbitration grant-active state" "2021-05-24 15:53:19.978854195 UTC"                                     
+    65545 fan-controller-1 power-fault ASSERT NOTICE "Power fault detected in hardware" "2021-05-24 15:53:21.049898161 UTC"                                                 
+    66048 controller-2 arbitration-state EVENT NA "Asserted: local arbitration health state" "2021-05-24 15:53:26.015915252 UTC"                                            
+    66048 controller-2 arbitration-state EVENT NA "Asserted: local arbitration request-active state" "2021-05-24 15:53:27.966554138 UTC"                                    
+    66048 controller-2 arbitration-state EVENT NA "Asserted: local arbitration grant-active state" "2021-05-24 15:53:28.856929312 UTC"                                      
+    65546 blade-2 thermal-fault ASSERT WARNING "Thermal fault detected in hardware" "2021-05-24 15:53:36.609780988 UTC"                                                     
+    65546 blade-1 thermal-fault ASSERT WARNING "Thermal fault detected in hardware" "2021-05-24 15:53:40.490642113 UTC"                                                     
+    66048 controller-2 arbitration-state EVENT NA "Asserted: peer arbitration health state" "2021-05-24 15:53:40.497334043 UTC"                                             
+    66048 controller-1 arbitration-state EVENT NA "Asserted: peer arbitration health state" "2021-05-24 15:53:26.746574994 UTC"                                             
+    66048 controller-2 arbitration-state EVENT NA "Asserted: peer arbitration request-active state" "2021-05-24 15:53:40.509161929 UTC"                                     
+    66048 controller-1 arbitration-state EVENT NA "Asserted: peer arbitration request-active state" "2021-05-24 15:53:28.706752103 UTC"                                     
+    66048 controller-1 arbitration-state EVENT NA "Asserted: peer arbitration grant-active state" "2021-05-24 15:53:28.715491054 UTC"                                       
+    66048 controller-1 arbitration-state EVENT NA "Deasserted: local arbitration health state" "2021-05-24 15:53:30.717324742 UTC"                                          
+    66048 controller-1 arbitration-state EVENT NA "Deasserted: local arbitration request-active state" "2021-05-24 15:53:30.855158278 UTC"                                  
+    66048 controller-1 arbitration-state EVENT NA "Deasserted: local arbitration grant-active state" "2021-05-24 15:53:30.866478756 UTC"                                    
+    66048 controller-1 arbitration-state EVENT NA "Asserted: local arbitration health state" "2021-05-24 15:53:32.702577376 UTC"                                            
+    66048 controller-1 arbitration-state EVENT NA "Asserted: local arbitration request-active state" "2021-05-24 15:53:34.604942495 UTC"                                    
+    66048 controller-1 arbitration-state EVENT NA "Deasserted: local arbitration request-active state" "2021-05-24 15:53:42.172936771 UTC"                                  
+    65546 blade-3 thermal-fault ASSERT WARNING "Thermal fault detected in hardware" "2021-05-24 15:53:44.108120781 UTC"                                                     
+    66048 controller-2 arbitration-state EVENT NA "Deasserted: peer arbitration request-active state" "2021-05-24 15:53:44.763209737 UTC"                                   
+    65550 controller-1 firmware-update-status EVENT NA "Firmware update is running for sirr " "2021-05-24 15:53:50.355583264 UTC"                                           
+    65550 controller-1 firmware-update-status EVENT NA "Firmware update completed for sirr " "2021-05-24 15:53:54.860605432 UTC"                                            
+    131073 chassis nebsDisabled EVENT NA "Chassis is operating with non-NEBS temperature thresholds" "2021-05-24 15:53:54.959361073 UTC"                                    
+    65550 controller-2 firmware-update-status EVENT NA "Firmware update is running for sirr " "2021-05-24 15:53:55.977932249 UTC"                                           
+    65550 controller-2 firmware-update-status EVENT NA "Firmware update completed for sirr " "2021-05-24 15:53:56.004017282 UTC"                                            
+    65546 blade-2 thermal-fault CLEAR WARNING "Thermal fault detected in hardware" "2021-05-24 19:02:25.967760976 UTC"                                                      
+    65546 blade-2 thermal-fault EVENT NA "Deasserted: VQF hot" "2021-05-24 19:02:25.967814413 UTC"                                                                          
+    65546 blade-1 thermal-fault CLEAR WARNING "Thermal fault detected in hardware" "2021-05-24 19:02:25.984620974 UTC"                                                      
+    65546 blade-1 thermal-fault EVENT NA "Deasserted: VQF hot" "2021-05-24 19:02:25.984658200 UTC"                                                                          
+    65546 blade-3 thermal-fault CLEAR WARNING "Thermal fault detected in hardware" "2021-05-24 19:02:26.005916081 UTC"                                                      
+    65546 blade-3 thermal-fault EVENT NA "Deasserted: VQF hot" "2021-05-24 19:02:26.005953590 UTC"                                         
+
+
 ------------------------------
 Checking Active Alerts via GUI
 ------------------------------
