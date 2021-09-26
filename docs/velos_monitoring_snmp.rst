@@ -357,7 +357,7 @@ You can enable SNMP traps in both the system controllers and within each chassis
 
 
 
-For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x:
+For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**:
 
 +----------------------------+----------------------------------+
 | **Alert**                  | **OID**                          |                            
@@ -418,7 +418,7 @@ For the system controllers the following SNMP Traps are supported as of F5OS 1.2
 +----------------------------+----------------------------------+
 
 
-For the chassis partitions the following SNMP Traps are supported as of F5OS 1.2.x:
+For the chassis partitions the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
 
 +----------------------------+-----------------------------------+
 | **Alert**                  | **OID**                           |                            
@@ -465,7 +465,7 @@ Enabling SNMP Traps in the CLI
 
 Enter **config** mode and enter the following commands to enable SNMP traps. Specifiy your SNMP trap reciver's IP address and port after the **snmpTargetAddrTAddress** field. Make sure to **commit** any changes.
 
-Note: The **snmpTargetAddrTAddress** is currently uniintuitive and an enhacement request has been filed to simplify the IP address and port configuration. The Trap target ip configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, The 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 + 161 UDP port is "10.255.0.139.0.161"
+Note: The **snmpTargetAddrTAddress** is currently uniintuitive and an enhacement request has been filed to simplify the IP address and port configuration. The Trap target ip configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, The 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 & 161 UDP port is "10.255.0.139.0.161"
 
 
 .. code-block:: bash
@@ -515,19 +515,7 @@ SNMP information is captured in the **snmp.log** located with the log directory 
     bigpartition-1# 
 
 
-In F5OS v1.1.x:
 
-
-- Controller - SNMP Traps
-- Partition - SNMP Trps, IF-MIB walk
-
-
-In F%OS 1.2.x:
-
-
-- - Controller - SNMP Traps
-Partition - SNMP Traps, linkUp/linkDown traps,
-- walk support for IF-MIB, EtherLike-MIB, PLATFORM-STATS-MIB,
 
 
 
