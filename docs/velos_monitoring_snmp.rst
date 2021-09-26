@@ -353,7 +353,72 @@ SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 SNMP Trap Support in F5OS
 ========================
 
-You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB* & the **F5-PARTITION-ALERT-NOTIF-MIB** provides details of supported system controller and chassis partition traps. Below is the current full list of traps support by F5OS: 
+You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB* & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps support by F5OS: 
+
+
+
+For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x:
+
++----------------------------+----------------------------------+
+| **Alert**                  | **OID**                          |                            
++============================+==================================+
+| lcd-fault                  | .1.3.6.1.4.1.12276.1.1.1.65792   |
++----------------------------+----------------------------------+
+| psu-fault                  | .1.3.6.1.4.1.12276.1.1.1.65793   |
++----------------------------+----------------------------------+
+| module-present             | .1.3.6.1.4.1.12276.1.1.1.65794   |
++----------------------------+----------------------------------+
+| module-communication-error | .1.3.6.1.4.1.12276.1.1.1.65795   |
++----------------------------+----------------------------------+
+| psu-redundancy-fault       | .1.3.6.1.4.1.12276.1.1.1.65796   |
++----------------------------+----------------------------------+
+| arbitration-state          | .1.3.6.1.4.1.12276.1.1.1.66048   |
++----------------------------+----------------------------------+
+| switch-status              | .1.3.6.1.4.1.12276.1.1.1.66049   |
++----------------------------+----------------------------------+
+| link-state                 | .1.3.6.1.4.1.12276.1.1.1.66050   |
++----------------------------+----------------------------------+
+| hardware-device-fault      | .1.3.6.1.4.1.12276.1.1.1.65536   |
++----------------------------+----------------------------------+
+| firmware-fault             | .1.3.6.1.4.1.12276.1.1.1.65537   |
++----------------------------+----------------------------------+
+| unknown-alarm              | .1.3.6.1.4.1.12276.1.1.1.65538   |
++----------------------------+----------------------------------+
+| memory-fault               | .1.3.6.1.4.1.12276.1.1.1.65539   |
++----------------------------+----------------------------------+
+| drive-fault                | .1.3.6.1.4.1.12276.1.1.1.65540   |
++----------------------------+----------------------------------+
+| cpu-fault                  | .1.3.6.1.4.1.12276.1.1.1.65541   |
++----------------------------+----------------------------------+
+| pcie-fault                 | .1.3.6.1.4.1.12276.1.1.1.65542   |
++----------------------------+----------------------------------+
+| aom-fault                  | .1.3.6.1.4.1.12276.1.1.1.65543   |
++----------------------------+----------------------------------+
+| drive-capacity-fault       | .1.3.6.1.4.1.12276.1.1.1.65544   |
++----------------------------+----------------------------------+
+| power-fault                | .1.3.6.1.4.1.12276.1.1.1.65545   |
++----------------------------+----------------------------------+
+| thermal-fault              | .1.3.6.1.4.1.12276.1.1.1.65546   |
++----------------------------+----------------------------------+
+| drive-thermal-throttle     | .1.3.6.1.4.1.12276.1.1.1.65547   |
++----------------------------+----------------------------------+
+| blade-thermal-fault        | .1.3.6.1.4.1.12276.1.1.1.65548   |
++----------------------------+----------------------------------+
+| blade-hardware-fault       | .1.3.6.1.4.1.12276.1.1.1.65549   |
++----------------------------+----------------------------------+
+| firmware-update-status     | .1.3.6.1.4.1.12276.1.1.1.65550   |
++----------------------------+----------------------------------+
+| drive-utilization          | .1.3.6.1.4.1.12276.1.1.1.65551   |
++----------------------------+----------------------------------+
+| service-health             | .1.3.6.1.4.1.12276.1.1.1.65552   |
++----------------------------+----------------------------------+
+| fipsError                  | .1.3.6.1.4.1.12276.1.1.1.196608  |
++----------------------------+----------------------------------+
+| core-dump                  | .1.3.6.1.4.1.12276.1.1.1.327680  |
++----------------------------+----------------------------------+
+
+
+For the chassis partitions the following SNMP Traps are supported as of F5OS 1.2.x:
 
 +----------------------------+-----------------------------------+
 | **Alert**                  | **OID**                           |                            
@@ -374,7 +439,7 @@ You can enable SNMP traps in both the system controllers and within each chassis
 +----------------------------+-----------------------------------+
 | aom-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65543   |
 +----------------------------+-----------------------------------+
-| drive-capacity-limit       |  .1.3.6.1.4.1.12276.1.1.1.65544   |
+| drive-capacity-fault       |  .1.3.6.1.4.1.12276.1.1.1.65544   |
 +----------------------------+-----------------------------------+
 | power-fault                |  .1.3.6.1.4.1.12276.1.1.1.65545   |
 +----------------------------+-----------------------------------+
@@ -388,26 +453,6 @@ You can enable SNMP traps in both the system controllers and within each chassis
 +----------------------------+-----------------------------------+
 | firmware-update-status     |  .1.3.6.1.4.1.12276.1.1.1.65550   |
 +----------------------------+-----------------------------------+
-| drive-utilization          |  .1.3.6.1.4.1.12276.1.1.1.65551   |
-+----------------------------+-----------------------------------+
-| service-health             |  .1.3.6.1.4.1.12276.1.1.1.65552   |
-+----------------------------+-----------------------------------+
-| lcd-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65792   |
-+----------------------------+-----------------------------------+
-| psu-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65793   |
-+----------------------------+-----------------------------------+
-| module-present             |  .1.3.6.1.4.1.12276.1.1.1.65794   |
-+----------------------------+-----------------------------------+
-| module-communication-error |  .1.3.6.1.4.1.12276.1.1.1.65795   |
-+----------------------------+-----------------------------------+
-| psu-redundancy-fault       |  .1.3.6.1.4.1.12276.1.1.1.65796   |
-+----------------------------+-----------------------------------+
-| arbitration-state          |  .1.3.6.1.4.1.12276.1.1.1.66048   |
-+----------------------------+-----------------------------------+
-| switch-status              |  .1.3.6.1.4.1.12276.1.1.1.66049   |
-+----------------------------+-----------------------------------+
-| link-state                 |  .1.3.6.1.4.1.12276.1.1.1.66050   |
-+----------------------------+-----------------------------------+
 | fipsError                  |  .1.3.6.1.4.1.12276.1.1.1.196608  |
 +----------------------------+-----------------------------------+
 | core-dump                  |  .1.3.6.1.4.1.12276.1.1.1.327680  |
@@ -420,14 +465,16 @@ Enabling SNMP Traps in the CLI
 
 Enter **config** mode and enter the following commands to enable SNMP traps. Specifiy your SNMP trap reciver's IP address and port after the **snmpTargetAddrTAddress** field. Make sure to **commit** any changes.
 
+Note: The **snmpTargetAddrTAddress** is currently uniintuitive and an enhacement request has been filed to simplify the IP address and port configuration. The Trap target ip configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, The 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 + 161 UDP port is "10.255.0.139.0.161"
+
 
 .. code-block:: bash
 
     syscon-1-active(config)# SNMP-NOTIFICATION-MIB snmpNotifyTable snmpNotifyEntry v2_trap snmpNotifyTag v2_trap snmpNotifyType trap snmpNotifyStorageType nonVolatile 
     syscon-1-active(config-snmpNotifyEntry-v2_trap)# exit
-    syscon-1-active(config)# SNMP-TARGET-MIB snmpTargetAddrTable snmpTargetAddrEntry group2 snmpTargetAddrTDomain 1.3.6.1.6.1.1 snmpTargetAddrTAddress 172.18.104.29.30.162 snmpTargetAddrTimeout 1500 snmpTargetAddrRetryCount 3 snmpTargetAddrTagList v2_trap snmpTargetAddrParams group2 snmpTargetAddrStorageType nonVolatile snmpTargetAddrEngineID ""
+    syscon-1-active(config)# SNMP-TARGET-MIB snmpTargetAddrTable snmpTargetAddrEntry group2 snmpTargetAddrTDomain 1.3.6.1.6.1.1 snmpTargetAddrTAddress 10.255.0.139.0.161 snmpTargetAddrTimeout 1500 snmpTargetAddrRetryCount 3 snmpTargetAddrTagList v2_trap snmpTargetAddrParams group2 snmpTargetAddrStorageType nonVolatile snmpTargetAddrEngineID "" snmpTargetAddrTMask "" snmpTargetAddrMMS 2048 enabled
     syscon-1-active(config-snmpTargetAddrEntry-group2)# exit
-    syscon-1-active(config)# SNMP-TARGET-MIB snmpTargetParamsTable snmpTargetParamsEntry group2 snmpTargetParamsMPModel 1 snmpTargetParamsSecurityModel 2 snmpTargetParamsSecurityName boyapati snmpTargetParamsSecurityLevel noAuthNoPriv snmpTargetParamsStorageType nonVolatile
+    syscon-1-active(config)# SNMP-TARGET-MIB snmpTargetParamsTable snmpTargetParamsEntry group2 snmpTargetParamsMPModel 1 snmpTargetParamsSecurityModel 2 snmpTargetParamsSecurityName public snmpTargetParamsSecurityLevel noAuthNoPriv snmpTargetParamsStorageType nonVolatile
     syscon-1-active(config-snmpTargetParamsEntry-group2)# exit
     syscon-1-active(config)# commit 
     Commit complete.
