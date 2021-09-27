@@ -246,48 +246,53 @@ Uploading a Tenant Image
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The upload utility requires a remote HTTPS server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition.
+o copy a tenant image into a chassis partition, use the following API call to the chassis partition IP address:
 
 .. code-block:: bash
 
-  POST https://{{Chassis_Partition_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{Chassis1_BigPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
-  {
-      "input": [
-          {
-              "remote-host": "10.255.0.142",
-              "remote-file": "{{Tenant_Image}}",
-              "local-file": "IMAGES",
-              "insecure": ""
-          }
-      ]
-  }
+    {
+        "input": [
+            {
+                "remote-host": "10.255.0.142",
+                "remote-file": "upload/{{Tenant_Image}}",
+                "local-file": "images/{{Tenant_Image}}",
+                "insecure": "",
+                "f5-utils-file-transfer:username": "corpuser",
+                "f5-utils-file-transfer:password": "Passw0rd!!"
+            }
+        ]
+    }
 
-Once the image transfer is initiated you can check on its status with the following API call. You cannot start to deploy a tenant until the image shows replicated status:
+To list the current tenant images available on the chassis partition use the following API Call:
 
 .. code-block:: bash
 
-  GET https://{{Chassis_Partition_IP}}:8888/restconf/data/f5-tenant-images:images
+    GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-tenant-images:images
+
+Below is output generated from the previous command:
 
 .. code-block:: json
 
-  {
-      "f5-tenant-images:images": {
-          "image": [
-              {
-                  "name": "BIGIP-14.1.4-0.0.11.ALL-VELOS.qcow2.zip.bundle",
-                  "in-use": true,
-                  "status": "replicated"
-              },
-              {
-                  "name": "BIGIP-14.1.4.1-0.0.1.ALL-VELOS.qcow2.zip.bundle",
-                  "in-use": false,
-                  "status": "replicated"
-              }
-          ]
-      }
-  }
+    {
+        "f5-tenant-images:images": {
+            "image": [
+                {
+                    "name": "BIGIP-15.1.4-0.0.46.ALL-VELOS.qcow2.zip.bundle",
+                    "in-use": true,
+                    "status": "replicated"
+                },
+                {
+                    "name": "BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle",
+                    "in-use": false,
+                    "status": "replicated"
+                }
+            ]
+        }
+    }
 
 Creating a Tenant
 ^^^^^^^^^^^^^^^^^
