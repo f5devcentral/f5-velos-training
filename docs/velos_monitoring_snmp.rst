@@ -12,14 +12,6 @@ Setting up SNMP can de done from the CLI by enabling an SNMP community. Below is
 
 .. code-block:: bash
 
-    bigpartition-2(config)# SNMP-COMMUNITY-MIB snmpCommunityTable snmpCommunityEntry public snmpCommunityName public snmpCommunitySecurityName public
-    bigpartition-2(config-snmpCommunityEntry-public)# exit
-    bigpartition-2(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 2 public vacmGroupName read-access
-    bigpartition-2(config-vacmSecurityToGroupEntry-2/boyapati)# exit
-    bigpartition-2(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 1 public vacmGroupName read-access
-    bigpartition-2(config-vacmSecurityToGroupEntry-1/public)# exit
-    bigpartition-2(config)# commit 
-    Commit complete.
 
     bigpartition-1# config
     Entering configuration mode terminal
