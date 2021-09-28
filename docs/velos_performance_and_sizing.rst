@@ -18,7 +18,7 @@ In VELOS there are now two distinct FPGA’s, the Application Traffic Services E
   :align: center
   :scale: 70%
 
-**Note: In the initial 1.1.x versions of F5OS, not all HW functions were enabled. Many have been added in the subsequent TMOS 15.1/F5OS 1.2.1 release. AFM DDoS mitigation offload is not fully supported in v1.1.x versions of F5OS and will run in software similar to how it would run in a BIG-IP VE. v15.1.4 tenants deployed ontop of F5OS v.1.2.x or later now support additional AFM hardware acceleration. SSL & Compression HW offload are fully supported in the initial v1.1.x F5OS releases, as is FASTL4 HW offload.**
+**Note: In the initial 1.1.x versions of F5OS, not all HW functions were enabled. Many have been added in the subsequent TMOS v15.1.4/F5OS 1.2.1 release. AFM DDoS mitigation offload is not fully supported in v1.1.x versions of F5OS and will run in software similar to how it would run in a BIG-IP VE. v15.1.4 tenants deployed ontop of F5OS v.1.2.x or later now support additional AFM hardware acceleration. SSL & Compression HW offload are fully supported in the initial v1.1.x F5OS releases, as is FASTL4 HW offload. CGNAT & PEM support were not supported in the initial F5OS 1.1.x releases, and is now supported with F5OS v1.2.1 with tenants runnning v15.1.4 **
 
 When comparing VELOS to VIPRION C2400 it is important to note that VELOS is more scalable as it has double the number of slots (8 in VELOS vs. 4 in VIPRION), so the amount of performance in the same RU (Rack Unit) is significantly increased. The VELOS blades are half the width of the current B2250 blades in VIPRION. Looking at comparisons of VIPRION B2150 & B2250 vs. a single VELOS BX110 blade you can see 1.5x-3x increase in Layer 7 RPS performance depending on which blade a customer may be migrating from. From an SSL perspective the increase is 2.3x-10x for RSA based ciphers, and for Elliptical Curve the BX110 can now offload that to hardware, whereas the B2150 & B2250 had to process those ciphers in software consuming more CPU.
 
@@ -46,7 +46,7 @@ When comparing VELOS to VIPRION C4480/4800 it is important to note that the curr
   :scale: 40%
 
 
-The VELOS CX410 chassis is only 4U compared to the VIPRION 4480 (7RU) and VIPRION 4800 (16RU) chassis so comparing performance per RU may be a more important metric. The other important factor is cost, a single BX110 blade is half the price of the VIPRION B4450 blade so an apples-to-apples comparisons would be two BX110 blades to a single B4450 blade. 2 BX110 blades will compare very well to a single B4450 blade with some metrics being higher, and some slightly lower than the B4450 but at the same pricepoint. 
+The VELOS CX410 chassis is only 4U compared to the VIPRION 4480 (7RU) and VIPRION 4800 (16RU) chassis so comparing performance per RU may be a more important metric. The other important factor is cost, a single BX110 blade is half the price of the VIPRION B4450 blade so an apples-to-apples comparison would be two BX110 blades to a single B4450 blade. 2 BX110 blades will compare very well to a single B4450 blade with some metrics being higher, and some slightly lower than the B4450 but at the same pricepoint. 
 
 .. image:: images/velos_performance_and_sizing/image6.png
   :align: center
