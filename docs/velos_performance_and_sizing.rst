@@ -87,7 +87,7 @@ Each VELOS BX110 blade has 28 vCPU’s, but 6 of those vCPU’s are reserved for
 
 When sizing, removing the 6 dedicated vCPU’s from the equation will give a better representation of what the per vCPU performance will be. Comparing the performance of a single vCPU can be important for control plane sizing and also for extrapolation of what a tenant’s performance may be. Below is a comparison on the CPU’s on the VIPRION B2250, VELOS BX110, and VIPRION B4450. Note that the VELOS sizing is more complex because of the way the CPU’s are used. Since 3 physical / 6 vCPU’s are dedicated for use by the platform layer overall CPU performance can be misleading. 
 
-The graphs below compare 1 and 2 blade configurations of the B2250 vs. a single B4450 blade, and one and two blade VELOS BX110 configurations. There are comparisons which includes all the vCPU’s on a BX110, and another set which removes the 6 vCPU’s used for the platform layer. Instead of showing 14 physical cores and 28 vCPU’s, VELOS is sized using 11 physical cores and 22 vCPU’s listed as (Minus platform Layer CPU).
+The graphs below compare 1 and 2 blade configurations of the B2250 vs. a single B4450 blade, and one and two blade VELOS BX110 configurations. There are comparisons which includes all the vCPU’s on a BX110, and another set which removes the 6 vCPU’s used for the platform layer. Instead of showing 14 physical cores and 28 vCPU’s, VELOS is sized using 11 physical cores and 22 vCPU’s listed as (minus platform Layer CPU).
 
 .. image:: images/velos_performance_and_sizing/image11.png
   :align: center
@@ -101,7 +101,7 @@ To compare performance of VIPRION vs. VELOS you can first look at overall CPU ca
 
 **Relative CPU Scale** is a numeric grade-based comparison where the overall CPU capacity/horsepower of the system is given a rating. The rating is an easy way to compare different BIG-IP platforms. The Relative CPU Scale is calculated by taking the total # of CPU’s in a system (not including those used by VELOS platform layer) and multiplying that times the speed that the processors run. This will result in an aggregate CPU Ghz for the platform or blade. We then take the Aggregate CPU Ghz of a BIG-IP 2000s platform and give it a grade of 1. All other platforms are then given a numeric grade of how many times faster it is than the 2000s. This results in a simple numeric rating system that combines CPU speed with the number of CPU’s.
 
-In the graph below you can see that a B2250 blade has 10x more aggregate CPU capacity than the 2000s.  A VELOS BX110 blade will have either 8.7x (Minus platform CPU’s) or 11.1x (Including platform CPU’s) and a 4450 blade has 22x. What may be deceiving here is how this translates into performance because the BX110 has next generation processors, and a different architecture where some CPU’s are dedicated to the platform layer.
+In the graph below you can see that a B2250 blade has 10x more aggregate CPU capacity than the 2000s.  A VELOS BX110 blade will have either 8.7x (minus platform CPU’s) or 11.1x (including platform CPU’s) and a 4450 blade has 22x. What may be deceiving here is how this translates into performance because the BX110 has next generation processors, and a different architecture where some CPU’s are dedicated to the platform layer.
 
 
 .. image:: images/velos_performance_and_sizing/image13.png
