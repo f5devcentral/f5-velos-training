@@ -132,6 +132,8 @@ Only F5 branded optics are officially supported on VELOS. VELOS supports speeds 
 
 Below are the current VELOS optic SKU’s:
 
+**Note: 100G BiDi is planned (please contact product management to discuss your requirements, as there are different standards available in the market)**
+
 +----------------------+------+---------------------------------------------------------------------------------------+
 | F5-UPGVELQSFP28LR4   | MY   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS           |
 +----------------------+------+---------------------------------------------------------------------------------------+
