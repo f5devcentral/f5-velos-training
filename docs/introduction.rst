@@ -20,11 +20,11 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
 •	Future support for Next-generation BIG-IP software tenants (BIG-IP MA/Modular Architecture)
 •	In the future the possibility of running approved 3rd party tenants 
 
-* specific software releases
+ * specific software releases
 
 .. image:: images/velos_introduction/image1.png
   :align: center
-  :scale: 40%
+  :scale: 70%
 
 
 
