@@ -337,7 +337,7 @@ SNMP Memory Stats Table OID:.1.3.6.1.4.1.12276.1.2.1.4.1
 FPGA Stats Table
 ----------------
 
-The FPGA Stats table shows the current FPGA version. There are two sifferent FPGS's on each BX110 line card. The ATSE (Application Traffic Service Engine) and the VQF (VELOS Queing FPGA). 
+The FPGA Stats table shows the current FPGA version. There are two different FPGA's on each BX110 line card. The ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). 
 
 SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 
