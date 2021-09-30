@@ -614,7 +614,7 @@ The **show vlan-listeners** command will show the current state:
 Configuring VLANs from the API
 ------------------------------
 
-To configure VLANs use the following API command and JSON body. This will configure 3 VLANs (Interna-VLAN, External-VLAN, & HA-VLAN) along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
+To configure VLANs use the following API command and JSON body. This will configure 3 VLANs (Internal-VLAN, External-VLAN, & HA-VLAN) along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
 
 .. code-block:: bash
   PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
@@ -717,7 +717,7 @@ The following command will list the configuration and status of all VLANs within
 Network Settings -> LAGs
 ------------------------
 
-All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. You can add up to eight members for each LAG.
+All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. 
 
 Configuring LAGs from the GUI
 -----------------------------
