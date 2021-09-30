@@ -506,14 +506,14 @@ Configuring VLANs from the GUI
 
 VLANs can be created in the chassis partition GUI under **Network Settings > VLANs**. VLANs are not shared across chassis partitions, and each partition must configure its own set of VLANs. When adding a new VLAN you will define a Name and a VLAN ID. When you assign this VLAN to an interface or LAG you will determine if you want it to be untagged by configuring it as a Native VLAN or tagged by adding it as a Trunked VLAN.
 
-
 .. image:: images/initial_setup_of_velos_chassis_partitions/image60.png
   :align: center
-  :scale: 70% 
+  :scale: 70%
 
-  .. image:: images/initial_setup_of_velos_chassis_partitions/image61.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image61.png
   :align: center
-  :scale: 70% 
+  :scale: 70%
+
 
 Configuring VLANs from the CLI
 ------------------------------
