@@ -12,7 +12,7 @@ https://techdocs.f5.com/content/dam/f5/kb/global/solutions/sol12837_pdf.html/128
 
 https://devcentral.f5.com/s/articles/F5-Fast-L4-Acceleration-and-the-F5-Smart-Coprocessor-prioritized-Fast-L4-Acceleration
 
-In VELOS there are now two distinct FPGA’s, the Application Traffic Services Engine (ATSE), and the VELOS Queuing FPGA (VQF). In addition to supporting previous functions done by the ePVA there are also additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGA’s.
+In VELOS there are now two distinct FPGA’s, the **Application Traffic Services Engine** (ATSE), and the **VELOS Queuing FPGA** (VQF). In addition to supporting previous functions done by the ePVA there are also additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGA’s.
 
 .. image:: images/velos_performance_and_sizing/image1.png
   :align: center
