@@ -5,9 +5,9 @@ VELOS Networking
 Platform Layer Isolation
 ========================
 
-The new F5OS platform layer is completely isolated from in-band traffic networking and VLANs. It is purposely isolated so that it is only accessible via the out-of-band management network. In fact, there are no in-band IP addresses assigned to either the system controllers or the chassis partitions (The F5OS layer), only tenants will have in-band management IP addresses and access. Tenants also have out-of-band connectivity.
+Management of the new F5OS platform layer is completely isolated from in-band traffic networking and VLANs. It is purposely isolated so that it is only accessible via the out-of-band management network. In fact, there are no in-band IP addresses assigned to either the system controllers or the chassis partitions (The F5OS layer), only tenants will have in-band management IP addresses and access. Tenants also have out-of-band connectivity.
 
-This allows customers to run a secure/locked-down out-of-band management network where access is tightly restricted. The diagram below shows the out-of-band management access entering the chassis through the system controllers on the left. They bridge those external out-of-band connections to an internal out-of-band network that connects to all chassis partitions and tenants within the VELOS chassis. 
+This allows customers to run a secure/locked-down out-of-band management network where access is tightly restricted. The diagram below shows the out-of-band management access entering the VELOS chassis through the system controllers on the left. The system controllers bridge those external out-of-band connections to an internal out-of-band network that connects to all chassis partitions and tenants within the VELOS chassis. 
 
 .. image:: images/velos_networking/image1.png
   :align: center
@@ -17,7 +17,7 @@ Out-of-Band Management Network
 
 All out-of-band networking is handled through the system controllers. Each system controller has its own static IP address and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network and the out-of-band management VLAN inside the chassis. There is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. VLAN tagging is not supported on the out-of-band management ports on the system controllers.
 
-Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the active system controller so that an admin using API, CLI, or GUI can always connect to the active system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
+Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the active system controller so that an admin using the F5OS API, CLI, or GUI can always connect to the active system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
 .. image:: images/velos_networking/image2.png
   :align: center
@@ -26,7 +26,7 @@ Below is an example deployment where each system controller has its own unique I
 Chassis Partitions and Networking
 =================================
 
-Each chassis partition is a unique entity that has its own set of (local/remote) users and authentication, it is managed via a dedicated out-of-band IP address with its own CLI, GUI, and API access. A chassis partition can be dedicated to a specific group, and that group will only be able to access networking and tenants within their partition. They will not be able to access or share resources within other chassis partitions in the system. This is an added level of isolation that VIPRION did not have. Below are some examples:
+Each chassis partition is a unique entity that has its own set of (local/remote) users and authentication, it is managed via a dedicated out-of-band IP address with its own F5OS CLI, GUI, and API access. A chassis partition can be dedicated to a specific group, and that group will only be able to access networking and tenants within their partition. They will not be able to access or share resources within other chassis partitions in the system. This is an added level of isolation that VIPRION did not have. Below are some examples:
 
 .. image:: images/velos_networking/image3.png
   :align: center
@@ -38,7 +38,7 @@ Each chassis partition is a unique entity that has its own set of (local/remote)
   :align: center
   :scale: 50%
 
-In addition to management access being completely isolated and unique, in-band networking is configured in and completely contained within the chassis partition. Each chassis partition will have its own set of networking components such as PortGroups, VLANs, LAGs, and interfaces. This means that networking within one chassis partition is not accessible or viewable from another chassis partition. 
+In addition to management access being completely isolated and unique, in-band networking (for use by tenants) is configured in and completely contained within the chassis partition. Each chassis partition will have its own set of networking components such as PortGroups, VLANs, LAGs, and Interfaces. This means that networking within one chassis partition is not accessible or viewable from another chassis partition. 
 
 Isolation at the network level is also enforced via the centralized switch fabrics that reside in the dual system controllers. In the VELOS system each blade has multiple connections into the centralized switch fabrics for redundancy and added bandwidth. Each BX110 blade has 2 100Gb backplane connections (one to each system controller), that are bonded together in a static LAG (Link Aggregation Group). This star-wired topology provides fast and reliable backplane connections between all the blades, and also allows for complete isolation at the networking layer.
 
