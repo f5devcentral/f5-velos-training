@@ -2,7 +2,7 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP Support for F5OS will vary by release. In the intial v1.1.x versions of F5OS SNMP support is limited to SNMP Trap support from the System Controllers & Chassis Partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, & the **PLATFORM-STATS-MIB**.
+SNMP Support for F5OS will vary by release. In the intial v1.1.x versions of F5OS SNMP support is limited to SNMP Trap support from the system controllers & chassis partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, & the **PLATFORM-STATS-MIB**.
 
 
 Enabling SNMP via CLI
@@ -99,7 +99,9 @@ Exmaple output:
 SNMP ifIndex
 ------------
 
-You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX100 blades and also for Link Aggregation Groups that have been configured. Note that you will only ses interfaces and LAG's that are configured within the chassis partition you are monitoring. You will not have visibility into other chasssi partition interfaces of LAG's unless you poll them directly.
+You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX100 blades and also for Link Aggregation Groups that have been configured. Note that you will only see interfaces and LAG's that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces of LAG's unless you poll them directly.
+
+**NOTE: Stats for LAG interfaces are not currently populated.**
 
 SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 
@@ -281,7 +283,7 @@ SNMP CPU Core Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.3
 Disk Info Table
 ---------------
 
-The following table display information bout the disks installed on each blade in the current chassis partition.
+The following table display information about the disks installed on each blade in the current chassis partition.
 
 SNMP Disk Info Table OID: .1.3.6.1.4.1.12276.1.2.1.2.1
 
@@ -297,7 +299,7 @@ SNMP Disk Info Table OID: .1.3.6.1.4.1.12276.1.2.1.2.1
 Disk Utilization Stats Table
 ----------------------------
 
-The table below shows the current disk utilzation and perfromance of the disk on each BX110 blade within the current chassis partition.
+The table below shows the current disk utilzation and performance of the disk on each BX110 blade within the current chassis partition.
 
 SNMP Disk Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.2.2
 
@@ -363,6 +365,7 @@ You can enable SNMP traps in both the system controllers and within each chassis
 
 For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**:
 
+SNMP Trap events that note a fault should also trigger an Alert that can be viewed in the show alerts, in the CLI, GUI, and API. Once the clear SNMP Trap is sent it should clear the event form the show events output.
 +----------------------------+----------------------------------+
 | **Alert**                  | **OID**                          |                            
 +============================+==================================+
