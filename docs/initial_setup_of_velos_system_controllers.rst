@@ -234,7 +234,7 @@ Once the IP addresses have been defined system settings such as DNS servers, NTP
 
 **From the GUI:**
 
-You can configure the DNS and Time setting from the GUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time settings from the GUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image4.png
   :align: center
@@ -589,7 +589,7 @@ If you click on the **Dashboard**, you’ll see a graphical representation that 
 Creating a Chassis Partition via the CLI
 ----------------------------------------
 
-Before creating a chassis partition via the CLI you must first ensure that there are available slots in order to create a partition. You can issue the command show running-config slots to see what slots are available.  If all the slots are assigned to a partition like default, then you’ll need to move some of the slots to the partition none before they can be added to a new partition. 
+Before creating a chassis partition via the CLI you must first ensure that there are available slots in order to create a partition. You can issue the command show running-config slots to see what slots are available.  If all the slots are assigned to a partition like **default**, then you’ll need to move some of the slots to the partition **none** before they can be added to a new partition. 
 
 .. code-block:: bash
 
@@ -1114,6 +1114,7 @@ System Controller Configuration Options
 
 You can go back and review or edit various settings for the system controllers. 
 
+-----------------------------------------
 Network Settings -> Management Interfaces
 -----------------------------------------
 
@@ -1125,6 +1126,7 @@ Under **Network Settings** you can view/edit the IP addresses both floating and 
   :align: center
   :scale: 70%
 
+-----------------------
 Network Settings -> DNS
 -----------------------
 
@@ -1134,6 +1136,7 @@ External **DNS Lookup Servers** and **Search Domains** can be configured. This w
   :align: center
   :scale: 70%
 
+---------------------------------------
 Software Management -> Partition Images
 ---------------------------------------
 
@@ -1143,6 +1146,7 @@ Each chassis partition will require an F5OS software release to be specified whe
   :align: center
   :scale: 70%
 
+----------------------------------------
 Software Management -> Controller Images
 ----------------------------------------
 
@@ -1152,6 +1156,7 @@ System controllers also run a unique F5OS software version. Both system controll
   :align: center
   :scale: 70%
 
+----------------------------------
 System Settings -> Alarms & Events
 ----------------------------------
 
@@ -1166,6 +1171,7 @@ You may also change timeframe to see historical events, and optional refresh the
 .. image:: images/initial_setup_of_velos_system_controllers/image27.png
   :align: center
 
+----------------------------------------
 System Settings -> Controller Management
 ----------------------------------------
 
@@ -1179,6 +1185,7 @@ An administrator can failover from one system controller to the other, and also 
   :align: center
   :scale: 70% 
 
+-----------------------------------
 System Settings -> System Inventory
 -----------------------------------
 
@@ -1188,6 +1195,7 @@ The **System Settings > System Inventory** page provides status, part numbers an
   :align: center
   :scale: 70% 
 
+-------------------------------
 System Settings -> Log Settings
 -------------------------------
 
@@ -1197,6 +1205,7 @@ Under **System Settings > Log Settings** you may add remote log servers for the 
   :align: center
   :scale: 70% 
 
+---------------------------------
 System Settings -> File Utilities
 ---------------------------------
 
@@ -1212,6 +1221,7 @@ The Import/Export utility requires an external HTTPS server to copy to/from. A p
   :align: center
   :scale: 70% 
 
+--------------------------------
 System Settings -> Time Settings
 --------------------------------
 
@@ -1221,7 +1231,7 @@ Under the **System Settings > Time Settings** page Network Time Protocol servers
   :align: center
   :scale: 70% 
 
-
+-------------------------------------
 System Settings -> Device Certificate
 -------------------------------------
 
@@ -1231,6 +1241,7 @@ Device certificates and keys can be uploaded via the **Systems Settings > Device
   :align: center
   :scale: 70% 
 
+---------------------------------
 System Settings -> System Reports
 ---------------------------------
 
@@ -1268,7 +1279,7 @@ If you would like to store iHealth credentials within the configuration you may 
     username     username to login to iHealth
   syscon-1-active(config)# system diagnostics ihealth config 
 
-
+---------------------------------------
 System Settings -> Configuration Backup
 ---------------------------------------
 
@@ -1282,7 +1293,7 @@ You may backup the confd configuration databases for the system controller via t
   :align: center
   :scale: 70% 
 
-
+----------------------------
 System Settings -> Licensing
 ----------------------------
 
@@ -1294,7 +1305,7 @@ Licenses can be applied via CLI, GUI, or API. A base registration key and option
   :align: center
   :scale: 70% 
 
-
+------------------------------------------
 System Settings -> Software Install Status
 ------------------------------------------
 
@@ -1304,6 +1315,7 @@ The **System Settings -> Software Install Status** is used to verify and observe
   :align: center
   :scale: 70% 
 
+--------------------------
 System Settings -> General
 --------------------------
 
@@ -1313,6 +1325,7 @@ The **System Settings > General** page allows you to configure Appliance mode fo
   :align: center
   :scale: 70% 
 
+--------------------------------
 User Management -> Auth Settings
 --------------------------------
 
@@ -1328,6 +1341,7 @@ Each layer of F5OS has its own user and authentication management. This allows f
   :align: center
   :scale: 70% 
 
+--------------------------------
 User Management -> Server Groups
 --------------------------------
 
@@ -1345,6 +1359,7 @@ You may define Server Groups which are collections of remote auth servers that t
   :align: center
   :scale: 70% 
 
+------------------------
 User Management -> Users
 ------------------------
 
