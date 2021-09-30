@@ -1283,7 +1283,7 @@ If you would like to store iHealth credentials within the configuration you may 
 System Settings -> Configuration Backup
 ---------------------------------------
 
-You may backup the confd configuration databases for the system controller via the GUI. The backups can then be copied off-box using the file utilities GUI option. Currently the GUI does not support the restoration of confd backups, this must be done via the CLI ro API. 
+You may backup the confd configuration databases for the system controller via the GUI. The backups can then be copied off-box using the file utilities GUI option. Currently the GUI does not support the restoration of confd backups, this must be done via the CLI or API. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image39.png
   :align: center
