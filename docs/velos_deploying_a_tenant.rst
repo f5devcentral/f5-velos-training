@@ -7,13 +7,13 @@ Deploying a Tenant
 Tenant Image Types
 ------------------
 
-VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. The only release supported at launch is 14.1.4, it can be found on downloads.f5.com:
+VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 & 15.1.4), they can be found on downloads.f5.com:
 
 .. image:: images/velos_deploying_a_tenant/image64.png
   :align: center
   :scale: 70% 
 
-Ensure you choose the option labeled 14.1.4_Tenant_VELOS:
+Ensure you choose the option that is labeled specifically for VELOS. i.e. **14.1.4_Tenant_VELOS**:
 
 .. image:: images/velos_deploying_a_tenant/image65.png
   :align: center
@@ -230,8 +230,6 @@ You can deploy a tenant from the GUI using the Add button in the Tenant Manageme
 
 The tenant deployment options are almost identical to deploying a vCMP guest, with a few minor differences. You’ll supply the tenant a name and choose the image for it to run. Next you will pick what slots (blades) within the chassis partition you want the tenant to run on and assign an out-of-band management address, prefix and gateway. There are **Recommended** and **Advanced** options for resource provisioning, choosing Recommended will automatically adjust memory based on the vCPU’s allocated to the tenant. Choosing Advanced will allow you to over-allocate memory which is something VIPRION did not support. You can choose different states (Configured, Provisioned, Deployed) just like vCMP and there is an option to enable/disable HW crypto acceleration (Recommended this is enabled). And finally, there is an option to enable Appliance mode which will disable root/bash access to the tenant.
 
-**Note: Configured mode in VELOS operates differently than vCMP. It will not preserve existing tenant disk configuration and should be used with caution.**
-
 .. image:: images/velos_deploying_a_tenant/image74.png
   :align: center
   :scale: 70% 
@@ -246,7 +244,7 @@ Uploading a Tenant Image
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The upload utility requires a remote HTTPS server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition.
-o copy a tenant image into a chassis partition, use the following API call to the chassis partition IP address:
+To copy a tenant image into a chassis partition, use the following API call to the chassis partition IP address:
 
 .. code-block:: bash
 
@@ -507,8 +505,6 @@ Resizing a Tenant
 -----------------
 
 VELOS tenants have static CPU and memory allocations. These can be changed after a tenant has been deployed, but the tenant will have to be temporarily suspended (put in the **provisioned** state), then the change to CPU and or memory allocation can be made. A tenant can be expanded within a single blade or it can be configured to extend across blades assuming adequate resources are available. Once the changes are completed the tenant can be put into the deployed state and returned to service.
-
-**Note: Configured mode in VELOS operates differently than vCMP. It will not preserve existing tenant disk configuration and should be used with caution.**
 
 Expanding a Tenant within the Same Blade via GUI
 ------------------------------------------------
