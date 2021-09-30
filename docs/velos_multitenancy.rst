@@ -20,37 +20,37 @@ Creating a tenant is nearly identical to creating a vCMP guest with a few except
 
 For resource provisioning you can use **Recommended** settings or **Advanced** settings. Recommended will allocate memory in proportion the number of vCPU’s assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
 
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| **Tenant Size**      | **Physical Cores**  | **Logical Cores (vCPU)** | **Min GB RAM**  | **RAM/vCPU**    |
-+======================+=====================+==========================+=================+=================+
-| BX110 1vCPU Tenant   | 0.5                 |  1                       | 4,096,000,000   | 4,096,000,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 2vCPU Tenant   | 1                   |  2                       | 7,680,000,000   | 3,840,000,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 4vCPU Tenant   | 2                   |  4                       | 14,848,000,000  | 3,712,000,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 6vCPU Tenant   | 3                   |  6                       | 22,016,000,000  | 3,669,333,333   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 8vCPU Tenant   | 4                   |  8                       | 29,184,000,000  | 3,648,000,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 10vCPU Tenan   | 5                   |  10                      | 36,352,000,000  | 3,635,200,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 12vCPU Tenant  | 6                   |  12                      | 43,520,000,000  | 3,626,666,667   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 14vCPU Tenant  | 7                   |  14                      | 50,688,000,000  | 3,620,571,429   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 16vCPU Tenant  | 8                   |  16                      | 57,856,000,000  | 3,616,000,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 18vCPU Tenant  | 9                   |  18                      | 65,024,000,000  | 3,612,444,444   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 20vCPU Tenant  | 10                  |  20                      | 72,192,000,000  | 3,609,600,000   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
-| BX110 22vCPU Tenant  | 11                  |  22                      | 79,360,000,000  | 3,607,272,727   |
-+----------------------+---------------------+--------------------------+-----------------+-----------------+
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| **Tenant Size**     | **Physical Cores** | **Logical Cores (vCPU)** | **Min GB RAM** | **RAM/vCPU**    |
++=====================+====================+==========================+================+=================+
+| BX110 1vCPU Tenant  | 0.5                |  1                       | 4,096,000,000  | 4,096,000,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 2vCPU Tenant  | 1                  |  2                       | 7,680,000,000  | 3,840,000,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 4vCPU Tenant  | 2                  |  4                       | 14,848,000,000 | 3,712,000,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 6vCPU Tenant  | 3                  |  6                       | 22,016,000,000 | 3,669,333,333   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 8vCPU Tenant  | 4                  |  8                       | 29,184,000,000 | 3,648,000,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 10vCPU Tenant | 5                  |  10                      | 36,352,000,000 | 3,635,200,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 12vCPU Tenant | 6                  |  12                      | 43,520,000,000 | 3,626,666,667   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 14vCPU Tenant | 7                  |  14                      | 50,688,000,000 | 3,620,571,429   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 16vCPU Tenant | 8                  |  16                      | 57,856,000,000 | 3,616,000,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 18vCPU Tenant | 9                  |  18                      | 65,024,000,000 | 3,612,444,444   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 20vCPU Tenant | 10                 |  20                      | 72,192,000,000 | 3,609,600,000   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
+| BX110 22vCPU Tenant | 11                 |  22                      | 79,360,000,000 | 3,607,272,727   |
++---------------------+--------------------+--------------------------+----------------+-----------------+
 
 Each BX110 blade has 128GB of memory. The F5OS layer takes about 33GB of RAM leaving ~95GB of RAM for use by tenants. Using the Recommended values per tenant ~80GB of RAM will be used, leaving ~15GB of additional RAM. You may over-allocate RAM to a tenant until the 90GB of RAM is depleted. There is a formula for figuring out the minimum amount of RAM a particular tenant size will receive using the recommended values:
 
-**min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
+  **min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
 
 Each BX110 blade has 28 vCPU’s, however 6 of those vCPU’s are dedicated to the F5OS layer. This leaves 22 vCPU’s left over for use by tenants.  You can dedicate all 22 vCPU’s to one large tenant, or you can allocate smaller numbers of VCPU’s per tenant so that you can deploy many tenants.
 
@@ -60,20 +60,20 @@ Each BX110 blade has 28 vCPU’s, however 6 of those vCPU’s are dedicated to t
 
 Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPU’s guests are supported, they are not recommended for most environments. This is due to the fact that a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior only a very lightly loaded LTM/DNS only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
 
-A VELOS tenant supports 3 states: (**Configured, Provisioned, and Deployed**):
+A VELOS tenant supports 3 states: (**Configured**, **Provisioned**, and **Deployed**):
 
 •	**Configured**
 
-The tenant configuration exists on the chassis partition, but the tenant is not running, and no hardware resources (CPU, memory) are allocated to it. This is the initial state and the default.
+  The tenant configuration exists on the chassis partition, but the tenant is not running, and no hardware resources (CPU, memory) are allocated to it. This is the initial state and the default.
 
 
 •	**Provisioned**
 
-Moves the tenant into the Provisioned state, which causes the system to install the software, assign the tenant to nodes, and create virtual disks for the tenant on those nodes. If you choose this option, it takes a few minutes to complete the provisioning. The tenant does not run while in this state.
+  Moves the tenant into the Provisioned state, which causes the system to install the software, assign the tenant to nodes, and create virtual disks for the tenant on those nodes. If you choose this option, it takes a few minutes to complete the provisioning. The tenant does not run while in this state.
 
 •	**Deployed**
 
-Changes the tenant to the Deployed state. The tenant is set up, resources are allocated to the tenant, the image is moved onto the blade, the software is installed, and after those tasks are complete, the tenant is fully deployed and running. If you choose this option, it takes a few minutes to complete the deployment and bring up the system.
+  Changes the tenant to the Deployed state. The tenant is set up, resources are allocated to the tenant, the image is moved onto the blade, the software is installed, and after those tasks are complete, the tenant is fully deployed and running. If you choose this option, it takes a few minutes to complete the deployment and bring up the system.
 
 
 You may also configure **Crypto/Compression Acceleration**. This option is enabled by default, meaning the tenant will utilize and offload to crypto (SSL/TLS) and compression hardware, or it can be disabled meaning all crypto and compression will be done in software. It is highly recommended to use the default enabled option for best performance. 
