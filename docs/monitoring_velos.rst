@@ -7,7 +7,7 @@ With the introduction of a new platform layer, anyone deploying VELOS will need 
 Some admins may want CLI commands to monitor, or API calls to query the system, and others may prefer the GUI. Many customers also use SNMP to monitor and be alerted of system issues and events. For SNMP integrations F5 will provide specific SNMP OID’s that an admin can monitor, and what traps are available for altering. The following sections will outline what sort of monitoring and alerting is available with the new VELOS platform.
 
 Accessing the F5OS API
-----------------------
+======================
 
 The VELOS platform API’s for the system controllers and chassis partitions can be reached on port 8888. In this document we will use the Postman tool to access VELOS platform layer API’s. You can download the Postman tool at:
 
@@ -36,6 +36,7 @@ The same format is used when pointing directly to the IP address of a Chassis Pa
 Chassis Level and System Component Monitoring
 =============================================
 
+------------------------------------------
 System Inventory / Components from the GUI
 ------------------------------------------
 
@@ -45,6 +46,7 @@ In the system controller GUI there is a **System Inventory** page that shows all
   :align: center
   :scale: 70%
 
+------------------------------------------
 System Inventory / Components from the CLI
 ------------------------------------------
 
@@ -217,11 +219,12 @@ A combined output of all the commands above can be output by a single command to
     state nebs enabled
     ...
 
+------------------------------------------
 System Inventory / Components from the API
 ------------------------------------------
 
 Chassis Status
-^^^^^^^^^^^^^^
+--------------
 
 The overall chassis status can be queried via the following API command:
 
@@ -254,7 +257,7 @@ The overall chassis status can be queried via the following API command:
 
 
 LCD Status
-^^^^^^^^^^
+----------
 
 The chassis LCD panel status can be queried via the following API command:
 
@@ -282,7 +285,7 @@ The chassis LCD panel status can be queried via the following API command:
 
 
 Fantray Status
-^^^^^^^^^^^^^^
+--------------
 
 The chassis fantray status can be queried via the following API command:
 
@@ -311,7 +314,7 @@ The chassis fantray status can be queried via the following API command:
     }
 
 Power Supply Controller Status
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 
 There are two power supply controllers in the CX410 chassis. They can each be queried via the following API call. Substitute psu-controller-2 for the second controller status:
 
@@ -340,7 +343,7 @@ There are two power supply controllers in the CX410 chassis. They can each be qu
     }
 
 Power Supply Status
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 The CX410 chassis can have up to 4 individual power supplies installed. Each can be queried via the following API command. Substitute psu-1, psu-2, psu-3, or psu-4 at the end of the API call:
 
@@ -367,7 +370,7 @@ The CX410 chassis can have up to 4 individual power supplies installed. Each can
     }
 
 Blade Status
-^^^^^^^^^^^^
+------------
 
 There can be up to 8 blades installed in the CX410 chassis. Each one can be queried by changing the blade number at the end:
 
@@ -400,7 +403,7 @@ There can be up to 8 blades installed in the CX410 chassis. Each one can be quer
 
 
 System Controller 1 & 2 Status
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 
 There are 2 redundant system controllers in the CX410 chassis. Each one can be queried using the following API call. Substitute controller=2 to query the second system controller: 
 
@@ -744,6 +747,7 @@ The last section of this output shows CPU state and stats. There are 8 CPU cores
         ]
     }
 
+--------------------------------------------------
 System Inventory / Components Alerting and Logging
 --------------------------------------------------
 
@@ -755,7 +759,7 @@ From the system controller GUI there is a high-level status and alerting of any 
 
 
 System Alerts via API
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 Recent system level alerts can be accessed via the API. 
 
