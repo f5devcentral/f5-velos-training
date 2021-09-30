@@ -56,7 +56,7 @@ A VIPRION chassis in comparison does not have a centralized switch fabric, and a
 
 .. image:: images/velos_introduction/image4.png
   :align: center
-  :scale: 40%
+  :scale: 70%
 
 The system controllers in VELOS are also the central point of management for the entire chassis. VIPRION required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. This meant more cabling, layer2 switch ports, and external terminal servers in order to fully manage the VIPRION chassis as seen below:
 
