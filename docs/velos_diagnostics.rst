@@ -11,23 +11,24 @@ VELOS supports the ability to generate qkviews to collect and bundle configurati
 https://support.f5.com/csp/article/K02521182
 
 System Controller qkview:
-•	Use this to investigate problems relating to the controllers themselves, or the controller platform services.
-•	Collects info for active controller
-o	Collects host info, including logs
-o	Collects info from each controller platform service container
-•	Collects info for standby controller
-o	Collects host info, including logs
-o	Collects info from each controller platform service container
+
+- Use this to investigate problems relating to the controllers themselves, or the controller platform services.
+    - Collects info for active controller
+    - Collects host info, including logs
+    - Collects info from each controller platform service container
+- Collects info for standby controller
+    - Collects host info, including logs
+    - Collects info from each controller platform service container
  
 Chassis Partition qkview:
-•	Use this to investigate problems relating to a Partition. i.e. a problem with one of the partition services, or one of the blades in that partition
-•	Collects info for partition services, on the controller for which the partition is active
-o	Collects info for each partition service container
-•	Collects info for partition services, on the controller for which the partition is standby
-o	Collects info for each partition service container
-•	Collects info from each blade in the partition
-o	Collects blade host info, including logs
-o	Collects info for each partition service container
+- Use this to investigate problems relating to a Partition. i.e. a problem with one of the partition services, or one of the blades in that partition
+    - Collects info for partition services, on the controller for which the partition is active
+    - Collects info for each partition service container
+    - Collects info for partition services, on the controller for which the partition is standby
+    - Collects info for each partition service container
+    - Collects info from each blade in the partition
+    - Collects blade host info, including logs
+    - Collects info for each partition service container
 
 In both the system controller and the chassis partition the qkview can be generated from The **System Settings > System Reports** page. Here it also allows an admin to optionally upload them to iHealth. 
 
