@@ -36,6 +36,8 @@ You can do this from the **Software Management -> Partitions Image** and **Contr
 
 When you click **Add**, you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. In the current F5OS versions there is no option to upload directly from your browser (this will be added in a future release). You will need to have a remote HTTPS server that allows downloads to import images into the system via the GUI.
 
+You can alternatively upload F5OS images for both the system controllers and the chassis partitions using the **Sysyem Settings > File Utilities** page.
+
 .. image:: images/velos_software_upgrades/image5.png
   :align: center
   :scale: 70%
@@ -76,7 +78,7 @@ You can alternatively copy the controller and partition images into the floating
 Uploading Controller and Partition Images via the API
 -----------------------------------------------------
 
-As with the GUI, the current implementation of **ile import** in the API relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
+As with the GUI, the current implementation of **file import** in the API relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
 
 List the current system controller and partitions images in the images/staging directory via API calls:
 
@@ -543,7 +545,7 @@ Repeat for other chassis partitions:
     smallpartition# file import remote-host 10.255.0.142 remote-file /upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username corpuser insecure
 
 
-The command **file transfer-status**will provide details of the transfer progress and any errors:
+The command **file transfer-status** will provide details of the transfer progress and any errors:
 
 .. code-block:: bash
 
@@ -623,7 +625,7 @@ Below is output generated from the previous command:
 Tenant Upgrades
 ---------------
 
-Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release, and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant form the F5OS layer, you must perfrom the upgrade from inside the tenant.
+Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release, and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant from inside the F5OS layer, you must perform the upgrade from inside the tenant.
 
 **NOTE: Currently VELOS does not provide a shared image repository for all tenants to upgrade from. With vCMP guests, VIPRION allowed for an image to be loaded once into the host layer, and all tenants had access to that repository to use to upgrade.**
 
