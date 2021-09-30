@@ -10,7 +10,7 @@ VELOS supports the ability to generate qkviews to collect and bundle configurati
 
 https://support.f5.com/csp/article/K02521182
 
-System Controller qkview:
+**System Controller qkview**:
 
 - Use this to investigate problems relating to the controllers themselves, or the controller platform services.
     - Collects info for active controller
@@ -20,12 +20,13 @@ System Controller qkview:
     - Collects host info, including logs
     - Collects info from each controller platform service container
  
-Chassis Partition qkview:
+**Chassis Partition qkview**:
+
 - Use this to investigate problems relating to a Partition. i.e. a problem with one of the partition services, or one of the blades in that partition
     - Collects info for partition services, on the controller for which the partition is active
-    - Collects info for each partition service container
+        - Collects info for each partition service container
     - Collects info for partition services, on the controller for which the partition is standby
-    - Collects info for each partition service container
+        - Collects info for each partition service container
     - Collects info from each blade in the partition
     - Collects blade host info, including logs
     - Collects info for each partition service container
@@ -276,6 +277,55 @@ More detail on configuration and filtering of tcpdump is provide here:
 https://support.f5.com/csp/article/K12313135
 
 
+You can capture traffic for a specific interface on a blade using the interface keyword in the tcpdump command. The interface is specified as <blade>/<port>.<subport>. If the interface keyword is not supplied, or if 0/0.0 is specified for the interface, no interface filtering occurs and the command captures all interfaces in the partition.
+
+Important: The interfaces on the VELOS system are capable of very high traffic rates. To prevent dropped packets during traffic capture, you should specify appropriate filters in order to capture only the intended traffic and reduce the total amount of captured traffic.
+
+For example, the following command captures traffic on interface 1.0 on blade number 2:
+
+.. code-block:: bash
+
+    system diagnostics tcpdump interface "2/1.0"
+
+The following command captures traffic-only packets in and out of the host of blade 2:
+
+.. code-block:: bash
+    system diagnostics tcpdump interface "2/0.0"
+
+----------------
+Specify a filter
+----------------
+
+Using the bpf keyword in the tcpdump command, you can specify a filter that limits the traffic capture based on the keywords you supply.
+
+For example, the following command captures traffic only if the source or destination IP address is 10.10.10.100 and the source or destination port is 80:
+
+system diagnostics tcpdump bpf "host 10.10.10.100 and port 80"
+
+The following command captures traffic if the source IP address is 10.10.1.1 and the destination port is 443:
+
+system diagnostics tcpdump bpf "src host 10.10.1.1 and dst port 443"
+
+----------------------
+Specify an output file
+----------------------
+
+To send the captured traffic to a file, specify the filename using the outfile keyword. The resulting file is placed in the /var/F5/<partiton>/ directory by default, or you can specify the directory in which to save the file.
+
+For example, the following command sends the output of the tcpdump command to the /var/F5/partition/shared/example_capture.pcap file:
+
+.. code-block:: bash
+
+    system diagnostics tcpdump outfile /var/F5/partition/shared/example_capture.pcap
+
+---------------
+Combine options
+---------------
+
+The following example combines options to only capture traffic on interface 2.0 on blade 1 if the source IP address is 10.10.1.1 and the destination port is 80, and send the output to the /var/F5/partition/shared/example_capture.pcap file:
+
+system diagnostics tcpdump interface "1/2.0" bpf "src host 10.10.1.1 and dst port 80" outfile /var/F5/partition/shared/example_capture.pcap    
+
 Console Access to System Controllers and Blades via Built-In Terminal Server
 ============================================================================
 
@@ -326,9 +376,9 @@ Console Access to Tenant via Built-In Terminal Server
 
 
 You may have a need to access the console of a tenant to diagnose a problem, or to watch it bootup. VELOS
-provides a built-in terminal server function that will proxy network connections to a tenant console. VIPRION provided a vconsole capability which required a user to authenticate to VIPRION’s CLI first before they could run the vconsole command. 
+provides a built-in terminal server function that will proxy network connections to a tenant console. VIPRION provided a **vconsole** capability which required a user to authenticate to VIPRION’s CLI first before they could run the vconsole command. 
 
-When a VELOS tenant is created and deployed a listening ssh port will be configured on port 700x of the chassis partition (where x is the tenant instance ID). After a tenant is created, you will need to set the tenant password and tweak the expiry date to force a password change before a user can connection via the terminal server.
+When a VELOS tenant is created and deployed a listening ssh port will be configured on port 700x of the chassis partition (where x is the tenant instance ID). After a tenant is created, you will need to set the tenant password and tweak the expiry date to force a password change before a user can connect via the terminal server.
 
 Once a tenant is created from the chassis partition CLI enter the command **show system aaa authentication**. Note that there is a **username** that corresponds to each tenant that has been created (tenant1, tenant2, tenant3 in this case, but will match the configured name of the tenant) and each of these have the role of **tenant-console**. Note the expiry date is set for **1**, which means expired.
 
