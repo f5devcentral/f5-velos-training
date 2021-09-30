@@ -43,7 +43,7 @@ The failover behavior will depend on the type of outage encountered at the syste
   :align: center
   :scale: 70%
 
-This will fail the K8s control plane services from the Active system controller to the Standby, and the floating IP address will move to the new Active controller. This type of outage will be non-disruptive to client traffic flowing through the tenants and layer2 switch fabrics running on the system controllers which will continue to run in an Active/Active manner. Any management connections to the system controller or chassis partition GUI, CLI, or API’s or will be disconnected, and will have to be re-established through the new Active system controller. 
+This will fail the Kubernetes control plane services from the active system controller to the standby, and the floating IP address will move to the new active controller. This type of outage will be non-disruptive to client traffic flowing through the tenants and layer2 switch fabrics running on the system controllers which will continue to run in an active/active manner. Any management connections to the system controller or chassis partition F5OS GUI, CLI, or API’s or will be disconnected, and will have to be re-established through the new active system controller. 
 
 A physical reboot of the active system controller will cause all backplane traffic to temporarily use only the previously standby system controller. In the initial 1.1.x versions of F5OS tenant traffic may be disrupted during the reboot process as the system controllers shut down and reload. 
 
