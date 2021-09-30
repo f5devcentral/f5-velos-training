@@ -62,16 +62,16 @@ Single vCPU (Skinny) tenants are supported, but that option is hidden under **Ad
 
 A VELOS tenant supports 3 states: (**Configured**, **Provisioned**, and **Deployed**):
 
-•	**Configured**
+**Configured**
 
 - The tenant configuration exists on the chassis partition, but the tenant is not running, and no hardware resources (CPU, memory) are allocated to it. This is the initial state and the default.
 
 
-•	**Provisioned**
+**Provisioned**
 
 - Moves the tenant into the Provisioned state, which causes the system to install the software, assign the tenant to nodes, and create virtual disks for the tenant on those nodes. If you choose this option, it takes a few minutes to complete the provisioning. The tenant does not run while in this state.
 
-•	**Deployed**
+**Deployed**
 
 - Changes the tenant to the Deployed state. The tenant is set up, resources are allocated to the tenant, the image is moved onto the blade, the software is installed, and after those tasks are complete, the tenant is fully deployed and running. If you choose this option, it takes a few minutes to complete the deployment and bring up the system.
 
