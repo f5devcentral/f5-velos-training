@@ -1360,4 +1360,4 @@ You can verify the tenant has successfully started once the image has been loade
     }
 
 
- The final step is to restore the backups on each individual tenant. This will follow the normal BIG-IP UCS restore process.
+The final step is to restore the backups on each individual tenant. This will follow the normal BIG-IP UCS restore process.
