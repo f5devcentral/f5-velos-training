@@ -19,6 +19,7 @@ VELOS Training Guide
    velos_inside_the_tenant.rst
    velos_f5os_backup_and_restore.rst
    velos_software_upgrades.rst
+   velos_f5os_configuration_backup_and_restore.rst
    velos_diagnostics.rst
    bigiq_support_for_velos.rst
    monitoring_velos_health_status.rst
