@@ -421,6 +421,8 @@ For the bigpartition:
     Commit performed by admin via tcp using cli.
     bigpartition-2(config)# 
 
+Using the API to Remove Partitions and Reset Controller
+-------------------------------------------------------
 
 There is no GUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called bigpartition:
 
