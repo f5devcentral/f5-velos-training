@@ -4,6 +4,29 @@ VELOS F5OS SNMP Monitoring and Alerting
 
 SNMP Support for F5OS will vary by release. In the intial v1.1.x versions of F5OS SNMP support is limited to SNMP Trap support from the system controllers & chassis partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, & the **PLATFORM-STATS-MIB**.
 
+As of F5OS 1.2.0 the list of MIBs available are as follows:
+
+- SNMP-FRAMEWORK-MIB
+- SNMP-MPD-MIB
+- SNMP-TARGET-MIB
+- SNMP-USER-BASED-SM-MIB
+- SNMP-COMMUNITY-MIB
+- SNMP-NOTIFICATION-MIB
+- SNMP-VIEW-BASED-ACM-MIB
+- SNMPv2-MIB
+- IF-MIB
+- EtherLike-MIB
+- IANAifType-MIB
+- F5-PLATFORM-STATS-MIB
+- F5-COMMON-SMI-MIB
+- F5-COMMON-SMI
+- F5-ALERT-MIB
+
+As of F5OS 1.2.0 the list of alerts that can be configured as traps is as follows:
+
+- Interface UP
+- Interface DOWN
+- Cold Start
 
 Enabling SNMP via CLI
 =============================
@@ -491,7 +514,40 @@ Note: The **snmpTargetAddrTAddress** is currently uniintuitive and an enhacement
 Troubleshooting SNMP
 ====================
 
-SNMP information is captured in the **snmp.log** located with the log directory of each chassis partition:
+There are SNMP logs for the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located with the **log/confd** directory of the system controller:
+
+**Note: The CLI and GUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the system controller snmp logs is **/var/confd/log/snmp.log**
+
+.. code-block:: bash
+
+    syscon-2-active# file tail -n 20 log/confd/snmp.log 
+    <INFO> 6-Oct-2021::00:25:49.125 controller-2 confd[403]: snmp get-request reqid=1698654669 10.255.0.139:53745 (OCTET STRING sysContact)
+    <INFO> 6-Oct-2021::00:25:49.129 controller-2 confd[403]: snmp get-response reqid=1698654669 10.255.0.139:53745 (OCTET STRING sysContact=Jim@f5.com)
+    <INFO> 6-Oct-2021::00:25:49.130 controller-2 confd[403]: snmp get-request reqid=1698654670 10.255.0.139:53438 (OCTET STRING sysName)
+    <INFO> 6-Oct-2021::00:25:49.133 controller-2 confd[403]: snmp get-response reqid=1698654670 10.255.0.139:53438 (OCTET STRING sysName=VELOS)
+    <INFO> 6-Oct-2021::00:25:49.133 controller-2 confd[403]: snmp get-request reqid=1698654671 10.255.0.139:40402 (OCTET STRING sysLocation)
+    <INFO> 6-Oct-2021::00:25:49.136 controller-2 confd[403]: snmp get-response reqid=1698654671 10.255.0.139:40402 (OCTET STRING sysLocation=Boston)
+    <INFO> 6-Oct-2021::00:30:48.493 controller-2 confd[403]: snmp get-request reqid=1002109892 10.255.0.139:57416 (TimeTicks sysUpTime)
+    <INFO> 6-Oct-2021::00:30:48.496 controller-2 confd[403]: snmp get-response reqid=1002109892 10.255.0.139:57416 (TimeTicks sysUpTime=174495150)
+    <INFO> 6-Oct-2021::00:30:48.499 controller-2 confd[403]: snmp get-request reqid=1002109893 10.255.0.139:45272 (OCTET STRING sysDescr)
+    <INFO> 6-Oct-2021::00:30:48.502 controller-2 confd[403]: snmp get-response reqid=1002109893 10.255.0.139:45272 (OCTET STRING sysDescr=Tail-f ConfD agent)
+    <INFO> 6-Oct-2021::00:30:48.503 controller-2 confd[403]: snmp get-request reqid=1002109894 10.255.0.139:52783 (OBJECT IDENTIFIER sysObjectID)
+    <INFO> 6-Oct-2021::00:30:48.509 controller-2 confd[403]: snmp get-response reqid=1002109894 10.255.0.139:52783 (OBJECT IDENTIFIER sysObjectID=1.3.6.1.4.1.24961)
+    <INFO> 6-Oct-2021::00:30:48.510 controller-2 confd[403]: snmp get-request reqid=1002109895 10.255.0.139:52543 (TimeTicks sysUpTime)
+    <INFO> 6-Oct-2021::00:30:48.512 controller-2 confd[403]: snmp get-response reqid=1002109895 10.255.0.139:52543 (TimeTicks sysUpTime=174495152)
+    <INFO> 6-Oct-2021::00:30:48.514 controller-2 confd[403]: snmp get-request reqid=1002109896 10.255.0.139:50082 (OCTET STRING sysContact)
+    <INFO> 6-Oct-2021::00:30:48.517 controller-2 confd[403]: snmp get-response reqid=1002109896 10.255.0.139:50082 (OCTET STRING sysContact=Jim@f5.com)
+    <INFO> 6-Oct-2021::00:30:48.518 controller-2 confd[403]: snmp get-request reqid=1002109897 10.255.0.139:54944 (OCTET STRING sysName)
+    <INFO> 6-Oct-2021::00:30:48.520 controller-2 confd[403]: snmp get-response reqid=1002109897 10.255.0.139:54944 (OCTET STRING sysName=VELOS)
+    <INFO> 6-Oct-2021::00:30:48.521 controller-2 confd[403]: snmp get-request reqid=1002109898 10.255.0.139:51556 (OCTET STRING sysLocation)
+    <INFO> 6-Oct-2021::00:30:48.523 controller-2 confd[403]: snmp get-response reqid=1002109898 10.255.0.139:51556 (OCTET STRING sysLocation=Boston)
+    syscon-2-active# 
+
+
+SNMP information is captured in the **snmp.log** located with the **log** directory of each chassis partition:
+
+**Note: The CLI and GUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the chassis partition snmp logs is **/var/F5/partition<id>/log/snmp.log**
+
 
 .. code-block:: bash
 

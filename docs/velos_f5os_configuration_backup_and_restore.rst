@@ -485,7 +485,7 @@ Once this has been committed both controllers need to be rebooted manually. Logi
 
     syscon-1-active(config)# system reboot controllers controller active
 
-Using the API to Remove Partitions and Reset Controller
+Using the GUI to Remove Partitions and Reset Controller
 -------------------------------------------------------
 
 In the system controller GUI go to the **Chassis Partitions** page. Select the chassis partition you wish to delete by using the check box, then click the **Delete** button. The GUI will automatically remove the slots and return them to the **none** chassis partition before deleting the selected chassis partition. You should delete all partitions except for **default**. 
