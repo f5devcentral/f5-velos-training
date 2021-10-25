@@ -421,34 +421,6 @@ For the bigpartition:
     Commit performed by admin via tcp using cli.
     bigpartition-2(config)# 
 
-Using the API to Remove Partitions and Reset Controller
--------------------------------------------------------
-
-There is no GUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called bigpartition:
-
-.. code-block:: bash
-
-    POST https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
-
-.. code-block:: json
-
-    {
-    "f5-database:proceed": "yes"
-    }
-
-Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition smallpartition:
-
-.. code-block:: bash
-
-    POST https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
-
-.. code-block:: json
-
-    {
-    "f5-database:proceed": "yes"
-    }
-
-
 Once the partition configurations have been cleared, you’ll need to login to the system controller. You’ll need to put all slots back into the **none** partition and **commit** the changes if making changes via the CLI.
 
 .. code-block:: bash
@@ -486,6 +458,90 @@ Once this has been committed both controllers need to be rebooted manually. Logi
     syscon-1-active(config)# system reboot controllers controller standby
 
     syscon-1-active(config)# system reboot controllers controller active
+
+The system controllers should reboot, and their configurations will be completel wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
+
+
+
+Using the API to Remove Partitions and Reset Controller
+-------------------------------------------------------
+
+There is no GUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called bigpartition:
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+
+.. code-block:: json
+
+    {
+    "f5-database:proceed": "yes"
+    }
+
+Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition smallpartition:
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+
+.. code-block:: json
+
+    {
+    "f5-database:proceed": "yes"
+    }
+
+First send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition none. In the example below slots 1-2 were assigned to bigpartition and slot3 was assigned to smallpartition. All 3 slots will be moved to the partition none. 
+
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+    {
+        "f5-system-slot:slots": {
+            "slot": [
+                {
+                    "slot-num": 1,
+                    "enabled": true,
+                    "partition": "none"
+                },
+                {
+                    "slot-num": 2,
+                    "enabled": true,
+                    "partition": "none"
+                },
+                {
+                    "slot-num": 3,
+                    "enabled": true,
+                    "partition": "none"
+                }
+            ]
+        }
+    }
+
+Next Delete any chassis partitions that were configured. In this case both **bigpartition** and **smallpartiion** will be deleted by sending API calls to the system controller IP address:
+
+.. code-block:: bash
+
+    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=bigpartition
+
+    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=smallpartition
+
+The last step in the reset procedure is to set the system controllers confd database back to default.
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config
+
+.. code-block:: json
+
+    {
+    "f5-database:reset-default-config": "true"
+    }
+
+The system controllers should reboot, and their configurations will be completel wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.    
 
 Using the GUI to Remove Partitions and Reset Controller
 -------------------------------------------------------
