@@ -614,14 +614,11 @@ To transfer files into the system controller you’ll have to manually configure
     syscon-1-active(config-interface-1/mgmt0)# ethernet config aggregate-id mgmt-aggr 
     syscon-1-active(config-interface-1/mgmt0)# exit
     syscon-1-active(config)# exit
-
+    yscon-1-active(config)# interfaces interface 2/mgmt0  
     syscon-1-active(config-interface-2/mgmt0)# config name 2/mgmt0
     syscon-1-active(config-interface-2/mgmt0)# config type ethernetCsmacd 
     syscon-1-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr
     syscon-1-active(config-interface-2/mgmt0)# 
-    Uncommitted changes found, commit them? [yes/no/CANCEL] yes 
-    Commit complete.
-    syscon-1-active# 
     syscon-1-active(config)# system mgmt-ip config ipv4 controller-1 address 10.255.0.145
     syscon-1-active(config)# system mgmt-ip config ipv4 controller-2 address 10.255.0.146
     syscon-1-active(config)# system mgmt-ip config ipv4 floating address 10.255.0.147
