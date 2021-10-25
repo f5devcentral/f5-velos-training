@@ -451,7 +451,7 @@ Set controller:
     syscon-2-active(config)# system database config reset-default-config true
     syscon-2-active(config)# commit
 
-Once this has been committed both controllers need to be rebooted manually. Login to the active controller and enter config mode and then issue the **system reboot controllers standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller. 
+Once this has been committed both controllers need to be rebooted manually. Login to the active controller and enter config mode and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller. 
 
 .. code-block:: bash
 
@@ -459,7 +459,7 @@ Once this has been committed both controllers need to be rebooted manually. Logi
 
     syscon-1-active(config)# system reboot controllers controller active
 
-The system controllers should reboot, and their configurations will be completel wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
+The system controllers should reboot, and their configurations will be completely wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
 
 
 
