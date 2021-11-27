@@ -389,6 +389,7 @@ You can enable SNMP traps in both the system controllers and within each chassis
 For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**:
 
 SNMP Trap events that note a fault should also trigger an Alert that can be viewed in the show alerts, in the CLI, GUI, and API. Once the clear SNMP Trap is sent it should clear the event form the show events output.
+
 +----------------------------+----------------------------------+
 | **Alert**                  | **OID**                          |                            
 +============================+==================================+
