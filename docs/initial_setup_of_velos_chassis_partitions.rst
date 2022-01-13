@@ -617,6 +617,7 @@ Configuring VLANs from the API
 To configure VLANs use the following API command and JSON body. This will configure 3 VLANs (Internal-VLAN, External-VLAN, & HA-VLAN) along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
 
 .. code-block:: bash
+
   PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
 
 .. code-block:: json
