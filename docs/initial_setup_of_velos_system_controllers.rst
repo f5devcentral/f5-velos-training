@@ -256,7 +256,7 @@ It’s also a good idea to have the VELOS system send logs to an external syslog
 
 If you would prefer to automate the setup of the VELOS chassis, there are API calls for all of the examples above. To set the DNS configuration for the system controllers use the following API call. 
 
-For any API calls to VELOS it is import to include the header **Content-Type** **application/yang-data+json**.
+For any API calls to VELOS it is important to include the header **Content-Type** **application/yang-data+json**.
 
 .. code-block:: bash
 
