@@ -254,7 +254,9 @@ You can configure the DNS and Time settings from the GUI if preferred. DNS is co
 
 **From the API:**
 
-If you would prefer to automate the setup of the VELOS chassis, there are API calls for all of the examples above. To set the DNS configuration for the system controllers use the following API call:
+If you would prefer to automate the setup of the VELOS chassis, there are API calls for all of the examples above. To set the DNS configuration for the system controllers use the following API call. 
+
+For any API calls to VELOS it is import to include the header **Content-Type** **application/yang-data+json**.
 
 .. code-block:: bash
 
