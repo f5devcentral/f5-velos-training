@@ -1,5 +1,5 @@
 ====================
-VELOS Training Guide
+VELOS Training webUIde
 ====================
 
 .. toctree::

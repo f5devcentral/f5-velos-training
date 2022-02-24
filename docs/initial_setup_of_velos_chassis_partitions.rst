@@ -2,7 +2,7 @@
 Initial Setup Within the Chassis Partition
 ==========================================
 
-Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own CLI, GUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band interfaces. 
+Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band interfaces. 
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image52.png
   :align: center
@@ -41,10 +41,10 @@ Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure 
 
 **NOTE: Both ports on the BX110 blade must be configured in the same mode in current F5OS versions i.e. both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
 
-Configuring PortGroups from the GUI
+Configuring PortGroups from the webUI
 -----------------------------------
 
-To configure Portgroups go to **Network Settings > Port Groups** in the chassis partition GUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the GUI page:
+To configure Portgroups go to **Network Settings > Port Groups** in the chassis partition webUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the webUI page:
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image56.png
   :align: center
@@ -230,16 +230,16 @@ Interface numbering will vary depending on the current portgroup configuration. 
   :align: center
   :scale: 70% 
 
-Configuring Interfaces from the GUI
+Configuring Interfaces from the webUI
 -----------------------------------
 
-Within the chassis partition GUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
+Within the chassis partition webUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image58.png
   :align: center
   :scale: 70%  
 
-You can click on any interface to view its settings or edit them. You can currently change the interface State via the GUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG then the VLAN configuration is done within the LAG rather than the interface.
+You can click on any interface to view its settings or edit them. You can currently change the interface State via the webUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG then the VLAN configuration is done within the LAG rather than the interface.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image59.png
   :align: center
@@ -497,14 +497,14 @@ Network Settings -> VLANs
 
 All in-band networking including VLANs are configured in the VELOS chassis partition layer, and just like vCMP guests inherit VLANs, VLANs will be inherited by VELOS tenants. This allows administrators to assign the VLANs that are authorized for use by the tenant at the chassis partition layer, and then within the tenant there is no ability to configure lower-level networking like interfaces, LAG’s and VLANs. 
 
-VELOS supports both tagged (802.1Q) and untagged VLAN interfaces externally. VLANs can be configured from the CLI, GUI, or API.
+VELOS supports both tagged (802.1Q) and untagged VLAN interfaces externally. VLANs can be configured from the CLI, webUI, or API.
 
 **Note: 802.1Q-in-Q (double VLAN tagging) is not currently supported on the VELOS platform.**
 
-Configuring VLANs from the GUI
+Configuring VLANs from the webUI
 ------------------------------
 
-VLANs can be created in the chassis partition GUI under **Network Settings > VLANs**. VLANs are not shared across chassis partitions, and each partition must configure its own set of VLANs. When adding a new VLAN you will define a Name and a VLAN ID. When you assign this VLAN to an interface or LAG you will determine if you want it to be untagged by configuring it as a Native VLAN or tagged by adding it as a Trunked VLAN.
+VLANs can be created in the chassis partition webUI under **Network Settings > VLANs**. VLANs are not shared across chassis partitions, and each partition must configure its own set of VLANs. When adding a new VLAN you will define a Name and a VLAN ID. When you assign this VLAN to an interface or LAG you will determine if you want it to be untagged by configuring it as a Native VLAN or tagged by adding it as a Trunked VLAN.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image60.png
   :align: center
@@ -720,10 +720,10 @@ Network Settings -> LAGs
 
 All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. 
 
-Configuring LAGs from the GUI
+Configuring LAGs from the webUI
 -----------------------------
 
-Link Aggregation Groups (LAGs) can be configured in the chassis partition GUI via the **Network Settings > LAGs** page:
+Link Aggregation Groups (LAGs) can be configured in the chassis partition webUI via the **Network Settings > LAGs** page:
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image62.png
   :align: center
@@ -735,7 +735,7 @@ https://support.f5.com/csp/article/K1689
 
 https://support.f5.com/csp/article/K13142
 
-The following solution article provides guidance for setting up VELOS LAG interfaces and LACP with Cisco Nexus 9000 series switches:
+The following solution article provides webUIdance for setting up VELOS LAG interfaces and LACP with Cisco Nexus 9000 series switches:
 
 https://support.f5.com/csp/article/K33431212
 
@@ -749,7 +749,7 @@ Once you have configured the LAG Type and LACP options, you can add any physical
 Configuring LAGs from the CLI
 -----------------------------
 
-Within the GUI LAGs and LACP parameters are configured within the LAG GUI pages. In the CLI they are broken out into sperate areas. First enter **config** mode and then use the following lacp commands to configure the lacp interfaces:
+Within the webUI LAGs and LACP parameters are configured within the LAG webUI pages. In the CLI they are broken out into sperate areas. First enter **config** mode and then use the following lacp commands to configure the lacp interfaces:
 
 .. code-block:: bash
 

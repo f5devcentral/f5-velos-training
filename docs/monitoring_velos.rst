@@ -4,7 +4,7 @@ Monitoring VELOS
 
 With the introduction of a new platform layer, anyone deploying VELOS will need to know the important things for them to monitor to ensure proper health and performance of the system. In addition to getting F5’s recommendation on what to monitor, administrators will require details on how to get access to that information. 
 
-Some admins may want CLI commands to monitor, or API calls to query the system, and others may prefer the GUI. Many customers also use SNMP to monitor and be alerted of system issues and events. For SNMP integrations F5 will provide specific SNMP OID’s that an admin can monitor, and what traps are available for altering. The following sections will outline what sort of monitoring and alerting is available with the new VELOS platform.
+Some admins may want CLI commands to monitor, or API calls to query the system, and others may prefer the webUI. Many customers also use SNMP to monitor and be alerted of system issues and events. For SNMP integrations F5 will provide specific SNMP OID’s that an admin can monitor, and what traps are available for altering. The following sections will outline what sort of monitoring and alerting is available with the new VELOS platform.
 
 Accessing the F5OS API
 ======================
@@ -37,10 +37,10 @@ Chassis Level and System Component Monitoring
 =============================================
 
 ------------------------------------------
-System Inventory / Components from the GUI
+System Inventory / Components from the webUI
 ------------------------------------------
 
-In the system controller GUI there is a **System Inventory** page that shows all the physical components (system controllers, blades, power supplies, PSU controller, fan-tray, disk, and LCD) within the chassis and their high-level status, part number, and serial number:
+In the system controller webUI there is a **System Inventory** page that shows all the physical components (system controllers, blades, power supplies, PSU controller, fan-tray, disk, and LCD) within the chassis and their high-level status, part number, and serial number:
 
 .. image:: images/monitoring_velos/image1.png
   :align: center
@@ -751,7 +751,7 @@ The last section of this output shows CPU state and stats. There are 8 CPU cores
 System Inventory / Components Alerting and Logging
 --------------------------------------------------
 
-From the system controller GUI there is a high-level status and alerting of any faults for the chassis level components.
+From the system controller webUI there is a high-level status and alerting of any faults for the chassis level components.
 
 .. image:: images/monitoring_velos/image2.png
   :align: center
@@ -839,13 +839,13 @@ To see if the openshift cluster is up and running use the **show cluster** comma
     20     2021-02-06 18:22:19.060573 -  Openshift cluster is ready.                              
 
 
-In the GUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the next and perform controller software upgrades. 
+In the webUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the next and perform controller software upgrades. 
 
 .. image:: images/monitoring_velos/image3.png
   :align: center
   :scale: 70%
 
-The dashboard in the system controller GUI also provides high level status of each controller and its current role.
+The dashboard in the system controller webUI also provides high level status of each controller and its current role.
 
 .. image:: images/monitoring_velos/image4.png
   :align: center
@@ -861,7 +861,7 @@ Active alarms & events can be viewed form the system controllers **System Settin
 Monitoring the Layer2 Switch Fabric on the System Controllers
 -------------------------------------------------------------
 
-This section will outline what status should and can be monitored for the Layer2 switch fabric function on the system controllers. Administrators will want to monitor the internal and external interfaces and LAGs for both status and to view stats to understand current utilization. They will be looking to understand what the utilization of each port is and how is traffic balanced between the two switch fabrics on the system controllers. This section will detail what sort of monitoring is currently supported via CLI, GUI, API, and SNMP, and will also detail any altering, logging, or SNMP traps that are available.
+This section will outline what status should and can be monitored for the Layer2 switch fabric function on the system controllers. Administrators will want to monitor the internal and external interfaces and LAGs for both status and to view stats to understand current utilization. They will be looking to understand what the utilization of each port is and how is traffic balanced between the two switch fabrics on the system controllers. This section will detail what sort of monitoring is currently supported via CLI, webUI, API, and SNMP, and will also detail any altering, logging, or SNMP traps that are available.
 
 Before getting into what monitoring is supported, it is important to understand how things connect together and their labeling. The diagram below provides the internal interface numbering on the system controllers so that an admin can monitor the status and statistics of each interface. This will give them visibility into the traffic distribution across the backplane and dual switch fabrics.  Link Aggregation is configured on the blade side of the connection, but not on the system controller side. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/3.1** and one to system controller 2 interface **2/3.1**, the numbering follows the same logic for other slots:
 
@@ -957,10 +957,10 @@ The **show lacp** CLI command will show both external LAG interfaces if the mana
 
     syscon-1-active# 
 
-GUI Monitoring of the Layer2 Switch Fabric on the System Controllers
+webUI Monitoring of the Layer2 Switch Fabric on the System Controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the current release there is no backplane interface or LAG monitoring in the system controller GUI. You’ll need to use the CLI or API to get stats/status of the backplane ports or external management ports.
+In the current release there is no backplane interface or LAG monitoring in the system controller webUI. You’ll need to use the CLI or API to get stats/status of the backplane ports or external management ports.
 
 API Monitoring of the Layer2 Switch Fabric on the System Controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4639,7 +4639,7 @@ API Monitoring of Chassis Partitions from the System Controller
         }
     }
 
-GUI Monitoring of Chassis Partitions from the System Controller
+webUI Monitoring of Chassis Partitions from the System Controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Dashboard:
@@ -4648,9 +4648,9 @@ Dashboard:
   :align: center
   :scale: 70%
 
-The are some basic visuals in the System Controller GUI for Chassis Partitions with an Operational State, views of the partitions, and the ability to do some basic configuration from the System Controller. You can connect directly to one of the Chassis Partitions to get more specific details.
+The are some basic visuals in the System Controller webUI for Chassis Partitions with an Operational State, views of the partitions, and the ability to do some basic configuration from the System Controller. You can connect directly to one of the Chassis Partitions to get more specific details.
 
-The GUI screen below shows Chassis Partition visualization/configuration. An admin can see which blades belong to which chassis partitions as well as the chassis partition operational status:
+The webUI screen below shows Chassis Partition visualization/configuration. An admin can see which blades belong to which chassis partitions as well as the chassis partition operational status:
 
 .. image:: images/monitoring_velos/image10.png
   :align: center

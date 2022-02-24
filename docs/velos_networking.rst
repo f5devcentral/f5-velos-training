@@ -17,7 +17,7 @@ Out-of-Band Management Network
 
 All out-of-band networking is handled through the system controllers. Each system controller has its own static IP address and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network and the out-of-band management VLAN inside the chassis. There is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. VLAN tagging is not supported on the out-of-band management ports on the system controllers.
 
-Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the active system controller so that an admin using the F5OS API, CLI, or GUI can always connect to the active system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
+Below is an example deployment where each system controller has its own unique IP address, and administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured and that will follow the active system controller so that an admin using the F5OS API, CLI, or webUI can always connect to the active system controller.  Note the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
 .. image:: images/velos_networking/image2.png
   :align: center
@@ -26,7 +26,7 @@ Below is an example deployment where each system controller has its own unique I
 Chassis Partitions and Networking
 =================================
 
-Each chassis partition is a unique entity that has its own set of (local/remote) users and authentication, it is managed via a dedicated out-of-band IP address with its own F5OS CLI, GUI, and API access. A chassis partition can be dedicated to a specific group, and that group will only be able to access networking and tenants within their partition. They will not be able to access or share resources within other chassis partitions in the system. This is an added level of isolation that VIPRION did not have. Below are some examples:
+Each chassis partition is a unique entity that has its own set of (local/remote) users and authentication, it is managed via a dedicated out-of-band IP address with its own F5OS CLI, webUI, and API access. A chassis partition can be dedicated to a specific group, and that group will only be able to access networking and tenants within their partition. They will not be able to access or share resources within other chassis partitions in the system. This is an added level of isolation that VIPRION did not have. Below are some examples:
 
 .. image:: images/velos_networking/image3.png
   :align: center
@@ -69,7 +69,7 @@ To illustrate the point of how isolated chassis partitions are, the diagram belo
 Port Groups
 ===========
 
-The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. Both ports on the BX110 blade must be configured in the same mode currently. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, GUI or API.
+The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. Both ports on the BX110 blade must be configured in the same mode currently. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, webUI or API.
 
 
 .. image:: images/velos_networking/image9.png
@@ -80,7 +80,7 @@ The portgroup component is used to control the mode of the physical port. This c
 
 **Note: In the current releases of F5OS both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB, there is no support for mixing modes on the same blade. More granular options will be added in future F5OS software releases.**
 
-Below is an example of the chassis partition GUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
+Below is an example of the chassis partition webUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
 
 .. image:: images/velos_networking/image11.png
    :align: center

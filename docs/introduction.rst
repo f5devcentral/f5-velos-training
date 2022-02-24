@@ -2,7 +2,7 @@
 Introduction
 =============
 
-VELOS is F5’s next generation chassis-based solution that will replace the current VIPRION platforms. Specifically, the new CX410 chassis will be a direct replacement for the current VIPRION c2400/c2200 chassis families. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures and then provide details on how to configure, monitor and troubleshoot the new platform so that customers considering adoption understand how VELOS will fit within their environment. 
+VELOS is F5’s next generation chassis-based solution that will replace the current VIPRION platforms. Specifically, the new CX410 chassis will be a direct replacement for the current VIPRION c2400/c2200 chassis families. The VELOS platform has many advantages over the current VIPRION architecture. This webUIde will highlight the differences between the two architectures and then provide details on how to configure, monitor and troubleshoot the new platform so that customers considering adoption understand how VELOS will fit within their environment. 
 
 
 VELOS Overview
@@ -12,7 +12,7 @@ VELOS Overview
 Kubernetes Based Platform Layer
 -------------------------------
 
-The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer (called F5OS) that will allow for some exciting new capabilities. Luckily customers won’t need to learn Kubernetes in order to manage the new chassis, it will be abstracted from the administrator who will be able to manage the new platform layer via familiar F5 CLI, GUI, or API interfaces. 
+The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer (called F5OS) that will allow for some exciting new capabilities. Luckily customers won’t need to learn Kubernetes in order to manage the new chassis, it will be abstracted from the administrator who will be able to manage the new platform layer via familiar F5 CLI, webUI, or API interfaces. 
 
 VELOS will continue to provide hardware acceleration and offload capabilities in a similar way that VIPRION did, however more modern FPGA, CPU, and crypto offload capabilities have been introduced. The new F5OS platform layer will allow VELOS to run different types of tenants within the same chassis. As an example, VELOS will be able to run:
 
@@ -28,7 +28,7 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
 
 
 
-Customers will be able to migrate existing BIG-IP devices, or vCMP guests into a tenant running on VELOS. A tenant is conceptually similar to a vCMP guest on the VIPRION platform. Once inside the tenant, the management experience will be similar to the experience on existing BIG-IP platforms. The BIG-IP tenant will be managed just as a vCMP guest is managed today on VIPRION. The administrator can connect directly to the tenant’s GUI, CLI, or API and have the same experience as they have with their existing platforms. 
+Customers will be able to migrate existing BIG-IP devices, or vCMP guests into a tenant running on VELOS. A tenant is conceptually similar to a vCMP guest on the VIPRION platform. Once inside the tenant, the management experience will be similar to the experience on existing BIG-IP platforms. The BIG-IP tenant will be managed just as a vCMP guest is managed today on VIPRION. The administrator can connect directly to the tenant’s webUI, CLI, or API and have the same experience as they have with their existing platforms. 
 
 In the future BIG-IP MA tenants will be able to be provisioned within the same chassis, which will allow customers to leverage the next generation of BIG-IP software side-by-side with the existing BIG-IP software. What will differ from an administrator’s perspective is the initial setup of the F5OS platform layer. We’ll look at some additional architecture differences between VELOS and VIPRION before getting into how to manage and monitor the new F5OS platform layer. 
 
@@ -77,15 +77,15 @@ Additionally, the out-of-band Ethernet ports on the system controllers can be bu
 The Kubernetes Control Plane
 ----------------------------
 
-In addition to being the centralized layer2 switch fabric for the entire chassis, the system controllers also host the Kubernetes control plane that is responsible for provisioning resources/workloads within the chassis. VELOS utilizes an opensource distribution of Kubernetes called OpenShift, and specifically it uses the OKD project/distribution. This is largely abstracted away from the administrator as they won’t be configuring or monitoring containers or Kubernetes components. In the future some Kubernetes like features will start to be exposed, but it will likely be done through the VELOS F5OS CLI, GUI, or API’s. 
+In addition to being the centralized layer2 switch fabric for the entire chassis, the system controllers also host the Kubernetes control plane that is responsible for provisioning resources/workloads within the chassis. VELOS utilizes an opensource distribution of Kubernetes called OpenShift, and specifically it uses the OKD project/distribution. This is largely abstracted away from the administrator as they won’t be configuring or monitoring containers or Kubernetes components. In the future some Kubernetes like features will start to be exposed, but it will likely be done through the VELOS F5OS CLI, webUI, or API’s. 
 
-A combination of Docker Compose and Kubernetes is used within the F5OS layer.  Docker Compose is used to bring up the system controller and chassis partition software stacks as they need to be fully functional early in the startup process. Then Kubernetes takes over and is responsible for deploying workloads to the blades. One of the system controllers will be chosen to serve as primary and the other secondary from a Kubernetes control plane perspective. The central VELOS chassis F5OS API, CLI and GUI are served up from the primary system controller. The floating IP address will always follow the primary controller so CLI, GUI, and API access should not be prevented due to a controller failure.
+A combination of Docker Compose and Kubernetes is used within the F5OS layer.  Docker Compose is used to bring up the system controller and chassis partition software stacks as they need to be fully functional early in the startup process. Then Kubernetes takes over and is responsible for deploying workloads to the blades. One of the system controllers will be chosen to serve as primary and the other secondary from a Kubernetes control plane perspective. The central VELOS chassis F5OS API, CLI and webUI are served up from the primary system controller. The floating IP address will always follow the primary controller so CLI, webUI, and API access should not be prevented due to a controller failure.
 
 .. image:: images/velos_introduction/image7.png
   :align: center
   :scale: 40%
 
-The diagram above is somewhat simplified as it shows a single software stack for the Kubernetes control plane. In reality there are multiple instances that run on the system controllers. There is a software stack for the system controllers themselves which provides F5OS CLI, GUI, and API management for the controllers as well as chassis partition (a grouping of blades) lifecycle management. There is also a unique stack for every chassis partition in the system. This software stack resides on the system controllers and can fail over from one controller to the other for added redundancy. It provides the F5OS CLI, GUI, and API functions for the chassis partition, as well as support for the networking services such as stpd, lldpd, lacpd, that get deployed as workloads on the blades.
+The diagram above is somewhat simplified as it shows a single software stack for the Kubernetes control plane. In reality there are multiple instances that run on the system controllers. There is a software stack for the system controllers themselves which provides F5OS CLI, webUI, and API management for the controllers as well as chassis partition (a grouping of blades) lifecycle management. There is also a unique stack for every chassis partition in the system. This software stack resides on the system controllers and can fail over from one controller to the other for added redundancy. It provides the F5OS CLI, webUI, and API functions for the chassis partition, as well as support for the networking services such as stpd, lldpd, lacpd, that get deployed as workloads on the blades.
 
 The Kubernetes control plane is responsible for deploying workloads to the blades. This would happen when tenants or **chassis partitions** (see next section) are configured. We won’t get too deep into the Kubernetes architecture as its not required to manage the VELOS chassis. Know that the Kubernetes platform layer will allow F5 to introduce exciting new features in the future, but F5 will continue to provide abstracted interfaces for ease of management. By leveraging microservices and containers, F5 may be able to introduce new options such as shared multitenancy and dynamic scaling in the future. These are features that wer not supported on VIPRION.
 
@@ -97,7 +97,7 @@ Another exciting new feature is the notion of grouping multiple VELOS blades tog
  
 **Note: Chassis partitions are not related to TMOS admin partitions which are typically used to provide admin separation within a TMOS instance.** 
  
-A chassis partition runs its own unique F5OS software image, has a unique set of users/authentication, and is accessed via its own GUI, CLI and API. The chassis partition can be further divided to support multiple BIG-IP tenants. A tenant operates in a similar manner to how vCMP guests operated within the VIPRION chassis. It is assigned dedicated vCPU and memory resources and is restricted to specific VLANs for network connectivity. 
+A chassis partition runs its own unique F5OS software image, has a unique set of users/authentication, and is accessed via its own webUI, CLI and API. The chassis partition can be further divided to support multiple BIG-IP tenants. A tenant operates in a similar manner to how vCMP guests operated within the VIPRION chassis. It is assigned dedicated vCPU and memory resources and is restricted to specific VLANs for network connectivity. 
 
 Below is an example of a VELOS CX410 chassis divided into 3 chassis partitions (Red, Green, and Blue). These chassis partitions are completely isolated from each other and the system controllers ensure no traffic can bleed from one chassis partition to another.  Once a chassis partition is created individual tenants can be deployed and they will be restricted to only the resources within that chassis partition. 
 

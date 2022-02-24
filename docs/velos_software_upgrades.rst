@@ -21,7 +21,7 @@ When upgrading the system controllers, you will have a choice of upgrading eithe
 
 The outage for a service only upgrade on the system controller is smaller than if the entire OS was upgraded. A service upgrade will not cause a reboot of the controllers, where an OS upgrade will. If the OS does not need to be upgraded to address an issue, then you can choose to only upgrade the services. The OS is more of the container/OS layer, where most of the F5 specific code is in the service layer. Most upgrades currently require both service and OS to be upgraded, but in the future this service vs. OS upgrades may become available. Upgrades are easily accomplished via the system controller UI. First you would upload F5OS images for both the controllers as well as the partitions into the system controllers. 
 
-Uploading Controller and Partition Images via the GUI
+Uploading Controller and Partition Images via the webUI
 -----------------------------------------------------
 
 You can do this from the **Software Management -> Partitions Image** and **Controller Images** pages.
@@ -34,7 +34,7 @@ You can do this from the **Software Management -> Partitions Image** and **Contr
   :align: center
   :scale: 70%
 
-When you click **Add**, you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. In the current F5OS versions there is no option to upload directly from your browser (this will be added in a future release). You will need to have a remote HTTPS server that allows downloads to import images into the system via the GUI.
+When you click **Add**, you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. In the current F5OS versions there is no option to upload directly from your browser (this will be added in a future release). You will need to have a remote HTTPS server that allows downloads to import images into the system via the webUI.
 
 You can alternatively upload F5OS images for both the system controllers and the chassis partitions using the **Sysyem Settings > File Utilities** page.
 
@@ -48,12 +48,12 @@ You can alternatively upload F5OS images for both the system controllers and the
   :align: center
   :scale: 70%
 
-After the upload completes, it will take some time for it to be replicated to the standby system controller. At that point it should show up in the CLI and GUI. If you don’t see it immediately be patient and wait a few minutes for it to show up as it will not show up until the internal replication is completed.
+After the upload completes, it will take some time for it to be replicated to the standby system controller. At that point it should show up in the CLI and webUI. If you don’t see it immediately be patient and wait a few minutes for it to show up as it will not show up until the internal replication is completed.
 
 Uploading Controller and Partition Images via the CLI
 -----------------------------------------------------
 
-As with the GUI, the current implementation of **file import** in the CLI relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** command.
+As with the webUI, the current implementation of **file import** in the CLI relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** command.
 
 
 .. code-block:: bash
@@ -78,7 +78,7 @@ You can alternatively copy the controller and partition images into the floating
 Uploading Controller and Partition Images via the API
 -----------------------------------------------------
 
-As with the GUI, the current implementation of **file import** in the API relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
+As with the webUI, the current implementation of **file import** in the API relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
 
 List the current system controller and partitions images in the images/staging directory via API calls:
 
@@ -246,7 +246,7 @@ You’ll see output similar to the example below. Once the file shows up here yo
         }
     }
 
-Upgrading the System Controllers via GUI
+Upgrading the System Controllers via webUI
 ----------------------------------------
 
 Once the new images are loaded you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click Save the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality.
@@ -259,10 +259,10 @@ Chassis Partition Upgrades
 ==========================
 
 -----------------------------------------
-Upgrading a Chassis Partition via the GUI
+Upgrading a Chassis Partition via the webUI
 -----------------------------------------
 
-Upgrade of chassis partitions is performed from the system controller GUI **Partition Management** screen. You must first click the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. At this time a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
+Upgrade of chassis partitions is performed from the system controller webUI **Partition Management** screen. You must first click the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. At this time a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
 
 .. image:: images/velos_software_upgrades/image8.png
   :align: center
@@ -515,7 +515,7 @@ Tenant software images are loaded directly into each chassis partition. If you h
 
 Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the chassis partition. Under **Tenant Management** there is a page for uploading tenant software images. There are TMOS images specifically for VELOS. Only supported VELOS TMOS releases should be loaded into this system. Do not attempt to load older or even newer images unless there are officially supported on VELOS. 
 
-There is an option to **Add** new releases which will open a pop-up window that will ask for remote host, path and optional authentication parameters. You may only upload from a remote HTTPS server using the GUI in the current VELOS release. The **Tenant Images** page will also indicate of an image is in use by a tenant, and if it is replicated to other blades in the chassis partition.
+There is an option to **Add** new releases which will open a pop-up window that will ask for remote host, path and optional authentication parameters. You may only upload from a remote HTTPS server using the webUI in the current VELOS release. The **Tenant Images** page will also indicate of an image is in use by a tenant, and if it is replicated to other blades in the chassis partition.
 
 .. image:: images/velos_software_upgrades/image9.png
   :align: center

@@ -16,19 +16,19 @@ The layer2 switch fabric function performed by the system controllers runs in an
 
 While both switch fabrics are active there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane and each blade will be limited to 100Gbs of backplane capacity. Note that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity.
 
-The second function the system controllers perform is the management of the new Kubernetes platform layer. At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, GUI services etc…. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
+The second function the system controllers perform is the management of the new Kubernetes platform layer. At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, webUI services etc…. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
 
 .. image:: images/velos_high_availability/image2.png
   :align: center
   :scale: 70%
 
-You may view the current high availability status in the dashboard of the system controller GUI. It will show which controllers is primary and standby, the preferred node and status.
+You may view the current high availability status in the dashboard of the system controller webUI. It will show which controllers is primary and standby, the preferred node and status.
 
 .. image:: images/velos_high_availability/image3.png
   :align: center
   :scale: 70%
 
-You can view and configure the High Availability options for the system controllers in the GUI **Systems Settings > Controller Management** screen. You can force a failover, configure auto failback, as well as set the preferred node:
+You can view and configure the High Availability options for the system controllers in the webUI **Systems Settings > Controller Management** screen. You can force a failover, configure auto failback, as well as set the preferred node:
 
 .. image:: images/velos_high_availability/image4.png
   :align: center
@@ -37,13 +37,13 @@ You can view and configure the High Availability options for the system controll
 Failover Behavior
 =================
 
-The failover behavior will depend on the type of outage encountered at the system controller. You can perform a manual failover from one system controller to the other via the system controller GUI:
+The failover behavior will depend on the type of outage encountered at the system controller. You can perform a manual failover from one system controller to the other via the system controller webUI:
 
 .. image:: images/velos_high_availability/image5.png
   :align: center
   :scale: 70%
 
-This will fail the Kubernetes control plane services from the active system controller to the standby, and the floating IP address will move to the new active controller. This type of outage will be non-disruptive to client traffic flowing through the tenants and layer2 switch fabrics running on the system controllers which will continue to run in an active/active manner. Any management connections to the system controller or chassis partition F5OS GUI, CLI, or API’s or will be disconnected, and will have to be re-established through the new active system controller. 
+This will fail the Kubernetes control plane services from the active system controller to the standby, and the floating IP address will move to the new active controller. This type of outage will be non-disruptive to client traffic flowing through the tenants and layer2 switch fabrics running on the system controllers which will continue to run in an active/active manner. Any management connections to the system controller or chassis partition F5OS webUI, CLI, or API’s or will be disconnected, and will have to be re-established through the new active system controller. 
 
 A physical reboot of the active system controller will cause all backplane traffic to temporarily use only the previously standby system controller. In the initial 1.1.x versions of F5OS tenant traffic may be disrupted during the reboot process as the system controllers shut down and reload. 
 

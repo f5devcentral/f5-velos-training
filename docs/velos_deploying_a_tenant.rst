@@ -201,13 +201,13 @@ To see the actual status of the tenants, issue the CLI command **show tenants**.
   2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                           -     
 
 
-Tenant Deployment via GUI
+Tenant Deployment via webUI
 -------------------------
 
 Uploading a Tenant Image
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can upload a tenant image via the GUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the Add button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is no option to upload direct from a computer via the browser, but this functionality will be added in a subsequent release.
+You can upload a tenant image via the webUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the Add button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is no option to upload direct from a computer via the browser, but this functionality will be added in a subsequent release.
 
 .. image:: images/velos_deploying_a_tenant/image71.png
   :align: center
@@ -222,7 +222,7 @@ After the image is uploaded you need to wait until it shows **Replicated** statu
 Creating a Tenant
 ^^^^^^^^^^^^^^^^^
 
-You can deploy a tenant from the GUI using the Add button in the Tenant Management > Tenant Deployments screen.
+You can deploy a tenant from the webUI using the Add button in the Tenant Management > Tenant Deployments screen.
 
 .. image:: images/velos_deploying_a_tenant/image73.png
   :align: center
@@ -506,10 +506,10 @@ Resizing a Tenant
 
 VELOS tenants have static CPU and memory allocations. These can be changed after a tenant has been deployed, but the tenant will have to be temporarily suspended (put in the **provisioned** state), then the change to CPU and or memory allocation can be made. A tenant can be expanded within a single blade or it can be configured to extend across blades assuming adequate resources are available. Once the changes are completed the tenant can be put into the deployed state and returned to service.
 
-Expanding a Tenant within the Same Blade via GUI
+Expanding a Tenant within the Same Blade via webUI
 ------------------------------------------------
 
-Below is GUI output of a single tenant that is in the deployed and running state configured with 2 vCPU’s per slot, 7680 memory per slot, and the tenant is allowed to run on only slot1. The workflow below will cover expanding the tenant from 2 to 4 vCPU’s and the memory from 7680 to 14848 per slot. Click the check box next to the tenant, and then select the **Provision** button. 
+Below is webUI output of a single tenant that is in the deployed and running state configured with 2 vCPU’s per slot, 7680 memory per slot, and the tenant is allowed to run on only slot1. The workflow below will cover expanding the tenant from 2 to 4 vCPU’s and the memory from 7680 to 14848 per slot. Click the check box next to the tenant, and then select the **Provision** button. 
 
 .. image:: images/velos_deploying_a_tenant/image75.png
   :align: center
@@ -539,7 +539,7 @@ Next click on the hyperlink for tenant1. This will bring you into the configurat
 Expanding a Tenant within the Same Blade via CLI
 ------------------------------------------------
 
-Expanding a tenant on the same blade via the CLI follows the same workflows as the GUI. You must first put the tenant in a provisioned state, and then make configuration changes, and then change back to deployed state. You can view the current configuration of the tenant by issuing the **show running-config tenants** command. Note the tenant currently has 2 vCPU, and 7680 MB of memory.
+Expanding a tenant on the same blade via the CLI follows the same workflows as the webUI. You must first put the tenant in a provisioned state, and then make configuration changes, and then change back to deployed state. You can view the current configuration of the tenant by issuing the **show running-config tenants** command. Note the tenant currently has 2 vCPU, and 7680 MB of memory.
 
 .. code-block:: bash
 
@@ -723,19 +723,19 @@ Finally change the tenant status back to **deployed** and then check the status 
   }
 
 
-Expanding a Tenant Across Blades via GUI
+Expanding a Tenant Across Blades via webUI
 ----------------------------------------
 
 
 VELOS tenants can be configured to expand across multiple blades. You can pre-configure a tenant to span more than one blade, and as blades are added to a chassis partition the tenant should automatically expand and start using additional resources it has been configured for.
 
-One consideration when expanding a tenant across more than one blade is that you will need to configure additional out-of-band IP addresses for each blade that the tenant will reside on. This is required for proper HA communication and failover to cover specific cases around blade failures. Below is a GUI screenshot inside a VELOS tenant that shows the out-of-band management IP address along with the **Cluster Member IP Addresses**. You should configure a Cluster Member IP Address for each slot that a tenant will span. The **Alternate Management** and **Alternate Cluster Member IP addresses** are for dual stack IPv4/IPv6 support and you would configure IPv6 addresses here, if the primary addresses were IPv4.
+One consideration when expanding a tenant across more than one blade is that you will need to configure additional out-of-band IP addresses for each blade that the tenant will reside on. This is required for proper HA communication and failover to cover specific cases around blade failures. Below is a webUI screenshot inside a VELOS tenant that shows the out-of-band management IP address along with the **Cluster Member IP Addresses**. You should configure a Cluster Member IP Address for each slot that a tenant will span. The **Alternate Management** and **Alternate Cluster Member IP addresses** are for dual stack IPv4/IPv6 support and you would configure IPv6 addresses here, if the primary addresses were IPv4.
 
 .. image:: images/velos_deploying_a_tenant/image80.png
   :align: center
   :scale: 70% 
 
-Next a tenant that currently exists on a single blade will be expanded to span two blades using the GUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 6 vCPU’s and 22016 MB of memory on slot1.
+Next a tenant that currently exists on a single blade will be expanded to span two blades using the webUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 6 vCPU’s and 22016 MB of memory on slot1.
 
 .. image:: images/velos_deploying_a_tenant/image81.png
   :align: center

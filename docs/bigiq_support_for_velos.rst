@@ -2,7 +2,7 @@
 BIG-IQ Support for VELOS
 ========================
 
-Currently VELOS support in BIG-IQ will mimic VIPRION functionality. In VIPRION a vCMP guest can be created via the chassis CLI, GUI, or API and it can then be imported into BIG-IQ as a device. From there statistics/analytics can be gathered, and L4-7 configurations can be managed in a variety of ways. A VELOS tenant will behave identical to a vCMP guest from a BIG-IQ perspective, meaning you can import it after it has been created to manage configuration or get analytics.
+Currently VELOS support in BIG-IQ will mimic VIPRION functionality. In VIPRION a vCMP guest can be created via the chassis CLI, webUI, or API and it can then be imported into BIG-IQ as a device. From there statistics/analytics can be gathered, and L4-7 configurations can be managed in a variety of ways. A VELOS tenant will behave identical to a vCMP guest from a BIG-IQ perspective, meaning you can import it after it has been created to manage configuration or get analytics.
 
 When a VELOS tenant is created it can be imported as a device into BIG-IQ. It will import just like any other BIG-IP instance or device.  Once imported it will show up with a Type of **BIG-IP Tenant**.
 

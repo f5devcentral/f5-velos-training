@@ -57,7 +57,7 @@ If you would like to store iHealth credentials within the configuration you may 
     Commit complete.
     syscon-2-active(config)# do show system diagnostics ihealth 
     system diagnostics ihealth state username j.mccarron@f5.com
-    system diagnostics ihealth state server https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_gui=True
+    system diagnostics ihealth state server https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_webUI=True
     system diagnostics ihealth state authserver https://api.f5.com/auth/pub/sso/login/ihealth-api
     syscon-2-active(config)# 
 
@@ -246,7 +246,7 @@ Within a chassis partition the path for the logging is different. You can use th
     2021-02-23T17:38:11+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000045 msg="PDU:" direction="Transmitted" interface="1/1.0" length=124.
 
 
-Currently in both the system controller and chassis partition GUI’s logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
+Currently in both the system controller and chassis partition webUI’s logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
 
 .. image:: images/velos_diagnostics/image4.png
   :align: center

@@ -181,7 +181,7 @@ SNMP CPU Utilization Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.2
 CPU Core Stats Table
 ---------------------------
 
-The table below shows the total CPU Utilization per vCPU within a chassis parition over 5 seconds, 1 minute, and 5 minutes averages. Below is an example of a 2 blade chassis partition. Each blade has 28 vCPU's or Cores:
+The table below shows the total CPU Utilization per vCPU within a chassis parition over 5 seconds, 1 minute, and 5 minutes averages. Below is an example of a 2 blade chassis partition. Each blade has 28 vCPUs or Cores:
 
 SNMP CPU Core Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.3
 
@@ -388,7 +388,7 @@ You can enable SNMP traps in both the system controllers and within each chassis
 
 For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**:
 
-SNMP Trap events that note a fault should also trigger an Alert that can be viewed in the show alerts, in the CLI, GUI, and API. Once the clear SNMP Trap is sent it should clear the event form the show events output.
+SNMP Trap events that note a fault should also trigger an Alert that can be viewed in the show alerts, in the CLI, webUI, and API. Once the clear SNMP Trap is sent it should clear the event form the show events output.
 
 +----------------------------+----------------------------------+
 | **Alert**                  | **OID**                          |                            
@@ -517,7 +517,7 @@ Troubleshooting SNMP
 
 There are SNMP logs for the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located with the **log/confd** directory of the system controller:
 
-**Note: The CLI and GUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the system controller snmp logs is **/var/confd/log/snmp.log**
+**Note: The CLI and webUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the system controller snmp logs is **/var/confd/log/snmp.log**
 
 .. code-block:: bash
 
@@ -547,7 +547,7 @@ There are SNMP logs for the system controllers and within each chassis partition
 
 SNMP information is captured in the **snmp.log** located with the **log** directory of each chassis partition:
 
-**Note: The CLI and GUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the chassis partition snmp logs is **/var/F5/partition<id>/log/snmp.log**
+**Note: The CLI and webUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the chassis partition snmp logs is **/var/F5/partition<id>/log/snmp.log**
 
 
 .. code-block:: bash

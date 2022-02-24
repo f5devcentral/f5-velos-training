@@ -60,9 +60,9 @@ You can back up the system controller configuration database using the **system 
 
 
 
-**Using the GUI:**
+**Using the webUI:**
 
-Using the system controller GUI you can backup the confd configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
+Using the system controller webUI you can backup the confd configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image1.png
    :width: 45%
@@ -83,16 +83,16 @@ Using the system controller GUI you can backup the confd configuration database 
     }
 
 
-**Note: In the current F5OS releases the confd system database can be backed up via CLI/GUI/API but it cannot be restored using the F5OS GUI. This will be added in a subsequent release.**
+**Note: In the current F5OS releases the confd system database can be backed up via CLI/webUI/API but it cannot be restored using the F5OS webUI. This will be added in a subsequent release.**
 
 Copying System Controller Database Backup to an External Location
 =================================================================
 
-Once the database backup has been completed, you should copy the file to an external location so that the system can be restored in the case of a total failure. You can download the database configuration backup using the CLI, GUI, or API. 
+Once the database backup has been completed, you should copy the file to an external location so that the system can be restored in the case of a total failure. You can download the database configuration backup using the CLI, webUI, or API. 
 
-**From the GUI:**
+**From the webUI:**
 
-In the GUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can import or export configuration files. Note that the current transfer of files to and from the GUI requires an external HTTPS server. 
+In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can import or export configuration files. Note that the current transfer of files to and from the webUI requires an external HTTPS server. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image3.png
   :align: center
@@ -140,7 +140,7 @@ To check on status of the export use the **file transfer-status** command:
     2    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |chassis1-sys-controller-backup-2-26-21                      |Failed to open/read local data from file/application
     3    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |/backup                                                     |Failed to open/read local data from file/application
 
-If you don’t have an external HTTPS server that allows uploads, then you can log into the system controllers floating IP address with root access and scp the file from the shell. Go to the **/var/confd/configs** directory and scp the file to an external location. Note in the CLI and GUI the path is simplified to configs, but in the underlying file system it is actually stored in the **/var/confd/configs** directory.
+If you don’t have an external HTTPS server that allows uploads, then you can log into the system controllers floating IP address with root access and scp the file from the shell. Go to the **/var/confd/configs** directory and scp the file to an external location. Note in the CLI and webUI the path is simplified to configs, but in the underlying file system it is actually stored in the **/var/confd/configs** directory.
 
 .. code-block:: bash
 
@@ -215,7 +215,7 @@ Log directly into the chassis partition smallpartition's management IP address a
     }
     smallpartition-1# 
 
-This can also be done from each chassis partition’s GUI interface. Log into the chassis partition GUI. Then go to **System Utilities -> Configuration Backup**. Click **Create** to save the confd database configuration and provide a name. 
+This can also be done from each chassis partition’s webUI interface. Log into the chassis partition webUI. Then go to **System Utilities -> Configuration Backup**. Click **Create** to save the confd database configuration and provide a name. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image5.png
   :align: center
@@ -236,12 +236,12 @@ You’ll need to do this for each chassis partition in the system. To backup the
 
 Repeat this for each chassis partition.
 
-Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, GUI, or API. In the current release you need an external HTTPS server configured to allow uploads in order to export database backups from VELOS. 
+Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, webUI, or API. In the current release you need an external HTTPS server configured to allow uploads in order to export database backups from VELOS. 
 
-Export Backup From the Chassis Partition GUI
+Export Backup From the Chassis Partition webUI
 --------------------------------------------
 
-You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the GUI. Use the Base Directory drop down menu to select **configs** directory, and you should see a copy of the file created there:
+You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, and you should see a copy of the file created there:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image6.png
   :align: center
@@ -466,7 +466,7 @@ The system controllers should reboot, and their configurations will be completel
 Using the API to Remove Partitions and Reset Controller
 -------------------------------------------------------
 
-There is no GUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called bigpartition:
+There is no webUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called bigpartition:
 
 .. code-block:: bash
 
@@ -543,16 +543,16 @@ The last step in the reset procedure is to set the system controllers confd data
 
 The system controllers should reboot, and their configurations will be completel wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.    
 
-Using the GUI to Remove Partitions and Reset Controller
+Using the webUI to Remove Partitions and Reset Controller
 -------------------------------------------------------
 
-In the system controller GUI go to the **Chassis Partitions** page. Select the chassis partition you wish to delete by using the check box, then click the **Delete** button. The GUI will automatically remove the slots and return them to the **none** chassis partition before deleting the selected chassis partition. You should delete all partitions except for **default**. 
+In the system controller webUI go to the **Chassis Partitions** page. Select the chassis partition you wish to delete by using the check box, then click the **Delete** button. The webUI will automatically remove the slots and return them to the **none** chassis partition before deleting the selected chassis partition. You should delete all partitions except for **default**. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image8.png
   :align: center
   :scale: 70%
 
-There is no capability in the GUI currently to reset the system controller database. You’ll need to use the API or CLI to perform that function.
+There is no capability in the webUI currently to reset the system controller database. You’ll need to use the API or CLI to perform that function.
 
 Restoring Out-of-Band Connectivity and Copying Archived Configs into the Controller
 ===================================================================================
@@ -719,7 +719,7 @@ You’ll see the contents of the directory in the API response:
     }
 
 
-Importing System Controller Backups via GUI
+Importing System Controller Backups via webUI
 -------------------------------------------
 
 You can use the **System Settings -> File Utilities** page to import an archived system controller backup from a remote HTTPS server. Use the drop-down option for **Base Directory** and choose **configs** to see the current files in that directory, and to import or export files. Choose the **Import** option and a popup will appear asking for the details of how to obtain the remote file.
@@ -764,9 +764,9 @@ To restore the system controller confd database use the following API call:
     "f5-database:name": "SYSTEM-CONTROLLER-DB-BACKUP{{currentdate}}"
     }
 
-Currently there is no GUI support for restoration of the confd database, so you’ll need to use either the CLI or API to restore the system controller’s database. Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you need to reboot the blades in-order for the config to be deployed successfully.
+Currently there is no webUI support for restoration of the confd database, so you’ll need to use either the CLI or API to restore the system controller’s database. Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you need to reboot the blades in-order for the config to be deployed successfully.
 
-To reboot blades from the GUI log into each chassis partition. You will be prompted to change the password on first login. 
+To reboot blades from the webUI log into each chassis partition. You will be prompted to change the password on first login. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image11.png
   :align: center
@@ -1099,7 +1099,7 @@ Repeat similar steps for remaining chassis partitions:
         "f5-utils-file-transfer:local-file": "configs/bigpartition-DB-BACKUP2021-09-10"
     }
 
-Importing Archived Chassis Partition Configs via GUI
+Importing Archived Chassis Partition Configs via webUI
 ----------------------------------------------------
 
 You can use the System Settings -> File Utilities page to import archives from a remote HTTPS server. 

@@ -84,7 +84,7 @@ The VELOS systems ship with a default internal RFC6598 address space of 100.64.0
 
 This address range never leaves the inside of the chassis and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range and communicated with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
 
-Some examples would be any client trying to access the F5OS or tenant out-of-band interfaces to reach its’ CLI, GUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services if there is an overlap. Note that this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
+Some examples would be any client trying to access the F5OS or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services if there is an overlap. Note that this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
 
 If there is the potential for conflict with external devices that fall within this range that need to communicate with VELOS, then there are options to change the configured-network-range-type to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient.  Please consult with F5 prior to making any changes to the internal addresses.
 
@@ -158,7 +158,7 @@ In order to make these changes active you must commit the changes. No configurat
 
   syscon-2-active(config)# commit
 
-Now that the out-of-band addresses and routing are configured you can attempt to access the system controller GUI via the floating IP address that has been defined. You should see a screen similar to the one below, and you can verify your management interface settings.
+Now that the out-of-band addresses and routing are configured you can attempt to access the system controller webUI via the floating IP address that has been defined. You should see a screen similar to the one below, and you can verify your management interface settings.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image2.png
   :align: center
@@ -174,7 +174,7 @@ As seen in previous diagrams each system controller has its own independent out-
   :align: center
   :scale: 70%
 
-To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, GUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG configure as follows:
+To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, webUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG configure as follows:
 
 On the active controller create a managment LACP interface:
 
@@ -215,7 +215,7 @@ Finally add the aggregate that you created by name to each of the management int
 System Settings
 ---------------
 
-Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, GUI, or API.
+Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, webUI, or API.
 
 **From the CLI:**
 
@@ -232,9 +232,9 @@ Once the IP addresses have been defined system settings such as DNS servers, NTP
   syscon-2-active(config-remote-server-10.255.0.142)# exit
   syscon-2-active(config)# commit
 
-**From the GUI:**
+**From the webUI:**
 
-You can configure the DNS and Time settings from the GUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image4.png
   :align: center
@@ -379,7 +379,7 @@ Licensing the VELOS Chassis
 
 Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
 
-Licenses can be applied via CLI, GUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server use the **Manual** method.
+Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server use the **Manual** method.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image7.png
   :width: 45%
@@ -387,7 +387,7 @@ Licenses can be applied via CLI, GUI, or API. A base registration key and option
 .. image:: images/initial_setup_of_velos_system_controllers/image8.png
   :width: 45%
 
-You can activate and display the current license in the GUI, CLI or API. To license the VELOS chassis automatically from the CLI:
+You can activate and display the current license in the webUI, CLI or API. To license the VELOS chassis automatically from the CLI:
 
 .. code-block:: bash
 
@@ -527,7 +527,7 @@ Once the base level networking, licensing, and system settings are defined, the 
 
 If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix and default route so that it can be managed. You can also define what release of F5OS software the chassis partition should run. Note this is different than the software the tenants will actually run. Once the management IP address is assigned you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
 
-If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not tied to an existing chassis partition may be added to it. In the GUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis, and the rest show as **Empty**. 
+If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not tied to an existing chassis partition may be added to it. In the webUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis, and the rest show as **Empty**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image12.png
   :align: center
@@ -629,7 +629,7 @@ Before creating a chassis partition via the CLI you must first ensure that there
   partition default
   !
 
-In this case we will mimic the flow in the GUI section where there are 3 blades installed in slots 1-3. Enter config mode and configure each slot to be in the partition none and then commit the changes. 
+In this case we will mimic the flow in the webUI section where there are 3 blades installed in slots 1-3. Enter config mode and configure each slot to be in the partition none and then commit the changes. 
 
 .. code-block:: bash
 
@@ -1093,7 +1093,7 @@ Finally, the bigpartition containing slots 1 & 2 will be enabled:
       "enabled": true        
   }
 
-The chassis partition will have a default username/password of admin/admin. When using the GUI you would be prompted on first login to change the password. To do this via the API use the following API call:
+The chassis partition will have a default username/password of admin/admin. When using the webUI you would be prompted on first login to change the password. To do this via the API use the following API call:
 
 .. code-block:: bash
 
@@ -1142,7 +1142,7 @@ External **DNS Lookup Servers** and **Search Domains** can be configured. This w
 Software Management -> Partition Images
 ---------------------------------------
 
-Each chassis partition will require an F5OS software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** GUI page. F5OS releases are available on downloads.f5.com.
+Each chassis partition will require an F5OS software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS releases are available on downloads.f5.com.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image24.png
   :align: center
@@ -1152,7 +1152,7 @@ Each chassis partition will require an F5OS software release to be specified whe
 Software Management -> Controller Images
 ----------------------------------------
 
-System controllers also run a unique F5OS software version. Both system controllers will need to run the same SW version. You can upload new F5 OS controller images via the **Software Management > Controller Images** GUI screen.
+System controllers also run a unique F5OS software version. Both system controllers will need to run the same SW version. You can upload new F5 OS controller images via the **Software Management > Controller Images** webUI screen.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image25.png
   :align: center
@@ -1162,7 +1162,7 @@ System controllers also run a unique F5OS software version. Both system controll
 System Settings -> Alarms & Events
 ----------------------------------
 
-Alarms and Events can be viewed via the **System Settings > Alarms & Events** GUI page. You may optionally choose different severity levels to see more or less events. 
+Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image26.png
   :align: center
@@ -1177,7 +1177,7 @@ You may also change timeframe to see historical events, and optional refresh the
 System Settings -> Controller Management
 ----------------------------------------
 
-System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** GUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
+System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
 
 An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the OS, will be more disruptive timewise vs. an upgrade that only updates the F5 services. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. For the initial releases of F5OS updating the full ISO is recommended.
 
@@ -1277,7 +1277,7 @@ If you would like to store iHealth credentials within the configuration you may 
   Possible completions:
     authserver   Server for Authentication server of iHealth ex:- https://api.f5.com/auth/pub/sso/login/ihealth-api
     password     password to login to iHealth
-    server       Server for iHealth ex:- https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_gui=True
+    server       Server for iHealth ex:- https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_webUI=True
     username     username to login to iHealth
   syscon-1-active(config)# system diagnostics ihealth config 
 
@@ -1285,7 +1285,7 @@ If you would like to store iHealth credentials within the configuration you may 
 System Settings -> Configuration Backup
 ---------------------------------------
 
-You may backup the confd configuration databases for the system controller via the GUI. The backups can then be copied off-box using the file utilities GUI option. Currently the GUI does not support the restoration of confd backups, this must be done via the CLI or API. 
+You may backup the confd configuration databases for the system controller via the webUI. The backups can then be copied off-box using the file utilities webUI option. Currently the webUI does not support the restoration of confd backups, this must be done via the CLI or API. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image39.png
   :align: center
@@ -1301,7 +1301,7 @@ System Settings -> Licensing
 
 Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is handled, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS licensing is applied at the system controller and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to add-on license for MAX SSL/Compression or for tenancy. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost.
 
-Licenses can be applied via CLI, GUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. 
+Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image41.png
   :align: center
@@ -1331,7 +1331,7 @@ The **System Settings > General** page allows you to configure Appliance mode fo
 User Management -> Auth Settings
 --------------------------------
 
-Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP & RADIUS. Active Directory and TACACS remote auth are not currently supported in the v1.1.x versions of the F5OS layer. These have been added to the v1.2.x F5OS release and are currently configurable via the CLI only. GUI configuration support for TACACS and Active Directory will be added in a subsequent release. 
+Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP & RADIUS. Active Directory and TACACS remote auth are not currently supported in the v1.1.x versions of the F5OS layer. These have been added to the v1.2.x F5OS release and are currently configurable via the CLI only. webUI configuration support for TACACS and Active Directory will be added in a subsequent release. 
 
 **Note: VELOS tenants running TMOS support Active Directory and TACACS for remote auth. The limitation is only for the F5OS v1.1.x platform layer.**
 
