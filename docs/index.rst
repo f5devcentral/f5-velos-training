@@ -1,6 +1,6 @@
-====================
-VELOS Training webUIde
-====================
+========================
+Planning for VELOS Guide
+========================
 
 .. toctree::
    :maxdepth: 1
