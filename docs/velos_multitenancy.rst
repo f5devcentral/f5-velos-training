@@ -18,7 +18,7 @@ Creating a tenant is nearly identical to creating a vCMP guest with a few except
   :align: center
   :scale: 50%
 
-For resource provisioning you can use **Recommended** settings or **Advanced** settings. Recommended will allocate memory in proportion the number of vCPU’s assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
+For resource provisioning you can use **Recommended** settings or **Advanced** settings. Recommended will allocate memory in proportion the number of vCPUs assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
 
 +---------------------+--------------------+--------------------------+----------------+-----------------+
 | **Tenant Size**     | **Physical Cores** | **Logical Cores (vCPU)** | **Min GB RAM** | **RAM/vCPU**    |
@@ -52,13 +52,13 @@ Each BX110 blade has 128GB of memory. The F5OS layer takes about 33GB of RAM lea
 
   **min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
 
-Each BX110 blade has 28 vCPU’s, however 6 of those vCPU’s are dedicated to the F5OS layer. This leaves 22 vCPU’s left over for use by tenants.  You can dedicate all 22 vCPU’s to one large tenant, or you can allocate smaller numbers of VCPU’s per tenant so that you can deploy many tenants.
+Each BX110 blade has 28 vCPUs, however 6 of those vCPUs are dedicated to the F5OS layer. This leaves 22 vCPUs left over for use by tenants.  You can dedicate all 22 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants.
 
 .. image:: images/velos_multitenancy/image3.png
   :align: center
   :scale: 70%
 
-Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPU’s guests are supported, they are not recommended for most environments. This is due to the fact that a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior only a very lightly loaded LTM/DNS only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
+Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is due to the fact that a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior only a very lightly loaded LTM/DNS only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
 
 A VELOS tenant supports 3 states: (**Configured**, **Provisioned**, and **Deployed**):
 
@@ -80,8 +80,8 @@ You may also configure **Crypto/Compression Acceleration**. This option is enabl
 
 In some VIPRION blades there is an option to configure an **SSL Mode** for vCMP guests. This option is not available in VELOS, and the behavior may be different:
 
-If you currently utilize the SSL Mode feature where SSL resources can be **Dedicated, Shared, or Isolated** for each vCMP guest, this configuration option is not supported on VELOS at initial release. vCMP guests operate in the default shared mode meaning all guests get equal access to the shared SSL hardware resources. You may configure the SSL Mode to **dedicated** where SSL hardware resources are dedicated to a guest in proportion to the vCPU’s assigned to a guest. You may also configure **none**, meaning all SSL processing is done in software.  
+If you currently utilize the SSL Mode feature where SSL resources can be **Dedicated, Shared, or Isolated** for each vCMP guest, this configuration option is not supported on VELOS at initial release. vCMP guests operate in the default shared mode meaning all guests get equal access to the shared SSL hardware resources. You may configure the SSL Mode to **dedicated** where SSL hardware resources are dedicated to a guest in proportion to the vCPUs assigned to a guest. You may also configure **none**, meaning all SSL processing is done in software.  
   
-In VELOS there is no SSL Mode configuration option. By default, you may configure the **Crypto/Compression Acceleration** option when deploying a VELOS tenant. The choices are **enabled** or **disabled**. When enabled the system will assign SSL hardware resources in proportion to the number of vCPU’s assigned to the tenant. This is conceptually similar to how SSL Mode **Dedicated** works on vCMP guests but not 100% the same implementation.  When disabled no SSL hardware resources are assigned to the tenant and all processing is done in software. A environment currently running in the default shared mode will now be running in a mode that essentially mimics the SSL Mode Dedicated. 
+In VELOS there is no SSL Mode configuration option. By default, you may configure the **Crypto/Compression Acceleration** option when deploying a VELOS tenant. The choices are **enabled** or **disabled**. When enabled the system will assign SSL hardware resources in proportion to the number of vCPUs assigned to the tenant. This is conceptually similar to how SSL Mode **Dedicated** works on vCMP guests but not 100% the same implementation.  When disabled no SSL hardware resources are assigned to the tenant and all processing is done in software. A environment currently running in the default shared mode will now be running in a mode that essentially mimics the SSL Mode Dedicated. 
 
 Lastly the tenant may be configured to support **Appliance Mode** which is a security option which disables root and bash access to the tenant.

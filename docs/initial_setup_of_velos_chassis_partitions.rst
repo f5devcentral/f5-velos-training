@@ -12,7 +12,7 @@ Chassis partitions are completely separate management entities that are managed 
 Chassis Partition Dashboard
 ---------------------------
 
-The chassis partition Dashboard will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPU’s available for multitenancy and how many are currently in use. If there are any active-alarms they will be displayed on this page. There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly there is a high availability status display.
+The chassis partition Dashboard will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use. If there are any active-alarms they will be displayed on this page. There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly there is a high availability status display.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image53.png
   :align: center

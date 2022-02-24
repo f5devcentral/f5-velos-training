@@ -76,7 +76,7 @@ VELOS does not support tenant HA within the same chassis. F5 recommends configur
   :align: center
   :scale: 70%
 
-Tenants on different chassis, should have the same number of vCPU’s and be configured to run on the same slots. HA interconnection VLANs would be configured between chassis partitions in the two chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
+Tenants on different chassis, should have the same number of vCPUs and be configured to run on the same slots. HA interconnection VLANs would be configured between chassis partitions in the two chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
 
 .. image:: images/velos_high_availability/image9.png
   :align: center
