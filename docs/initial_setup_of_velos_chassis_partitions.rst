@@ -735,7 +735,7 @@ https://support.f5.com/csp/article/K1689
 
 https://support.f5.com/csp/article/K13142
 
-The following solution article provides webUIdance for setting up VELOS LAG interfaces and LACP with Cisco Nexus 9000 series switches:
+The following solution article provides guidance for setting up VELOS LAG interfaces and LACP with Cisco Nexus 9000 series switches:
 
 https://support.f5.com/csp/article/K33431212
 

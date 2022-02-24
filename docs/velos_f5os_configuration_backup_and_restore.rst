@@ -83,7 +83,7 @@ Using the system controller webUI you can backup the confd configuration databas
     }
 
 
-**Note: In the current F5OS releases the confd system database can be backed up via CLI/webUI/API but it cannot be restored using the F5OS webUI. This will be added in a subsequent release.**
+**Note: In the current F5OS releases the confd system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI. This will be added in a subsequent release.**
 
 Copying System Controller Database Backup to an External Location
 =================================================================
