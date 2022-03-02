@@ -12,15 +12,14 @@ VELOS Overview
 Kubernetes Based Platform Layer
 -------------------------------
 
-The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer (called F5OS) that will allow for some exciting new capabilities. Luckily customers won’t need to learn Kubernetes in order to manage the new chassis, it will be abstracted from the administrator who will be able to manage the new platform layer via familiar F5 CLI, webUI, or API interfaces. 
+The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer (called F5OS) that will allow for exciting new capabilities. Luckily customers won’t need to learn Kubernetes in order to manage the new chassis, it will be abstracted from the administrator who will be able to manage the new platform layer via familiar F5 CLI, webUI, or API interfaces. 
 
 VELOS will continue to provide hardware acceleration and offload capabilities in a similar way that VIPRION did, however more modern FPGA, CPU, and crypto offload capabilities have been introduced. The new F5OS platform layer will allow VELOS to run different types of tenants within the same chassis. As an example, VELOS will be able to run:
 
-•	Existing TMOS/BIG-IP tenants*
-•	Future support for Next-generation BIG-IP software tenants (BIG-IP MA/Modular Architecture)
-•	In the future the possibility of running approved 3rd party tenants 
+•	Existing TMOS/BIG-IP tenants (specific TMOS releases)
+•	Next-generation BIG-IP software tenants (BIG-IP Next)
+•	Possibility of running approved 3rd party tenants (future)
 
- * specific software releases
 
 .. image:: images/velos_introduction/image1.png
   :align: center
@@ -30,7 +29,7 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
 
 Customers will be able to migrate existing BIG-IP devices, or vCMP guests into a tenant running on VELOS. A tenant is conceptually similar to a vCMP guest on the VIPRION platform. Once inside the tenant, the management experience will be similar to the experience on existing BIG-IP platforms. The BIG-IP tenant will be managed just as a vCMP guest is managed today on VIPRION. The administrator can connect directly to the tenant’s webUI, CLI, or API and have the same experience as they have with their existing platforms. 
 
-In the future BIG-IP MA tenants will be able to be provisioned within the same chassis, which will allow customers to leverage the next generation of BIG-IP software side-by-side with the existing BIG-IP software. What will differ from an administrator’s perspective is the initial setup of the F5OS platform layer. We’ll look at some additional architecture differences between VELOS and VIPRION before getting into how to manage and monitor the new F5OS platform layer. 
+In the future BIG-IP Next tenants will be able to be provisioned within the same chassis, which will allow customers to leverage the next generation of BIG-IP software side-by-side with the existing BIG-IP software. What will differ from an administrator’s perspective is the initial setup of the F5OS platform layer. We’ll look at some additional architecture differences between VELOS and VIPRION before getting into how to manage and monitor the new F5OS platform layer. 
 
 ---------------------------------
 Smaller Footprint, Higher Density
