@@ -526,7 +526,7 @@ There is an option to **Add** new releases which will open a pop-up window that 
   :align: center
   :scale: 70%
 
-If an HTTPS server is not available, you may upload a tenant image using scp directly to the chassis partition. Simply scp an image to the system controllers out-of-band management IP address using the admin account and a path of **IMAGES**. 
+If an HTTPS server is not available, you may upload a tenant image using scp directly to the chassis partition. Simply scp an image to the chassis partitions out-of-band management IP address using the admin account and a path of **IMAGES**. 
 
 .. code-block:: bash
 
