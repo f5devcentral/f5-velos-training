@@ -49,7 +49,7 @@ The system controllers are responsible for providing non-blocking connections an
   :align: center
   :scale: 40%
 
-While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots. Note that the BX110 linecards currently have a L4/L7 throughput rating of 95Gbs, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. The backplane ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG) thus utilizing both controllers for forwarding between slots.
+While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots. Note that the BX110 line cards currently have a L4/L7 throughput rating of 95Gbs, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. The backplane ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG) thus utilizing both controllers for forwarding between slots.
 
 A VIPRION chassis in comparison does not have a centralized switch fabric, and all blades are connected across the passive backplane in a full mesh fashion. The backplane in VIPRION was blocking, meaning the front panel bandwidth of a blade was greater than the blades backplane connectivity. Below is an example of the VIPRION C2400 chassis with B2250 blades. Each blade had a single 40Gb connection to every other blade. The total backplane bandwidth is 6 x 40 Gb = 240 Gb.
 
@@ -70,7 +70,7 @@ With VELOS only the system controllers need to be cabled for out-of-band managem
   :align: center
   :scale: 40%
 
-Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together inside of a Link Aggregation Group.
+Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together to form a Link Aggregation Group.
 
 ----------------------------
 The Kubernetes Control Plane
@@ -86,19 +86,19 @@ A combination of Docker Compose and Kubernetes is used within the F5OS layer.  D
 
 The diagram above is somewhat simplified as it shows a single software stack for the Kubernetes control plane. In reality there are multiple instances that run on the system controllers. There is a software stack for the system controllers themselves which provides F5OS CLI, webUI, and API management for the controllers as well as chassis partition (a grouping of blades) lifecycle management. There is also a unique stack for every chassis partition in the system. This software stack resides on the system controllers and can fail over from one controller to the other for added redundancy. It provides the F5OS CLI, webUI, and API functions for the chassis partition, as well as support for the networking services such as stpd, lldpd, lacpd, that get deployed as workloads on the blades.
 
-The Kubernetes control plane is responsible for deploying workloads to the blades. This would happen when tenants or **chassis partitions** (see next section) are configured. We won’t get too deep into the Kubernetes architecture as its not required to manage the VELOS chassis. Know that the Kubernetes platform layer will allow F5 to introduce exciting new features in the future, but F5 will continue to provide abstracted interfaces for ease of management. By leveraging microservices and containers, F5 may be able to introduce new options such as shared multitenancy and dynamic scaling in the future. These are features that wer not supported on VIPRION.
+The Kubernetes control plane is responsible for deploying workloads to the blades. This would happen when tenants or **chassis partitions** (see next section) are configured. We won’t get too deep into the Kubernetes architecture as its not required to manage the VELOS chassis. Know that the Kubernetes platform layer will allow F5 to introduce exciting new features in the future, but F5 will continue to provide abstracted interfaces for ease of management. By leveraging microservices and containers, F5 may be able to introduce new options such as shared multitenancy and dynamic scaling in the future. These are features that were not supported on VIPRION.
 
 ------------------
 Chassis Partitions
 ------------------
 
-Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation in addition to tenancy (similar to vCMP guests) that VIPRION didn’t support. This could be used to separate production from dev/test environments or to provide different security zones for different classes of applications. Within a VELOS chassis an administrator can group together one or more blades to form a chassis partition. A chassis may contain multiple chassis partitions and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade and the maximum is 8 blades within the CX410 chassis.
+Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation in addition to tenancy (similar to vCMP guests) that VIPRION didn’t support. This could be used to separate production from dev/test environments, or to provide different security zones for different classes of applications. Within a VELOS chassis an administrator can group together one or more blades to form a chassis partition. A chassis may contain multiple chassis partitions and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade and the maximum is 8 blades within the CX410 chassis.
  
 **Note: Chassis partitions are not related to TMOS admin partitions which are typically used to provide admin separation within a TMOS instance.** 
  
-A chassis partition runs its own unique F5OS software image, has a unique set of users/authentication, and is accessed via its own webUI, CLI and API. The chassis partition can be further divided to support multiple BIG-IP tenants. A tenant operates in a similar manner to how vCMP guests operated within the VIPRION chassis. It is assigned dedicated vCPU and memory resources and is restricted to specific VLANs for network connectivity. 
+A chassis partition runs its own unique F5OS software image, has a unique set of users/authentication, and is accessed via its own webUI, CLI and API. The chassis partition can be further divided to support multiple BIG-IP tenants. A tenant operates in a similar manner to how vCMP guests operate within the VIPRION chassis. It is assigned dedicated vCPU and memory resources, and is restricted to specific VLANs by the administrator for network connectivity. 
 
-Below is an example of a VELOS CX410 chassis divided into 3 chassis partitions (Red, Green, and Blue). These chassis partitions are completely isolated from each other and the system controllers ensure no traffic can bleed from one chassis partition to another.  Once a chassis partition is created individual tenants can be deployed and they will be restricted to only the resources within that chassis partition. 
+Below is an example of a VELOS CX410 chassis divided into 3 chassis partitions (Red, Green, and Blue). These chassis partitions are completely isolated from each other and the system controllers ensure no traffic can bleed from one chassis partition to another.  Once a chassis partition is created, individual tenants can be deployed and they will be restricted to only the resources within that chassis partition. 
 
 .. image:: images/velos_introduction/image8.png
   :align: center
