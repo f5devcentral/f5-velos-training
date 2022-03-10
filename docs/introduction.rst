@@ -2,7 +2,7 @@
 Introduction
 =============
 
-VELOS is F5’s next generation chassis-based solution that will replace the current VIPRION platforms. Specifically, the new CX410 chassis will be a direct replacement for the current VIPRION c2400/c2200 chassis families. The VELOS platform has many advantages over the current VIPRION architecture. This Guide will highlight the differences between the two architectures and then provide details on how to configure, monitor and troubleshoot the new platform so that customers considering adoption understand how VELOS will fit within their environment. 
+VELOS is F5’s next generation chassis-based solution that will replace the current VIPRION platforms. Specifically, the new CX410 chassis will be a direct replacement for the current VIPRION c2400/c2200 chassis families. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures and then provide details on how to configure, monitor and troubleshoot the new platform so that customers considering adoption understand how VELOS will fit within their environment. 
 
 
 VELOS Overview
