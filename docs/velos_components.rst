@@ -5,7 +5,7 @@ VELOS Components
 CX410 Chassis
 =============
 
-The CX410 is a 4RU chassis, that has eight ¼ width slots for the BX110 line cards, as well as 2 larger slots for SX410 system controllers. The system controllers proxy console and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications.  The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots which can be populated by the BX110 line cards, as well as 2 larger slots which are populated by the SX410 system controllers. The system controllers proxy console and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications.  The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/image1.png
   :align: center
