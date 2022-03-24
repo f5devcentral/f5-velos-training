@@ -4,21 +4,21 @@ Multitenancy
 
 In previous generation chassis and appliances F5 supported **vCMP** as a means of providing multitenancy and virtualization. vCMP allowed for configuration of **Guests** which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience, however it is not based on vCMP.  Instead VELOS will allow for **Tenants** to be created, which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
 
-Unlike VIPRION, where vCMP is an option that can added to the chassis, VELOS is multitenant by default. There is no option for a “bare metal” configuration, tenancy is baked into the architecture. You may configure one large tenant to emulate a “bare-metal” BIG-IP configuration if required. For customers that run bare-metal in VIPRION today, the L4-7 configuration and inherited VLANs will be migrated into a VELOS tenant, and the lower level networking (interfaces, Link Aggregation Grosups, and VLANs) will be configured in the F5OS platform layer. Below is a depiction of BIG-IP tenants running on top of the F5OS layer. 
+Unlike VIPRION, where vCMP is an option that can added to the chassis, VELOS is multitenant by default. There is no option for a “bare metal” configuration, tenancy is baked into the architecture. You may configure one large tenant to emulate a “bare-metal” BIG-IP configuration if required. For customers that run bare-metal in VIPRION today, the L4-7 configuration and inherited VLANs will be migrated into a VELOS tenant, and the lower level networking (interfaces, Link Aggregation Groups, and VLANs) will be configured in the F5OS platform layer. Below is a depiction of BIG-IP tenants running on top of the F5OS layer. 
 
 .. image:: images/velos_multitenancy/image1.png
   :align: center
   :scale: 80%
 
-Each tenant will run as a Virtual Machine via a technology called Kubevirt which allows Virtual Machines to run on top of a containerized architecture. The tenant itself will run TMOS, and it will be managed similar to how a vCMP guest is managed. Note the tenant is not a Virtual Edition (VE) is a highly optimized virtual machine that is fully integrated with the underlying hardware and supports all the traditional hardware offload capbilities like SSL/TLS offload, FASTL4 forwarding, DDoS mitgation, and much more. In the future when BIG-IP Next tenants are supported in VELOS, those tenants will run in their native containerized mode, and not run as a Virtual Machine.
+Each tenant will run as a Virtual Machine via a technology called Kubevirt which allows Virtual Machines to run on top of a containerized architecture. The tenant itself will run TMOS, and it will be managed similar to how a vCMP guest is managed. Note the tenant is not a Virtual Edition (VE), it is a highly optimized virtual machine that is fully integrated with the underlying hardware, and supports all the traditional hardware offload capabilities like SSL/TLS offload, FASTL4 forwarding, DDoS mitgation, and much more. In the future when BIG-IP Next tenants are supported in VELOS, those tenants will run in their native containerized mode, and not run as a Virtual Machine.
 
-Creating a tenant is nearly identical to creating a vCMP guest with a few exceptions. When creating a VELOS tenant, you’ll provide a name, a TMOS image to run inside the tenant, which slots (blades) the tenant will be configured to run on, out-of-band IP addressing/mask and gateway, and which VLANs the tenant should inherit. Just like a vCMP guest the VLANs are configured at provision time and not within the tenant itself, the tenant will inherit what is configured at the F5OS platform layer.
+Creating a VELOS tenant is nearly identical to creating a vCMP guest on VIPRION with a few exceptions. When creating a VELOS tenant, you’ll provide a name, a TMOS image for the tenant to run, which slots (blades) the tenant will be configured to run on, out-of-band IP addressing/mask and gateway, and which VLANs the tenant should inherit. Just like a vCMP guest the VLANs are configured at provision time and not within the tenant itself. The tenant will inherit VLANs that have been configured at the F5OS platform layer, and have been added to the tenant configuration by the administrator during provisioning.
 
 .. image:: images/velos_multitenancy/image2.png
   :align: center
   :scale: 50%
 
-For resource provisioning you can use **Recommended** settings or **Advanced** settings. Recommended will allocate memory in proportion the number of vCPUs assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
+For resource provisioning you can use **Recommended** settings or **Advanced** settings. Recommended will allocate the minimum amount of memory in proportion the number of vCPUs assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant and over allocated if desired, without having to allocate additional vCPUs. This is something not possible in VIPRION, but now you can over provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
 
 +---------------------+--------------------+--------------------------+----------------+-----------------+
 | **Tenant Size**     | **Physical Cores** | **Logical Cores (vCPU)** | **Min GB RAM** | **RAM/vCPU**    |
@@ -50,9 +50,9 @@ For resource provisioning you can use **Recommended** settings or **Advanced** s
 
 Each BX110 blade has 128GB of memory. The F5OS layer takes about 33GB of RAM leaving ~95GB of RAM for use by tenants. Using the Recommended values per tenant ~80GB of RAM will be used, leaving ~15GB of additional RAM. You may over-allocate RAM to a tenant until the 90GB of RAM is depleted. There is a formula for figuring out the minimum amount of RAM a particular tenant size will receive using the recommended values:
 
-  **min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
+**min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
 
-Each BX110 blade has 28 vCPUs, however 6 of those vCPUs are dedicated to the F5OS layer. This leaves 22 vCPUs left over for use by tenants.  You can dedicate all 22 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants.
+Each BX110 blade has 28 vCPUs, however 6 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 22 vCPUs left over for use by tenants. You can dedicate all 22 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. Below is a diagram depicting the CPU/vCPUs on a single BX110 blade.
 
 .. image:: images/velos_multitenancy/image3.png
   :align: center
