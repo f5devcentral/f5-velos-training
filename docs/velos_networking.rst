@@ -182,6 +182,6 @@ VELOS supports both 802.1Q tagged and untagged VLAN interfaces. In the current F
 Link Aggregation Groups
 =======================
 
-VELOS allows for bonding of interfaces into Link Aggregation Groups or LAG’s. LAG’s can span across blades as long as blades are in the same chassis partition. Links within a LAG must be the same type and speed. LAG’s may be configured for static or lacp mode. The maximum number of members within a single LAG is 32.
+VELOS allows for bonding of interfaces into Link Aggregation Groups or LAGs. LAGs can span across blades as long as blades are in the same chassis partition. Links within a LAG must be the same type and speed. LAGs may be configured for static or lacp mode. The maximum number of members within a single LAG is 32.
 
 An admin can configure the **LACP Type** to **LACP** or **Static**, the **LACP Mode** to be **Active** or **Passive**, and the **LACP Interval** to **Slow** or **Fast**.  
