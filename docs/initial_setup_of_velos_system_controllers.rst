@@ -217,7 +217,10 @@ System Settings
 
 Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, webUI, or API.
 
-**From the CLI:**
+Configure System Settings From the CLI
+---------------------------------------
+
+In the system controller F5OS CLI enter config mode. DNS, logging, and NTP can be set as seen in the example below.
 
 .. code-block:: bash
 
@@ -232,31 +235,69 @@ Once the IP addresses have been defined system settings such as DNS servers, NTP
   syscon-2-active(config-remote-server-10.255.0.142)# exit
   syscon-2-active(config)# commit
 
-**From the webUI:**
+Configure System Settings From the WebUI
+----------------------------------------
 
-You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image4.png
   :align: center
   :scale: 70%
 
-Configuring Network Time Protocol is highly recommended so that the VELOS systems clock is sync’d and accurate. In addition to configure NTP time sources, you can set the local timezone for this chassis location.
+Configuring Network Time Protocol is highly recommended so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local timezone for this chassis location.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image5.png
   :align: center
   :scale: 70%
 
-It’s also a good idea to have the VELOS system send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem level individually. The remote logging severity level will override and component logging levels if they are higher, but only for logs sent remotely. Local logging levels will follow however the component levels are configured here.
+It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem levels individually. The remote logging severity level will override the component logging levels if they are configured higher, but only for logs sent remotely. Local logging levels will always follow the component levels that are configured here.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6.png
   :align: center
   :scale: 70%
 
-**From the API:**
+Configure System Settings From the API
+---------------------------------------
 
-If you would prefer to automate the setup of the VELOS chassis, there are API calls for all of the examples above. To set the DNS configuration for the system controllers use the following API call. 
+If you would prefer to automate the setup of the VELOS chassis, there are F5OS API calls for all of the examples above. VELOS supports token based authentication for the F5OS API's. You can send a standard API call with user/password based authentication (basic auth), and then store the token for subsequent API calls. The token has a lifetime of ????, where it will be required to refresh. All the API examples in this guide were generated using the Postman utility. Below is an example of using password based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth**, and enter the username and password to log into your system controller.
 
-For any API calls to VELOS it is important to include the header **Content-Type** **application/yang-data+json**.
+.. image:: images/initial_setup_of_velos_system_controllers/image6a.png
+  :align: center
+  :scale: 70%
+
+To capture the token and save it for use in subsequent API calls, go to the **Test** option in the API call and enter the following:
+
+.. code-block:: bash
+
+  var headerValue = pm.response.headers.get("X-Auth-Token");
+  pm.environment.set("X-Auth-Token_Chassis1_System_Controller", headerValue);
+
+This will capture the auth token and store it in a variable called **X-Auth-Token_Chassis1_System_Controller**.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image6b.png
+  :align: center
+  :scale: 70%
+
+This will be stored as a variable in the Postman **Environment** as seen below.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image6c.png
+  :align: center
+  :scale: 70%
+
+
+Once the variable is stored with the auth token, it can be used insteasd of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note postman references variables by encasing the Variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{X-Auth-Token_Chassis1_System_Controller}}**. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image6d.png
+  :align: center
+  :scale: 70%
+
+You must also add some required headers to any API calls to F5OS. It is important to include the header **Content-Type** **application/yang-data+json** and the Token header **X-Auth-Token** with a value of **{{X-Auth-Token_Chassis1_System_Controller}}**.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image6e.png
+  :align: center
+  :scale: 70%
+
+To set the DNS configuration for the system controllers, use the following API call with the headers and auth settings from above. Don't forget to acquire the auth token first, otherwise the API call wil fail.
 
 .. code-block:: bash
 
@@ -302,7 +343,7 @@ For any API calls to VELOS it is important to include the header **Content-Type*
   }
 
 
-To set System Time settings use the following API call as an example:
+To set System Time settings, use the following API call as an example:
 
 .. code-block:: bash
 
@@ -335,7 +376,7 @@ To set System Time settings use the following API call as an example:
       }
   }
 
-To set a Remote Logging destination:
+To set a Remote Logging destination, use the following API call:
 
 .. code-block:: bash
 
@@ -377,9 +418,14 @@ To set a Remote Logging destination:
 Licensing the VELOS Chassis
 ---------------------------
 
-Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
+Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
 
-Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server use the **Manual** method.
+Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems.
+
+Apply License via webUI
+-----------------------
+
+Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server, use the **Manual** method.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image7.png
   :width: 45%
@@ -387,21 +433,26 @@ Licenses can be applied via CLI, webUI, or API. A base registration key and opti
 .. image:: images/initial_setup_of_velos_system_controllers/image8.png
   :width: 45%
 
-You can activate and display the current license in the webUI, CLI or API. To license the VELOS chassis automatically from the CLI:
+You can activate and display the current license in the webUI, CLI or API. 
+
+Apply License via CLI
+---------------------
+
+You can license the VLEOS system automatically if the F5's licesing server is reachable form the VELOS system, and it can resolve the licesing servers name via DNS. If this is not possible, manual licesing may be used. To license the VELOS chassis automatically from the F5OS CLI:
 
 .. code-block:: bash
 
   syscon-1-active(config)# system licensing install registration-key I1234-12345-12345-12345-1234567
   result License installed successfully.
 
-To license the VELOS chassis manually you’ll need to get the dossier first:
+To license the VELOS chassis manually, you’ll need to get the dossier first:
 
 .. code-block:: bash
 
   syscon-2-active(config)# system licensing get-dossier
   b9a9936886bada077d93843a281ce4c34bf78db0d6c32c40adea3a5329db15edd413fe7d7f8143fd128ebe2d97642b4ed9192b530788fe3965593e3b42131c66220401b16843476159414ceeba8af5fb67a39fe2a2f408b9…
 
-You can then access F5’s licensing server (license.f5.com) and paste in the dossier when prompted:
+You can then access F5’s licensing server (license.f5.com) via another host that has internet access, and paste in the dossier when prompted:
 
 .. image:: images/initial_setup_of_velos_system_controllers/image9.png
   :align: center
@@ -496,7 +547,11 @@ The CLI command **show system licensing** will display the chassis level licensi
 
 https://support.f5.com/csp/article/K70113407
 
-To get the current licensing status via API use the following API call. Issue a **GET** to the floating IP address of the system controllers:
+
+Apply License via API
+---------------------
+
+To get the current licensing status via API, use the following API call. Issue a **GET** to the floating IP address of the system controllers:
 
 .. code-block:: bash
 
@@ -519,58 +574,81 @@ To get the current licensing status via API use the following API call. Issue a 
       }
   }
 
+.. code-block:: bash
+
+To install a license via API, use the following API call:
+
+  POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:install
+
+In the body of the API call, add the following JSON payload which references the **registration-key** as a variable in postman:
+
+.. code-block:: json
+
+  {
+      "f5-system-licensing-install:input": [
+          {
+              "registration-key": "{{License_Registration_Key_Chassis1}}"
+          }
+      ]
+  }
+
+
 --------------------------
 Chassis Partition Creation
 --------------------------
 
-Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition and they can be restricted to specific vCPUs as well as restricted to a single blade or be allowed to span across multiple blades. Conceptually this is similar to how vCMP guests are defined, but the underlying technology is different. 
+Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade, or be allowed to span across multiple blades. Conceptually this is similar to how vCMP guests are defined, but the underlying technology in F5OS is different. 
 
-If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix and default route so that it can be managed. You can also define what release of F5OS software the chassis partition should run. Note this is different than the software the tenants will actually run. Once the management IP address is assigned you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
+If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS software, as the version that shipped on the system may not be the latest. Note this is different than the software that the tenants will actually run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
 
-If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not tied to an existing chassis partition may be added to it. In the webUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis, and the rest show as **Empty**. 
+You may want to leave the default partition, and create new partitions with names that make sense for your environment. You might want to create different chassis partitions for different envirnments like QA/Dev and Production, or for different business units or departments, or different security zones. If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases, you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not currently tied to an existing chassis partition may be added to it. 
+
+Creating Chassis Partitions via the webUI
+-----------------------------------------
+
+ The term **Slot** and **Blade** may be used interchangably, in the F5OS configuration interfaces (CLI,webUI,API) the term slot is used as you may want to assign empty slots to a chassis partition. If the term blade were used this may lead to confusion, as a blade may not be installed yet. In the webUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis (in slots 1-3), and the rest show as **Empty**.  
 
 .. image:: images/initial_setup_of_velos_system_controllers/image12.png
   :align: center
   :scale: 50%
 
-For this configuration we will remove slots 1, 2, & 3 from the default chassis partition first. Once they are removed from default partition they can be assigned to a new partition. Select the checkbox next to the default partition and then click **Edit**.
+For this configuration, we will remove slots 1, 2, and 3 from the **default** chassis partition first. Once they are removed from the default partition, they can be assigned to a new partition. Select the checkbox next to the default partition and then click **Edit**.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image13.png
   :align: center
   :scale: 70%
 
-
-You can then click on the slots in the graphic that you want to remove (slots 1, 2, & 3), and they will change from dark blue to light blue. Also note the **Selected Slots** will remove these slots as indicated by **4,5,6,7,8**. Click **Save** to complete removing slots 1-3 from the default partition.
+You can then click on the slots in the graphic that you want to remove (slots 1, 2, and 3), and they will change from dark blue to light blue. Also note; the **Selected Slots** will remove these slots from the default partition as indicated by **4,5,6,7,8**. Click **Save** to complete removing slots 1-3 from the default partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image14.png
   :align: center
   :scale: 70%
 
-The slots will turn white indicating they are not assigned to any chassis partition.
+The slots will turn white indicating they are not currently assigned to any chassis partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image15.png
   :align: center
   :scale: 70%
 
-Next, create a new chassis partition that includes slots 1 & 2, and it will be named **bigpartition**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. 
+Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image16.png
   :align: center
   :scale: 70%
 
-The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally select a Partition Image which defines the software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS images form downloads.f5.com. When done click **Save** to create the new chassis partition.  
+The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
 
 .. image:: images/initial_setup_of_velos_system_controllers/image17.png
   :align: center
   :scale: 70%
 
-You can monitor the chassis partition status; it will go from **Disabled** to **Starting** to **Running**. 
+You can monitor the chassis partition status; it will go from **Disabled**, to **Starting**, to **Running**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image18.png
   :align: center
   :scale: 70%
 
-Next repeat the process and create another chassis partition for slot3 naming it **smallpartition** and supplying IP address, prefix, and gateway along with a partition image.
+Next, repeat the process and create another chassis partition for slot3 naming it **Devlopment** and supply and IP address, prefix, and gateway along with a partition image.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image19.png
   :align: center
@@ -588,10 +666,16 @@ If you click on the **Dashboard**, you’ll see a graphical representation that 
   :align: center
   :scale: 70%
 
+Once the partitions are started and operational, you can log into each one and change the default password. Each chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
+
+.. code-block:: bash
+
+  PLACEHOLDER  
+
 Creating a Chassis Partition via the CLI
 ----------------------------------------
 
-Before creating a chassis partition via the CLI you must first ensure that there are available slots in order to create a partition. You can issue the command show running-config slots to see what slots are available.  If all the slots are assigned to a partition like **default**, then you’ll need to move some of the slots to the partition **none** before they can be added to a new partition. 
+Before creating a chassis partition via the CLI, you must first ensure that there are available slots in order to create a partition. You can issue the command **show running-config slots** to see what slots are available. If all the slots are assigned to a partition like **default**, then you’ll need to move some of the slots to the partition **none** before they can be added to a new partition. The **none** chassis partition is a special hidden partition that is used to temporarily remove slots from an existing chassis partition. In the webUI the none partition is hidden and this process is handled automatically. In the CLI and API you must first move slots to the none partition, before they are eligible to be added to a new partition.
 
 .. code-block:: bash
 
@@ -629,7 +713,7 @@ Before creating a chassis partition via the CLI you must first ensure that there
   partition default
   !
 
-In this case we will mimic the flow in the webUI section where there are 3 blades installed in slots 1-3. Enter config mode and configure each slot to be in the partition none and then commit the changes. 
+In this case we will mimic the flow in the webUI section where there are 3 blades installed in slots 1-3. Enter **config** mode and configure each slot to be in the partition **none** and then commit the changes. 
 
 .. code-block:: bash
 
@@ -645,26 +729,26 @@ Now these slots are available to be assigned to a new partition. Enter config mo
 
 .. code-block:: bash
 
-  syscon-2-active(config)# partitions partition bigpartition config mgmt-ip ipv4 address 5.5.5.5 prefix-length 24 gateway 5.5.5.254
+  syscon-2-active(config)# partitions partition Production config mgmt-ip ipv4 address 5.5.5.5 prefix-length 24 gateway 5.5.5.254
 
 Next set the software version you want the partition to run, and enable the partition and then commit changes:
 
 .. code-block:: bash
 
-  syscon-2-active(config)# partitions partition bigpartition set-version iso-version 1.1.0-3698
+  syscon-2-active(config)# partitions partition Production set-version iso-version 1.1.0-3698
 
 
-  syscon-2-active(config)# partitions partition bigpartition config enable  
+  syscon-2-active(config)# partitions partition Production config enable  
 
 
-You can use the command show running-config partitions to see how each partition is configured:
+You can use the command **show running-config partitions** to see how each partition is configured:
 
 .. code-block:: bash
 
   syscon-2-active# show running-config partitions 
   partitions partition Number2
   !
-  partitions partition bigpartition
+  partitions partition Production
   config enabled
   config iso-version 1.1.0-3698
   config mgmt-ip ipv4 address 10.255.0.148
@@ -689,6 +773,12 @@ You can use the command show running-config partitions to see how each partition
   config mgmt-ip ipv4 prefix-length 24
   config mgmt-ip ipv4 gateway 10.255.0.1
   !
+
+Once the partitions are started and operational, you can log into each one and change the default password. The chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
+
+.. code-block:: bash
+
+  PLACEHOLDER
 
 Creating a Chassis Partition via the API
 ----------------------------------------
@@ -894,7 +984,7 @@ Before creating any new chassis partitions you should ensure you have the proper
       }
   }
 
-Next import the desired image into the system controller floating IP address using the path /var/import/staging. You will need to import from a remote HTTPS server. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
+Next import the desired image into the system controller floating IP address using the path /var/import/staging. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options avialble in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
 
 .. code-block:: bash
 
@@ -942,7 +1032,10 @@ You will see a response similar to the one below showing status:
       }
   }
 
-The system ships with all slots configured in the default chassis partition.  Before you can create a new chassis partition you must remove any slots you want to add to it from the default partition. To view the current assignment of slots to partitions use the following API command: 
+
+Before creating a chassis partition via the API, you must first ensure that there are available slots in order to create a partition. You can issue API commands to see what slots are available. If all the slots are assigned to a partition like **default**, then you’ll need to move some of the slots to the partition **none** before they can be added to a new partition. The **none** chassis partition is a special hidden partition that is used to temporarily remove slots from an existing chassis partition. In the webUI the none partition is hidden and this process is handled automatically. In the CLI and API you must first move slots to the none partition, before they are eligible to be added to a new partition.
+
+The system ships with all slots configured in the default chassis partition. Before you can create a new chassis partition, you must remove any slots from the default partition so that they are eligible to be added to a new chassis partition. To view the current assignment of slots to partitions use the following API command: 
 
 .. code-block:: bash
 
@@ -997,7 +1090,7 @@ The system ships with all slots configured in the default chassis partition.  Be
       }
   }
 
-Next remove the default partition from the slots you’d like to assign to any new chassis partitions. In this case we’ll assign the partition none to slots 1, 2, 3. Once the slots are unassigned (in the none partition), they can be added to a new chassis partition.
+Next remove the default partition from the slots you’d like to assign to any new chassis partitions. In this case we’ll assign the partition **none** to slots 1, 2, 3. Once the slots are unassigned (in the none partition), they can be added to a new chassis partition.
 
 .. code-block:: bash
 
@@ -1028,7 +1121,7 @@ Next remove the default partition from the slots you’d like to assign to any n
       }
   }
 
-Next a chassis partition called bigpartition will be created. It will be assigned an out-of-band management IP address, mask and gateway, along with an F5OS ISO version that must be loaded before the partition can be created.
+Next, a chassis partition called **Production** will be created. It will be assigned an out-of-band management IP address, mask and gateway, along with an F5OS ISO version that must be loaded before the partition can be created.
 
 .. code-block:: bash
 
@@ -1039,13 +1132,13 @@ Next a chassis partition called bigpartition will be created. It will be assigne
     {
         "partition":
             {
-        "name": "bigpartition",
+        "name": "Production",
             "config": {
                     "enabled": false,
                         "iso-version": "{{Partition_ISO_Image}}",
                         "mgmt-ip": {
                             "ipv4": {
-                                "address": "{{Chassis1_BigPartition_IP}}",
+                                "address": "{{Chassis1_Production_IP}}",
                                 "prefix-length": 24,
                                 "gateway": "{{OutofBand_DFGW}}"
                             }
@@ -1055,7 +1148,7 @@ Next a chassis partition called bigpartition will be created. It will be assigne
     }
 
 
-Next slots 1 & 2 will be assigned to the chassis partition called bigpartition:
+Next, slots 1 & 2 will be assigned to the chassis partition called **Production**:
 
 .. code-block:: bash
 
@@ -1069,23 +1162,24 @@ Next slots 1 & 2 will be assigned to the chassis partition called bigpartition:
               {
                   "slot-num": 1,
                   "enabled": true,
-                  "partition": "bigpartition"
+                  "partition": "Production"
               },
               {
                   "slot-num": 2,
                   "enabled": true,
-                  "partition": "bigpartition"
+                  "partition": "Production"
               }
               
           ]
       }
   }
 
-Finally, the bigpartition containing slots 1 & 2 will be enabled:
+Finally, the chassis partition **Production** containing slots 1 & 2 will be enabled:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=bigpartition/config/enabled
+  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/config/enabled
+
 
 .. code-block:: json
 
@@ -1093,11 +1187,72 @@ Finally, the bigpartition containing slots 1 & 2 will be enabled:
       "enabled": true        
   }
 
-The chassis partition will have a default username/password of admin/admin. When using the webUI you would be prompted on first login to change the password. To do this via the API use the following API call:
+Next, a chassis partition called **Devlopment** will be created. It will be assigned an out-of-band management IP address, mask and gateway, along with an F5OS ISO version that must be loaded before the partition can be created.
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_BigPartition_IP}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
+  POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions
+
+.. code-block:: json
+
+    {
+        "partition":
+            {
+        "name": "Development",
+            "config": {
+                    "enabled": false,
+                        "iso-version": "{{Partition_ISO_Image}}",
+                        "mgmt-ip": {
+                            "ipv4": {
+                                "address": "{{Chassis1_Development_IP}}",
+                                "prefix-length": 24,
+                                "gateway": "{{OutofBand_DFGW}}"
+                            }
+                        }
+                    }
+            }
+    }
+
+
+Next, slot 3 will be assigned to the chassis partition called Development:
+
+.. code-block:: bash
+
+  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+
+.. code-block:: json
+
+  {
+      "f5-system-slot:slots": {
+          "slot": [
+              {
+                  "slot-num": 3,
+                  "enabled": true,
+                  "partition": "Development"
+              }
+          ]
+      }
+  }
+
+Finally, the chassis partition **Development** containing slot 3 will be enabled:
+
+.. code-block:: bash
+
+  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Development/config/enabled
+
+
+.. code-block:: json
+
+  {
+      "enabled": true        
+  }
+
+
+The chassis partitions will have a default username/password of admin/admin. When using the webUI you would be prompted on first login to change the password. To do this via the API use the following API call. Note this API call is made to the IP address of the chassis partition and not the system controller. This API call is made using Basic Auth.
+
+.. code-block:: bash
+
+  POST https://{{Chassis1_Production_IP}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
 
 .. code-block:: json
 
@@ -1111,18 +1266,37 @@ The chassis partition will have a default username/password of admin/admin. When
         ]
     }
 
+Repeat the same proicess for the chassis partition Development:
+
+.. code-block:: bash
+
+  POST https://{{Chassis1_Devlopment_IP}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
+
+.. code-block:: json
+
+    {
+        "input": [
+            {
+                "old-password": "admin",
+                "new-password": "{{Chassis_Partition_Password}}",
+                "confirm-password": "{{Chassis_Partition_Password}}"
+            }
+        ]
+    }
+
+
 System Controller Configuration Options
 =======================================
 
-You can go back and review or edit various settings for the system controllers. 
+Once the minimum parameters have been setup, you can go back and review or edit various settings for the system controllers. Below is a review of the current webUI options that are available with the system controller F5OS configuration. Other options are available within the F5OS chassis partition interfaces, and are covered in a later section. 
 
 -----------------------------------------
 Network Settings -> Management Interfaces
 -----------------------------------------
 
-Under **Network Settings** you can view/edit the IP addresses both floating and static for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. It has been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
+Under **Network Settings**, you can view/edit both the floating and static IP addresses for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
 
-**NOTE: For the initial 1.1.x versions of F5OS ronly IPv4 IP addressing is supported for the F5OS platform layer. IPv4/IPv6 dual stack support has been added in the F5OS 1.2.x release. This limitation is only for the F5OS platform layer v1.1.x versions, BIG-IP tenants are capable of IPv4/v6 dual stack management.** 
+**NOTE: For the initial 1.1.x versions of F5OS-C only IPv4 IP addressing was available for the F5OS platform layer. IPv4/IPv6 dual stack support has since been added in the F5OS 1.2.x release. This limitation was only for the F5OS-C platform layer v1.1.x versions, BIG-IP tenants are capable of IPv4/v6 dual stack management, even with older F5OS software.** 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image22.png
   :align: center
@@ -1142,7 +1316,7 @@ External **DNS Lookup Servers** and **Search Domains** can be configured. This w
 Software Management -> Partition Images
 ---------------------------------------
 
-Each chassis partition will require an F5OS software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS releases are available on downloads.f5.com.
+Each chassis partition will require an F5OS-C software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS-C partition images are available on downloads.f5.com.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image24.png
   :align: center
@@ -1152,7 +1326,7 @@ Each chassis partition will require an F5OS software release to be specified whe
 Software Management -> Controller Images
 ----------------------------------------
 
-System controllers also run a unique F5OS software version. Both system controllers will need to run the same SW version. You can upload new F5 OS controller images via the **Software Management > Controller Images** webUI screen.
+System controllers also run a unique F5OS-C software version and have a seprate ISO from the chassis partitions. Both system controllers will need to run the same SW version. You can upload or import new F5OS-C controller images via the **Software Management > Controller Images** webUI screen.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image25.png
   :align: center
@@ -1162,13 +1336,13 @@ System controllers also run a unique F5OS software version. Both system controll
 System Settings -> Alarms & Events
 ----------------------------------
 
-Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. 
+Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including thos that have resolved. Each event should have different assertions to both **Raise** and **Clear** alarms. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image26.png
   :align: center
   :scale: 70%
 
-You may also change timeframe to see historical events, and optional refresh the screen via the controls on the right-hand side of the page:
+You may also change timeframe to see historical events, and optionally refresh the screen via the controls on the right-hand side of the page:
 
 .. image:: images/initial_setup_of_velos_system_controllers/image27.png
   :align: center
@@ -1177,11 +1351,11 @@ You may also change timeframe to see historical events, and optional refresh the
 System Settings -> Controller Management
 ----------------------------------------
 
-System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
+System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a kubernetes control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
 
-An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the OS, will be more disruptive timewise vs. an upgrade that only updates the F5 services. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. For the initial releases of F5OS updating the full ISO is recommended.
+An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. seprate OS and service.
 
-**NOTE: Intial v1.1.x F5OS versions do not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades and updating the standby chassis first is recommended if possible. Rolling upgrade support has been added to the 1.2.x release of F5OS. Once the system controllers are starting from a 1.2.x release rolling upgrade is supported.** 
+**NOTE: The intial v1.1.x F5OS-C versions did not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades, and updating the standby chassis first is recommended if possible. Rolling upgrade support for the system controllers was added to the 1.2.x release of F5OS-C. Once the system controllers are starting from a 1.2.x release, rolling upgrade is supported.** 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image28.png
   :align: center
