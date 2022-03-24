@@ -5,7 +5,7 @@ Initial Setup of VELOS System Controllers
 System Controller Setup
 =======================
 
-Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. F5OS utilizes **ConfD** for configuration management of F5OS and will be a familiar navigation experience if you have used it on other products. The CLI supports command completion and online help and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
+Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. F5OS utilizes **ConfD** for configuration management of F5OS and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?** and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
 
 Once logged in you can display the current running configuration by issuing the command **show running-config**.
 
@@ -46,7 +46,7 @@ An example of the Secondary/Standby system controller:
 
   syscon-1-standby#
 
-If you are logged into the standby system controller then you will not be able to enter config mode. You must be on the primary/active system controller.
+If you are logged into the standby system controller then you will not be able to enter config mode. You must be on the primary/active system controller to make configuration changes.
 
 .. code-block:: bash
 
@@ -82,11 +82,11 @@ The VELOS systems ship with a default internal RFC6598 address space of 100.64.0
   system network state active-chassis-id 1
   syscon-2-active# 
 
-This address range never leaves the inside of the chassis and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range and communicated with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
+This address range never leaves the inside of the chassis and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range and communicates with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
 
-Some examples would be any client trying to access the F5OS or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services if there is an overlap. Note that this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
+Some examples would be any client trying to access the F5OS-C platform layer (system controller or chassis partition) or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services if there is any overlap. Note that this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
 
-If there is the potential for conflict with external devices that fall within this range that need to communicate with VELOS, then there are options to change the configured-network-range-type to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient.  Please consult with F5 prior to making any changes to the internal addresses.
+If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur the reboot.  Please consult with F5 prior to making any changes to the internal addresses.
 
 .. code-block:: bash
 
@@ -136,7 +136,7 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
 IP Address Assignment & Routing
 -------------------------------
 
-Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined or acquired via DHCP. In addition to the IP addresses a default route and subnet mask/prefix length is defined. For the initial 1.1.x versions of F5OS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support requires F5OS be running 1.2.x or later. Note the tenants themselves support IPv4/IPv6 management today.
+Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined, or acquired via DHCP. In addition to the IP addresses, a default route and subnet mask/prefix length is defined. For the initial 1.1.x versions of F5OS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support requires F5OS be running 1.2.x or later. Note the tenants themselves support IPv4/IPv6 management reagrdless of F5OS version.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image1.png
   :align: center
@@ -158,7 +158,7 @@ In order to make these changes active you must commit the changes. No configurat
 
   syscon-2-active(config)# commit
 
-Now that the out-of-band addresses and routing are configured you can attempt to access the system controller webUI via the floating IP address that has been defined. You should see a screen similar to the one below, and you can verify your management interface settings.
+Now that the out-of-band addresses and routing are configured you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to onitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in stnady state. After logging into the floating IP address, you should see a screen similar to the one below, and you can verify your management interface settings.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image2.png
   :align: center
@@ -246,7 +246,7 @@ Configuring Network Time Protocol is highly recommended so that the VELOS system
   :align: center
   :scale: 70%
 
-It’s also a good idea to have the VELOS system send logs to an external syslog server. This can be configured in the System Settings > Log Settings screen. Here you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem level individually. The remote logging severity level will override and component logging levels if they are higher, but only for logs sent remotely. Local logging levels will follow however the component levels are configured here.
+It’s also a good idea to have the VELOS system send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem level individually. The remote logging severity level will override and component logging levels if they are higher, but only for logs sent remotely. Local logging levels will follow however the component levels are configured here.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6.png
   :align: center
@@ -377,7 +377,7 @@ To set a Remote Logging destination:
 Licensing the VELOS Chassis
 ---------------------------
 
-Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
+Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION where there was an extra charge for virtualization/vCMP and in some cases for MAX SSL/Compression. For VELOS these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
 
 Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems. Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server use the **Manual** method.
 
