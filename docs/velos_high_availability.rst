@@ -134,7 +134,7 @@ An active tenant will naturally failover to the standby tenant in another VELOS 
 VELOS HA Considerations and Recommended Practices
 =================================================
 
-As with previous generation BIG-IP appliances and chassis there are multiple HA topologies that are supported for VELOS tenants. In general, the HA setup for VELOS will mimic vCMP guest HA setup, as there is no HA configured at the underlying F5OS platform layer, although there is HA between the dual system controllers. Some customers prefer to utilize dedicated links (within a LAG) for the HA interconnect which carries HA VLANs between tenants, and other customers prefer to run these HA VLANs over the existing in-band ports (within a LAG), and not dedicate ports for the HA interconnect. This will cover the different topology options specific to the VELOS platform and cover pros and cons of each approach.
+As with previous generation BIG-IP appliances and chassis there are multiple HA topologies that are supported for VELOS tenants. In general, the HA setup for VELOS will mimic vCMP guest HA setup, as there is no HA configured at the underlying F5OS platform layer, although there is HA between the dual system controllers. Some customers prefer to utilize dedicated links (within a LAG) for the HA interconnect which carries HA VLANs between tenants, and other customers prefer to run these HA VLANs over the existing in-band ports (within a LAG), and not dedicate ports for the HA interconnect. The remaining parts of this section will cover the different topology options specific to the VELOS platform and cover pros and cons of each approach.
 
 VELOS BX110 Blade 
 -----------------
@@ -170,14 +170,14 @@ Most modern environments will have dual upstream layer2 switches that handle the
   :align: center
   :scale: 90%
 
-If the environment only has a single blade in each chassis and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual homing it to the two upstream switches in a vPC makes the most sense. Because there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best.
+If the environment only has a single blade in each chassis and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual homing it to the two upstream switches in a vPC makes the most sense. Because there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best. In the example below, the HA VLAN(s) will run on the same LAG as the in-band traffic.
 
 .. image:: images/velos_high_availability/image15.png
   :align: center
   :scale: 90%
 
 
-If the environment is not running 100Gb or 40Gb, then the BX110 blade can be configured so that both ports support 4 x 25Gb ports, or 4 x 10Gb ports (total of 8 ports). With this many ports you have the option of adding more ports into the LAG to the upstream switches, and dedicating ports for an HA interconnect LAG between the two VELOS chassis.  As an example, 4 of the ports could be aggregated together in a LAG and 2 of those ports would go to switch1 and the other two to switch2. The remaining 4 ports could be put into another LAG dedicated for the HA interconnect between the chassis. The number of ports within the LAGs could be adjusted based on the specific environment requirements. i.e. fewer ports for the HA interconnect LAG if mirroring bandwidth is not expected to be too high. These ports could be added to the in-band LAG.
+If the environment is not running 100Gb or 40Gb, then the BX110 blade can be configured so that both ports support 4 x 25Gb ports, or 4 x 10Gb ports (total of 8 ports). With this many ports you have the option of adding more ports into the LAG to the upstream switches, and dedicating ports for an HA interconnect LAG between the two VELOS chassis.  As an example, 4 of the ports could be aggregated together in a LAG and 2 of those ports would go to upstream switch1 and the other two to upstream switch2. The remaining 4 ports could be put into another LAG dedicated for the HA interconnect between the chassis. The number of ports within the LAGs could be adjusted based on the specific environment requirements. i.e. fewer ports for the HA interconnect LAG if mirroring bandwidth is not expected to be too high. These ports could be added to the in-band LAG.
 
 .. image:: images/velos_high_availability/image16.png
   :align: center
@@ -213,9 +213,9 @@ The two topologies below are identical except one has a dedicated LAG for the HA
   :align: center
   :scale: 90%   
 
-Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to switch error. The biggest concern is the Failover heartbeats from sod (udp port 1026). 
+Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented, it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to switch error. This can affect mirroring and heartbeat, whereas a dedicated HA interconnect between the VELOS chassis has no dpedencies on upstream switches or networking. The biggest concern is the Failover heartbeats from sod (udp port 1026). 
 
-The right way to set this up is to configure HA heartbeats over the management interface as well as over the HA VLAN (K37361453). Unfortunately, this is harder than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step and can if they fail to set this up properly, they would be unwittingly relying solely on the stability of their HA VLAN.
+The right way to set this up is to configure HA heartbeats over the management interface as well as over the HA VLAN (K37361453). Unfortunately, this is harder than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step and if they fail to set this up properly, they would be unwittingly relying solely on the stability of their HA VLAN.
 
 The example below shows a tenant configured on VELOS. For a single slot tenant (a tenant that only utilizes one slot/blade), you only need to configure the single Management IP address. If a VELOS tenant spans more than one blade then you must configure a separate cluster member IP address for each slot/blade that the tenant will run on. You cannot reuse these IP addresses within other tenants, they must have their own unique cluster member IP addresses if they span more than one blade.
 
@@ -236,7 +236,7 @@ How Many Ports are Required for an HA Interconnect LAG?
 
 The number of ports required in a dedicated HA Interconnect may vary. Ideally you should have a minimum of two ports in a LAG with dedicated tagged VLANs for each tenant HA pair. Running configsync and mirroring over this interface is preferred if it has been enabled. The two links in a LAG provide redundancy if one link should fail, and you can add more interfaces to the LAG for added resiliency. These links should be spread across additional blades for added redundancy.
 
-Generally, heartbeat traffic is not very bandwidth sensitive, but it can be sensitive to latency especially when mirroring is enabled. Mirroring will take up more bandwidth over the HA links, layer4 mirroring is less bandwidth intensive than layer7 mirroring. With layer4 mirroring there is one packet per connection, whereas layer7 mirroring is one connection per packet. 
+Generally, heartbeat traffic is not very bandwidth sensitive, but it can be sensitive to latency especially when mirroring is enabled. Mirroring will take up more bandwidth over the HA links, layer4 mirroring is less bandwidth intensive than layer7 mirroring. With layer4 mirroring there is one packet mirrored per connection, whereas layer7 mirroring is one mirrored connection per packet. 
 
 You should plan for enough bandwidth in the LAG if mirroring is enabled. As mentioned above layer7 mirroring will generate lots of bandwidth as every packet has to be mirrored. 
 
