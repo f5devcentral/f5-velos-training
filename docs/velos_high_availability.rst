@@ -159,7 +159,7 @@ Tenants on different chassis should have the same number of vCPU’s and be conf
 
 .. image:: images/velos_high_availability/image13.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 HA Topology Considerations
 --------------------------
@@ -168,20 +168,20 @@ Most modern environments will have dual upstream layer2 switches that handle the
 
 .. image:: images/velos_high_availability/image14.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 If the environment only has a single blade in each chassis and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual homing it to the two upstream switches in a vPC makes the most sense. Because there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best. In the example below, the HA VLAN(s) will run on the same LAG as the in-band traffic.
 
 .. image:: images/velos_high_availability/image15.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 
 If the environment is not running 100Gb or 40Gb, then the BX110 blade can be configured so that both ports support 4 x 25Gb ports, or 4 x 10Gb ports (total of 8 ports). With this many ports you have the option of adding more ports into the LAG to the upstream switches, and dedicating ports for an HA interconnect LAG between the two VELOS chassis.  As an example, 4 of the ports could be aggregated together in a LAG and 2 of those ports would go to upstream switch1 and the other two to upstream switch2. The remaining 4 ports could be put into another LAG dedicated for the HA interconnect between the chassis. The number of ports within the LAGs could be adjusted based on the specific environment requirements. i.e. fewer ports for the HA interconnect LAG if mirroring bandwidth is not expected to be too high. These ports could be added to the in-band LAG.
 
 .. image:: images/velos_high_availability/image16.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 As more BX110 blades are added to each VELOS chassis, more options become available as the restriction of running only one speed / mode is lifted because a second blade could be configured to run at different speeds.  This could allow some ports to run lowers speeds (4 x 25Gb, 4 x 10Gb) and break out, while other ports are running higher speed (40Gb or 100Gb). 
 
@@ -189,13 +189,13 @@ As additional blades are added, it makes sense to spread the LAG across more bla
 
 .. image:: images/velos_high_availability/image17.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 Consider the same number of blades, but instead of terminating the LAG on blade1 only, this time it is spread across both blade1 and blade2. This will allow incoming traffic to be somewhat evenly distributed coming into the chassis across the two blades (this is dependent on the upstream layer2 switch hashing algorithms and traffic patterns). In the diagram below traffic will still go through a disaggregation process and may be sent across the backplane/switch fabrics if needed. However, instead of having to traverse the backplane to egress the chassis, the VELOS blades will always prefer a local egress port over a backplane traversal. For this reason, spreading a LAG over more ports not only provides added resiliency in case of blade failure it also provides a more optimal traffic flow.
 
 .. image:: images/velos_high_availability/image18.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 Adding two highspeed (100gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (Especially for the 100Gb case) because each BX110 blade is rated for a max of 95Gb, so adding an additional port is not going to increase performance.  If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
 
@@ -207,11 +207,11 @@ The two topologies below are identical except one has a dedicated LAG for the HA
 
 .. image:: images/velos_high_availability/image19.png
   :align: center
-  :scale: 40% 
+  :scale: 60% 
 
 .. image:: images/velos_high_availability/image20.png
   :align: center
-  :scale: 40%   
+  :scale: 60%   
 
 Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented, it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to switch error. This can affect mirroring and heartbeat, whereas a dedicated HA interconnect between the VELOS chassis has no dpedencies on upstream switches or networking. The biggest concern is the Failover heartbeats from sod (udp port 1026). 
 
@@ -227,7 +227,7 @@ The diagram below shows the configuration of multiple HA heartbeat paths. One is
 
 .. image:: images/velos_high_availability/image22.png
   :align: center
-  :scale: 40%  
+  :scale: 70%  
 
 There is an alternative to configuring Multicast over the Management network, called Unicast Mesh, where each blade in the tenant is added configured as a Failover Unicast address, allowing each blade to exchange heartbeat message with all the blades of the peer tenant. As with Multicast, you must configure a separate cluster member IP address for each blade on which the tenant will run.
 
