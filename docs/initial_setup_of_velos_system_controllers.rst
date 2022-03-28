@@ -637,25 +637,25 @@ Next, create a new chassis partition that includes slots 1 & 2, and it will be n
 
 .. image:: images/initial_setup_of_velos_system_controllers/image16.png
   :align: center
-  :scale: 70%
+  :scale: 80%
 
 Change the partition state to **Enabled**. You can monitor the chassis partition status; it will go from **Disabled**, to **Starting**, to **Running**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image18.png
   :align: center
-  :scale: 70%
+  :scale: 80%
 
 Next, repeat the process and create another chassis partition for slot3 naming it **Development** and supply and IP address, prefix, and gateway along with a partition image.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image19.png
   :align: center
-  :scale: 70%
+  :scale: 80%
 
 You’ll then see a summary of all 3 partitions each with a unique **partition ID**, along with their **Operational State**.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image20.png
   :align: center
-  :scale: 50%
+  :scale: 80%
 
 If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to:
 
