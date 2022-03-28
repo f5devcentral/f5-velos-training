@@ -746,6 +746,7 @@ In this case we will mimic the flow in the webUI section where there are 3 blade
 
 Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway. Be sure to commit the change.
 Next you'll set the version for the partition to run, and then enable it and commit. Note there are still no slots assigned to the chassis partition.
+
 .. code-block:: bash
 
   syscon-2-active# config
@@ -762,6 +763,7 @@ Next you'll set the version for the partition to run, and then enable it and com
   Commit complete.
 
 Next assign slots 1 and 2 to the Production chassis partition and commit.
+
 .. code-block:: bash
 
   syscon-2-active(config)# slots slot 1-2 partition Production enabled
@@ -782,6 +784,7 @@ Next create a chassis partition for slot3 called **Development**.
   syscon-2-active(config-partition-Development)# config enable
 
 Next assign slot 3 to the Development chassis partition and commit.
+
 .. code-block:: bash
 
   syscon-2-active(config)# slots slot 3 partition Development enable
