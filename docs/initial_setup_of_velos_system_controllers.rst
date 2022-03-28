@@ -655,7 +655,7 @@ You’ll then see a summary of all 3 partitions each with a unique **partition I
 
 .. image:: images/initial_setup_of_velos_system_controllers/image20.png
   :align: center
-  :scale: 80%
+  :scale: 100%
 
 If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to:
 
@@ -670,7 +670,7 @@ Once the partitions are started and operational, you can log into each one and c
   :scale: 70%
 
 
-Below is an example of the CLI prompitng for a new password. You'll then be disconnected and will have to log in with the new password.
+Below is an example of the CLI prompting for a new password. You'll then be disconnected and will have to log in with the new password.
 
 .. code-block:: bash
 
@@ -744,60 +744,104 @@ In this case we will mimic the flow in the webUI section where there are 3 blade
   syscon-2-active(config-slot-3)# exit
   syscon-2-active(config)# commit
 
-Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway.
+Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway. Be sure to commit the change.
+Next you'll set the version for the partition to run, and then enable it and commit. Note there are still no slots assigned to the chassis partition.
+.. code-block:: bash
+
+  syscon-2-active# config
+  Entering configuration mode terminal
+  syscon-2-active(config)# partitions partition Production config mgmt-ip ipv4 address 10.255.0.148 prefix-length 24 gateway 10.255.0.1 
+  syscon-2-active(config-partition-Production)# commit
+  Commit complete.
+  syscon-2-active(config-partition-Production)# set-version iso-version 1.4.0-3915 proceed                                                                   
+  Value for 'proceed' [no,yes]: yes
+  Partition database compatibility check skipped: service-version is unchanged.
+  result Version update successful.
+  syscon-2-active(config-partition-Production)# config enable                                                                                               
+  syscon-2-active(config-partition-Production)# commit
+  Commit complete.
+
+Next assign slots 1 and 2 to the Production chassis partition and commit.
+.. code-block:: bash
+
+  syscon-2-active(config)# slots slot 1-2 partition Production enabled
+  syscon-2-active(config-slot-1-2)# commit
+  Commit complete.
+  syscon-2-active(config-slot-1-2)# 
+
+Next create a chassis partition for slot3 called **Development**.
 
 .. code-block:: bash
 
-  syscon-2-active(config)# partitions partition Production config mgmt-ip ipv4 address 5.5.5.5 prefix-length 24 gateway 5.5.5.254
+  syscon-2-active(config)# partitions partition Development config mgmt-ip ipv4 address 10.255.0.141 prefix-length 24 gateway 10.255.0.1
+  syscon-2-active(config-partition-Development)# commit                  
+  Commit complete.
+  syscon-2-active(config-partition-Development)# set-version iso-version 1.4.0-3915
+  Partition database compatibility check skipped: service-version is unchanged.
+  result Version update successful.
+  syscon-2-active(config-partition-Development)# config enable
 
-Next set the software version you want the partition to run, and enable the partition and then commit changes:
-
+Next assign slot 3 to the Development chassis partition and commit.
 .. code-block:: bash
 
-  syscon-2-active(config)# partitions partition Production set-version iso-version 1.1.0-3698
-
-
-  syscon-2-active(config)# partitions partition Production config enable  
-
+  syscon-2-active(config)# slots slot 3 partition Development enable
+  syscon-2-active(config-slot-3)# commit
+  Commit complete.
 
 You can use the command **show running-config partitions** to see how each partition is configured:
 
 .. code-block:: bash
 
   syscon-2-active# show running-config partitions 
-  partitions partition Number2
+  partitions partition Development
+  config enabled
+  config iso-version 1.4.0-3915
+  config mgmt-ip ipv4 address 10.255.0.141
+  config mgmt-ip ipv4 prefix-length 24
+  config mgmt-ip ipv4 gateway 10.255.0.1
   !
   partitions partition Production
   config enabled
-  config iso-version 1.1.0-3698
+  config iso-version 1.4.0-3915
   config mgmt-ip ipv4 address 10.255.0.148
   config mgmt-ip ipv4 prefix-length 24
   config mgmt-ip ipv4 gateway 10.255.0.1
   !
   partitions partition default
-  config enabled
-  config iso-version 1.1.0-3698
-  config pxe-server internal
+  config disabled
   config mgmt-ip ipv4 address 0.0.0.0
   config mgmt-ip ipv4 prefix-length 0
   config mgmt-ip ipv4 gateway 0.0.0.0
+  config mgmt-ip ipv6 address ::
+  config mgmt-ip ipv6 prefix-length 0
+  config mgmt-ip ipv6 gateway ::
   !
   partitions partition none
   config disabled
   !
-  partitions partition smallpartition
-  config enabled
-  config iso-version 1.1.0-3698
-  config mgmt-ip ipv4 address 10.255.0.141
-  config mgmt-ip ipv4 prefix-length 24
-  config mgmt-ip ipv4 gateway 10.255.0.1
-  !
+  syscon-2-active# 
+
 
 Once the partitions are started and operational, you can log into each one and change the default password. The chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
 
 .. code-block:: bash
 
-  PLACEHOLDER
+  FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.255.0.148
+  The authenticity of host '10.255.0.148 (10.255.0.148)' can't be established.
+  RSA key fingerprint is SHA256:BhkFg220oTVsXfwU0aDM69Tp3KXfn8TOk/ysnCSb61g.
+  Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+  Warning: Permanently added '10.255.0.148' (RSA) to the list of known hosts.
+  admin@10.255.0.148's password: 
+  You are required to change your password immediately (root enforced)
+  WARNING: Your password has expired.
+  You must change your password now and login again!
+  Changing password for user admin.
+  Changing password for admin.
+  (current) UNIX password: 
+  New password: 
+  Retype new password: 
+  passwd: all authentication tokens updated successfully.
+  Connection to 10.255.0.148 closed.
 
 Creating a Chassis Partition via the API
 ----------------------------------------
