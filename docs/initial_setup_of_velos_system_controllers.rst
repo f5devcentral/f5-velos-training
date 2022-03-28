@@ -615,7 +615,7 @@ The term **Slot** and **Blade** may be used interchangably, in the F5OS configur
   :align: center
   :scale: 70%
 
-For this configuration, we will remove slots 1, 2, and 3 from the **default** chassis partition first. Once they are removed from the default partition, they can be assigned to a new partition. Select the checkbox next to the default partition and then click **Edit**.
+For this configuration, you will remove slots 1, 2, and 3 from the **default** chassis partition first. Once they are removed from the default partition, they can be assigned to a new partition. Select the checkbox next to the default partition and then click **Edit**.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image13.png
   :align: center
@@ -633,25 +633,19 @@ The slots will turn white indicating they are not currently assigned to any chas
   :align: center
   :scale: 70%
 
-Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. 
+Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
 
 .. image:: images/initial_setup_of_velos_system_controllers/image16.png
   :align: center
   :scale: 70%
 
-The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
-
-.. image:: images/initial_setup_of_velos_system_controllers/image17.png
-  :align: center
-  :scale: 70%
-
-You can monitor the chassis partition status; it will go from **Disabled**, to **Starting**, to **Running**. 
+Change the partition state to **Enabled**. You can monitor the chassis partition status; it will go from **Disabled**, to **Starting**, to **Running**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image18.png
   :align: center
   :scale: 70%
 
-Next, repeat the process and create another chassis partition for slot3 naming it **Devlopment** and supply and IP address, prefix, and gateway along with a partition image.
+Next, repeat the process and create another chassis partition for slot3 naming it **Development** and supply and IP address, prefix, and gateway along with a partition image.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image19.png
   :align: center
@@ -671,9 +665,31 @@ If you click on the **Dashboard**, you’ll see a graphical representation that 
 
 Once the partitions are started and operational, you can log into each one and change the default password. Each chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
 
+.. image:: images/initial_setup_of_velos_system_controllers/image21a.png
+  :align: center
+  :scale: 70%
+
+
+Below is an example of the CLI prompitng for a new password. You'll then be disconnected and will have to log in with the new password.
+
 .. code-block:: bash
 
-  PLACEHOLDER  
+  FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.255.0.148
+  The authenticity of host '10.255.0.148 (10.255.0.148)' can't be established.
+  RSA key fingerprint is SHA256:BhkFg220oTVsXfwU0aDM69Tp3KXfn8TOk/ysnCSb61g.
+  Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+  Warning: Permanently added '10.255.0.148' (RSA) to the list of known hosts.
+  admin@10.255.0.148's password: 
+  You are required to change your password immediately (root enforced)
+  WARNING: Your password has expired.
+  You must change your password now and login again!
+  Changing password for user admin.
+  Changing password for admin.
+  (current) UNIX password: 
+  New password: 
+  Retype new password: 
+  passwd: all authentication tokens updated successfully.
+  Connection to 10.255.0.148 closed.
 
 Creating a Chassis Partition via the CLI
 ----------------------------------------
