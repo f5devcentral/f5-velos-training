@@ -824,6 +824,26 @@ You can use the command **show running-config partitions** to see how each parti
   !
   syscon-2-active# 
 
+The command **show partitions** will display the operation state and versions of the configured partitions:
+
+.. code-block:: bash
+
+  syscon-2-active# show partitions 
+                                                                        RUNNING             
+                  BLADE OS    SERVICE                 PARTITION        SERVICE     STATUS  
+  NAME         ID  VERSION     VERSION     CONTROLLER  STATUS           VERSION     AGE     
+  ------------------------------------------------------------------------------------------
+  Development  3   1.4.0-3915  1.4.0-3915  1           running-active   1.4.0-3915  10m     
+                                          2           running-standby  1.4.0-3915  10m     
+  Production   2   1.4.0-3915  1.4.0-3915  1           running-active   1.4.0-3915  17m     
+                                          2           running-standby  1.4.0-3915  17m     
+  default      1   -           -           1           disabled         -           4h      
+                                          2           disabled         -           5h      
+  none         0   -           -           1           disabled         -           -       
+                                          2           disabled         -           -       
+
+  syscon-2-active# 
+
 
 Once the partitions are started and operational, you can log into each one and change the default password. The chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
 
@@ -1050,7 +1070,7 @@ Before creating any new chassis partitions you should ensure you have the proper
       }
   }
 
-Next import the desired image into the system controller floating IP address using the path /var/import/staging. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options avialble in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
+Next import the desired image into the system controller floating IP address using the path **images/staging**. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options avialble in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
 
 .. code-block:: bash
 
@@ -1350,6 +1370,168 @@ Repeat the same proicess for the chassis partition Development:
         ]
     }
 
+Once the chassis partitions have been created you can query their status using the following API command.
+
+.. code-block:: bash
+
+  GET https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions
+
+.. code-block:: json
+
+  {
+      "f5-system-partition:partitions": {
+          "partition": [
+              {
+                  "name": "Development",
+                  "config": {
+                      "enabled": true,
+                      "iso-version": "1.4.0-3915",
+                      "mgmt-ip": {
+                          "ipv4": {
+                              "address": "10.255.0.141",
+                              "prefix-length": 24,
+                              "gateway": "10.255.0.1"
+                          }
+                      }
+                  },
+                  "state": {
+                      "id": 3,
+                      "os-version": "1.4.0-3915",
+                      "service-version": "1.4.0-3915",
+                      "install-os-version": "1.4.0-3915",
+                      "install-service-version": "1.4.0-3915",
+                      "install-status": "success",
+                      "controllers": {
+                          "controller": [
+                              {
+                                  "controller": 1,
+                                  "partition-id": 3,
+                                  "partition-status": "running-active",
+                                  "running-service-version": "1.4.0-3915",
+                                  "status-seconds": "1054",
+                                  "status-age": "17m"
+                              },
+                              {
+                                  "controller": 2,
+                                  "partition-id": 3,
+                                  "partition-status": "running-standby",
+                                  "running-service-version": "1.4.0-3915",
+                                  "status-seconds": "1051",
+                                  "status-age": "17m"
+                              }
+                          ]
+                      }
+                  }
+              },
+              {
+                  "name": "Production",
+                  "config": {
+                      "enabled": true,
+                      "iso-version": "1.4.0-3915",
+                      "mgmt-ip": {
+                          "ipv4": {
+                              "address": "10.255.0.148",
+                              "prefix-length": 24,
+                              "gateway": "10.255.0.1"
+                          }
+                      }
+                  },
+                  "state": {
+                      "id": 2,
+                      "os-version": "1.4.0-3915",
+                      "service-version": "1.4.0-3915",
+                      "install-os-version": "1.4.0-3915",
+                      "install-service-version": "1.4.0-3915",
+                      "install-status": "success",
+                      "controllers": {
+                          "controller": [
+                              {
+                                  "controller": 1,
+                                  "partition-id": 2,
+                                  "partition-status": "running-active",
+                                  "running-service-version": "1.4.0-3915",
+                                  "status-seconds": "1454",
+                                  "status-age": "24m"
+                              },
+                              {
+                                  "controller": 2,
+                                  "partition-id": 2,
+                                  "partition-status": "running-standby",
+                                  "running-service-version": "1.4.0-3915",
+                                  "status-seconds": "1453",
+                                  "status-age": "24m"
+                              }
+                          ]
+                      }
+                  }
+              },
+              {
+                  "name": "default",
+                  "config": {
+                      "enabled": false,
+                      "mgmt-ip": {
+                          "ipv4": {
+                              "address": "0.0.0.0",
+                              "prefix-length": 0,
+                              "gateway": "0.0.0.0"
+                          },
+                          "ipv6": {
+                              "address": "::",
+                              "prefix-length": 0,
+                              "gateway": "::"
+                          }
+                      }
+                  },
+                  "state": {
+                      "id": 1,
+                      "install-status": "none",
+                      "controllers": {
+                          "controller": [
+                              {
+                                  "controller": 1,
+                                  "partition-id": 1,
+                                  "partition-status": "disabled",
+                                  "status-seconds": "18079",
+                                  "status-age": "5h"
+                              },
+                              {
+                                  "controller": 2,
+                                  "partition-id": 1,
+                                  "partition-status": "disabled",
+                                  "status-seconds": "18541",
+                                  "status-age": "5h"
+                              }
+                          ]
+                      }
+                  }
+              },
+              {
+                  "name": "none",
+                  "config": {
+                      "enabled": false
+                  },
+                  "state": {
+                      "id": 0,
+                      "install-status": "none",
+                      "controllers": {
+                          "controller": [
+                              {
+                                  "controller": 1,
+                                  "partition-id": 0,
+                                  "partition-status": "disabled"
+                              },
+                              {
+                                  "controller": 2,
+                                  "partition-id": 0,
+                                  "partition-status": "disabled"
+                              }
+                          ]
+                      }
+                  }
+              }
+          ]
+      }
+  }
 
 System Controller Configuration Options
 =======================================
