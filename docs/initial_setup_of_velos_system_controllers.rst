@@ -259,7 +259,7 @@ It’s also a good idea to have the VELOS system controllers send logs to an ext
 Configure System Settings From the API
 ---------------------------------------
 
-If you would prefer to automate the setup of the VELOS chassis, there are F5OS API calls for all of the examples above. VELOS supports token based authentication for the F5OS API's. You can send a standard API call with user/password based authentication (basic auth), and then store the token for subsequent API calls. The token has a lifetime of ????, where it will be required to refresh. All the API examples in this guide were generated using the Postman utility. Below is an example of using password based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth**, and enter the username and password to log into your system controller.
+If you would prefer to automate the setup of the VELOS chassis, there are F5OS API calls for all of the examples above. VELOS supports token based authentication for the F5OS API's. You can send a standard API call with user/password based authentication (basic auth), and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth.  The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes.  If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth**, and enter the username and password to log into your system controller.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6a.png
   :align: center
@@ -285,7 +285,7 @@ This will be stored as a variable in the Postman **Environment** as seen below.
   :scale: 70%
 
 
-Once the variable is stored with the auth token, it can be used insteasd of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note postman references variables by encasing the Variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{X-Auth-Token_Chassis1_System_Controller}}**. 
+Once the variable is stored with the auth token, it can be used instead of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note, postman references variables by encasing the variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{X-Auth-Token_Chassis1_System_Controller}}**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6d.png
   :align: center
@@ -297,7 +297,8 @@ You must also add some required headers to any API calls to F5OS. It is importan
   :align: center
   :scale: 70%
 
-To set the DNS configuration for the system controllers, use the following API call with the headers and auth settings from above. Don't forget to acquire the auth token first, otherwise the API call wil fail.
+
+To set the DNS configuration for the system controllers, use the following API call with the headers and auth settings from above. Don't forget to acquire the auth token first, otherwise the API call will fail.
 
 .. code-block:: bash
 
@@ -418,7 +419,7 @@ To set a Remote Logging destination, use the following API call:
 Licensing the VELOS Chassis
 ---------------------------
 
-Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
+Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression, or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
 
 Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems.
 
@@ -438,7 +439,7 @@ You can activate and display the current license in the webUI, CLI or API.
 Apply License via CLI
 ---------------------
 
-You can license the VLEOS system automatically if the F5's licesing server is reachable form the VELOS system, and it can resolve the licesing servers name via DNS. If this is not possible, manual licesing may be used. To license the VELOS chassis automatically from the F5OS CLI:
+You can license the VELOS system automatically if the F5's licesing server is reachable from the VELOS system, and it can resolve the licensing servers name via DNS. If this is not possible, manual licesing may be used. To license the VELOS chassis automatically from the F5OS CLI:
 
 .. code-block:: bash
 
@@ -476,7 +477,7 @@ This should generate a license that can be saved or pasted into the VELOS system
   [Multiline mode, exit with ctrl-D.]
   >
 
-You should paste in the license and when finished hit **<CTRL> D**.
+You should paste in the license, and when finished hit **<CTRL> D**.
 
 .. code-block:: bash
 
@@ -574,9 +575,11 @@ To get the current licensing status via API, use the following API call. Issue a
       }
   }
 
-.. code-block:: bash
+
 
 To install a license via API, use the following API call:
+
+.. code-block:: bash
 
   POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:install
 
@@ -599,18 +602,18 @@ Chassis Partition Creation
 
 Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade, or be allowed to span across multiple blades. Conceptually this is similar to how vCMP guests are defined, but the underlying technology in F5OS is different. 
 
-If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS software, as the version that shipped on the system may not be the latest. Note this is different than the software that the tenants will actually run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
+If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS software, as the version that shipped on the system may not be the latest. Note, this is different than the software that the tenants will actually run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
 
-You may want to leave the default partition, and create new partitions with names that make sense for your environment. You might want to create different chassis partitions for different envirnments like QA/Dev and Production, or for different business units or departments, or different security zones. If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases, you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not currently tied to an existing chassis partition may be added to it. 
+You may want to leave the default partition, and create new partitions with names that make sense for your environment. You might want to create different chassis partitions for different environments like QA/Dev and Production, or for different business units or departments, or different security zones. If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases, you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not currently tied to an existing chassis partition may be added to it. 
 
 Creating Chassis Partitions via the webUI
 -----------------------------------------
 
- The term **Slot** and **Blade** may be used interchangably, in the F5OS configuration interfaces (CLI,webUI,API) the term slot is used as you may want to assign empty slots to a chassis partition. If the term blade were used this may lead to confusion, as a blade may not be installed yet. In the webUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis (in slots 1-3), and the rest show as **Empty**.  
+The term **Slot** and **Blade** may be used interchangably, in the F5OS configuration interfaces (CLI, webUI, API) the term slot is used as you may want to assign empty slots to a chassis partition. If the term blade were used this may lead to confusion, as a blade may not be installed yet. In the webUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis (in slots 1-3), and the rest show as **Empty**.  
 
 .. image:: images/initial_setup_of_velos_system_controllers/image12.png
   :align: center
-  :scale: 50%
+  :scale: 70%
 
 For this configuration, we will remove slots 1, 2, and 3 from the **default** chassis partition first. Once they are removed from the default partition, they can be assigned to a new partition. Select the checkbox next to the default partition and then click **Edit**.
 
