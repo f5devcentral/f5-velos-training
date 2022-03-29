@@ -1058,127 +1058,130 @@ To create a LAG and add interfaces & proper LACP configuration will take a few d
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/
 
 .. code-block:: json
 
-  {
-      "openconfig-interfaces:interfaces": {
-          "interface": [
-              {
-                  "name": "Arista",
-                  "config": {
-                      "name": "Arista",
-                      "type": "iana-if-type:ieee8023adLag",
-                      "enabled": true,
-                      "openconfig-vlan:tpid": "openconfig-vlan-types:TPID_0X8100"
-                  },
-                  "openconfig-if-aggregate:aggregation": {
-                      "config": {
-                          "lag-type": "LACP",
-                          "f5-if-aggregate:distribution-hash": "src-dst-ipport"
-                      },
-                      "openconfig-vlan:switched-vlan": {
-                          "config": {
-                              "trunk-vlans": [
-                                  444,
-                                  555
-                              ]
-                          }
-                      }
-                  }
-              },
-              {
-                  "name": "HA-Interconnect",
-                  "config": {
-                      "name": "HA-Interconnect",
-                      "type": "iana-if-type:ieee8023adLag",
-                      "enabled": true,
-                      "openconfig-vlan:tpid": "openconfig-vlan-types:TPID_0X8100"
-                  },
-                  "openconfig-if-aggregate:aggregation": {
-                      "config": {
-                          "lag-type": "LACP",
-                          "f5-if-aggregate:distribution-hash": "src-dst-ipport"
-                      },
-                      "openconfig-vlan:switched-vlan": {
-                          "config": {
-                              "trunk-vlans": [
-                                  500
-                              ]
-                          }
-                      }
-                  }
-              }
-          ]
-      }
-  }
+    {
+        "openconfig-interfaces:interfaces": {
+            "interface": [
+                {
+                    "name": "Arista",
+                    "config": {
+                        "name": "Arista",
+                        "type": "iana-if-type:ieee8023adLag",
+                        "enabled": true
+                    
+                    },
+                    "openconfig-if-aggregate:aggregation": {
+                        "config": {
+                            "lag-type": "LACP",
+                            "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                        },
+                        "openconfig-vlan:switched-vlan": {
+                            "config": {
+                                "trunk-vlans": [
+                                    3010,
+                                    3011
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "HA-Interconnect",
+                    "config": {
+                        "name": "HA-Interconnect",
+                        "type": "iana-if-type:ieee8023adLag",
+                        "enabled": true
+                        
+                    },
+                    "openconfig-if-aggregate:aggregation": {
+                        "config": {
+                            "lag-type": "LACP",
+                            "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                        },
+                        "openconfig-vlan:switched-vlan": {
+                            "config": {
+                                "trunk-vlans": [
+                                    500,
+                                    501,
+                                    502,
+                                    503
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
 
 
 The next step is to add physical interfaces into the LAG group. Interfaces will be added to the aggregate-id that was created in the previous step:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/
 
 .. code-block:: json
 
     {
-      "openconfig-interfaces:interfaces": {
-          "interface": [
-              {
-                  "name": "1/2.0",
-                  "config": {
-                      "name": "1/2.0"
-                  },
-                  "openconfig-if-ethernet:ethernet": {
-                      "config": {
-                          "openconfig-if-aggregate:aggregate-id": "Arista"
-                      }
-                  }
-              },
-              {
-                  "name": "2/1.0",
-                  "config": {
-                      "name": "2/1.0"
-                  },
-                  "openconfig-if-ethernet:ethernet": {
-                      "config": {
-                          "openconfig-if-aggregate:aggregate-id": "Arista"
-                      }
-                  }
-              },
-              {
-                  "name": "1/1.0",
-                  "config": {
-                      "name": "1/1.0"
-                  },
-                  "openconfig-if-ethernet:ethernet": {
-                      "config": {
-                          "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
-                      }
-                  }
-              },
-              {
-                  "name": "2/2.0",
-                  "config": {
-                      "name": "2/2.0"
-                  },
-                  "openconfig-if-ethernet:ethernet": {
-                      "config": {
-                          "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
-                      }
-                  }
-              }
-          ]
-      }
-  }
+        "openconfig-interfaces:interfaces": {
+            "interface": [
+                {
+                    "name": "1/2.0",
+                    "config": {
+                        "name": "1/2.0"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "Arista"
+                        }
+                    }
+                },
+                {
+                    "name": "2/1.0",
+                    "config": {
+                        "name": "2/1.0"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "Arista"
+                        }
+                    }
+                },
+                {
+                    "name": "1/1.0",
+                    "config": {
+                        "name": "1/1.0"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                        }
+                    }
+                },
+                {
+                    "name": "2/2.0",
+                    "config": {
+                        "name": "2/2.0"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                        }
+                    }
+                }
+            ]
+        }
+    }
 
 The final step is adding LACP configuration for each LAG:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/
+  PATCH https://{{Chassis2_Production_IP}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -1213,7 +1216,7 @@ To view the final LAG configuration via the API use the following API call:
 
 .. code-block:: bash
 
-	GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/openconfig-lacp:lacp
+	GET https://{{Chassis2_Production_IP}}:8888/restconf/data/openconfig-lacp:lacp
 
 .. code-block:: json
 
@@ -1372,7 +1375,7 @@ You can get more granular information down to the interface level using the foll
 
 .. code-block:: bash
 
-	GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+	GET https://{{Chassis2_Production_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
 
 .. code-block:: json
 
