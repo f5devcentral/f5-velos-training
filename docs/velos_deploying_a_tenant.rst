@@ -7,31 +7,31 @@ Deploying a Tenant
 Tenant Image Types
 ------------------
 
-Tenant Images for F5OS/VELOS are avilable on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 and later, & 15.1.4 and later), There is no plan to support v16.x tenants, and the next targeted tenant release will be v17.1. Tenant images for VELOS can be founf on downaloads.f5.com.
+Tenant Images for F5OS/VELOS are available on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 and later, & 15.1.4 and later), There is no plan to support v16.x tenants, and the next targeted tenant release will be v17.1. Tenant images for VELOS can be found on downloads.f5.com.
 
-.. image:: images/velos_deploying_a_tenant/image64.png
+.. image:: images/velos_deploying_a_tenant/image1.png
   :align: center
   :scale: 70% 
 
-Ensure you choose the option that is labeled specifically for VELOS. i.e. **14.1.4_Tenant_VELOS**:
+Choose either 14.x or v15.x BIG-IP version, to get access to the VELOS/F5OS supported tenant images. Ensure you choose the option that is labeled specifically for F5OS Tenant. As an example, **15.1.5_Tenant-F5OS**:
 
-.. image:: images/velos_deploying_a_tenant/image65.png
+.. image:: images/velos_deploying_a_tenant/image2.png
   :align: center
   :scale: 70% 
 
-There are 4 different types of tenant images to choose from as seen below, please read the rest of this section to determine the best image type for your environment:
+There are 4 different types of tenant images to choose from (ALL, T1, T2, T4) as seen below, please read the rest of this section to determine the best image type for your environment:
 
-.. image:: images/velos_deploying_a_tenant/image66.png
+.. image:: images/velos_deploying_a_tenant/image3.png
   :align: center
   :scale: 70% 
 
-The **T1-VELOS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software meaning it does not support upgrades (not even for hotfixes). This type of image is geared towards more modern environments where pave & nuke strategies are preferred over in place upgrades.   
+The **T1-F5OS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software meaning it does not support upgrades (not even for hotfixes). This type of image is geared towards more modern environments where pave & nuke strategies are preferred over in place upgrades.   
 
-.. image:: images/velos_deploying_a_tenant/image67.png
+.. image:: images/velos_deploying_a_tenant/image4.png
   :align: center
   :scale: 70% 
 
-The remaining images (T2, ALL, T4) all support in place upgrades; however, they may limit the amount of disk space that can be used by the tenant and currently there is no utility to expand an image once it is full. A tenant expansion utility is something that is being considered for a future release.
+The remaining images (T2, ALL, T4) all support in place upgrades; however, they may limit the amount of disk space that can be used by the tenant. If more disk space is needed in the future the tenant can be movied to provisioned state and the disk can be expanded. There is no ability to decrease the disk space, so starting smaller and increasing will ensure there is adequate disk space for many tenants. 
 
 The **T2-VELOS** image is intended for a tenant that will run LTM and or DNS only, it is not suitable for tenants needing other modules provisioned (AVR may be an exception). This type of image is best suited in a high density tenant environment where the number of tenants is going to be high per blade and using minimum CPU resources (1 or 2 vCPUs per tenant). You may want to limit the amount of disk space each tenant can use as a means of ensuring the filesystem on the blade does not become full. As an example, there is 1TB of disk per blade, and 22 tenants each using the 142GB T4 image would lead to an over provisioning situation. Because tenants are deployed in sparse mode which allows over provisioning, this may not be an issue initially, but could become a problem later in the tenant’s lifespan as it writes more data to disk. To keep the tenants in check, you can deploy smaller T2 images which can consume 45GB each. LTM/DNS deployments use much less disk than other BIG-IP modules which do extensive local logging and utilize databases on disk.
 
