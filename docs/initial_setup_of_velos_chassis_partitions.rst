@@ -48,12 +48,12 @@ Network Settings - > Port Groups
 
 Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure the portgroups so that physical interfaces on the blade are configured for the proper speed and bundling. The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. The term portgroup is used rather than simply Port because some front panel sockets may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA bitstream version is loaded, and the speed of the port is adjusted accordingly (this will require a reboot of the blade). The portgroup components are created by the system, based on the type of the blades installed. The user can modify the portgroup mode.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image54.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image6.png
   :width: 45%
 
 
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image55.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image7.png
   :width: 45%
 
 
@@ -64,7 +64,7 @@ Configuring PortGroups from the webUI
 
 To configure Portgroups go to **Network Settings > Port Groups** in the chassis partition webUI. This should be configured before any Interface, VLAN, or LAG configuration as changing the portgroup mode will alter interface numbering on the blade. Note the warning at the top of the webUI page:
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image56.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image8.png
   :align: center
   :scale: 70% 
 
@@ -244,13 +244,13 @@ Network Settings -> Interfaces
 
 Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. A breakout cable is require to separate the different ports. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image6.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image9.png
   :align: center
   :scale: 70% 
 
 The following example shows the port numbering when all interfaces are unbundled.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image7.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image10.png
   :align: center
   :scale: 70%   
 
@@ -259,13 +259,13 @@ Configuring Interfaces from the webUI
 
 Within the chassis partition webUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image58.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image11.png
   :align: center
   :scale: 70%  
 
 You can click on any interface to view its settings or edit them. You can currently change the interface State via the webUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG then the VLAN configuration is done within the LAG rather than the interface.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image59.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image12.png
   :align: center
   :scale: 70% 
 
@@ -530,11 +530,11 @@ Configuring VLANs from the webUI
 
 VLANs can be created in the chassis partition webUI under **Network Settings > VLANs**. VLANs are not shared across chassis partitions, and each partition must configure its own set of VLANs. When adding a new VLAN you will define a Name and a VLAN ID. When you assign this VLAN to an interface or LAG you will determine if you want it to be untagged by configuring it as a Native VLAN or tagged by adding it as a Trunked VLAN.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image60.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image13.png
   :align: center
   :scale: 70%
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image61.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image14.png
   :align: center
   :scale: 70%
 
@@ -818,7 +818,7 @@ Configuring LAGs from the webUI
 
 Link Aggregation Groups (LAGs) can be configured in the chassis partition webUI via the **Network Settings > LAGs** page:
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image62.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image15.png
   :align: center
   :scale: 70% 
 
@@ -835,7 +835,7 @@ https://support.f5.com/csp/article/K33431212
 
 Once you have configured the LAG Type and LACP options, you can add any physical interfaces within this chassis partition to be part of a LAG. Note you cannot add physical interfaces that reside in other chassis partitions as they are completely isolated from each other. Finally, you can configure the **Native VLAN** (for untagged VLAN), and what **Trunked VLANs** (tagged) you’d like to add to this LAG interface.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image63.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image16.png
   :align: center
   :scale: 70% 
 
