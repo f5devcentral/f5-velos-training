@@ -565,7 +565,7 @@ You can view the current tenant images and their status in the chassis partition
 
 .. code-block:: bash
 
-    bigpartition-2# show images
+    Production-1# show images
                                                                             IN                 
     NAME                                                                       USE    STATUS      
     ----------------------------------------------------------------------------------------------

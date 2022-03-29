@@ -275,22 +275,22 @@ To transfer the file from the CLI you can use the **file export** command. Note 
 
 .. code-block:: bash
 
-    bigpartition-2# file export local-file configs/chassis-partition-bigbartition-08-17-2021 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
+    Production-1# file export local-file configs/chassis-partition-bigbartition-08-17-2021 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
     Value for 'password' (<string>): ********
     result File transfer is initiated.(configs/chassis-partition-bigbartition-08-17-2021)
-    bigpartition-2#
+    Production-1#
 
 You can use the CLI command **file transfer-status** to see if the file was copied successfully or not:
 
 .. code-block:: bash
 
-    bigpartition-2# file transfer-status                                                                                                                                       
+    Production-1# file transfer-status                                                                                                                                       
     result 
     S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                
     1    |Export file|HTTPS   |configs/3-20-2021-bigpartition-backup                       |10.255.0.142        |/upload/upload.php                                          |Failed to open/read local data from file/application|Fri Aug 27 20:05:34 2021
     2    |Export file|HTTPS   |configs/chassis-partition-bigbartition-08-17-2021           |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:06:22 2021
 
-    bigpartition-2# 
+    Production-1# 
 
 
 If you do not have a remote HTTPS server with the proper access to POST files then you can copy the chassis partition backups from the system controller shell. You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice partition<ID> directories, where <ID> equals the ID assigned to each partition.
@@ -411,15 +411,15 @@ For the bigpartition:
 
 .. code-block:: bash
 
-    bigpartition-2# config 
+    Production-1# config 
     Entering configuration mode terminal
-    bigpartition-2(config)# system database reset-to-default proceed 
+    Production-1(config)# system database reset-to-default proceed 
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    bigpartition-2(config)# 
+    Production-1(config)# 
     System message at 2021-03-02 23:01:50...
     Commit performed by admin via tcp using cli.
-    bigpartition-2(config)# 
+    Production-1(config)# 
 
 Once the partition configurations have been cleared, you’ll need to login to the system controller. You’ll need to put all slots back into the **none** partition and **commit** the changes if making changes via the CLI.
 

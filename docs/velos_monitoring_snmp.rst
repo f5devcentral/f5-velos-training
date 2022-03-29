@@ -52,8 +52,8 @@ You can configure the SNMP System paramters including the System Contact, System
 
 .. code-block:: bash
 
-    bigpartition-2(config)# SNMPv2-MIB system sysContact jim@f5.com sysLocation Boston sysName VELOS-bigpartition
-    bigpartition-2(config)# commit
+    Production-1(config)# SNMPv2-MIB system sysContact jim@f5.com sysLocation Boston sysName VELOS-bigpartition
+    Production-1(config)# commit
 
 
 
@@ -61,19 +61,19 @@ It is highly recommend that you put Interface descriptions in your configuration
 
 .. code-block:: bash
 
-    bigpartition-2(config)# interfaces interface 1/1.0
-    bigpartition-2(config-interface-1/1.0)# config description "Interface-1/1.0"
-    bigpartition-2(config-interface-1/1.0)# exit                              
-    bigpartition-2(config)# interfaces interface 1/2.0        
-    bigpartition-2(config-interface-1/2.0)# config description Interface-1/2.0
-    bigpartition-2(config-interface-1/2.0)# exit                              
-    bigpartition-2(config)# interfaces interface 2/1.0        
-    bigpartition-2(config-interface-2/1.0)# config description Interface-2/1.0
-    bigpartition-2(config-interface-2/1.0)# exit
-    bigpartition-2(config)# interfaces interface 2/2.0        
-    bigpartition-2(config-interface-2/2.0)# config description Interface-2/2.0
-    bigpartition-2(config-interface-2/2.0)# exit
-    bigpartition-2(config)# commit
+    Production-1(config)# interfaces interface 1/1.0
+    Production-1(config-interface-1/1.0)# config description "Interface-1/1.0"
+    Production-1(config-interface-1/1.0)# exit                              
+    Production-1(config)# interfaces interface 1/2.0        
+    Production-1(config-interface-1/2.0)# config description Interface-1/2.0
+    Production-1(config-interface-1/2.0)# exit                              
+    Production-1(config)# interfaces interface 2/1.0        
+    Production-1(config-interface-2/1.0)# config description Interface-2/1.0
+    Production-1(config-interface-2/1.0)# exit
+    Production-1(config)# interfaces interface 2/2.0        
+    Production-1(config-interface-2/2.0)# config description Interface-2/2.0
+    Production-1(config-interface-2/2.0)# exit
+    Production-1(config)# commit
     Commit complete.
 
 
@@ -81,13 +81,13 @@ If LAGs are configured decriptions should be added to the LAG interfaces as well
 
 .. code-block:: bash
 
-    bigpartition-2(config)# interfaces interface Arista 
-    bigpartition-2(config-interface-Arista)# config description "Arista LAG"
-    bigpartition-2(config-interface-Arista)# exit
-    bigpartition-2(config)# interfaces interface HA-Interconnect 
-    bigpartition-2(config-interface-HA-Interconnect)# config description "HA-Interconnect LAG"
-    bigpartition-2(config-interface-HA-Interconnect)# exit
-    bigpartition-2(config)# commit
+    Production-1(config)# interfaces interface Arista 
+    Production-1(config-interface-Arista)# config description "Arista LAG"
+    Production-1(config-interface-Arista)# exit
+    Production-1(config)# interfaces interface HA-Interconnect 
+    Production-1(config-interface-HA-Interconnect)# config description "HA-Interconnect LAG"
+    Production-1(config-interface-HA-Interconnect)# exit
+    Production-1(config)# commit
     Commit complete.
 
 
