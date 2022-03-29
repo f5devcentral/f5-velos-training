@@ -2,9 +2,9 @@
 Initial Setup Within the Chassis Partition
 ==========================================
 
-Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band interfaces. 
+Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own F5OS-C CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band IP interfaces. At first login you will be prompted to change the default chassis partition password.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image52.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image1.png
   :align: center
   :scale: 70% 
 
@@ -12,11 +12,29 @@ Chassis partitions are completely separate management entities that are managed 
 Chassis Partition Dashboard
 ---------------------------
 
-The chassis partition Dashboard will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use. If there are any active-alarms they will be displayed on this page. There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly there is a high availability status display.
+The chassis partition Dashboard will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly tit will display **System Summary** stats under the tab of that name..
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image53.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image2.png
   :align: center
   :scale: 70% 
+
+If you click on the **Network** tab, then each front panel port will be displayed, and it will be color coded red or green based on its current status.
+
+.. image:: images/initial_setup_of_velos_chassis_partitions/image3.png
+  :align: center
+  :scale: 70%
+
+If you click on the **CPU** tab, then CPU utlization across different time periods will be displyed for each fo the blades in this chassis partition.
+
+.. image:: images/initial_setup_of_velos_chassis_partitions/image4.png
+  :align: center
+  :scale: 70%     
+
+If there are any active alarms they will be displayed on the **Active Alarms** page.
+
+.. image:: images/initial_setup_of_velos_chassis_partitions/image5.png
+  :align: center
+  :scale: 70%   
 
 ----------------------------
 Chassis Partition Networking
@@ -28,7 +46,7 @@ Before configuring any tenant, you’ll need to setup networking for the chassis
 Network Settings - > Port Groups
 --------------------------------
 
-Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure the portgroups so that physical interfaces on the blade are configured for the proper speed and bundling. The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. The term portgroup is used rather than simply Port because some front panel sockets may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly (this will require a reboot of the blade). The portgroup components are created by the system, based on the type of the blades installed. The user can modify the portgroup mode.
+Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure the portgroups so that physical interfaces on the blade are configured for the proper speed and bundling. The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. The term portgroup is used rather than simply Port because some front panel sockets may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA bitstream version is loaded, and the speed of the port is adjusted accordingly (this will require a reboot of the blade). The portgroup components are created by the system, based on the type of the blades installed. The user can modify the portgroup mode.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image54.png
   :width: 45%
@@ -59,22 +77,22 @@ Portgroups can be configured from the chassis partition CLI using the **portgrou
 
 .. code-block:: bash
 
-  bigpartition-2# config
+  Production-1# config
   Entering configuration mode terminal
-  bigpartition-2(config)# portgroups portgroup 1/1 config mode MODE_100GB
+  Production-1(config)# portgroups portgroup 1/1 config mode MODE_100GB
 
 You must commit for any changes to take affect:
 
 .. code-block:: bash
 
-  bigpartition-2(config)# commit
+  Production-1(config)# commit
 
 
 Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command **show running-config portgroups**:
 
 .. code-block:: bash
 
-  bigpartition-2# show running-config portgroups 
+  Production-1# show running-config portgroups 
   portgroups portgroup 1/1
   config name 1/1
   config mode MODE_100GB
@@ -95,7 +113,7 @@ Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100G
   config mode MODE_100GB
   config ddm ddm-poll-frequency 30
   !
-  bigpartition-2# 
+  Production-1# 
 
 Configuring PortGroups from the API
 -----------------------------------
@@ -104,7 +122,7 @@ To list the current portgroup configuration issue the following API call:
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-portgroup:portgroups
+  GET https://{{Production_IP}}:8888/restconf/data/f5-portgroup:portgroups
 
 .. code-block:: json
 
@@ -224,11 +242,17 @@ To list the current portgroup configuration issue the following API call:
 Network Settings -> Interfaces
 ------------------------------
 
-Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** & **1/2.0** for slot 1, and **2/1.0** & **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, & 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, & 1/2.4** for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image57.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/image6.png
   :align: center
   :scale: 70% 
+
+The following example shows the port numbering when all interfaces are unbundled.
+
+.. image:: images/initial_setup_of_velos_chassis_partitions/image7.png
+  :align: center
+  :scale: 70%   
 
 Configuring Interfaces from the webUI
 -----------------------------------
