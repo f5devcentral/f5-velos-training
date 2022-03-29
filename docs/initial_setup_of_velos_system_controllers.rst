@@ -1584,7 +1584,7 @@ System controllers also run a unique F5OS-C software version and have a seprate 
 System Settings -> Alarms & Events
 ----------------------------------
 
-Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including thos that have resolved. Each event should have different assertions to both **Raise** and **Clear** alarms. 
+Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including thoseß that have cleared. Each event should have different assertions to both **Raise** and **Clear** alarms. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image26.png
   :align: center
@@ -1601,7 +1601,7 @@ System Settings -> Controller Management
 
 System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a kubernetes control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
 
-An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. seprate OS and service.
+An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service.
 
 **NOTE: The intial v1.1.x F5OS-C versions did not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades, and updating the standby chassis first is recommended if possible. Rolling upgrade support for the system controllers was added to the 1.2.x release of F5OS-C. Once the system controllers are starting from a 1.2.x release, rolling upgrade is supported.** 
 
@@ -1633,13 +1633,13 @@ Under **System Settings > Log Settings** you may add remote log servers for the 
 System Settings -> File Utilities
 ---------------------------------
 
-The **System Settings > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from the various log directories log can be exported, cores and qkviews can be imported/exported from diags/shared and system controller and chassis partition SW images can be imported into import/staging.
+The **System Settings > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from the various log directories log can be exported, cores and qkviews can be imported/exported from diags/shared and system controller and chassis partition software images can be imported into import/staging.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image31.png
   :align: center
   :scale: 70% 
 
-The Import/Export utility requires an external HTTPS server to copy to/from. A pop-up will be displayed asking for remote HTTPS server information. The utility does not currently support downloading directly through a browser to your desktop. Download directly to a browser is planned for a future release.
+The Import/Export utility requires an external HTTPS server to copy to/from. A pop-up will be displayed asking for remote HTTPS server information. There are also options to upload/download directly through a browser to or from your desktop. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image32.png
   :align: center
@@ -1691,7 +1691,7 @@ Once the QKView is generated, you can click the checkbox next to it, and then se
   :align: center
   :scale: 70% 
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter config mode, and then use the system diagnostics ihealth config command to configure a username and password.
+If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a username and password.
 
 .. code-block:: bash
 
@@ -1743,7 +1743,7 @@ The **System Settings -> Software Install Status** is used to verify and observe
 System Settings -> General
 --------------------------
 
-The **System Settings > General** page allows you to configure Appliance mode for the system controllers. Appliance mode is a security feature where all root and bash shell access are disabled. A user will only be able to utilize the F5OS CLI when Appliance mode is enabled. The page also displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partitions.
+The **System Settings > General** page allows you to configure Appliance mode for the system controllers. Appliance mode is a security feature where all root and bash shell access are disabled. A user will only be able to utilize the F5OS CLI when Appliance mode is enabled. The page also displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partitions. You can also configure the system hostname, and as of F5OS-C 1.4.0 and later a **Login Banner** and Message of the Day **MOTD Banner** are supported.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image43.png
   :align: center
@@ -1753,23 +1753,18 @@ The **System Settings > General** page allows you to configure Appliance mode fo
 User Management -> Auth Settings
 --------------------------------
 
-Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP & RADIUS. Active Directory and TACACS remote auth are not currently supported in the v1.1.x versions of the F5OS layer. These have been added to the v1.2.x F5OS release and are currently configurable via the CLI only. webUI configuration support for TACACS and Active Directory will be added in a subsequent release. 
-
-**Note: VELOS tenants running TMOS support Active Directory and TACACS for remote auth. The limitation is only for the F5OS v1.1.x platform layer.**
+Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP, RADIUS, or TACACS+. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image44.png
   :align: center
   :scale: 70% 
 
-.. image:: images/initial_setup_of_velos_system_controllers/image45.png
-  :align: center
-  :scale: 70% 
 
 --------------------------------
 User Management -> Server Groups
 --------------------------------
 
-You may define Server Groups which are collections of remote auth servers that the VELOS platform layer will use to authenticate against. Currently LDAP and RADIUS are supported. For LDAP you may choose to authenticate of TCP or SSL. You can configure the remote host’s IP address and port. 
+You may define Server Groups which are collections of remote auth servers that the VELOS platform layer will use to authenticate against. LDAP, RADIUS, and TACACS+ are supported. For LDAP you may choose to authenticate of TCP or SSL. You can configure the remote host’s IP address and port. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image46.png
   :align: center
@@ -1782,6 +1777,10 @@ You may define Server Groups which are collections of remote auth servers that t
 .. image:: images/initial_setup_of_velos_system_controllers/image48.png
   :align: center
   :scale: 70% 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image48a.png
+  :align: center
+  :scale: 70%   
 
 ------------------------
 User Management -> Users
