@@ -12,7 +12,7 @@ Chassis partitions are completely separate management entities that are managed 
 Chassis Partition Dashboard
 ---------------------------
 
-The chassis partition Dashboard will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly tit will display **System Summary** stats under the tab of that name..
+The chassis partition **Dashboard** will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly it will display **System Summary** stats under the tab of that name..
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image2.png
   :align: center
@@ -24,7 +24,7 @@ If you click on the **Network** tab, then each front panel port will be displaye
   :align: center
   :scale: 70%
 
-If you click on the **CPU** tab, then CPU utlization across different time periods will be displyed for each fo the blades in this chassis partition.
+If you click on the **CPU** tab, then CPU utlization across different time periods will be displyed for each of the blades in this chassis partition.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image4.png
   :align: center
@@ -122,7 +122,7 @@ To list the current portgroup configuration issue the following API call:
 
 .. code-block:: bash
 
-  GET https://{{Production_IP}}:8888/restconf/data/f5-portgroup:portgroups
+  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-portgroup:portgroups
 
 .. code-block:: json
 
@@ -242,7 +242,7 @@ To list the current portgroup configuration issue the following API call:
 Network Settings -> Interfaces
 ------------------------------
 
-Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. A breakout cable is require to separate the different ports. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image6.png
   :align: center
@@ -272,12 +272,12 @@ You can click on any interface to view its settings or edit them. You can curren
 Configuring Interfaces from the CLI
 -----------------------------------
 
-Interfaces can be configured in the chassis partition CLI. As mentioned previously portgroups should be configured for their desired state before configuring any interfaces as the interface numbering may change. In the CLI enter config mode and then specify the interface you want to configure. If the interface is going to be part of a LAG, then most of the configuration is done within the LAG. Use the command **show running-config interfaces** to see the current configuration:
+Interfaces can be configured in the chassis partition CLI. As mentioned previously, portgroups should be configured for their desired state before configuring any interfaces as the interface numbering may change. In the CLI, enter config mode and then specify the interface you want to configure. If the interface is going to be part of a LAG, then most of the configuration is done within the LAG. Use the command **show running-config interfaces** to see the current configuration:
 
 
 .. code-block:: bash
 
-  bigpartition-2# show running-config interfaces 
+  Production-1# show running-config interfaces 
   interfaces interface 1/1.0
   config name 1/1.0
   config type ethernetCsmacd
@@ -323,24 +323,24 @@ Interfaces can be configured in the chassis partition CLI. As mentioned previous
   aggregation switched-vlan config trunk-vlans [ 500 ]
   !
 
-To make any changes you will need to enter config mode and then enter the interface to make changes. Be sure to commit any changes as they don’t take effect until the commit is issues.
+To make any changes you will need to enter **config** mode and then enter the **interface** to make changes. Be sure to **commit** any changes as they don’t take effect until the commit is issued.
 
 .. code-block:: bash
 
-  bigpartition-1# config
+  Production-1# config
   Entering configuration mode terminal
-  bigpartition-1(config)# interfaces interface 1/1.0
-  bigpartition-1(config-interface-1/1.0)# ethernet switched-vlan config trunk-vlans 500
-  bigpartition-1(config-interface-1/1.0)# commit
+  Production-1(config)# interfaces interface 1/1.0
+  Production-1(config-interface-1/1.0)# ethernet switched-vlan config trunk-vlans 500
+  Production-1(config-interface-1/1.0)# commit
 
 Configuring Interfaces from the API
 -----------------------------------
 
-The following API command will list all the current interfaces within the current chassis partition with their configuration and status: 
+The following API command will list all the current interfaces within the current chassis partition with their current configuration and status: 
 
 .. code-block:: bash
 
-  GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+  GET https://{{Chassis1_Development_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
 
 .. code-block:: json
 
@@ -475,11 +475,11 @@ The following API command will list all the current interfaces within the curren
   }
 
 
-To configure interfaces (that are not part of a LAG), use the following PATCH API call. In the example below VLANs are being assigned to the physical interfaces.
+To configure interfaces (that are not part of a LAG), use the following **PATCH** API call. In the example below, VLANs are being assigned to the physical interfaces.
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+  PATCH https://{{Chassis1_Development_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
 
 .. code-block:: json
 
@@ -548,7 +548,7 @@ To show the current configured VLANs and their options use the command **show ru
 
 .. code-block:: bash
 
-  bigpartition-1# show running-config vlans
+  Production-1# show running-config vlans
   vlans vlan 500
   config name HA-VLAN
   !
@@ -573,7 +573,7 @@ You can also see configured state of VLANs by running the **show vlans** command
 
 .. code-block:: bash
 
-  bigpartition-1# show vlans
+  Production-1# show vlans
   VLAN                   
   ID    INTERFACE        
   -----------------------
@@ -584,13 +584,13 @@ You can also see configured state of VLANs by running the **show vlans** command
   3010  Arista           
   3011  Arista  
 
-There are a few other VLAN related commands to show the configuration and running state of **vlan-listeners**. **show running-config vlan-listeners** will show the current configuration. A VLAN listener is created for each VLAN and is responsible for rebroadcasting traffic within the VLAN.
+There are a few other VLAN related commands to show the configuration and running state of **vlan-listeners**. The command **show running-config vlan-listeners** will show the current configuration. A VLAN listener is created for each VLAN and is responsible for rebroadcasting traffic within the VLAN.
 
 **NOTE: For Shared VLANs amongst different tenants, the VLAN must be tied to an external interface or LAG in order for the VLAN listener to be created.** 
 
 .. code-block:: bash
 
-  bigpartition-2# show running-config vlan-listeners 
+  Production-1# show running-config vlan-listeners 
   vlan-listeners vlan-listener Arista 444
   config entry-type RBCAST-LISTENER
   config owner rbcast
@@ -626,7 +626,7 @@ The **show vlan-listeners** command will show the current state:
 
 .. code-block:: bash
 
-  bigpartition-1# show vlan-listeners 
+  Production-1# show vlan-listeners 
                                                   NDI                                             SERVICE  
   INTERFACE        VLAN  ENTRY TYPE       OWNER    ID    SVC  VTC  SEP  DMS  DID  CMDS  MIRRORING  IDS      
   ----------------------------------------------------------------------------------------------------------
@@ -638,105 +638,174 @@ The **show vlan-listeners** command will show the current state:
 Configuring VLANs from the API
 ------------------------------
 
-To configure VLANs use the following API command and JSON body. This will configure 3 VLANs (Internal-VLAN, External-VLAN, & HA-VLAN) along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
+To configure VLANs use the following API command and JSON body. This will configure mul;tiple VLANs along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/
+  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/
 
 .. code-block:: json
 
-  {
-      "openconfig-vlan:vlans": {
-          "vlan": [
-              {
-                  "vlan-id": "444",
-                  "config": {
-                      "vlan-id": 444,
-                      "name": "Internal-VLAN"
-                  }
-              },
-              {
-                  "vlan-id": "555",
-                  "config": {
-                      "vlan-id": 555,
-                      "name": "External-VLAN"
-                  }
-              },
-              {
-                  "vlan-id": "500",
-                  "config": {
-                      "vlan-id": 500,
-                      "name": "HA-VLAN"
-                  }
-              }
-          ]
-      }
-  }
+    {
+        "openconfig-vlan:vlans": {
+            "vlan": [
+                {
+                    "vlan-id": "3010",
+                    "config": {
+                        "vlan-id": 3010,
+                        "name": "Internal-VLAN"
+                    }
+                },
+                {
+                    "vlan-id": "3011",
+                    "config": {
+                        "vlan-id": 3011,
+                        "name": "External-VLAN"
+                    }
+                },
+                {
+                    "vlan-id": "500",
+                    "config": {
+                        "vlan-id": 500,
+                        "name": "HA-VLAN"
+                    }
+                },
+                {
+                    "vlan-id": "501",
+                    "config": {
+                        "vlan-id": 501,
+                        "name": "HA-VLAN-Tenant1"
+                    }
+                },
+                {
+                    "vlan-id": "502",
+                    "config": {
+                        "vlan-id": 502,
+                        "name": "HA-VLAN-Tenant2"
+                    }
+                },
+                {
+                    "vlan-id": "503",
+                    "config": {
+                        "vlan-id": 503,
+                        "name": "HA-VLAN-Tenant3"
+                    }
+                }
+            ]
+        }
+    }
 
 
 The following command will list the configuration and status of all VLANs within the current chassis partition:
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/openconfig-vlan:vlans
+  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/openconfig-vlan:vlans
 
 .. code-block:: json
 
-  {
-      "openconfig-vlan:vlans": {
-          "vlan": [
-              {
-                  "vlan-id": 444,
-                  "config": {
-                      "vlan-id": 444,
-                      "name": "Internal-VLAN"
-                  },
-                  "members": {
-                      "member": [
-                          {
-                              "state": {
-                                  "interface": "Arista"
-                              }
-                          }
-                      ]
-                  }
-              },
-              {
-                  "vlan-id": 500,
-                  "config": {
-                      "vlan-id": 500,
-                      "name": "HA-VLAN"
-                  },
-                  "members": {
-                      "member": [
-                          {
-                              "state": {
-                                  "interface": "HA-Interconnect"
-                              }
-                          }
-                      ]
-                  }
-              },
-              {
-                  "vlan-id": 555,
-                  "config": {
-                      "vlan-id": 555,
-                      "name": "External-VLAN"
-                  },
-                  "members": {
-                      "member": [
-                          {
-                              "state": {
-                                  "interface": "Arista"
-                              }
-                          }
-                      ]
-                  }
-              }
-          ]
-      }
-  }
+    {
+        "openconfig-vlan:vlans": {
+            "vlan": [
+                {
+                    "vlan-id": 500,
+                    "config": {
+                        "vlan-id": 500,
+                        "name": "HA-VLAN"
+                    },
+                    "members": {
+                        "member": [
+                            {
+                                "state": {
+                                    "interface": "HA-Interconnect"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "vlan-id": 501,
+                    "config": {
+                        "vlan-id": 501,
+                        "name": "HA-VLAN-Tenant1"
+                    },
+                    "members": {
+                        "member": [
+                            {
+                                "state": {
+                                    "interface": "HA-Interconnect"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "vlan-id": 502,
+                    "config": {
+                        "vlan-id": 502,
+                        "name": "HA-VLAN-Tenant2"
+                    },
+                    "members": {
+                        "member": [
+                            {
+                                "state": {
+                                    "interface": "HA-Interconnect"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "vlan-id": 503,
+                    "config": {
+                        "vlan-id": 503,
+                        "name": "HA-VLAN-Tenant3"
+                    },
+                    "members": {
+                        "member": [
+                            {
+                                "state": {
+                                    "interface": "HA-Interconnect"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "vlan-id": 3010,
+                    "config": {
+                        "vlan-id": 3010,
+                        "name": "Internal-VLAN"
+                    },
+                    "members": {
+                        "member": [
+                            {
+                                "state": {
+                                    "interface": "Arista"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "vlan-id": 3011,
+                    "config": {
+                        "vlan-id": 3011,
+                        "name": "External-VLAN"
+                    },
+                    "members": {
+                        "member": [
+                            {
+                                "state": {
+                                    "interface": "Arista"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
 
 ------------------------
 Network Settings -> LAGs
@@ -753,7 +822,7 @@ Link Aggregation Groups (LAGs) can be configured in the chassis partition webUI 
   :align: center
   :scale: 70% 
 
-You can add a new LAG or edit an existing one. For **LAG Type** the options are **LACP** or **STATIC**. If you choose LACP then you have additional options for **LACP Interval** (**SLOW** or **FAST**) and **LACP Mode** (**ACTIVE** or **PASSIVE**). LACP best practices should follow previous BIG-IP examples as outlined in the links below. Note in BIG-IP the term Trunks is used in place of LAG which is used in VELOS: 
+You can add a new LAG or edit an existing one. For **LAG Type** the options are **LACP** or **STATIC**. If you choose LACP, then you have additional options for **LACP Interval** (**SLOW** or **FAST**) and **LACP Mode** (**ACTIVE** or **PASSIVE**). LACP best practices should follow previous BIG-IP examples as outlined in the links below. Note in BIG-IP the term **Trunks** is used in place of **LAG** which is used in the F5OS layer in VELOS: 
 
 https://support.f5.com/csp/article/K1689
 
@@ -777,29 +846,29 @@ Within the webUI LAGs and LACP parameters are configured within the LAG webUI pa
 
 .. code-block:: bash
 
-  bigpartition-1# config
+  Production-1# config
   Entering configuration mode terminal
-  bigpartition-1(config)# lacp interfaces interface Arista config name Arista
-  bigpartition-1(config-interface-Arista)# config interval FAST 
-  bigpartition-1(config-interface-Arista)# config lacp-mode ACTIVE 
-  bigpartition-1(config-interface-Arista)# commit 
+  Production-1(config)# lacp interfaces interface Arista config name Arista
+  Production-1(config-interface-Arista)# config interval FAST 
+  Production-1(config-interface-Arista)# config lacp-mode ACTIVE 
+  Production-1(config-interface-Arista)# commit 
 
 
 Next configure the interface aggregation:
 
 .. code-block:: bash
 
-  bigpartition-1(config)# interfaces interface Arista aggregation config distribution-hash src-dst-ipport  
-  bigpartition-1(config-interface-Arista)#  aggregation config lag-type LACP
-  bigpartition-1(config-interface-Arista)#  aggregation switched-vlan config trunk-vlans [ 444 555 ]
-  bigpartition-1(config-interface-Arista)#  commit
+  Production-1(config)# interfaces interface Arista aggregation config distribution-hash src-dst-ipport  
+  Production-1(config-interface-Arista)#  aggregation config lag-type LACP
+  Production-1(config-interface-Arista)#  aggregation switched-vlan config trunk-vlans [ 3010 3011 ]
+  Production-1(config-interface-Arista)#  commit
 
 
 You can view the current interface aggregation configurations in the CLI by running the command **show running-config interfaces interface aggregation** command. This will show the current aggregation interfaces, lag-type, distribution hash, and VLANs assigned to each lag:
 
 .. code-block:: bash
 
-  bigpartition-1# show running-config interfaces interface aggregation 
+  Production-1# show running-config interfaces interface aggregation 
   interfaces interface Arista
   aggregation config lag-type LACP
   aggregation config distribution-hash src-dst-ipport
@@ -810,13 +879,13 @@ You can view the current interface aggregation configurations in the CLI by runn
   aggregation config distribution-hash src-dst-ipport
   aggregation switched-vlan config trunk-vlans [ 500 501 502 503 ]
   !
-  bigpartition-1#
+  Production-1#
 
 Finally, you must configure interfaces to be part of the LAG. Below are examples of interface 1/1.0 and 2/2.0 being added to the aggregate-id **HA-Interconnect**, and interfaces 1/2.0 and 2/1.0 being added to the aggregate **Arista**.
 
 .. code-block:: bash
 
-  bigpartition-1# show running-config interfaces 
+  Production-1# show running-config interfaces 
   interfaces interface 1/1.0
   config type ethernetCsmacd
   config enabled
@@ -855,7 +924,7 @@ You can also view the current lacp configuration for each LAG by issuing the **s
 
 .. code-block:: bash
 
-  bigpartition-1# show running-config lacp
+  Production-1# show running-config lacp
   lacp config system-priority 32768
   lacp interfaces interface Arista
   config name Arista
@@ -867,14 +936,14 @@ You can also view the current lacp configuration for each LAG by issuing the **s
   config interval FAST
   config lacp-mode ACTIVE
   !
-  bigpartition-1# 
+  Production-1# 
 
 
-To see that status of the LACP interfaces run the command **show lacp**. It is best to widen your terminal screen as the output is dynamic and will display better on a wider terminal screen in more of a table format:
+To see the status of the LACP interfaces run the command **show lacp**. It is best to widen your terminal screen as the output is dynamic and will display better on a wider terminal screen in more of a table format:
 
 .. code-block:: bash
 
-  bigpartition-1# show lacp
+  Production-1# show lacp
   lacp state system-id-mac 00:94:a1:8e:d0:08
                                                                                                                                                                                                                                   PARTNER  LACP    LACP    LACP    LACP    LACP             
                                               LACP                                                                                                                                        OPER                     PARTNER  PORT  PORT     IN      OUT     RX      TX      UNKNOWN  LACP    
@@ -885,14 +954,14 @@ To see that status of the LACP interfaces run the command **show lacp**. It is b
   HA-Interconnect  HA-Interconnect  FAST      ACTIVE  0:94:a1:8e:d0:8  1/1.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  3     0:94:a1:8e:58:28   3        4224  8448     714114  713959  0       0       0        0       
                                                                       2/2.0      -          ACTIVE    SHORT    IN_SYNC          true          true        true          0:94:a1:8e:d0:8  3     0:94:a1:8e:58:28   3        8448  4224     714155  713959  0       0       0        0       
 
-  bigpartition-1# 
+  Production-1# 
 
 
 If you have shorter width terminal, then the output above may be condensed as seen below:
 
 .. code-block:: bash
 
-  bigpartition-1# show lacp
+  Production-1# show lacp
   lacp state system-id-mac 00:94:a1:8e:d0:08
   lacp interfaces interface Arista
   state name    Arista
@@ -980,7 +1049,7 @@ If you have shorter width terminal, then the output above may be condensed as se
     state counters lacp-tx-errors 0
     state counters lacp-unknown-errors 0
     state counters lacp-errors 0
-  bigpartition-1# 
+  Production-1# 
 
 Configuring LAGs from the API
 -----------------------------

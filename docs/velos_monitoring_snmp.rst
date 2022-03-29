@@ -36,15 +36,15 @@ Setting up SNMP can de done from the CLI by enabling an SNMP community. Below is
 .. code-block:: bash
 
 
-    bigpartition-1# config
+    Production-1# config
     Entering configuration mode terminal
-    bigpartition-1(config)# SNMP-COMMUNITY-MIB snmpCommunityTable snmpCommunityEntry public snmpCommunityName public snmpCommunitySecurityName public
-    bigpartition-1(config-snmpCommunityEntry-public)# exit
-    bigpartition-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 2 public vacmGroupName read-access
-    bigpartition-1(config-vacmSecurityToGroupEntry-2/public)# exit
-    bigpartition-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 1 public vacmGroupName read-access
-    bigpartition-1(config-vacmSecurityToGroupEntry-1/public)# exit
-    bigpartition-1(config)# commit
+    Production-1(config)# SNMP-COMMUNITY-MIB snmpCommunityTable snmpCommunityEntry public snmpCommunityName public snmpCommunitySecurityName public
+    Production-1(config-snmpCommunityEntry-public)# exit
+    Production-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 2 public vacmGroupName read-access
+    Production-1(config-vacmSecurityToGroupEntry-2/public)# exit
+    Production-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 1 public vacmGroupName read-access
+    Production-1(config-vacmSecurityToGroupEntry-1/public)# exit
+    Production-1(config)# commit
     Commit complete.
 
 
@@ -552,10 +552,10 @@ SNMP information is captured in the **snmp.log** located with the **log** direct
 
 .. code-block:: bash
 
-    bigpartition-1# file tail -n 20 log/
+    Production-1# file tail -n 20 log/
     Possible completions:
     audit.log  auth.log  confd.log  devel.log  ext-auth-err.log  ext-val-err.log  httpd/  logrotate.log  logrotate.log.1  logrotate.log.2.gz  partition_sync.log  rsyslogd_init.log  snmp.log  startup.log  startup.log.prev  trace/  vconsole_auth.log  vconsole_startup.log  velos.log  webui/
-    bigpartition-1# file tail -n 20 log/snmp.log 
+    Production-1# file tail -n 20 log/snmp.log 
     <INFO> 24-Sep-2021::06:10:36.000 partition2 confd[103]: snmp get-next-request reqid=1512684928 172.18.104.29:50858 (INTEGER vacmAccessContextMatch.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1)(OCTET STRING vacmAccessReadViewName.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1)(OCTET STRING vacmAccessNotifyViewName.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1)(INTEGER vacmAccessStorageType.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1)(INTEGER vacmAccessStatus.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1)
     <INFO> 24-Sep-2021::06:10:36.003 partition2 confd[103]: snmp get-response reqid=1512684928 172.18.104.29:50858 (OCTET STRING vacmAccessReadViewName.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1=internet)(OCTET STRING vacmAccessNotifyViewName.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1=internet)(INTEGER vacmAccessStorageType.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1=3)(INTEGER vacmAccessStatus.11.114.101.97.100.45.97.99.99.101.115.115.0.0.1=1)(INTEGER vacmViewSpinLock=1837836215)
     <INFO> 24-Sep-2021::06:10:43.510 partition2 confd[103]: snmp get-next-request reqid=1512684931 172.18.104.29:50859 (OCTET STRING vacmViewTreeFamilyViewName.)(OBJECT IDENTIFIER vacmViewTreeFamilySubtree.)(OCTET STRING vacmViewTreeFamilyMask.)(INTEGER vacmViewTreeFamilyType.)(INTEGER vacmViewTreeFamilyStorageType.)(INTEGER vacmViewTreeFamilyStatus.)
@@ -576,7 +576,7 @@ SNMP information is captured in the **snmp.log** located with the **log** direct
     <INFO> 24-Sep-2021::17:47:04.751 partition2 confd[103]: snmp get-request reqid=6728306 172.23.81.81:42172 (OCTET STRING sysDescr)
     <INFO> 24-Sep-2021::17:47:14.754 partition2 confd[103]: snmp get-request reqid=6728306 172.23.81.81:42172 (OCTET STRING sysDescr)
     <INFO> 24-Sep-2021::17:47:24.760 partition2 confd[103]: snmp get-request reqid=6728306 172.23.81.81:42172 (OCTET STRING sysDescr)
-    bigpartition-1# 
+    Production-1# 
 
 
 

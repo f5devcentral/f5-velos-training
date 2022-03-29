@@ -186,17 +186,17 @@ Log directly into the chassis partition bigpartitions management IP address and 
 
 .. code-block:: bash
 
-    bigpartition-1# config
+    Production-1# config
     Entering configuration mode terminal
-    bigpartition-1(config)# system database config-backup name chassis-partition-bigbartition-08-17-2021
+    Production-1(config)# system database config-backup name chassis-partition-bigbartition-08-17-2021
     result Database backup successful.
-    bigpartition-1(config)# exit
-    bigpartition-1# file list path configs/
+    Production-1(config)# exit
+    Production-1# file list path configs/
     entries {
         name 
     chassis-partition-bigbartition-08-17-2021
     }
-    bigpartition-1# 
+    Production-1# 
 
 
 Log directly into the chassis partition smallpartition's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
@@ -264,12 +264,12 @@ To backup chassis partition bigpartition:
 
 .. code-block:: bash
 
-    bigpartition-1# file list path configs/
+    Production-1# file list path configs/
     entries {
         name 
     chassis-partition-bigpartition-08-17-2021
     }
-    bigpartition-1# 
+    Production-1# 
 
 To transfer the file from the CLI you can use the **file export** command. Note that the file export command requires a remote HTTPS server that the file can be posted to. 
 
@@ -1002,24 +1002,24 @@ Log directly into the chassis partition CLI and use the **file import** command 
 
 .. code-block:: bash
 
-    bigpartition-1# file import remote-host 10.255.0.142 remote-file /upload/bigpartition-DB-BACKUP2021-09-10 local-file configs/bigpartition-DB-BACKUP2021-09-10 username corpuser insecure  
+    Production-1# file import remote-host 10.255.0.142 remote-file /upload/bigpartition-DB-BACKUP2021-09-10 local-file configs/bigpartition-DB-BACKUP2021-09-10 username corpuser insecure  
     Value for 'password' (<string>): ********
     result File transfer is initiated.(configs/bigpartition-DB-BACKUP2021-09-10)
 
 
-    bigpartition-1# file transfer-status 
+    Production-1# file transfer-status 
     result 
     S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                
     1    |Import file|HTTPS   |configs/bigpartition-DB-BACKUP2021-09-10                    |10.255.0.142        |/upload/bigpartition-DB-BACKUP2021-09-10                    |         Completed|Wed Sep 15 03:15:43 2021
 
 
 
-    bigpartition-1# file list path configs/
+    Production-1# file list path configs/
     entries {
         name 
     bigpartition-DB-BACKUP2021-09-10
     }
-    bigpartition-1# 
+    Production-1# 
 
 Repeat this process for each chassis partition in the system.
 
@@ -1115,15 +1115,15 @@ To restore a configuration database backup within a chassis partition, use the *
 
 .. code-block:: bash
 
-    bigpartition-1(config)# system database config-restore name bigpartition-DB-BACKUP2021-09-10
+    Production-1(config)# system database config-restore name bigpartition-DB-BACKUP2021-09-10
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
     result Database config-restore successful.
-    bigpartition-1(config)# 
+    Production-1(config)# 
     System message at 2021-09-15 03:25:53...
     Commit performed by admin via tcp using cli.
-    bigpartition-1(config)# 
+    Production-1(config)# 
 
 
     smallpartition-1(config)# system database config-restore name smallpartition-DB-BACKUP2021-09-10
@@ -1154,14 +1154,14 @@ This can be seen in the chassis partition CLI by using the **show tenants** comm
 
  .. code-block:: bash
 
-    bigpartition-1# show images 
+    Production-1# show images 
                                                     IN                  
     NAME                                            USE    STATUS       
     --------------------------------------------------------------------
     BIGIP-15.1.4-0.0.46.ALL-VELOS.qcow2.zip.bundle  false  not-present  
 
 
-    bigpartition-1# show images
+    Production-1# show images
                                                     IN                 
     NAME                                            USE    STATUS      
     -------------------------------------------------------------------

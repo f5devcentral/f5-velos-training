@@ -384,7 +384,7 @@ Once a tenant is created from the chassis partition CLI enter the command **show
 
 .. code-block:: bash
 
-    bigpartition-1# show system aaa authentication      
+    Production-1# show system aaa authentication      
             LAST    TALLY  EXPIRY                  
     USERNAME  CHANGE  COUNT  DATE    ROLE            
     -------------------------------------------------
@@ -407,11 +407,11 @@ For tenant2 to have console access you must first set a password for that user u
 
 .. code-block:: bash
 
-    bigpartition-1(config)# system aaa authentication users user tenant2 config set-password password      
+    Production-1(config)# system aaa authentication users user tenant2 config set-password password      
     Value for 'password' (<string>): **************
-    bigpartition-1(config)# system aaa authentication users user tenant2 config expiry-date                                                                                                                                    
+    Production-1(config)# system aaa authentication users user tenant2 config expiry-date                                                                                                                                    
     (<string>) (1): -1
-    bigpartition-1(config-user-tenant2)# commit 
+    Production-1(config-user-tenant2)# commit 
     Commit complete.
 
 Now it will be possible to remotely ssh using a specific username and port pointed at the chassis partition IP address to connect directly to the console port of the tenant. The username will be the name of the tenant, and the port will be the instance tcp port 700x (where x is the instance ID of that tenant). Below is an example of the output from the **show tenants** command within the chassis partition. The tenant **tenant2** is running on two blades so it has two instance ID’s 1 & 2. You can connect to either one of these instances via the console using tenant2 as the username and either port 7001 or 7002. 
