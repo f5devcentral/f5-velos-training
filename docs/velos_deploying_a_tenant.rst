@@ -7,7 +7,7 @@ Deploying a Tenant
 Tenant Image Types
 ------------------
 
-VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 & 15.1.4), they can be found on downloads.f5.com:
+Tenant Images for F5OS/VELOS are avilable on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 and later, & 15.1.4 and later), There is no plan to support v16.x tenants, and the next targeted tenant release will be v17.1. Tenant images for VELOS can be founf on downaloads.f5.com.
 
 .. image:: images/velos_deploying_a_tenant/image64.png
   :align: center
