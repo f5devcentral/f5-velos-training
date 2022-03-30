@@ -249,13 +249,249 @@ You’ll see output similar to the example below. Once the file shows up here yo
     }
 
 Upgrading the System Controllers via webUI
-----------------------------------------
+------------------------------------------
 
 Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support traffic disruption should be minimal during the upgrade process.
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
   :scale: 70%
+
+
+Upgrading the System Controllers via CLI
+----------------------------------------
+
+In the system controller CLI you can use the **show image** command to see the currently installed software versions for each system controller.
+
+.. code-block:: bash
+
+    syscon-1-active# show image
+    VERSION OS                                   IN     
+    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
+    ----------------------------------------------------
+    1.1.2-6101   1           ready               false  
+    1.2.0-10357  1           ready   2021-08-21  false  
+    1.2.1-10692  1           ready   2021-08-30  false  
+    1.2.1-10781  1           ready   2021-09-01  true   
+
+    VERSION                                             
+    SERVICE                                      IN     
+    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
+    ----------------------------------------------------
+    1.1.0-6101   1           ready   2021-05-09  false  
+    1.1.2-6101   1           ready   2021-05-09  false  
+    1.2.0-10357  1           ready   2021-08-21  false  
+    1.2.1-10692  1           ready   2021-08-30  false  
+    1.2.1-10781  1           ready   2021-09-01  true   
+
+    VERSION ISO                                  IN     
+    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
+    ----------------------------------------------------
+    1.1.2-6101   1           ready   2021-05-09  false  
+    1.2.0-10357  1           ready   2021-08-21  false  
+    1.2.1-10692  1           ready   2021-08-30  false  
+    1.2.1-10781  1           ready   2021-09-01  false  
+
+    VERSION OS                                   IN     
+    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
+    ----------------------------------------------------
+    1.1.2-6101   2           ready   2021-05-09  false  
+    1.2.0-10357  2           ready   2021-08-21  false  
+    1.2.1-10692  2           ready   2021-08-30  false  
+    1.2.1-10781  2           ready   2021-09-01  true   
+
+    VERSION                                             
+    SERVICE                                      IN     
+    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
+    ----------------------------------------------------
+    1.1.0-6101   2           ready   2021-05-09  false  
+    1.1.2-6101   2           ready   2021-05-09  false  
+    1.2.0-10357  2           ready   2021-08-21  false  
+    1.2.1-10692  2           ready   2021-08-30  false  
+    1.2.1-10781  2           ready   2021-09-01  true   
+
+    VERSION ISO                                  IN     
+    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
+    ----------------------------------------------------
+    1.1.2-6101   2           ready   2021-05-09  false  
+    1.2.0-10357  2           ready   2021-08-21  false  
+    1.2.1-10692  2           ready   2021-08-30  false  
+    1.2.1-10781  2           ready   2021-09-01  false  
+
+    VERSION OS                                   IN               
+    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME  ID  
+    --------------------------------------------------------------
+    1.2.0-10357  1           ready   2021-08-21  false            
+    1.2.1-10692  1           ready   2021-08-30  false            
+
+    VERSION                                                          
+    SERVICE                                      IN                  
+    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME     ID  
+    -----------------------------------------------------------------
+    1.2.0-10357  1           ready   2021-08-21  false               
+    1.2.1-10692  1           ready   2021-08-30  true   default  1   
+
+    VERSION ISO                                  IN                         
+    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
+    ------------------------------------------------------------------------
+    1.2.0-10357  1           ready   2021-08-21  false                      
+    1.2.1-10692  1           ready   2021-08-30  true   Production    2   
+                                                        default         1   
+                                                        smallpartition  3   
+
+    VERSION OS                                   IN               
+    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME  ID  
+    --------------------------------------------------------------
+    1.2.0-10357  2           ready   2021-08-21  false            
+    1.2.1-10692  2           ready   2021-08-30  false            
+
+    VERSION                                                          
+    SERVICE                                      IN                  
+    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME     ID  
+    -----------------------------------------------------------------
+    1.2.0-10357  2           ready   2021-08-21  false               
+    1.2.1-10692  2           ready   2021-08-30  true   default  1   
+
+    VERSION ISO                                  IN                         
+    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
+    ------------------------------------------------------------------------
+    1.2.0-10357  2           ready   2021-08-21  false                      
+    1.2.1-10692  2           ready   2021-08-30  true   Production    2   
+                                                        default         1   
+                                                        smallpartition  3   
+
+    syscon-1-active# 
+
+The command show running-config image will show the current configuration for software images. You can enter config mode and change the configuration using the system image set-version command and then commit to initiate an upgrade.
+
+.. code-block:: bash
+
+    syscon-1-active# show running-config image 
+    image controller config os os 1.1.2-6101
+    !
+    image controller config os os 1.2.0-10357
+    !
+    image controller config os os 1.2.1-10692
+    !
+    image controller config os os 1.2.1-10781
+    !
+    image controller config services service 1.1.0-6101
+    !
+    image controller config services service 1.1.2-6101
+    !
+    image controller config services service 1.2.0-10357
+    !
+    image controller config services service 1.2.1-10692
+    !
+    image controller config services service 1.2.1-10781
+    !
+    image controller config iso iso 1.1.2-6101
+    service 1.1.2-6101
+    os      1.1.2-6101
+    !
+    image controller config iso iso 1.2.0-10357
+    service 1.2.0-10357
+    os      1.2.0-10357
+    !
+    image controller config iso iso 1.2.1-10692
+    service 1.2.1-10692
+    os      1.2.1-10692
+    !
+    image controller config iso iso 1.2.1-10781
+    service 1.2.1-10781
+    os      1.2.1-10781
+    !
+    image partition config os os 1.2.0-10357
+    !
+    image partition config os os 1.2.1-10692
+    !
+    image partition config services service 1.2.0-10357
+    !
+    image partition config services service 1.2.1-10692
+    !
+    image partition config iso iso 1.2.0-10357
+    service 1.2.0-10357
+    os      1.2.0-10357
+    !
+    image partition config iso iso 1.2.1-10692
+    service 1.2.1-10692
+    os      1.2.1-10692
+    !
+    syscon-1-active# 
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system image set-version iso-version 1.2.1-10781 
+    response Controller iso version has been set
+    syscon-1-active(config)# 
+
+
+An upgrade of the system controllers should automatically start after the above command is entered. You can follow the upgrade progress by issuing the command **show system image**:
+
+.. code-block:: bash
+
+    syscon-2-active# show system image 
+                        SERVICE      ISO      INSTALL      
+    NUMBER  OS VERSION   VERSION      VERSION  STATUS       
+    --------------------------------------------------------
+    1       1.2.1-10692  1.2.1-10692  -        in-progress  
+    2       1.2.1-10692  1.2.1-10692  -        pending      
+
+    syscon-2-active# 
+
+
+Upgrading the System Controllers via API
+----------------------------------------
+
+To upgrade the system controllers via the API you must first run the check version API call with the version you want to update to:
+
+.. code-block:: bash
+
+ POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/check-version
+
+.. code-block:: json
+
+    {
+        "input": {
+            "iso-version": "{{Partition_ISO_Image}}"
+        }
+    }
+
+If the compatability check then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+
+.. code-block:: json
+
+    {
+        "f5-system-partition:output": {
+            "result": "Partition upgrade compatibility check succeeded."
+        }
+    }
+
+This is the Set Version API call that will initiate the upgrade:
+
+.. code-block:: bash
+
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/set-version
+
+.. code-block:: json
+
+    {
+        "input": {
+            "iso-version": "{{Partition_ISO_Image}}"
+        }
+    }
+
+If the upgrade is successful, you will get notification like the message below:
+
+.. code-block:: json
+
+    {
+        "f5-system-partition:output": {
+            "result": "Version update successful."
+        }
+    }
+
+
 
 Chassis Partition Upgrades
 ==========================
@@ -374,82 +610,7 @@ In the system controller CLI you can use the **show image** command to see the c
 
     syscon-1-active# 
 
-The command **show running-config image** will show the current configuration for software images. You can enter **config** mode and change the configuration using the **system image set-version** command and then commit to initiate an upgrade.
-
-.. code-block:: bash
-
-    syscon-1-active# show running-config image 
-    image controller config os os 1.1.2-6101
-    !
-    image controller config os os 1.2.0-10357
-    !
-    image controller config os os 1.2.1-10692
-    !
-    image controller config os os 1.2.1-10781
-    !
-    image controller config services service 1.1.0-6101
-    !
-    image controller config services service 1.1.2-6101
-    !
-    image controller config services service 1.2.0-10357
-    !
-    image controller config services service 1.2.1-10692
-    !
-    image controller config services service 1.2.1-10781
-    !
-    image controller config iso iso 1.1.2-6101
-    service 1.1.2-6101
-    os      1.1.2-6101
-    !
-    image controller config iso iso 1.2.0-10357
-    service 1.2.0-10357
-    os      1.2.0-10357
-    !
-    image controller config iso iso 1.2.1-10692
-    service 1.2.1-10692
-    os      1.2.1-10692
-    !
-    image controller config iso iso 1.2.1-10781
-    service 1.2.1-10781
-    os      1.2.1-10781
-    !
-    image partition config os os 1.2.0-10357
-    !
-    image partition config os os 1.2.1-10692
-    !
-    image partition config services service 1.2.0-10357
-    !
-    image partition config services service 1.2.1-10692
-    !
-    image partition config iso iso 1.2.0-10357
-    service 1.2.0-10357
-    os      1.2.0-10357
-    !
-    image partition config iso iso 1.2.1-10692
-    service 1.2.1-10692
-    os      1.2.1-10692
-    !
-    syscon-1-active# 
-
-.. code-block:: bash
-
-    syscon-1-active(config)# system image set-version iso-version 1.2.1-10781 
-    response Controller iso version has been set
-    syscon-1-active(config)# 
-
-
-An upgrade of the system controllers should automatically start after the above command is entered. You can follow the upgrade progress by issuing the command **show system image**:
-
-.. code-block:: bash
-
-    syscon-2-active# show system image 
-                        SERVICE      ISO      INSTALL      
-    NUMBER  OS VERSION   VERSION      VERSION  STATUS       
-    --------------------------------------------------------
-    1       1.2.1-10692  1.2.1-10692  -        in-progress  
-    2       1.2.1-10692  1.2.1-10692  -        pending      
-
-    syscon-2-active# 
+The command **show running-config image** will show the current configuration for software images. You can enter **config** mode and change the configuration using the **system image set-version** command and then **commit** to initiate an upgrade.
 
 
 Upgrading a Chassis Partition via the API
@@ -493,7 +654,7 @@ This is the Set Version API call that will initiate the upgrade:
         }
     }
 
-If the upgrad is successful, you will get notification like the message below:
+If the upgrade is successful, you will get notification like the message below:
 
 .. code-block:: json
 
