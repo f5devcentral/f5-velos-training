@@ -2,14 +2,14 @@
 Software Upgrades
 =================
 
-System Controller Upgrades
-==========================
+F5OS-C System Controller Upgrades
+=================================
 
-The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS have introduced a rolling upgrade capability for the system controller upgrade process which minimizes disruption to the chassis. The chassis must be already running a version of f5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x version to 1.2.x version will not see rolling upgrade functionality.
+The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C have introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
 
-This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and fail over all services to the other chassis that is paired with the one you’re upgrading.
+This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and fail over all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers a rolling upgrade occurs where the standby controllers is upgraded first, and when completed thit will go to an acitve state, and the remaining controller will be upgraded.
 
-When upgrading the system controllers, you will have a choice of upgrading either a bundled release meaning **OS** and **Services** are **bundled** together in an ISO image or **unbundled** where you can upgrade service and/or OS independently.
+When upgrading the system controllers, you will have a choice of upgrading either a bundled release meaning **OS** and **Services** are **bundled** together in an ISO image or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled / ISO option for upgrades at this time. In the future, unbundled options may be utilized for some upgrades.
 
 .. image:: images/velos_software_upgrades/image1.png
   :align: center
@@ -34,26 +34,26 @@ You can do this from the **Software Management -> Partitions Image** and **Contr
   :align: center
   :scale: 70%
 
-When you click **Add**, you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. In the current F5OS versions there is no option to upload directly from your browser (this will be added in a future release). You will need to have a remote HTTPS server that allows downloads to import images into the system via the webUI.
+Click **Add** and you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. You will need to have a remote HTTPS server that allows downloads in order to import images into the system via the webUI. You can alternatively use the **Upload** option to upload an F5OS-C system controller or partition ISO file form a client machine through the browser.
 
-You can alternatively upload F5OS images for both the system controllers and the chassis partitions using the **Sysyem Settings > File Utilities** page.
+You can also upload or import F5OS-C images for both the system controllers and the chassis partitions using the **System Settings > File Utilities** page.
 
 .. image:: images/velos_software_upgrades/image5.png
   :align: center
   :scale: 70%
 
-  Alternatively, you may also upload images to the controller through the **System Settings -> File Utilities** page. You can select the **images/staging** option form the drop-down menu to import new controller or partition images. Once uploaded into the staging area they will be imported and made available for upgrades after a brief delay.
+Alternatively, you may also upload images to the controller through the **System Settings -> File Utilities** page. You can select the **images/staging** option form the drop-down menu to import new controller or partition images. Once uploaded into the staging area they will be imported and made available for upgrades after a brief delay.
 
 .. image:: images/velos_software_upgrades/image6.png
   :align: center
   :scale: 70%
 
-After the upload completes, it will take some time for it to be replicated to the standby system controller. At that point it should show up in the CLI and webUI. If you don’t see it immediately be patient and wait a few minutes for it to show up as it will not show up until the internal replication is completed.
+After the upload completes, it will take some time for it to be replicated to the standby system controller. At that point it should show up in the CLI and webUI. If you don’t see it immediately, be patient and wait a few minutes for it to show up, as it will not appear until the internal replication is completed.
 
 Uploading Controller and Partition Images via the CLI
 -----------------------------------------------------
 
-As with the webUI, the current implementation of **file import** in the CLI relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** command.
+The current implementation of **file import** in the CLI relies on either a remote HTTPS, SCP, or SFTP server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated, you can check its status using the **file transfer-status** command.
 
 
 .. code-block:: bash
@@ -78,13 +78,15 @@ You can alternatively copy the controller and partition images into the floating
 Uploading Controller and Partition Images via the API
 -----------------------------------------------------
 
-As with the webUI, the current implementation of **file import** in the API relies on a remote HTTPS server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
+As with the webUI, the current implementation of **file import** in the API relies on either a remote HTTPS, SCP, or SFTP server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
 
 List the current system controller and partitions images in the images/staging directory via API calls:
 
 .. code-block:: bash
 
     POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+The following JSON should be in the payload of the API call above.
 
     .. code-block:: json
 
@@ -249,7 +251,7 @@ You’ll see output similar to the example below. Once the file shows up here yo
 Upgrading the System Controllers via webUI
 ----------------------------------------
 
-Once the new images are loaded you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click Save the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality.
+Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support traffic disruption should be minimal during the upgrade process.
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
@@ -258,7 +260,6 @@ Once the new images are loaded you can perform the upgrade from the **System Set
 Chassis Partition Upgrades
 ==========================
 
------------------------------------------
 Upgrading a Chassis Partition via the webUI
 -----------------------------------------
 
@@ -268,7 +269,7 @@ Upgrade of chassis partitions is performed from the system controller webUI **Pa
   :align: center
   :scale: 70%
 
------------------------------------------
+
 Upgrading a Chassis Partition via the CLI
 -----------------------------------------
 
@@ -450,7 +451,7 @@ An upgrade of the system controllers should automatically start after the above 
 
     syscon-2-active# 
 
------------------------------------------
+
 Upgrading a Chassis Partition via the API
 -----------------------------------------
 
