@@ -52,7 +52,7 @@ You can configure the SNMP System paramters including the System Contact, System
 
 .. code-block:: bash
 
-    Production-1(config)# SNMPv2-MIB system sysContact jim@f5.com sysLocation Boston sysName VELOS-bigpartition
+    Production-1(config)# SNMPv2-MIB system sysContact jim@f5.com sysLocation Boston sysName VELOS-Production
     Production-1(config)# commit
 
 
@@ -111,7 +111,7 @@ Exmaple output:
     sysObjectID.0	system	OID	10.255.0.148:161
     sysUpTime.0	1 hour 13 minutes 13.88 seconds (439388)	TimeTicks	10.255.0.148:161
     sysContact.0	jim@f5.com	OctetString	10.255.0.148:161
-    sysName.0	VELOS-bigpartition	OctetString	10.255.0.148:161
+    sysName.0	VELOS-Production	OctetString	10.255.0.148:161
     sysLocation.0	Boston	OctetString	10.255.0.148:161
     sysServices.0	72	Integer	10.255.0.148:161
     .1.3.6.1.2.1.1.8.0	190 milliseconds (19)	TimeTicks	10.255.0.148:161

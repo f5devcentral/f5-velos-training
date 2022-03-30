@@ -4598,12 +4598,12 @@ API Monitoring of Chassis Partitions from the System Controller
                 {
                     "slot-num": 1,
                     "enabled": true,
-                    "partition": "bigpartition"
+                    "partition": "Production"
                 },
                 {
                     "slot-num": 2,
                     "enabled": true,
-                    "partition": "bigpartition"
+                    "partition": "Production"
                 },
                 {
                     "slot-num": 3,

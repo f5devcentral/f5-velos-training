@@ -346,7 +346,7 @@ In the system controller CLI you can use the **show image** command to see the c
     PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
     ------------------------------------------------------------------------
     1.2.0-10357  1           ready   2021-08-21  false                      
-    1.2.1-10692  1           ready   2021-08-30  true   bigpartition    2   
+    1.2.1-10692  1           ready   2021-08-30  true   Production    2   
                                                         default         1   
                                                         smallpartition  3   
 
@@ -367,7 +367,7 @@ In the system controller CLI you can use the **show image** command to see the c
     PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
     ------------------------------------------------------------------------
     1.2.0-10357  2           ready   2021-08-21  false                      
-    1.2.1-10692  2           ready   2021-08-30  true   bigpartition    2   
+    1.2.1-10692  2           ready   2021-08-30  true   Production    2   
                                                         default         1   
                                                         smallpartition  3   
 
@@ -458,7 +458,7 @@ To upgrade a chassis partition via the API you must first run the check version 
 
 .. code-block:: bash
 
- POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=bigpartition/check-version
+ POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/check-version
 
 .. code-block:: json
 
@@ -482,7 +482,7 @@ This is the Set Version API call that will initiate the upgrade:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=bigpartition/set-version
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/set-version
 
 .. code-block:: json
 
@@ -536,7 +536,7 @@ You may also import the tenant image file from the chassis partition CLI. Use th
 
 .. code-block:: bash
 
-    bigpartition# file import remote-host 10.255.0.142 remote-file /upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username corpuser insecure
+    Production# file import remote-host 10.255.0.142 remote-file /upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username corpuser insecure
 
 Repeat for other chassis partitions:
 
@@ -577,7 +577,7 @@ To copy a tenant image into a chassis partition, use the following API call to t
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_BigPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{Chassis1_Production_IP}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -598,7 +598,7 @@ To list the current tenant images available on the chassis partition use the fol
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-tenant-images:images
+    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenant-images:images
 
 Below is output generated from the previous command:
 

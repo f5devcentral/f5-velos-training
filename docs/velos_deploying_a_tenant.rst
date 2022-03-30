@@ -207,7 +207,7 @@ Tenant Deployment via webUI
 Uploading a Tenant Image
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can upload a tenant image via the webUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the **Add** button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is also an option to upload direct from a computer via the browser using the **Upload** option..
+You can upload a tenant image via the webUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the **Add** button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is also an option to upload direct from a computer via the browser using the **Upload** option.
 
 .. image:: images/velos_deploying_a_tenant/image8.png
   :align: center
@@ -228,13 +228,13 @@ Alternatively, you can upload from the **System Settings > File Utilities** page
 Creating a Tenant
 ^^^^^^^^^^^^^^^^^
 
-You can deploy a tenant from the webUI using the Add button in the Tenant Management > Tenant Deployments screen.
+You can deploy a tenant from the webUI using the **Add** button in the **Tenant Management > Tenant Deployments** screen.
 
 .. image:: images/velos_deploying_a_tenant/image10.png
   :align: center
   :scale: 70% 
 
-The tenant deployment options are almost identical to deploying a vCMP guest, with a few minor differences. You’ll supply the tenant a name and choose the image for it to run. Next you will pick what slots (blades) within the chassis partition you want the tenant to run on and assign an out-of-band management address, prefix and gateway. There are **Recommended** and **Advanced** options for resource provisioning, choosing Recommended will automatically adjust memory based on the vCPUs allocated to the tenant. Choosing Advanced will allow you to over-allocate memory which is something VIPRION did not support. You can choose different states (Configured, Provisioned, Deployed) just like vCMP and there is an option to enable/disable HW crypto acceleration (Recommended this is enabled). And finally, there is an option to enable Appliance mode which will disable root/bash access to the tenant.
+The tenant deployment options are almost identical to deploying a vCMP guest, with a few minor differences. You’ll supply the tenant a name, and choose the image for it to run. Next, you will pick what slots (blades) within the chassis partition you want the tenant to run on, and assign an out-of-band management address, prefix and gateway. There are **Recommended** and **Advanced** options for resource provisioning, choosing Recommended will automatically adjust memory based on the vCPUs allocated to the tenant. Choosing Advanced will allow you to over-allocate memory which is something VIPRION did not support. You can choose different states (Configured, Provisioned, Deployed) just like vCMP and there is an option to enable/disable hardware crypto acceleration (Recommended this is enabled). And finally, there is an option to enable Appliance mode which will disable root/bash access to the tenant.
 
 .. image:: images/velos_deploying_a_tenant/image11.png
   :align: center
@@ -249,12 +249,11 @@ The VELOS tenant lifecycle is fully supported in the F5OS API. This section will
 Uploading a Tenant Image
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-The upload utility requires a remote HTTPS server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition.
-To copy a tenant image into a chassis partition, use the following API call to the chassis partition IP address:
+The upload utility requires a remote HTTPS, SCP, or SFTP server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition. To copy a tenant image into a chassis partition from a remote HTTPS server, use the following API call to the chassis partition IP address:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_BigPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{Chassis1_Production_IP}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -275,7 +274,7 @@ To list the current tenant images available on the chassis partition use the fol
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-tenant-images:images
+    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenant-images:images
 
 Below is output generated from the previous command:
 
@@ -625,7 +624,7 @@ First get the current tenant status via the API and note the current CPU Allocat
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_BigPartition_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config
+  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config
 
 The API output:
 
@@ -680,7 +679,7 @@ The workflow to change the tenant configuration is to first change the tenant st
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_BigPartition_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
+  PATCH https://{{Chassis2_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
 
 And for the JSON body of the API call change the **running-state** to **provisioned**:
 
@@ -707,7 +706,7 @@ Send a PATCH API command to change the CPU and memory configuration so the tenan
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_BigPartition_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/vcpu-cores-per-node
+  PATCH https://{{Chassis2_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/vcpu-cores-per-node
 
 .. code-block:: json
 
@@ -720,7 +719,7 @@ Finally change the tenant status back to **deployed** and then check the status 
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_BigPartition_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
+  PATCH https://{{Chassis2_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
 
 .. code-block:: json
 
@@ -876,7 +875,7 @@ If the tenant is already deployed, then you must first change the tenant to a pr
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_BigPartition_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/running-state
+  PATCH https://{{Chassis2_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/running-state
 
 .. code-block:: json
 
@@ -888,7 +887,7 @@ Once the tenant is in the provisioned state you can issue another API call to mo
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_BigPartition_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/vcpu-cores-per-node
+  PATCH https://{{Chassis2_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/vcpu-cores-per-node
 
 .. code-block:: json
 
@@ -906,7 +905,7 @@ The last part is to verify the tenant’s status, and that the config change has
 
 .. code-block:: bash
 
-  GET https://{{Chassis2_BigPartition_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config
+  GET https://{{Chassis2_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config
 
 .. code-block:: json
 

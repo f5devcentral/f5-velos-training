@@ -971,7 +971,7 @@ Before creating any new chassis partitions you should ensure you have the proper
                                                   "id": 1
                                               },
                                               {
-                                                  "name": "bigpartition",
+                                                  "name": "Production",
                                                   "id": 2
                                               },
                                               {
@@ -1044,7 +1044,7 @@ Before creating any new chassis partitions you should ensure you have the proper
                                                   "id": 1
                                               },
                                               {
-                                                  "name": "bigpartition",
+                                                  "name": "Production",
                                                   "id": 2
                                               },
                                               {
