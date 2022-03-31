@@ -447,23 +447,21 @@ To upgrade the system controllers via the API you must first run the check versi
 
 .. code-block:: bash
 
- POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/check-version
+ POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image/f5-system-controller-image:check-version
 
 .. code-block:: json
 
     {
-        "input": {
-            "iso-version": "{{Partition_ISO_Image}}"
-        }
+        "f5-system-controller-image:iso-version": "{{Controller_ISO_Image_Full}}"
     }
 
-If the compatability check then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+If the compatability check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
 
 .. code-block:: json
 
     {
-        "f5-system-partition:output": {
-            "result": "Partition upgrade compatibility check succeeded."
+        "f5-system-controller-image:output": {
+            "response": "Compatibility verification succeeded."
         }
     }
 
@@ -471,14 +469,12 @@ This is the Set Version API call that will initiate the upgrade:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/set-version
+    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image/f5-system-controller-image:set-version
 
 .. code-block:: json
 
     {
-        "input": {
-            "iso-version": "{{Partition_ISO_Image}}"
-        }
+        "f5-system-controller-image:iso-version": "{{Controller_ISO_Image_Full}}"
     }
 
 If the upgrade is successful, you will get notification like the message below:
@@ -486,8 +482,8 @@ If the upgrade is successful, you will get notification like the message below:
 .. code-block:: json
 
     {
-        "f5-system-partition:output": {
-            "result": "Version update successful."
+        "f5-system-controller-image:output": {
+            "response": "Controller iso version has been set"
         }
     }
 
