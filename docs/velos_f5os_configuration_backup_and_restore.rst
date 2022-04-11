@@ -61,7 +61,7 @@ You can back up the system controller configuration database using the **system 
 
 
 
-Backing Up the System Controller Database via WebUI
+Backing Up the System Controller Database via webUI
 ---------------------------------------------------
 
 Using the system controller webUI you can backup the confd configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
@@ -93,7 +93,7 @@ Copying System Controller Database Backup to an External Location
 
 Once the database backup has been completed, you should copy the file to an external location so that the system can be restored in the case of a total failure. You can download the database configuration backup using the CLI, webUI, or API. 
 
-Copying System Controller Database Backup to an External Location via WebUI
+Copying System Controller Database Backup to an External Location via webUI
 ---------------------------------------------------------------------------
 
 In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can import or export configuration files. Note that the current transfer of files to and from the webUI requires an external HTTPS server. 
@@ -186,7 +186,10 @@ To copy a confd configuration backup file from the system controller to a remote
 Backing Up Chassis Partition Databases
 ======================================
 
-In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below there are two chassis partitions currently in use; **Production** and **smallpartition**. Both must be backed up and archived off of the VELOS system.
+In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below there are two chassis partitions currently in use; **Production** and **Development**. Both must be backed up and archived off of the VELOS system.
+
+Backing Up Chassis Partition Databases via CLI
+----------------------------------------------
 
 Log directly into the chassis partition Productions management IP address and enter config mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
 
@@ -194,7 +197,7 @@ Log directly into the chassis partition Productions management IP address and en
 
     Production-1# config
     Entering configuration mode terminal
-    Production-1(config)# system database config-backup name chassis-partition-bigbartition-08-17-2021
+    Production-1(config)# system database config-backup name chassis-partition-production-08-17-2021
     result Database backup successful.
     Production-1(config)# exit
     Production-1# file list path configs/
@@ -205,27 +208,35 @@ Log directly into the chassis partition Productions management IP address and en
     Production-1# 
 
 
-Log directly into the chassis partition smallpartition's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
+Log directly into the chassis partition development's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
 
 .. code-block:: bash
 
-    smallpartition-1# config
+    development-1# config
     Entering configuration mode terminal
-    smallpartition-1(config)# system database config-backup name chassis-partition-smallpartition-08-17-2021
+    development-1(config)# system database config-backup name chassis-partition-development-08-17-2021
     result Database backup successful.
-    smallpartition-1(config)# exit
-    smallpartition-1# file list path configs/
+    development-1(config)# exit
+    development-1# file list path configs/
     entries {
         name 
-    chassis-partition-smallpartition-08-17-2021
+    chassis-partition-development-08-17-2021
     }
-    smallpartition-1# 
+    development-1# 
+
+
+Backing Up Chassis Partition Databases via webUI
+------------------------------------------------
+
 
 This can also be done from each chassis partition’s webUI interface. Log into the chassis partition webUI. Then go to **System Utilities -> Configuration Backup**. Click **Create** to save the confd database configuration and provide a name. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image5.png
   :align: center
   :scale: 70%
+
+Backing Up Chassis Partition Databases via API
+------------------------------------------------
 
 
 You’ll need to do this for each chassis partition in the system. To backup the chassis partition databases via API use the following API command:
@@ -242,10 +253,13 @@ You’ll need to do this for each chassis partition in the system. To backup the
 
 Repeat this for each chassis partition.
 
+Export Backups From the Chassis Partitions
+==========================================
+
 Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, webUI, or API. In the current release you need an external HTTPS server configured to allow uploads in order to export database backups from VELOS. 
 
 Export Backup From the Chassis Partition webUI
---------------------------------------------
+----------------------------------------------
 
 You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, and you should see a copy of the file created there:
 
@@ -337,15 +351,16 @@ Below is an example using SCP to copy off the backup file from partition ID 4, y
     3-20-2021-Production-backup                                                             100%   46KB  23.7MB/s   00:00    
     [root@controller-2 ~]# 
     
-Now repeat the same steps for chassis partition smallpartition. 
+Now repeat the same steps for chassis partition development. 
 
-Export Files From the Chassis Partition API
--------------------------------------------
-Each chassis partition in the system needs to be backed up independently. Below is an API example of backing up the chassis partition smallpartition. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS server is required to export the copy of the configuration backup.
+Export Backup From the Chassis Partition API
+--------------------------------------------
+
+Each chassis partition in the system needs to be backed up independently. Below is an API example of backing up the chassis partition development. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS server is required to export the copy of the configuration backup.
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_SmallPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/export
+    POST https://{{Chassis1_development_IP}}:8888/api/data/f5-utils-file-transfer:file/export
 
 .. code-block:: json
 
@@ -353,7 +368,7 @@ Each chassis partition in the system needs to be backed up independently. Below 
         "f5-utils-file-transfer:insecure": "",
         "f5-utils-file-transfer:username": "corpuser",
         "f5-utils-file-transfer:password": "Passw0rd1!",
-        "f5-utils-file-transfer:local-file": "configs/smallpartition-DB-BACKUP{{currentdate}}",
+        "f5-utils-file-transfer:local-file": "configs/development-DB-BACKUP{{currentdate}}",
         "f5-utils-file-transfer:remote-host": "10.255.0.142",
         "f5-utils-file-transfer:remote-port": 0,
         "f5-utils-file-transfer:remote-file": "/upload/upload.php"
@@ -363,14 +378,14 @@ To check on the status of the file export you can use the following API call to 
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_SmallPartition_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+  POST https://{{Chassis1_development_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
 In the body of the post use the following json payload:
 
 .. code-block:: json
 
     {
-        "f5-utils-file-transfer:file-name": "configs/smallpartition-DB-BACKUP{{currentdate}}"
+        "f5-utils-file-transfer:file-name": "configs/development-DB-BACKUP{{currentdate}}"
     }
 
 You will end up seeing a status similar to the output below.
@@ -379,7 +394,7 @@ You will end up seeing a status similar to the output below.
 
     {
         "f5-utils-file-transfer:output": {
-            "result": "\nS.No.|Operation  |Protocol|Local File Path |Remote Host  |Remote File Path   |Status  |Time  \n1    |Export file|HTTPS   |configs/smallpartition-DB-BACKUP2021-08-27 |10.255.0.142 |/upload/upload.php | Completed|Fri Aug 27 20:18:12 2021"
+            "result": "\nS.No.|Operation  |Protocol|Local File Path |Remote Host  |Remote File Path   |Status  |Time  \n1    |Export file|HTTPS   |configs/development-DB-BACKUP2021-08-27 |10.255.0.142 |/upload/upload.php | Completed|Fri Aug 27 20:18:12 2021"
         }
     }
 
@@ -397,20 +412,24 @@ For a proof-of-concept test, this section will provide steps to wipe out the ent
 
 The first step would be to ensure you have completed the previous sections, and have created backups for the system controllers, each chassis partition, and each tenant. These backups should have been copied out of the VELOS system to a remote HTTPS server so that they can be used to restore to the system after it has been reset.
 
+
+Remove Partitions and Reset Controller via CLI
+----------------------------------------------
+
 The first step is to ensure each chassis partition’s confd database has been **reset-to-default**. This will wipe out all tenant configurations and networking as well as all the system parameters associated with each chassis partition.
 
-For the smallpartition:
+For the development:
 
 .. code-block:: bash
 
-    smallpartition-1# config
-    smallpartition-1(config)# system database reset-to-default proceed  
+    development-1# config
+    development-1(config)# system database reset-to-default proceed  
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    smallpartition-1(config)# 
+    development-1(config)# 
     System message at 2021-03-02 22:51:54...
     Commit performed by admin via tcp using cli.
-    smallpartition-1(config)# 
+    development-1(config)# 
 
 
 For the Production:
@@ -437,12 +456,12 @@ Once the partition configurations have been cleared, you’ll need to login to t
     syscon-2-active(config-slot-1-3)#
 
 
-Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **smallpartition**.
+Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **development**.
 
 .. code-block:: bash
 
     syscon-2-active(config)# no partitions partition Production 
-    syscon-2-active(config)# no partitions partition smallpartition 
+    syscon-2-active(config)# no partitions partition development 
     syscon-2-active(config)# commit 
     Commit complete.
     syscon-2-active(config)# 
@@ -469,8 +488,8 @@ The system controllers should reboot, and their configurations will be completel
 
 
 
-Using the API to Remove Partitions and Reset Controller
--------------------------------------------------------
+Remove Partitions and Reset Controller via API
+----------------------------------------------
 
 There is no webUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called Production:
 
@@ -484,11 +503,11 @@ There is no webUI support for this functionality currently. To do this via API c
     "f5-database:proceed": "yes"
     }
 
-Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition smallpartition:
+Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition development:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+    POST https://{{Chassis1_development_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
 
 .. code-block:: json
 
@@ -496,7 +515,7 @@ Repeat this for the other chassis partitions in the system, in this case send an
     "f5-database:proceed": "yes"
     }
 
-First send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition none. In the example below slots 1-2 were assigned to Production and slot3 was assigned to smallpartition. All 3 slots will be moved to the partition none. 
+First send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition none. In the example below slots 1-2 were assigned to Production and slot3 was assigned to development. All 3 slots will be moved to the partition none. 
 
 
 .. code-block:: bash
@@ -533,7 +552,7 @@ Next Delete any chassis partitions that were configured. In this case both **Pro
 
     DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production
 
-    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=smallpartition
+    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=development
 
 The last step in the reset procedure is to set the system controllers confd database back to default.
 
@@ -549,8 +568,8 @@ The last step in the reset procedure is to set the system controllers confd data
 
 The system controllers should reboot, and their configurations will be completel wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.    
 
-Using the webUI to Remove Partitions and Reset Controller
--------------------------------------------------------
+Remove Partitions and Reset Controller via webUI
+------------------------------------------------
 
 In the system controller webUI go to the **Chassis Partitions** page. Select the chassis partition you wish to delete by using the check box, then click the **Delete** button. The webUI will automatically remove the slots and return them to the **none** chassis partition before deleting the selected chassis partition. You should delete all partitions except for **default**. 
 
@@ -996,7 +1015,7 @@ You must reboot each blade that was previously assigned to a partition:
 
     POST https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-2/reboot
 
-    POST https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-3/reboot
+    POST https://{{Chassis1_development_IP}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-3/reboot
 
 
 
@@ -1031,24 +1050,24 @@ Repeat this process for each chassis partition in the system.
 
 .. code-block:: bash
 
-    smallpartition-1# file import remote-host 10.255.0.142 remote-file /upload/smallpartition-DB-BACKUP2021-09-10 local-file configs/smallpartition-DB-BACKUP2021-09-10 username corpuser insecure 
+    development-1# file import remote-host 10.255.0.142 remote-file /upload/development-DB-BACKUP2021-09-10 local-file configs/development-DB-BACKUP2021-09-10 username corpuser insecure 
     Value for 'password' (<string>): ********
-    result File transfer is initiated.(configs/smallpartition-DB-BACKUP2021-09-10)
+    result File transfer is initiated.(configs/development-DB-BACKUP2021-09-10)
 
 
-    smallpartition-1# file transfer-status 
+    development-1# file transfer-status 
     result 
     S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                
-    1    |Import file|HTTPS   |configs/smallpartition-DB-BACKUP2021-09-10                  |10.255.0.142        |/upload/smallpartition-DB-BACKUP2021-09-10                  |         Completed|Wed Sep 15 03:21:40 2021
+    1    |Import file|HTTPS   |configs/development-DB-BACKUP2021-09-10                  |10.255.0.142        |/upload/development-DB-BACKUP2021-09-10                  |         Completed|Wed Sep 15 03:21:40 2021
 
 
 
-    smallpartition-1# file list path configs/
+    development-1# file list path configs/
     entries {
         name 
-    smallpartition-DB-BACKUP2021-09-10
+    development-DB-BACKUP2021-09-10
     }
-    smallpartition-1# 
+    development-1# 
 
 Importing Archived Chassis Partition Configs via API
 ----------------------------------------------------
@@ -1057,7 +1076,7 @@ Archived confd database backups can be imported from a remote HTTPS server via t
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/f5-utils-file-transfer:file/import
+    POST https://{{Chassis1_development_IP}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -1067,8 +1086,8 @@ Archived confd database backups can be imported from a remote HTTPS server via t
         "f5-utils-file-transfer:username": "corpuser",
         "f5-utils-file-transfer:password": "Passw0rd!!",
         "f5-utils-file-transfer:remote-host": "10.255.0.142",
-        "f5-utils-file-transfer:remote-file": "/upload/smallpartition-DB-BACKUP2021-09-10",
-        "f5-utils-file-transfer:local-file": "configs/smallpartition-DB-BACKUP2021-09-10"
+        "f5-utils-file-transfer:remote-file": "/upload/development-DB-BACKUP2021-09-10",
+        "f5-utils-file-transfer:local-file": "configs/development-DB-BACKUP2021-09-10"
     }
 
 You can check on the file transfer status by issubg the following API call:
@@ -1132,15 +1151,15 @@ To restore a configuration database backup within a chassis partition, use the *
     Production-1(config)# 
 
 
-    smallpartition-1(config)# system database config-restore name smallpartition-DB-BACKUP2021-09-10
+    development-1(config)# system database config-restore name development-DB-BACKUP2021-09-10
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
     result Database config-restore successful.
-    smallpartition-1(config)# 
+    development-1(config)# 
     System message at 2021-09-15 03:23:50...
     Commit performed by admin via tcp using cli.
-    smallpartition-1(config)# 
+    development-1(config)# 
 
 
 The tenant is properly restored and deployed; however, its status is pending waiting on image:
@@ -1192,12 +1211,12 @@ The following API commands will restore the database backups on the two chassis 
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_SmallPartition_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
+    POST https://{{Chassis1_development_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
 .. code-block:: json
 
     {
-    "f5-database:name": "smallpartition-DB-BACKUP2021-09-10"
+    "f5-database:name": "development-DB-BACKUP2021-09-10"
     }
 
 The tenants are properly restored and deployed; however, its status is pending waiting on image. You can check the status of the images with the following API call:
