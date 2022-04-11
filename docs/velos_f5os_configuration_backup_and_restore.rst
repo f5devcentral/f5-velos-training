@@ -2,7 +2,7 @@
 F5OS Configuration Backup and Restore
 =====================================
 
-To completely backup the VELOS system, you’ll need to backup each tenant TMOS configuration, each F5OS chassis partition configuration, as well as the F5OS system controller configuration. Tenant backup utilizes the same backup and recovery procedures as existing BIG-IP devices/guests because the tenants themselves are running TMOS. For the F5OS layer (system controllers and chassis partitions) a different backup mechanism is utilized because F5OS configuration management is based on ConfD.  
+To completely backup the VELOS system, you’ll need to backup each tenant TMOS configuration, each F5OS chassis partition configuration, as well as the F5OS system controller configuration. Tenant backup utilizes the same backup and recovery procedures as existing BIG-IP devices/guests because the tenants themselves are running TMOS. For the F5OS layer (system controllers and chassis partitions), a different backup mechanism is utilized because F5OS configuration management is based on ConfD.  
 
 The ConfD process manages the F5OS configuration on a VELOS system. The system stores the configuration in its configuration database (CDB). There are separate ConfD databases for the system controller layer, and for each chassis partition.
 
@@ -28,7 +28,7 @@ At the chassis partition level, the F5OS configuration contains data that includ
 
 To perform a complete backup of the VELOS system, you must:
 
-•	Back up the configuration data at the chassis and at each chassis partition.
+•	Back up the configuration data at the system controller and at each chassis partition.
 •	Back up any deployed tenants using the tenants’ backup mechanism (i.e. a UCS).
 
 More detail is covered in the following solution article:
@@ -41,7 +41,7 @@ Backing Up the System Controller Database
 Backing Up the System Controller Database via CLI
 -------------------------------------------------
 
-You can back up the system controller configuration database using the **system database config-backup** command when in config mode. The file will be saved in the path of **/configs** automatically. You can then list the contents of that directory to ensure the file is there using the **file list path** command.
+You can back up the system controller configuration database using the **system database config-backup** command when in **config** mode. The file will be saved in the path of **/configs** automatically. You can then list the contents of that directory to ensure the file is there using the **file list path** command.
 
 .. code-block:: bash
 
@@ -75,9 +75,13 @@ Using the system controller webUI you can backup the ConfD configuration databas
 Backing Up the System Controller Database via API
 -------------------------------------------------
 
+The following API call will backup the system controller.
+
 .. code-block:: bash
 
     POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
+
+In the body of the API call, supply the name of the file that you want to save. 
 
 .. code-block:: json
 
@@ -86,7 +90,7 @@ Backing Up the System Controller Database via API
     }
 
 
-**Note: In the current F5OS releases the ConfD system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI. This will be added in a subsequent release.**
+**Note: In the current F5OS releases the ConfD system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI. This may be added in a subsequent release.**
 
 Copying System Controller Database Backup to an External Location
 =================================================================
@@ -96,7 +100,7 @@ Once the database backup has been completed, you should copy the file to an exte
 Copying System Controller Database Backup to an External Location via webUI
 ---------------------------------------------------------------------------
 
-In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can import or export configuration files. Note that the current transfer of files to and from the webUI requires an external HTTPS server. 
+In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files form your local browser. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image3.png
   :align: center
@@ -106,7 +110,6 @@ In the webUI use the **System Settings -> File Utilities** page and from the dro
   :align: center
   :scale: 70%
 
-**Note: In the current release exporting and importing the system database requires an external HTTPS server. Future releases will add more options for import/export that don’t rely on an external HTTPS server.**
 
 Copying System Controller Database Backup to an External Location via CLI
 -------------------------------------------------------------------------
@@ -125,7 +128,7 @@ To transfer a file using the CLI use the **file list** command to see the conten
     }
 
 
-To transfer the file from the CLI you can use the **file export** command. 
+To transfer the file from the CLI you can use the **file export** command. The option below is exporting to a remote HTTPS server. there are options to trasnfer using SFTP, and SCP as well.
 
 .. code-block:: bash
 
@@ -191,7 +194,7 @@ In addition to backing up the system controller database, you should backup the 
 Backing Up Chassis Partition Databases via CLI
 ----------------------------------------------
 
-Log directly into the chassis partition Productions management IP address and enter config mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
+Log directly into the chassis partition Production's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partition config database. Then list the file using the **file list** command.
 
 .. code-block:: bash
 
@@ -203,7 +206,7 @@ Log directly into the chassis partition Productions management IP address and en
     Production-1# file list path configs/
     entries {
         name 
-    chassis-partition-bigbartition-08-17-2021
+    chassis-partition-production-08-17-2021
     }
     Production-1# 
 
@@ -247,6 +250,7 @@ You’ll need to do this for each chassis partition in the system. To backup the
 
 
 .. code-block:: json
+
     {
         "f5-database:name": "Production-DB-BACKUP{{currentdate}}"
     }
@@ -256,12 +260,12 @@ Repeat this for each chassis partition.
 Export Backups From the Chassis Partitions
 ==========================================
 
-Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, webUI, or API. In the current release you need an external HTTPS server configured to allow uploads in order to export database backups from VELOS. 
+Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, webUI, or API. 
 
 Export Backup From the Chassis Partition webUI
 ----------------------------------------------
 
-You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, and you should see a copy of the file created there:
+You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, you should see a copy of the file created there:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image6.png
   :align: center
