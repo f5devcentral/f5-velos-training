@@ -38,7 +38,8 @@ https://support.f5.com/csp/article/K50135154
 Backing Up the System Controller Database
 =========================================
 
-**Using the CLI:**
+Backing Up the System Controller Database via CLI
+-------------------------------------------------
 
 You can back up the system controller configuration database using the **system database config-backup** command when in config mode. The file will be saved in the path of **/configs** automatically. You can then list the contents of that directory to ensure the file is there using the **file list path** command.
 
@@ -60,7 +61,8 @@ You can back up the system controller configuration database using the **system 
 
 
 
-**Using the webUI:**
+Backing Up the System Controller Database via WebUI
+---------------------------------------------------
 
 Using the system controller webUI you can backup the confd configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
 
@@ -70,7 +72,8 @@ Using the system controller webUI you can backup the confd configuration databas
 .. image:: images/velos_f5os_configuration_backup_and_restore/image2.png
    :width: 45%
 
-**Using the API:**
+Backing Up the System Controller Database via API
+-------------------------------------------------
 
 .. code-block:: bash
 
@@ -90,7 +93,8 @@ Copying System Controller Database Backup to an External Location
 
 Once the database backup has been completed, you should copy the file to an external location so that the system can be restored in the case of a total failure. You can download the database configuration backup using the CLI, webUI, or API. 
 
-**From the webUI:**
+Copying System Controller Database Backup to an External Location via WebUI
+---------------------------------------------------------------------------
 
 In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can import or export configuration files. Note that the current transfer of files to and from the webUI requires an external HTTPS server. 
 
@@ -104,7 +108,8 @@ In the webUI use the **System Settings -> File Utilities** page and from the dro
 
 **Note: In the current release exporting and importing the system database requires an external HTTPS server. Future releases will add more options for import/export that don’t rely on an external HTTPS server.**
 
-**From the CLI:**
+Copying System Controller Database Backup to an External Location via CLI
+-------------------------------------------------------------------------
 
 To transfer a file using the CLI use the **file list** command to see the contents of the **configs** directory. Note the previously saved file is listed.
 
@@ -156,7 +161,8 @@ If you don’t have an external HTTPS server that allows uploads, then you can l
     controller-backup-08-17-21                                                       100%   77KB  28.8MB/s   00:00    
     [root@controller-2 ~]# 
 
-**From the API:**
+Copying System Controller Database Backup to an External Location via API
+-------------------------------------------------------------------------
 
 To copy a confd configuration backup file from the system controller to a remote https server use the following API call:
 
