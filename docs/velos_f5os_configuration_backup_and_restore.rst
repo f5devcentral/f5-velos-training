@@ -4,7 +4,7 @@ F5OS Configuration Backup and Restore
 
 To completely backup the VELOS system, you’ll need to backup each tenant TMOS configuration, each F5OS chassis partition configuration, as well as the F5OS system controller configuration. Tenant backup utilizes the same backup and recovery procedures as existing BIG-IP devices/guests because the tenants themselves are running TMOS. For the F5OS layer (system controllers and chassis partitions) a different backup mechanism is utilized because F5OS configuration management is based on ConfD.  
 
-The confd process manages the F5OS configuration on a VELOS system. The system stores the configuration in its configuration database (CDB). There are separate Confd databases for the system controller layer, and for each chassis partition.
+The ConfD process manages the F5OS configuration on a VELOS system. The system stores the configuration in its configuration database (CDB). There are separate ConfD databases for the system controller layer, and for each chassis partition.
 
 At the chassis level, the F5OS configuration contains data that includes the following:
 
@@ -64,7 +64,7 @@ You can back up the system controller configuration database using the **system 
 Backing Up the System Controller Database via webUI
 ---------------------------------------------------
 
-Using the system controller webUI you can backup the confd configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
+Using the system controller webUI you can backup the ConfD configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image1.png
    :width: 45%
@@ -86,7 +86,7 @@ Backing Up the System Controller Database via API
     }
 
 
-**Note: In the current F5OS releases the confd system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI. This will be added in a subsequent release.**
+**Note: In the current F5OS releases the ConfD system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI. This will be added in a subsequent release.**
 
 Copying System Controller Database Backup to an External Location
 =================================================================
@@ -164,7 +164,7 @@ If you don’t have an external HTTPS server that allows uploads, then you can l
 Copying System Controller Database Backup to an External Location via API
 -------------------------------------------------------------------------
 
-To copy a confd configuration backup file from the system controller to a remote https server use the following API call:
+To copy a ConfD configuration backup file from the system controller to a remote https server use the following API call:
 
 .. code-block:: bash
 
@@ -229,7 +229,7 @@ Backing Up Chassis Partition Databases via webUI
 ------------------------------------------------
 
 
-This can also be done from each chassis partition’s webUI interface. Log into the chassis partition webUI. Then go to **System Utilities -> Configuration Backup**. Click **Create** to save the confd database configuration and provide a name. 
+This can also be done from each chassis partition’s webUI interface. Log into the chassis partition webUI. Then go to **System Utilities -> Configuration Backup**. Click **Create** to save the ConfD database configuration and provide a name. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image5.png
   :align: center
@@ -416,7 +416,7 @@ The first step would be to ensure you have completed the previous sections, and 
 Remove Partitions and Reset Controller via CLI
 ----------------------------------------------
 
-The first step is to ensure each chassis partition’s confd database has been **reset-to-default**. This will wipe out all tenant configurations and networking as well as all the system parameters associated with each chassis partition.
+The first step is to ensure each chassis partition’s ConfD database has been **reset-to-default**. This will wipe out all tenant configurations and networking as well as all the system parameters associated with each chassis partition.
 
 For the development:
 
@@ -467,7 +467,7 @@ Then remove the partitions from the system controller. In this case we will remo
     syscon-2-active(config)# 
 
 
-For the final step reset the system controllers confd database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default.
+For the final step reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default.
 
 Set controller:
 
@@ -554,7 +554,7 @@ Next Delete any chassis partitions that were configured. In this case both **Pro
 
     DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=development
 
-The last step in the reset procedure is to set the system controllers confd database back to default.
+The last step in the reset procedure is to set the system controllers ConfD database back to default.
 
 .. code-block:: bash
 
@@ -656,7 +656,7 @@ To transfer files into the system controller you’ll have to manually configure
 Importing System Controller Backups
 ===================================
 
-Once the system is configured and out-of-band connectivity is restored you can now copy the confd database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controllers configuration as outlined earlier.
+Once the system is configured and out-of-band connectivity is restored you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controllers configuration as outlined earlier.
 
 
 Next SCP the file from a remote server:
@@ -695,7 +695,7 @@ To import the file using the F5OS CLI you must have a remote HTTP server to host
 Importing System Controller Backups via API
 -------------------------------------------
 
-Post the following API call to the system controllers IP address to import the archived confd backup file form a remote HTTPS server to the configs directory on the system controller.
+Post the following API call to the system controllers IP address to import the archived ConfD backup file form a remote HTTPS server to the configs directory on the system controller.
 
 .. code-block:: bash
 
@@ -791,7 +791,7 @@ Now that the system controller backup has been copied into the system, you can r
 Restoring the System Controller from a Database Backup via API
 --------------------------------------------------------------
 
-To restore the system controller confd database use the following API call:
+To restore the system controller ConfD database use the following API call:
 
 .. code-block:: bash
 
@@ -806,7 +806,7 @@ To restore the system controller confd database use the following API call:
 Restoring the System Controller from a Database Backup via webUI
 --------------------------------------------------------------
 
-Currently there is no webUI support for restoration of the confd database, so you’ll need to use either the CLI or API to restore the system controller’s database. Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you need to reboot the blades in-order for the config to be deployed successfully.
+Currently there is no webUI support for restoration of the ConfD database, so you’ll need to use either the CLI or API to restore the system controller’s database. Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you need to reboot the blades in-order for the config to be deployed successfully.
 
 To reboot blades from the webUI log into each chassis partition. You will be prompted to change the password on first login. 
 
@@ -1094,7 +1094,7 @@ Repeat this process for each chassis partition in the system.
 Importing Archived Chassis Partition Configs via API
 ----------------------------------------------------
 
-Archived confd database backups can be imported from a remote HTTPS server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
+Archived ConfD database backups can be imported from a remote HTTPS server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
 
 .. code-block:: bash
 
