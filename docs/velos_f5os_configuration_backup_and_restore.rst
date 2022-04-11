@@ -652,6 +652,10 @@ To transfer files into the system controller you’ll have to manually configure
     syscon-1-active(config)# commit 
     Commit complete.
 
+
+Importing System Controller Backups
+===================================
+
 Once the system is configured and out-of-band connectivity is restored you can now copy the confd database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controllers configuration as outlined earlier.
 
 
@@ -660,6 +664,10 @@ Next SCP the file from a remote server:
 .. code-block:: bash
 
     scp root@10.255.0.142:/var/www/server/1/upload/SYSTEM-CONTROLLER-DB-BACKUP2021-09-10 .
+
+
+Importing System Controller Backups via CLI
+-------------------------------------------
 
 To import the file using the F5OS CLI you must have a remote HTTP server to host the file. Use the file import command as seen below to import the file into the **configs** directory.
 
@@ -760,6 +768,10 @@ You can use the **System Settings -> File Utilities** page to import an archived
 Restoring the System Controller from a Database Backup
 ======================================================
 
+Restoring the System Controller from a Database Backup via CLI
+--------------------------------------------------------------
+
+
 Now that the system controller backup has been copied into the system, you can restore the previous backup using the **system database config-restore** command as seen below. You can use the file list command to verify the file name:
 
 .. code-block:: bash
@@ -776,6 +788,8 @@ Now that the system controller backup has been copied into the system, you can r
     response Succeeded.
     syscon-2-active(config)#
 
+Restoring the System Controller from a Database Backup via API
+--------------------------------------------------------------
 
 To restore the system controller confd database use the following API call:
 
@@ -788,6 +802,9 @@ To restore the system controller confd database use the following API call:
     {
     "f5-database:name": "SYSTEM-CONTROLLER-DB-BACKUP{{currentdate}}"
     }
+
+Restoring the System Controller from a Database Backup via webUI
+--------------------------------------------------------------
 
 Currently there is no webUI support for restoration of the confd database, so you’ll need to use either the CLI or API to restore the system controller’s database. Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you need to reboot the blades in-order for the config to be deployed successfully.
 
@@ -1022,6 +1039,11 @@ You must reboot each blade that was previously assigned to a partition:
 
 Importing Archived Chassis Partition Configs
 ============================================
+
+
+Importing Archived Chassis Partition Configs via CLI
+----------------------------------------------------
+
 
 Log directly into the chassis partition CLI and use the **file import** command to copy the archived image from a remote HTTPS server. You can then use the **file transfer-status** to see if the import succeeded, and then the **file list** command to see the file.
 
