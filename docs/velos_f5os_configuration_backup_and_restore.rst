@@ -277,14 +277,15 @@ You can highlight the file and then click the **Export** button. You when then b
   :align: center
   :scale: 70%
 
-**Note: In the current release the exporting and importing the system database requires an external HTTPS server. Future releases will add more options for import/export that don’t rely on an external HTTPS server.**
+If you select *Download**, then an option will appear to download through your browser to your local client machine.
+
 
 Export Backup From the Chassis Partition CLI
 --------------------------------------------
 
-To transfer a file using the CLI use the **file list** command to see the contents of the **configs** directory. Note the previously saved file is listed. You will need to do this for all chassis partitions.
+To transfer a file using the CLI, use the **file list** command to see the contents of the **configs** directory. Note, the previously saved file is listed. You will need to repeat this for all chassis partitions in the VELOS system.
 
-To backup chassis partition Production:
+To export the backup for the chassis partition **Production**, first list the contents of the configs directory:
 
 .. code-block:: bash
 
@@ -295,13 +296,13 @@ To backup chassis partition Production:
     }
     Production-1# 
 
-To transfer the file from the CLI you can use the **file export** command. Note that the file export command requires a remote HTTPS server that the file can be posted to. 
+To transfer the file from the CLI, you can use the **file export** command. Note that the file export command requires either a remote HTTPS, SFPT, or SCP server that the file can be posted to. 
 
 .. code-block:: bash
 
-    Production-1# file export local-file configs/chassis-partition-bigbartition-08-17-2021 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
+    Production-1# file export local-file configs/chassis-partition-Production-08-17-2021 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
     Value for 'password' (<string>): ********
-    result File transfer is initiated.(configs/chassis-partition-bigbartition-08-17-2021)
+    result File transfer is initiated.(configs/chassis-partition-Production-08-17-2021)
     Production-1#
 
 You can use the CLI command **file transfer-status** to see if the file was copied successfully or not:
@@ -312,12 +313,12 @@ You can use the CLI command **file transfer-status** to see if the file was copi
     result 
     S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                
     1    |Export file|HTTPS   |configs/3-20-2021-Production-backup                       |10.255.0.142        |/upload/upload.php                                          |Failed to open/read local data from file/application|Fri Aug 27 20:05:34 2021
-    2    |Export file|HTTPS   |configs/chassis-partition-bigbartition-08-17-2021           |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:06:22 2021
+    2    |Export file|HTTPS   |configs/chassis-partition-Production-08-17-2021           |10.255.0.142        |/upload/upload.php                                          |         Completed|Fri Aug 27 20:06:22 2021
 
     Production-1# 
 
 
-If you do not have a remote HTTPS server with the proper access to POST files then you can copy the chassis partition backups from the system controller shell. You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice partition<ID> directories, where <ID> equals the ID assigned to each partition.
+If you do not have a remote HTTPS, SCP, or SFTP server with the proper access to POST files, then you can copy the chassis partition backups from the system controller shell (Note, there is no shelll access via the chassis partition IP). You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice **partition<ID>** directories, where <ID> equals the ID assigned to each partition.
 
 .. code-block:: bash
 
@@ -335,7 +336,7 @@ If you do not have a remote HTTPS server with the proper access to POST files th
     drwxr-xr-x.  3 root root 4096 Feb  9 16:08 sirr
     [root@controller-2 ~]# 
 
-The backup files for each partition are stored in the **/var/F5/partition<ID>/configs** directory. You will need to copy off each chassis partitions backup file. You can use SCP to do this from the shell.
+The backup files for each partition are stored in the **/var/F5/partition<ID>/configs** directory. You will need to copy off each chassis partition backup file. You can use SCP to do this from the shell.
 
 .. code-block:: bash
 
@@ -355,12 +356,12 @@ Below is an example using SCP to copy off the backup file from partition ID 4, y
     3-20-2021-Production-backup                                                             100%   46KB  23.7MB/s   00:00    
     [root@controller-2 ~]# 
     
-Now repeat the same steps for chassis partition development. 
+Now repeat the same steps for each chassis partition in the system. 
 
 Export Backup From the Chassis Partition API
 --------------------------------------------
 
-Each chassis partition in the system needs to be backed up independently. Below is an API example of backing up the chassis partition development. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS server is required to export the copy of the configuration backup.
+Each chassis partition in the system needs to be backed up independently. Below is an API example of exportinh the backuo up the chassis partition **Development**. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS, SCP, or SFTP server is required to export the copy of the configuration backup.
 
 .. code-block:: bash
 
@@ -384,7 +385,7 @@ To check on the status of the file export you can use the following API call to 
 
   POST https://{{Chassis1_development_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
-In the body of the post use the following json payload:
+In the body of the post use the following json payload to denote the path and file name to be exported.
 
 .. code-block:: json
 
@@ -392,7 +393,7 @@ In the body of the post use the following json payload:
         "f5-utils-file-transfer:file-name": "configs/development-DB-BACKUP{{currentdate}}"
     }
 
-You will end up seeing a status similar to the output below.
+A status similar to the output below will be seen.
 
 .. code-block:: json
 
@@ -402,7 +403,7 @@ You will end up seeing a status similar to the output below.
         }
     }
 
-Repeat this for other partitions in the system.
+Repeat this step for all the other chassis partitions in the system.
 
 Backing up Tenants
 ==================
@@ -414,7 +415,7 @@ Resetting the System (Not for Production)
 
 For a proof-of-concept test, this section will provide steps to wipe out the entire system configuration in a graceful manner. This is not intended as a workflow for production environments, as you would not typically be deleting entire system configurations, instead you would be restoring pieces of the configuration in the case of failure. 
 
-The first step would be to ensure you have completed the previous sections, and have created backups for the system controllers, each chassis partition, and each tenant. These backups should have been copied out of the VELOS system to a remote HTTPS server so that they can be used to restore to the system after it has been reset.
+The first step would be to ensure you have completed the previous sections, and have created backups for the system controllers, each chassis partition, and each tenant. These backups should have been copied out of the VELOS system to a remote server so that they can be copied back into the system and used to restore after it has been reset.
 
 
 Remove Partitions and Reset Controller via CLI
@@ -422,21 +423,21 @@ Remove Partitions and Reset Controller via CLI
 
 The first step is to ensure each chassis partition’s ConfD database has been **reset-to-default**. This will wipe out all tenant configurations and networking as well as all the system parameters associated with each chassis partition.
 
-For the development:
+For the Development chassis partition:
 
 .. code-block:: bash
 
-    development-1# config
-    development-1(config)# system database reset-to-default proceed  
+    Development-1# config
+    Development-1(config)# system database reset-to-default proceed  
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    development-1(config)# 
+    Development-1(config)# 
     System message at 2021-03-02 22:51:54...
     Commit performed by admin via tcp using cli.
-    development-1(config)# 
+    Development-1(config)# 
 
 
-For the Production:
+For the Production chassis partition:
 
 .. code-block:: bash
 
@@ -450,7 +451,7 @@ For the Production:
     Commit performed by admin via tcp using cli.
     Production-1(config)# 
 
-Once the partition configurations have been cleared, you’ll need to login to the system controller. You’ll need to put all slots back into the **none** partition and **commit** the changes if making changes via the CLI.
+Once the partition configurations have been cleared, you’ll need to login to the system controller CLI via the floating IP address. You’ll need to put all slots back into the **none** partition and **commit** the changes. This will allow the partitions to be deleted in the next step.
 
 .. code-block:: bash
 
@@ -460,27 +461,26 @@ Once the partition configurations have been cleared, you’ll need to login to t
     syscon-2-active(config-slot-1-3)#
 
 
-Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **development**.
+Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **Development**.
 
 .. code-block:: bash
 
     syscon-2-active(config)# no partitions partition Production 
-    syscon-2-active(config)# no partitions partition development 
+    syscon-2-active(config)# no partitions partition Development 
     syscon-2-active(config)# commit 
     Commit complete.
     syscon-2-active(config)# 
 
 
-For the final step reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default.
+For the final step, reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default.
 
-Set controller:
 
 .. code-block:: bash
 
     syscon-2-active(config)# system database config reset-default-config true
     syscon-2-active(config)# commit
 
-Once this has been committed both controllers need to be rebooted manually. Login to the active controller and enter config mode and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller. 
+Once this has been committed, both controllers need to be rebooted manually. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller. 
 
 .. code-block:: bash
 
@@ -488,18 +488,19 @@ Once this has been committed both controllers need to be rebooted manually. Logi
 
     syscon-1-active(config)# system reboot controllers controller active
 
-The system controllers should reboot, and their configurations will be completely wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
-
+The system controllers should reboot, and their configurations will be completely wiped clean. You will need to login via the console / CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
 
 
 Remove Partitions and Reset Controller via API
 ----------------------------------------------
 
-There is no webUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset to default command to the chassis partition called Production:
+There is no webUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset-to-default command to the chassis partition called Production:
 
 .. code-block:: bash
 
     POST https://{{Chassis1_Production_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+
+The body of the API call must have the following:
 
 .. code-block:: json
 
@@ -507,7 +508,7 @@ There is no webUI support for this functionality currently. To do this via API c
     "f5-database:proceed": "yes"
     }
 
-Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition development:
+Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition Development:
 
 .. code-block:: bash
 
@@ -519,7 +520,7 @@ Repeat this for the other chassis partitions in the system, in this case send an
     "f5-database:proceed": "yes"
     }
 
-First send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition none. In the example below slots 1-2 were assigned to Production and slot3 was assigned to development. All 3 slots will be moved to the partition none. 
+Next, send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition **none**. In the example below slots 1-2 were assigned to the chassis partition Production and slot3 was assigned to the chassis partition development. All 3 slots will be moved to the partition none. 
 
 
 .. code-block:: bash
@@ -550,13 +551,13 @@ First send an API call to the system controller IP address to re-assign any slot
         }
     }
 
-Next Delete any chassis partitions that were configured. In this case both **Production** and **smallpartiion** will be deleted by sending API calls to the system controller IP address:
+ONce the slots have been removed form the partitions, you can Delete any chassis partitions that were configured. In this case both **Production** and **Development** chassis partitions will be deleted by sending API calls to the system controller IP address:
 
 .. code-block:: bash
 
     DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production
 
-    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=development
+    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Development
 
 The last step in the reset procedure is to set the system controllers ConfD database back to default.
 
@@ -570,7 +571,7 @@ The last step in the reset procedure is to set the system controllers ConfD data
     "f5-database:reset-default-config": "true"
     }
 
-The system controllers should reboot, and their configurations will be completel wiped clean. You will need ot login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.    
+The system controllers should reboot, and their configurations will be completely wiped clean. You will need to login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.    
 
 Remove Partitions and Reset Controller via webUI
 ------------------------------------------------
