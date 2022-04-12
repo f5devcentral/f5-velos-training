@@ -246,7 +246,7 @@ You’ll need to do this for each chassis partition in the system. To backup the
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
 
 
 .. code-block:: json
@@ -365,7 +365,7 @@ Each chassis partition in the system needs to be backed up independently. Below 
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_development_IP}}:8888/api/data/f5-utils-file-transfer:file/export
+    POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/api/data/f5-utils-file-transfer:file/export
 
 .. code-block:: json
 
@@ -383,7 +383,7 @@ To check on the status of the file export you can use the following API call to 
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_development_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+  POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
 In the body of the post use the following json payload to denote the path and file name to be exported.
 
@@ -498,7 +498,7 @@ The reset-to-default for the chassis partition database is not supported via the
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
 
 The body of the API call must have the following:
 
@@ -512,7 +512,7 @@ Repeat this for the other chassis partitions in the system, in this case send an
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_development_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+    POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
 
 The body of the API call must have the following:
 
@@ -836,7 +836,7 @@ To reboot blades from the API, using the following API commands to list nodes (B
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-cluster:cluster/nodes
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-cluster:cluster/nodes
 
 .. code-block:: json
 
@@ -1037,11 +1037,11 @@ You must reboot each blade that was previously assigned to a partition:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-1/reboot
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-1/reboot
 
-    POST https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-2/reboot
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-2/reboot
 
-    POST https://{{Chassis1_development_IP}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-3/reboot
+    POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-3/reboot
 
 
 
@@ -1107,7 +1107,7 @@ Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SC
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_development_IP}}:8888/restconf/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -1125,7 +1125,7 @@ You can check on the file transfer status by issubg the following API call:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
 A status similar to the one below will show a status of completed if successful:
 
@@ -1141,7 +1141,7 @@ Repeat similar steps for remaining chassis partitions:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -1232,7 +1232,7 @@ The following API commands will restore the database backups on the two chassis 
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
 .. code-block:: json
 
@@ -1242,7 +1242,7 @@ The following API commands will restore the database backups on the two chassis 
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_development_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
+    POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
 .. code-block:: json
 
@@ -1254,13 +1254,13 @@ The tenants are properly restored and deployed; however, its status is pending w
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenant-images:images
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenant-images:images
 
 You will need to load the image that the tenant was running when it was archived. The following API call will import a tenant image from a remote HTTPS server:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -1281,7 +1281,7 @@ You can verify the tenant has successfully started once the image has been loade
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenants:tenants
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
 
 .. code-block:: json
 

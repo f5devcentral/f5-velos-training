@@ -1224,7 +1224,7 @@ Next, a chassis partition called **Production** will be created. It will be assi
                         "iso-version": "{{Partition_ISO_Image}}",
                         "mgmt-ip": {
                             "ipv4": {
-                                "address": "{{Chassis1_Production_IP}}",
+                                "address": "{{velos_chassis1_chassis_partition1_ip}}",
                                 "prefix-length": 24,
                                 "gateway": "{{OutofBand_DFGW}}"
                             }
@@ -1290,7 +1290,7 @@ Next, a chassis partition called **Devlopment** will be created. It will be assi
                         "iso-version": "{{Partition_ISO_Image}}",
                         "mgmt-ip": {
                             "ipv4": {
-                                "address": "{{Chassis1_Development_IP}}",
+                                "address": "{{velos_chassis1_chassis_partition2_ip}}",
                                 "prefix-length": 24,
                                 "gateway": "{{OutofBand_DFGW}}"
                             }
@@ -1338,7 +1338,7 @@ The chassis partitions will have a default username/password of admin/admin. Whe
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_Production_IP}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
+  POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
 
 .. code-block:: json
 

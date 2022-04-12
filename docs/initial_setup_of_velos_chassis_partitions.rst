@@ -122,7 +122,7 @@ To list the current portgroup configuration issue the following API call:
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-portgroup:portgroups
+  GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-portgroup:portgroups
 
 .. code-block:: json
 
@@ -340,7 +340,7 @@ The following API command will list all the current interfaces within the curren
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_Development_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+  GET https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
 
 .. code-block:: json
 
@@ -479,7 +479,7 @@ To configure interfaces (that are not part of a LAG), use the following **PATCH*
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Development_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+  PATCH https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
 
 .. code-block:: json
 
@@ -642,7 +642,7 @@ To configure VLANs use the following API command and JSON body. This will config
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -700,7 +700,7 @@ The following command will list the configuration and status of all VLANs within
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/openconfig-vlan:vlans
+  GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-vlan:vlans
 
 .. code-block:: json
 
@@ -1058,7 +1058,7 @@ To create a LAG and add interfaces & proper LACP configuration will take a few d
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -1122,7 +1122,7 @@ The next step is to add physical interfaces into the LAG group. Interfaces will 
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
 .. code-block:: json
 

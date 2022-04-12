@@ -253,7 +253,7 @@ The upload utility requires a remote HTTPS, SCP, or SFTP server that is hosting 
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -274,7 +274,7 @@ To list the current tenant images available on the chassis partition use the fol
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenant-images:images
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenant-images:images
 
 Below is output generated from the previous command:
 
@@ -681,7 +681,7 @@ First get the current tenant status via the API and note the current CPU Allocat
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config
+  GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config
 
 The API output:
 
@@ -736,7 +736,7 @@ The workflow to change the tenant configuration is to first change the tenant st
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
 
 And for the JSON body of the API call change the **running-state** to **provisioned**:
 
@@ -934,7 +934,7 @@ If the tenant is already deployed, then you must first change the tenant to a pr
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/running-state
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/running-state
 
 .. code-block:: json
 
@@ -946,7 +946,7 @@ Once the tenant is in the provisioned state you can issue another API call to mo
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_Production_IP}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/vcpu-cores-per-node
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/vcpu-cores-per-node
 
 .. code-block:: json
 
@@ -964,7 +964,7 @@ The last part is to verify the tenant’s status, and that the config change has
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config
+  GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config
 
 .. code-block:: json
 

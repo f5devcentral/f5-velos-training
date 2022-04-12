@@ -735,7 +735,7 @@ To copy a tenant image into a chassis partition, use the following API call to t
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_Production_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -756,7 +756,7 @@ To list the current tenant images available on the chassis partition use the fol
 
 .. code-block:: bash
 
-    GET https://{{Chassis1_Production_IP}}:8888/restconf/data/f5-tenant-images:images
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenant-images:images
 
 Below is output generated from the previous command:
 
