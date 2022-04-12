@@ -79,7 +79,7 @@ The following API call will backup the system controller.
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
 
 In the body of the API call, supply the name of the file that you want to save. 
 
@@ -171,7 +171,7 @@ To copy a ConfD configuration backup file from the system controller to a remote
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-utils-file-transfer:file/export
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/export
 
 .. code-block:: json
 
@@ -527,7 +527,7 @@ Next, send an API call to the system controller IP address to re-assign any slot
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 All 3 slots are assigned to partition none.
 
@@ -559,15 +559,15 @@ Once the slots have been removed form the partitions, you can Delete any chassis
 
 .. code-block:: bash
 
-    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production
+    DELETE https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production
 
-    DELETE https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Development
+    DELETE https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Development
 
 The last step in the reset procedure is to set the system controllers ConfD database back to default.
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config
 
 .. code-block:: json
 
@@ -708,7 +708,7 @@ Post the following API call to the system controllers IP address to import the a
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -726,7 +726,7 @@ You may query the transfer status of the file via the following API command:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
 .. code-block:: json
 
@@ -738,7 +738,7 @@ If you want to list the contents of the config directory via API use the followi
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-utils-file-transfer:file/list
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
 
 .. code-block:: json
 
@@ -804,7 +804,7 @@ To restore the system controller ConfD database use the following API call:
 
 .. code-block:: bash
 
-    POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
 .. code-block:: json
 

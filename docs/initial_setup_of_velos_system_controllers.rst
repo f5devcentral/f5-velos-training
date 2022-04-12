@@ -302,7 +302,7 @@ To set the DNS configuration for the system controllers, use the following API c
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -348,7 +348,7 @@ To set System Time settings, use the following API call as an example:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -381,7 +381,7 @@ To set a Remote Logging destination, use the following API call:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -581,7 +581,7 @@ To install a license via API, use the following API call:
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:install
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:install
 
 In the body of the API call, add the following JSON payload which references the **registration-key** as a variable in postman:
 
@@ -873,7 +873,7 @@ Before creating any new chassis partitions you should ensure you have the proper
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-image:image/partition/config
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-image:image/partition/config
 
 .. code-block:: json
 
@@ -1074,7 +1074,7 @@ Next import the desired image into the system controller floating IP address usi
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_System_Controller_IP}}:8888/api/data/f5-utils-file-transfer:file/import
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
 .. code-block:: json
 
@@ -1106,7 +1106,7 @@ You may also check the transfer status via the API:
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-utils-file-transfer:file/transfer-status
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/transfer-status
 
 You will see a response similar to the one below showing status:
 
@@ -1125,7 +1125,7 @@ The system ships with all slots configured in the default chassis partition. Bef
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-slot:slots
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-slot:slots
 
 .. code-block:: json
 
@@ -1180,7 +1180,7 @@ Next remove the default partition from the slots you’d like to assign to any n
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -1211,7 +1211,7 @@ Next, a chassis partition called **Production** will be created. It will be assi
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
 
 .. code-block:: json
 
@@ -1238,7 +1238,7 @@ Next, slots 1 & 2 will be assigned to the chassis partition called **Production*
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -1264,7 +1264,7 @@ Finally, the chassis partition **Production** containing slots 1 & 2 will be ena
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/config/enabled
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/config/enabled
 
 
 .. code-block:: json
@@ -1277,7 +1277,7 @@ Next, a chassis partition called **Devlopment** will be created. It will be assi
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
 
 .. code-block:: json
 
@@ -1304,7 +1304,7 @@ Next, slot 3 will be assigned to the chassis partition called Development:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -1324,7 +1324,7 @@ Finally, the chassis partition **Development** containing slot 3 will be enabled
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions/partition=Development/config/enabled
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Development/config/enabled
 
 
 .. code-block:: json
@@ -1374,7 +1374,7 @@ Once the chassis partitions have been created you can query their status using t
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/f5-system-partition:partitions
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
 
 .. code-block:: json
 

@@ -97,7 +97,7 @@ A qkview can be generated for the system controller or any chassis partition usi
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-qkview:qkview/f5-system-diagnostics-qkview:capture
+    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-qkview:qkview/f5-system-diagnostics-qkview:capture
 
 In the body of the API call enter the filename of the qkview to be saved.
 
@@ -122,7 +122,7 @@ To check the status of the qkview collection you can use the following API comma
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-qkview:qkview/f5-system-diagnostics-qkview:status
+    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-qkview:qkview/f5-system-diagnostics-qkview:status
 
 
 The output of the command will show the percentage complete of the qkview.
@@ -140,7 +140,7 @@ If you'd like to copy the qkview directly to iHealth once it is completed use th
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
+    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
 
 In the body of the API call add details with the filename, optinal descrioption and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
 
