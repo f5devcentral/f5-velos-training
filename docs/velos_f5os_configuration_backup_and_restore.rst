@@ -494,7 +494,7 @@ The system controllers should reboot, and their configurations will be completel
 Remove Partitions and Reset Controller via API
 ----------------------------------------------
 
-There is no webUI support for this functionality currently. To do this via API call you will need to send the following API call to the chassis partition IP address. Below is an example sending the database reset-to-default command to the chassis partition called Production:
+The reset-to-default for the chassis partition database is not supported via the webUI. This can be done via an API call to the chassis partition IP address. Below is an example sending the database reset-to-default command to the chassis partition called Production:
 
 .. code-block:: bash
 
@@ -508,11 +508,13 @@ The body of the API call must have the following:
     "f5-database:proceed": "yes"
     }
 
-Repeat this for the other chassis partitions in the system, in this case send and API call to the IP address of the chassis partition Development:
+Repeat this for the other chassis partitions in the system, in this case send an API call to the IP address of the chassis partition Development:
 
 .. code-block:: bash
 
     POST https://{{Chassis1_development_IP}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:reset-to-default
+
+The body of the API call must have the following:
 
 .. code-block:: json
 
@@ -520,12 +522,14 @@ Repeat this for the other chassis partitions in the system, in this case send an
     "f5-database:proceed": "yes"
     }
 
-Next, send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition **none**. In the example below slots 1-2 were assigned to the chassis partition Production and slot3 was assigned to the chassis partition development. All 3 slots will be moved to the partition none. 
+Next, send an API call to the system controller IP address to re-assign any slots that were previously part of a chassis partition to the partition **none**. In the example below slots 1-2 were assigned to the chassis partition Production, and slot3 was assigned to the chassis partition Development. All 3 slots will be moved to the partition none. 
 
 
 .. code-block:: bash
 
     POST https://{{Chassis1_System_Controller_IP}}:8888/restconf/data/
+
+All 3 slots are assigned to partition none.
 
 .. code-block:: json
 
@@ -551,7 +555,7 @@ Next, send an API call to the system controller IP address to re-assign any slot
         }
     }
 
-ONce the slots have been removed form the partitions, you can Delete any chassis partitions that were configured. In this case both **Production** and **Development** chassis partitions will be deleted by sending API calls to the system controller IP address:
+Once the slots have been removed form the partitions, you can Delete any chassis partitions that were configured. In this case both **Production** and **Development** chassis partitions will be deleted by sending API calls to the system controller IP address:
 
 .. code-block:: bash
 
@@ -661,7 +665,7 @@ To transfer files into the system controller you’ll have to manually configure
 Importing System Controller Backups
 ===================================
 
-Once the system is configured and out-of-band connectivity is restored you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controllers configuration as outlined earlier.
+Once the system is configured and out-of-band connectivity is restored, you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controllers configuration as outlined earlier.
 
 
 Next SCP the file from a remote server:
@@ -674,7 +678,7 @@ Next SCP the file from a remote server:
 Importing System Controller Backups via CLI
 -------------------------------------------
 
-To import the file using the F5OS CLI you must have a remote HTTP server to host the file. Use the file import command as seen below to import the file into the **configs** directory.
+To import the file using the F5OS CLI you must have a remote HTTPS, SFTP, or SCP server to host the file. Use the **file import** command as seen below to import the file into the **configs** directory. You can then check the **file transfer-status** and list the contents of the config directory using the **file list path configs** command.
 
 .. code-block:: bash
 
@@ -700,7 +704,7 @@ To import the file using the F5OS CLI you must have a remote HTTP server to host
 Importing System Controller Backups via API
 -------------------------------------------
 
-Post the following API call to the system controllers IP address to import the archived ConfD backup file form a remote HTTPS server to the configs directory on the system controller.
+Post the following API call to the system controllers IP address to import the archived ConfD backup file from a remote HTTPS server to the configs directory on the system controller.
 
 .. code-block:: bash
 
@@ -760,7 +764,7 @@ You’ll see the contents of the directory in the API response:
 Importing System Controller Backups via webUI
 -------------------------------------------
 
-You can use the **System Settings -> File Utilities** page to import an archived system controller backup from a remote HTTPS server. Use the drop-down option for **Base Directory** and choose **configs** to see the current files in that directory, and to import or export files. Choose the **Import** option and a popup will appear asking for the details of how to obtain the remote file.
+You can use the **System Settings -> File Utilities** page to import or upload an archived system controller backup from a remote HTTPS, SFTP, or SCP server. Use the drop-down option for **Base Directory** and choose **configs** to see the current files in that directory, and to import or export files. Choose the **Import** option and a popup will appear asking for the details of how to obtain the remote file. The **Upload** option will allow you to upload from you client machine via the browser.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image9.png
   :align: center
@@ -777,7 +781,7 @@ Restoring the System Controller from a Database Backup via CLI
 --------------------------------------------------------------
 
 
-Now that the system controller backup has been copied into the system, you can restore the previous backup using the **system database config-restore** command as seen below. You can use the file list command to verify the file name:
+Now that the system controller backup has been copied into the system, you can restore the previous backup using the **system database config-restore** command as seen below. You can use the **file list** command to verify the file name:
 
 .. code-block:: bash
 
@@ -1099,7 +1103,7 @@ Repeat this process for each chassis partition in the system.
 Importing Archived Chassis Partition Configs via API
 ----------------------------------------------------
 
-Archived ConfD database backups can be imported from a remote HTTPS server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
+Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SCP server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
 
 .. code-block:: bash
 
@@ -1154,7 +1158,7 @@ Repeat similar steps for remaining chassis partitions:
 Importing Archived Chassis Partition Configs via webUI
 ----------------------------------------------------
 
-You can use the System Settings -> File Utilities page to import archives from a remote HTTPS server. 
+You can use the **System Settings -> File Utilities** page to import archives from a remote HTTPS server. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image13.png
   :align: center
@@ -1178,15 +1182,15 @@ To restore a configuration database backup within a chassis partition, use the *
     Production-1(config)# 
 
 
-    development-1(config)# system database config-restore name development-DB-BACKUP2021-09-10
+    Development-1(config)# system database config-restore name development-DB-BACKUP2021-09-10
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
     result Database config-restore successful.
-    development-1(config)# 
+    Development-1(config)# 
     System message at 2021-09-15 03:23:50...
     Commit performed by admin via tcp using cli.
-    development-1(config)# 
+    Development-1(config)# 
 
 
 The tenant is properly restored and deployed; however, its status is pending waiting on image:
@@ -1202,7 +1206,7 @@ This can be seen in the chassis partition CLI by using the **show tenants** comm
 
     Placeholder
 
- Copy the proper tenant image into each partition and the tenant should then deploy successfully. Below is a **show images** output before and after an image is successfully uploaded. Note the **STATUS** of **not-present** and then **replicated** after the image has been uploaded:   
+Copy the proper tenant image into each partition and the tenant should then deploy successfully. Below is a **show images** output before and after an image is successfully uploaded. Note the **STATUS** of **not-present** and then **replicated** after the image has been uploaded:   
 
  .. code-block:: bash
 
