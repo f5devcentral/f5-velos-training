@@ -134,12 +134,12 @@ An active tenant will naturally failover to the standby tenant in another VELOS 
 VELOS HA Considerations and Recommended Practices
 =================================================
 
-As with previous generation BIG-IP appliances and chassis there are multiple HA topologies that are supported for VELOS tenants. In general, the HA setup for VELOS will mimic vCMP guest HA setup, as there is no HA configured at the underlying F5OS platform layer, although there is HA between the dual system controllers. Some customers prefer to utilize dedicated links (within a LAG) for the HA interconnect which carries HA VLANs between tenants, and other customers prefer to run these HA VLANs over the existing in-band ports (within a LAG), and not dedicate ports for the HA interconnect. The remaining parts of this section will cover the different topology options specific to the VELOS platform and cover pros and cons of each approach.
+As with previous generation BIG-IP appliances and chassis, there are multiple HA topologies that are supported for VELOS tenants. In general, the HA setup for VELOS will mimic vCMP guest HA setup, as there is no HA configured at the underlying F5OS platform layer, although there is HA between the dual system controllers. Some customers prefer to utilize dedicated links (within a LAG) for the HA interconnect which carries HA VLANs between tenants, and other customers prefer to run these HA VLANs over the existing in-band ports (within a LAG), and not dedicate ports for the HA interconnect. The remaining parts of this section will cover the different topology options specific to the VELOS platform, and cover pros and cons of each approach.
 
 VELOS BX110 Blade 
 -----------------
 
-Each VELOS BX110 blade has two physical ports, that currently support the following options for connectivity: 100Gb, 40Gb, 4 x 25Gb, 4 x 10Gb. Currently both ports on the same blade must be configured for the same speed and mode. The number of blades installed may dictate what approach makes the most sense, as the number of ports available and the performance required may dictate some topology decisions.
+Each VELOS BX110 blade has two physical ports, that currently support the following options for connectivity: 100Gb, 40Gb, 4 x 25Gb, and 4 x 10Gb. Currently, both ports on the same blade must be configured for the same speed and mode. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
 
 .. image:: images/velos_high_availability/image12.png
   :align: center
@@ -148,13 +148,13 @@ Each VELOS BX110 blade has two physical ports, that currently support the follow
 HA Topology Options
 -------------------
 
-VELOS does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis with identically configured tenants and maintaining HA relationships at the tenant level as seen below. This mimics the VIPRION HA behavior between vCMP guests. There is no redundancy between chassis at the F5OS platform layer. The chassis’ themselves are unaware of the other chassis and there is no HA communication at this level, it’s the tenants that form the HA relationship.
+VELOS does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis, with identically configured tenants, on the same slots, and maintaining HA relationships at the tenant level as seen below. This mimics the previous HA behavior supported on VIPRION between vCMP guests. There is no HA or redundancy configuration between chassis at the F5OS platform layer. The chassis themselves are unaware of the other chassis, and there is no HA communication at this level. It’s the tenants on seprate chassis that form the HA relationship.
 
 .. image:: images/velos_high_availability/image8.png
   :align: center
   :scale: 70%
 
-Tenants on different chassis should have the same number of vCPU’s and be configured to run on the same slots. HA interconnection VLANs would be configured between chassis partitions in the two chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
+Tenants on different chassis should have the same number of vCPUs, and be configured to run on the same slots. HA interconnect VLANs would be configured between chassis partitions in the two separate chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
 
 
 .. image:: images/velos_high_availability/image13.png
@@ -164,46 +164,46 @@ Tenants on different chassis should have the same number of vCPU’s and be conf
 HA Topology Considerations
 --------------------------
 
-Most modern environments will have dual upstream layer2 switches that handle the in-band connections from multiple VELOS chassis. The ideal connection mechanism for the in-band connections is to connect to a switching infrastructure that supports MLAG or VPC between the upstream switches. This will allow LAG’s on VELOS side to be dual homed to both upstream switches and this will help prevent failover on VELOS in the event of an upstream switch failure. Below is an example of a typical deployment with a LAG with members from separate BX110 VELOS blades going to upstream L2 switches:
+Most modern environments will have dual upstream layer2 switches that handle the in-band connections from multiple VELOS chassis. The ideal connection mechanism for the in-band connections, is to connect to a switching infrastructure that supports MLAG or VPC between the upstream switches. This will allow LAG’s on the VELOS side to be dual homed to both upstream switches, and this will help prevent failover on VELOS in the event of an upstream switch failure. Below is an example of a typical deployment with LAG with members from separate BX110 VELOS blades going to upstream L2 switches:
 
 .. image:: images/velos_high_availability/image14.png
   :align: center
   :scale: 60%
 
-If the environment only has a single blade in each chassis and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual homing it to the two upstream switches in a vPC makes the most sense. Because there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best. In the example below, the HA VLAN(s) will run on the same LAG as the in-band traffic.
+If the environment only has a single blade in each chassis, and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual homing it to the two upstream switches in a vPC makes the most sense. Since there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best. In the example below, the HA VLAN(s) will run on the same LAG as the in-band traffic.
 
 .. image:: images/velos_high_availability/image15.png
   :align: center
   :scale: 60%
 
 
-If the environment is not running 100Gb or 40Gb, then the BX110 blade can be configured so that both ports support 4 x 25Gb ports, or 4 x 10Gb ports (total of 8 ports). With this many ports you have the option of adding more ports into the LAG to the upstream switches, and dedicating ports for an HA interconnect LAG between the two VELOS chassis.  As an example, 4 of the ports could be aggregated together in a LAG and 2 of those ports would go to upstream switch1 and the other two to upstream switch2. The remaining 4 ports could be put into another LAG dedicated for the HA interconnect between the chassis. The number of ports within the LAGs could be adjusted based on the specific environment requirements. i.e. fewer ports for the HA interconnect LAG if mirroring bandwidth is not expected to be too high. These ports could be added to the in-band LAG.
+If the environment is not running 100Gb or 40Gb, then the BX110 blade can be configured so that both ports support 4 x 25Gb ports, or 4 x 10Gb ports (total of 8 ports). With this many ports, you have the option of adding more ports into the LAG connecting to the upstream switches, and dedicating ports for an HA interconnect LAG between the two VELOS chassis.  As an example, 4 of the ports could be aggregated together in a LAG and 2 of those ports would go to upstream switch1, and the other two to upstream switch2. The remaining 4 ports could be put into another LAG dedicated for the HA interconnect between the chassis. The number of ports within the LAGs could be adjusted based on the specific environment requirements. As an example, fewer ports for the HA interconnect LAG if mirroring bandwidth is not expected to be too high. These ports could be added to the in-band LAG instead.
 
 .. image:: images/velos_high_availability/image16.png
   :align: center
   :scale: 60%
 
-As more BX110 blades are added to each VELOS chassis, more options become available as the restriction of running only one speed / mode is lifted because a second blade could be configured to run at different speeds.  This could allow some ports to run lowers speeds (4 x 25Gb, 4 x 10Gb) and break out, while other ports are running higher speed (40Gb or 100Gb). 
+As more BX110 blades are added to each VELOS chassis, more options become available, as the restriction of running only one speed / mode is lifted because a second blade could be configured to run at different speeds.  This could allow some ports to run at lowers speeds (4 x 25Gb or 4 x 10Gb) and break out, while other ports are running higher speed (40Gb or 100Gb). 
 
-As additional blades are added, it makes sense to spread the LAG across more blades for added redundancy. It is not a requirement to extend the LAG to every blade within a chassis partition, but this can be done to optimize traffic flows and avoid extra backplane traversals. Consider the diagram below where a single LAG on one blade is configured but 2 blades are installed. Traffic will enter blade1 and go through a disaggregation process where some traffic may be processed locally on blade1 and other traffic will be sent to the remote blade2. Tenant slot configuration will also play into this decision. This means an extra hop across the backplane/switch fabrics for transactions to be processed, and then the response having to come back across the backplane to exit the chassis via the LAG.
+As additional blades are added, it makes sense to spread the LAG across more blades for added redundancy. It is not a requirement to extend the LAG to every blade within a chassis partition, but this can be done to optimize traffic flows and avoid extra backplane traversals. Consider the diagram below; where a single LAG on one blade is configured but 2 blades are installed. Traffic will enter blade1 and go through a disaggregation process where some traffic may be processed locally on blade1, and other traffic will be sent to the remote blade2. Tenant slot configuration will also play into this decision. This means an extra hop across the backplane/switch fabrics for transactions to be processed, and then the response having to come back across the backplane to exit the chassis via the LAG.
 
 .. image:: images/velos_high_availability/image17.png
   :align: center
   :scale: 60%
 
-Consider the same number of blades, but instead of terminating the LAG on blade1 only, this time it is spread across both blade1 and blade2. This will allow incoming traffic to be somewhat evenly distributed coming into the chassis across the two blades (this is dependent on the upstream layer2 switch hashing algorithms and traffic patterns). In the diagram below traffic will still go through a disaggregation process and may be sent across the backplane/switch fabrics if needed. However, instead of having to traverse the backplane to egress the chassis, the VELOS blades will always prefer a local egress port over a backplane traversal. For this reason, spreading a LAG over more ports not only provides added resiliency in case of blade failure it also provides a more optimal traffic flow.
+Consider the same number of blades, but instead of terminating the LAG on blade1 only, this time it is spread across both blade1 and blade2. This will allow incoming traffic to be somewhat evenly distributed coming into the chassis across the two blades (this is dependent on the upstream layer2 switch hashing algorithms and traffic patterns). In the diagram below, traffic will still go through a disaggregation process, and may be sent across the backplane/switch fabrics if needed. However, instead of having to traverse the backplane to egress the chassis, the VELOS blades will always prefer a local egress port over a backplane traversal. For this reason, spreading a LAG over more ports not only provides added resiliency in case of blade failure, it also provides a more optimal traffic flow.
 
 .. image:: images/velos_high_availability/image18.png
   :align: center
   :scale: 60%
 
-Adding two highspeed (100gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (Especially for the 100Gb case) because each BX110 blade is rated for a max of 95Gb, so adding an additional port is not going to increase performance.  If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
+Adding two highspeed (100Gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (Especially for the 100Gb case) because each BX110 blade is rated for a max of 95Gb, so adding an additional port is not going to increase performance.  If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
 
 
 Mirroring Considerations
 ------------------------
 
-The two topologies below are identical except one has a dedicated LAG for the HA interconnect VLANs and the other lets HA VLANs ride over the in-band LAG. Whether they go to a vPC or not is optional. While the dedicated HA Interconnect LAG requires more ports, it does provide better isolation and performance for mirroring.
+The two topologies below are identical, except one has a dedicated LAG for the HA interconnect VLANs, and the other lets HA VLANs ride over the in-band LAG. Whether they go to an upstream switch that supports vPC or MLAG is optional. While the dedicated HA Interconnect LAG requires more ports, it does provide better isolation and performance for mirroring.
 
 .. image:: images/velos_high_availability/image19.png
   :align: center
@@ -213,33 +213,33 @@ The two topologies below are identical except one has a dedicated LAG for the HA
   :align: center
   :scale: 60%   
 
-Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented, it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to switch error. This can affect mirroring and heartbeat, whereas a dedicated HA interconnect between the VELOS chassis has no dpedencies on upstream switches or networking. The biggest concern is the Failover heartbeats from sod (udp port 1026). 
+Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented, it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to an upstream switch error. This can affect mirroring and heartbeat, whereas a dedicated HA interconnect between the VELOS chassis has no dependencies on upstream switches or networking. The biggest concern is disrupting the Failover heartbeats from sod (udp port 1026) between the tenants. 
 
-The right way to set this up is to configure HA heartbeats over the management interface as well as over the HA VLAN (K37361453). Unfortunately, this is harder than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step and if they fail to set this up properly, they would be unwittingly relying solely on the stability of their HA VLAN.
+The proper way to deploy, is to configure HA heartbeats over the management interface, as well as over the HA VLAN (K37361453). Unfortunately, this may be more difficult than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must also configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step, and if it not setup properly, stability of the HA environment will rely solely on the stability of the HA VLAN.
 
-The example below shows a tenant configured on VELOS. For a single slot tenant (a tenant that only utilizes one slot/blade), you only need to configure the single Management IP address. If a VELOS tenant spans more than one blade then you must configure a separate cluster member IP address for each slot/blade that the tenant will run on. You cannot reuse these IP addresses within other tenants, they must have their own unique cluster member IP addresses if they span more than one blade.
+The example below shows a BIG-IP tenant configured on VELOS. For a single slot tenant (a tenant that only utilizes one slot/blade), you only need to configure the single management IP address. If a VELOS tenant spans more than one blade, then you must configure a separate cluster member IP address for each slot/blade that the tenant will run on. You cannot reuse these IP addresses within other tenants, they must have their own unique cluster member IP addresses if they span more than one blade. While spanning a tenant across blades may provide some level of local redundancy, it does require additional configuration and IP addressing, and may also cause additional strain on the control plane process (mcpd), as it will need to replicate between blades. These should be considered before finalizing a design for the tenants.
 
 .. image:: images/velos_high_availability/image21.png
   :align: center
   :scale: 60%  
 
-The diagram below shows the configuration of multiple HA heartbeat paths. One is Multicast configured on the out-of-band network via the Management port on the VELOS system controllers, and the other is Unicast configured on the in-band network Self-IP on the tenant. As outlined in (K37361453), having both options defined is critical to HA working properly.
+The diagram below shows the configuration of multiple HA heartbeat paths. One is **Multicast**, configured on the out-of-band network via the management port on the VELOS system controllers, and the other is **Unicast** configured on the in-band network Self-IP on the tenant. As outlined in (K37361453), having both options defined is critical in order to have tenant HA working properly.
 
 .. image:: images/velos_high_availability/image22.png
   :align: center
   :scale: 70%  
 
-There is an alternative to configuring Multicast over the Management network, called Unicast Mesh, where each blade in the tenant is added configured as a Failover Unicast address, allowing each blade to exchange heartbeat message with all the blades of the peer tenant. As with Multicast, you must configure a separate cluster member IP address for each blade on which the tenant will run.
+There is an alternative to configuring the multicast option over the management network, called **Unicast Mesh**, where each blade in the tenant is added and configured as a **Failover Unicast Address**, allowing each blade to exchange heartbeat messages with all of the blades where the peer tenant is runnnig. As with the Multicast option, you must configure a separate cluster member IP address inside the tenant, for each blade that the tenant will run on.
 
 How Many Ports are Required for an HA Interconnect LAG?
 -------------------------------------------------------
 
-The number of ports required in a dedicated HA Interconnect may vary. Ideally you should have a minimum of two ports in a LAG with dedicated tagged VLANs for each tenant HA pair. Running configsync and mirroring over this interface is preferred if it has been enabled. The two links in a LAG provide redundancy if one link should fail, and you can add more interfaces to the LAG for added resiliency. These links should be spread across additional blades for added redundancy.
+The number of ports required in a dedicated HA Interconnect may vary based on perfromance and deployment options. Ideally, you should have a minimum of two ports within a LAG, with dedicated tagged VLANs for each tenant HA pair. Running config-sync and mirroring over this LAG interface is preferred if it has been enabled, because it is usually directly connected, has lower latency, and doesn't compete with in-band traffic. The two links in a LAG provide redundancy if one link should fail, and you can add more interfaces to the LAG for added resiliency. These links should be spread across additional blades when possible, for added redundancy.
 
-Generally, heartbeat traffic is not very bandwidth sensitive, but it can be sensitive to latency especially when mirroring is enabled. Mirroring will take up more bandwidth over the HA links, layer4 mirroring is less bandwidth intensive than layer7 mirroring. With layer4 mirroring there is one packet mirrored per connection, whereas layer7 mirroring is one mirrored connection per packet. 
+Generally, heartbeat traffic is not very bandwidth sensitive, but it can be very sensitive to latency, especially when mirroring is enabled. Mirroring will take up more bandwidth over the HA links; layer4 mirroring is less bandwidth intensive than layer7 mirroring because it is sending less traffic to keep mirror state in sync. With layer4 mirroring, there is one packet mirrored **per connection**, whereas layer7 mirroring is one mirrored connection **per packet**. 
 
-You should plan for enough bandwidth in the LAG if mirroring is enabled. As mentioned above layer7 mirroring will generate lots of bandwidth as every packet has to be mirrored. 
+You should plan to have adequate bandwidth in the LAG if mirroring is enabled. As mentioned above layer7 mirroring will generate lots of bandwidth as every packet has to be mirrored. Not every virtual server or application requires mirroring, it is reccomened you enable only where required. 
 
-HA Groups should be properly configured within VELOS tenants to detect external failures. You need to configure an HA Group with sufficient weight on the correct operation of the main trunk to upstream switches.  Without HA Groups (or less preferred VLAN Failsafe), the only requirement is to have heartbeat.
+Tenant failover triggers can be configured through the **HA Group** feature. This should be properly configured within VELOS tenants to detect external failures and trigger failover. You should configure an HA Group with sufficient weight on the correct operation of the main trunk/LAG to the upstream switches or optionally when the number of memers in a cluster is too low. Without HA Groups (or less preferred VLAN Failsafe), the only requirement keeping a device or virtual server active, is to have heartbeat.
 
-If you're setting up peer to peer connectivity, you're putting yourself in a position where a VELOS which loses its main traffic LAG will continue to heartbeat over the HA interface, and will continue to remain active.  Make sure HA group setup is explicitly mentioned as a requirement if you setup peer to peer HA VLANs
+If you're setting up tenant to tenant connectivity, and don't have HA groups configured, you may end up with cases where failover is desired but not triggered. If a VELOS chassis partition loses its main traffic LAG, it will continue to heartbeat over the HA interface, and will continue to remain active.  To avoid this, make sure the HA group setup is explicitly mentioned as a requirement if you setup peer to peer dedicated HA VLANs.
