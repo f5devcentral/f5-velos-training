@@ -142,7 +142,7 @@ If you'd like to copy the qkview directly to iHealth once it is completed use th
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
 
-In the body of the API call add details with the filename, optinal descrioption and SR number.
+In the body of the API call add details with the filename, optinal descrioption and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
 
 .. code-block:: json
 
@@ -152,6 +152,16 @@ In the body of the API call add details with the filename, optinal descrioption 
     "f5-system-diagnostics-ihealth:service-request-number": ""
     }
 
+The output will confirm the upload has begun.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-ihealth:output": {
+            "message": "HTTP/1.1 202 Accepted\r\nLocation: /support/ihealth/status/a0PBQTGW\r\nDate: Tue, 12 Apr 2022 04:19:40 GMT\r\nContent-Length: 0\r\n\r\n",
+            "errorcode": false
+        }
+    }
 
 Logging
 =======
