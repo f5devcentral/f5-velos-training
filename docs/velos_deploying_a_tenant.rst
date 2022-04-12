@@ -304,7 +304,7 @@ Tenant creation via the API is as simple as defining the parameters below and se
 
 .. code-block:: bash
 
-  POST https://{{Chassis1_Partition_IP}}:8888/restconf/data/f5-tenants:tenants
+  POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
 
 .. code-block:: json
 
@@ -763,7 +763,7 @@ Send a PATCH API command to change the CPU and memory configuration so the tenan
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/vcpu-cores-per-node
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/vcpu-cores-per-node
 
 .. code-block:: json
 
@@ -776,7 +776,7 @@ Finally change the tenant status back to **deployed** and then check the status 
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_Production_IP}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
+  PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
 
 .. code-block:: json
 

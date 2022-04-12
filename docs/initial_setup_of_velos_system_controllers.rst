@@ -556,7 +556,7 @@ To get the current licensing status via API, use the following API call. Issue a
 
 .. code-block:: bash
 
-  GET https://{System-Controller-IP}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing
 
 .. code-block:: json
 

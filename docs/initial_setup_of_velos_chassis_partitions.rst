@@ -1181,7 +1181,7 @@ The final step is adding LACP configuration for each LAG:
 
 .. code-block:: bash
 
-  PATCH https://{{Chassis2_Production_IP}}:8888/restconf/data/
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 .. code-block:: json
 
@@ -1216,7 +1216,7 @@ To view the final LAG configuration via the API use the following API call:
 
 .. code-block:: bash
 
-	GET https://{{Chassis2_Production_IP}}:8888/restconf/data/openconfig-lacp:lacp
+	GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-lacp:lacp
 
 .. code-block:: json
 
@@ -1375,7 +1375,7 @@ You can get more granular information down to the interface level using the foll
 
 .. code-block:: bash
 
-	GET https://{{Chassis2_Production_IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+	GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
 
 .. code-block:: json
 

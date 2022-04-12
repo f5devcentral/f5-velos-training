@@ -88,7 +88,7 @@ List the current system controller and partitions images in the images/staging d
 
 The following JSON should be in the payload of the API call above.
 
-    .. code-block:: json
+.. code-block:: json
 
     {
     "f5-utils-file-transfer:path": "images/staging"
