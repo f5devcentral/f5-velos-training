@@ -31,13 +31,16 @@ https://support.f5.com/csp/article/K02521182
     - Collects blade host info, including logs
     - Collects info for each partition service container
 
+Generating Qkviews from the webUI
+---------------------------------
+
 In both the system controller and the chassis partition the qkview can be generated from The **System Settings > System Reports** page. Here it also allows an admin to optionally upload them to iHealth. 
 
 .. image:: images/velos_diagnostics/image1.png
   :align: center
   :scale: 70%
 
-To generate a qkview click on the button in the upper right-hand corner. It will take some time for the qkyou view to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if entered them previously and can be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
+To generate a qkview, click on the button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously, and can be cleared if you want to use another account. You can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
 
 
 .. image:: images/velos_diagnostics/image2.png
@@ -46,8 +49,10 @@ To generate a qkview click on the button in the upper right-hand corner. It will
 .. image:: images/velos_diagnostics/image3.png
   :width: 45%
 
+Generating Qkviews from the CLI
+---------------------------------
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter config mode, and then use the **system diagnostics ihealth config** command to configure a **username** and **password**.
+If you would like to store iHealth credentials within the configuration you may do so via the system controller or chassis partition CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a **username** and **password**.
 
 .. code-block:: bash
 
@@ -85,6 +90,67 @@ You can view the status of the capture using the command system diagnostics qkvi
     
     resultint 0
 
+Generating Qkviews from the API
+---------------------------------
+
+A qkview can be generated for the system controller or any chassis partition using the following API call. Note the IP address endpoint will either be the system controller or the desired chassis partition IP address.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-qkview:qkview/f5-system-diagnostics-qkview:capture
+
+In the body of the API call enter the filename of the qkview to be saved.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-qkview:filename": "qkview{{currentdate}}.tgz"
+    }
+
+If the generation of a qkview is successful, you'll receive confirmation similar to the output below.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-qkview:output": {
+            "result": " Warning: Qkview may contain sensitive data such as secrets, passwords and core files. Handle with care. Please send this file to F5 support. \nQkview file my-qkview2022-04-12.tgz is being collected.\nreturn code 200\n ",
+            "resultint": 0
+        }
+    }
+
+To check the status of the qkview collection you can use the following API command.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-qkview:qkview/f5-system-diagnostics-qkview:status
+
+
+The output of the command will show the percentage complete of the qkview.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-qkview:output": {
+            "result": " {\"Busy\":true,\"Percent\":18,\"Status\":\"collecting\",\"Message\":\"Collecting Data\",\"Filename\":\"my-qkview2022-04-12.tgz\"}\n ",
+            "resultint": 0
+        }
+    }
+
+If you'd like to copy the qkview directly to iHealth once it is completed use the following API command referencing the previously completed qkview file.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
+
+In the body of the API call add details with the filename, optinal descrioption and SR number.
+
+.. code-block:: json
+
+    {
+    "f5-system-diagnostics-ihealth:qkview-file": "qkview{{currentdate}}.tgz",
+    "f5-system-diagnostics-ihealth:description": "This is a test qkview",
+    "f5-system-diagnostics-ihealth:service-request-number": ""
+    }
 
 
 Logging
