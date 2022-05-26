@@ -5,9 +5,9 @@ Initial Setup of VELOS System Controllers
 System Controller Setup
 =======================
 
-Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. F5OS utilizes **ConfD** for configuration management of F5OS and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?** and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
+Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password), and access the F5OS CLI. F5OS utilizes **ConfD** for configuration management and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?**, and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
 
-Once logged in you can display the current running configuration by issuing the command **show running-config**.
+Once logged in, you can display the current running configuration by issuing the command **show running-config**.
 
 .. code-block:: bash
 
@@ -46,7 +46,7 @@ An example of the Secondary/Standby system controller:
 
   syscon-1-standby#
 
-If you are logged into the standby system controller then you will not be able to enter config mode. You must be on the primary/active system controller to make configuration changes.
+If you are logged into the standby system controller, then you will not be able to enter config mode. You must be on the primary/active system controller to make configuration changes.
 
 .. code-block:: bash
 
@@ -69,7 +69,7 @@ The out-of-band Ethernet interfaces on each system controller can be configured 
 Internal Chassis IP Ranges
 --------------------------
 
-The VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/12. This should be sufficient for most production environments. You can verify this with the following command.
+VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/12. This should be sufficient for most production environments. You can verify this with the following command.
 
 .. code-block:: bash
 
@@ -82,11 +82,11 @@ The VELOS systems ship with a default internal RFC6598 address space of 100.64.0
   system network state active-chassis-id 1
   syscon-2-active# 
 
-This address range never leaves the inside of the chassis and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range and communicates with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
+This address range never leaves the inside of the chassis, and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range, and communicates with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
 
-Some examples would be any client trying to access the F5OS-C platform layer (system controller or chassis partition) or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services if there is any overlap. Note that this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
+Some examples would be; any client trying to access the F5OS-C platform layer (system controller or chassis partition), or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be; external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services, if there is any address space overlap. Note, this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
 
-If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur the reboot.  Please consult with F5 prior to making any changes to the internal addresses.
+If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur before the reboot. Please consult with F5 prior to making any changes to the internal addresses.
 
 .. code-block:: bash
 
@@ -136,13 +136,13 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
 IP Address Assignment & Routing
 -------------------------------
 
-Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined, or acquired via DHCP. In addition to the IP addresses, a default route and subnet mask/prefix length is defined. For the initial 1.1.x versions of F5OS only IPv4 IP addresses are supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support requires F5OS be running 1.2.x or later. Note the tenants themselves support IPv4/IPv6 management reagrdless of F5OS version.
+Each system controller requires its own unique IP address, and a floating IP address also needs to be configured. The floating IP address will follow the primary system controller. The IP addresses can be statically defined, or acquired via DHCP. In addition to the IP addresses, a default route and subnet mask/prefix length is defined. For the initial 1.1.x versions of F5OS-C only IPv4 IP addresses were supported on the out-of-band interfaces of the system controllers. IPv6 and dual stack IPv4/v6 support requires F5OS-C be running 1.2.x or later. Note the tenants themselves support IPv4/IPv6 management reagrdless of F5OS version.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image1.png
   :align: center
   :scale: 70%
 
-Once logged in you will configure the static IP addresses (unless DHCP is preferred).
+Once logged in, you will configure the static IP addresses (unless DHCP is preferred).
 
 .. code-block:: bash
 
@@ -152,13 +152,13 @@ Once logged in you will configure the static IP addresses (unless DHCP is prefer
   syscon-2-active(config)# system mgmt-ip config ipv4 prefix-length 24
   syscon-2-active(config)# system mgmt-ip config ipv4 gateway 10.255.0.1
 
-In order to make these changes active you must commit the changes. No configuration changes are executed until the commit command is issued. 
+In order to make these changes active, you must commit the changes. No configuration changes are executed until the commit command is issued. 
 
 .. code-block:: bash
 
   syscon-2-active(config)# commit
 
-Now that the out-of-band addresses and routing are configured you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to onitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in stnady state. After logging into the floating IP address, you should see a screen similar to the one below, and you can verify your management interface settings.
+Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to onitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in stnady state. After logging into the floating IP address, you should see a screen similar to the one below, and you can verify your management interface settings.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image2.png
   :align: center
@@ -168,15 +168,15 @@ Now that the out-of-band addresses and routing are configured you can attempt to
 Interface Aggregation for System Controllers (Optional)
 -------------------------------------------------------
 
-As seen in previous diagrams each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency which is recommended. This would allow direct access to either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers OOB interface bonded together in a single LAG:
+As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other, and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
 
 .. image:: images/initial_setup_of_velos_system_controllers/image3.png
   :align: center
   :scale: 70%
 
-To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, webUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG configure as follows:
+To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, webUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG, configure as follows:
 
-On the active controller create a managment LACP interface:
+On the active controller, create a managment LACP interface:
 
 .. code-block:: bash
 
@@ -184,7 +184,7 @@ On the active controller create a managment LACP interface:
   config name mgmt-aggr
   !
  
-Next create a management aggregate interface and set the **config type** to **ieee8023adLag** and set the **lag-type** to **LACP**.
+Next, create a management aggregate interface and set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**.
 
 .. code-block:: bash
 
@@ -194,7 +194,7 @@ Next create a management aggregate interface and set the **config type** to **ie
   aggregation config lag-type LACP
   !
 
-Finally add the aggregate that you created by name to each of the management interfaces on the two controllers: 
+Finally, add the aggregate that you created by name to each of the management interfaces on the two controllers: 
 
 .. code-block:: bash
 
@@ -215,12 +215,12 @@ Finally add the aggregate that you created by name to each of the management int
 System Settings
 ---------------
 
-Once the IP addresses have been defined system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, webUI, or API.
+Once the IP addresses have been defined, system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, webUI, or API.
 
 Configure System Settings From the CLI
 ---------------------------------------
 
-In the system controller F5OS CLI enter config mode. DNS, logging, and NTP can be set as seen in the example below.
+In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can be set as seen in the example below.
 
 .. code-block:: bash
 
@@ -238,19 +238,19 @@ In the system controller F5OS CLI enter config mode. DNS, logging, and NTP can b
 Configure System Settings From the WebUI
 ----------------------------------------
 
-You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image4.png
   :align: center
   :scale: 70%
 
-Configuring Network Time Protocol is highly recommended so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local timezone for this chassis location.
+Configuring Network Time Protocol is highly recommended, so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local timezone for this chassis location.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image5.png
   :align: center
   :scale: 70%
 
-It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem levels individually. The remote logging severity level will override the component logging levels if they are configured higher, but only for logs sent remotely. Local logging levels will always follow the component levels that are configured here.
+It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here, you can configure remote servers, the logging facility, and severity levels. You can also configure logging subsystem levels individually. The remote logging severity level will override the component logging levels if they are configured higher, but only for logs sent remotely. Local logging levels will always follow the component levels that are configured here.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6.png
   :align: center
@@ -259,7 +259,7 @@ It’s also a good idea to have the VELOS system controllers send logs to an ext
 Configure System Settings From the API
 ---------------------------------------
 
-If you would prefer to automate the setup of the VELOS chassis, there are F5OS API calls for all of the examples above. VELOS supports token based authentication for the F5OS API's. You can send a standard API call with user/password based authentication (basic auth), and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth.  The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes.  If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth**, and enter the username and password to log into your system controller.
+If you would prefer to automate the setup of the VELOS chassis, there are F5OS-C API calls for all of the examples above. VELOS supports token based authentication for the F5OS API's. You can send a standard API call with user/password based authentication (basic auth), and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth. The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes. If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth**, and enter the username and password to log into your system controller.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6a.png
   :align: center
@@ -285,13 +285,13 @@ This will be stored as a variable in the Postman **Environment** as seen below.
   :scale: 70%
 
 
-Once the variable is stored with the auth token, it can be used instead of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note, postman references variables by encasing the variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{X-Auth-Token_Chassis1_System_Controller}}**. 
+Once the variable is stored with the auth token, it can be used instead of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note, Postman references variables by encasing the variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{x-auth-token_chassis1_system_controller}}**. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6d.png
   :align: center
   :scale: 70%
 
-You must also add some required headers to any API calls to F5OS. It is important to include the header **Content-Type** **application/yang-data+json** and the Token header **X-Auth-Token** with a value of **{{X-Auth-Token_Chassis1_System_Controller}}**.
+You must also add some required headers to any API calls sent to F5OS. It is important to include the header **Content-Type** **application/yang-data+json** and the Token header **X-Auth-Token** with a value of **{{x-auth-token_chassis1_system_controller}}**. The variable and header will change depening on the destination of the API call. It can be send to a second chassis, or to chassis partitions within the chassis depending on the parameter being configured.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6e.png
   :align: center
@@ -421,12 +421,12 @@ Licensing the VELOS Chassis
 
 Licensing for the VELOS system is handled at the chassis level. This is similar to how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression, or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
 
-Licenses can be applied via CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems.
+Licenses can be applied via the F5OS-C CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems.
 
 Apply License via webUI
 -----------------------
 
-Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If this is not possible to reach the licensing server, use the **Manual** method.
+Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If it is not possible to reach the licensing server, use the **Manual** method.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image7.png
   :width: 45%
@@ -439,7 +439,7 @@ You can activate and display the current license in the webUI, CLI or API.
 Apply License via CLI
 ---------------------
 
-You can license the VELOS system automatically if the F5's licesing server is reachable from the VELOS system, and it can resolve the licensing servers name via DNS. If this is not possible, manual licesing may be used. To license the VELOS chassis automatically from the F5OS CLI:
+You can license the VELOS system automatically if F5's licesing server is reachable from the VELOS system, and it can resolve the licensing servers name via DNS. If this is not possible, manual licensing may be used. To license the VELOS chassis automatically from the F5OS CLI:
 
 .. code-block:: bash
 
@@ -490,7 +490,7 @@ You should paste in the license, and when finished hit **<CTRL> D**.
   result License installed successfully.
   syscon-2-active(config)# 
 
-You can also view the EULA via the CLI:
+You can also view the End User License Agreement (EULA) via the CLI:
 
 .. code-block:: bash
 
@@ -544,9 +544,11 @@ The CLI command **show system licensing** will display the chassis level licensi
                             App Tunnel
                             Remote Desktop
 
-**Note: VELOS supports AWAF vs. ASM licensing, and modules like AAM are not supported on the VELOS platform since it has reached End-of-Life.**
+**Note: VELOS supports AWAF and not ASM licensing. Modules such as AAM and Link Controller are not supported on the VELOS platform since they have reached End-of-Life.**
 
 https://support.f5.com/csp/article/K70113407
+
+https://support.f5.com/csp/article/K13328631
 
 
 Apply License via API
@@ -583,7 +585,7 @@ To install a license via API, use the following API call:
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:install
 
-In the body of the API call, add the following JSON payload which references the **registration-key** as a variable in postman:
+In the body of the API call, add the following JSON payload which references the **registration-key** as a variable in Postman:
 
 .. code-block:: json
 
@@ -600,16 +602,16 @@ In the body of the API call, add the following JSON payload which references the
 Chassis Partition Creation
 --------------------------
 
-Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade, or be allowed to span across multiple blades. Conceptually this is similar to how vCMP guests are defined, but the underlying technology in F5OS is different. 
+Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade, or be allowed to span across multiple blades. Conceptually this is similar to how vCMP guests are defined on VIPRION, but the underlying technology in F5OS is different. 
 
-If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS software, as the version that shipped on the system may not be the latest. Note, this is different than the software that the tenants will actually run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
+If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS-C software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS-C software, as the version that shipped on the system may not be the latest. Note, this is different than the software that the tenants will actually run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
 
-You may want to leave the default partition, and create new partitions with names that make sense for your environment. You might want to create different chassis partitions for different environments like QA/Dev and Production, or for different business units or departments, or different security zones. If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases, you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not currently tied to an existing chassis partition may be added to it. 
+You may want to leave the default partition, and create new partitions with names that make sense for your environment. As an example, you may want to create different chassis partitions for different environments like Development and Production, or for different business units, or departments, or different security zones. If you want to utilize other chassis partitions so that you can isolate all the networking for use by different groups, or for specific use cases, you must first edit the default partition and remove any slots that you want to add to other partitions. Once a slot is removed from the default partition an option to create new chassis partitions is enabled, slots that are not currently tied to an existing chassis partition may be added to a new chassis partition. 
 
 Creating Chassis Partitions via the webUI
 -----------------------------------------
 
-The term **Slot** and **Blade** may be used interchangably, in the F5OS configuration interfaces (CLI, webUI, API) the term slot is used as you may want to assign empty slots to a chassis partition. If the term blade were used this may lead to confusion, as a blade may not be installed yet. In the webUI screen below note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis (in slots 1-3), and the rest show as **Empty**.  
+The term **Slot** and **Blade** may be used interchangably, in the F5OS-C configuration interfaces (CLI, webUI, API) the term slot is used as you may want to assign empty slots to a chassis partition. If the term blade were used, this may lead to confusion, as a blade may not be installed yet. In the webUI screen below, note that there is only the default partition, and all 8 slots are assigned to it. There are 3 blades installed in the chassis (in slots 1-3), and the rest show as **Empty**.  
 
 .. image:: images/initial_setup_of_velos_system_controllers/image12.png
   :align: center
@@ -627,13 +629,13 @@ You can then click on the slots in the graphic that you want to remove (slots 1,
   :align: center
   :scale: 70%
 
-The slots will turn white indicating they are not currently assigned to any chassis partition.
+The slots will turn white, indicating they are not currently assigned to any chassis partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image15.png
   :align: center
   :scale: 70%
 
-Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
+Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally, select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C controller and partition images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
 
 .. image:: images/initial_setup_of_velos_system_controllers/image16.png
   :align: center
@@ -645,13 +647,13 @@ Change the partition state to **Enabled**. You can monitor the chassis partition
   :align: center
   :scale: 80%
 
-Next, repeat the process and create another chassis partition for slot3 naming it **Development** and supply and IP address, prefix, and gateway along with a partition image.
+Next, repeat the process and create another chassis partition for slot3 naming it **Development**, and supply and IP address, prefix, and gateway along with a partition F5OS-C image to run
 
 .. image:: images/initial_setup_of_velos_system_controllers/image19.png
   :align: center
   :scale: 80%
 
-You’ll then see a summary of all 3 partitions each with a unique **partition ID**, along with their **Operational State**.
+You’ll then see a summary of all 3 partitions, each with a unique **partition ID**, along with their **Operational State**.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image20.png
   :align: center
@@ -663,14 +665,14 @@ If you click on the **Dashboard**, you’ll see a graphical representation that 
   :align: center
   :scale: 70%
 
-Once the partitions are started and operational, you can log into each one and change the default password. Each chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
+Once the partitions are started and operational, you can log into each one directly via its management IP and change the default password. Each chassis partition will have a default username/password of admin/admin. When using the CLI or webUI you will be prompted on first login to change the password. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image21a.png
   :align: center
   :scale: 70%
 
 
-Below is an example of the CLI prompting for a new password. You'll then be disconnected and will have to log in with the new password.
+Below is an example of the CLI prompting for a new password. You'll then be disconnected, and will have to log in with the new password.
 
 .. code-block:: bash
 

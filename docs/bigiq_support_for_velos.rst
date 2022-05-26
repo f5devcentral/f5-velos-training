@@ -2,7 +2,7 @@
 BIG-IQ Support for VELOS
 ========================
 
-Currently VELOS support in BIG-IQ will mimic VIPRION functionality. In VIPRION a vCMP guest can be created via the chassis CLI, webUI, or API and it can then be imported into BIG-IQ as a device. From there statistics/analytics can be gathered, and L4-7 configurations can be managed in a variety of ways. A VELOS tenant will behave identical to a vCMP guest from a BIG-IQ perspective, meaning you can import it after it has been created to manage configuration or get analytics.
+Currently VELOS support in BIG-IQ will mimic VIPRION functionality. In VIPRION, a vCMP guest can be created via the chassis CLI, webUI, or API and it can then be imported into BIG-IQ as a device. From there, statistics/analytics can be gathered, and L4-7 configurations can be managed in a variety of ways. A VELOS tenant will behave identically to a vCMP guest from a BIG-IQ perspective, meaning you can import it after it has been created to manage configuration or get analytics.
 
 When a VELOS tenant is created it can be imported as a device into BIG-IQ. It will import just like any other BIG-IP instance or device.  Once imported it will show up with a Type of **BIG-IP Tenant**.
 
@@ -10,7 +10,7 @@ When a VELOS tenant is created it can be imported as a device into BIG-IQ. It wi
   :align: center
   :scale: 70%
 
-VELOS tenants can also be onboarded in BIG-IQ using Declarative Onboarding (DO). Once A tenant is created via one of the VELOS interfaces you can run a DO declaration like the one below to BIG-IQ to provision, configure and import it. In the DO declaration you will specify a **targetHost** which is the IP address of the tenant to be onboarded. The following is an example of a DO declaration for onboarding a VELOS tenant:
+VELOS tenants can also be onboarded in BIG-IQ using Declarative Onboarding (DO). Once a tenant is created via one of the VELOS interfaces you can run a DO declaration like the one below to BIG-IQ to provision, configure, and import it. In the DO declaration you will specify a **targetHost**, which is the IP address of the tenant to be onboarded. The following is an example of a DO declaration for onboarding a VELOS tenant:
 
 .. code-block:: bash
 
