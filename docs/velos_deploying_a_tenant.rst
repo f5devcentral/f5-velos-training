@@ -7,25 +7,25 @@ Deploying a Tenant
 Tenant Image Types
 ------------------
 
-Tenant Images for F5OS/VELOS are available on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 and later, & 15.1.4 and later), There is no plan to support v16.x tenants, and the next targeted tenant release will be v17.1. Tenant images for VELOS can be found on downloads.f5.com.
+Tenant images for F5OS are available on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether or not they allow in place upgrades. VELOS only supports specific TMOS releases (currently 14.1.4 and later, and 15.1.4 and later). There is no plan to support v16.0, 16.1, or 17.0 tenants, and the next targeted tenant release will be v17.1. Tenant images for VELOS can be found on downloads.f5.com.
 
 .. image:: images/velos_deploying_a_tenant/image1.png
   :align: center
   :scale: 70% 
 
-Choose either 14.x or v15.x BIG-IP version, to get access to the VELOS/F5OS supported tenant images. Ensure you choose the option that is labeled specifically for F5OS Tenant. As an example, **15.1.5_Tenant-F5OS**:
+Choose either 14.x or v15.x BIG-IP version, to get access to the F5OS supported tenant images. Ensure you choose the option that is labeled specifically for F5OS Tenant. As an example, **15.1.5_Tenant-F5OS**:
 
 .. image:: images/velos_deploying_a_tenant/image2.png
   :align: center
   :scale: 70% 
 
-There are 4 different types of tenant images to choose from (ALL, T1, T2, T4) as seen below, please read the rest of this section to determine the best image type for your environment:
+There are 4 different types of tenant images to choose from (ALL, T1, T2, T4) as seen below; please read the rest of this section to determine the best image type for your environment:
 
 .. image:: images/velos_deploying_a_tenant/image3.png
   :align: center
   :scale: 70% 
 
-The **T1-F5OS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software meaning it does not support upgrades (not even for hotfixes). This type of image is geared towards more modern environments where pave & nuke strategies are preferred over in place upgrades.   
+The **T1-F5OS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software, meaning it does not support upgrades (not even for hotfixes). This type of image is geared toward more modern environments where pave and nuke strategies are preferred over in-place upgrades.   
 
 .. image:: images/velos_deploying_a_tenant/image4.png
   :align: center
@@ -33,15 +33,15 @@ The **T1-F5OS** image type should be used with extreme caution. It is the smalle
 
 The remaining images (T2, ALL, T4) all support in place upgrades; however, they may limit the amount of disk space that can be used by the tenant. If more disk space is needed by the tenant in the future, the tenant can be moved to provisioned state and the disk can be expanded. There is no ability to decrease the disk space, so starting smaller and increasing will ensure there is adequate disk space for many tenants. 
 
-The **T2-F5OS** image is intended for a tenant that will run LTM and or DNS only, it is not suitable for tenants needing other modules provisioned (AVR may be an exception). This type of image is best suited in a high density tenant environment where the number of tenants is going to be high per blade and using minimum CPU resources (1 or 2 vCPUs per tenant). You may want to limit the amount of disk space each tenant can use as a means of ensuring the filesystem on the blade does not become full. As an example, there is 1TB of disk per blade, and 22 tenants each using the 142GB T4 image would lead to an over provisioning situation. Because tenants are deployed in sparse mode which allows over provisioning, this may not be an issue initially, but could become a problem later in the tenant’s lifespan as it writes more data to disk. To keep the tenants in check, you can deploy smaller T2 images which can consume 45GB each. LTM/DNS deployments use much less disk than other BIG-IP modules which do extensive local logging and utilize databases on disk.
+The **T2-F5OS** image is intended for a tenant that will run LTM and / or DNS only; it is not suitable for tenants needing other modules provisioned (AVR may be an exception). This type of image is best suited in a high density tenant environment where the number of tenants is going to be high per blade and using minimum CPU resources (1 or 2 vCPUs per tenant). You may want to limit the amount of disk space each tenant can use as a means of ensuring the file system on the blade does not become full. As an example, there is 1TB of disk per blade, and 22 tenants each using the 142GB T4 image would lead to an over provisioning situation. Because tenants are deployed in sparse mode which allows over provisioning, this may not be an issue initially, but could become a problem later in the tenant’s lifespan as it writes more data to disk. To keep the tenants in check, you can deploy smaller T2 images, which can consume 45GB each. LTM/DNS deployments use much less disk than other BIG-IP modules, which do extensive local logging and utilize databases on disk.
 
-The **All-F5OS** image is suitable for any module configuration and supports a maximum of 76GB for the tenant. It is expected that the number of tenants per blade would be much less, as the module combinations that drive the need for more disk typically require more CPU/Memory which will artificially reduce the tenant count per blade. Having a handful of 76GB or 156GB images per blade should not lead to an out of space condition. There are some environments where some tenants may need more disk space and the T4 image can provide for that. It may be best to default using the T4 image as that is essentially the default size for vCMP deployments today. 
+The **All-F5OS** image is suitable for any module configuration and supports a maximum of 76GB for the tenant. It is expected that the number of tenants per blade would be much less, as the module combinations that drive the need for more disk space typically require more CPU/memory, which will artificially reduce the tenant count per blade. Having a handful of 76GB or 156GB images per blade should not lead to an out of space condition. There are some environments where some tenants may need more disk space and the T4 image can provide for that. It may be best to default to using the T4 image as that is essentially the default size for vCMP deployments today. 
 
-The **T4-VELOS** image also supports any module combination but has additional disk capacity. If you intend to have lots of software images, databases for modules, run modules like SWG which utilize a lot of disk, and local logging, then the added capacity is recommended. More detail on the image types can be found in the following solution article.
+The **T4-VELOS** image also supports any module combination but has additional disk capacity. If you intend to have a lot of software images, databases for modules, run modules like SWG which utilize a lot of disk, and local logging, then the added capacity is recommended. More detail on the image types can be found in the following solution article.
 
 https://support.f5.com/csp/article/K45191957
 
-Note that the image sizes in the chart are the maximum amount of space a tenant could use, not necessarily what it will consume on the physical disk. VELOS tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but in reality, most of the space that is unutilized is zeroed-out and not consuming any space on the disk. 
+Note that the image sizes in the chart are the maximum amount of space a tenant could use, not necessarily what it will consume on the physical disk. VELOS tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but in reality, most of the space that is unused is zeroed-out and not consuming any space on the disk. 
 
 .. image:: images/velos_deploying_a_tenant/image5.png
   :align: center
@@ -53,13 +53,13 @@ This means the disk consumption on the chassis partition disk is actually much s
   :align: center
   :scale: 70% 
 
-However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs, and on the filesystem of the blade it is actually consuming only 11GB on the disk:
+However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs, and on the file system of the blade it is actually consuming only 11GB on the disk:
 
 .. image:: images/velos_deploying_a_tenant/image7.png
   :align: center
   :scale: 70% 
 
-This is analogous to thin provisioning in a hypervisor, where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4 image. There may be rare instances where tenant running in production for a long time can end up with lots of extra space consumed on disk. This could be due to many in place software upgrades, local logging, core files, database use etc…There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over utilized, you could backup the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
+This is analogous to thin provisioning in a hypervisor, where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4 image. There may be rare instances where a tenant running in production for a long time can end up with lots of extra space consumed on disk. This could be due to many in-place software upgrades, local logging, core files, database use etc…There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over-utilized, you could back up the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
 
 Tenant Deployment via CLI
 -------------------------
@@ -207,7 +207,7 @@ Tenant Deployment via webUI
 Uploading a Tenant Image
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can upload a tenant image via the webUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the **Add** button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is also an option to upload direct from a computer via the browser using the **Upload** option.
+You can upload a tenant image via the webUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the **Add** button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is also an option to upload directly from a computer via the browser using the **Upload** option.
 
 .. image:: images/velos_deploying_a_tenant/image8.png
   :align: center
@@ -234,7 +234,7 @@ You can deploy a tenant from the webUI using the **Add** button in the **Tenant 
   :align: center
   :scale: 70% 
 
-The tenant deployment options are almost identical to deploying a vCMP guest, with a few minor differences. You’ll supply the tenant a name, and choose the image for it to run. Next, you will pick what slots (blades) within the chassis partition you want the tenant to run on, and assign an out-of-band management address, prefix and gateway. There are **Recommended** and **Advanced** options for resource provisioning, choosing Recommended will automatically adjust memory based on the vCPUs allocated to the tenant. Choosing Advanced will allow you to over-allocate memory which is something VIPRION did not support. You can choose different states (Configured, Provisioned, Deployed) just like vCMP and there is an option to enable/disable hardware crypto acceleration (Recommended this is enabled). And finally, there is an option to enable Appliance mode which will disable root/bash access to the tenant.
+The tenant deployment options are almost identical to deploying a vCMP guest, with a few minor differences. You’ll supply the tenant a name, and choose the image for it to run. Next, you will pick what slots (blades) within the chassis partition you want the tenant to run on, and assign an out-of-band management address, prefix, and gateway. There are **Recommended** and **Advanced** options for resource provisioning, Choosing Recommended will automatically adjust memory based on the vCPUs allocated to the tenant. Choosing Advanced will allow you to over-allocate memory which is something VIPRION did not support. You can choose different states (Configured, Provisioned, Deployed) just like vCMP, and there is an option to enable/disable hardware crypto acceleration (Enable is recommended). And finally, there is an option to enable Appliance mode which will disable root/bash access to the tenant.
 
 .. image:: images/velos_deploying_a_tenant/image11.png
   :align: center
@@ -566,7 +566,7 @@ Below is an example output from a VELOS system:
 Resizing a Tenant
 -----------------
 
-VELOS tenants have static CPU and memory allocations. These can be changed after a tenant has been deployed, but the tenant will have to be temporarily suspended (put in the **provisioned** state), then the change to CPU and or memory allocation can be made. A tenant can be expanded within a single blade or it can be configured to extend across blades assuming adequate resources are available. Once the changes are completed the tenant can be put into the **deployed** state and returned to service.
+VELOS tenants have static CPU and memory allocations. These can be changed after a tenant has been deployed, but the tenant will have to be temporarily suspended (put in the **provisioned** state), then the change to CPU and/or memory allocation can be made. A tenant can be expanded within a single blade or it can be configured to extend across blades assuming adequate resources are available. Once the changes are completed the tenant can be put into the **deployed** state and returned to service.
 
 Expanding a Tenant within the Same Blade via webUI
 ------------------------------------------------
@@ -577,7 +577,7 @@ Below is webUI output of a single tenant that is in the deployed and running sta
   :align: center
   :scale: 70% 
 
-Click **OK**. This will move the tenant from **deployed** to **provisioned** state. You will see the tenant go from **running**, to **stopping** to **stopped**.
+Click **OK**. This will move the tenant from **deployed** to **provisioned** state. You will see the tenant go from **running**, to **stopping**, to **stopped**.
 
 .. image:: images/velos_deploying_a_tenant/image13.png
   :align: center
@@ -622,7 +622,7 @@ Expanding a tenant on the same blade via the CLI follows the same workflows as t
   !
   Production-1# 
 
-You can also view the tenants running status by issuing the CLI command **show tenants**.
+You can also view the tenant running status by issuing the CLI command **show tenants**.
 
 .. code-block:: bash
 
@@ -654,7 +654,7 @@ You can also view the tenants running status by issuing the CLI command **show t
 
   Production-1# 
 
-To change the tenant configuration, you must first enter config mode and then change the tenant running state to **provisioned**, the change won’t take effect until the **commit** command is issued:
+To change the tenant configuration, you must first enter config mode and then change the tenant running state to **provisioned**. The change won’t take effect until the **commit** command is issued:
 
 .. code-block:: bash
 
@@ -791,7 +791,7 @@ Expanding a Tenant Across Blades via webUI
 
 VELOS tenants can be configured to expand across multiple blades. You can pre-configure a tenant to span more than one blade, and as blades are added to a chassis partition the tenant should automatically expand and start using additional resources it has been configured for. Spanning tenants across two or more blades have advantages and disadvantages that need to be considered. 
 
-For tenants where the control plane is heavily utilized, spanning the tenant across blades can make the control plane performance worse, as it now needs to replicate its state between blades and this adds addtional overhead. Spanning tenants across blades also requires more IP addresses inside the tenants (one for each blade the tenant resides on)to ensure all failure cases are handled properly. A tenant can be configured to survive a blade failure and not failover to its peer, provided it has enough resources to run on a single blade. This is handled through HA group configuration within the tenant itself. It may be better in some cases to just failover to the tenant's peer in another chassis if a blade failure occurs. Expaning a tenant across blades can provide much higher data plane performance for a single tenant, so all these considerations need to be examined to determine the best configuration.   
+For tenants where the control plane is heavily utilized, spanning the tenant across blades can make the control plane performance worse, as it now needs to replicate its state between blades and this adds addtional overhead. Spanning tenants across blades also requires more IP addresses inside the tenants (one for each blade the tenant resides on) to ensure all failure cases are handled properly. A tenant can be configured to survive a blade failure and not failover to its peer, provided it has enough resources to run on a single blade. This is handled through HA group configuration within the tenant itself. It may be better in some cases to just failover to the tenant's peer in another chassis if a blade failure occurs. Expanding a tenant across blades can provide much higher data plane performance for a single tenant, so all these considerations need to be examined to determine the best configuration.   
 
 One consideration when expanding a tenant across more than one blade is that you will need to configure additional out-of-band IP addresses for each blade that the tenant will reside on. This is required for proper HA communication and failover to cover specific cases around blade failures. Below is a webUI screenshot inside a VELOS tenant that shows the out-of-band management IP address along with the **Cluster Member IP Addresses**. You should configure a Cluster Member IP Address for each slot that a tenant will span. The **Alternate Management** and **Alternate Cluster Member IP addresses** are for dual stack IPv4/IPv6 support and you would configure IPv6 addresses here, if the primary addresses were IPv4.
 
@@ -805,19 +805,19 @@ Next a tenant that currently exists on a single blade will be expanded to span t
   :align: center
   :scale: 70% 
 
-Click the check-mark next to tenant2 and then click the Provision button to move the tenant to the **provisioned** state so that configuration changes can occur. A pop-up will appear asking you to confirm. After confirming it will take a few seconds for the tenant to spin down into the provisioned state.
+Select the checkbox next to tenant2 and then click the Provision button to move the tenant to the **provisioned** state so that configuration changes can occur. A pop-up will appear asking you to confirm. After confirming it will take a few seconds for the tenant to spin down into the provisioned state.
 
 .. image:: images/velos_deploying_a_tenant/image19.png
   :align: center
   :scale: 70% 
 
-Next click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted confirm, and then watch the tenant startup.
+Next click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted, confirm, and then watch the tenant start up.
 
 .. image:: images/velos_deploying_a_tenant/image20.png
   :align: center
   :scale: 70% 
 
-Note the tenant is now configured for both. Slots 1 & 2 for **Allowed Slots**.
+Note the tenant is now configured for both Slots 1 & 2 for **Allowed Slots**.
 
 .. image:: images/velos_deploying_a_tenant/image21.png
   :align: center
