@@ -5,7 +5,7 @@ VELOS Networking
 Platform Layer Isolation
 ========================
 
-Management of the new F5OS-C platform layer is completely isolated from in-band traffic networking and VLANs. It is purposely isolated, so that it is only accessible via the out-of-band management network. In fact, there are no in-band IP addresses assigned to either the system controllers, or the chassis partitions (The F5OS layer), only tenants will have in-band management IP addresses and access. Tenants also have out-of-band connectivity.
+Management of the new F5OS-C platform layer is completely isolated from in-band traffic networking and VLANs. It is purposely isolated, so that it is only accessible via the out-of-band management network. In fact, there are no in-band IP addresses assigned to either the system controllers or the chassis partitions (The F5OS layer); only tenants will have in-band management IP addresses and access. Tenants also have out-of-band connectivity.
 
 This allows customers to run a secure/locked-down out-of-band management network, where access is tightly restricted. The diagram below shows the out-of-band management access entering the VELOS chassis through the system controllers on the left. The system controllers bridge those external out-of-band connections to an internal out-of-band network, that connects to all chassis partitions and tenants within the VELOS chassis. 
 
@@ -69,7 +69,7 @@ To illustrate the point of how isolated chassis partitions are, the diagram belo
 Port Groups
 ===========
 
-The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled, and the port speed. Both ports on the BX110 blade must be configured in the same mode currently. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, webUI or API.
+The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled, and the port speed. Both ports on the BX110 blade must be configured in the same mode currently. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, webUI, or API.
 
 
 .. image:: images/velos_networking/image9.png
@@ -78,7 +78,7 @@ The portgroup component is used to control the mode of the physical port. This c
 .. image:: images/velos_networking/image10.png
   :width: 45%
 
-**Note: In the current release of F5OS-C both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB, there is no support for mixing modes on the same blade. You can have different options across different blades within the same chassis partition, but within a single blade, the ports have to be the same. More granular options may be added in future F5OS software releases.**
+**Note: In the current release of F5OS-C both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB; there is no support for mixing modes on the same blade. You can have different options across different blades within the same chassis partition, but within a single blade, the ports have to be the same. More granular options may be added in future F5OS software releases.**
 
 Below is an example of the chassis partition webUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade in order to load a new FPGA bitstream image.
 
@@ -105,7 +105,7 @@ Below is an example of port numbering when all interfaces are unbundled.
 Supported Optics
 ================
 
-Only F5 branded optics are officially supported on VELOS. The BX110 blade supports speeds of 10Gb, 25Gb, 40Gb, and 100Gb depending on the type of optics used, and the port group configuration. VELOS interfaces will accept F5 approved QSFP+ or QSFP28 optics. 3rd party optics are not officially supported per F5’s support policies: https://support.f5.com/csp/article/K8153. 
+Only F5 branded optics are officially supported on VELOS. The BX110 blade supports speeds of 10Gb, 25Gb, 40Gb, and 100Gb depending on the type of optics used, and the port group configuration. VELOS interfaces will accept F5 approved QSFP+ or QSFP28 optics. Third-party optics are not officially supported per F5 support policies: https://support.f5.com/csp/article/K8153. 
 
 **40GB QSFP+ options:**
 
@@ -133,11 +133,11 @@ Only F5 branded optics are officially supported on VELOS. The BX110 blade suppor
 +------------------------+------------+----------------------------------------------------------------------------------+
 
 
-**Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G SR4 VEOS is OPT-0052 (as shown above)**
+**Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G SR4 VEOS is OPT-0052 (as shown above)**.
 
-Below are the current VELOS optic SKU’s:
+Below are the current VELOS optic SKUs:
 
-**Note: 100G BiDi is planned (please contact product management to discuss your requirements, as there are different standards available in the market)**
+**Note: 100G BiDi is planned (please contact product management to discuss your requirements, as there are different standards available in the market)**.
 
 +----------------------+------+---------------------------------------------------------------------------------------+
 | F5-UPGVELQSFP28LR4   | MY   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS           |
@@ -155,7 +155,7 @@ Below are the current VELOS optic SKU’s:
 | F5-UPG-VEL-QSFP+SR4  | CN   | VELOS Field Upgrade: QSFP+ Transceiver (40G-SR4, 850NM, 100M, MPO, DDM Support)       |
 +----------------------+------+---------------------------------------------------------------------------------------+
 
-The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKU’s can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1Meter, 3 Meter, or 10 Meter) and each of the SKU’s is a 2 Pack.
+The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meter, or 10 meter) and each of the SKUs is a 2 Pack.
 
 +---------------------+------+--------------------------------------------------------------------------------------------+
 | F5-UPGVELSR4XSR3M   | CN   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (3 Meter 2 Pack)  |
@@ -182,6 +182,6 @@ VELOS supports both 802.1Q tagged and untagged VLAN interfaces. In the current F
 Link Aggregation Groups
 =======================
 
-VELOS allows for bonding of interfaces into Link Aggregation Groups or LAGs. LAGs can span across blades, as long as blades are in the same chassis partition. Links within a LAG must be the same type and speed. LAGs may be configured for static or lacp mode. The maximum number of members within a single LAG is 32.
+VELOS allows for bonding of interfaces into Link Aggregation Groups or LAGs. LAGs can span across blades, as long as blades are in the same chassis partition. Links within a LAG must be the same type and speed. LAGs may be configured for **static** or **lacp** mode. The maximum number of members within a single LAG is 32.
 
 An admin can configure the **LACP Type** to **LACP** or **Static**, the **LACP Mode** to be **Active** or **Passive**, and the **LACP Interval** to **Slow** or **Fast**.  
