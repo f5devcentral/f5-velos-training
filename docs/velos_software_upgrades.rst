@@ -7,9 +7,9 @@ F5OS-C System Controller Upgrades
 
 The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C have introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
 
-This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and fail over all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers a rolling upgrade occurs where the standby controllers is upgraded first, and when completed thit will go to an acitve state, and the remaining controller will be upgraded.
+This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and failover all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an acitve state, and the remaining controller will be upgraded.
 
-When upgrading the system controllers, you will have a choice of upgrading either a bundled release meaning **OS** and **Services** are **bundled** together in an ISO image or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled / ISO option for upgrades at this time. In the future, unbundled options may be utilized for some upgrades.
+When upgrading the system controllers, you will have a choice of upgrading either a bundled release, meaning **OS** and **Services** are **bundled** together in an ISO image, or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled/ISO option for upgrades at this time. In the future, unbundled options may be utilized for some upgrades.
 
 .. image:: images/velos_software_upgrades/image1.png
   :align: center
@@ -19,7 +19,7 @@ When upgrading the system controllers, you will have a choice of upgrading eithe
   :align: center
   :scale: 70%
 
-The outage for a service only upgrade on the system controller is smaller than if the entire OS was upgraded. A service upgrade will not cause a reboot of the controllers, where an OS upgrade will. If the OS does not need to be upgraded to address an issue, then you can choose to only upgrade the services. The OS is more of the container/OS layer, where most of the F5 specific code is in the service layer. Most upgrades currently require both service and OS to be upgraded, but in the future this service vs. OS upgrades may become available. Upgrades are easily accomplished via the system controller UI. First you would upload F5OS images for both the controllers as well as the partitions into the system controllers. 
+The outage for a service-only upgrade on the system controller is smaller than if the entire OS was upgraded. A service upgrade will not cause a reboot of the controllers, where an OS upgrade will. If the OS does not need to be upgraded to address an issue, then you can choose to only upgrade the services. The OS is more of the container/OS layer, where most of the F5 specific code is in the service layer. Most upgrades currently require both service and OS to be upgraded, but in the future this service versus OS upgrades may become available. Upgrades are easily accomplished via the system controller UI. First you would upload F5OS images for both the controllers as well as the partitions into the system controllers. 
 
 Uploading Controller and Partition Images via the webUI
 -----------------------------------------------------
@@ -34,7 +34,7 @@ You can do this from the **Software Management -> Partitions Image** and **Contr
   :align: center
   :scale: 70%
 
-Click **Add** and you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. You will need to have a remote HTTPS server that allows downloads in order to import images into the system via the webUI. You can alternatively use the **Upload** option to upload an F5OS-C system controller or partition ISO file form a client machine through the browser.
+Click **Add** and you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. You will need to have a remote HTTPS server that allows downloads in order to import images into the system via the webUI. You can alternatively use the **Upload** option to upload an F5OS-C system controller or chassis partition ISO file from a client machine through the browser.
 
 You can also upload or import F5OS-C images for both the system controllers and the chassis partitions using the **System Settings > File Utilities** page.
 
@@ -42,7 +42,7 @@ You can also upload or import F5OS-C images for both the system controllers and 
   :align: center
   :scale: 70%
 
-Alternatively, you may also upload images to the controller through the **System Settings -> File Utilities** page. You can select the **images/staging** option form the drop-down menu to import new controller or partition images. Once uploaded into the staging area they will be imported and made available for upgrades after a brief delay.
+Alternatively, you may also upload images to the controller through the **System Settings -> File Utilities** page. You can select the **images/staging** option from the drop-down menu to import new controller or partition images. Once uploaded into the staging area they will be imported and made available for upgrades after a brief delay.
 
 .. image:: images/velos_software_upgrades/image6.png
   :align: center
@@ -495,7 +495,7 @@ Chassis Partition Upgrades
 Upgrading a Chassis Partition via the webUI
 -----------------------------------------
 
-Upgrade of chassis partitions is performed from the system controller webUI **Partition Management** screen. You must first click the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. At this time a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
+Upgrade of chassis partitions is performed from the system controller webUI **Partition Management** screen. You must first select the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. At this time a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
 
 .. image:: images/velos_software_upgrades/image8.png
   :align: center
@@ -626,7 +626,7 @@ To upgrade a chassis partition via the API you must first run the check version 
         }
     }
 
-If the compatability check then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+If the compatability check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
 
 .. code-block:: json
 
@@ -684,7 +684,7 @@ There is an option to **Add** new releases which will open a pop-up window that 
   :align: center
   :scale: 70%
 
-If an HTTPS server is not available, you may upload a tenant image using scp directly to the chassis partition. Simply scp an image to the chassis partitions out-of-band management IP address using the admin account and a path of **IMAGES**. 
+If an HTTPS server is not available, you may upload a tenant image using SCP directly to the chassis partition. Simply scp an image to the chassis partitions out-of-band management IP address using the admin account and a path of **IMAGES**. 
 
 .. code-block:: bash
 
