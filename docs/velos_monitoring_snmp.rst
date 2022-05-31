@@ -122,7 +122,7 @@ Exmaple output:
 SNMP ifIndex
 ------------
 
-You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX100 blades and also for Link Aggregation Groups that have been configured. Note that you will only see interfaces and LAG's that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces of LAG's unless you poll them directly.
+You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX100 blades and also for Link Aggregation Groups that have been configured. Note that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces of LAGs unless you poll them directly.
 
 **NOTE: Stats for LAG interfaces are not currently populated.**
 

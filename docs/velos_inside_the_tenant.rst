@@ -41,6 +41,6 @@ Within a vCMP guest Trunks can be used as part of the **HA Group** functionality
 
 An HA group is a specification of certain pools, host trunks, or cluster members (blades) or any combination of these that a guest administrator associates with a traffic group instance. The most common reason to configure an HA group is to ensure that failover is triggered when some number of trunk members or cluster members become unavailable.
 
-**Note: The initial versions of VELOS did not support the trunk option within an HA group. VELOS tenants will not have visibility into the trunks (LAG's in F5OS) configured at the platform layer. This feature has been added in F5OS v1.2.x and also requires the VELOS tenant be running v15.1.4.**
+**Note: The initial versions of VELOS did not support the trunk option within an HA group. VELOS tenants will not have visibility into the trunks (LAGs in F5OS) configured at the platform layer. This feature has been added in F5OS v1.2.x and also requires the VELOS tenant be running v15.1.4.**
 
 

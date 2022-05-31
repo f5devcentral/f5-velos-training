@@ -7,22 +7,22 @@ System Controller HA
 
 The system controllers perform two main functions for the VELOS chassis. They are the centralized layer2 switch fabric connecting all blades within the system, and they also host the Kubernetes control plane which manages the F5OS layer. The CX410 system ships with redundant system controllers. 
 
-The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX110 blade is dual homed with a 100Gb backplane connection to each system controller (200Gb total). On the BX110 blade, the two 100Gb ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
+The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX110 blade is dual-homed with a 100Gb backplane connection to each system controller (200Gb total). On the BX110 blade, the two 100Gb ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
 
 
 .. image:: images/velos_high_availability/image1.png
   :align: center
   :scale: 70%
 
-While both switch fabrics are active there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane, and each blade will be limited to 100Gbs of backplane capacity. Note that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity, even if there is a single system controller failure.
+While both switch fabrics are active, there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane, and each blade will be limited to 100Gbs of backplane capacity. Note that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity, even if there is a single system controller failure.
 
-The second function the system controllers perform is the management of the control plane for the new Kubernetes platform layer (F5OS) . At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, webUI services etc…. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
+The second function the system controllers perform is the management of the control plane for the new Kubernetes platform layer (F5OS) . At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, webUI services, etc. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
 
 .. image:: images/velos_high_availability/image2.png
   :align: center
   :scale: 70%
 
-You may view the current high availability status in the dashboard of the system controller webUI. It will show which controller is primary and standby, as well as other system infromation realted to the system controllers.
+You may view the current high availability status in the dashboard of the system controller webUI. It will show which controller is primary and standby, as well as other system infromation related to the system controllers.
 
 .. image:: images/velos_high_availability/image3.png
   :align: center
@@ -53,7 +53,7 @@ If a software upgrade is being performed, then both system controllers are upgra
 Blade Level HA
 ==============
 
-From a design standpoint it is best to spread in-band network connections across multiple blades if possible. Assuming there is more than one blade within a chassis partition spreading network connections via LAG’s will give the best resiliency and performance. Consider the diagram below where a LAG is split across two different BX110 blades. Incoming traffic should hash across both links and statistically should provide fairly even distribution given enough connections. Performance can still be lumpy, as the upstream switch is likely performing a hash-based distribution, and not distributing based on load. 
+From a design standpoint it is best to spread in-band network connections across multiple blades if possible. Assuming there is more than one blade within a chassis partition spreading network connections via LAGs will give the best resiliency and performance. Consider the diagram below where a LAG is split across two different BX110 blades. Incoming traffic should hash across both links and statistically should provide fairly even distribution given enough connections. Performance can still be lumpy, as the upstream switch is likely performing a hash-based distribution, and not distributing based on load. 
 
 Incoming traffic will go through a disaggregation (DAG) process where connections are spread across all processors within the VELOS tenant. Again, a hash-based distribution will decide which blade/processor should handle the incoming connection. Given enough connections the expectation is that half are processed locally on the incoming blade, and the other half will be sent across the backplane to another blade assuming a tenant is configured to utilize more than one blade. If the return traffic going outbound can egress on the same blade that processed the connection, then a backplane traversal is saved, it doesn’t have to go back to the incoming blade. If a blade fails, or one of the links in the LAG should fail, then all traffic will ingress and egress on the remaining blade. There are more granular configuration options within the tenant to determine how failover cases should be handled if a blade should fail. Of course, additional blades/links can be added to a chassis partition, but they follow this forwarding behavior:
 
@@ -70,13 +70,13 @@ This approach is better than terminating a LAG on a single blade. Incoming conne
 Tenant Level HA Across Chassis
 ==============================
 
-VELOS does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis with identically configured tenants and maintaining HA relationships at the tenant level as seen below. This mimics the VIPRION HA behavior between vCMP guests. There is no redundancy between chassis at the F5OS platform layer. The chassis’ themselves are unaware of the other chassis and there is no HA communication at this level, it’s the tenants that form the HA relationship.
+VELOS does not support tenant HA within the same chassis. F5 recommends configuring dual VELOS chassis with identically configured tenants and maintaining HA relationships at the tenant level as seen below. This mimics the VIPRION HA behavior between vCMP guests. There is no redundancy between chassis at the F5OS platform layer. The chassis themselves are unaware of the other chassis and there is no HA communication at this level; it’s the tenants that form the HA relationship.
 
 .. image:: images/velos_high_availability/image8.png
   :align: center
   :scale: 70%
 
-Tenants on different chassis, should have the same number of vCPUs and be configured to run on the same slots. HA interconnection VLANs would be configured between chassis partitions in the two chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
+Tenants on different chassis should have the same number of vCPUs and be configured to run on the same slots. HA interconnection VLANs would be configured between chassis partitions in the two chassis, and then tenants would configure HA just as is the case with vCMP guest HA relationships. Below is an example of two VELOS chassis with multiple chassis partitions each with their own HA interconnects and in-band networking.
 
 .. image:: images/velos_high_availability/image9.png
   :align: center
@@ -87,7 +87,7 @@ Tenant Level HA within the Chassis
 
 VELOS does not support configuring HA relationships between tenants within the same chassis. You can configure tenants to span multiple blades, and then depending on what failover behavior you want, you can have the tenant run with less capacity within the same chassis if a blade fails, or fail over to the tenant in the other chassis. This is controlled within the tenant itself, just like vCMP guests HA failover was configured. HA groups allow an administrator to fail over based on pool, trunk, or blade availability. 
 
-**Note: The HA Groups failover option based on trunks is not supported in VELOS tenants running 14.1.4.x and F5OS v1.1.x. The Tenants do not have visibility into the F5OS layer Link Aggregation Groups. F5OS 1.2.x and later along with VELOS tenant running 15.1.4 or later support trunks within an HA Group.**
+**Note: The HA Groups failover option based on trunks is not supported in VELOS tenants running 14.1.4.x and F5OS v1.1.x. The tenants do not have visibility into the F5OS layer Link Aggregation Groups. F5OS 1.2.x and later along with VELOS tenant running 15.1.4 or later support trunks within an HA Group.**
 
 **NOTE: Expanding a tenant across two or more blades will require additional configuration and IP addresses within the tenant. A tenant will require one out-of-band IP address for each slot it is hosted on plus one floating IP address. This is similar to how vCMP addressing is configured for HA.**
 
@@ -104,7 +104,7 @@ Inside the tenant, one **Cluster Member IP Address** will need to be configured 
   :align: center
   :scale: 90%
 
-For planning purposes a single large tenant “SuperVip” spanning 8 total blades would require 13 out-of-band management IP addresses for each chassis. In-band Self-IP & Virtual addresses are not included in this calculation.
+For planning purposes a single large tenant “SuperVIP” spanning 8 total blades would require 13 out-of-band management IP addresses for each chassis. In-band Self-IP and Virtual addresses are not included in this calculation.
 
 +------------------------------+----------------------------------+--------------------+
 | **IP Addresses Required**    | **Single Chassis**               | **HA Environment** | 
@@ -164,13 +164,13 @@ Tenants on different chassis should have the same number of vCPUs, and be config
 HA Topology Considerations
 --------------------------
 
-Most modern environments will have dual upstream layer2 switches that handle the in-band connections from multiple VELOS chassis. The ideal connection mechanism for the in-band connections, is to connect to a switching infrastructure that supports MLAG or VPC between the upstream switches. This will allow LAG’s on the VELOS side to be dual homed to both upstream switches, and this will help prevent failover on VELOS in the event of an upstream switch failure. Below is an example of a typical deployment with LAG with members from separate BX110 VELOS blades going to upstream L2 switches:
+Most modern environments will have dual upstream layer2 switches that handle the in-band connections from multiple VELOS chassis. The ideal connection mechanism for the in-band connections, is to connect to a switching infrastructure that supports MLAG or VPC between the upstream switches. This will allow LAGs on the VELOS side to be dual homed to both upstream switches, and this will help prevent failover on VELOS in the event of an upstream switch failure. Below is an example of a typical deployment with LAG with members from separate BX110 VELOS blades going to upstream L2 switches:
 
 .. image:: images/velos_high_availability/image14.png
   :align: center
   :scale: 60%
 
-If the environment only has a single blade in each chassis, and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual homing it to the two upstream switches in a vPC makes the most sense. Since there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best. In the example below, the HA VLAN(s) will run on the same LAG as the in-band traffic.
+If the environment only has a single blade in each chassis, and 100Gb or 40Gb connectivity is desired, then putting both ports on the BX110 into a LAG and dual-homing it to the two upstream switches in a vPC makes the most sense. Since there aren’t more ports to dedicate to an HA interconnect LAG, this drives the decision of which topology is best. In the example below, the HA VLAN(s) will run on the same LAG as the in-band traffic.
 
 .. image:: images/velos_high_availability/image15.png
   :align: center
@@ -183,7 +183,7 @@ If the environment is not running 100Gb or 40Gb, then the BX110 blade can be con
   :align: center
   :scale: 60%
 
-As more BX110 blades are added to each VELOS chassis, more options become available, as the restriction of running only one speed / mode is lifted because a second blade could be configured to run at different speeds.  This could allow some ports to run at lowers speeds (4 x 25Gb or 4 x 10Gb) and break out, while other ports are running higher speed (40Gb or 100Gb). 
+As more BX110 blades are added to each VELOS chassis, more options become available, as the restriction of running only one speed/mode is lifted because a second blade could be configured to run at different speeds.  This could allow some ports to run at lowers speeds (4 x 25Gb or 4 x 10Gb) and break out, while other ports are running higher speed (40Gb or 100Gb). 
 
 As additional blades are added, it makes sense to spread the LAG across more blades for added redundancy. It is not a requirement to extend the LAG to every blade within a chassis partition, but this can be done to optimize traffic flows and avoid extra backplane traversals. Consider the diagram below; where a single LAG on one blade is configured but 2 blades are installed. Traffic will enter blade1 and go through a disaggregation process where some traffic may be processed locally on blade1, and other traffic will be sent to the remote blade2. Tenant slot configuration will also play into this decision. This means an extra hop across the backplane/switch fabrics for transactions to be processed, and then the response having to come back across the backplane to exit the chassis via the LAG.
 
@@ -197,7 +197,7 @@ Consider the same number of blades, but instead of terminating the LAG on blade1
   :align: center
   :scale: 60%
 
-Adding two highspeed (100Gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (Especially for the 100Gb case) because each BX110 blade is rated for a max of 95Gb, so adding an additional port is not going to increase performance.  If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
+Adding two highspeed (100Gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (especially for the 100Gb case) because each BX110 blade is rated for a maximum of 95Gb, so adding an additional port is not going to increase performance. If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
 
 
 Mirroring Considerations
@@ -213,17 +213,17 @@ The two topologies below are identical, except one has a dedicated LAG for the H
   :align: center
   :scale: 60%   
 
-Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented, it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to an upstream switch error. This can affect mirroring and heartbeat, whereas a dedicated HA interconnect between the VELOS chassis has no dependencies on upstream switches or networking. The biggest concern is disrupting the Failover heartbeats from sod (udp port 1026) between the tenants. 
+Consider the case where mirror traffic is intermingled over the in-band LAG with application traffic. Unless there is some sort of prioritization implemented, it’s possible that heartbeat and mirroring type traffic may be affected by saturation somewhere in the upstream switch or within the networking layer. The main disadvantage of this topology is HA VLAN disruption due to an upstream switch error. This can affect mirroring and heartbeat, whereas a dedicated HA interconnect between the VELOS chassis has no dependencies on upstream switches or networking. The biggest concern is disrupting the failover heartbeats from the SOD process (udp port 1026) between the tenants. 
 
-The proper way to deploy, is to configure HA heartbeats over the management interface, as well as over the HA VLAN (K37361453). Unfortunately, this may be more difficult than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must also configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step, and if it not setup properly, stability of the HA environment will rely solely on the stability of the HA VLAN.
+The proper way to deploy, is to configure HA heartbeats over the management interface, as well as over the HA VLAN (K37361453). Unfortunately, this may be more difficult than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must also configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step, and if it not set up properly, stability of the HA environment will rely solely on the stability of the HA VLAN.
 
-The example below shows a BIG-IP tenant configured on VELOS. For a single slot tenant (a tenant that only utilizes one slot/blade), you only need to configure the single management IP address. If a VELOS tenant spans more than one blade, then you must configure a separate cluster member IP address for each slot/blade that the tenant will run on. You cannot reuse these IP addresses within other tenants, they must have their own unique cluster member IP addresses if they span more than one blade. While spanning a tenant across blades may provide some level of local redundancy, it does require additional configuration and IP addressing, and may also cause additional strain on the control plane process (mcpd), as it will need to replicate between blades. These should be considered before finalizing a design for the tenants.
+The example below shows a BIG-IP tenant configured on VELOS. For a single slot tenant (a tenant that only utilizes one slot/blade), you only need to configure the single management IP address. If a VELOS tenant spans more than one blade, then you must configure a separate cluster member IP address for each slot/blade that the tenant will run on. You cannot reuse these IP addresses within other tenants; they must have their own unique cluster member IP addresses if they span more than one blade. While spanning a tenant across blades may provide some level of local redundancy, it does require additional configuration and IP addressing, and may also cause additional strain on the control plane process (MCPD), as it will need to replicate between blades. These should be considered before finalizing a design for the tenants.
 
 .. image:: images/velos_high_availability/image21.png
   :align: center
   :scale: 60%  
 
-The diagram below shows the configuration of multiple HA heartbeat paths. One is **Multicast**, configured on the out-of-band network via the management port on the VELOS system controllers, and the other is **Unicast** configured on the in-band network Self-IP on the tenant. As outlined in (K37361453), having both options defined is critical in order to have tenant HA working properly.
+The diagram below shows the configuration of multiple HA heartbeat paths. One is **Multicast**, configured on the out-of-band network via the management port on the VELOS system controllers, and the other is **Unicast**, configured on the in-band network Self-IP on the tenant. As outlined in (K37361453), having both options defined is critical in order to have tenant HA working properly.
 
 .. image:: images/velos_high_availability/image22.png
   :align: center
