@@ -6,41 +6,41 @@ Qkviews
 =======
 
 
-VELOS supports the ability to generate qkviews to collect and bundle configuration and diagnostic data that can be sent to support or uploaded to iHealth. It is important to understand the VELOS architecture when generating qkviews. Generating a qkview from the system controller will capture OS data and container information related to the system controller software, while generating a qkview inside a partition will capture data and container information related to the partition layer. To capture tenant level information, you’ll need to run a qkview inside the TMOS layer of the tenant.
+VELOS supports the ability to generate qkview reporte to collect and bundle configuration and diagnostic data that can be sent to support or uploaded to iHealth. It is important to understand the VELOS architecture when generating qkview reports. Generating a qkview report from the system controller will capture OS data and container information related to the system controller software, while generating a qkview report inside a chassis partition will capture data and container information related to the partition layer. To capture tenant level information, you’ll need to run a qkview report inside the TMOS layer of the tenant.
 
 https://support.f5.com/csp/article/K02521182
 
 **System Controller qkview**:
 
 - Use this to investigate problems relating to the controllers themselves, or the controller platform services.
-    - Collects info for active controller
-    - Collects host info, including logs
-    - Collects info from each controller platform service container
+    - Collects information for active controller
+    - Collects host information, including logs
+    - Collects information from each controller platform service container
 - Collects info for standby controller
-    - Collects host info, including logs
-    - Collects info from each controller platform service container
+    - Collects host information, including logs
+    - Collects information from each controller platform service container
  
 **Chassis Partition qkview**:
 
-- Use this to investigate problems relating to a Partition. i.e. a problem with one of the partition services, or one of the blades in that partition
-    - Collects info for partition services, on the controller for which the partition is active
-        - Collects info for each partition service container
-    - Collects info for partition services, on the controller for which the partition is standby
-        - Collects info for each partition service container
-    - Collects info from each blade in the partition
-    - Collects blade host info, including logs
-    - Collects info for each partition service container
+- Use this to investigate problems relating to a chassis partition. For example, a problem with one of the partition services, or one of the blades in that partition
+    - Collects information for chassis partition services, on the controller for which the partition is active
+        - Collects information for each partition service container
+    - Collects information for partition services, on the controller for which the partition is in standby mode
+        - Collects information for each partition service container
+    - Collects information from each blade in the partition
+    - Collects blade host information, including logs
+    - Collects information for each partition service container
 
 Generating Qkviews from the webUI
 ---------------------------------
 
-In both the system controller and the chassis partition the qkview can be generated from The **System Settings > System Reports** page. Here it also allows an admin to optionally upload them to iHealth. 
+In both the system controller and the chassis partition the qkview can be generated from **System Settings > System Reports** page. Here it also allows an admin to optionally upload them to iHealth. 
 
 .. image:: images/velos_diagnostics/image1.png
   :align: center
   :scale: 70%
 
-To generate a qkview, click on the button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously, and can be cleared if you want to use another account. You can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
+To generate a qkview report, click the button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously, and can be cleared if you want to use another account. You can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
 
 
 .. image:: images/velos_diagnostics/image2.png
@@ -142,7 +142,7 @@ If you'd like to copy the qkview directly to iHealth once it is completed use th
 
     POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
 
-In the body of the API call add details with the filename, optinal descrioption and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
+In the body of the API call add details with the filename, optional description and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
 
 .. code-block:: json
 
@@ -166,7 +166,7 @@ The output will confirm the upload has begun.
 Logging
 =======
 
-Many functions inside the F5OS layer system controllers and partitions will log their events to the **velos.log** file that resides in the **/var/log_controller** path in the underlying system controller shell. In the F5OS CLI the paths are simplified in v1.2.x so that you don’t have know the underlying directory structure. You can use the **file list path** command to see the files inside the **log/controller** directory:
+Many functions inside the F5OS layer will log their events to the **velos.log** file that resides in the **/var/log_controller** path in the underlying system controller shell. In the F5OS CLI the paths are simplified in v1.2.x so that you don’t have to know the underlying directory structure. You can use the **file list path** command to see the files inside the **log/controller** directory:
 
 .. code-block:: bash
 
@@ -322,7 +322,7 @@ Within a chassis partition the path for the logging is different. You can use th
     2021-02-23T17:38:11+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000045 msg="PDU:" direction="Transmitted" interface="1/1.0" length=124.
 
 
-Currently in both the system controller and chassis partition webUI’s logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
+Currently in both the system controller and chassis partition webUIs logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level, which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
 
 .. image:: images/velos_diagnostics/image4.png
   :align: center
@@ -405,13 +405,13 @@ system diagnostics tcpdump interface "1/2.0" bpf "src host 10.10.1.1 and dst por
 Console Access to System Controllers and Blades via Built-In Terminal Server
 ============================================================================
 
-You may have a need to access the console of a VELOS BX110 blade, one of the system controllers, or a tenant to diagnose a problem, or to watch it bootup. VELOS provides a built-in terminal server function that will proxy network connections to individual blades, system controller, & tenant console ports. Specific TCP ports on the system controller floating IP address have been reserved and mapped to console ports of as follows:
+You may have a need to access the console of a VELOS BX110 blade, one of the system controllers, or a tenant to diagnose a problem, or to watch it bootup. VELOS provides a built-in terminal server function that will proxy network connections to individual blades, system controller, and tenant console ports. Specific TCP ports on the system controller floating IP address have been reserved and mapped to console ports as follows:
 
 •	System controller ports 7001-7008 map to slots/blades 1-8
-•	System controller ports 7100 & 7200 map to system controllers 1 & 2
+•	System controller ports 7100 and 7200 map to system controllers 1 & 2
 •	Chassis partition ports 700x map to tenant ID’s (requires tenant name as username)
 
-You can connect to any blade by SSH’ing to the floating IP address of the system controller and specifying the proper port for the blade you want to connect with. Port 7001 maps to blade1, 7002 to blade2 etc…. Once connected to the terminal server, you will need to login as root to the blade. The blade will have the default root password and will need to be changed on first reboot. The example below shows connecting to blade 2 ( port 7002) through a terminal server.
+You can connect to any blade by SSH’ing to the floating IP address of the system controller and specifying the proper port for the blade you want to connect with. Port 7001 maps to blade-1, 7002 to blade-2 etc. Once connected to the terminal server, you will need to log in as root to the blade. The blade will have the default root password and will need to be changed on first reboot. The example below shows connecting to blade 2 ( port 7002) through a terminal server.
 
 .. code-block:: bash
 
@@ -452,7 +452,7 @@ Console Access to Tenant via Built-In Terminal Server
 
 
 You may have a need to access the console of a tenant to diagnose a problem, or to watch it bootup. VELOS
-provides a built-in terminal server function that will proxy network connections to a tenant console. VIPRION provided a **vconsole** capability which required a user to authenticate to VIPRION’s CLI first before they could run the vconsole command. 
+provides a built-in terminal server function that will proxy network connections to a tenant console. VIPRION provided a **vconsole** capability which required a user to authenticate to the VIPRION CLI first before they could run the vconsole command. 
 
 When a VELOS tenant is created and deployed a listening ssh port will be configured on port 700x of the chassis partition (where x is the tenant instance ID). After a tenant is created, you will need to set the tenant password and tweak the expiry date to force a password change before a user can connect via the terminal server.
 
@@ -479,7 +479,7 @@ Once a tenant is created from the chassis partition CLI enter the command **show
     tenant-console  9100  -   
 
 
-For tenant2 to have console access you must first set a password for that user using the command **system aaa authentication users user <tenant-name> config set-password password**. When prompted enter the desired password for this tenant’s console access. Next set the tenants **expiry-date** to **-1** (no expiration date) and then **commit** to enable the changes.
+For tenant2 to have console access you must first set a password for that user using the command **system aaa authentication users user <tenant-name> config set-password password**. When prompted enter the desired password for this tenant’s console access. Next set the tenant's **expiry-date** to **-1** (no expiration date) and then **commit** to enable the changes.
 
 .. code-block:: bash
 
@@ -490,7 +490,7 @@ For tenant2 to have console access you must first set a password for that user u
     Production-1(config-user-tenant2)# commit 
     Commit complete.
 
-Now it will be possible to remotely ssh using a specific username and port pointed at the chassis partition IP address to connect directly to the console port of the tenant. The username will be the name of the tenant, and the port will be the instance tcp port 700x (where x is the instance ID of that tenant). Below is an example of the output from the **show tenants** command within the chassis partition. The tenant **tenant2** is running on two blades so it has two instance ID’s 1 & 2. You can connect to either one of these instances via the console using tenant2 as the username and either port 7001 or 7002. 
+Now it will be possible to remotely ssh using a specific username and port pointed at the chassis partition IP address to connect directly to the console port of the tenant. The username will be the name of the tenant, and the port will be the instance TCP port 700x (where x is the instance ID of that tenant). Below is an example of the output from the **show tenants** command within the chassis partition. The tenant **tenant2** is running on two blades so it has two instance IDs 1 and 2. You can connect to either one of these instances via the console using tenant2 as the username and either port 7001 or 7002. 
 
 .. code-block:: bash
 
@@ -522,7 +522,7 @@ Now it will be possible to remotely ssh using a specific username and port point
     2     2         Running  BIGIP-14.1.4-0.0.9.ALL-VELOS.qcow2.zip.bundle  2021-02-10T21:16:27Z  2021-02-10T21:16:24Z  Started tenant instance  16:1a:f6:87:be:07  
 
 
-The built-in terminal server will switch the connection to the appropriate tenant terminal server port. Once connected, you will still need to login to the tenant. In the example below the username is tenant2 (matches the tenant name), and the port is 7001 meaning connect to instance ID 1 of that tenant. 
+The built-in terminal server will switch the connection to the appropriate tenant terminal server port. Once connected, you will still need to log in to the tenant. In the example below the username is tenant2 (matches the tenant name), and the port is 7001 meaning connect to instance ID 1 of that tenant. 
 
 .. code-block:: bash
 
