@@ -5,7 +5,7 @@ VELOS Components
 CX410 Chassis
 =============
 
-The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots, which can be populated by the BX110 line cards, as well as 2 larger slots which are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/image1.png
   :align: center
@@ -59,7 +59,7 @@ A DC power version of the CX410 chassis is also avilable, and runs the same syst
 Fan Tray & Cooling
 ===================
 
-The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS is not intaking hot airflow from other devices. The fan tray is removable if its needs to be replaced, but should not be removed for long periods of time, as overheating may occur. 
+The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS is not intaking hot airflow from other devices. The fan tray is removable if it needs to be replaced, but should not be removed for long periods of time, as overheating may occur. 
 
 .. image:: images/velos_components/image9.png
   :align: center
@@ -94,7 +94,7 @@ Each CX410 chassis ships with two SX410 system controllers already installed. Th
 •	They host the Kubernetes control plane functions
   •	They operate in an active/standby manner for these functions
 
-It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can takeover, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller, and will fail over to the standby if the active should fail. 
+It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller, and will fail over to the standby if the active should fail. 
 
 .. image:: images/velos_components/image14.png
   :align: center
