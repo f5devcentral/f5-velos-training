@@ -2,9 +2,9 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions SNMP support is limited to SNMP Trap support from the system controllers and chassis partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.
+SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions SNMP support is limited to SNMP Trap support from the system controllers and chassis partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support, including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.
 
-As of F5OS 1.2.0 the list of MIBs available are as follows:
+As of F5OS-C 1.2.0 the list of MIBs available are as follows:
 
 - SNMP-FRAMEWORK-MIB
 - SNMP-MPD-MIB
@@ -22,16 +22,11 @@ As of F5OS 1.2.0 the list of MIBs available are as follows:
 - F5-COMMON-SMI
 - F5-ALERT-MIB
 
-As of F5OS 1.2.0 the list of alerts that can be configured as traps is as follows:
-
-- Interface UP
-- Interface DOWN
-- Cold Start
 
 Enabling SNMP via CLI
 =============================
 
-Setting up SNMP can be done from the CLI by enabling an SNMP community. Below is an example of enabling SNMP monitoring on a chassis partition:
+Setting up SNMP can be done from the CLI by enabling an SNMP community such as public. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well.
 
 .. code-block:: bash
 
@@ -57,7 +52,7 @@ You can configure the SNMP system paramters including the System Contact, System
 
 
 
-It is highly recommend that you put interface descriptions in your configuration so that this will show up when using SNMP polling:
+For the chassis partitions, it is highly recommend that you put interface descriptions in your configuration so that they will show up when using SNMP polling:
 
 .. code-block:: bash
 
@@ -77,7 +72,7 @@ It is highly recommend that you put interface descriptions in your configuration
     Commit complete.
 
 
-If LAGs are configured decriptions should be added to the LAG interfaces as well:
+If LAGs are configured, descriptions should be added to the LAG interfaces as well:
 
 .. code-block:: bash
 
@@ -122,7 +117,7 @@ Example output:
 SNMP ifIndex
 ------------
 
-You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX100 blades and also for Link Aggregation Groups that have been configured. Note that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces of LAGs unless you poll them directly.
+You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX110 blades, and also for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chasssis partitions directly.
 
 **NOTE: Stats for LAG interfaces are not currently populated.**
 
@@ -382,74 +377,135 @@ SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 SNMP Trap Support in F5OS
 ========================
 
-You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB* & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps support by F5OS.
+You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps support by F5OS.
 
 
 
-For the system controllers the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
+For the system controllers the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
 
-SNMP Trap events that note a fault should also trigger an alert that can be viewed in the show alerts in the CLI, webUI, and API. Once the clear SNMP Trap is sent it should clear the event form the show events output.
+SNMP Trap events that note a fault should also trigger an alert that can be viewed in the show alerts in the CLI, webUI, and API. Once the clear SNMP Trap is sent it should clear the event from the **show events** output.
 
-+----------------------------+----------------------------------+
-| **Alert**                  | **OID**                          |                            
-+============================+==================================+
-| lcd-fault                  | .1.3.6.1.4.1.12276.1.1.1.65792   |
-+----------------------------+----------------------------------+
-| psu-fault                  | .1.3.6.1.4.1.12276.1.1.1.65793   |
-+----------------------------+----------------------------------+
-| module-present             | .1.3.6.1.4.1.12276.1.1.1.65794   |
-+----------------------------+----------------------------------+
-| module-communication-error | .1.3.6.1.4.1.12276.1.1.1.65795   |
-+----------------------------+----------------------------------+
-| psu-redundancy-fault       | .1.3.6.1.4.1.12276.1.1.1.65796   |
-+----------------------------+----------------------------------+
-| arbitration-state          | .1.3.6.1.4.1.12276.1.1.1.66048   |
-+----------------------------+----------------------------------+
-| switch-status              | .1.3.6.1.4.1.12276.1.1.1.66049   |
-+----------------------------+----------------------------------+
-| link-state                 | .1.3.6.1.4.1.12276.1.1.1.66050   |
-+----------------------------+----------------------------------+
-| hardware-device-fault      | .1.3.6.1.4.1.12276.1.1.1.65536   |
-+----------------------------+----------------------------------+
-| firmware-fault             | .1.3.6.1.4.1.12276.1.1.1.65537   |
-+----------------------------+----------------------------------+
-| unknown-alarm              | .1.3.6.1.4.1.12276.1.1.1.65538   |
-+----------------------------+----------------------------------+
-| memory-fault               | .1.3.6.1.4.1.12276.1.1.1.65539   |
-+----------------------------+----------------------------------+
-| drive-fault                | .1.3.6.1.4.1.12276.1.1.1.65540   |
-+----------------------------+----------------------------------+
-| cpu-fault                  | .1.3.6.1.4.1.12276.1.1.1.65541   |
-+----------------------------+----------------------------------+
-| pcie-fault                 | .1.3.6.1.4.1.12276.1.1.1.65542   |
-+----------------------------+----------------------------------+
-| aom-fault                  | .1.3.6.1.4.1.12276.1.1.1.65543   |
-+----------------------------+----------------------------------+
-| drive-capacity-fault       | .1.3.6.1.4.1.12276.1.1.1.65544   |
-+----------------------------+----------------------------------+
-| power-fault                | .1.3.6.1.4.1.12276.1.1.1.65545   |
-+----------------------------+----------------------------------+
-| thermal-fault              | .1.3.6.1.4.1.12276.1.1.1.65546   |
-+----------------------------+----------------------------------+
-| drive-thermal-throttle     | .1.3.6.1.4.1.12276.1.1.1.65547   |
-+----------------------------+----------------------------------+
-| blade-thermal-fault        | .1.3.6.1.4.1.12276.1.1.1.65548   |
-+----------------------------+----------------------------------+
-| blade-hardware-fault       | .1.3.6.1.4.1.12276.1.1.1.65549   |
-+----------------------------+----------------------------------+
-| firmware-update-status     | .1.3.6.1.4.1.12276.1.1.1.65550   |
-+----------------------------+----------------------------------+
-| drive-utilization          | .1.3.6.1.4.1.12276.1.1.1.65551   |
-+----------------------------+----------------------------------+
-| service-health             | .1.3.6.1.4.1.12276.1.1.1.65552   |
-+----------------------------+----------------------------------+
-| fipsError                  | .1.3.6.1.4.1.12276.1.1.1.196608  |
-+----------------------------+----------------------------------+
-| core-dump                  | .1.3.6.1.4.1.12276.1.1.1.327680  |
-+----------------------------+----------------------------------+
++--------------------------------------+----------------------------------+
+| **Alert**                            | **OID**                          |                            
++======================================+==================================+
+| lcd-fault                            | .1.3.6.1.4.1.12276.1.1.1.65792   |
++--------------------------------------+----------------------------------+
+| psu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65793   |
++--------------------------------------+----------------------------------+
+| module-present                       | .1.3.6.1.4.1.12276.1.1.1.65794   |
++--------------------------------------+----------------------------------+
+| module-communication-error           | .1.3.6.1.4.1.12276.1.1.1.65795   |
++--------------------------------------+----------------------------------+
+| psu-redundancy-fault                 | .1.3.6.1.4.1.12276.1.1.1.65796   |
++--------------------------------------+----------------------------------+
+| psu-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65797   |
++--------------------------------------+----------------------------------+
+| fan-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65798   |
++--------------------------------------+----------------------------------+
+| arbitration-state                    | .1.3.6.1.4.1.12276.1.1.1.66048   |
++--------------------------------------+----------------------------------+
+| switch-status                        | .1.3.6.1.4.1.12276.1.1.1.66049   |
++--------------------------------------+----------------------------------+
+| link-state                           | .1.3.6.1.4.1.12276.1.1.1.66050   |
++--------------------------------------+----------------------------------+
+| hardware-device-fault                | .1.3.6.1.4.1.12276.1.1.1.65536   |
++--------------------------------------+----------------------------------+
+| firmware-fault                       | .1.3.6.1.4.1.12276.1.1.1.65537   |
++--------------------------------------+----------------------------------+
+| unknown-alarm                        | .1.3.6.1.4.1.12276.1.1.1.65538   |
++--------------------------------------+----------------------------------+
+| memory-fault                         | .1.3.6.1.4.1.12276.1.1.1.65539   |
++--------------------------------------+----------------------------------+
+| drive-fault                          | .1.3.6.1.4.1.12276.1.1.1.65540   |
++--------------------------------------+----------------------------------+
+| cpu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65541   |
++--------------------------------------+----------------------------------+
+| pcie-fault                           | .1.3.6.1.4.1.12276.1.1.1.65542   |
++--------------------------------------+----------------------------------+
+| aom-fault                            | .1.3.6.1.4.1.12276.1.1.1.65543   |
++--------------------------------------+----------------------------------+
+| drive-capacity-fault                 | .1.3.6.1.4.1.12276.1.1.1.65544   |
++--------------------------------------+----------------------------------+
+| power-fault                          | .1.3.6.1.4.1.12276.1.1.1.65545   |
++--------------------------------------+----------------------------------+
+| thermal-fault                        | .1.3.6.1.4.1.12276.1.1.1.65546   |
++--------------------------------------+----------------------------------+
+| drive-thermal-throttle               | .1.3.6.1.4.1.12276.1.1.1.65547   |
++--------------------------------------+----------------------------------+
+| blade-thermal-fault                  | .1.3.6.1.4.1.12276.1.1.1.65548   |
++--------------------------------------+----------------------------------+
+| blade-hardware-fault                 | .1.3.6.1.4.1.12276.1.1.1.65549   |
++--------------------------------------+----------------------------------+
+| firmware-update-status               | .1.3.6.1.4.1.12276.1.1.1.65550   |
++--------------------------------------+----------------------------------+
+| drive-utilization                    | .1.3.6.1.4.1.12276.1.1.1.65551   |
++--------------------------------------+----------------------------------+
+| service-health                       | .1.3.6.1.4.1.12276.1.1.1.65552   |
++--------------------------------------+----------------------------------+
+| partition1-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65553   |
++--------------------------------------+----------------------------------+
+| partition2-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65554   |
++--------------------------------------+----------------------------------+
+| partition3-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65555   |
++--------------------------------------+----------------------------------+
+| partition4-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65556   |
++--------------------------------------+----------------------------------+
+| partition5-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65557   |
++--------------------------------------+----------------------------------+
+| partition6-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65558   |
++--------------------------------------+----------------------------------+
+| partition7-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65559   |
++--------------------------------------+----------------------------------+
+| partition8-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65560   |
++--------------------------------------+----------------------------------+
+| partition1-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65561   |
++--------------------------------------+----------------------------------+
+| partition2-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65562   |
++--------------------------------------+----------------------------------+
+| partition3-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65563   |
++--------------------------------------+----------------------------------+
+| partition4-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65564   |
++--------------------------------------+----------------------------------+
+| partition5-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65565   |
++--------------------------------------+----------------------------------+
+| partition6-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65566   |
++--------------------------------------+----------------------------------+
+| partition7-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65567   |
++--------------------------------------+----------------------------------+
+| partition8-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65568   |
++--------------------------------------+----------------------------------+
+| partition1-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65569   |
++--------------------------------------+----------------------------------+
+| partition2-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65570   |
++--------------------------------------+----------------------------------+
+| partition3-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65571   |
++--------------------------------------+----------------------------------+
+| partition4-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65572   |
++--------------------------------------+----------------------------------+
+| partition5-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65573   |
++--------------------------------------+----------------------------------+
+| partition6-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65574   |
++--------------------------------------+----------------------------------+
+| partition7-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65575   |
++--------------------------------------+----------------------------------+
+| partition8-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65576   |
++--------------------------------------+----------------------------------+
+| sensor-fault                         | .1.3.6.1.4.1.12276.1.1.1.65577   |
++--------------------------------------+----------------------------------+
+| fipsError                            | .1.3.6.1.4.1.12276.1.1.1.196608  |
++--------------------------------------+----------------------------------+
+| core-dump                            | .1.3.6.1.4.1.12276.1.1.1.327680  |
++--------------------------------------+----------------------------------+
+| nebsEnabled                          | .1.3.6.1.4.1.12276.1.1.1.131072  |
++--------------------------------------+----------------------------------+
+| nebsDisabled                         | .1.3.6.1.4.1.12276.1.1.1.131073  |
++--------------------------------------+----------------------------------+
+| systemControllerNebsMismatch         | .1.3.6.1.4.1.12276.1.1.1.131929  |
++--------------------------------------+----------------------------------+
 
 
-For the chassis partitions the following SNMP Traps are supported as of F5OS 1.2.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
+
+For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
 
 +----------------------------+-----------------------------------+
 | **Alert**                  | **OID**                           |                            
@@ -547,7 +603,7 @@ There are SNMP logs for the system controllers and within each chassis partition
 
 SNMP information is captured in the **snmp.log** located with the **log** directory of each chassis partition:
 
-**Note: The CLI and webUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the chassis partition snmp logs is **/var/F5/partition<id>/log/snmp.log**
+Note: The CLI and webUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the chassis partition snmp logs is **/var/F5/partition<id>/log/snmp.log**
 
 
 .. code-block:: bash
