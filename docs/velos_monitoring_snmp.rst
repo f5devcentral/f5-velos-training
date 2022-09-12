@@ -571,7 +571,7 @@ Note: The **snmpTargetAddrTAddress** is currently unintuitive and an enhacement 
 Troubleshooting SNMP
 ====================
 
-There are SNMP logs for the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located with the **log/confd** directory of the system controller:
+There are SNMP logs for the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located with the **log/confd** directory of the system controller. Below is an example using the system contoller F5OS CLI to view the SNMP logs. 
 
 **Note: The CLI and webUI abstract the full paths for logs so that they are easier to find; if using root access to the bash shell, then the full path to the system controller SNMP logs is **/var/confd/log/snmp.log**.
 
@@ -601,7 +601,7 @@ There are SNMP logs for the system controllers and within each chassis partition
     syscon-2-active# 
 
 
-SNMP information is captured in the **snmp.log** located with the **log** directory of each chassis partition:
+SNMP information is captured in the **snmp.log** located within the **log** directory of each chassis partition:
 
 Note: The CLI and webUI abstract the full paths for logs so that they are easier to find, if using root access to the bash shell, then the full path to the chassis partition snmp logs is **/var/F5/partition<id>/log/snmp.log**
 
