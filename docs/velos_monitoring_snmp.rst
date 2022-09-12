@@ -2,25 +2,47 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions SNMP support is limited to SNMP Trap support from the system controllers and chassis partitions, and **IF-MIB** support for the chassis partitions. F5OS v1.2.x added addtional SNMP support, including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.
+SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions, SNMP support is limited to **IF-MIB** support for the chassis partitions as well as SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.
 
-As of F5OS-C 1.2.0 the list of MIBs available are as follows:
+As of F5OS-C 1.5.0 the list of MIBs available are as follows:
 
-- SNMP-FRAMEWORK-MIB
-- SNMP-MPD-MIB
-- SNMP-TARGET-MIB
-- SNMP-USER-BASED-SM-MIB
-- SNMP-COMMUNITY-MIB
-- SNMP-NOTIFICATION-MIB
-- SNMP-VIEW-BASED-ACM-MIB
-- SNMPv2-MIB
-- IF-MIB
+- HOST-RESOURCES-MIB
+- RFC1213-MIB
 - EtherLike-MIB
 - IANAifType-MIB
-- F5-PLATFORM-STATS-MIB
+- IF-MIB
+- IPV6-TC
+- SNMP-COMMUNITY-MIB
+- SNMP-FRAMEWORK-MIB
+- SNMP-MPD-MIB
+- SNMP-NOTIFICATION-MIB
+- SNMP-TARGET-MIB
+- SNMP-USER-BASED-SM-MIB
+- SNMP-VIEW-BASED-ACM-MIB
+- SNMPv2-CONF
+- SNMPv2-MIB
+- SNMPv2-SMI
+- SNMPv2-TC
+- TRANSPORT-ADDRESS-MIB
+- F5-ALERT-DEF-MIB
 - F5-COMMON-SMI-MIB
-- F5-COMMON-SMI
-- F5-ALERT-MIB
+- F5-CTRLR-ALERT-NOTIF-MIB
+- F5-PLATFORM-STATS-MIB
+- F5-OS-SYSTEM-MIB
+- F5-PARTITION-ALERT-NOTIF-MIB
+
+MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory.
+
+.. image:: images/velos_monitoring_snmp/image1.png
+  :align: center
+  :scale: 70%
+
+You can then download the F5OS controller MIBS and sta standard Net SNMP MIBS as seen above. Repeat the same process on one of the chassis partitions to download the chassis partition MIBs.
+
+.. image:: images/velos_monitoring_snmp/image2.png
+  :align: center
+  :scale: 70%
+
 
 
 Enabling SNMP via CLI
