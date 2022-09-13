@@ -37,7 +37,7 @@ MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. F
   :align: center
   :scale: 70%
 
-You can then download the F5OS controller MIBS and sta standard Net SNMP MIBS as seen above. Repeat the same process on one of the chassis partitions to download the chassis partition MIBs.
+You can then download the F5OS controller MIBS and the standard Net SNMP MIBS as seen above. Repeat the same process on one of the chassis partitions to download the chassis partition MIBs.
 
 .. image:: images/velos_monitoring_snmp/image2.png
   :align: center
@@ -399,11 +399,11 @@ SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 SNMP Trap Support in F5OS
 ========================
 
-You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps support by F5OS.
+You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.5.x.
 
 
 
-For the system controllers the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
+For the system controllers, the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
 
 SNMP Trap events that note a fault should also trigger an alert that can be viewed in the show alerts in the CLI, webUI, and API. Once the clear SNMP Trap is sent it should clear the event from the **show events** output.
 
@@ -593,7 +593,7 @@ Note: The **snmpTargetAddrTAddress** is currently unintuitive and an enhacement 
 Troubleshooting SNMP
 ====================
 
-There are SNMP logs for the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located with the **log/confd** directory of the system controller. Below is an example using the system contoller F5OS CLI to view the SNMP logs. 
+There are SNMP logs for the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located within the **log/confd** directory of the system controller. Below is an example using the system contoller F5OS CLI to view the SNMP logs. 
 
 **Note: The CLI and webUI abstract the full paths for logs so that they are easier to find; if using root access to the bash shell, then the full path to the system controller SNMP logs is **/var/confd/log/snmp.log**.
 
