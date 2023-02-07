@@ -480,7 +480,7 @@ For the final step, reset the system controllers ConfD database. This will essen
     syscon-2-active(config)# system database config reset-default-config true
     syscon-2-active(config)# commit
 
-Once this has been committed, both controllers need to be rebooted manually. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller. 
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back to back.
 
 .. code-block:: bash
 
@@ -555,7 +555,7 @@ All 3 slots are assigned to partition none.
         }
     }
 
-Once the slots have been removed form the partitions, you can Delete any chassis partitions that were configured. In this case both **Production** and **Development** chassis partitions will be deleted by sending API calls to the system controller IP address:
+Once the slots have been removed from the partitions, you can Delete any chassis partitions that were configured. In this case both **Production** and **Development** chassis partitions will be deleted by sending API calls to the system controller IP address:
 
 .. code-block:: bash
 
@@ -575,7 +575,15 @@ The last step in the reset procedure is to set the system controllers ConfD data
     "f5-database:reset-default-config": "true"
     }
 
-The system controllers should reboot, and their configurations will be completely wiped clean. You will need to login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.    
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back to back.
+
+.. code-block:: bash
+
+
+
+
+
+The system controllers should reboot, and their configurations will be completely wiped clean. You will need to login via the CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.  
 
 Remove Partitions and Reset Controller via webUI
 ------------------------------------------------
