@@ -77,7 +77,7 @@ How much performance drops can vary for different metrics, but F5 has always siz
 vCPU Sizing
 ===========
 
-Each VELOS BX110 blade has 28 vCPUs, but 6 of those vCPUs are reserved for use by the F5OS platform layer and data mover (FPGA to CPU interconnet). This is different than VIPRION where each vCPU gave a portion of its processing and memory to the hypervisor. In VELOS 22 vCPUs are available per blade to be assigned to tenants since the other 6 are reserved by the F5OS platform layer. The diagram below depicts the BX110 blade vCPU allocation: 
+Each VELOS BX110 blade has 28 vCPUs, but 6 of those vCPUs are reserved for use by the F5OS platform layer and data mover (FPGA to CPU interconnect). This is different than VIPRION where each vCPU gave a portion of its processing and memory to the hypervisor. In VELOS 22 vCPUs are available per blade to be assigned to tenants since the other 6 are reserved by the F5OS platform layer. The diagram below depicts the BX110 blade vCPU allocation: 
 
 
 .. image:: images/velos_performance_and_sizing/image10.png
