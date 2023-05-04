@@ -114,3 +114,30 @@ Shortly after the declaration is sent to BIG-IQ you can see a new onboarding tas
   :scale: 70%
 
 
+
+F5OS Backup for VELOS
+==========================
+
+The configuration and monitoring of the F5OS platform layer is not managed by BIG-IQ, it has to be managed locally on the VELOS appliance using the F5OS CLI, webUI, API or SNMP. The exception, is that scheduled backups for F5OS configuration has been added in BIG-IQ version 8.3. This new functionality allows for rSeries and/or VELOS devices to be added to BIG-IQ for the purpose of backing up their F5OS configurations. The management IP address of the F5OS layer belonging to the rSeries appliance or VELOS system controller is added to the **F5OS** section in BIG-IQ. From this section, device credentials can be added to access the F5OS platform layer, and backups may be scheduled or created on demand. The F5OS tenants are backed up using the normal **Backup & Restore** workflows in BIG-IQ, just as any BIG-IP instance or vCMP guest would be.
+
+**IMPORTANT: The F5 VELOS system uses a primary key to perform encryption and decryption of highly sensitive passwords/passphrases in the configuration database. You should set this primary key prior to performing any configuration backup if you have not already done so. In the case of a configuration migration such as moving configuration to a replacement device due to RMA, it is important to set the primary key to a known value so that the same key can be used to decrypt the passwords/passphrases in the configuration restored on the replacement device. More details are in the K article below.** 
+
+`K50135154: Back up and restore the F5OS-C configuration on a VELOS system <https://my.f5.com/manage/s/article/K50135154>`_
+
+Below are the two sections needed to fully restore an VELOS chassis. The **Backup & Restore** section is used for the F5OS tenants, and the **F5OS** section is used to backup the F5OS platform layer. 
+
+.. image:: images/bigiq_support_for_rseries/image3.png
+  :align: center
+  :scale: 70%
+
+Below is an example of a scheduled backup where VELOS and/or rSeries devices can be added to a scheduled backup. This will backup the F5OS platform layer only, F5OS tenants are backed up using the normal **Backup & Restore** workflows in BIG-IQ. 
+
+.. image:: images/bigiq_support_for_rseries/image4.png
+  :align: center
+  :scale: 70%
+
+If a restore of the F5OS layer needs to occur, this is not facilitated from BIG-IQ. You will need to download the saved backup you wish to restore for F5OS from the BIG-IQ system, and then follow the restoration procedures as outlined in the article below.
+
+`K50135154: Back up and restore the F5OS-C configuration on a VELOS system <https://my.f5.com/manage/s/article/K50135154>`_
+
+Note: You will need to have the passwords used to encrypt the primary key before restoring the F5OS configuration. Tenant configurations are restored separately from the F5OS layer.
