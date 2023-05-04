@@ -62,7 +62,7 @@ In general, F5OS tenants in the VELOS platforms have no visibility into the unde
   :align: center
   :scale: 70%
 
-If you were to look inside the tenant, you'll notice that the number of Interfaces corelates ot the number of CPU cores assigned to the tenant, in this case 11. Note how the tenant does not see the physical interfaces at the F5OS layer.  
+If you were to look inside the tenant, you'll notice that the number of Interfaces corelates to the number of CPU cores assigned to the tenant, in this case 11. Note how the tenant does not see the physical interfaces at the F5OS layer.  
 
 .. image:: images/velos_points_of_management/image7a.png
   :align: center
