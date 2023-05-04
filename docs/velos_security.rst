@@ -21,7 +21,7 @@ This allows customers to run a secure/locked-down out-of-band management network
 Allow List for F5OS Management
 ===============================
 
-F5OS only allows management access via the out-of-band management interfaces on VELOS, there is no in-band access to the F5OS management layer. Within VELOS there are two layers for F5OS; the **system controller** layer, and the **chassis partition** layer. Each of these layers have their own management IP addresses, and access control which can restric access through the out of band network. 
+F5OS only allows management access via the out-of-band management interfaces on VELOS, there is no in-band access to the F5OS management layer. Within VELOS there are two layers for F5OS; the **system controller** layer, and the **chassis partition** layer. Each of these layers have their own management IP addresses, and access control which can restrict access through the out-of-band network. 
 
 Each of the two system controllers has a static IP address assigned, and there is a floating IP address which should be use to access the active system controller. As chassis partitions are deployed they also have a single IP address which is assigned. Access to those F5OS management interfaces may be restricted to specific IP addresses (both IPv4 and IPv6), subnets (via Prefix Length), as well as protocols - 443 (HTTPS), 80 (HTTP), 8888 (RESTCONF), 161 (SNMP), 7001 (VCONSOLE), and 22 (SSH) with version F5OS-C 1.6.0 and later. An administrator can add one or more Allow List entries via the CLI, webUI (webUI will be added in F5OS-C 1.7.0) or API at the system controller layer and the chassis partition layer to lock down access to specific endpoints.
 
@@ -354,7 +354,7 @@ You can display the current certificate, keys, and passphrases using the CLI com
 Managing Device Certificates, Keys, CSRs, and CAs via webUI
 -----------------------------------------------------------
 
-In the F5OS webUI you can manage device certificates for the management interface via the **System Settings -> Certificate Management** page. There are options to view the TLS certificates, keys, and details. You may also create self-signed certificates, create certificate signing requests (CSRs), and CA bundles.
+In the F5OS webUI you can manage device certificates for the management interface via the **Authentication & Access -> TLS Configuration** page. There are options to view the TLS certificates, keys, and details. You may also create self-signed certificates, create certificate signing requests (CSRs), and CA bundles.
 
 .. image:: images/velos_security/imagecert2.png
   :align: center
@@ -500,7 +500,7 @@ To disable appliance mode.
 Enabling Appliance Mode via the webUI
 ------------------------------------- 
 
-Appliance mode can be enabled or disabled via the webUI under the **System Settings -> General** page.
+Appliance mode can be enabled or disabled via the webUI under the **System Settings -> General** page in both the system controller webUI and the chassis partition webUI.
 
 .. image:: images/velos_security/image4.png
   :align: center
@@ -637,7 +637,7 @@ You'll see output similar to the example below.
 Configuring SSH and CLI Timeouts via webUI
 ------------------------------------------
 
-Currently only the HTTPS token lifetime is configurable in the webUI. SSH and CLI timeouts are not currently configurable via the webUI.
+Currently only the HTTPS token lifetime is configurable in the webUI. SSH and CLI timeouts are not currently configurable via the webUI and must be set via CLI or API. To set the **Token Lifetime** go to the **Authentication & Access -> Authentication Settings** page in either the system controller or the chassis partition webUI.
 
 .. image:: images/velos_security/imagetoken1.png
   :align: center
@@ -733,7 +733,7 @@ To display the current restconf-token lifetime setting, use the command **show s
 Token Lifetime via webUI
 ------------------------
 
-You may configure the restconf-token lifetime via the webUI (new feature added in F5OS-A 1.4.0). The value is in minutes, and the client is able to refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
+You may configure the restconf-token lifetime via the webUI (new feature added in F5OS-A 1.6.0). The value is in minutes, and the client is able to refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
 
 .. image:: images/velos_security/image6.png
   :align: center
@@ -2022,7 +2022,7 @@ In the current F5OS releases, you cannot view the F5OS audit.log file directly f
   :align: center
   :scale: 70%
 
-If you want to download the main **audit.log**, select the directory **/log/system**.
+If you want to download the main **audit.log**, select the directory **/log/controller**.
 
 
 .. image:: images/velos_security/image11.png
