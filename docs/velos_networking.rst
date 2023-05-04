@@ -78,7 +78,13 @@ The portgroup component is used to control the mode of the physical port. This c
 .. image:: images/velos_networking/image10.png
   :width: 45%
 
-**Note: In the current release of F5OS-C both ports on a BX110 blade must be configured for the same mode.  Both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB; there is no support for mixing modes on the same blade. You can have different options across different blades within the same chassis partition, but within a single blade, the ports have to be the same. More granular options may be added in future F5OS software releases.**
+In releases prior to F5OS-C 1.5.1 both ports on a BX110 blade must be configured for the same mode, both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB; there was no support for mixing modes on the same blade. You could have different options across different blades within the same chassis partition, but within a single blade, the ports had to be the same. F5OS-C 1.5.1 introduced more flexible options for port group configurations within the same blade. The table below shows the new heterogeneous port modes that were introduced in F5OS-C 1.5.1.
+
+.. image:: images/velos_networking/image10a.png
+   :align: center
+   :scale: 70%
+
+
 
 Below is an example of the chassis partition webUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade in order to load a new FPGA bitstream image.
 
