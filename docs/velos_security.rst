@@ -23,7 +23,7 @@ Allow List for F5OS Management
 
 F5OS only allows management access via the out-of-band management interfaces on VELOS, there is no in-band access to the F5OS management layer. Within VELOS there are two layers for F5OS; the **system controller** layer, and the **chassis partition** layer. Each of these layers have their own management IP addresses, and access control which can restric access through the out of band network. 
 
-Each of the two system controllers has a static IP address assigned, and there is a floating IP address which should be use to access the active system controller. As chassis partitions are deployed they also have a single IP address which is assigned. Access to those F5OS management interfaces may be restricted to specific IP addresses (both IPv4 and IPv6), subnets (via Prefix Length), as well as protocols - 443 (HTTPS), 80 (HTTP), 8888 (RESTCONF), 161 (SNMP), 7001 (VCONSOLE), and 22 (SSH). An administrator can add one or more Allow List entries via the CLI, webUI or API at the system controller layer and the chassis partition layer to lock down access to specific endpoints.
+Each of the two system controllers has a static IP address assigned, and there is a floating IP address which should be use to access the active system controller. As chassis partitions are deployed they also have a single IP address which is assigned. Access to those F5OS management interfaces may be restricted to specific IP addresses (both IPv4 and IPv6), subnets (via Prefix Length), as well as protocols - 443 (HTTPS), 80 (HTTP), 8888 (RESTCONF), 161 (SNMP), 7001 (VCONSOLE), and 22 (SSH) with version F5OS-C 1.6.0 and later. An administrator can add one or more Allow List entries via the CLI, webUI (webUI will be added in F5OS-C 1.7.0) or API at the system controller layer and the chassis partition layer to lock down access to specific endpoints.
 
 By default, all ports except for 161 (SNMP) are enabled for access, meaning ports 80, 443, 8888, 7001, and 22 are allowed access. Port 80 is only open to allow a redirect to port 443 in case someone tries to access the webUI over port 80. The webUI itself is not accessible over port 80. Port 161 is typically viewed as un-secure, and is therefore not accessible until an allow list entry is created for the endpoint trying to access F5OS using SNMP queries. Ideally SNMPv3 should be utilized to provide additional layers of security on an otherwise un-secure protocol. VCONSOLE access also has to be explicitly configured before access to the tenants is possible over port 7001. 
 
@@ -38,24 +38,25 @@ If you would like to lock down one of the protocols to either a single IP addres
 
 .. code-block:: bash
 
-    r10900-2(config)# system allowed-ips allowed-ip snmp config ipv4 address 10.255.0.0 prefix-length 24 port 161
-    r10900-2(config-allowed-ip-snmp)# commit
+    syscon-2-active(config)# system allowed-ips allowed-ip snmp config ipv4 address 10.255.0.0 prefix-length 24 port 161 
+    syscon-2-active(config-allowed-ip-snmp)# commit
     Commit complete.
+    syscon-2-active(config-allowed-ip-snmp)#
 
 Currently you can add one IP address/port pair per **allowed-ip** name with an optional prefix length to specify a CIDR block containing multiple addresses. If you require more than one non-contiguous IP address or subnets you can add it under another name as seen below. 
 
 .. code-block:: bash
 
-    appliance-1(config)# system allowed-ips allowed-ip SNMP-144 config ipv4 address 10.255.0.144 port 161 
-    appliance-1(config-allowed-ip-SNMP)# commit
+    syscon-2-active(config)# system allowed-ips allowed-ip SNMP-144 config ipv4 address 10.255.0.144 port 161 
+    syscon-2-active(config-allowed-ip-SNMP-144)# commit
     Commit complete.
-    appliance-1(config-allowed-ip-SNMP)# 
+    syscon-2-active(config-allowed-ip-SNMP-144)#
 
 
-    appliance-1(config)# system allowed-ips allowed-ip SNMP-145 config ipv4 address 10.255.2.145 port 161 
-    appliance-1(config-allowed-ip-SNMP)# commit
+    syscon-2-active(config)# system allowed-ips allowed-ip SNMP-145 config ipv4 address 10.255.2.145 port 161
+    syscon-2-active(config-allowed-ip-SNMP-145)# commit
     Commit complete.
-    appliance-1(config-allowed-ip-SNMP)# 
+    syscon-2-active(config-allowed-ip-SNMP-145)#
 
 
 Adding Allow List Entries via API
@@ -157,10 +158,10 @@ The output will show the previously configured allowed-ips.
         }
     }
 
-Adding Allow List Entries via webUI
------------------------------------
+Adding Allow List Entries via webUI (F5OS-C 1.7.0)
+---------------------------------------------------
 
-You can configure the **Allow List** in the webUI under the **System Settings** section. 
+You can configure the **Allow List** in the webUI starting with version F5OS-C 1.7.0 under the **System Settings** section. 
 
 .. image:: images/velos_security/image2.png
   :align: center
@@ -175,7 +176,17 @@ Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length o
 Setting F5OS Primary Key
 ======================== 
 
-The VELOS system uses a primary key to perform encryption and decryption of highly sensitive passwords/passphrases in the configuration database. You should periodically reset this primary key for additional security. You should set this primary key prior to performing any configuration backup if you have not already done so. In the case of a configuration migration such as moving configuration to a replacement device due to RMA, it is important to set the primary key to a known value so that the same key can be used to decrypt the passwords/passphrases in the configuration restored on the replacement device. More details are provided in the solution article below.
+The F5 VELOS system uses a primary key to encrypt highly sensitive passwords/passphrases in the configuration database, such as:
+
+- Tenant unit keys used for TMOS Secure Vault
+- The F5OS API Service Gateway TLS key
+- Stored iHealth credentials
+- Stored AAA server credentials
+
+The primary key is randomly generated by F5OS during initial installation. You should set the primary key to a known value prior to performing a configuration backup. If you restore a configuration backup on a different VELOS device, e.g. during an RMA replacement, you must first set the primary key passphrase and salt on the destination device to the same value as the source device. If this is not done correctly, the F5OS configuration restoration may appear to succeed but produce failures later when the system attempts to decrypt and use the secured parameters.
+
+You should periodically change the primary key for additional security. If doing so, please note that a configuration backup is tied to the primary key at the time it was generated. If you change the primary key, you cannot restore older configuration backups without first setting the primary key to the previous value, if it is known. More details are provided in the solution article below.
+
 
 `K50135154: Backup and restore the F5OS-C configuration on a VELOS system <https://my.f5.com/manage/s/article/K50135154>`_
 
@@ -189,16 +200,16 @@ Note that the hash key can be used to check and compare the status of the primar
 
 .. code-block:: bash
 
-    r10900-1# show system aaa primary-key 
-    system aaa primary-key state hash IWDanp1tcAO+PJPH2Hti6BSvpFKgRvvFpXNZRIAk3JoXhypflBofHc+IJp8LA2SDGCQ2IgE8Z628lGjCWVjBxg==
-    system aaa primary-key state status "COMPLETE        Initiated: Mon Feb 27 13:38:02 2023"
-    r10900-1# 
+    syscon-2-active# show system aaa primary-key 
+    system aaa primary-key state hash sj2GslitH9XYbmW/cpY0TJhMWkU+CpvAU9vqoiL4aZcfE6qnSUDU3PWx+lCZO5KrqVzlWu/3mRugCNniNyQhSA==
+    system aaa primary-key state status NONE
+    syscon-2-active#
 
 
 Certificates for Device Management
 ==================================
 
-F5OS supports TLS device certificates and keys to secure connections to the management interface. You can either create a self-signed certificate, or load your own certificates and keys into the system. In F5OS-A 1.4.0 an admin can now optionally enter a passphrase with the encrypted private key. More details can be found in the link below.
+F5OS supports TLS device certificates and keys to secure connections to the management interface. You can either create a self-signed certificate, or load your own certificates and keys into the system. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. More details can be found in the link below.
 
 `VELOS Certificate Management Overview <https://techdocs.f5.com/en-us/velos-1-5-0/velos-systems-administration-configuration/title-system-settings.html#cert-mgmt-overview>`_
 
@@ -210,46 +221,47 @@ By default, F5OS uses a self-signed certificate and key for device management. I
 
 .. code-block:: bash
 
-    r10900-1(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls true key-passphrase 
+    syscon-2-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls true key-passphrase 
     Value for 'key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
-    r10900-1(config)#
+    syscon-2-active(config)#
 
 
 The **store-tls** option when set to **true**, stores the private key and self-signed certificate in the system instead of returning the values only in the CLI output. If you would prefer to have the keys returned in the CLI output and not stored in the system, then set **store-tls false** as seen below.
 
 .. code-block:: bash
 
-    r10900-1(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls false key-passphrase 
+    syscon-2-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls false key-passphrase
     Value for 'key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     key-response 
     -----BEGIN EC PRIVATE KEY-----
     Proc-Type: 4,ENCRYPTED
-    DEK-Info: AES-256-CBC,BA7ECF55A14EBD39F5DB48EBB6BBB53E
+    DEK-Info: AES-256-CBC,6EE0AFCBE422562DD8653DA0EA60B3AA
 
-    IF6Uk2tLE6LzIu3mEgy3VB/uADkN53HO4LE7P8QDTLBRt5f81LjxhP5MFJlKFk2a
-    iYpZEqzhZwCAfOetcaK+LFv+z26NzUSdHLmEvM+qG3B5s6U7eQbes6mMPAyOFZcj
-    +1El1olDrHfn+xmcbUFlM7lUVRgIhABy+Y3WT6GaH7CaYghDjKkRoppiiQs3KwXf
-    /ZdO7QFRAWr0Lfi8iBtVZKBqL2CHsBQxfggvP0EB+9o=
+    TignlV9B8xZj1Pr9/NZrlwZkjhfa1Md1pksZZ5pCxUXkQBJjj/XN9bve6E9ZwZlw
+    /mh7Anv46XZikh6PHKIbdtQNTiTfVljpXSD2xn1nAlPjUlE8xg5H1FXEs4KTDjvN
+    NSDd3lupIH7xq37/3iMyKx2hWyZbMCaSPVMPyt4wBMZ2TucaOx0HEK1YOpjWyPV9
+    DPF2J5q3srSDd7RAti6hQ3R214y65TT4uPPxcZviz+s=
     -----END EC PRIVATE KEY-----
 
     cert-response 
     -----BEGIN CERTIFICATE-----
-    MIICDjCCAZUCCQCRNihj9kub1zAKBggqhkjOPQQDAjBxMQwwCgYDVQQDDANqaW0x
+    MIICDzCCAZUCCQDsONxeyLMipDAKBggqhkjOPQQDAjBxMQwwCgYDVQQDDANqaW0x
     CzAJBgNVBAYTAlVTMQswCQYDVQQIDAJNQTEPMA0GA1UEBwwGQm9zdG9uMQswCQYD
     VQQKDAJGNTEOMAwGA1UECwwFU2FsZXMxGTAXBgkqhkiG9w0BCQEWCmppbUBmNS5j
-    b20wHhcNMjMwMjIzMDUwMDE0WhcNMjQwMjIzMDUwMDE0WjBxMQwwCgYDVQQDDANq
+    b20wHhcNMjMwNTA0MTY1NjUwWhcNMjQwNTAzMTY1NjUwWjBxMQwwCgYDVQQDDANq
     aW0xCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJNQTEPMA0GA1UEBwwGQm9zdG9uMQsw
     CQYDVQQKDAJGNTEOMAwGA1UECwwFU2FsZXMxGTAXBgkqhkiG9w0BCQEWCmppbUBm
-    NS5jb20wdjAQBgcqhkjOPQIBBgUrgQQAIgNiAATDLVWBq7s1nwkZy27DGbqNEkHM
-    /WTXwKo2i+uzoB2fL6DXGlgKJo1WIY5sFMYGv1lNsDte5Ztr11331rmcWghVOHkr
-    FndFmeEnSNRyHZoqHXzVIkp60JAsv2Yv2ZafGJEwCgYIKoZIzj0EAwIDZwAwZAIw
-    EluMBf0X9Zotm6pWMiajR5AL8Z2PMIE3hqpc3IREeSs09xf8ADKoCEEudRMHB1lc
-    AjBelhJIkUoiZBtfAdf6NrUDWQdrN7kvC4h8DLm1XV9lr4Wxh5Es1WSwF1PoTRMt
-    Mqs=
+    NS5jb20wdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAQa1U/Nlxqj2+8WeXFH9sFtzKx9
+    i63GXFVPMAJ6B8YvPMPRJWBhMfKFf93LdB6en5t3AGkApRkzCxmNMunknmrLOJqL
+    apjsUQFznt2ksk0EO3c8+lxe80/dfiJs7e6jWygwCgYIKoZIzj0EAwIDaAAwZQIx
+    AK91V3pXXWc0grzWu8V9c1Ls8pUESMk/02cHbQ4KpHy9dIM7Urqv4eOz2/7KPHYL
+    PgIwMeuPVPB3kmata305fN7XGI+vu9bbKU2SUBXV55YRF5qGmyURLZJr8/tMkRlB
+    Z5lL
     -----END CERTIFICATE-----
-    r10900-1(config)# 
+    syscon-2-active(config)# 
+
 
 The management interface will now use the self-signed certificate you just created. You can verify by connecting to the F5OS management interface via a browser and then examining the certificate.
 
@@ -262,79 +274,81 @@ To create a Certificate Signing Request (CSR) via the CLI use the **system aaa t
 
 .. code-block:: bash
 
-    r10900-1(config)# system aaa tls create-csr name r10900-1.f5demo.net email jim@f5.com city Boston country US organization F5 region MA unit Sales version 1 
+    syscon-2-active(config)# system aaa tls create-csr name r10900-1.f5demo.net email jim@f5.com city Boston country US organization F5 region MA unit Sales version 1 
     response 
     -----BEGIN CERTIFICATE REQUEST-----
-    MIIBezCCAQECAQEwgYExHDAaBgNVBAMME3IxMDkwMC0xLmY1ZGVtby5uZXQxCzAJ
+    MIIBejCCAQECAQEwgYExHDAaBgNVBAMME3IxMDkwMC0xLmY1ZGVtby5uZXQxCzAJ
     BgNVBAYTAlVTMQswCQYDVQQIDAJNQTEPMA0GA1UEBwwGQm9zdG9uMQswCQYDVQQK
     DAJGNTEOMAwGA1UECwwFU2FsZXMxGTAXBgkqhkiG9w0BCQEWCmppbUBmNS5jb20w
-    djAQBgcqhkjOPQIBBgUrgQQAIgNiAAQ/8UzZtEGMJ+vtmkEUsgiv2hL8r81sKwB3
-    clwqnXKl08vFCNr4wy7TB28b4EszAQDTBhIipHuC5L2GpetjNsFywkDqZuoJAvmx
-    nrqYQe5z9bDUpO6AJsAaohLG0sc9E4WgADAKBggqhkjOPQQDAgNoADBlAjEAsTST
-    M43RDyve46QJtHf3ofCVuhmxZ8lAcWBX5W3JsDiZcdaNCeXgSk4pX5nwSrDnAjAH
-    GPjWc5CcyCBh8+RyV9zNL7I5WlIsZj1aUAA3PD1CSgFHxaXV6cpHP8H8kQiJjjE=
+    djAQBgcqhkjOPQIBBgUrgQQAIgNiAARZs7Vj5RCTJQUbVe96+OwqaBmKqT7TL9Rs
+    N2sFWtO8c/ze2fpYxV7yHSFSPQhw40fjmbxHb8O0BHtYIWP0czPTgnHA6l6CD4Q2
+    qz0vvp8Q/wWtMrEo/lKbLBDKKe4FgvOgADAKBggqhkjOPQQDAgNnADBkAjAC3x6k
+    Rg3ncd7B2U/7Fcclilv/xgUqVS9eXdkTZSqXiCIz4Ff7pOWwpkqHRBx5iLICMF0C
+    tpSmmQVOSRYU98q8JJ0HClZ+8eTan2fotaKvYyzYMrge5cl0w6J7dnFZwLdmYA==
     -----END CERTIFICATE REQUEST-----
-    r10900-1(config)# 
+    syscon-2-active(config)# 
+
 
 To create a CA bundle via the CLI use the **system aaa tls ca-bundle** command.
 
 .. code-block:: bash
 
-    r10900-1(config)# system aaa tls ca-bundles ca-bundle ?
+    syscon-2-active(config)# system aaa tls ca-bundles ca-bundle ?
     Possible completions:
     <Reference to configured name of the CA Bundle.>
-    r10900-1(config)# system aaa tls ca-bundles ca-bundle    
+    syscon-2-active(config)#  
 
 
 To create a Client Revocation List (CRL) via the CLI issue the following command.
 
 .. code-block:: bash
 
-    r10900-1(config)# system aaa tls crls crl ?
+    syscon-2-active(config)# system aaa tls crls crl ?
     Possible completions:
     <Reference to configured name of the CRL.>
-    r10900-1(config)# system aaa tls crls crl
+    syscon-2-active(config)# system aaa tls crls crl
 
 You can display the current certificate, keys, and passphrases using the CLI command **show system aaa tls**.
 
 .. code-block:: bash
 
-    r10900-1# show system aaa tls
+    syscon-2-active# show system aaa tls
     system aaa tls state certificate Certificate:
                                         Data:
                                             Version: 1 (0x0)
                                             Serial Number:
-                                                c9:79:f0:b2:3e:9e:d2:a1
+                                                b9:0d:2d:10:75:4a:53:2f
                                         Signature Algorithm: ecdsa-with-SHA256
-                                            Issuer: CN=jim2, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
+                                            Issuer: CN=jim, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
                                             Validity
-                                                Not Before: Feb 24 21:35:31 2023 GMT
-                                                Not After : Feb 24 21:35:31 2024 GMT
-                                            Subject: CN=jim2, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
+                                                Not Before: May  4 16:55:58 2023 GMT
+                                                Not After : May  3 16:55:58 2024 GMT
+                                            Subject: CN=jim, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
                                             Subject Public Key Info:
                                                 Public Key Algorithm: id-ecPublicKey
                                                     Public-Key: (384 bit)
                                                     pub: 
-                                                        04:3f:f1:4c:d9:b4:41:8c:27:eb:ed:9a:41:14:b2:
-                                                        08:af:da:12:fc:af:cd:6c:2b:00:77:72:5c:2a:9d:
-                                                        72:a5:d3:cb:c5:08:da:f8:c3:2e:d3:07:6f:1b:e0:
-                                                        4b:33:01:00:d3:06:12:22:a4:7b:82:e4:bd:86:a5:
-                                                        eb:63:36:c1:72:c2:40:ea:66:ea:09:02:f9:b1:9e:
-                                                        ba:98:41:ee:73:f5:b0:d4:a4:ee:80:26:c0:1a:a2:
-                                                        12:c6:d2:c7:3d:13:85
+                                                        04:59:b3:b5:63:e5:10:93:25:05:1b:55:ef:7a:f8:
+                                                        ec:2a:68:19:8a:a9:3e:d3:2f:d4:6c:37:6b:05:5a:
+                                                        d3:bc:73:fc:de:d9:fa:58:c5:5e:f2:1d:21:52:3d:
+                                                        08:70:e3:47:e3:99:bc:47:6f:c3:b4:04:7b:58:21:
+                                                        63:f4:73:33:d3:82:71:c0:ea:5e:82:0f:84:36:ab:
+                                                        3d:2f:be:9f:10:ff:05:ad:32:b1:28:fe:52:9b:2c:
+                                                        10:ca:29:ee:05:82:f3
                                                     ASN1 OID: secp384r1
                                                     NIST CURVE: P-384
                                         Signature Algorithm: ecdsa-with-SHA256
-                                            30:66:02:31:00:ad:83:1c:be:06:49:b7:16:36:57:aa:20:f5:
-                                            73:b6:59:2a:48:01:cd:18:3f:8a:65:87:4c:02:17:14:32:47:
-                                            02:db:c6:c7:28:48:ac:6c:9a:fc:e2:88:40:71:1c:31:45:02:
-                                            31:00:b3:06:dc:eb:60:42:df:d7:a6:b2:21:aa:ad:15:e9:70:
-                                            1f:76:d6:1d:2d:25:5a:d0:0f:53:ab:1c:1a:3c:ce:e3:9a:6d:
-                                            c4:e0:1f:38:58:d0:b3:dc:94:6a:02:47:a8:d0
+                                            30:64:02:30:58:3a:be:8d:9e:e0:53:89:12:f2:10:b6:0b:f2:
+                                            77:15:cb:eb:7d:55:31:01:70:4e:83:fc:89:f5:f5:e4:1a:4e:
+                                            43:81:20:07:4a:0d:e3:72:3a:3e:7c:cb:54:67:b0:1a:02:30:
+                                            1c:fe:7c:f1:a5:00:93:77:f2:02:af:82:fc:22:67:ea:35:e7:
+                                            0e:9c:b8:90:13:f5:f8:98:f6:07:fe:f9:4b:66:99:32:e9:eb:
+                                            92:3d:d2:a2:26:67:c9:01:f9:43:20:a6
                                     
     system aaa tls state verify-client false
     system aaa tls state verify-client-depth 1
-    r10900-1# 
+    syscon-2-active# 
+
 
 
 Managing Device Certificates, Keys, CSRs, and CAs via webUI
@@ -459,18 +473,18 @@ Appliance mode can be enabled or disabled via the CLI using the command **system
 
 .. code-block:: bash
 
-    r10900(config)# system appliance-mode config enabled 
-    r10900(config)# commit
+    syscon-2-active(config)# system appliance-mode config enabled 
+    syscon-2-active(config)# commit
     Commit complete.
-    r10900(config)# 
+    syscon-2-active(config)# 
 
 To display the current status.
 
 .. code-block:: bash
 
-    r10900(config)# do show system appliance-mode       
+    syscon-2-active# show system appliance-mode 
     system appliance-mode state enabled
-    r10900(config)# 
+    syscon-2-active#
 
 If you then try to login as root, you will get a permission denied error. You can still login as admin to gain access to the F5OS CLI.
 
@@ -478,10 +492,10 @@ To disable appliance mode.
 
 .. code-block:: bash
 
-    r10900(config)# system appliance-mode config disabled 
-    r10900(config)# commit
+    syscon-2-active(config)# system appliance-mode config disabled 
+    syscon-2-active(config)# commit
     Commit complete.
-    r10900(config)#
+    syscon-2-active(config)#
 
 Enabling Appliance Mode via the webUI
 ------------------------------------- 
@@ -552,28 +566,31 @@ To configure the F5OS CLI timeout via the CLI, use the command **system settings
 
 .. code-block:: bash
 
-    r10900(config)# system settings config idle-timeout 300
-    r10900(config)# commit
-    Commit complete.     
+    syscon-2-active(config)# system settings config idle-timeout 300
+    syscon-2-active(config)# commit
+    Commit complete.
+    syscon-2-active(config)#     
 
 To configure the SSH timeout via the CLI, use the command **system settings config sshd-idle-timeout <value-in-seconds>**. This idle-timeout will apply to both bash sessions over SSH, as well as F5OS CLI sessions over SSH. Be sure to issue a commit to save the changes. In the case below, the CLI session should disconnect after 300 seconds of inactivity.
 
 
 .. code-block:: bash
 
-    r10900(config)# system settings config ssh-idle-timeout 300
-    r10900(config)# commit
-    Commit complete.      
+    syscon-2-active(config)# system settings config sshd-idle-timeout 300
+    syscon-2-active(config)# commit
+    Commit complete.
+    syscon-2-active(config)#    
  
 Both timeout settings can be viewed using the **show system settings** command.
 
 .. code-block:: bash
 
-    r10900-1# show system settings 
+    syscon-2-active# show system settings 
     system settings state idle-timeout 300
     system settings state sshd-idle-timeout 300
-    system settings dag state gtp-u teid-hash disabled
-    r10900-1#
+    system settings gui advisory state disabled
+    system settings gui advisory state text ""
+    syscon-2-active#
 
 
  
@@ -633,42 +650,85 @@ As mentioned in the introduction, the webUI and API use token based authenticati
 
 .. code-block:: bash
 
-    r10900(config)# system aaa restconf-token config lifetime 1 
-    r10900(config)# commit
+    syscon-2-active(config)# system aaa restconf-token config lifetime 1
+    syscon-2-active(config)# commit
     Commit complete.
-    r10900(config)# 
+    syscon-2-active(config)#
 
 To display the current restconf-token lifetime setting, use the command **show system aaa***.
 
 .. code-block:: bash
 
-    r10900(config)# do show system aaa
+    syscon-2-active# show system aaa
     system aaa restconf-token state lifetime 1
-    system aaa primary-key state hash gK/F47uQfi7JWYFirStCVhIaGcuoctpbGpx63MNy/korwigBW6piKx9TldiRazHmE8Y+qylGY4MOcs9IZ+KG4Q==
+    system aaa primary-key state hash sj2GslitH9XYbmW/cpY0TJhMWkU+CpvAU9vqoiL4aZcfE6qnSUDU3PWx+lCZO5KrqVzlWu/3mRugCNniNyQhSA==
     system aaa primary-key state status NONE
-    system aaa authentication state basic enabled
-            LAST        TALLY  EXPIRY                  
-    USERNAME  CHANGE      COUNT  DATE    ROLE            
-    -----------------------------------------------------
-    admin     2022-06-02  0      -1      admin           
-    jim-test  2022-09-02  10     -1      admin           
-    operator  2022-10-11  0      -1      operator        
-    root      2022-06-02  0      -1      root            
-    tenant1   0           0      1       tenant-console  
-    tenant2   0           0      1       tenant-console  
+    system aaa authentication f5-aaa-token:state basic enabled
+    system aaa authentication f5-aaa-clientcert:state cert-auth disabled
+    system aaa authentication ocsp state override-responder off
+    system aaa authentication ocsp state response-max-age -1
+    system aaa authentication ocsp state response-time-skew 300
+    system aaa authentication ocsp state nonce-request on
+    system aaa authentication ocsp state disabled
+            AUTHORIZED  LAST    TALLY  EXPIRY         
+    USERNAME  KEYS        CHANGE  COUNT  DATE    ROLE   
+    ----------------------------------------------------
+    admin     -           19384   0      -1      admin  
+    root      -           19384   0      -1      root   
 
-    ROLENAME        GID   USERS  
-    -----------------------------
-    admin           9000  -      
-    operator        9001  -      
-    tenant-console  9100  -      
+                        REMOTE         
+    ROLENAME        GID   GID     USERS  
+    -------------------------------------
+    admin           9000  -       -      
+    operator        9001  -       -      
+    partition_1     9101  -       -      
+    partition_2     9102  -       -      
+    partition_3     9103  -       -      
+    partition_4     9104  -       -      
+    partition_5     9105  -       -      
+    partition_6     9106  -       -      
+    partition_7     9107  -       -      
+    partition_8     9108  -       -      
+    resource-admin  9003  -       -      
+    ts_admin        9100  -       -      
+    user            9002  -       -      
 
-    NAME    NAME    TYPE    
-    ------------------------
-    tacacs  tacacs  TACACS  
-
+    system aaa tls state certificate Certificate:
+                                        Data:
+                                            Version: 1 (0x0)
+                                            Serial Number:
+                                                b9:0d:2d:10:75:4a:53:2f
+                                        Signature Algorithm: ecdsa-with-SHA256
+                                            Issuer: CN=jim, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
+                                            Validity
+                                                Not Before: May  4 16:55:58 2023 GMT
+                                                Not After : May  3 16:55:58 2024 GMT
+                                            Subject: CN=jim, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
+                                            Subject Public Key Info:
+                                                Public Key Algorithm: id-ecPublicKey
+                                                    Public-Key: (384 bit)
+                                                    pub: 
+                                                        04:59:b3:b5:63:e5:10:93:25:05:1b:55:ef:7a:f8:
+                                                        ec:2a:68:19:8a:a9:3e:d3:2f:d4:6c:37:6b:05:5a:
+                                                        d3:bc:73:fc:de:d9:fa:58:c5:5e:f2:1d:21:52:3d:
+                                                        08:70:e3:47:e3:99:bc:47:6f:c3:b4:04:7b:58:21:
+                                                        63:f4:73:33:d3:82:71:c0:ea:5e:82:0f:84:36:ab:
+                                                        3d:2f:be:9f:10:ff:05:ad:32:b1:28:fe:52:9b:2c:
+                                                        10:ca:29:ee:05:82:f3
+                                                    ASN1 OID: secp384r1
+                                                    NIST CURVE: P-384
+                                        Signature Algorithm: ecdsa-with-SHA256
+                                            30:64:02:30:58:3a:be:8d:9e:e0:53:89:12:f2:10:b6:0b:f2:
+                                            77:15:cb:eb:7d:55:31:01:70:4e:83:fc:89:f5:f5:e4:1a:4e:
+                                            43:81:20:07:4a:0d:e3:72:3a:3e:7c:cb:54:67:b0:1a:02:30:
+                                            1c:fe:7c:f1:a5:00:93:77:f2:02:af:82:fc:22:67:ea:35:e7:
+                                            0e:9c:b8:90:13:f5:f8:98:f6:07:fe:f9:4b:66:99:32:e9:eb:
+                                            92:3d:d2:a2:26:67:c9:01:f9:43:20:a6
+                                    
     system aaa tls state verify-client false
     system aaa tls state verify-client-depth 1
+    syscon-2-active# 
+
 
 Token Lifetime via webUI
 ------------------------
@@ -743,33 +803,76 @@ The default setting for basic auth is enabled, and the current state can be seen
 
 .. code-block:: bash
 
-    r10900# show system aaa
-    system aaa restconf-token state lifetime 15
-    system aaa primary-key state hash gK/F47uQfi7JWYFirStCVhIaGcuoctpbGpx63MNy/korwigBW6piKx9TldiRazHmE8Y+qylGY4MOcs9IZ+KG4Q==
+    syscon-2-active# show system aaa
+    system aaa restconf-token state lifetime 1
+    system aaa primary-key state hash sj2GslitH9XYbmW/cpY0TJhMWkU+CpvAU9vqoiL4aZcfE6qnSUDU3PWx+lCZO5KrqVzlWu/3mRugCNniNyQhSA==
     system aaa primary-key state status NONE
-    system aaa authentication state basic enabled
-            LAST        TALLY  EXPIRY                  
-    USERNAME  CHANGE      COUNT  DATE    ROLE            
-    -----------------------------------------------------
-    admin     2022-06-02  0      -1      admin           
-    jim-test  2022-09-02  10     -1      admin           
-    operator  2022-10-11  0      -1      operator        
-    root      2022-06-02  0      -1      root            
-    tenant1   0           0      1       tenant-console  
-    tenant2   0           0      1       tenant-console  
+    system aaa authentication f5-aaa-token:state basic enabled
+    system aaa authentication f5-aaa-clientcert:state cert-auth disabled
+    system aaa authentication ocsp state override-responder off
+    system aaa authentication ocsp state response-max-age -1
+    system aaa authentication ocsp state response-time-skew 300
+    system aaa authentication ocsp state nonce-request on
+    system aaa authentication ocsp state disabled
+            AUTHORIZED  LAST    TALLY  EXPIRY         
+    USERNAME  KEYS        CHANGE  COUNT  DATE    ROLE   
+    ----------------------------------------------------
+    admin     -           19384   0      -1      admin  
+    root      -           19384   0      -1      root   
 
-    ROLENAME        GID   USERS  
-    -----------------------------
-    admin           9000  -      
-    operator        9001  -      
-    root            0     -      
-    tenant-console  9100  -      
+                        REMOTE         
+    ROLENAME        GID   GID     USERS  
+    -------------------------------------
+    admin           9000  -       -      
+    operator        9001  -       -      
+    partition_1     9101  -       -      
+    partition_2     9102  -       -      
+    partition_3     9103  -       -      
+    partition_4     9104  -       -      
+    partition_5     9105  -       -      
+    partition_6     9106  -       -      
+    partition_7     9107  -       -      
+    partition_8     9108  -       -      
+    resource-admin  9003  -       -      
+    ts_admin        9100  -       -      
+    user            9002  -       -      
 
-    NAME    NAME    TYPE    
-    ------------------------
-    tacacs  tacacs  TACACS  
+    system aaa tls state certificate Certificate:
+                                        Data:
+                                            Version: 1 (0x0)
+                                            Serial Number:
+                                                b9:0d:2d:10:75:4a:53:2f
+                                        Signature Algorithm: ecdsa-with-SHA256
+                                            Issuer: CN=jim, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
+                                            Validity
+                                                Not Before: May  4 16:55:58 2023 GMT
+                                                Not After : May  3 16:55:58 2024 GMT
+                                            Subject: CN=jim, C=US, ST=MA, L=Boston, O=F5, OU=Sales/emailAddress=jim@f5.com
+                                            Subject Public Key Info:
+                                                Public Key Algorithm: id-ecPublicKey
+                                                    Public-Key: (384 bit)
+                                                    pub: 
+                                                        04:59:b3:b5:63:e5:10:93:25:05:1b:55:ef:7a:f8:
+                                                        ec:2a:68:19:8a:a9:3e:d3:2f:d4:6c:37:6b:05:5a:
+                                                        d3:bc:73:fc:de:d9:fa:58:c5:5e:f2:1d:21:52:3d:
+                                                        08:70:e3:47:e3:99:bc:47:6f:c3:b4:04:7b:58:21:
+                                                        63:f4:73:33:d3:82:71:c0:ea:5e:82:0f:84:36:ab:
+                                                        3d:2f:be:9f:10:ff:05:ad:32:b1:28:fe:52:9b:2c:
+                                                        10:ca:29:ee:05:82:f3
+                                                    ASN1 OID: secp384r1
+                                                    NIST CURVE: P-384
+                                        Signature Algorithm: ecdsa-with-SHA256
+                                            30:64:02:30:58:3a:be:8d:9e:e0:53:89:12:f2:10:b6:0b:f2:
+                                            77:15:cb:eb:7d:55:31:01:70:4e:83:fc:89:f5:f5:e4:1a:4e:
+                                            43:81:20:07:4a:0d:e3:72:3a:3e:7c:cb:54:67:b0:1a:02:30:
+                                            1c:fe:7c:f1:a5:00:93:77:f2:02:af:82:fc:22:67:ea:35:e7:
+                                            0e:9c:b8:90:13:f5:f8:98:f6:07:fe:f9:4b:66:99:32:e9:eb:
+                                            92:3d:d2:a2:26:67:c9:01:f9:43:20:a6
+                                    
+    system aaa tls state verify-client false
+    system aaa tls state verify-client-depth 1
+    syscon-2-active# 
 
-    r10900# 
 
 You may disable basic authentication by issuing the cli command **system aaa authentication config basic disabled**, and then committing the change.
 
