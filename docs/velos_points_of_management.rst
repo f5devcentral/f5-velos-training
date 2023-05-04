@@ -58,13 +58,13 @@ Monitoring for a bare metal iSeries of VIPRION is all done within TMOS, whereas 
 In general, F5OS tenants in the VELOS platforms have no visibility into the underlying physical interfaces or LAGs that are configured at the F5OS layer. The tenant will be connected to specific interfaces or LAGs based on its VLAN membership. The only exception to this is the HA Group functionality inside the tenant, which has visibility into LAG state and membership to facilitate proper redundancy/failover. As an example, an F5OS tenant on a VELOS BX110 blade has no visibility into the physical interfaces at the F5OS layer. Instead, the tenant will see virtual interfaces and the number of interfaces within a tenant will be based upon the number of CPUs assigned to the tenant. The screenshot below shows the interfaces inside the tenant lining up with the number of physical CPU cores per tenant. In the example there are 22 vCPUs assigned to a single F5OS tenant, this will equate to 11 physical CPUs due to hyperthreading. As seen in the output below, the tenant has 22 vCPUs assigned. 
 
 
-.. image:: images/velos_inside_the_tenant/image7.png
+.. image:: images/velos_points_of_management/image7.png
   :align: center
   :scale: 70%
 
 If you were to look inside the tenant, you'll notice that the number of Interfaces corelates ot the number of CPU cores assigned to the tenant, in this case 11. Note how the tenant does not see the physical interfaces at the F5OS layer.  
 
-.. image:: images/velos_inside_the_tenant/image7a.png
+.. image:: images/velos_points_of_management/image7a.png
   :align: center
   :scale: 70%
 
