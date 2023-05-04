@@ -126,13 +126,13 @@ The configuration and monitoring of the F5OS platform layer is not managed by BI
 
 Below are the two sections needed to fully restore an VELOS chassis. The **Backup & Restore** section is used for the F5OS tenants, and the **F5OS** section is used to backup the F5OS platform layer. 
 
-.. image:: images/bigiq_support_for_rseries/image3.png
+.. image:: images/bigiq_support_for_velos/image3.png
   :align: center
   :scale: 70%
 
 Below is an example of a scheduled backup where VELOS and/or rSeries devices can be added to a scheduled backup. This will backup the F5OS platform layer only, F5OS tenants are backed up using the normal **Backup & Restore** workflows in BIG-IQ. 
 
-.. image:: images/bigiq_support_for_rseries/image4.png
+.. image:: images/bigiq_support_for_velos/image4.png
   :align: center
   :scale: 70%
 
