@@ -29,7 +29,7 @@ By default, all ports except for 161 (SNMP) are enabled for access, meaning port
 
 To further lock down access you may add an Allow List entry including an IP address and optional prefix for each of the protocols listed above. As an example, if you wanted to restrict API and webUI access to a particular IP address and/or subnet, you can add an Allow List entry for the desired IP or subnet (using the prefix length), specify port 443 and all access from other IP endpoints will be prevented.
 
-The examples below can be applied at either the system controller layer logging in using the floating system controller IP address or poiting to it for API calls, or to any chassis partition using its management IP address when logging in or sending API calls. 
+The examples below can be applied at either the system controller layer logging in using the floating system controller IP address or pointing to it for API calls, or to any chassis partition using its management IP address when logging in or sending API calls. 
 
 Adding Allow List Entries via CLI
 -----------------------------------
@@ -456,7 +456,7 @@ In the body of the API call enter the following JSON syntax.
 Encrypt Management TLS Private Key
 =======================
 
-Previously, F5OS allowed an admin to import a TLS certificate and key in clear text. In F5OS-A 1.4.0 an admin can now optionally enter a passphrase with the encrypted private key. This is similar to the BIG-IP functionality defined in the link below.
+Previously, F5OS allowed an admin to import a TLS certificate and key in clear text. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. This is similar to the BIG-IP functionality defined in the link below.
 
 `K14912: Adding and removing encryption from private SSL keys (11.x - 16.x) <https://my.f5.com/manage/s/article/K14912>`_
 
