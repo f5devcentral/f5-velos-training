@@ -2,16 +2,28 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions, SNMP support is limited to **IF-MIB** support for the chassis partitions as well as SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partittions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.
+SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.F5OS-C 1.5.x added addtional SNMP MIB coverage and traps and F5OS-C 1.6.0 added SNMPv3 support.
 
-As of F5OS-C 1.5.0 the list of MIBs available are as follows:
+As of F5OS-C 1.6.0 the list of SNMP MIBs available are as follows:
 
-- HOST-RESOURCES-MIB
-- RFC1213-MIB
+System Controller MIBs:
+
+F5OS Controller MIBs:
+
+- F5-ALERT-DEF-MIB
+- F5-COMMON-SMI-MIB
+- F5-CTRLR-ALERT-NOTIF-MIB
+- F5-PLATFORM-STATS-MIB
+- F5-OS-SYSTEM-MIB
+
+NetSNMP MIBs System Controller:
+
 - EtherLike-MIB
+- HOST-RESOURCES-MIB
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
+- RFC1213-MIB
 - SNMP-COMMUNITY-MIB
 - SNMP-FRAMEWORK-MIB
 - SNMP-MPD-MIB
@@ -24,12 +36,41 @@ As of F5OS-C 1.5.0 the list of MIBs available are as follows:
 - SNMPv2-SMI
 - SNMPv2-TC
 - TRANSPORT-ADDRESS-MIB
+
+Chassis Partition MIBs:
+
+F5OS Chassis Partition MIBs:
+
 - F5-ALERT-DEF-MIB
 - F5-COMMON-SMI-MIB
-- F5-CTRLR-ALERT-NOTIF-MIB
-- F5-PLATFORM-STATS-MIB
+- F5-OS-LLDP-MIB
+- F5-OS-PLATFORM-SMI-MIB
 - F5-OS-SYSTEM-MIB
 - F5-PARTITION-ALERT-NOTIF-MIB
+- F5-PLATFORM-STATS-MIB
+
+
+NetSNMP MIBs Chassis Partition:
+
+- EtherLike-MIB
+- HOST-RESOURCES-MIB
+- IANAifType-MIB
+- IF-MIB
+- IPV6-TC
+- RFC1213-MIB
+- SNMP-COMMUNITY-MIB
+- SNMP-FRAMEWORK-MIB
+- SNMP-MPD-MIB
+- SNMP-NOTIFICATION-MIB
+- SNMP-TARGET-MIB
+- SNMP-USER-BASED-SM-MIB
+- SNMP-VIEW-BASED-ACM-MIB
+- SNMPv2-CONF
+- SNMPv2-MIB
+- SNMPv2-SMI
+- SNMPv2-TC
+- TRANSPORT-ADDRESS-MIB
+
 
 MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory.
 
