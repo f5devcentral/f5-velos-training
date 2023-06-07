@@ -72,7 +72,7 @@ NetSNMP MIBs Chassis Partition:
 - TRANSPORT-ADDRESS-MIB
 
 
-MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory.
+MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files.
 
 .. image:: images/velos_monitoring_snmp/image1.png
   :align: center
