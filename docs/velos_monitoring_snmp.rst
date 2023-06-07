@@ -6,7 +6,7 @@ SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions,
 
 As of F5OS-C 1.6.0 the list of SNMP MIBs available are as follows:
 
-System Controller MIBs:
+VELOS System Controller MIBs:
 
 F5OS Controller MIBs:
 
@@ -37,7 +37,7 @@ NetSNMP MIBs System Controller:
 - SNMPv2-TC
 - TRANSPORT-ADDRESS-MIB
 
-Chassis Partition MIBs:
+VELOS Chassis Partition MIBs:
 
 F5OS Chassis Partition MIBs:
 
