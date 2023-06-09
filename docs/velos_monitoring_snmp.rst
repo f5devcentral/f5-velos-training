@@ -2,11 +2,11 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**.F5OS-C 1.5.x added addtional SNMP MIB coverage and traps and F5OS-C 1.6.0 added SNMPv3 support.
+SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**. F5OS-C 1.5.x added addtional SNMP MIB and trap coverage and F5OS-C 1.6.0 added SNMPv3 support.
 
 As of F5OS-C 1.6.0 the list of SNMP MIBs available are as follows:
 
-VELOS System Controller MIBs:
+**VELOS System Controller MIBs**
 
 F5OS Controller MIBs:
 
@@ -37,7 +37,7 @@ NetSNMP MIBs System Controller:
 - SNMPv2-TC
 - TRANSPORT-ADDRESS-MIB
 
-VELOS Chassis Partition MIBs:
+**VELOS Chassis Partition MIBs**
 
 F5OS Chassis Partition MIBs:
 
@@ -72,7 +72,7 @@ NetSNMP MIBs Chassis Partition:
 - TRANSPORT-ADDRESS-MIB
 
 
-MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files.
+MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files. There are two separate MIB files: NetSNMP and F5OS MIBs for the controller. Download both MIB files and extract them to see the individual MIB files.
 
 .. image:: images/velos_monitoring_snmp/image1.png
   :align: center
@@ -84,10 +84,348 @@ You can then download the F5OS controller MIBS and the standard Net SNMP MIBS as
   :align: center
   :scale: 70%
 
+Adding Allowed IPs for SNMP
+===========================
+
+Adding Allowed IPs for SNMP via CLI
+-----------------------------------
+
+By default, SNMP queries are not allowed into the F5OS platform layer. Before enabling SNMP, you'll need to open up the out-of-band management port on F5OS-C (on both the system controller and on all the chassis partitions) to allow SNMP queries from particular SNMP management endpoints. Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length of 24) to query the F5OS layer on port 161. The allowed-ip functionality is added in F5OS-C 1.6.0.
 
 
-Enabling SNMP via CLI
-=============================
+.. code-block:: bash
+
+    syscon-1-active(config)# system allowed-ips allowed-ip snmp config ipv4 address 10.255.0.0 prefix-length 24 port 161
+    syscon-1-active(config-allowed-ip-snmp)# commit
+    Commit complete.
+    syscon-1-active(config-allowed-ip-snmp)# 
+
+Currently you can add one IP address/port pair per **allowed-ip** name with an optional prefix length to specify a CIDR block contaning multiple addresses. If you require more than one non-contiguous IP address you can add it under another name as seen below. 
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system allowed-ips allowed-ip SNMP-144 config ipv4 address 10.255.0.144 port 161 
+    syscon-1-active(config-allowed-ip-SNMP-144)# commit
+    Commit complete.
+
+    syscon-1-active(config-allowed-ip-SNMP-144)# system allowed-ips allowed-ip SNMP-145 config ipv4 address 10.255.2.145 port 161 
+    syscon-1-active(config-allowed-ip-SNMP-145)# commit
+    Commit complete.
+    syscon-1-active(config-allowed-ip-SNMP-145)#
+
+
+Adding Allowed IPs for SNMP via API
+-----------------------------------
+
+By default SNMP queries are not allowed into the F5OS layer. Before enabling SNMP you'll need to open up the out-of-band management port on F5OS-C to allow SNMP queries (on both the system controller and on all the chassis partitions). Below is an example of allowing multiple SNMP endpoints to access SNMP on the system on port 161.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-allowed-ips:allowed-ips
+
+Within the body of the API call, specific IP address/port combinations can be added under a given name. In the current release, you are limited to one IP address/port per name. 
+
+.. code-block:: json
+
+    {
+        "allowed-ip": [
+            {
+                "name": "SNMP",
+                "config": {
+                    "ipv4": {
+                        "address": "10.255.0.143",
+                        "port": 161,
+                        "prefix-length": 32
+                    }
+                }
+            },
+            {
+                "name": "SNMP-WIN-10",
+                "config": {
+                    "ipv4": {
+                        "address": "10.255.0.144",
+                        "port": 161,
+                        "prefix-length": 32
+                    }
+                }
+            },
+            {
+                "name": "SNMP2",
+                "config": {
+                    "ipv4": {
+                        "address": "10.254.0.0",
+                        "port": 161,
+                        "prefix-length": 16
+                    }
+                }
+            }
+        ]
+    }
+
+
+
+To view the allowed IPs in the API, use the following call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-allowed-ips:allowed-ips
+
+The output will show the previously configured allowed-ip's.
+
+
+.. code-block:: json
+
+    {
+        "f5-allowed-ips:allowed-ips": {
+            "allowed-ip": [
+                {
+                    "name": "SNMP",
+                    "config": {
+                        "ipv4": {
+                            "address": "10.255.0.143",
+                            "prefix-length": 32,
+                            "port": 161
+                        }
+                    }
+                },
+                {
+                    "name": "SNMP-WIN-10",
+                    "config": {
+                        "ipv4": {
+                            "address": "10.255.0.144",
+                            "prefix-length": 32,
+                            "port": 161
+                        }
+                    }
+                },
+                {
+                    "name": "SNMP2",
+                    "config": {
+                        "ipv4": {
+                            "address": "10.254.0.0",
+                            "prefix-length": 16,
+                            "port": 161
+                        }
+                    }
+                }
+            ]
+        }
+    }
+
+Adding Allowed IPs for SNMP via webUI
+-----------------------------------
+
+Configuration of the **allowed-ip** functionality is not supported yet, this will be added in F5OS-C 1.7.0. For now you must use either the API or CLI to configure this. Below is what the F5OS-C 1.7.0 fucntinality will look like:
+
+By default, SNMP queries are not allowed into the F5OS platform layer. Before enabling SNMP, you'll need to open up the out-of-band management port on F5OS-C (on both the system controller and on all the chassis partitions) to allow SNMP queries from particular SNMP management endpoints. Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length of 24) to query the F5OS layer on port 161.
+
+.. image:: images/velos_monitoring_snmp/image3.png
+  :align: center
+  :scale: 70%
+
+
+Adding Interface and LAG descriptions
+=====================================
+
+
+It is highly recommended that you put interface descriptions in your configuration, so that they will show up in the description field when using SNMP polling.
+
+Adding Interface and LAG descriptions via CLI
+---------------------------------------------
+
+To add descriptions for both the in-band, and out-of-band management ports in the CLI, follow the examples below. For the system controller layer, add descriptions for each of the out-of-band management ports as follows:
+
+.. code-block:: bash
+
+    syscon-1-active(config)# interfaces interface 1/mgmt0 config description "Interface 1/mgmt0"
+    syscon-1-active(config-interface-1/mgmt0)# exit
+    syscon-1-active(config)# interfaces interface 2/mgmt0 config description "Interface 2/mgmt0"
+    syscon-1-active(config-interface-2/mgmt0)# exit
+    syscon-1-active(config)# commit
+    Commit complete.
+    syscon-1-active(config)#
+
+For each of the in-band interfaces connect to the chassis partition CLI
+
+
+Adding Interface and LAG descriptions via API
+---------------------------------------------
+
+To add descriptions for both the in-band, and out-of-band management ports in the CLI, follow the examples below. The API example below is for the r10000 models, which have 20 interfaces and one managment port. For the r5000 series models you should adjust for 10 interfaces and one managment port.
+
+.. code-block:: bash
+
+    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/
+
+.. code-block:: json
+
+    {
+        "openconfig-interfaces:interfaces": {
+            "interface": [
+                {
+                    "name": "1.0",
+                    "config": {
+                        "description": "r10900 Interface 1.0"
+                    }
+                },
+                {
+                    "name": "2.0",
+                    "config": {
+                        "description": "r10900 Interface 2.0"
+                    }
+                },
+                {
+                    "name": "3.0",
+                    "config": {
+                        "description": "r10900 Interface 3.0"
+                    }
+                },
+                {
+                    "name": "4.0",
+                    "config": {
+                        "description": "r10900 Interface 4.0"
+                    }
+                },
+                {
+                    "name": "5.0",
+                    "config": {
+                        "description": "r10900 Interface 5.0"
+                    }
+                },
+                {
+                    "name": "6.0",
+                    "config": {
+                        "description": "r10900 Interface 6.0"
+                    }
+                },
+                {
+                    "name": "7.0",
+                    "config": {
+                        "description": "r10900 Interface 7.0"
+                    }
+                },
+                {
+                    "name": "8.0",
+                    "config": {
+                        "description": "r10900 Interface 8.0"
+                    }
+                },
+                {
+                    "name": "9.0",
+                    "config": {
+                        "description": "r10900 Interface 9.0"
+                    }
+                },
+                {
+                    "name": "10.0",
+                    "config": {
+                        "description": "r10900 Interface 10.0"
+                    }
+                },
+                {
+                    "name": "11.0",
+                    "config": {
+                        "description": "r10900 Interface 11.0"
+                    }
+                },
+                {
+                    "name": "12.0",
+                    "config": {
+                        "description": "r10900 Interface 12.0"
+                    }
+                },
+                {
+                    "name": "13.0",
+                    "config": {
+                        "description": "r10900 Interface 13.0"
+                    }
+                },
+                {
+                    "name": "14.0",
+                    "config": {
+                        "description": "r10900 Interface 14.0"
+                    }
+                },
+                {
+                    "name": "15.0",
+                    "config": {
+                        "description": "r10900 Interface 15.0"
+                    }
+                },
+                {
+                    "name": "16.0",
+                    "config": {
+                        "description": "r10900 Interface 16.0"
+                    }
+                },
+                {
+                    "name": "17.0",
+                    "config": {
+                        "description": "r10900 Interface 17.0"
+                    }
+                },
+                {
+                    "name": "18.0",
+                    "config": {
+                        "description": "r10900 Interface 18.0"
+                    }
+                },
+                {
+                    "name": "19.0",
+                    "config": {
+                        "description": "r10900 Interface 19.0"
+                    }
+                },
+                {
+                    "name": "20.0",
+                    "config": {
+                        "description": "r10900 Interface 20.0"
+                    }
+                },
+                {
+                    "name": "mgmt",
+                    "config": {
+                        "description": "r10900 Interface mgmt"
+                    }
+                }
+            ]
+        }
+    }
+
+
+If Link Aggregation Groups (LAGs) are configured, descriptions should be added to the LAG interfaces as well.
+
+.. code-block:: bash
+
+    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/
+
+The body of the API call should contain JSON data that includes the descriptions for each LAG.
+
+.. code-block:: json
+
+    {
+        "openconfig-interfaces:interfaces": {
+            "interface": [
+                {
+                    "name": "Arista",
+                    "config": {
+                        "description": "LAG to Arista"
+                    }
+                },
+                {
+                    "name": "HA-Interconnect",
+                    "config": {
+                        "description": "LAG to other r10900"
+                    }
+                }
+
+            ]
+        }
+    }
+
+
+Enabling SNMP via CLI prior to F5OS-C 1.5.x
+===========================================
 
 Setting up SNMP can be done from the CLI by enabling an SNMP community such as public. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well.
 
