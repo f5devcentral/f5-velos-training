@@ -224,16 +224,16 @@ By default, SNMP queries are not allowed into the F5OS platform layer. Before en
   :scale: 70%
 
 
-Adding Interface and LAG descriptions
+Adding Interface and LAG Descriptions
 =====================================
 
 
 It is highly recommended that you put interface descriptions in your configuration, so that they will show up in the description field when using SNMP polling.
 
-Adding Interface and LAG descriptions via CLI
----------------------------------------------
+Adding Out-of-Band Interface and LAG Descriptions via CLI
+---------------------------------------------------------
 
-To add descriptions for both the in-band, and out-of-band management ports in the CLI, follow the examples below. For the system controller layer, add descriptions for each of the out-of-band management ports as follows:
+To add descriptions for the out-of-band management ports on the system controllers in the CLI, follow the examples below. 
 
 .. code-block:: bash
 
@@ -245,11 +245,188 @@ To add descriptions for both the in-band, and out-of-band management ports in th
     Commit complete.
     syscon-1-active(config)#
 
-For each of the in-band interfaces connect to the chassis partition CLI
+
+Adding Out-of-Band Interface and LAG Descriptions via API
+---------------------------------------------------------
+
+To add descriptions for the out-of-band management ports on the system controllers via the API, follow the examples below. Use the following PATCH command to update the descriptions for both 1/mgmt0 and 2/mgmt0 out-of-band interfaces.
 
 
-Adding Interface and LAG descriptions via API
----------------------------------------------
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+.. code-block:: json
+
+    {
+        "openconfig-interfaces:interfaces": {
+            "interface": [
+                {
+                    "name": "1/mgmt0",
+                    "config": {
+                        "description": "1/mgmt0"
+                    }
+                },
+                {
+                    "name": "2/mgmt0",
+                    "config": {
+                        "description": "2/mgmt0"
+                    }
+                }
+            ]
+        }
+    }
+
+You can then issue the following GET API call to view each interfaces configuration inclusing the new decription. Note the interface name has to be encoded in postman because of the special characters. The %2F will repsent the slash in the interface name.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=1%2Fmgmt0/config
+
+.. code-block:: json
+
+
+    {
+        "openconfig-interfaces:config": {
+            "name": "1/mgmt0",
+            "type": "iana-if-type:ethernetCsmacd",
+            "description": "1/mgmt0",
+            "enabled": true
+        }
+    }
+
+You can then issue the same command with a different interface name for the second management interface.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=2%2Fmgmt0/config
+
+.. code-block:: json
+
+
+    {
+        "openconfig-interfaces:config": {
+            "name": "2/mgmt0",
+            "type": "iana-if-type:ethernetCsmacd",
+            "description": "2/mgmt0",
+            "enabled": true
+        }
+    }
+
+You cannot currently set the interface descriptions for the out-of-band management interfaces via the webUI. You'll need to use either the API or CLI.
+
+Adding Interface and LAG Descriptions for Chassis Partitions via CLI
+--------------------------------------------------------------------
+
+Adding descriptions to the interfaces will make it easier to determine which interface you are monitoring when using SNMP. Below are examples of adding interface descriptions via CLI to interfaces within a chassi partition. You should repeat this for each chassis partition and all interfaces.
+
+.. code-block:: bash
+
+    prod2-2(config)# interfaces interface 1/1.0 config description "Interface 1/1.0"
+    prod2-2(config-interface-1/1.0)# exit
+    prod2-2(config)# interfaces interface 1/2.0 config description "Interface 1/2.0"
+    prod2-2(config-interface-1/2.0)# exit
+    prod2-2(config)# interfaces interface 2/1.0 config description "Interface 2/1.0"
+    prod2-2(config-interface-2/1.0)# exit
+    prod2-2(config)# interfaces interface 2/2.0 config description "Interface 2/2.0"
+    prod2-2(config-interface-2/2.0)# exit
+    prod2-2(config)# commit
+    Commit complete.
+    prod2-2(config)#
+
+If you are using Link Aggregation Groups (LAGs), then you can also add interface descriptions to the LAG interfaces within each chassis partition:
+
+.. code-block:: bash
+
+    prod2-2(config)# interfaces interface Arista config description "Interface Arista LAG"
+    prod2-2(config-interface-Arista)# exit
+    prod2-2(config)# interfaces interface HA-Interconnect config description "Interface HA-Interconnect LAG"
+    prod2-2(config-interface-HA-Interconnect)# exit 
+    prod2-2(config)# commit
+    Commit complete.
+    prod2-2(config)# 
+
+To view the interface descriptions, use the **show running-config interfaces** command.
+
+.. code-block:: bash
+
+    prod2-2# show running-config interfaces          
+    interfaces interface 1/1.0
+    config type              ethernetCsmacd
+    config description       "Interface 1/1.0"
+    config enabled
+    config forward-error-correction auto
+    ethernet config aggregate-id HA-Interconnect
+    !
+    interfaces interface 1/2.0
+    config type              ethernetCsmacd
+    config description       "Interface 1/2.0"
+    config enabled
+    config forward-error-correction auto
+    ethernet config aggregate-id Arista
+    !
+    interfaces interface 2/1.0
+    config type              ethernetCsmacd
+    config description       "Interface 2/1.0"
+    config enabled
+    config forward-error-correction auto
+    ethernet config aggregate-id Arista
+    !
+    interfaces interface 2/2.0
+    config type              ethernetCsmacd
+    config description       "Interface 2/2.0"
+    config enabled
+    config forward-error-correction auto
+    ethernet config aggregate-id HA-Interconnect
+    !
+    interfaces interface Arista
+    config type ieee8023adLag
+    config description "Interface Arista LAG"
+    aggregation config lag-type LACP
+    aggregation config distribution-hash src-dst-ipport
+    aggregation switched-vlan config trunk-vlans [ 3010 3011 ]
+    !
+    interfaces interface HA-Interconnect
+    config type ieee8023adLag
+    config description "Interface HA-Interconnect LAG"
+    aggregation config lag-type LACP
+    aggregation config distribution-hash src-dst-ipport
+    aggregation switched-vlan config trunk-vlans [ 500 501 502 503 510 511 ]
+    !
+    prod2-2#
+
+Adding Interface and LAG Descriptions for Chassis Partitions via webUI
+--------------------------------------------------------------------
+
+You can also add interface descriptions for both interfaces and LAGs within the webUI. Got to the **Network Settings -> Interfaces** page and select an interface to modify.
+
+.. image:: images/velos_monitoring_snmp/image4.png
+  :align: center
+  :scale: 70%
+
+Then edit the description and **Save** the change, then repeat for all the other interfaces within that chassis partition. Then repeat for other chassis partitions.
+
+.. image:: images/velos_monitoring_snmp/image5.png
+  :align: center
+  :scale: 70%
+
+For Link Aggregation Groups go to the **Network Settings -> LAGs** page and select a LAG to modify.
+
+.. image:: images/velos_monitoring_snmp/image6.png
+  :align: center
+  :scale: 70%
+
+Then edit the description and **Save** the change, then repeat for all the other LAG interfaces within that chassis partition. Then repeat for other chassis partitions.
+
+.. image:: images/velos_monitoring_snmp/image7.png
+  :align: center
+  :scale: 70%
+
+
+
+
+Adding Interface and LAG Descriptions for Chassis Partitions via API
+--------------------------------------------------------------------
 
 To add descriptions for both the in-band, and out-of-band management ports in the CLI, follow the examples below. The API example below is for the r10000 models, which have 20 interfaces and one managment port. For the r5000 series models you should adjust for 10 interfaces and one managment port.
 
