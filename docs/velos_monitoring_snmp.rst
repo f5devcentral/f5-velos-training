@@ -256,6 +256,8 @@ To add descriptions for the out-of-band management ports on the system controlle
 
     PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
+In the body of the API call, add the descriptions as seen below.
+
 .. code-block:: json
 
     {
@@ -283,6 +285,8 @@ You can then issue the following GET API call to view each interfaces configurat
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=1%2Fmgmt0/config
 
+You should see a resonse similar to the one below.
+
 .. code-block:: json
 
 
@@ -300,6 +304,8 @@ You can then issue the same command with a different interface name for the seco
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=2%2Fmgmt0/config
+
+You should see a resonse similar to the one below.
 
 .. code-block:: json
 
