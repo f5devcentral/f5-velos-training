@@ -279,13 +279,13 @@ In the body of the API call, add the descriptions as seen below.
         }
     }
 
-You can then issue the following GET API call to view each interfaces configuration inclusing the new decription. Note the interface name has to be encoded in postman because of the special characters. The %2F will repsent the slash in the interface name.
+You can then issue the following GET API call to view each interfaces configuration including the new description. Note, the interface name has to be encoded in Postman because of the special characters. The %2F will repsent the slash in the interface name.
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=1%2Fmgmt0/config
 
-You should see a resonse similar to the one below.
+You should see a response similar to the one below.
 
 .. code-block:: json
 
@@ -305,7 +305,7 @@ You can then issue the same command with a different interface name for the seco
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=2%2Fmgmt0/config
 
-You should see a resonse similar to the one below.
+You should see a response similar to the one below.
 
 .. code-block:: json
 
@@ -404,7 +404,7 @@ To view the interface descriptions, use the **show running-config interfaces** c
 Adding Interface and LAG Descriptions for Chassis Partitions via webUI
 --------------------------------------------------------------------
 
-You can also add interface descriptions for both interfaces and LAGs within the webUI. Got to the **Network Settings -> Interfaces** page and select an interface to modify.
+You can also add interface descriptions for both interfaces and LAGs within the webUI. Go to the **Network Settings -> Interfaces** page and select an interface to modify.
 
 .. image:: images/velos_monitoring_snmp/image4.png
   :align: center
@@ -434,153 +434,56 @@ Then edit the description and **Save** the change, then repeat for all the other
 Adding Interface and LAG Descriptions for Chassis Partitions via API
 --------------------------------------------------------------------
 
-To add descriptions for both the in-band, and out-of-band management ports in the CLI, follow the examples below. The API example below is for the r10000 models, which have 20 interfaces and one managment port. For the r5000 series models you should adjust for 10 interfaces and one managment port.
+To add descriptions for both the in-band interfaces and LAGs in the CLI, follow the examples below. The API example below is sent to the chassis partition IP address. 
 
 .. code-block:: bash
 
-    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/
+    PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
+
+Below is the proper formatitng for the body of the API call. You will need to adjust to the number and type of interfaces you have in your chassis partition.
 
 .. code-block:: json
 
-    {
-        "openconfig-interfaces:interfaces": {
-            "interface": [
-                {
-                    "name": "1.0",
-                    "config": {
-                        "description": "r10900 Interface 1.0"
-                    }
-                },
-                {
-                    "name": "2.0",
-                    "config": {
-                        "description": "r10900 Interface 2.0"
-                    }
-                },
-                {
-                    "name": "3.0",
-                    "config": {
-                        "description": "r10900 Interface 3.0"
-                    }
-                },
-                {
-                    "name": "4.0",
-                    "config": {
-                        "description": "r10900 Interface 4.0"
-                    }
-                },
-                {
-                    "name": "5.0",
-                    "config": {
-                        "description": "r10900 Interface 5.0"
-                    }
-                },
-                {
-                    "name": "6.0",
-                    "config": {
-                        "description": "r10900 Interface 6.0"
-                    }
-                },
-                {
-                    "name": "7.0",
-                    "config": {
-                        "description": "r10900 Interface 7.0"
-                    }
-                },
-                {
-                    "name": "8.0",
-                    "config": {
-                        "description": "r10900 Interface 8.0"
-                    }
-                },
-                {
-                    "name": "9.0",
-                    "config": {
-                        "description": "r10900 Interface 9.0"
-                    }
-                },
-                {
-                    "name": "10.0",
-                    "config": {
-                        "description": "r10900 Interface 10.0"
-                    }
-                },
-                {
-                    "name": "11.0",
-                    "config": {
-                        "description": "r10900 Interface 11.0"
-                    }
-                },
-                {
-                    "name": "12.0",
-                    "config": {
-                        "description": "r10900 Interface 12.0"
-                    }
-                },
-                {
-                    "name": "13.0",
-                    "config": {
-                        "description": "r10900 Interface 13.0"
-                    }
-                },
-                {
-                    "name": "14.0",
-                    "config": {
-                        "description": "r10900 Interface 14.0"
-                    }
-                },
-                {
-                    "name": "15.0",
-                    "config": {
-                        "description": "r10900 Interface 15.0"
-                    }
-                },
-                {
-                    "name": "16.0",
-                    "config": {
-                        "description": "r10900 Interface 16.0"
-                    }
-                },
-                {
-                    "name": "17.0",
-                    "config": {
-                        "description": "r10900 Interface 17.0"
-                    }
-                },
-                {
-                    "name": "18.0",
-                    "config": {
-                        "description": "r10900 Interface 18.0"
-                    }
-                },
-                {
-                    "name": "19.0",
-                    "config": {
-                        "description": "r10900 Interface 19.0"
-                    }
-                },
-                {
-                    "name": "20.0",
-                    "config": {
-                        "description": "r10900 Interface 20.0"
-                    }
-                },
-                {
-                    "name": "mgmt",
-                    "config": {
-                        "description": "r10900 Interface mgmt"
-                    }
+   {
+    "openconfig-interfaces:interfaces": {
+        "interface": [
+            {
+                "name": "1/1.0",
+                "config": {
+                    "description": "VELOS Interface 1/1.0"
                 }
-            ]
-        }
+            },
+            {
+                "name": "1/2.0",
+                "config": {
+                    "description": "VELOS Interface 1/2.0"
+                }
+            },
+            {
+                "name": "2/1.0",
+                "config": {
+                    "description": "VELOS Interface 2/1.0"
+                }
+            },
+            {
+                "name": "2/2.0",
+                "config": {
+                    "description": "VELOS Interface 2/2.0"
+                }
+            }
+
+
+
+        ]
     }
+}
 
 
 If Link Aggregation Groups (LAGs) are configured, descriptions should be added to the LAG interfaces as well.
 
 .. code-block:: bash
 
-    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/
+    PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
 The body of the API call should contain JSON data that includes the descriptions for each LAG.
 
@@ -592,20 +495,370 @@ The body of the API call should contain JSON data that includes the descriptions
                 {
                     "name": "Arista",
                     "config": {
-                        "description": "LAG to Arista"
+                        "description": "VELOS Arista LAG Interface"
                     }
                 },
                 {
                     "name": "HA-Interconnect",
                     "config": {
-                        "description": "LAG to other r10900"
+                        "description": "VELOS HA-Interconnect Interface"
                     }
                 }
-
             ]
         }
     }
 
+You may then view the LAG description via the following API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
+    
+
+The output below will show the LAG descriptions as well as all the other interfaces.
+
+.. code-block:: json
+
+    {
+        "openconfig-interfaces:interfaces": {
+            "interface": [
+                {
+                    "name": "1/1.0",
+                    "config": {
+                        "name": "1/1.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "description": "VELOS Interface 1/1.0",
+                        "enabled": true,
+                        "f5-interface:forward-error-correction": "auto"
+                    },
+                    "state": {
+                        "name": "1/1.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "mtu": 9600,
+                        "enabled": true,
+                        "oper-status": "UP",
+                        "counters": {
+                            "in-octets": "17514",
+                            "in-unicast-pkts": "0",
+                            "in-broadcast-pkts": "0",
+                            "in-multicast-pkts": "135",
+                            "in-discards": "0",
+                            "in-errors": "0",
+                            "in-fcs-errors": "0",
+                            "out-octets": "33431490",
+                            "out-unicast-pkts": "0",
+                            "out-broadcast-pkts": "0",
+                            "out-multicast-pkts": "256908",
+                            "out-discards": "0",
+                            "out-errors": "0"
+                        },
+                        "f5-interface:forward-error-correction": "auto",
+                        "f5-lacp:lacp_state": "LACP_DOWN"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                        },
+                        "state": {
+                            "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                            "hw-mac-address": "00:94:a1:8e:d0:00",
+                            "counters": {
+                                "in-mac-control-frames": "0",
+                                "in-mac-pause-frames": "0",
+                                "in-oversize-frames": "0",
+                                "in-jabber-frames": "0",
+                                "in-fragment-frames": "0",
+                                "in-8021q-frames": "0",
+                                "in-crc-errors": "0",
+                                "out-mac-control-frames": "0",
+                                "out-mac-pause-frames": "0",
+                                "out-8021q-frames": "0"
+                            },
+                            "f5-if-ethernet:flow-control": {
+                                "rx": "on"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "1/2.0",
+                    "config": {
+                        "name": "1/2.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "description": "VELOS Interface 1/2.0",
+                        "enabled": true,
+                        "f5-interface:forward-error-correction": "auto"
+                    },
+                    "state": {
+                        "name": "1/2.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "mtu": 9600,
+                        "enabled": true,
+                        "oper-status": "UP",
+                        "counters": {
+                            "in-octets": "34222124",
+                            "in-unicast-pkts": "6",
+                            "in-broadcast-pkts": "5",
+                            "in-multicast-pkts": "258896",
+                            "in-discards": "0",
+                            "in-errors": "0",
+                            "in-fcs-errors": "0",
+                            "out-octets": "31820928",
+                            "out-unicast-pkts": "0",
+                            "out-broadcast-pkts": "0",
+                            "out-multicast-pkts": "248601",
+                            "out-discards": "0",
+                            "out-errors": "0"
+                        },
+                        "f5-interface:forward-error-correction": "auto",
+                        "f5-lacp:lacp_state": "LACP_UP"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "Arista"
+                        },
+                        "state": {
+                            "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                            "hw-mac-address": "00:94:a1:8e:d0:01",
+                            "counters": {
+                                "in-mac-control-frames": "0",
+                                "in-mac-pause-frames": "0",
+                                "in-oversize-frames": "0",
+                                "in-jabber-frames": "0",
+                                "in-fragment-frames": "0",
+                                "in-8021q-frames": "0",
+                                "in-crc-errors": "0",
+                                "out-mac-control-frames": "0",
+                                "out-mac-pause-frames": "0",
+                                "out-8021q-frames": "0"
+                            },
+                            "f5-if-ethernet:flow-control": {
+                                "rx": "on"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "2/1.0",
+                    "config": {
+                        "name": "2/1.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "description": "VELOS Interface 2/1.0",
+                        "enabled": true,
+                        "f5-interface:forward-error-correction": "auto"
+                    },
+                    "state": {
+                        "name": "2/1.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "mtu": 9600,
+                        "enabled": true,
+                        "oper-status": "UP",
+                        "counters": {
+                            "in-octets": "51072261",
+                            "in-unicast-pkts": "9",
+                            "in-broadcast-pkts": "18752",
+                            "in-multicast-pkts": "383463",
+                            "in-discards": "0",
+                            "in-errors": "1",
+                            "in-fcs-errors": "1",
+                            "out-octets": "31832708",
+                            "out-unicast-pkts": "0",
+                            "out-broadcast-pkts": "0",
+                            "out-multicast-pkts": "248701",
+                            "out-discards": "0",
+                            "out-errors": "0"
+                        },
+                        "f5-interface:forward-error-correction": "auto",
+                        "f5-lacp:lacp_state": "LACP_UP"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "Arista"
+                        },
+                        "state": {
+                            "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                            "hw-mac-address": "00:94:a1:8e:d0:80",
+                            "counters": {
+                                "in-mac-control-frames": "0",
+                                "in-mac-pause-frames": "0",
+                                "in-oversize-frames": "0",
+                                "in-jabber-frames": "0",
+                                "in-fragment-frames": "1",
+                                "in-8021q-frames": "0",
+                                "in-crc-errors": "0",
+                                "out-mac-control-frames": "0",
+                                "out-mac-pause-frames": "0",
+                                "out-8021q-frames": "0"
+                            },
+                            "f5-if-ethernet:flow-control": {
+                                "rx": "on"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "2/2.0",
+                    "config": {
+                        "name": "2/2.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "description": "VELOS Interface 2/2.0",
+                        "enabled": true,
+                        "f5-interface:forward-error-correction": "auto"
+                    },
+                    "state": {
+                        "name": "2/2.0",
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "mtu": 9600,
+                        "enabled": true,
+                        "oper-status": "UP",
+                        "counters": {
+                            "in-octets": "33026022",
+                            "in-unicast-pkts": "0",
+                            "in-broadcast-pkts": "0",
+                            "in-multicast-pkts": "256851",
+                            "in-discards": "0",
+                            "in-errors": "0",
+                            "in-fcs-errors": "0",
+                            "out-octets": "33430966",
+                            "out-unicast-pkts": "0",
+                            "out-broadcast-pkts": "0",
+                            "out-multicast-pkts": "256916",
+                            "out-discards": "0",
+                            "out-errors": "0"
+                        },
+                        "f5-interface:forward-error-correction": "auto",
+                        "f5-lacp:lacp_state": "LACP_UP"
+                    },
+                    "openconfig-if-ethernet:ethernet": {
+                        "config": {
+                            "openconfig-if-aggregate:aggregate-id": "HA-Interconnect"
+                        },
+                        "state": {
+                            "port-speed": "openconfig-if-ethernet:SPEED_100GB",
+                            "hw-mac-address": "00:94:a1:8e:d0:81",
+                            "counters": {
+                                "in-mac-control-frames": "0",
+                                "in-mac-pause-frames": "0",
+                                "in-oversize-frames": "0",
+                                "in-jabber-frames": "0",
+                                "in-fragment-frames": "0",
+                                "in-8021q-frames": "0",
+                                "in-crc-errors": "0",
+                                "out-mac-control-frames": "0",
+                                "out-mac-pause-frames": "0",
+                                "out-8021q-frames": "0"
+                            },
+                            "f5-if-ethernet:flow-control": {
+                                "rx": "on"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Arista",
+                    "config": {
+                        "name": "Arista",
+                        "type": "iana-if-type:ieee8023adLag",
+                        "description": "Interface Arista LAG",
+                        "enabled": true
+                    },
+                    "state": {
+                        "name": "Arista",
+                        "type": "iana-if-type:ieee8023adLag",
+                        "mtu": 9600,
+                        "enabled": true,
+                        "oper-status": "UP"
+                    },
+                    "openconfig-if-aggregate:aggregation": {
+                        "config": {
+                            "lag-type": "LACP",
+                            "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                        },
+                        "state": {
+                            "lag-type": "LACP",
+                            "lag-speed": 200,
+                            "f5-if-aggregate:distribution-hash": "src-dst-ipport",
+                            "f5-if-aggregate:members": {
+                                "member": [
+                                    {
+                                        "member-name": "1/2.0",
+                                        "member-status": "UP"
+                                    },
+                                    {
+                                        "member-name": "2/1.0",
+                                        "member-status": "UP"
+                                    }
+                                ]
+                            },
+                            "f5-if-aggregate:mac-address": "00:94:a1:8e:d0:19",
+                            "f5-if-aggregate:lagid": 1
+                        },
+                        "openconfig-vlan:switched-vlan": {
+                            "config": {
+                                "trunk-vlans": [
+                                    3010,
+                                    3011
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "HA-Interconnect",
+                    "config": {
+                        "name": "HA-Interconnect",
+                        "type": "iana-if-type:ieee8023adLag",
+                        "description": "Interface HA-Interconnect LAG",
+                        "enabled": true
+                    },
+                    "state": {
+                        "name": "HA-Interconnect",
+                        "type": "iana-if-type:ieee8023adLag",
+                        "mtu": 9600,
+                        "enabled": true,
+                        "oper-status": "UP"
+                    },
+                    "openconfig-if-aggregate:aggregation": {
+                        "config": {
+                            "lag-type": "LACP",
+                            "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                        },
+                        "state": {
+                            "lag-type": "LACP",
+                            "lag-speed": 100,
+                            "f5-if-aggregate:distribution-hash": "src-dst-ipport",
+                            "f5-if-aggregate:members": {
+                                "member": [
+                                    {
+                                        "member-name": "1/1.0",
+                                        "member-status": "DOWN"
+                                    },
+                                    {
+                                        "member-name": "2/2.0",
+                                        "member-status": "UP"
+                                    }
+                                ]
+                            },
+                            "f5-if-aggregate:mac-address": "00:94:a1:8e:d0:1a",
+                            "f5-if-aggregate:lagid": 2
+                        },
+                        "openconfig-vlan:switched-vlan": {
+                            "config": {
+                                "trunk-vlans": [
+                                    500,
+                                    501,
+                                    502,
+                                    503,
+                                    510,
+                                    511
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
 
 Enabling SNMP via CLI prior to F5OS-C 1.5.x
 ===========================================
