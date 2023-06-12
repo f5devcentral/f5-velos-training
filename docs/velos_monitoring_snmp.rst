@@ -863,7 +863,7 @@ The output below will show the LAG descriptions as well as all the other interfa
 Enabling SNMP via CLI prior to F5OS-C 1.5.x
 ===========================================
 
-Setting up SNMP can be done from the CLI by enabling an SNMP community such as public. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well.
+Setting up SNMP can be done from the CLI by enabling an SNMP community such as public. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuraiotn in releases to 
 
 .. code-block:: bash
 
