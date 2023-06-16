@@ -1067,7 +1067,7 @@ You can poll the following SNMP OIDs to get detailed Interface stats for each ph
     HA-Interconnect ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               
     FLD-ML-00054045:~ jmccarron$
 
-Below is an example table view fomr an SNMP manager polling SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
+Below is an example table view from an SNMP manager polling SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 
 
 +-------------+---------------------+----------------+-----------+-------------+--------------------+-------------------+------------------+------------------+----------------+-------------------+--------------------+------------------+----------------+-----------------------+-----------------+--------------------+---------------------+-------------------+-----------------+---------------+----------------+-----------------+
@@ -1090,7 +1090,7 @@ Below is an example table view fomr an SNMP manager polling SNMP ifIndex OID: .1
 Chassis Partition CPU
 --------------------- 
 
-The CPU Processor Stats Table provides details on the Intel CPU processors which are running in the BX110 line card. It displays the core and thread Counts, as well as the cache size, frequency and model number.
+The CPU Processor Stats Table provides details on the Intel CPU processors which are running in the BX110 line card. It displays the core and thread counts, as well as the cache size, frequency and model number. Note how each BX110 blade has 14 CPU cores which are hyperthreaded, so there are 28 cpuThreadCnt per blade.
 
 SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.1
 
