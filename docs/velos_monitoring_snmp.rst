@@ -324,7 +324,7 @@ You cannot currently set the interface descriptions for the out-of-band manageme
 Adding Interface and LAG Descriptions for Chassis Partitions via CLI
 --------------------------------------------------------------------
 
-Adding descriptions to the interfaces will make it easier to determine which interface you are monitoring when using SNMP. Below are examples of adding interface descriptions via CLI to interfaces within a chassi partition. You should repeat this for each chassis partition and all interfaces.
+Adding descriptions to the interfaces will make it easier to determine which interface you are monitoring when using SNMP. Below are examples of adding interface descriptions via CLI to interfaces within a chassis partition. You should repeat this for each chassis partition and all interfaces.
 
 .. code-block:: bash
 
@@ -440,7 +440,7 @@ To add descriptions for both the in-band interfaces and LAGs in the CLI, follow 
 
     PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
-Below is the proper formatitng for the body of the API call. You will need to adjust to the number and type of interfaces you have in your chassis partition.
+Below is the proper formatitng for the body of the API call. You will need to adjust to the number and type of interfaces to match what is in your chassis partition.
 
 .. code-block:: json
 
@@ -863,22 +863,9 @@ The output below will show the LAG descriptions as well as all the other interfa
 Enabling SNMP via CLI prior to F5OS-C 1.5.x
 ===========================================
 
-Setting up SNMP can be done from the CLI by enabling an SNMP community such as public. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuraiotn in releases to 
+Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated, and has been improved in F5OS-C 1.5.x and later. We recomend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
 
-.. code-block:: bash
-
-
-    Production-1# config
-    Entering configuration mode terminal
-    Production-1(config)# SNMP-COMMUNITY-MIB snmpCommunityTable snmpCommunityEntry public snmpCommunityName public snmpCommunitySecurityName public
-    Production-1(config-snmpCommunityEntry-public)# exit
-    Production-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 2 public vacmGroupName read-access
-    Production-1(config-vacmSecurityToGroupEntry-2/public)# exit
-    Production-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 1 public vacmGroupName read-access
-    Production-1(config-vacmSecurityToGroupEntry-1/public)# exit
-    Production-1(config)# commit
-    Commit complete.
-
+To enable SNMP on F5OS-C 1.4.x and earlier use the following CLI commands. If you are running f5OS-C 1.5.0 or later skip this section and move onto the next section.
 
 You can configure the SNMP system paramters including the System Contact, System Location, and System Name as seen below:
 
@@ -888,43 +875,94 @@ You can configure the SNMP system paramters including the System Contact, System
     Production-1(config)# commit
 
 
-
-For the chassis partitions, it is highly recommend that you put interface descriptions in your configuration so that they will show up when using SNMP polling:
+Enabling SNMP can be done from the CLI by configuring the public SNMP community, and then configuring a Security Access Group. Below is an example of enabling SNMP monitoring at the F5OS layer. F5OS only supports read-only access for SNMP monitoring.    
 
 .. code-block:: bash
 
-    Production-1(config)# interfaces interface 1/1.0
-    Production-1(config-interface-1/1.0)# config description "Interface-1/1.0"
-    Production-1(config-interface-1/1.0)# exit                              
-    Production-1(config)# interfaces interface 1/2.0        
-    Production-1(config-interface-1/2.0)# config description Interface-1/2.0
-    Production-1(config-interface-1/2.0)# exit                              
-    Production-1(config)# interfaces interface 2/1.0        
-    Production-1(config-interface-2/1.0)# config description Interface-2/1.0
-    Production-1(config-interface-2/1.0)# exit
-    Production-1(config)# interfaces interface 2/2.0        
-    Production-1(config-interface-2/2.0)# config description Interface-2/2.0
-    Production-1(config-interface-2/2.0)# exit
+
+    Production-1# config
+    Entering configuration mode terminal
+    Production-1(config)# SNMP-COMMUNITY-MIB snmpCommunityTable snmpCommunityEntry public snmpCommunityName public snmpCommunitySecurityName public
+    Production-1(config-snmpCommunityEntry-public)# exit
+    Production-1(config)# commit
+    Commit complete.
+
+To configure a Security Group for both SNMPv1 and SNMPv2c.   
+   
+.. code-block:: bash   
+   
+    Production-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 2 public vacmGroupName read-access
+    Production-1(config-vacmSecurityToGroupEntry-2/public)# exit
+    Production-1(config)# SNMP-VIEW-BASED-ACM-MIB vacmSecurityToGroupTable vacmSecurityToGroupEntry 1 public vacmGroupName read-access
+    Production-1(config-vacmSecurityToGroupEntry-1/public)# exit
     Production-1(config)# commit
     Commit complete.
 
 
-If LAGs are configured, descriptions should be added to the LAG interfaces as well:
+Enabling SNMP via CLI for Releases F5OS-C 1.5.0 and Later
+=========================================================
+
+You can configure the SNMP System parameters including the **System Contact**, **System Location**, and **System Name** as seen below:
 
 .. code-block:: bash
 
-    Production-1(config)# interfaces interface Arista 
-    Production-1(config-interface-Arista)# config description "Arista LAG"
-    Production-1(config-interface-Arista)# exit
-    Production-1(config)# interfaces interface HA-Interconnect 
-    Production-1(config-interface-HA-Interconnect)# config description "HA-Interconnect LAG"
-    Production-1(config-interface-HA-Interconnect)# exit
+    Production-1(config)# SNMPv2-MIB system sysContact jim@f5.com sysLocation Boston sysName VELOS-Production
     Production-1(config)# commit
+
+SNMP configuration was only available in the CLI and API prior to F5OS-C 1.5.0, and the CLI configuration was not intuitive. F5OS-C 1.5.0 has improved and streamlined SNMP configuration in the CLI and then configuration via the webUI was also added in F5OS-C 1.5.0. The example below is utilizing the new and improved SNMP CLI configuration for VELOS systems running F5OS-C 1.5.0 or later. 
+
+Enabling SNMP can be done from the CLI by configuring the **public** SNMP community, and then configuring a **security-model**. The command below sets up an SNMP community of **public** with v1 and v2c security models. You may choose to enable both of these security models or only one.
+
+.. code-block:: bash
+
+    Production-1(config)# system snmp communities community public config security-model [ v1 v2c ]
+    Production-1(config-community-public)# commit
     Commit complete.
+    Production-1(config-community-public)# 
+
+
+You can then display the SNMP community configuration using the **show system snmp** command.
+
+.. code-block:: bash
+
+    Production-1(config)# do show system snmp 
+    system snmp engine-id state engine-id 80:00:2f:f4:03:00:94:a1:8e:d0:ff
+    system snmp engine-id state type mac
+                    SECURITY    
+    NAME    NAME    MODEL       
+    ----------------------------
+    public  public  [ v1 v2c ]  
+
+    Production-1(config)#
+
+You may also configure SNMP users for SNMPv3 support, since SNMPv3 is a user-based security model. This provides addtional support for authentication and privacy protocols. Authentication protocols of **md5**, **sha**, or **none** are supported. For privacy protocols **aes**, **des**, or **none** are supported. You'll then be prompted to enter the privacy-password.
+
+.. code-block:: bash
+
+    Production-1(config)# system snmp users user snmpv3user config authentication-protocol md5 privacy-protocol aes privacy-password 
+    (<string, min: 8 chars, max: 32 chars>): **************
+    Production-1(config-user-snmpv3user)# commit
+    Commit complete.
+    Production-1(config-user-snmpv3user)#
+
+You may display the SNMP user configuration by entering the command **show system snmp users**.
+
+.. code-block:: bash
+
+    Production-1(config)# do show system snmp users
+                            AUTHENTICATION  PRIVACY   
+    NAME        NAME        PROTOCOL        PROTOCOL  
+    --------------------------------------------------
+    snmpv3user  snmpv3user  md5             aes       
+
+    Production-1(config)# 
 
 
 Polling SNMP Endpoints
 =====================
+
+
+Once SNMP is properly setup, and allow-lists are enabled (in both the system controllers and chassis partitions) you can poll SNMP objects from remote endpoints. If you have an SNMP manager it is recommended you download the appropriate MIBs from the VELOS chassis, and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilites from a remote client to validate the SNMP endpoints.
 
 
 You can then poll the chassis partiton via SNMP to get stats from the system using the following SNMP OID's:
