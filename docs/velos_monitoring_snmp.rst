@@ -977,26 +977,91 @@ Example output:
 
 .. code-block:: bash
 
-    sysDescr.0	Linux 3.10.0-862.14.4.el7.centos.plus.x86_64 : Partition services version 1.2.1-10781	OctetString	10.255.0.148:161
-    sysObjectID.0	system	OID	10.255.0.148:161
-    sysUpTime.0	1 hour 13 minutes 13.88 seconds (439388)	TimeTicks	10.255.0.148:161
-    sysContact.0	jim@f5.com	OctetString	10.255.0.148:161
-    sysName.0	VELOS-Production	OctetString	10.255.0.148:161
-    sysLocation.0	Boston	OctetString	10.255.0.148:161
-    sysServices.0	72	Integer	10.255.0.148:161
-    .1.3.6.1.2.1.1.8.0	190 milliseconds (19)	TimeTicks	10.255.0.148:161
-    .1.3.6.1.2.1.1.9.1.2.1	platform	OID	10.255.0.148:161
-    .1.3.6.1.2.1.1.9.1.2.2	.1.3.6.1.2.1.31	OID	10.255.0.148:161
+    FLD-ML-00054045:~ jmccarron$  snmpwalk -ObenU -v2c -c public 10.255.2.4 .1.3.6.1.2.1.1
+    .1.3.6.1.2.1.1.1.0 = STRING: Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : Partition services version 1.6.0-12952
+    .1.3.6.1.2.1.1.2.0 = OID: .1.3.6.1.4.1.12276.1.3.1.6
+    .1.3.6.1.2.1.1.3.0 = Timeticks: (14137257) 1 day, 15:16:12.57
+    .1.3.6.1.2.1.1.4.0 = STRING: jim@f5.com
+    .1.3.6.1.2.1.1.5.0 = STRING: VELOS-Production
+    .1.3.6.1.2.1.1.6.0 = STRING: Boston
+    .1.3.6.1.2.1.1.7.0 = INTEGER: 72
+    .1.3.6.1.2.1.1.8.0 = Timeticks: (53) 0:00:00.53
+    .1.3.6.1.2.1.1.9.1.2.1 = OID: .1.3.6.1.4.1.12276.1
+    .1.3.6.1.2.1.1.9.1.2.2 = OID: .1.3.6.1.2.1.31
+    .1.3.6.1.2.1.1.9.1.3.1 = STRING: F5 Networks enterprise Platform MIB
+    .1.3.6.1.2.1.1.9.1.3.2 = STRING: The MIB module to describe generic objects for network interface sub-layers
+    .1.3.6.1.2.1.1.9.1.4.1 = Timeticks: (53) 0:00:00.53
+    .1.3.6.1.2.1.1.9.1.4.2 = Timeticks: (53) 0:00:00.53
+    FLD-ML-00054045:~ jmccarron$ 
 
-------------
-SNMP ifIndex
-------------
+-----------------------
+SNMP ifTable & ifXTable
+-----------------------
 
-You can poll the following SNMP OID to get detailed Interface stats for each physical port on the BX110 blades, and also for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chasssis partitions directly.
+You can poll the following SNMP OIDs to get detailed Interface stats for each physical port on the BX110 blades, and also for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chasssis partitions directly. Below are table view of the ifTable and ifXTable, you can poll individual interfaces if needed.
 
 **NOTE: Stats for LAG interfaces are not currently populated.**
 
-SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
+.. code-block:: bash
+
+    FLD-ML-00054045:~ jmccarron$ snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 32 -Cw 500  -c public 10.255.2.4 ifTable
+    SNMP table: IF-MIB::ifTable
+
+    Index                           Descr                           Type                            Mtu                             Speed                           PhysAddress                     AdminStatus                     OperStatus                      LastChange                      InOctets                        InUcastPkts                     InNUcastPkts                    InDiscards                      InErrors                        InUnknownProtos                 
+    OutOctets                       OutUcastPkts                    OutNUcastPkts                   OutDiscards                     OutErrors                       OutQLen                         Specific                        
+
+    index: [33554441]
+    33554441                        VELOS Interface 1/1.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:0                 up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
+    ?                               ?                               ?                               0                               0                               ?                               ?                               
+
+    index: [33554442]
+    33554442                        VELOS Interface 1/2.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:1                 up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
+    ?                               ?                               ?                               0                               0                               ?                               ?                               
+
+    index: [33554449]
+    33554449                        VELOS Interface 2/1.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:80                up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
+    ?                               ?                               ?                               0                               0                               ?                               ?                               
+
+    index: [33554450]
+    33554450                        VELOS Interface 2/2.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:81                up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
+    ?                               ?                               ?                               0                               0                               ?                               ?                               
+
+    index: [67108865]
+    67108865                        Interface Arista LAG            ieee8023adLag                   9600                            4294967295                      0:94:a1:8e:d0:19                up                              up                              ?                               ?                               ?                               ?                               ?                               ?                               ?                               
+    ?                               ?                               ?                               ?                               ?                               ?                               ?                               
+
+    index: [67108866]
+    67108866                        Interface HA-Interconnect LAG   ieee8023adLag                   9600                            4294967295                      0:94:a1:8e:d0:1a                up                              up                              ?                               ?                               ?                               ?                               ?                               ?                               ?                               
+    ?                               ?                               ?                               ?                               ?                               ?                               ?                               
+    FLD-ML-00054045:~ jmccarron$ 
+
+.. code-block:: bash
+
+    FLD-ML-00054045:~ jmccarron$ snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 384  -c public 10.255.2.4 ifXTable
+    SNMP table: IF-MIB::ifXTable
+
+    Name            InMulticastPkts InBroadcastPkts OutMulticastPkt OutBroadcastPkt HCInOctets      HCInUcastPkts   HCInMulticastPk HCInBroadcastPk HCOutOctets     HCOutUcastPkts  HCOutMulticastP HCOutBroadcastP LinkUpDownTrapE HighSpeed       PromiscuousMode ConnectorPresen Alias           CounterDisconti 
+
+    index: [33554441]
+    1/1.0           ?               ?               ?               ?               18883720        0               146777          0               19241160        0               147273          0               ?               ?               ?               ?               ?               ?               
+
+    index: [33554442]
+    1/2.0           ?               ?               ?               ?               28240312        1               218521          116             18072960        0               141195          0               ?               ?               ?               ?               ?               ?               
+
+    index: [33554449]
+    2/1.0           ?               ?               ?               ?               20343389        3               147723          9982            18145664        0               141763          0               ?               ?               ?               ?               ?               ?               
+
+    index: [33554450]
+    2/2.0           ?               ?               ?               ?               18832188        0               146463          0               19084361        0               146479          0               ?               ?               ?               ?               ?               ?               
+
+    index: [67108865]
+    Arista          ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               
+
+    index: [67108866]
+    HA-Interconnect ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               
+    FLD-ML-00054045:~ jmccarron$
+
+Below is an example table view fomr an SNMP manager polling SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 
 
 +-------------+---------------------+----------------+-----------+-------------+--------------------+-------------------+------------------+------------------+----------------+-------------------+--------------------+------------------+----------------+-----------------------+-----------------+--------------------+---------------------+-------------------+-----------------+---------------+----------------+-----------------+
