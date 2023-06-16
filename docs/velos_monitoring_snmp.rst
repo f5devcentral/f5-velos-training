@@ -860,8 +860,14 @@ The output below will show the LAG descriptions as well as all the other interfa
         }
     }
 
+
+Enabling SNMP
+=============
+
+You can enable SNMP individually at the system controller layer, and for each chassis partition.
+
 Enabling SNMP via CLI prior to F5OS-C 1.5.x
-===========================================
+-------------------------------------------
 
 Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated, and has been improved in F5OS-C 1.5.x and later. We recomend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
 
@@ -900,7 +906,7 @@ To configure a Security Group for both SNMPv1 and SNMPv2c.
 
 
 Enabling SNMP via CLI for Releases F5OS-C 1.5.0 and Later
-=========================================================
+---------------------------------------------------------
 
 You can configure the SNMP System parameters including the **System Contact**, **System Location**, and **System Name** as seen below:
 
@@ -959,7 +965,7 @@ You may display the SNMP user configuration by entering the command **show syste
 
 
 Polling SNMP Endpoints
-=====================
+======================
 
 
 Once SNMP is properly setup, and allow-lists are enabled (in both the system controllers and chassis partitions) you can poll SNMP objects from remote endpoints. If you have an SNMP manager it is recommended you download the appropriate MIBs from the VELOS chassis, and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilites from a remote client to validate the SNMP endpoints.
@@ -967,7 +973,7 @@ Once SNMP is properly setup, and allow-lists are enabled (in both the system con
 
 You can then poll the chassis partiton via SNMP to get stats from the system using the following SNMP OID's:
 
------------
+
 SNMP System
 -----------
 
@@ -994,7 +1000,7 @@ Example output:
     .1.3.6.1.2.1.1.9.1.4.2 = Timeticks: (53) 0:00:00.53
     FLD-ML-00054045:~ jmccarron$ 
 
------------------------
+
 SNMP ifTable & ifXTable
 -----------------------
 
@@ -1080,7 +1086,7 @@ Below is an example table view fomr an SNMP manager polling SNMP ifIndex OID: .1
 | 67108866    | HA-Interconnect LAG | ieee8023adLag  | 9600      | 4294967295  | 00-94-A1-8E-D0-0C  | up                | up               | 0                | 0              | 0                 | 0                  | 33554441         |                |                       |                 |                    |                     |                   |                 |               |                |                 |
 +-------------+---------------------+----------------+-----------+-------------+--------------------+-------------------+------------------+------------------+----------------+-------------------+--------------------+------------------+----------------+-----------------------+-----------------+--------------------+---------------------+-------------------+-----------------+---------------+----------------+-----------------+
 
----------------------
+
 Chassis Partition CPU
 --------------------- 
 
@@ -1096,7 +1102,7 @@ SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1
 | blade-2   | 0            | 19712(KB)        | 14             | 2370.593(MHz) | 4               | 28               | Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz  | 7.98.108.97.100.101.45.50.0 |
 +-----------+--------------+------------------+----------------+---------------+-----------------+------------------+------------------------------------------+-----------------------------+
 
----------------------------
+
 CPU Utilization Stats Table
 ---------------------------
 
@@ -1112,7 +1118,7 @@ SNMP CPU Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.2
 | cpu         | 3              | 4                   | 4                   | 4                   | 7.98.108.97.100.101.45.50 |
 +-------------+----------------+---------------------+---------------------+---------------------+---------------------------+
 
----------------------------
+
 CPU Core Stats Table
 ---------------------------
 
@@ -1237,7 +1243,7 @@ SNMP CPU Core Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.3
 | 27            | cpu27        | 7               | 8                    | 8                    | 8                    | 7.98.108.97.100.101.45.50.27  |
 +---------------+--------------+-----------------+----------------------+----------------------+----------------------+-------------------------------+
 
----------------
+
 Disk Info Table
 ---------------
 
@@ -1253,7 +1259,7 @@ SNMP Disk Info Table OID: .1.3.6.1.4.1.12276.1.2.1.2.1
 | nvme0n1      | SAMSUNG MZ1LB960HAJQ=00007 | Samsung        | EDA7502Q        | S435NE0MA00227   | 733.00GB       | nvme         | 7.98.108.97.100.101.45.50.7.110.118.109.101.48.110.49 |
 +--------------+----------------------------+----------------+-----------------+------------------+----------------+--------------+-------------------------------------------------------+
 
-----------------------------
+
 Disk Utilization Stats Table
 ----------------------------
 
@@ -1270,7 +1276,7 @@ SNMP Disk Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.2.2
 |                        | 4495              | 0                | 0                  | 4390905           | 13695                 | 20511             | 32907               | 2195945            | 56163                   | 7.98.108.97.100.101.45.50.7.110.118.109.101.48.110.49 |
 +------------------------+-------------------+------------------+--------------------+-------------------+-----------------------+-------------------+---------------------+--------------------+-------------------------+-------------------------------------------------------+
 
------------------------
+
 Temperature Stats Table
 -----------------------
 
@@ -1287,13 +1293,13 @@ SNMP Temperature Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.3.1
 | 29.0           | 26.2            | 24.0            | 30.0            | 7.98.108.97.100.101.45.50 |        
 +----------------+-----------------+-----------------+-----------------+---------------------------+
 
-------------------
+
 Memory Stats Table
 ------------------
 
 SNMP Memory Stats Table OID:.1.3.6.1.4.1.12276.1.2.1.4.1
 
-----------------
+
 FPGA Stats Table
 ----------------
 
