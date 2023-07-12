@@ -2,7 +2,7 @@
 VELOS F5OS SNMP Monitoring and Alerting
 =======================================
 
-SNMP support for F5OS will vary by release. In the intial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for  **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**. F5OS-C 1.5.x added addtional SNMP MIB and trap coverage and F5OS-C 1.6.0 added SNMPv3 support.
+SNMP support for F5OS will vary by release. In the initial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**. F5OS-C 1.5.x added additional SNMP MIB and trap coverage and F5OS-C 1.6.0 added SNMPv3 support. The **F5-PLATFORM-STATS-MIB** and **F5-OS-SYSTEM-MIB** were not supported on the system controllers until F5OS-C 1.6.0.
 
 As of F5OS-C 1.6.0 the list of SNMP MIBs available are as follows:
 
@@ -869,7 +869,7 @@ You can enable SNMP individually at the system controller layer, and for each ch
 Enabling SNMP via CLI prior to F5OS-C 1.5.x
 -------------------------------------------
 
-Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated, and has been improved in F5OS-C 1.5.x and later. We recomend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
+Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated, and has been improved in F5OS-C 1.5.x and later. SNMPv3 support has also been added in F5OS-C 1.5.0. We recomend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
 
 To enable SNMP on F5OS-C 1.4.x and earlier use the following CLI commands. If you are running f5OS-C 1.5.0 or later skip this section and move onto the next section.
 
