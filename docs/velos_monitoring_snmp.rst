@@ -215,9 +215,7 @@ The output will show the previously configured allowed-ip's.
 Adding Allowed IPs for SNMP via webUI
 -----------------------------------
 
-Configuration of the **allowed-ip** functionality is not supported yet via the webUI, this will be added in F5OS-C 1.7.0. For now you must use either the API or CLI to configure this. Below is what the F5OS-C 1.7.0 webUI functionality will look like:
-
-By default, SNMP queries are not allowed into the F5OS platform layer. Before enabling SNMP, you'll need to open up the out-of-band management port on F5OS-C (on both the system controller and on all the chassis partitions) to allow SNMP queries from particular SNMP management endpoints. Below is an example of allowing a few SNMP endpoints to query the F5OS layer on port 161.
+Configuration of the **allowed-ip** functionality was added to the webUI in F5OS-C 1.6.0. By default, SNMP queries are not allowed into the F5OS platform layer. Before enabling SNMP, you'll need to open up the out-of-band management port on F5OS-C (on both the system controller and on all the chassis partitions) to allow SNMP queries from particular SNMP management endpoints. Below is an example of allowing a few SNMP endpoints to query the F5OS layer on port 161.
 
 .. image:: images/velos_monitoring_snmp/imagesnmpwebui.png
   :align: center
@@ -279,7 +277,7 @@ In the body of the API call, add the descriptions as seen below.
         }
     }
 
-You can then issue the following GET API call to view each interfaces configuration including the new description. Note, the interface name has to be encoded in Postman because of the special characters. The %2F will repsent the slash in the interface name.
+You can then issue the following GET API call to view each interfaces configuration including the new description. Note, the interface name has to be encoded in Postman because of the special characters. The %2F will represent the slash in the interface name.
 
 .. code-block:: bash
 
@@ -871,7 +869,7 @@ Enabling SNMP via CLI prior to F5OS-C 1.5.x
 
 Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated, and has been improved in F5OS-C 1.5.x and later. SNMPv3 support has also been added in F5OS-C 1.5.0. We recomend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
 
-To enable SNMP on F5OS-C 1.4.x and earlier use the following CLI commands. If you are running f5OS-C 1.5.0 or later skip this section and move onto the next section.
+To enable SNMP on F5OS-C 1.4.x and earlier use the following CLI commands. If you are running F5OS-C 1.5.0 or later skip this section and move onto the next section.
 
 You can configure the SNMP system paramters including the System Contact, System Location, and System Name as seen below:
 
@@ -1323,11 +1321,11 @@ SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 SNMP Trap Support in F5OS
 ========================
 
-You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.5.x.
+You can enable SNMP traps in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.6.x.
 
 
 
-For the system controllers, the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
+For the system controllers, the following SNMP Traps are supported as of F5OS 1.6.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
 
 SNMP Trap events that note a fault should also trigger an alert that can be viewed in the show alerts in the CLI, webUI, and API. Once the clear SNMP Trap is sent it should clear the event from the **show events** output.
 
@@ -1438,6 +1436,10 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | sensor-fault                         | .1.3.6.1.4.1.12276.1.1.1.65577   |
 +--------------------------------------+----------------------------------+
+| datapath-fault                       | .1.3.6.1.4.1.12276.1.1.1.65578   |
++--------------------------------------+----------------------------------+
+| boot-time-integrity-status           | .1.3.6.1.4.1.12276.1.1.1.65579   |
++--------------------------------------+----------------------------------+
 | fipsError                            | .1.3.6.1.4.1.12276.1.1.1.196608  |
 +--------------------------------------+----------------------------------+
 | core-dump                            | .1.3.6.1.4.1.12276.1.1.1.327680  |
@@ -1448,48 +1450,150 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | systemControllerNebsMismatch         | .1.3.6.1.4.1.12276.1.1.1.131929  |
 +--------------------------------------+----------------------------------+
-
+| bladeNebsMismatch                    | .1.3.6.1.4.1.12276.1.1.1.131329  |
++--------------------------------------+----------------------------------+
 
 
 For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
 
-+----------------------------+-----------------------------------+
-| **Alert**                  | **OID**                           |                            
-+============================+===================================+
-| hardware-device-fault      |  .1.3.6.1.4.1.12276.1.1.1.65536   |
-+----------------------------+-----------------------------------+
-| firmware-fault             |  .1.3.6.1.4.1.12276.1.1.1.65537   |
-+----------------------------+-----------------------------------+
-| unknown-alarm              |  .1.3.6.1.4.1.12276.1.1.1.65538   |
-+----------------------------+-----------------------------------+
-| memory-fault               |  .1.3.6.1.4.1.12276.1.1.1.65539   |
-+----------------------------+-----------------------------------+
-| drive-fault                |  .1.3.6.1.4.1.12276.1.1.1.65540   |
-+----------------------------+-----------------------------------+
-| cpu-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65541   |
-+----------------------------+-----------------------------------+
-| pcie-fault                 |  .1.3.6.1.4.1.12276.1.1.1.65542   |
-+----------------------------+-----------------------------------+
-| aom-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65543   |
-+----------------------------+-----------------------------------+
-| drive-capacity-fault       |  .1.3.6.1.4.1.12276.1.1.1.65544   |
-+----------------------------+-----------------------------------+
-| power-fault                |  .1.3.6.1.4.1.12276.1.1.1.65545   |
-+----------------------------+-----------------------------------+
-| thermal-fault              |  .1.3.6.1.4.1.12276.1.1.1.65546   |
-+----------------------------+-----------------------------------+
-| drive-thermal-throttle     |  .1.3.6.1.4.1.12276.1.1.1.65547   |
-+----------------------------+-----------------------------------+
-| blade-thermal-fault        |  .1.3.6.1.4.1.12276.1.1.1.65548   |
-+----------------------------+-----------------------------------+
-| blade-hardware-fault       |  .1.3.6.1.4.1.12276.1.1.1.65549   |
-+----------------------------+-----------------------------------+
-| firmware-update-status     |  .1.3.6.1.4.1.12276.1.1.1.65550   |
-+----------------------------+-----------------------------------+
-| fipsError                  |  .1.3.6.1.4.1.12276.1.1.1.196608  |
-+----------------------------+-----------------------------------+
-| core-dump                  |  .1.3.6.1.4.1.12276.1.1.1.327680  |
-+----------------------------+-----------------------------------+
++---------------------------------------+-----------------------------------+
+| **Alert**                             | **OID**                           |                            
++=======================================+===================================+
+| hardware-device-fault                 |  .1.3.6.1.4.1.12276.1.1.1.65536   |
++---------------------------------------+-----------------------------------+
+| firmware-fault                        |  .1.3.6.1.4.1.12276.1.1.1.65537   |
++---------------------------------------+-----------------------------------+
+| unknown-alarm                         |  .1.3.6.1.4.1.12276.1.1.1.65538   |
++---------------------------------------+-----------------------------------+
+| memory-fault                          |  .1.3.6.1.4.1.12276.1.1.1.65539   |
++---------------------------------------+-----------------------------------+
+| drive-fault                           |  .1.3.6.1.4.1.12276.1.1.1.65540   |
++---------------------------------------+-----------------------------------+
+| cpu-fault                             |  .1.3.6.1.4.1.12276.1.1.1.65541   |
++---------------------------------------+-----------------------------------+
+| pcie-fault                            |  .1.3.6.1.4.1.12276.1.1.1.65542   |
++---------------------------------------+-----------------------------------+
+| aom-fault                             |  .1.3.6.1.4.1.12276.1.1.1.65543   |
++---------------------------------------+-----------------------------------+
+| drive-capacity-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65544   |
++---------------------------------------+-----------------------------------+
+| power-fault                           |  .1.3.6.1.4.1.12276.1.1.1.65545   |
++---------------------------------------+-----------------------------------+
+| thermal-fault                         |  .1.3.6.1.4.1.12276.1.1.1.65546   |
++---------------------------------------+-----------------------------------+
+| drive-thermal-throttle                |  .1.3.6.1.4.1.12276.1.1.1.65547   |
++---------------------------------------+-----------------------------------+
+| blade-thermal-fault                   |  .1.3.6.1.4.1.12276.1.1.1.65548   |
++---------------------------------------+-----------------------------------+
+| blade-hardware-fault                  |  .1.3.6.1.4.1.12276.1.1.1.65549   |
++---------------------------------------+-----------------------------------+
+| firmware-update-status                |  .1.3.6.1.4.1.12276.1.1.1.65550   |
++---------------------------------------+-----------------------------------+
+| drive-utilization                     |  .1.3.6.1.4.1.12276.1.1.1.65551   |
++---------------------------------------+-----------------------------------+
+| service-health                        |  .1.3.6.1.4.1.12276.1.1.1.65552   |
++---------------------------------------+-----------------------------------+
+| partition1-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65553   |
++---------------------------------------+-----------------------------------+
+| partition2-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65554   |
++---------------------------------------+-----------------------------------+
+| partition3-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65555   |
++---------------------------------------+-----------------------------------+
+| partition4-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65556   |
++---------------------------------------+-----------------------------------+
+| partition5-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65557   |
++---------------------------------------+-----------------------------------+
+| partition6-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65558   |
++---------------------------------------+-----------------------------------+
+| partition7-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65559   |
++---------------------------------------+-----------------------------------+
+| partition8-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65560   |
++---------------------------------------+-----------------------------------+
+| partition1-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65561   |
++---------------------------------------+-----------------------------------+
+| partition2-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65562   |
++---------------------------------------+-----------------------------------+
+| partition3-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65563   |
++---------------------------------------+-----------------------------------+
+| partition4-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65564   |
++---------------------------------------+-----------------------------------+
+| partition5-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65565   |
++---------------------------------------+-----------------------------------+
+| partition6-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65566   |
++---------------------------------------+-----------------------------------+
+| partition7-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65567   |
++---------------------------------------+-----------------------------------+
+| partition8-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65568   |
++---------------------------------------+-----------------------------------+
+| partition1-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65569   |
++---------------------------------------+-----------------------------------+
+| partition2-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65570   |
++---------------------------------------+-----------------------------------+
+| partition3-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65571   |
++---------------------------------------+-----------------------------------+
+| partition4-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65572   |
++---------------------------------------+-----------------------------------+
+| partition5-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65573   |
++---------------------------------------+-----------------------------------+
+| partition6-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65574   |
++---------------------------------------+-----------------------------------+
+| partition7-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65575   |
++---------------------------------------+-----------------------------------+
+| partition8-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65576   |
++---------------------------------------+-----------------------------------+
+| sensor-fault                          |  .1.3.6.1.4.1.12276.1.1.1.65577   |
++---------------------------------------+-----------------------------------+
+| datapath-fault                        |  .1.3.6.1.4.1.12276.1.1.1.65578   |
++---------------------------------------+-----------------------------------+
+| boot-time-integrety-status            |  .1.3.6.1.4.1.12276.1.1.1.65579   |
++---------------------------------------+-----------------------------------+
+| fipsError                             |  .1.3.6.1.4.1.12276.1.1.1.196608  |
++---------------------------------------+-----------------------------------+
+| core-dump                             |  .1.3.6.1.4.1.12276.1.1.1.327680  |
++---------------------------------------+-----------------------------------+
+| backplane                             |  .1.3.6.1.4.1.12276.1.1.1.262144  |
++---------------------------------------+-----------------------------------+
+| txPwrHiAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262400  |
++---------------------------------------+-----------------------------------+
+| txPwrHiWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262401  |
++---------------------------------------+-----------------------------------+
+| txPwrLoAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262402  |
++---------------------------------------+-----------------------------------+
+| txPwrLoWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262403  |
++---------------------------------------+-----------------------------------+
+| rxPwrHiAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262404  |
++---------------------------------------+-----------------------------------+
+| rxPwrHiWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262405  |
++---------------------------------------+-----------------------------------+
+| rxPwrLoAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262406  |
++---------------------------------------+-----------------------------------+
+| rxPwrLoWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262407  |
++---------------------------------------+-----------------------------------+
+| txBiasHiAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262408  |
++---------------------------------------+-----------------------------------+
+| txBiasHiWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262409  |
++---------------------------------------+-----------------------------------+
+| txBiasLoAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262410  |
++---------------------------------------+-----------------------------------+
+| txBiasLoWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262411  |
++---------------------------------------+-----------------------------------+
+| ddmTempHiAlarm                        |  .1.3.6.1.4.1.12276.1.1.1.262412  |
++---------------------------------------+-----------------------------------+
+| ddmTempHiWarn                         |  .1.3.6.1.4.1.12276.1.1.1.262413  |
++---------------------------------------+-----------------------------------+
+| ddmTempLoAlarm                        |  .1.3.6.1.4.1.12276.1.1.1.262414  |
++---------------------------------------+-----------------------------------+
+| ddmTempLoWarn                         |  .1.3.6.1.4.1.12276.1.1.1.262415  |
++---------------------------------------+-----------------------------------+
+| ddmVccHiAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262416  |
++---------------------------------------+-----------------------------------+
+| ddmVccHiWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262417  |
++---------------------------------------+-----------------------------------+
+| ddmVccLoAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262418  |
++---------------------------------------+-----------------------------------+
+| ddmVccLoWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262419  |
++---------------------------------------+-----------------------------------+
+
 
 
 ------------------------------
