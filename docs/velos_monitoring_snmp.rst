@@ -1595,14 +1595,58 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 +---------------------------------------+-----------------------------------+
 
 
+Enabling SNMP Traps
+===================
 
 ------------------------------
 Enabling SNMP Traps in the CLI
 ------------------------------
 
+
+Enabling SNMP Traps in the CLI for F5OS-C 1.5.0 or Later
+--------------------------------------------------------
+
+The SNMP trap CLI configuration has been simplified in the F5OS-A 1.2.0 release and later. Use the **system snmp target** command to configure the SNMP trap destination. The example below uses SNMP v2c and a community string.
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system snmp targets target v2c-target config community public security-model v2c ipv4 address 10.255.0.144 port 162
+    syscon-1-active(config-target-v2c-target)# commit
+    Commit complete.
+    syscon-1-active(config-target-v2c-target)# 
+
+This example below uses SNMP v3 and uses an SNMP user instead of a community string. First, ceate the SNMPv3 user that can then be used to setup a snmp-trap-receiver.
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system snmp users user snmpv3-user config authentication-protocol md5 privacy-protocol aes 
+    syscon-1-active(config-user-snmpv3-user)# exit
+    syscon-1-active(config)# system snmp targets target snmp-trap-receiver config user snmpv3-user ipv4 address 10.255.0.144 port 162
+    syscon-1-active(config-target-snmp-trap-receiver)# commit
+    Commit complete.
+    syscon-1-active(config-target-snmp-trap-receiver)#
+
+You can then view the current SNMP configuration with the **show system snmp targets** command.
+
+.. code-block:: bash
+
+    syscon-1-active# show system snmp targets 
+                                                                    SECURITY                                     
+    NAME                NAME                USER         COMMUNITY  MODEL     ADDRESS       PORT  ADDRESS  PORT  
+    -------------------------------------------------------------------------------------------------------------
+    snmp-trap-receiver  snmp-trap-receiver  snmpv3-user  -          -         10.255.0.144  162   -        -     
+    test                test                -            public     v2c       10.255.0.139  162   -        -     
+    v2c-target          v2c-target          -            public     v2c       10.255.0.144  162   -        -     
+
+    syscon-1-active#
+
+
+Enabling SNMP Traps in the CLI for Releases Prior to F5OS-C 1.5.0
+-----------------------------------------------------------------
+
 Enter **config** mode and enter the following commands to enable SNMP traps. Specifiy your SNMP trap receiver's IP address and port after the **snmpTargetAddrTAddress** field. Make sure to **commit** any changes.
 
-Note: The **snmpTargetAddrTAddress** is currently unintuitive and an enhacement request has been filed to simplify the IP address and port configuration. The Trap target IP configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, The 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 & 161 UDP port is "10.255.0.139.0.161".
+Note: The **snmpTargetAddrTAddress** is currently unintuitive and is easier to configure in F5OS-C 1.5.0 and later. The Trap target IP configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, The 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 & 161 UDP port is "10.255.0.139.0.161".
 
 
 .. code-block:: bash
@@ -1617,6 +1661,139 @@ Note: The **snmpTargetAddrTAddress** is currently unintuitive and an enhacement 
     Commit complete.
     syscon-1-active(config)# 
 
+There are various SNMP show commands in the CLI to provide configuration and stats.
+
+.. code-block:: bash
+
+    syscon-1-active#  show SNMP-FRAMEWORK-MIB 
+    SNMP-FRAMEWORK-MIB snmpEngine snmpEngineID 80:00:61:81:05:01
+    SNMP-FRAMEWORK-MIB snmpEngine snmpEngineBoots 26
+    SNMP-FRAMEWORK-MIB snmpEngine snmpEngineTime 15215
+    SNMP-FRAMEWORK-MIB snmpEngine snmpEngineMaxMessageSize 50000
+    
+    syscon-1-active#  show SNMP-MPD-MIB      
+    SNMP-MPD-MIB snmpMPDStats snmpUnknownSecurityModels 0
+    SNMP-MPD-MIB snmpMPDStats snmpInvalidMsgs 0
+    SNMP-MPD-MIB snmpMPDStats snmpUnknownPDUHandlers 0
+   
+    syscon-1-active#  show SNMP-TARGET-MIB 
+    SNMP-TARGET-MIB snmpTargetObjects snmpUnavailableContexts 0
+    SNMP-TARGET-MIB snmpTargetObjects snmpUnknownContexts 0
+    
+    syscon-1-active#  show SNMP-USER-BASED-SM-MIB 
+    SNMP-USER-BASED-SM-MIB usmStats usmStatsUnsupportedSecLevels 0
+    SNMP-USER-BASED-SM-MIB usmStats usmStatsNotInTimeWindows 0
+    SNMP-USER-BASED-SM-MIB usmStats usmStatsUnknownUserNames 0
+    SNMP-USER-BASED-SM-MIB usmStats usmStatsUnknownEngineIDs 0
+    SNMP-USER-BASED-SM-MIB usmStats usmStatsWrongDigests 0
+    SNMP-USER-BASED-SM-MIB usmStats usmStatsDecryptionErrors 0
+    
+    syscon-1-active# show SNMPv2-MIB 
+    SNMPv2-MIB system sysDescr "Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : System controller services version 1.6.0-14544"
+    SNMPv2-MIB system sysObjectID 1.3.6.1.4.1.12276.1.3.1.5
+    SNMPv2-MIB system sysUpTime 311278314
+    SNMPv2-MIB system sysServices 72
+    SNMPv2-MIB system sysORLastChange 0
+    SNMPv2-MIB snmp snmpInPkts 0
+    SNMPv2-MIB snmp snmpInBadVersions 0
+    SNMPv2-MIB snmp snmpInBadCommunityNames 0
+    SNMPv2-MIB snmp snmpInBadCommunityUses 0
+    SNMPv2-MIB snmp snmpInASNParseErrs 0
+    SNMPv2-MIB snmp snmpSilentDrops 0
+    SNMPv2-MIB snmp snmpProxyDrops 0
+    SNMPv2-MIB snmpSet snmpSetSerialNo 195289254
+
+
+
+
+Enabling SNMP Traps in the webUI
+--------------------------------
+
+As of F5OS-C version 1.6.0 you can enable SNMP traps in the webUI. Go to the **System Settings** page, and then select **SNMP Configuration**. Under the **Targets** section, select **Add**. If you are going to use SNMPv3, you should setup an SNMP user first.
+
+
+.. image:: images/velos_monitoring_snmp/image_snmp1.png
+  :align: center
+  :scale: 70%
+
+Enter the **Security Model**, **IP Address** and **Port** of the SNMP Trap receiver. You'll be required to add an **SNMP User** when selecting SNMPv3 as the security model.
+
+.. image:: images/velos_monitoring_snmp/image_snmp2.png
+  :align: center
+  :scale: 100%
+
+
+Enabling SNMP Traps in the API
+------------------------------
+
+.. code-block:: bash
+
+    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/SNMP-NOTIFICATION-MIB:SNMP-NOTIFICATION-MIB
+
+
+.. code-block:: json
+
+    {
+        "SNMP-NOTIFICATION-MIB:SNMP-NOTIFICATION-MIB": {
+            "snmpNotifyTable": {
+                "snmpNotifyEntry": [
+                    {
+                        "snmpNotifyName": "v2_trap",
+                        "snmpNotifyTag": "v2_trap",
+                        "snmpNotifyType": "trap",
+                        "snmpNotifyStorageType": "nonVolatile"
+                    }
+                ]
+            }
+        }
+    }
+
+
+.. code-block:: bash
+
+    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/SNMP-TARGET-MIB:SNMP-TARGET-MIB
+
+.. code-block:: json
+
+    {
+        "SNMP-TARGET-MIB:SNMP-TARGET-MIB": {
+            "snmpTargetAddrTable": {
+                "snmpTargetAddrEntry": [
+                    {
+                        "snmpTargetAddrName": "group2",
+                        "snmpTargetAddrTDomain": "1.3.6.1.6.1.1",
+                        "snmpTargetAddrTAddress": "10.255.0.144.0.161",
+                        "snmpTargetAddrTimeout": 1500,
+                        "snmpTargetAddrRetryCount": 3,
+                        "snmpTargetAddrTagList": "v2_trap",
+                        "snmpTargetAddrParams": "group2",
+                        "snmpTargetAddrStorageType": "nonVolatile",
+                        "snmpTargetAddrEngineID": "",
+                        "snmpTargetAddrTMask": "",
+                        "snmpTargetAddrMMS": 2048,
+                        "enabled": true
+                    }
+                ]
+            },
+            "snmpTargetParamsTable": {
+                "snmpTargetParamsEntry": [
+                    {
+                        "snmpTargetParamsName": "group2",
+                        "snmpTargetParamsMPModel": 1,
+                        "snmpTargetParamsSecurityModel": 2,
+                        "snmpTargetParamsSecurityName": "public",
+                        "snmpTargetParamsSecurityLevel": "noAuthNoPriv",
+                        "snmpTargetParamsStorageType": "nonVolatile"
+                    }
+                ]
+            }
+        }
+    }
+
+
+
+
+
 
 Troubleshooting SNMP
 ====================
@@ -1627,28 +1804,29 @@ There are SNMP logs for the system controllers and within each chassis partition
 
 .. code-block:: bash
 
-    syscon-2-active# file tail -n 20 log/confd/snmp.log 
-    <INFO> 6-Oct-2021::00:25:49.125 controller-2 confd[403]: snmp get-request reqid=1698654669 10.255.0.139:53745 (OCTET STRING sysContact)
-    <INFO> 6-Oct-2021::00:25:49.129 controller-2 confd[403]: snmp get-response reqid=1698654669 10.255.0.139:53745 (OCTET STRING sysContact=Jim@f5.com)
-    <INFO> 6-Oct-2021::00:25:49.130 controller-2 confd[403]: snmp get-request reqid=1698654670 10.255.0.139:53438 (OCTET STRING sysName)
-    <INFO> 6-Oct-2021::00:25:49.133 controller-2 confd[403]: snmp get-response reqid=1698654670 10.255.0.139:53438 (OCTET STRING sysName=VELOS)
-    <INFO> 6-Oct-2021::00:25:49.133 controller-2 confd[403]: snmp get-request reqid=1698654671 10.255.0.139:40402 (OCTET STRING sysLocation)
-    <INFO> 6-Oct-2021::00:25:49.136 controller-2 confd[403]: snmp get-response reqid=1698654671 10.255.0.139:40402 (OCTET STRING sysLocation=Boston)
-    <INFO> 6-Oct-2021::00:30:48.493 controller-2 confd[403]: snmp get-request reqid=1002109892 10.255.0.139:57416 (TimeTicks sysUpTime)
-    <INFO> 6-Oct-2021::00:30:48.496 controller-2 confd[403]: snmp get-response reqid=1002109892 10.255.0.139:57416 (TimeTicks sysUpTime=174495150)
-    <INFO> 6-Oct-2021::00:30:48.499 controller-2 confd[403]: snmp get-request reqid=1002109893 10.255.0.139:45272 (OCTET STRING sysDescr)
-    <INFO> 6-Oct-2021::00:30:48.502 controller-2 confd[403]: snmp get-response reqid=1002109893 10.255.0.139:45272 (OCTET STRING sysDescr=Tail-f ConfD agent)
-    <INFO> 6-Oct-2021::00:30:48.503 controller-2 confd[403]: snmp get-request reqid=1002109894 10.255.0.139:52783 (OBJECT IDENTIFIER sysObjectID)
-    <INFO> 6-Oct-2021::00:30:48.509 controller-2 confd[403]: snmp get-response reqid=1002109894 10.255.0.139:52783 (OBJECT IDENTIFIER sysObjectID=1.3.6.1.4.1.24961)
-    <INFO> 6-Oct-2021::00:30:48.510 controller-2 confd[403]: snmp get-request reqid=1002109895 10.255.0.139:52543 (TimeTicks sysUpTime)
-    <INFO> 6-Oct-2021::00:30:48.512 controller-2 confd[403]: snmp get-response reqid=1002109895 10.255.0.139:52543 (TimeTicks sysUpTime=174495152)
-    <INFO> 6-Oct-2021::00:30:48.514 controller-2 confd[403]: snmp get-request reqid=1002109896 10.255.0.139:50082 (OCTET STRING sysContact)
-    <INFO> 6-Oct-2021::00:30:48.517 controller-2 confd[403]: snmp get-response reqid=1002109896 10.255.0.139:50082 (OCTET STRING sysContact=Jim@f5.com)
-    <INFO> 6-Oct-2021::00:30:48.518 controller-2 confd[403]: snmp get-request reqid=1002109897 10.255.0.139:54944 (OCTET STRING sysName)
-    <INFO> 6-Oct-2021::00:30:48.520 controller-2 confd[403]: snmp get-response reqid=1002109897 10.255.0.139:54944 (OCTET STRING sysName=VELOS)
-    <INFO> 6-Oct-2021::00:30:48.521 controller-2 confd[403]: snmp get-request reqid=1002109898 10.255.0.139:51556 (OCTET STRING sysLocation)
-    <INFO> 6-Oct-2021::00:30:48.523 controller-2 confd[403]: snmp get-response reqid=1002109898 10.255.0.139:51556 (OCTET STRING sysLocation=Boston)
-    syscon-2-active# 
+    syscon-1-active# file tail -n 20 log/confd/snmp.log 
+    <INFO> 2-Aug-2023::19:18:44.933 controller-1 confd[603]: snmp snmpv2-trap reqid=651301557 10.255.0.139:162 (TimeTicks sysUpTime=182562762)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-02 23:18:43.918659285 UTC)(OCTET STRING alertDescription=inlet at +18.5 degC)
+    <INFO> 2-Aug-2023::19:18:45.152 controller-1 confd[603]: snmp snmpv2-trap reqid=651301558 10.255.0.139:162 (TimeTicks sysUpTime=182562784)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-02 23:18:45.078005934 UTC)(OCTET STRING alertDescription=outlet at +45.0 degC)
+    <INFO> 2-Aug-2023::19:18:45.244 controller-1 confd[603]: snmp snmpv2-trap reqid=651301559 10.255.0.139:162 (TimeTicks sysUpTime=182562793)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-02 23:18:45.127424977 UTC)(OCTET STRING alertDescription=outlet at +45.0 degC)
+    <INFO> 2-Aug-2023::19:18:45.349 controller-1 confd[603]: snmp snmpv2-trap reqid=651301560 10.255.0.139:162 (TimeTicks sysUpTime=182562804)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-02 23:18:45.168637802 UTC)(OCTET STRING alertDescription=inlet at +23.0 degC)
+    <INFO> 2-Aug-2023::19:18:45.443 controller-1 confd[603]: snmp snmpv2-trap reqid=651301561 10.255.0.139:162 (TimeTicks sysUpTime=182562813)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-02 23:18:45.255147812 UTC)(OCTET STRING alertDescription=outlet at +28.0 degC)
+    <INFO> 2-Aug-2023::19:18:47.124 controller-1 confd[603]: snmp snmpv2-trap reqid=651301562 10.255.0.139:162 (TimeTicks sysUpTime=182562981)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-02 23:18:47.064438805 UTC)(OCTET STRING alertDescription=inlet at +9.9 degC)
+    <INFO> 3-Aug-2023::16:14:13.138 controller-1 confd[603]: snmp snmpv2-trap reqid=651301563 10.255.0.139:162 (TimeTicks sysUpTime=190095583)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-03 20:14:13.079245613 UTC)(OCTET STRING alertDescription=inlet at +10.0 degC)
+    <INFO> 5-Aug-2023::13:03:43.170 controller-1 confd[603]: snmp snmpv2-trap reqid=651301564 10.255.0.139:162 (TimeTicks sysUpTime=206232586)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-05 17:03:43.112461099 UTC)(OCTET STRING alertDescription=inlet at +9.3 degC)
+    <INFO> 7-Aug-2023::01:37:49.152 controller-1 confd[603]: snmp snmpv2-trap reqid=651301565 10.255.0.139:162 (TimeTicks sysUpTime=219397184)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-07 05:37:49.093715562 UTC)(OCTET STRING alertDescription=inlet at +9.7 degC)
+    <INFO> 7-Aug-2023::20:15:07.127 controller-1 confd[603]: snmp snmpv2-trap reqid=651301566 10.255.0.139:162 (TimeTicks sysUpTime=226100982)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-08 00:15:07.066042954 UTC)(OCTET STRING alertDescription=inlet at +10.2 degC)
+    <INFO> 8-Aug-2023::15:26:07.155 controller-1 confd[603]: snmp snmpv2-trap reqid=651301567 10.255.0.139:162 (TimeTicks sysUpTime=233006985)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-08 19:26:07.096245341 UTC)(OCTET STRING alertDescription=inlet at +9.4 degC)
+    <INFO> 9-Aug-2023::02:40:11.128 controller-1 confd[603]: snmp snmpv2-trap reqid=651301568 10.255.0.139:162 (TimeTicks sysUpTime=237051382)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-09 06:40:11.069561657 UTC)(OCTET STRING alertDescription=inlet at +8.5 degC)
+    <INFO> 9-Aug-2023::08:08:51.297 controller-1 confd[603]: snmp snmpv2-trap reqid=651301569 10.255.0.139:162 (TimeTicks sysUpTime=239023399)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-09 12:08:51.235393294 UTC)(OCTET STRING alertDescription=inlet at +9.0 degC)
+    <INFO> 9-Aug-2023::14:51:31.125 controller-1 confd[603]: snmp snmpv2-trap reqid=651301570 10.255.0.139:162 (TimeTicks sysUpTime=241439381)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-09 18:51:31.064364864 UTC)(OCTET STRING alertDescription=inlet at +8.4 degC)
+    <INFO> 9-Aug-2023::23:17:19.123 controller-1 confd[603]: snmp snmpv2-trap reqid=651301571 10.255.0.139:162 (TimeTicks sysUpTime=244474181)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-10 03:17:19.063597147 UTC)(OCTET STRING alertDescription=inlet at +9.2 degC)
+    <INFO> 10-Aug-2023::00:25:31.117 controller-1 confd[603]: snmp snmpv2-trap reqid=651301572 10.255.0.139:162 (TimeTicks sysUpTime=244883381)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-10 04:25:31.058598946 UTC)(OCTET STRING alertDescription=inlet at +9.5 degC)
+    <INFO> 10-Aug-2023::01:17:09.120 controller-1 confd[603]: snmp snmpv2-trap reqid=651301573 10.255.0.139:162 (TimeTicks sysUpTime=245193181)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-10 05:17:09.060294318 UTC)(OCTET STRING alertDescription=inlet at +9.4 degC)
+    <INFO> 10-Aug-2023::21:54:35.129 controller-1 confd[603]: snmp snmpv2-trap reqid=651301574 10.255.0.139:162 (TimeTicks sysUpTime=252617782)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-11 01:54:35.067191375 UTC)(OCTET STRING alertDescription=inlet at +9.0 degC)
+    <INFO> 12-Aug-2023::23:43:45.121 controller-1 confd[603]: snmp snmpv2-trap reqid=651301575 10.255.0.139:162 (TimeTicks sysUpTime=270552781)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-13 03:43:45.064105470 UTC)(OCTET STRING alertDescription=inlet at +10.0 degC)
+    <INFO> 15-Aug-2023::13:27:07.120 controller-1 confd[603]: snmp snmpv2-trap reqid=651301576 10.255.0.139:162 (TimeTicks sysUpTime=292772981)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-15 17:27:07.060818625 UTC)(OCTET STRING alertDescription=inlet at +9.5 degC)
+    syscon-1-active# 
+ 
 
 
 SNMP information is captured in the **snmp.log** located within the **log** directory of each chassis partition:
