@@ -215,11 +215,11 @@ The output will show the previously configured allowed-ip's.
 Adding Allowed IPs for SNMP via webUI
 -----------------------------------
 
-Configuration of the **allowed-ip** functionality is not supported yet, this will be added in F5OS-C 1.7.0. For now you must use either the API or CLI to configure this. Below is what the F5OS-C 1.7.0 fucntinality will look like:
+Configuration of the **allowed-ip** functionality is not supported yet via the webUI, this will be added in F5OS-C 1.7.0. For now you must use either the API or CLI to configure this. Below is what the F5OS-C 1.7.0 webUI functionality will look like:
 
-By default, SNMP queries are not allowed into the F5OS platform layer. Before enabling SNMP, you'll need to open up the out-of-band management port on F5OS-C (on both the system controller and on all the chassis partitions) to allow SNMP queries from particular SNMP management endpoints. Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length of 24) to query the F5OS layer on port 161.
+By default, SNMP queries are not allowed into the F5OS platform layer. Before enabling SNMP, you'll need to open up the out-of-band management port on F5OS-C (on both the system controller and on all the chassis partitions) to allow SNMP queries from particular SNMP management endpoints. Below is an example of allowing a few SNMP endpoints to query the F5OS layer on port 161.
 
-.. image:: images/velos_monitoring_snmp/image3.png
+.. image:: images/velos_monitoring_snmp/imagesnmpwebui.png
   :align: center
   :scale: 70%
 
