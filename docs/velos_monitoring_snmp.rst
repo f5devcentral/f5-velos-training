@@ -1988,59 +1988,82 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
     properties fantray-state exhaust-fan-3-speed 6793
     syscon-2-active#
 
+
+
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include blade-thermal-fault
+    r10900-1# file show log/confd/snmp.log | include blade-thermal-fault
 
 **blade-hardware-fault           .1.3.6.1.4.1.12276.1.1.1.65549**
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include blade-hardware-fault
+    syscon-1-active# file show log/confd/snmp.log | include blade-hardware-fault
+    <INFO> 3-Oct-2022::10:14:57.326 controller-1 confd[437]: snmp snmpv2-trap reqid=718708801 10.255.0.143:162 (TimeTicks sysUpTime=20291)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2022-10-03 10:13:27.747878684 UTC)(OCTET STRING alertDescription=Hardware fault detected in blade)
+    <INFO> 3-Oct-2022::10:14:57.376 controller-1 confd[437]: snmp snmpv2-trap reqid=718708802 10.255.0.143:162 (TimeTicks sysUpTime=20296)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 10:13:27.747890598 UTC)(OCTET STRING alertDescription=RAS AER 'Completion Timeout' uncorrectable errors detected, count=1)
+    <INFO> 3-Oct-2022::11:18:23.314 controller-1 confd[437]: snmp snmpv2-trap reqid=718708827 10.255.0.143:162 (TimeTicks sysUpTime=400889)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 11:18:23.298321034 UTC)(OCTET STRING alertDescription=Hardware fault detected in blade)
+    <INFO> 3-Oct-2022::11:18:23.363 controller-1 confd[437]: snmp snmpv2-trap reqid=718708828 10.255.0.143:162 (TimeTicks sysUpTime=400894)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 11:18:23.298341759 UTC)(OCTET STRING alertDescription=No RAS AER 'Completion Timeout' uncorrectable errors detected)
+    <INFO> 18-Nov-2022::17:10:49.938 controller-1 confd[439]: snmp snmpv2-trap reqid=166056832 10.255.0.143:162 (TimeTicks sysUpTime=128600349)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2022-11-18 17:10:49.926326214 UTC)(OCTET STRING alertDescription=Hardware fault detected in blade)
+    <INFO> 18-Nov-2022::17:10:49.988 controller-1 confd[439]: snmp snmpv2-trap reqid=166056833 10.255.0.143:162 (TimeTicks sysUpTime=128600353)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-11-18 17:10:49.926341579 UTC)(OCTET STRING alertDescription=RAS AER 'Completion Timeout' uncorrectable errors detected, count=1)
+    <INFO> 18-Nov-2022::18:15:48.355 controller-1 confd[439]: snmp snmpv2-trap reqid=166056834 10.255.0.143:162 (TimeTicks sysUpTime=128990190)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-11-18 18:15:48.336108363 UTC)(OCTET STRING alertDescription=Hardware fault detected in blade)
+    <INFO> 18-Nov-2022::18:15:48.404 controller-1 confd[439]: snmp snmpv2-trap reqid=166056835 10.255.0.143:162 (TimeTicks sysUpTime=128990195)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-11-18 18:15:48.336132387 UTC)(OCTET STRING alertDescription=No RAS AER 'Completion Timeout' uncorrectable errors detected)
+    syscon-1-active# 
+
 
 **sensor-fault                   .1.3.6.1.4.1.12276.1.1.1.65577**
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include sensor-fault
+    r10900-1# file show log/confd/snmp.log | include sensor-fault
 
 **module-present                 .1.3.6.1.4.1.12276.1.1.1.66304**
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include module-present
+    syscon-1-active# file show log/confd/snmp.log | include module-present | more
+    <INFO> 3-Oct-2022::09:34:24.770 controller-1 confd[437]: snmp snmpv2-trap reqid=64689696 10.255.0.143:162 (TimeTicks sysUpTime=2530)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:10.611355273 UTC)(OCTET STRING alertDescription=Blade6 removed)
+    <INFO> 3-Oct-2022::09:34:25.243 controller-1 confd[437]: snmp snmpv2-trap reqid=64689701 10.255.0.143:162 (TimeTicks sysUpTime=2577)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.560724295 UTC)(OCTET STRING alertDescription=Blade4 removed)
+    <INFO> 3-Oct-2022::09:34:25.293 controller-1 confd[437]: snmp snmpv2-trap reqid=64689702 10.255.0.143:162 (TimeTicks sysUpTime=2582)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.588691078 UTC)(OCTET STRING alertDescription=Blade5 removed)
+    <INFO> 3-Oct-2022::09:34:25.343 controller-1 confd[437]: snmp snmpv2-trap reqid=64689703 10.255.0.143:162 (TimeTicks sysUpTime=2587)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.631707464 UTC)(OCTET STRING alertDescription=Vpc1 present)
+    <INFO> 3-Oct-2022::09:34:25.394 controller-1 confd[437]: snmp snmpv2-trap reqid=64689704 10.255.0.143:162 (TimeTicks sysUpTime=2592)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.646922534 UTC)(OCTET STRING alertDescription=Vpc2 present)
+    <INFO> 3-Oct-2022::09:34:28.751 controller-1 confd[437]: snmp snmpv2-trap reqid=64689715 10.255.0.143:162 (TimeTicks sysUpTime=2928)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.510124761 UTC)(OCTET STRING alertDescription=Blade1 present)
+    <INFO> 3-Oct-2022::09:34:28.801 controller-1 confd[437]: snmp snmpv2-trap reqid=64689716 10.255.0.143:162 (TimeTicks sysUpTime=2933)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.528553059 UTC)(OCTET STRING alertDescription=Blade2 present)
+    <INFO> 3-Oct-2022::09:34:28.848 controller-1 confd[437]: snmp snmpv2-trap reqid=64689717 10.255.0.143:162 (TimeTicks sysUpTime=2938)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.559881492 UTC)(OCTET STRING alertDescription=Blade3 present)
+    <INFO> 3-Oct-2022::09:34:29.523 controller-1 confd[437]: snmp snmpv2-trap reqid=64689725 10.255.0.143:162 (TimeTicks sysUpTime=3005)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.706122781 UTC)(OCTET STRING alertDescription=Vfc1 present)
+    <INFO> 3-Oct-2022::09:34:30.385 controller-1 confd[437]: snmp snmpv2-trap reqid=64689734 10.255.0.143:162 (TimeTicks sysUpTime=3091)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.768040978 UTC)(OCTET STRING alertDescription=Blade7 removed)
+
 
 **psu-fault                      .1.3.6.1.4.1.12276.1.1.1.66305**
 
-This set of SNMP traps will relate to the health of the power supplies in the rSeries appliances. You may see traps realted to insetion or removal of power supplies, inputs, and voltage thresholds. It is best to determine if the trap was a temporary condition, and if not and an error state persists, then determine if the inputs of the power supplies have become disconnected, or changed. If the problem only occurs on one power supply, then you can try swapping inputs/power supplies (assuming dual power is installed) during a maintenance window to see if the issue follows the power supply or the input source. 
+This set of SNMP traps will relate to the health of the power supplies in the VELOS chassis. You may see traps realted to insetion or removal of power supplies, inputs, and voltage thresholds. It is best to determine if the trap was a temporary condition, and if not and an error state persists, then determine if the inputs of the power supplies have become disconnected, or changed. If the problem only occurs on one power supply, then you can try swapping inputs/power supplies during a maintenance window to see if the issue follows the power supply or the input source. 
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include psu-fault
-    <INFO> 10-Jul-2023::13:43:13.426 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423818 10.255.0.144:161 (TimeTicks sysUpTime=13923)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:12.676537826 UTC)(OCTET STRING alertDescription=Deasserted: PSU 2 present)
-    <INFO> 10-Jul-2023::13:43:15.336 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423839 10.255.0.144:161 (TimeTicks sysUpTime=14114)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:13.026271463 UTC)(OCTET STRING alertDescription=Asserted: PSU 1 input OK)
-    <INFO> 10-Jul-2023::13:43:15.437 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423840 10.255.0.144:161 (TimeTicks sysUpTime=14124)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:13.320285820 UTC)(OCTET STRING alertDescription=Asserted: PSU 1 output OK)
-    <INFO> 10-Jul-2023::13:43:15.537 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423841 10.255.0.144:161 (TimeTicks sysUpTime=14134)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:13.695325153 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 unsupported)
-    <INFO> 10-Jul-2023::13:43:21.823 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423906 10.255.0.144:161 (TimeTicks sysUpTime=14763)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:16.259904448 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input under-voltage warning)
-    <INFO> 10-Jul-2023::13:43:21.924 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423907 10.255.0.144:161 (TimeTicks sysUpTime=14773)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:16.610661807 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage warning)
-    <INFO> 10-Jul-2023::13:43:22.046 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423908 10.255.0.144:161 (TimeTicks sysUpTime=14785)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:16.937159315 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage fault)
-    <INFO> 10-Jul-2023::13:43:22.178 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423910 10.255.0.144:161 (TimeTicks sysUpTime=14798)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:17.289095481 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 unit off for low input voltage)
-    <INFO> 10-Jul-2023::13:43:22.279 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423911 10.255.0.144:161 (TimeTicks sysUpTime=14808)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:17.710166573 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input under-voltage fault)
-    <INFO> 10-Jul-2023::13:43:22.781 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423916 10.255.0.144:161 (TimeTicks sysUpTime=14858)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:18.060160831 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-power warning)
-    <INFO> 10-Jul-2023::13:43:22.882 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423917 10.255.0.144:161 (TimeTicks sysUpTime=14869)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:18.380302625 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-current warning)
-    <INFO> 10-Jul-2023::13:43:22.982 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423918 10.255.0.144:161 (TimeTicks sysUpTime=14879)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:18.704106036 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-current fault)
-    <INFO> 10-Jul-2023::13:43:26.650 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423955 10.255.0.144:161 (TimeTicks sysUpTime=15245)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:21.965032296 UTC)(OCTET STRING alertDescription=Asserted: PSU 1 present)
-    <INFO> 10-Jul-2023::13:43:27.554 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423964 10.255.0.144:161 (TimeTicks sysUpTime=15336)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:22.295486581 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
-    <INFO> 10-Jul-2023::13:43:28.708 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423977 10.255.0.144:161 (TimeTicks sysUpTime=15451)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:43:23.951104145 UTC)(OCTET STRING alertDescription=Deasserted: PSU 2 input OK)
+    syscon-1-active# file show log/confd/snmp.log | include psu-fault | more     
+    <INFO> 3-Oct-2022::09:34:18.591 controller-1 confd[437]: snmp snmpv2-trap reqid=64689673 10.255.0.143:162 (TimeTicks sysUpTime=1912)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:03.592794334 UTC)(OCTET STRING alertDescription=Asserted: PSU 1 output OK)
+    <INFO> 3-Oct-2022::09:34:18.667 controller-1 confd[437]: snmp snmpv2-trap reqid=64689674 10.255.0.143:162 (TimeTicks sysUpTime=1919)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:06.362645427 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 unsupported)
+    <INFO> 3-Oct-2022::09:34:18.822 controller-1 confd[437]: snmp snmpv2-trap reqid=64689676 10.255.0.143:162 (TimeTicks sysUpTime=1935)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:08.960634230 UTC)(OCTET STRING alertDescription=Deasserted: PSU 2 unsupported)
+    <INFO> 3-Oct-2022::09:34:18.871 controller-1 confd[437]: snmp snmpv2-trap reqid=64689677 10.255.0.143:162 (TimeTicks sysUpTime=1940)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:08.972412243 UTC)(OCTET STRING alertDescription=Asserted: PSU 1 present)
+    <INFO> 3-Oct-2022::09:34:18.971 controller-1 confd[437]: snmp snmpv2-trap reqid=64689678 10.255.0.143:162 (TimeTicks sysUpTime=1950)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:09.865116422 UTC)(OCTET STRING alertDescription=Asserted: PSU 1 input OK)
+    <INFO> 3-Oct-2022::09:34:19.076 controller-1 confd[437]: snmp snmpv2-trap reqid=64689679 10.255.0.143:162 (TimeTicks sysUpTime=1960)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:11.134629861 UTC)(OCTET STRING alertDescription=Asserted: PSU 2 input OK)
+    <INFO> 3-Oct-2022::09:34:19.180 controller-1 confd[437]: snmp snmpv2-trap reqid=64689680 10.255.0.143:162 (TimeTicks sysUpTime=1971)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:12.349240332 UTC)(OCTET STRING alertDescription=Asserted: PSU 2 output OK)
+    <INFO> 3-Oct-2022::09:34:19.228 controller-1 confd[437]: snmp snmpv2-trap reqid=64689681 10.255.0.143:162 (TimeTicks sysUpTime=1975)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:12.387972373 UTC)(OCTET STRING alertDescription=Asserted: PSU 2 present)
+    <INFO> 3-Oct-2022::09:34:20.845 controller-1 confd[437]: snmp snmpv2-trap reqid=64689683 10.255.0.143:162 (TimeTicks sysUpTime=2137)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:13.723877465 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input under-voltage warning)
+    <INFO> 3-Oct-2022::09:34:23.572 controller-1 confd[437]: snmp snmpv2-trap reqid=64689684 10.255.0.143:162 (TimeTicks sysUpTime=2410)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:16.190022658 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage warning)
+    <INFO> 3-Oct-2022::09:34:25.055 controller-1 confd[437]: snmp snmpv2-trap reqid=64689698 10.255.0.143:162 (TimeTicks sysUpTime=2558)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:17.487691756 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage fault)
 
 
 **lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.66306**
 
-This set of SNMP traps will relate to the health of the LCD subsystem on rSeries appliances. You may notice lcd-fault traps as the firmware on the LCD is updated as part of an upgrade as seen below. These should be temporary states and eventually the system will generate an **LCD Health is OK** trap. If the system continues to show an LCD fault, a support case should be opened to determine if there is a legitimate hardware issue.
+This set of SNMP traps will relate to the health of the LCD subsystem on the VELOS chassis. You may notice lcd-fault traps as the firmware on the LCD is updated as part of an upgrade as seen below. These should be temporary states and eventually the system will generate an **LCD Health is OK** trap. If the system continues to show an LCD fault, a support case should be opened to determine if there is a legitimate hardware issue.
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include lcd-fault
+    syscon-1-active# file show log/confd/snmp.log | include lcd-fault | more
+
+
+    Below is from an rSeries unit:
+
     <INFO> 15-Feb-2023::15:55:35.572 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418268 10.255.0.144:161 (TimeTicks sysUpTime=294)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-02-15 20:55:34.911681272 UTC)(OCTET STRING alertDescription=Fault detected in LCD module)
     <INFO> 15-Feb-2023::15:55:38.088 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418272 10.255.0.144:161 (TimeTicks sysUpTime=545)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-02-15 20:55:38.055131188 UTC)(OCTET STRING alertDescription=Firmware update is running for lcd app)
     <INFO> 15-Feb-2023::15:55:57.476 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418298 10.255.0.144:161 (TimeTicks sysUpTime=2484)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-02-15 20:55:57.472258315 UTC)(OCTET STRING alertDescription=Fault detected in LCD module)
@@ -2061,7 +2084,10 @@ Power Supply Module
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include module-communication-error
+    syscon-1-active# file show log/confd/snmp.log | include module-communication-error
+
+    The logs below are an example from an rSerise system.
+
     <INFO> 12-Apr-2023::11:48:24.877 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130717 10.255.8.22:6011 (TimeTicks sysUpTime=52511)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-12 11:48:24.872113844 UTC)(OCTET STRING alertDescription=Module communication error detected)
     <INFO> 12-Apr-2023::11:48:24.926 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130718 10.255.8.22:6011 (TimeTicks sysUpTime=52516)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:48:24.872136218 UTC)(OCTET STRING alertDescription=PSU communication error detected)
     <INFO> 12-Apr-2023::11:48:37.139 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130719 10.255.8.22:6011 (TimeTicks sysUpTime=53737)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:48:37.136351907 UTC)(OCTET STRING alertDescription=Module communication error detected)
@@ -2073,6 +2099,9 @@ LCD Module
 .. code-block:: bash
 
     r10900-1# file show log/system/snmp.log | include module-communication-error
+
+    The logs below are an example from an rSerise system.
+
     <INFO> 12-Apr-2023::11:51:32.363 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130725 10.255.8.22:6011 (TimeTicks sysUpTime=71259)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.359013061 UTC)(OCTET STRING alertDescription=Module communication error detected)
     <INFO> 12-Apr-2023::11:51:32.413 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130726 10.255.8.22:6011 (TimeTicks sysUpTime=71264)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.359032524 UTC)(OCTET STRING alertDescription=LCD module communication error detected)
     <INFO> 12-Apr-2023::11:51:32.463 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130727 10.255.8.22:6011 (TimeTicks sysUpTime=71269)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.361661313 UTC)(OCTET STRING alertDescription=LCD Health is Not OK)
@@ -2093,7 +2122,7 @@ Firmware Update Status Traps
 These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each componenent returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run, and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
 
-.. image:: images/rseries_monitoring_snmp/imagefirmwareupgrade.png
+.. image:: images/velos_monitoring_snmp/imagefirmwareupgrade.png
   :align: center
   :scale: 100%
 
@@ -2102,23 +2131,24 @@ The CLI command below shows how to filter the **snmp.log** file to only show fir
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include firmware
-    <INFO> 24-Feb-2022::15:03:43.201 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469870 10.255.0.144:6011 (TimeTicks sysUpTime=526)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:03:40.509604919 UTC)(OCTET STRING alertDescription=Firmware update is running for <no value> 0)
-    <INFO> 24-Feb-2022::15:03:43.203 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469871 10.255.0.144:6011 (TimeTicks sysUpTime=526)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:03:43.151642139 UTC)(OCTET STRING alertDescription=Firmware update is running for cpld)
-    <INFO> 24-Feb-2022::15:03:57.106 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469872 10.255.0.144:6011 (TimeTicks sysUpTime=1916)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:03:57.104520565 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 0)
-    <INFO> 24-Feb-2022::15:03:59.162 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469873 10.255.0.144:6011 (TimeTicks sysUpTime=2122)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:03:59.160527052 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 1)
-    <INFO> 24-Feb-2022::15:04:17.153 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469874 10.255.0.144:6011 (TimeTicks sysUpTime=3921)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:04:17.150451625 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 1)
-    <INFO> 24-Feb-2022::15:04:17.202 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469875 10.255.0.144:6011 (TimeTicks sysUpTime=3926)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:04:17.153133013 UTC)(OCTET STRING alertDescription=Firmware update is running for nso 0)
-    <INFO> 24-Feb-2022::15:04:31.472 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469876 10.255.0.144:6011 (TimeTicks sysUpTime=5353)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:04:31.470147155 UTC)(OCTET STRING alertDescription=Firmware update completed for nso 0)
-    <INFO> 24-Feb-2022::15:04:33.165 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469877 10.255.0.144:6011 (TimeTicks sysUpTime=5522)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:04:33.162670549 UTC)(OCTET STRING alertDescription=Firmware update is running for asw 0)
-    <INFO> 24-Feb-2022::15:04:47.390 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469878 10.255.0.144:6011 (TimeTicks sysUpTime=6945)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:04:47.387614748 UTC)(OCTET STRING alertDescription=Firmware update completed for asw 0)
-    <INFO> 24-Feb-2022::15:12:03.947 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469902 10.255.0.144:6011 (TimeTicks sysUpTime=50600)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:12:03.943198729 UTC)(OCTET STRING alertDescription=Firmware update completed for cpld)
-    <INFO> 24-Feb-2022::15:12:05.152 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469903 10.255.0.144:6011 (TimeTicks sysUpTime=50721)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:12:05.150458751 UTC)(OCTET STRING alertDescription=Firmware update is running for lop app)
-    <INFO> 24-Feb-2022::15:13:05.154 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469905 10.255.0.144:6011 (TimeTicks sysUpTime=56721)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:13:05.151861316 UTC)(OCTET STRING alertDescription=Firmware update completed for lop app)
-    <INFO> 24-Feb-2022::15:13:05.204 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469906 10.255.0.144:6011 (TimeTicks sysUpTime=56726)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:13:05.157391392 UTC)(OCTET STRING alertDescription=Firmware update is running for sirr )
-    <INFO> 24-Feb-2022::15:13:05.303 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469907 10.255.0.144:6011 (TimeTicks sysUpTime=56735)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:13:05.164284873 UTC)(OCTET STRING alertDescription=Firmware update completed for sirr )
-    <INFO> 24-Feb-2022::15:13:05.347 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469908 10.255.0.144:6011 (TimeTicks sysUpTime=56740)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:13:05.169214668 UTC)(OCTET STRING alertDescription=Firmware update is running for bios)
-    <INFO> 24-Feb-2022::15:16:24.434 appliance-1 confd[114]: snmp snmpv2-trap reqid=1908469910 10.255.0.144:6011 (TimeTicks sysUpTime=76649)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-02-24 15:16:24.432163279 UTC)(OCTET STRING alertDescription=Firmware update completed for bios)
+    syscon-1-active# file show log/confd/snmp.log | include firmware-update-status | more 
+    <INFO> 3-Oct-2022::09:37:44.393 controller-1 confd[437]: snmp snmpv2-trap reqid=64691707 10.255.0.143:162 (TimeTicks sysUpTime=22492)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:35:48.870896214 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 0)
+    <INFO> 3-Oct-2022::09:37:45.245 controller-1 confd[437]: snmp snmpv2-trap reqid=64691712 10.255.0.143:162 (TimeTicks sysUpTime=22577)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:35:51.939545738 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 0)
+    <INFO> 3-Oct-2022::09:37:46.942 controller-1 confd[437]: snmp snmpv2-trap reqid=64691729 10.255.0.143:162 (TimeTicks sysUpTime=22747)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:00.925871290 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 0)
+    <INFO> 3-Oct-2022::09:37:46.992 controller-1 confd[437]: snmp snmpv2-trap reqid=64691730 10.255.0.143:162 (TimeTicks sysUpTime=22752)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:00.929282709 UTC)(OCTET STRING alertDescription=Firmware update is running for vqf 0)
+    <INFO> 3-Oct-2022::09:37:47.043 controller-1 confd[437]: snmp snmpv2-trap reqid=64691731 10.255.0.143:162 (TimeTicks sysUpTime=22757)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:02.043180502 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 0)
+    <INFO> 3-Oct-2022::09:37:47.093 controller-1 confd[437]: snmp snmpv2-trap reqid=64691732 10.255.0.143:162 (TimeTicks sysUpTime=22762)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:02.046706053 UTC)(OCTET STRING alertDescription=Firmware update is running for vqf 0)
+    <INFO> 3-Oct-2022::09:37:47.144 controller-1 confd[437]: snmp snmpv2-trap reqid=64691733 10.255.0.143:162 (TimeTicks sysUpTime=22767)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:10.044153041 UTC)(OCTET STRING alertDescription=Firmware update completed for vqf 0)
+    <INFO> 3-Oct-2022::09:37:47.196 controller-1 confd[437]: snmp snmpv2-trap reqid=64691734 10.255.0.143:162 (TimeTicks sysUpTime=22772)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:10.104164703 UTC)(OCTET STRING alertDescription=Firmware update completed for vqf 0)
+    <INFO> 3-Oct-2022::09:37:47.705 controller-1 confd[437]: snmp snmpv2-trap reqid=64691736 10.255.0.143:162 (TimeTicks sysUpTime=22823)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:30.054712423 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 0)
+    <INFO> 3-Oct-2022::09:37:47.861 controller-1 confd[437]: snmp snmpv2-trap reqid=64691738 10.255.0.143:162 (TimeTicks sysUpTime=22839)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:40.619282892 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 0)
+    <INFO> 3-Oct-2022::09:37:47.915 controller-1 confd[437]: snmp snmpv2-trap reqid=64691739 10.255.0.143:162 (TimeTicks sysUpTime=22844)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:42.005007447 UTC)(OCTET STRING alertDescription=Firmware update is running for vqf 0)
+    <INFO> 3-Oct-2022::09:37:47.959 controller-1 confd[437]: snmp snmpv2-trap reqid=64691740 10.255.0.143:162 (TimeTicks sysUpTime=22849)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:36:50.005226389 UTC)(OCTET STRING alertDescription=Firmware update completed for vqf 0)
+    <INFO> 3-Oct-2022::09:37:48.008 controller-1 confd[437]: snmp snmpv2-trap reqid=64691741 10.255.0.143:162 (TimeTicks sysUpTime=22853)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:37:05.068269087 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 0)
+    <INFO> 3-Oct-2022::09:37:48.059 controller-1 confd[437]: snmp snmpv2-trap reqid=64691742 10.255.0.143:162 (TimeTicks sysUpTime=22859)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:37:18.925139998 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 0)
+    <INFO> 3-Oct-2022::09:38:14.931 controller-1 confd[437]: snmp snmpv2-trap reqid=64691743 10.255.0.143:162 (TimeTicks sysUpTime=25546)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:38:14.926040195 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 0)
+    <INFO> 3-Oct-2022::09:38:25.324 controller-1 confd[437]: snmp snmpv2-trap reqid=64691744 10.255.0.143:162 (TimeTicks sysUpTime=26585)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:38:25.318148132 UTC)(OCTET STRING alertDescription=Firmware update completed for atse 0)
+    <INFO> 3-Oct-2022::10:14:55.183 controller-1 confd[437]: snmp snmpv2-trap reqid=718708783 10.255.0.143:162 (TimeTicks sysUpTime=20076)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 10:13:23.217820626 UTC)(OCTET STRING alertDescription=Firmware update is running for atse 0)
 
 
 
@@ -2148,7 +2178,7 @@ The **show system events** CLI command will provide more details of the drive ev
 
 .. code-block:: bash
 
-    appliance-1# show system events | nomore
+    appliance-1# show system events | more
     system events event
     log "65544 appliance drive-capacity-fault ASSERT CRITICAL \"Running out of drive capacity\" \"2023-03-27 15:41:37.847817761 UTC\""
     system events event
@@ -2162,7 +2192,10 @@ You can also view the snmp.log file to see the SNMP traps that have been issued 
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include drive-utilization
+    syscon-1-active# file show log/confd/snmp.log | include drive-utilization
+
+    Below is an example of logs from an rSeries system.
+
     <INFO> 12-Apr-2023::12:00:00.042 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130742 10.255.8.22:6011 (TimeTicks sysUpTime=122027)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2023-04-12 12:00:00.037547416 UTC)(OCTET STRING alertDescription=Drive utilization growth rate is high)
     <INFO> 12-Apr-2023::12:00:00.092 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130743 10.255.8.22:6011 (TimeTicks sysUpTime=122032)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:00.037560232 UTC)(OCTET STRING alertDescription=Drive usage growth rate exceeded 10%, growth=13%)
     <INFO> 12-Apr-2023::12:00:52.838 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130745 10.255.8.22:6011 (TimeTicks sysUpTime=127307)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834736965 UTC)(OCTET STRING alertDescription=Drive utilization growth rate is high)
@@ -2177,7 +2210,10 @@ FIPS Related Traps
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include fips-fault
+    syscon-1-active# file show log/confd/snmp.log | include fips-fault
+
+    Below is an example of logs from an rSeries system.
+
     <INFO> 14-Apr-2023::13:42:57.915 appliance-1 confd[115]: snmp snmpv2-trap reqid=1188695914 10.255.8.22:6011 (TimeTicks sysUpTime=461536)(OBJECT IDENTIFIER snmpTrapOID=fips-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-14 13:42:57.910341089 UTC)(OCTET STRING alertDescription=Fault detected in FIPS module)
     <INFO> 14-Apr-2023::13:43:27.924 appliance-1 confd[115]: snmp snmpv2-trap reqid=1188695915 10.255.8.22:6011 (TimeTicks sysUpTime=464537)(OBJECT IDENTIFIER snmpTrapOID=fips-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-14 13:43:27.917797625 UTC)(OCTET STRING alertDescription=Fault detected in FIPS module)
     <INFO> 14-Apr-2023::13:56:57.930 appliance-1 confd[115]: snmp snmpv2-trap reqid=1188695918 10.255.8.22:6011 (TimeTicks sysUpTime=545537)(OBJECT IDENTIFIER snmpTrapOID=fips-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-14 13:56:57.925072069 UTC)(OCTET STRING alertDescription=Fault detected in FIPS module)
@@ -2187,7 +2223,7 @@ FIPS Related Traps
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include fipsError
+    syscon-1-active# file show log/confd/snmp.log | include fipsError    
 
 System Event Traps
 ------------------
@@ -2198,8 +2234,14 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include dump
-    <INFO> 27-Apr-2023::07:59:10.169 appliance-1 confd[115]: snmp snmpv2-trap reqid=627600425 10.255.0.144:161 (TimeTicks sysUpTime=223591142)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-27 11:59:10.166591016 UTC)(OCTET STRING alertDescription=Core dumped on Appliance. process=appliance_orche, location=/var/shared/core/container/core.appliance_orch.appliance_orchestration_manager.18120.1682596749.core.gz)
+    syscon-1-active# file show log/confd/snmp.log | include core-dump
+    <INFO> 27-Jan-2023::17:42:38.805 controller-1 confd[442]: snmp snmpv2-trap reqid=2081038626 10.255.0.143:162 (TimeTicks sysUpTime=206883178)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-01-27 17:42:27.132412331 UTC)(OCTET STRING alertDescription=Core dumped on Controller-2. process=vcc-chassis-man, location=/var/shared/core/container/core.vcc-chassis-ma.vcc-chassis-manager.12316.1674841342.core.gz)
+    <INFO> 3-May-2023::15:57:31.095 controller-1 confd[608]: snmp snmpv2-trap reqid=306728670 10.255.0.143:162 (TimeTicks sysUpTime=10751)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-03 15:57:11.960474641 UTC)(OCTET STRING alertDescription=Core dumped on Controller-1. process=vcc-chassis-man, location=/var/shared/core/container/core..vcc-chassis-manager.23134.1683129427.core.gz)
+    <INFO> 3-May-2023::16:06:46.063 controller-1 confd[608]: snmp snmpv2-trap reqid=306728930 10.255.0.143:162 (TimeTicks sysUpTime=66248)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-03 16:06:44.715885633 UTC)(OCTET STRING alertDescription=Core dumped on Controller-1. process=vcc-chassis-man, location=/var/shared/core/container/core..vcc-chassis-manager.60309.1683130000.core.gz)
+    <INFO> 15-May-2023::13:12:55.460 controller-1 confd[602]: snmp snmpv2-trap reqid=1448346415 10.255.0.143:162 (TimeTicks sysUpTime=2966)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-15 13:12:40.087271132 UTC)(OCTET STRING alertDescription=Core dumped on Controller-1. process=vcc-chassis-man, location=/var/shared/core/container/core..vcc-chassis-manager.13051.1684156356.core.gz)
+    <INFO> 15-May-2023::13:13:01.846 controller-1 confd[602]: snmp snmpv2-trap reqid=1448346431 10.255.0.143:162 (TimeTicks sysUpTime=3605)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-15 13:12:40.269591691 UTC)(OCTET STRING alertDescription=Core dumped on Controller-2. process=rsyslogd, location=/var/shared/core/container/core..rsyslogd.14019.1684156359.core.gz)
+    syscon-1-active# 
+
 
 **reboot                         .1.3.6.1.4.1.12276.1.1.1.327681**
 
@@ -2207,7 +2249,9 @@ This trap will indicate that the system has rebooted. Its possible this was a pl
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include reboot
+    syscon-1-active# file show log/confd/snmp.log | include reboot 
+
+
     <INFO> 10-Jul-2023::13:41:23.284 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423794 10.255.0.144:161 (TimeTicks sysUpTime=2909)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:41:23.281740739 UTC)(OCTET STRING alertDescription=reboot - appliance-1.chassis.local F5OS-A R5R10 version 1.7.0-0528)
 
 **raid-event                     .1.3.6.1.4.1.12276.1.1.1.393216**
@@ -2220,60 +2264,62 @@ This trap will indicate that the system has rebooted. Its possible this was a pl
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include backplane
+    syscon-1-active# file show log/confd/snmp.log | include backplane   
 
 Interface / Optic Related Traps
 -------------------------------
 
-The SNMP traps below will correspond the the Digital Diagnostics Monitoring (DDM) that the F5OS layer runs to check the status and health of the fiberoptic trasceivers installed. The **show portgroups** CLI command in F5OS will display the current ddm thresholds for wanring and alarm as well as current values.
+The SNMP traps below will correspond the the Digital Diagnostics Monitoring (DDM) that the F5OS layer runs to check the status and health of the fiberoptic trasceivers installed. The **show portgroups** CLI command in the VELOS chassis partition will display the current ddm thresholds for wanring and alarm as well as current values.
 
 
 .. code-block:: bash
 
-    r10900-1# show portgroups 
-    portgroups portgroup 1
+    Production-2# show portgroups | more
+    portgroups portgroup 1/1
     state vendor-name      "F5 NETWORKS INC."
     state vendor-oui       009065
     state vendor-partnum   "OPT-0031        "
     state vendor-revision  A0
-    state vendor-serialnum "X3CAU6G         "
+    state vendor-serialnum "X3CAU5A         "
     state transmitter-technology "850 nm VCSEL"
     state media            100GBASE-SR4
     state optic-state      QUALIFIED
     state ddm rx-pwr low-threshold alarm -14.0
     state ddm rx-pwr low-threshold warn -11.0
-    state ddm rx-pwr instant val-lane1 -0.66
-    state ddm rx-pwr instant val-lane2 -0.77
-    state ddm rx-pwr instant val-lane3 -0.79
-    state ddm rx-pwr instant val-lane4 -0.9
+    state ddm rx-pwr instant val-lane1 -0.06
+    state ddm rx-pwr instant val-lane2 0.06
+    state ddm rx-pwr instant val-lane3 -0.02
+    state ddm rx-pwr instant val-lane4 0.17
     state ddm rx-pwr high-threshold alarm 3.4
     state ddm rx-pwr high-threshold warn 2.4
     state ddm tx-pwr low-threshold alarm -10.0
     state ddm tx-pwr low-threshold warn -8.0
-    state ddm tx-pwr instant val-lane1 -1.17
-    state ddm tx-pwr instant val-lane2 -0.52
-    state ddm tx-pwr instant val-lane3 -1.02
-    state ddm tx-pwr instant val-lane4 -1.48
+    state ddm tx-pwr instant val-lane1 -0.83
+    state ddm tx-pwr instant val-lane2 -0.07
+    state ddm tx-pwr instant val-lane3 -0.28
+    state ddm tx-pwr instant val-lane4 -0.1
     state ddm tx-pwr high-threshold alarm 5.0
     state ddm tx-pwr high-threshold warn 3.0
     state ddm temp low-threshold alarm -5.0
     state ddm temp low-threshold warn 0.0
-    state ddm temp instant val 34.5781
+    state ddm temp instant val 28.8203
     state ddm temp high-threshold alarm 75.0
     state ddm temp high-threshold warn 70.0
     state ddm bias low-threshold alarm 0.003
     state ddm bias low-threshold warn 0.005
-    state ddm bias instant val-lane1 0.007494
-    state ddm bias instant val-lane2 0.007474
-    state ddm bias instant val-lane3 0.007494
-    state ddm bias instant val-lane4 0.00746
+    state ddm bias instant val-lane1 0.003934
+    state ddm bias instant val-lane2 0.007516
+    state ddm bias instant val-lane3 0.00749
+    state ddm bias instant val-lane4 0.007464
     state ddm bias high-threshold alarm 0.013
     state ddm bias high-threshold warn 0.011
+    state ddm bias latched-status low-warn-lane "[ 1 ]"
     state ddm vcc low-threshold alarm 2.97
     state ddm vcc low-threshold warn 3.135
-    state ddm vcc instant val 3.3162
+    state ddm vcc instant val 3.2626
     state ddm vcc high-threshold alarm 3.63
     state ddm vcc high-threshold warn 3.465
+
 
 To keep a balance between the number of DDM alert types that need to be defined and the speficity of the alerts, the type, direction (high/low), and severity uniquely identify each DDM alert type. For example, ddmTempHiWarn is the alert that indicates a high temperature warning condition. Temperature and Voltage (Vcc) are both only specific to the fiber-optic transceiver and not the lanes within Transmitter power, Receiver power, and Transmitter bias are specific to each of the 4 lanes in a fiber-optic transceiver. The lanes that are involved in each alert are embedded at the front of the description string of the alert. A description string might look like: Lanes 1,3 Receiver power low alarm.
 
@@ -2293,7 +2339,7 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
 
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include ddm    
+    Production-2# file show log/snmp.log | include ddm   
 
 **txPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262400**
 
