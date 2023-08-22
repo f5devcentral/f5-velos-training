@@ -2138,6 +2138,8 @@ Enabling SNMP Traps in the API
 SNMP Trap Details
 =================
 
+This section provides examples of SNMP traps and their associated log messages, and what troubleshooting steps are recommended.
+
 Device Fault Traps
 ------------------
 
