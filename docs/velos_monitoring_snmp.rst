@@ -1006,38 +1006,83 @@ You can poll the following SNMP OIDs to get detailed Interface stats for each ph
 
 **NOTE: Stats for LAG interfaces are not currently populated.**
 
+This MIB is supported on both the VELOS system controller and chassis partition layers.
+
+Below is an example of the ifTable on the VELOS system controller.
+
 .. code-block:: bash
 
-    prompt% snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 32 -Cw 500  -c public 10.255.2.4 ifTable
+    prompt % snmptable -v 2c  -c public -m ALL 10.255.2.3 ifTable                                
     SNMP table: IF-MIB::ifTable
 
-    Index                           Descr                           Type                            Mtu                             Speed                           PhysAddress                     AdminStatus                     OperStatus                      LastChange                      InOctets                        InUcastPkts                     InNUcastPkts                    InDiscards                      InErrors                        InUnknownProtos                 
-    OutOctets                       OutUcastPkts                    OutNUcastPkts                   OutDiscards                     OutErrors                       OutQLen                         Specific                        
+    ifIndex ifDescr         ifType ifMtu    ifSpeed    ifPhysAddress ifAdminStatus ifOperStatus ifLastChange ifInOctets ifInUcastPkts ifInNUcastPkts ifInDiscards ifInErrors ifInUnknownProtos ifOutOctets ifOutUcastPkts ifOutNUcastPkts ifOutDiscards ifOutErrors ifOutQLen ifSpecific
+    134217984       ? ethernetCsmacd     ? 4294967295 0:94:a1:8e:d0:7d            up           up            ?          ?             ?              ?         2517          0                 ?           ?              ?               ?            16           0         ?          ?
+    134218001       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:1:1            up           up            ?          ?             ?              ?            6          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218002       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:1:2            up           up            ?          ?             ?              ?           53          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218003       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:1:3            up           up            ?          ?             ?              ?          189          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218004       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:1:4            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218005       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:1:5            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218006       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:1:6            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218007       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:1:7            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218008       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:1:8            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218018       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:2:2            up           up            ?          ?             ?              ?       123430          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218019       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:2:3            up           up            ?          ?             ?              ?       123384          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218020       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:2:4            up           up            ?          ?             ?              ?       123633          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218021       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:2:5            up           up            ?          ?             ?              ?           87          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218022       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:2:6            up           up            ?          ?             ?              ?           25          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218033       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:1            up           up            ?          ?             ?              ?      2905895          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218034       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:2            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218035       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:3            up           up            ?          ?             ?              ?       294605          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218036       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:4            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218037       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:5            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218038       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:6            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218039       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:7            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218040       ? ethernetCsmacd     ?          ?   5a:a5:5a:1:3:8            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218049       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:1:4:1            up           up            ?          ?             ?              ?            1          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218240       ? ethernetCsmacd     ? 4294967295 0:94:a1:8e:d0:7e            up           up            ?          ?             ?              ?         2521          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218257       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:1:1            up           up            ?          ?             ?              ?            6          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218258       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:1:2            up           up            ?          ?             ?              ?           35          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218259       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:1:3            up           up            ?          ?             ?              ?            6          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218260       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:1:4            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218261       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:1:5            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218262       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:1:6            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218263       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:1:7            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218264       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:1:8            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218274       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:2:2            up           up            ?          ?             ?              ?       134473          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218275       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:2:3            up           up            ?          ?             ?              ?       134441          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218276       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:2:4            up           up            ?          ?             ?              ?       134273          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218277       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:2:5            up           up            ?          ?             ?              ?           77          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218278       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:2:6            up           up            ?          ?             ?              ?           79          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218289       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:1            up           up            ?          ?             ?              ?      3205615          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218290       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:2            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218291       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:3            up           up            ?          ?             ?              ?      3129748          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218292       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:4            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218293       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:5            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218294       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:6            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218295       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:7            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218296       ? ethernetCsmacd     ?          ?   5a:a5:5a:2:3:8            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    134218305       ? ethernetCsmacd     ? 4294967295   5a:a5:5a:2:4:1            up           up            ?          ?             ?              ?            1          0                 ?           ?              ?               ?             0           0         ?          ?
+    prompt % 
 
-    index: [33554441]
-    33554441                        VELOS Interface 1/1.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:0                 up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
-    ?                               ?                               ?                               0                               0                               ?                               ?                               
 
-    index: [33554442]
-    33554442                        VELOS Interface 1/2.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:1                 up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
-    ?                               ?                               ?                               0                               0                               ?                               ?                               
+Below is an example of the ifTable on the VELOS chassis partition.
 
-    index: [33554449]
-    33554449                        VELOS Interface 2/1.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:80                up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
-    ?                               ?                               ?                               0                               0                               ?                               ?                               
+.. code-block:: bash
 
-    index: [33554450]
-    33554450                        VELOS Interface 2/2.0           ethernetCsmacd                  9600                            4294967295                      0:94:a1:8e:d0:81                up                              up                              ?                               ?                               ?                               ?                               0                               0                               ?                               
-    ?                               ?                               ?                               0                               0                               ?                               ?                               
+    prompt % snmptable -v 2c  -c public -m ALL 10.255.2.4 ifTable
+    SNMP table: IF-MIB::ifTable
 
-    index: [67108865]
-    67108865                        Interface Arista LAG            ieee8023adLag                   9600                            4294967295                      0:94:a1:8e:d0:19                up                              up                              ?                               ?                               ?                               ?                               ?                               ?                               ?                               
-    ?                               ?                               ?                               ?                               ?                               ?                               ?                               
+    ifIndex                       ifDescr         ifType ifMtu    ifSpeed    ifPhysAddress ifAdminStatus ifOperStatus ifLastChange ifInOctets ifInUcastPkts ifInNUcastPkts ifInDiscards ifInErrors ifInUnknownProtos ifOutOctets ifOutUcastPkts ifOutNUcastPkts ifOutDiscards ifOutErrors ifOutQLen ifSpecific
+    33554441         VELOS Interface 1/1.0 ethernetCsmacd  9600 4294967295  0:94:a1:8e:d0:0            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    33554442         VELOS Interface 1/2.0 ethernetCsmacd  9600 4294967295  0:94:a1:8e:d0:1            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    33554449         VELOS Interface 2/1.0 ethernetCsmacd  9600 4294967295 0:94:a1:8e:d0:80            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    33554450         VELOS Interface 2/2.0 ethernetCsmacd  9600 4294967295 0:94:a1:8e:d0:81            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    67108865          Interface Arista LAG  ieee8023adLag  9600 4294967295 0:94:a1:8e:d0:19            up           up            ?          ?             ?              ?            ?          ?                 ?           ?              ?               ?             ?           ?         ?          ?
+    67108866 Interface HA-Interconnect LAG  ieee8023adLag  9600 4294967295 0:94:a1:8e:d0:1a            up           up            ?          ?             ?              ?            ?          ?                 ?           ?              ?               ?             ?           ?         ?          ?
+    prompt % 
 
-    index: [67108866]
-    67108866                        Interface HA-Interconnect LAG   ieee8023adLag                   9600                            4294967295                      0:94:a1:8e:d0:1a                up                              up                              ?                               ?                               ?                               ?                               ?                               ?                               ?                               
-    ?                               ?                               ?                               ?                               ?                               ?                               ?                               
-    prompt% 
+
+Below is an example of the ifXTable on the VELOS chassis partition.
 
 .. code-block:: bash
 
@@ -1084,15 +1129,176 @@ Below is an example table view from an SNMP manager polling SNMP ifIndex OID: .1
 | 67108866    | HA-Interconnect LAG | ieee8023adLag  | 9600      | 4294967295  | 00-94-A1-8E-D0-0C  | up                | up               | 0                | 0              | 0                 | 0                  | 33554441         |                |                       |                 |                    |                     |                   |                 |               |                |                 |
 +-------------+---------------------+----------------+-----------+-------------+--------------------+-------------------+------------------+------------------+----------------+-------------------+--------------------+------------------+----------------+-----------------------+-----------------+--------------------+---------------------+-------------------+-----------------+---------------+----------------+-----------------+
 
+Below is an example of the ifXTable on the VELOS system controller.
 
-Chassis Partition CPU
+.. code-block:: bash
+
+    prompt% snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 384  -c public 10.255.2.3 ifXTable
+    SNMP table: IF-MIB::ifXTable
+
+    Name            InMulticastPkts InBroadcastPkts OutMulticastPkt OutBroadcastPkt HCInOctets      HCInUcastPkts   HCInMulticastPk HCInBroadcastPk HCOutOctets     HCOutUcastPkts  HCOutMulticastP HCOutBroadcastP LinkUpDownTrapE HighSpeed       PromiscuousMode ConnectorPresen Alias           CounterDisconti 
+
+    index: [134217984]
+    1/mgmt0         ?               ?               ?               ?               5256447951      26117830        3199633         11958654        1284746094      12249665        3754677         2822129         ?               1000            ?               ?               ?               ?               
+
+    index: [134218001]
+    1/1.1           ?               ?               ?               ?               261779722836    604212954       74323736        15322929        207926430337    471079523       10414149        73420322        ?               10000           ?               ?               ?               ?               
+
+    index: [134218002]
+    1/1.2           ?               ?               ?               ?               28838246661     138497259       3732736         3695            70500241214     296539589       81022690        74640975        ?               10000           ?               ?               ?               ?               
+
+    index: [134218003]
+    1/1.3           ?               ?               ?               ?               22146223413     40899308        3652100         3641            15225553533     143001922       10414132        59378141        ?               10000           ?               ?               ?               ?               
+
+    index: [134218004]
+    1/1.4           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218005]
+    1/1.5           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218006]
+    1/1.6           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218007]
+    1/1.7           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218008]
+    1/1.8           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218018]
+    1/2.2           ?               ?               ?               ?               355245442939    971329076       85              19168869        621694386364    1309594382      74058406        125142614       ?               10000           ?               ?               ?               ?               
+
+    index: [134218019]
+    1/2.3           ?               ?               ?               ?               355481740189    971503869       87              19156691        561428589029    1063693447      7               39              ?               10000           ?               ?               ?               ?               
+
+    index: [134218020]
+    1/2.4           ?               ?               ?               ?               355531739556    971484256       89              19153502        573883917574    1023613049      11              33              ?               10000           ?               ?               ?               ?               
+
+    index: [134218021]
+    1/2.5           ?               ?               ?               ?               1727422530414   3159484769      1671945         88157276        1137069381464   2569256766      71577584        72821761        ?               25000           ?               ?               ?               ?               
+
+    index: [134218022]
+    1/2.6           ?               ?               ?               ?               1186128412      12597315        436289          9696545         1971917206      19283845        372886          11575733        ?               25000           ?               ?               ?               ?               
+
+    index: [134218033]
+    1/3.1           ?               ?               ?               ?               59926647230288  705018820503    413684          173             59926337516501  705015208994    319360          233846          ?               ?               ?               ?               ?               ?               
+
+    index: [134218034]
+    1/3.2           ?               ?               ?               ?               59926337596401  705015209893    319360          233846          59926400309453  705015915595    413684          173             ?               ?               ?               ?               ?               ?               
+
+    index: [134218035]
+    1/3.3           ?               ?               ?               ?               33739155        294652          60540           233958          0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218036]
+    1/3.4           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218037]
+    1/3.5           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218038]
+    1/3.6           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218039]
+    1/3.7           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218040]
+    1/3.8           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218049]
+    1/4.1           ?               ?               ?               ?               114             1               1               0               0               0               0               0               ?               10000           ?               ?               ?               ?               
+
+    index: [134218240]
+    2/mgmt0         ?               ?               ?               ?               8492534662      28123574        2246292         12499684        1456103313      11723154        3513257         2748            ?               1000            ?               ?               ?               ?               
+
+    index: [134218257]
+    2/1.1           ?               ?               ?               ?               45158149931     335891800       3670791         7031            262343095350    556163732       3514571         2161857         ?               10000           ?               ?               ?               ?               
+
+    index: [134218258]
+    2/1.2           ?               ?               ?               ?               47778945263     161419401       3652777         14105413        179226043162    221980951       3514995         2162145         ?               10000           ?               ?               ?               ?               
+
+    index: [134218259]
+    2/1.3           ?               ?               ?               ?               19278691083     109372485       3733349         14105207        24803211900     62880670        3514581         2160163         ?               10000           ?               ?               ?               ?               
+
+    index: [134218260]
+    2/1.4           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218261]
+    2/1.5           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218262]
+    2/1.6           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218263]
+    2/1.7           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218264]
+    2/1.8           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218274]
+    2/2.2           ?               ?               ?               ?               614994539260    1039229986      96              19189667        327746681079    1053203293      74059777        125117686       ?               10000           ?               ?               ?               ?               
+
+    index: [134218275]
+    2/2.3           ?               ?               ?               ?               614704695105    1039015065      90              19184746        300923198304    868146419       8               13              ?               10000           ?               ?               ?               ?               
+
+    index: [134218276]
+    2/2.4           ?               ?               ?               ?               614767925027    1039083864      74              19183370        287301628581    848312641       4               8               ?               10000           ?               ?               ?               ?               
+
+    index: [134218277]
+    2/2.5           ?               ?               ?               ?               1137089236634   2969440399      71577662        72824101        1727431047527   2346222975      1672069         88157747        ?               25000           ?               ?               ?               ?               
+
+    index: [134218278]
+    2/2.6           ?               ?               ?               ?               1972381831      19285046        372927          11576404        1186170267      12597599        436314          9696846         ?               25000           ?               ?               ?               ?               
+
+    index: [134218289]
+    2/3.1           ?               ?               ?               ?               69053336213017  775775728931    775686247756    3061716         69037152661741  775702419290    775613848272    7894            ?               ?               ?               ?               ?               ?               
+
+    index: [134218290]
+    2/3.2           ?               ?               ?               ?               69037152688708  775702419592    775613848574    7894            69053063762986  775772523623    775683042450    3061714         ?               ?               ?               ?               ?               ?               
+
+    index: [134218291]
+    2/3.3           ?               ?               ?               ?               259297071       3129752         59889           3069663         0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218292]
+    2/3.4           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218293]
+    2/3.5           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218294]
+    2/3.6           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218295]
+    2/3.7           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218296]
+    2/3.8           ?               ?               ?               ?               0               0               0               0               0               0               0               0               ?               ?               ?               ?               ?               ?               
+
+    index: [134218305]
+    2/4.1           ?               ?               ?               ?               114             1               1               0               0               0               0               0               ?               10000           ?               ?               ?               ?               
+    j.mccarron@J0MW6JR9CV mibs % 
+
+CPU Processor Stats
 --------------------- 
 
-The CPU Processor Stats Table provides details on the Intel CPU processors which are running in the BX110 line card. It displays the core and thread counts, as well as the cache size, frequency and model number. Note how each BX110 blade has 14 CPU cores which are hyperthreaded, so there are 28 cpuThreadCnt per blade.
+The CPU Processor Stats Table provides details on the Intel CPU processors which are running in the BX110 line card or on the system controller, depending on where the SNMP request is sent. It displays the core and thread counts, as well as the cache size, frequency and model number. 
 
-SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.1
+F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable OID: .1.3.6.1.4.1.12276.1.2.1.1.1
 
+This MIB is supported on both the VELOS system controller and chassis partition layers.
 
+Below is an example polling the F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable on the VELOS system controller.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuProcessorStatsTable
+
+            index cpuIndex cpuCacheSize cpuCoreCnt       cpuFreq cpuStepping cpuThreadCnt                          cpuModelName
+    controller-1        1     2048(KB)          8 2200.000(MHz)           1            8 Intel(R) Atom(TM) CPU C3758 @ 2.20GHz
+    controller-2        1     2048(KB)          8 2200.000(MHz)           1            8 Intel(R) Atom(TM) CPU C3758 @ 2.20GHz
+    prompt%
+
+Below is an example polling the F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable on the VELOS chassis partition. Note how each BX110 blade has 14 CPU cores which are hyperthreaded, so there are 28 cpuThreadCnt per blade.
 
 .. code-block:: bash
 
@@ -1102,7 +1308,7 @@ SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1
     index cpuIndex cpuCacheSize cpuCoreCnt       cpuFreq cpuStepping cpuThreadCnt                            cpuModelName
     blade-1        0    19712(KB)         14 2112.103(MHz)           4           28 Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz
     blade-2        0    19712(KB)         14 1908.929(MHz)           4           28 Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz
-
+    prompt%
 
 
 
@@ -1119,9 +1325,25 @@ SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1
 CPU Utilization Stats Table
 ---------------------------
 
-The table below shows the total CPU utilization per blade within a chassis partition over 5 seconds, 1 minute, and 5 minutes averages as well as the current value.
+The table below shows the total CPU utilization per blade within a chassis partition or on the system controllers over 5 seconds, 1 minute, and 5 minutes averages as well as the current value. 
+
+This MIB is supported on both the VELOS system controller and chassis partition layers.
 
 SNMP CPU Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.2
+
+Below is an example of an SNMP response from the system controller.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:cpuUtilizationStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuUtilizationStatsTable
+
+    cpuCore    cpuCurrent cpuTotal5secAvg cpuTotal1minAvg cpuTotal5minAvg
+        cpu 37 percentage   49 percentage   52 percentage   47 percentage
+        cpu 49 percentage   37 percentage   42 percentage   39 percentage
+    prompt% 
+
+Below is an example of an SNMP response from a chassis partition.
 
 .. code-block:: bash
 
@@ -1146,7 +1368,38 @@ CPU Core Stats Table
 
 The table below shows the total CPU utilization per vCPU within a chassis partition over 5 seconds, 1 minute, and 5 minutes averages. Below is an example of a 2 blade chassis partition. Each blade has 28 vCPUs or cores:
 
+This MIB is supported on both the VELOS system controller and chassis partition layers.
+
+
 SNMP CPU Core Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.3
+
+Below is an example SNMP response from the system controllers.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:cpuCoreStatsTable 
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuCoreStatsTable
+
+    coreIndex coreName   coreCurrent coreTotal5secAvg coreTotal1minAvg coreTotal5minAvg
+            0     cpu0 51 percentage    46 percentage    45 percentage    48 percentage
+            1     cpu1 43 percentage    51 percentage    43 percentage    47 percentage
+            2     cpu2 38 percentage    43 percentage    43 percentage    46 percentage
+            3     cpu3 41 percentage    51 percentage    45 percentage    48 percentage
+            4     cpu4 22 percentage    48 percentage    45 percentage    48 percentage
+            5     cpu5 47 percentage    50 percentage    43 percentage    46 percentage
+            6     cpu6 18 percentage    48 percentage    45 percentage    49 percentage
+            7     cpu7 47 percentage    50 percentage    44 percentage    47 percentage
+            0     cpu0 38 percentage    34 percentage    36 percentage    37 percentage
+            1     cpu1 32 percentage    38 percentage    38 percentage    40 percentage
+            2     cpu2 47 percentage    42 percentage    36 percentage    40 percentage
+            3     cpu3 39 percentage    67 percentage    41 percentage    39 percentage
+            4     cpu4 37 percentage    33 percentage    39 percentage    39 percentage
+            5     cpu5 98 percentage    57 percentage    38 percentage    39 percentage
+            6     cpu6 42 percentage    42 percentage    39 percentage    40 percentage
+            7     cpu7 49 percentage    47 percentage    38 percentage    39 percentage
+    prompt% 
+
+Below is an example SNMP response from a chassis partition.
 
 .. code-block:: bash
 
@@ -1334,9 +1587,25 @@ SNMP CPU Core Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.3
 Disk Info Table
 ---------------
 
-The following table displays information about the disks installed on each blade in the current chassis partition.
+The following table displays information about the disks installed on each blade in the current chassis partitionor on the system controllers in the VELOS system.
 
 SNMP Disk Info Table OID: .1.3.6.1.4.1.12276.1.2.1.2.1
+
+This MIB is supported on both the VELOS system controller and chassis partition layers.
+
+Below is an example of an SNMP response from the system controllers.
+
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:diskInfoTable  
+    SNMP table: F5-PLATFORM-STATS-MIB::diskInfoTable
+
+    diskName                  diskModel diskVendor diskVersion   diskSerialNo diskSize diskType
+    nvme0n1 SAMSUNG MZ1LB960HAJQ-00007    Samsung    EDA7602Q S435NE0MA00234 683.00GB     nvme
+    nvme0n1 SAMSUNG MZ1LB960HAJQ-00007    Samsung    EDA7602Q S435NE0MA00209 683.00GB     nvme
+    prompt%
+
+Below is an example of an SNMP response from a chassis partition.
 
 .. code-block:: bash
 
@@ -1362,7 +1631,23 @@ Disk Utilization Stats Table
 
 The table below shows the current disk utilization and performance of the disk on each BX110 blade within the current chassis partition.
 
+This MIB is supported on both the VELOS system controller and chassis partition layers.
+
 SNMP Disk Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.2.2
+
+Below is an example of an SNMP response from the system controllers.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::diskUtilizationStatsTable
+
+    diskPercentageUsed  diskTotalIops diskReadIops diskReadMerged     diskReadBytes diskReadLatencyMs   diskWriteIops diskWriteMerged       diskWriteBytes diskWriteLatencyMs
+                    ? 225124465 IOPs  754014 IOPs         616139  9625482752 bytes         146668 ms 1141617894 IOPs      1017149001 10947930554880 bytes        32045027 ms
+                    ? 230817683 IOPs  772963 IOPs         722503 10391336960 bytes         132484 ms 1171208497 IOPs       929037671 10557217084416 bytes        31396802 ms
+    prompt%
+
+Below is an example of an SNMP response from a chassis partition.
 
 .. code-block:: bash
 
@@ -1389,9 +1674,27 @@ Temperature Stats Table
 
 The table below shows the temperature stats for the current chassis partition.
 
+This MIB is supported on both the VELOS system controller and chassis partition layers.
+
 SNMP Temperature Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.3.1
 
+Below is an example of an SNMP response from the system controllers.
+
 .. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:temperatureStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::temperatureStatsTable
+
+        tempCurrent     tempAverage     tempMinimum     tempMaximum
+    10.4 centigrade 10.4 centigrade  9.7 centigrade 13.1 centigrade
+    19.3 centigrade 19.2 centigrade 18.5 centigrade 22.3 centigrade
+    prompt%
+
+
+
+.. code-block:: bash
+
+Below is an example of an SNMP response from a chassis partition.
 
     prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:temperatureStatsTable    
     SNMP table: F5-PLATFORM-STATS-MIB::temperatureStatsTable
@@ -1413,6 +1716,8 @@ SNMP Temperature Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.3.1
 Memory Stats Table
 ------------------
 
+This MIB displays the memory utilization for the system controllers. It is not currently supported on the chassis partitions. 
+
 F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1
 
 .. code-block:: bash
@@ -1429,7 +1734,7 @@ F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1
 FPGA Stats Table
 ----------------
 
-The FPGA Stats table shows the current FPGA version. There are two different FPGA's on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). 
+The FPGA Stats table shows the current FPGA versions. There are two different FPGA's on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer.
 
 F5-PLATFORM-STATS-MIB:fpgaTable OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 
@@ -1461,6 +1766,59 @@ F5-PLATFORM-STATS-MIB:fpgaTable OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 Firmware Table
 ----------------
 
+This MIB provides the current firmware status and version for all subsystems. This MIB is supported at both the system controller and chassis partition layers.
+
+Below is an example of an SNMP response from the system controllers.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:fwTable  
+    SNMP table: F5-PLATFORM-STATS-MIB::fwTable
+
+                                fwName     fwVersion configurable fwUpdateStatus
+                    fw-version-lop-app             ?        false           none
+                fw-version-fpga-vqf0             ?        false           none
+                fw-version-fpga-atse0             ?        false           none
+                    fw-version-lop-app             ?        false           none
+                fw-version-fpga-vqf0             ?        false           none
+                fw-version-fpga-atse0             ?        false           none
+                    fw-version-lop-app             ?        false           none
+                fw-version-fpga-vqf0             ?        false           none
+                fw-version-fpga-atse0             ?        false           none
+                        fw-version-bios    2.02.170.1        false           none
+                        fw-version-cpld      01.03.0A        false           none
+                        fw-version-sirr        1.1.52        false           none
+                    fw-version-drive      EDA7602Q        false           none
+                    fw-version-bios-me     4.0.4.705        false           none
+                    fw-version-lcd-app 2.02.141.00.1        false           none
+                    fw-version-lop-app 2.01.1228.0.1        false           none
+            fw-version-lcd-bootloader 2.01.109.00.1        false           none
+            fw-version-lop-bootloader 1.02.1019.0.1        false           none
+            fw-version-vfc-app-fanCtrl1  2.00.960.0.1        false           none
+            fw-version-vpc-app-psuCtrl1  2.00.827.0.1        false           none
+            fw-version-vpc-app-psuCtrl2  2.00.827.0.1        false           none
+    fw-version-vfc-bootloader-fanCtrl1  1.02.798.0.1        false           none
+    fw-version-vpc-bootloader-psuCtrl1  1.02.669.0.1        false           none
+    fw-version-vpc-bootloader-psuCtrl2  1.02.669.0.1        false           none
+                        fw-version-bios    2.02.170.1        false           none
+                        fw-version-cpld      01.03.0A        false           none
+                        fw-version-sirr        1.1.52        false           none
+                    fw-version-drive      EDA7602Q        false           none
+                    fw-version-bios-me     4.0.4.705        false           none
+                    fw-version-lcd-app 2.02.141.00.1        false           none
+                    fw-version-lop-app 2.01.1228.0.1        false           none
+            fw-version-lcd-bootloader 2.01.109.00.1        false           none
+            fw-version-lop-bootloader 1.02.1019.0.1        false           none
+            fw-version-vfc-app-fanCtrl1  2.00.960.0.1        false           none
+            fw-version-vpc-app-psuCtrl1  2.00.827.0.1        false           none
+            fw-version-vpc-app-psuCtrl2  2.00.827.0.1        false           none
+    fw-version-vfc-bootloader-fanCtrl1  1.02.798.0.1        false           none
+    fw-version-vpc-bootloader-psuCtrl1  1.02.669.0.1        false           none
+    fw-version-vpc-bootloader-psuCtrl2  1.02.669.0.1        false           none
+    prompt%
+
+Below is an example of an SNMP response from the chassis partition.
+
 .. code-block:: bash
 
     prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:fwTable  
@@ -1490,7 +1848,7 @@ Firmware Table
     prompt%
 
 
-    
+
 
 SNMP Trap Support in F5OS
 ========================
