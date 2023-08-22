@@ -19,7 +19,7 @@ F5OS Controller MIBs:
 NetSNMP MIBs System Controller:
 
 - EtherLike-MIB
-- HOST-RESOURCES-MIB
+- HOST-RESOURCES-MIB (Included for dependency reasons, not supported)
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
@@ -53,7 +53,7 @@ F5OS Chassis Partition MIBs:
 NetSNMP MIBs Chassis Partition:
 
 - EtherLike-MIB
-- HOST-RESOURCES-MIB
+- HOST-RESOURCES-MIB (Included for dependency reasons, not supported)
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
@@ -100,7 +100,7 @@ By default, SNMP queries are not allowed into the F5OS platform layer. Before en
     Commit complete.
     syscon-1-active(config-allowed-ip-snmp)# 
 
-Currently you can add one IP address/port pair per **allowed-ip** name with an optional prefix length to specify a CIDR block contaning multiple addresses. If you require more than one non-contiguous IP address you can add it under another name as seen below. 
+Currently you can add one IP address/port pair per **allowed-ip** name with an optional prefix length to specify a CIDR block containing multiple addresses. If you require more than one non-contiguous IP address, you can add it under another name as seen below. 
 
 .. code-block:: bash
 
@@ -117,7 +117,7 @@ Currently you can add one IP address/port pair per **allowed-ip** name with an o
 Adding Allowed IPs for SNMP via API
 -----------------------------------
 
-By default SNMP queries are not allowed into the F5OS layer. Before enabling SNMP you'll need to open up the out-of-band management port on F5OS-C to allow SNMP queries (on both the system controller and on all the chassis partitions). Below is an example of allowing multiple SNMP endpoints to access SNMP on the system on port 161.
+By default, SNMP queries are not allowed into the F5OS layer. Before enabling SNMP. you'll need to open up the out-of-band management port on F5OS-C to allow SNMP queries (on both the system controller and on all the chassis partitions). Below is an example of allowing multiple SNMP endpoints to access SNMP on the system on port 161.
 
 .. code-block:: bash
 
@@ -277,13 +277,13 @@ In the body of the API call, add the descriptions as seen below.
         }
     }
 
-You can then issue the following GET API call to view each interfaces configuration including the new description. Note, the interface name has to be encoded in Postman because of the special characters. The %2F will represent the slash in the interface name.
+You can then issue the following GET API call to view each interfaces configuration including the new description. Note, the interface name must be encoded in Postman because of the special characters. The %2F will represent the slash in the interface name.
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/interface=1%2Fmgmt0/config
 
-You should see a response similar to the one below.
+You should see a response like the one below.
 
 .. code-block:: json
 
@@ -438,7 +438,7 @@ To add descriptions for both the in-band interfaces and LAGs in the CLI, follow 
 
     PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
-Below is the proper formatitng for the body of the API call. You will need to adjust to the number and type of interfaces to match what is in your chassis partition.
+Below is the proper formatting for the body of the API call. You will need to adjust to the number and type of interfaces to match what is in your chassis partition.
 
 .. code-block:: json
 
@@ -867,11 +867,11 @@ You can enable SNMP individually at the system controller layer, and for each ch
 Enabling SNMP via CLI prior to F5OS-C 1.5.x
 -------------------------------------------
 
-Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated, and has been improved in F5OS-C 1.5.x and later. SNMPv3 support has also been added in F5OS-C 1.5.0. We recomend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
+Setting up SNMP can be done from the CLI by enabling an SNMP community such as **public**. Below is an example of enabling SNMP monitoring on a chassis partition, but the same configuration can be done on the system controller as well. The configuration in releases prior to F5OS-C 1.5.x is somewhat complicated and has been improved in F5OS-C 1.5.x and later. SNMPv3 support has also been added in F5OS-C 1.5.0. We recommend you use the later F5OS-C releases and the examples in the next section. This section is provided for reference for those that may still be running earlier versions of F5OS-C.
 
 To enable SNMP on F5OS-C 1.4.x and earlier use the following CLI commands. If you are running F5OS-C 1.5.0 or later skip this section and move onto the next section.
 
-You can configure the SNMP system paramters including the System Contact, System Location, and System Name as seen below:
+You can configure the SNMP system parameters including the System Contact, System Location, and System Name as seen below:
 
 .. code-block:: bash
 
@@ -939,7 +939,7 @@ You can then display the SNMP community configuration using the **show system sn
 
     Production-1(config)#
 
-You may also configure SNMP users for SNMPv3 support, since SNMPv3 is a user-based security model. This provides addtional support for authentication and privacy protocols. Authentication protocols of **md5**, **sha**, or **none** are supported. For privacy protocols **aes**, **des**, or **none** are supported. You'll then be prompted to enter the privacy-password.
+You may also configure SNMP users for SNMPv3 support, since SNMPv3 is a user-based security model. This provides additional support for authentication and privacy protocols. Authentication protocols of **md5**, **sha**, or **none** are supported. For privacy protocols **aes**, **des**, or **none** are supported. You'll then be prompted to enter the privacy-password.
 
 .. code-block:: bash
 
@@ -966,7 +966,7 @@ Polling SNMP Endpoints
 ======================
 
 
-Once SNMP is properly setup, and allow-lists are enabled (in both the system controllers and chassis partitions) you can poll SNMP objects from remote endpoints. If you have an SNMP manager it is recommended you download the appropriate MIBs from the VELOS chassis, and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilites from a remote client to validate the SNMP endpoints. You can then poll/query either the chassis partiton or the system controller via SNMP to get stats from the system using the following SNMP OID's:
+Once SNMP is properly setup and allow-lists are enabled (in both the system controllers and chassis partitions) you can poll SNMP objects from remote endpoints. If you have an SNMP manager it is recommended you download the appropriate MIBs from the VELOS chassis and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilities from a remote client to validate the SNMP endpoints. You can then poll/query either the chassis partition or the system controller via SNMP to get stats from the system using the following SNMP OID's:
 
 
 SNMP System
@@ -1001,7 +1001,7 @@ Example output:
 SNMP ifTable & ifXTable
 -----------------------
 
-You can poll the following SNMP OIDs to get detailed Interface stats for each physical port on the BX110 blades, and also for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chasssis partitions directly. Below are table view of the ifTable and ifXTable, you can poll individual interfaces if needed.
+You can poll the following SNMP OIDs to get detailed Interface stats for each physical port on the BX110 blades, and for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chassis partitions directly. Below are table view of the ifTable and ifXTable, you can poll individual interfaces if needed.
 
 **NOTE: Stats for LAG interfaces are not currently populated.**
 
@@ -1329,7 +1329,7 @@ Below is an example of an SNMP response from a chassis partition.
 CPU Core Stats Table
 ---------------------------
 
-The CPU Core Stats Table table shows the total CPU utilization per CPU within a chassis partition or system controller over 5 seconds, 1 minute, and 5 minutes averages. 
+The CPU Core Stats Table shows the total CPU utilization per CPU within a chassis partition or system controller over 5 seconds, 1 minute, and 5 minutes averages. 
 
 This MIB is supported on both the VELOS system controller and chassis partition layers.
 
@@ -1362,7 +1362,7 @@ Below is an example SNMP response from the system controllers. There are two sys
             7     cpu7 49 percentage    47 percentage    38 percentage    39 percentage
     prompt% 
 
-Below is an example SNMP response from a chassis partition. In this example there is a 2 blade chassis partition. Each blade has 28 vCPUs.
+Below is an example SNMP response from a chassis partition. In this example there is a 2-blade chassis partition. Each blade has 28 vCPUs.
 
 .. code-block:: bash
 
@@ -1558,7 +1558,7 @@ This MIB displays the memory utilization for the system controllers. It is not c
 FPGA Stats Table
 ----------------
 
-The FPGA Stats table shows the current FPGA versions. There are two different FPGA's on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer.
+The FPGA Stats table shows the current FPGA versions. There are two different FPGAs on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer.
 
 **F5-PLATFORM-STATS-MIB:fpgaTable OID: .1.3.6.1.4.1.12276.1.2.1.5.1**
 
@@ -1888,7 +1888,7 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 +---------------------------------------+-----------------------------------+
 | datapath-fault                        |  .1.3.6.1.4.1.12276.1.1.1.65578   |
 +---------------------------------------+-----------------------------------+
-| boot-time-integrety-status            |  .1.3.6.1.4.1.12276.1.1.1.65579   |
+| boot-time-integrity-status            |  .1.3.6.1.4.1.12276.1.1.1.65579   |
 +---------------------------------------+-----------------------------------+
 | fipsError                             |  .1.3.6.1.4.1.12276.1.1.1.196608  |
 +---------------------------------------+-----------------------------------+
@@ -1989,7 +1989,7 @@ Enabling SNMP Traps in the CLI for Releases Prior to F5OS-C 1.5.0
 
 Enter **config** mode and enter the following commands to enable SNMP traps. Specifiy your SNMP trap receiver's IP address and port after the **snmpTargetAddrTAddress** field. Make sure to **commit** any changes.
 
-Note: The **snmpTargetAddrTAddress** is currently unintuitive and is easier to configure in F5OS-C 1.5.0 and later. The Trap target IP configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, The 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 & 161 UDP port is "10.255.0.139.0.161".
+Note: The **snmpTargetAddrTAddress** is currently unintuitive and is easier to configure in F5OS-C 1.5.0 and later. The Trap target IP configuration for SNMP is ip + port. The calculation for port 2 octet conversion is 1st octet port >> 8 and 2nd octet is port & 255. For a typical 161 UDP port trap receiver, the 1st octet is 161 >> 8 = 0, and 2nd octet 161 & 255 = 161. The IP address configuration for an IP address of 10.255.0.139 & 161 UDP port is "10.255.0.139.0.161".
 
 
 .. code-block:: bash
@@ -2145,7 +2145,7 @@ Device Fault Traps
 
 **hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**   
 
-This set of taps may indicate a fault with various hardware components on the VELOS chassi like CPUs or fans. Examine the trap for specific details of what subsystem has failed to determine the proper troubleshooting steps to persue. 
+This set of taps may indicate a fault with various hardware components on the VELOS chassis like CPUs or fans. Examine the trap for specific details of what subsystem has failed to determine the proper troubleshooting steps to pursue. 
 
 .. code-block:: bash
 
@@ -2176,7 +2176,7 @@ This set of taps may indicate a fault with various hardware components on the VE
 
 **firmware-fault                 .1.3.6.1.4.1.12276.1.1.1.65537**
 
-This set of taps may indicate a fault or temporary warning with the firmware upgrade process. Monitor the firmware upgrade process via SNMP traps, or via the CLI, API, or webUI alerts. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each componenent returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run, and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
+This set of taps may indicate a fault or temporary warning with the firmware upgrade process. Monitor the firmware upgrade process via SNMP traps, or via the CLI, API, or webUI alerts. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
 
 .. image:: images/velos_monitoring_snmp/imagefirmwareupgrade.png
@@ -2313,7 +2313,7 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **blade-thermal-fault            .1.3.6.1.4.1.12276.1.1.1.65548**
 
-This SNMP Trap is for the VELOS system, and it monitors various temperature sensors on each VELOS blade. The sensors monitor CPU, FGPA, and memory temperatures and will warn if the temperature goes beyond recommended guidelines. If a thermal fault occurs you can verify if it has cleared due to a temporary condition. You can also check the system fans to ensure they are operating properly in the VELOS system via the command **show components component fantray-1**. You can also check the environment in which the VELOS system is running to ensure the data center is not operating at too high termperature.
+This SNMP Trap is for the VELOS system, and it monitors various temperature sensors on each VELOS blade. The sensors monitor CPU, FGPA, and memory temperatures and will warn if the temperature goes beyond recommended guidelines. If a thermal fault occurs, you can verify if it has cleared due to a temporary condition. You can also check the system fans to ensure they are operating properly in the VELOS system via the command **show components component fantray-1**. You can also check the environment in which the VELOS system is running to ensure the data center is not operating at too high temperature.
 
 .. code-block:: bash
 
@@ -2380,7 +2380,7 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 
 **psu-fault                      .1.3.6.1.4.1.12276.1.1.1.66305**
 
-This set of SNMP traps will relate to the health of the power supplies in the VELOS chassis. You may see traps realted to insetion or removal of power supplies, inputs, and voltage thresholds. It is best to determine if the trap was a temporary condition, and if not and an error state persists, then determine if the inputs of the power supplies have become disconnected, or changed. If the problem only occurs on one power supply, then you can try swapping inputs/power supplies during a maintenance window to see if the issue follows the power supply or the input source. 
+This set of SNMP traps will relate to the health of the power supplies in the VELOS chassis. You may see traps related to insertion or removal of power supplies, inputs, and voltage thresholds. It is best to determine if the trap was a temporary condition, and if not and an error state persists, then determine if the inputs of the power supplies have become disconnected or changed. If the problem only occurs on one power supply, then you can try swapping inputs/power supplies during a maintenance window to see if the issue follows the power supply or the input source. 
 
 .. code-block:: bash
 
@@ -2431,7 +2431,7 @@ Power Supply Module
 
     syscon-1-active# file show log/confd/snmp.log | include module-communication-error
 
-    The logs below are an example from an rSerise system.
+    The logs below are an example from an rSeries system.
 
     <INFO> 12-Apr-2023::11:48:24.877 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130717 10.255.8.22:6011 (TimeTicks sysUpTime=52511)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-12 11:48:24.872113844 UTC)(OCTET STRING alertDescription=Module communication error detected)
     <INFO> 12-Apr-2023::11:48:24.926 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130718 10.255.8.22:6011 (TimeTicks sysUpTime=52516)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:48:24.872136218 UTC)(OCTET STRING alertDescription=PSU communication error detected)
@@ -2464,7 +2464,7 @@ Firmware Update Status Traps
 
 **firmware-update-status         .1.3.6.1.4.1.12276.1.1.1.65550**
 
-These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each componenent returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run, and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
+These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
 
 .. image:: images/velos_monitoring_snmp/imagefirmwareupgrade.png
@@ -2519,7 +2519,7 @@ You can use the **show system alarms** CLI command to see if the drive is in an 
     65544 appliance CRITICAL Running out of drive capacity 2023-03-27 15:41:37.847817761 UTC
     65545 appliance EMERGENCY Power fault detected in hardware 2023-03-24 12:37:13.713715583 UTC
 
-The **show system events** CLI command will provide more details of the drive events that have occured.
+The **show system events** CLI command will provide more details of the drive events that have occurred.
 
 .. code-block:: bash
 
@@ -2590,7 +2590,7 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 
 **reboot                         .1.3.6.1.4.1.12276.1.1.1.327681**
 
-This trap will indicate that the system has rebooted. Its possible this was a planned reboot initiated by the administrator. Below is an example of a reboot trap.
+This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator. Below is an example of a reboot trap.
 
 .. code-block:: bash
 
@@ -2614,7 +2614,7 @@ This trap will indicate that the system has rebooted. Its possible this was a pl
 Interface / Optic Related Traps
 -------------------------------
 
-The SNMP traps below will correspond the the Digital Diagnostics Monitoring (DDM) that the F5OS layer runs to check the status and health of the fiberoptic trasceivers installed. The **show portgroups** CLI command in the VELOS chassis partition will display the current ddm thresholds for wanring and alarm as well as current values.
+The SNMP traps below will correspond to the Digital Diagnostics Monitoring (DDM) that the F5OS layer runs to check the status and health of the fiberoptic transceivers installed. The **show portgroups** CLI command in the VELOS chassis partition will display the current ddm thresholds for warning and alarm as well as current values.
 
 
 .. code-block:: bash
@@ -2666,7 +2666,7 @@ The SNMP traps below will correspond the the Digital Diagnostics Monitoring (DDM
     state ddm vcc high-threshold warn 3.465
 
 
-To keep a balance between the number of DDM alert types that need to be defined and the speficity of the alerts, the type, direction (high/low), and severity uniquely identify each DDM alert type. For example, ddmTempHiWarn is the alert that indicates a high temperature warning condition. Temperature and Voltage (Vcc) are both only specific to the fiber-optic transceiver and not the lanes within Transmitter power, Receiver power, and Transmitter bias are specific to each of the 4 lanes in a fiber-optic transceiver. The lanes that are involved in each alert are embedded at the front of the description string of the alert. A description string might look like: Lanes 1,3 Receiver power low alarm.
+To keep a balance between the number of DDM alert types that need to be defined and the specificity of the alerts, the type, direction (high/low), and severity uniquely identify each DDM alert type. For example, ddmTempHiWarn is the alert that indicates a high temperature warning condition. Temperature and Voltage (Vcc) are both only specific to the fiber-optic transceiver and not the lanes within Transmitter power, Receiver power, and Transmitter bias are specific to each of the 4 lanes in a fiber-optic transceiver. The lanes that are involved in each alert are embedded at the front of the description string of the alert. A description string might look like: Lanes 1,3 Receiver power low alarm.
 
 Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold of -11.0 and a low alarm threshold of -14.0. There is also a high warn threshold of 2.4 and a high alarm threshold of 3.4. There are 4 lanes for this specific transceiver, and the current readings are all within acceptable ranges. If any of the lanes were to cross the low or high warn or alarm thresholds, then an SNMP trap would be generated.
 
@@ -2772,7 +2772,7 @@ The ddm vcc (Voltage) threshold for a specific transceiver has reached low warn 
 Troubleshooting SNMP
 ====================
 
-There are SNMP logs in the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located within the **log/confd** directory of the system controller, and in the **/log** directory in the chassis partition. Below is an example using the system contoller F5OS CLI to view the SNMP logs. 
+There are SNMP logs in the system controllers and within each chassis partition. SNMP information is captured in the **snmp.log** located within the **log/confd** directory of the system controller, and in the **/log** directory in the chassis partition. Below is an example using the system controller F5OS CLI to view the SNMP logs. 
 
 **Note: The CLI and webUI abstract the full paths for logs so that they are easier to find; if using root access to the bash shell, then the full path to the system controller SNMP logs is **/var/confd/log/snmp.log**.
 
