@@ -981,7 +981,7 @@ Example output:
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$  snmpwalk -ObenU -v2c -c public 10.255.2.4 .1.3.6.1.2.1.1
+    prompt%  snmpwalk -ObenU -v2c -c public 10.255.2.4 .1.3.6.1.2.1.1
     .1.3.6.1.2.1.1.1.0 = STRING: Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : Partition services version 1.6.0-12952
     .1.3.6.1.2.1.1.2.0 = OID: .1.3.6.1.4.1.12276.1.3.1.6
     .1.3.6.1.2.1.1.3.0 = Timeticks: (14137257) 1 day, 15:16:12.57
@@ -996,7 +996,7 @@ Example output:
     .1.3.6.1.2.1.1.9.1.3.2 = STRING: The MIB module to describe generic objects for network interface sub-layers
     .1.3.6.1.2.1.1.9.1.4.1 = Timeticks: (53) 0:00:00.53
     .1.3.6.1.2.1.1.9.1.4.2 = Timeticks: (53) 0:00:00.53
-    FLD-ML-00054045:~ jmccarron$ 
+    prompt% 
 
 
 SNMP ifTable & ifXTable
@@ -1008,7 +1008,7 @@ You can poll the following SNMP OIDs to get detailed Interface stats for each ph
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$ snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 32 -Cw 500  -c public 10.255.2.4 ifTable
+    prompt% snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 32 -Cw 500  -c public 10.255.2.4 ifTable
     SNMP table: IF-MIB::ifTable
 
     Index                           Descr                           Type                            Mtu                             Speed                           PhysAddress                     AdminStatus                     OperStatus                      LastChange                      InOctets                        InUcastPkts                     InNUcastPkts                    InDiscards                      InErrors                        InUnknownProtos                 
@@ -1037,11 +1037,11 @@ You can poll the following SNMP OIDs to get detailed Interface stats for each ph
     index: [67108866]
     67108866                        Interface HA-Interconnect LAG   ieee8023adLag                   9600                            4294967295                      0:94:a1:8e:d0:1a                up                              up                              ?                               ?                               ?                               ?                               ?                               ?                               ?                               
     ?                               ?                               ?                               ?                               ?                               ?                               ?                               
-    FLD-ML-00054045:~ jmccarron$ 
+    prompt% 
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$ snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 384  -c public 10.255.2.4 ifXTable
+    prompt% snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 384  -c public 10.255.2.4 ifXTable
     SNMP table: IF-MIB::ifXTable
 
     Name            InMulticastPkts InBroadcastPkts OutMulticastPkt OutBroadcastPkt HCInOctets      HCInUcastPkts   HCInMulticastPk HCInBroadcastPk HCOutOctets     HCOutUcastPkts  HCOutMulticastP HCOutBroadcastP LinkUpDownTrapE HighSpeed       PromiscuousMode ConnectorPresen Alias           CounterDisconti 
@@ -1063,7 +1063,7 @@ You can poll the following SNMP OIDs to get detailed Interface stats for each ph
 
     index: [67108866]
     HA-Interconnect ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               
-    FLD-ML-00054045:~ jmccarron$
+    prompt%
 
 Below is an example table view from an SNMP manager polling SNMP ifIndex OID: .1.3.6.1.2.1.2.2.1
 
@@ -1092,6 +1092,21 @@ The CPU Processor Stats Table provides details on the Intel CPU processors which
 
 SNMP Chassis Partition CPU Processor Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.1
 
+
+
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuProcessorStatsTable
+
+    index cpuIndex cpuCacheSize cpuCoreCnt       cpuFreq cpuStepping cpuThreadCnt                            cpuModelName
+    blade-1        0    19712(KB)         14 2112.103(MHz)           4           28 Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz
+    blade-2        0    19712(KB)         14 1908.929(MHz)           4           28 Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz
+
+
+
+
+
 +-----------+--------------+------------------+----------------+---------------+-----------------+------------------+------------------------------------------+-----------------------------+
 | **Index** | **cpuIndex** | **cpuCacheSize** | **cpuCoreCnt** | **cpuFreq**   | **cpuStepping** | **cpuThreadCnt** | **cpuModelName**                         | **Index Value**             |
 +===========+==============+==================+================+===============+=================+==================+==========================================+=============================+
@@ -1108,6 +1123,15 @@ The table below shows the total CPU utilization per blade within a chassis parti
 
 SNMP CPU Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.1.2
 
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:cpuUtilizationStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuUtilizationStatsTable
+
+    cpuCore    cpuCurrent cpuTotal5secAvg cpuTotal1minAvg cpuTotal5minAvg
+        cpu 11 percentage   10 percentage    9 percentage   10 percentage
+        cpu  2 percentage    3 percentage    3 percentage    3 percentage
+
 +-------------+----------------+---------------------+---------------------+---------------------+---------------------------+
 | **cpuCore** |	**cpuCurrent** | **cpuTotal5secAvg** | **cpuTotal1minAvg** | **cpuTotal5minAvg** | **Index Value**           |
 +=============+================+=====================+=====================+=====================+===========================+
@@ -1123,6 +1147,71 @@ CPU Core Stats Table
 The table below shows the total CPU utilization per vCPU within a chassis partition over 5 seconds, 1 minute, and 5 minutes averages. Below is an example of a 2 blade chassis partition. Each blade has 28 vCPUs or cores:
 
 SNMP CPU Core Stas Table OID: .1.3.6.1.4.1.12276.1.2.1.1.3
+
+.. code-block:: bash
+
+    prompt%   snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:cpuCoreStatsTable       
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuCoreStatsTable
+
+    coreIndex coreName   coreCurrent coreTotal5secAvg coreTotal1minAvg coreTotal5minAvg
+            0     cpu0  9 percentage     8 percentage    12 percentage    11 percentage
+            1     cpu1  8 percentage     6 percentage     8 percentage     5 percentage
+            2     cpu2  9 percentage    12 percentage    11 percentage    11 percentage
+            3     cpu3 15 percentage    11 percentage    10 percentage    11 percentage
+            4     cpu4  4 percentage     6 percentage     8 percentage     5 percentage
+            5     cpu5  4 percentage     4 percentage     7 percentage     4 percentage
+            6     cpu6  6 percentage     4 percentage     8 percentage     5 percentage
+            7     cpu7  2 percentage     3 percentage     7 percentage     5 percentage
+            8     cpu8  8 percentage     6 percentage     6 percentage     4 percentage
+            9     cpu9 12 percentage     8 percentage    11 percentage    11 percentage
+            10    cpu10 10 percentage    10 percentage    12 percentage    11 percentage
+            11    cpu11  7 percentage     6 percentage     6 percentage     6 percentage
+            12    cpu12  6 percentage     6 percentage     6 percentage     6 percentage
+            13    cpu13  5 percentage     6 percentage     6 percentage     6 percentage
+            14    cpu14  6 percentage     5 percentage    14 percentage    13 percentage
+            15    cpu15  6 percentage     7 percentage     7 percentage     5 percentage
+            16    cpu16  7 percentage    10 percentage    13 percentage    13 percentage
+            17    cpu17 13 percentage     8 percentage    13 percentage    14 percentage
+            18    cpu18  7 percentage     9 percentage     8 percentage     5 percentage
+            19    cpu19  1 percentage     5 percentage     6 percentage     4 percentage
+            20    cpu20  5 percentage     3 percentage     5 percentage     4 percentage
+            21    cpu21  1 percentage     2 percentage     6 percentage     4 percentage
+            22    cpu22 10 percentage     6 percentage     6 percentage     4 percentage
+            23    cpu23 10 percentage     6 percentage    14 percentage    13 percentage
+            24    cpu24  8 percentage     6 percentage    11 percentage    12 percentage
+            25    cpu25 16 percentage    12 percentage    21 percentage    21 percentage
+            26    cpu26 25 percentage    20 percentage    23 percentage    22 percentage
+            27    cpu27 15 percentage    11 percentage    24 percentage    23 percentage
+            0     cpu0  4 percentage     2 percentage     2 percentage     2 percentage
+            1     cpu1  2 percentage     2 percentage     3 percentage     3 percentage
+            2     cpu2  2 percentage     2 percentage     3 percentage     3 percentage
+            3     cpu3  3 percentage     2 percentage     3 percentage     3 percentage
+            4     cpu4  4 percentage     2 percentage     2 percentage     3 percentage
+            5     cpu5  4 percentage     2 percentage     2 percentage     2 percentage
+            6     cpu6  4 percentage     3 percentage     2 percentage     2 percentage
+            7     cpu7  2 percentage     2 percentage     3 percentage     3 percentage
+            8     cpu8  7 percentage     3 percentage     2 percentage     2 percentage
+            9     cpu9  3 percentage     3 percentage     3 percentage     2 percentage
+            10    cpu10  3 percentage     2 percentage     2 percentage     2 percentage
+            11    cpu11  7 percentage     7 percentage     7 percentage     7 percentage
+            12    cpu12  6 percentage     7 percentage     7 percentage     7 percentage
+            13    cpu13  7 percentage     6 percentage     6 percentage     6 percentage
+            14    cpu14  0 percentage     0 percentage     3 percentage     3 percentage
+            15    cpu15  2 percentage     1 percentage     4 percentage     3 percentage
+            16    cpu16  0 percentage     1 percentage     4 percentage     2 percentage
+            17    cpu17  9 percentage     9 percentage     3 percentage     2 percentage
+            18    cpu18  1 percentage     1 percentage     1 percentage     2 percentage
+            19    cpu19  1 percentage     1 percentage     1 percentage     3 percentage
+            20    cpu20  1 percentage     1 percentage     1 percentage     2 percentage
+            21    cpu21  0 percentage     1 percentage     3 percentage     3 percentage
+            22    cpu22  0 percentage     1 percentage     3 percentage     5 percentage
+            23    cpu23  0 percentage     0 percentage     2 percentage     2 percentage
+            24    cpu24  0 percentage     0 percentage     2 percentage     2 percentage
+            25    cpu25  3 percentage     3 percentage     6 percentage     6 percentage
+            26    cpu26  5 percentage     3 percentage     8 percentage     6 percentage
+            27    cpu27  2 percentage     2 percentage     5 percentage     6 percentage
+    prompt% 
+
 
 
 +---------------+--------------+-----------------+----------------------+----------------------+----------------------+-------------------------------+
@@ -1249,6 +1338,16 @@ The following table displays information about the disks installed on each blade
 
 SNMP Disk Info Table OID: .1.3.6.1.4.1.12276.1.2.1.2.1
 
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskInfoTable    
+    SNMP table: F5-PLATFORM-STATS-MIB::diskInfoTable
+
+    diskName           diskModel diskVendor diskVersion     diskSerialNo  diskSize diskType
+    nvme0n1 INTEL SSDPELKX010T8      Intel    VCV10301 BTLJ832408MW1P0I 1000.00GB     nvme
+    nvme0n1 INTEL SSDPELKX010T8      Intel    VCV10301 BTLJ83040J6T1P0I 1000.00GB     nvme
+    prompt%
+
 +--------------+----------------------------+----------------+-----------------+------------------+----------------+--------------+-------------------------------------------------------+
 | **diskName** | **diskModel**              | **diskVendor** | **diskVersion** | **diskSerialNo** | **diskSize**   | **diskType** | **Index Value**                                       |
 +==============+============================+================+=================+==================+================+==============+=======================================================+
@@ -1264,6 +1363,16 @@ Disk Utilization Stats Table
 The table below shows the current disk utilization and performance of the disk on each BX110 blade within the current chassis partition.
 
 SNMP Disk Utilization Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.2.2
+
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::diskUtilizationStatsTable
+
+    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged    diskReadBytes diskReadLatencyMs  diskWriteIops diskWriteMerged      diskWriteBytes diskWriteLatencyMs
+                    ? 61438858 IOPs  385138 IOPs             39 5277251584 bytes         133577 ms 715914107 IOPs       488863893 7439268038144 bytes        49397122 ms
+                    ? 43878413 IOPs  106619 IOPs             57 2466797568 bytes          56394 ms 467008954 IOPs       400818555 4270643787264 bytes        12735703 ms
+    prompt%
 
 
 +------------------------+-------------------+------------------+--------------------+-------------------+-----------------------+-------------------+---------------------+--------------------+-------------------------+-------------------------------------------------------+
@@ -1282,6 +1391,15 @@ The table below shows the temperature stats for the current chassis partition.
 
 SNMP Temperature Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.3.1
 
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:temperatureStatsTable    
+    SNMP table: F5-PLATFORM-STATS-MIB::temperatureStatsTable
+
+        tempCurrent     tempAverage     tempMinimum     tempMaximum
+    29.0 centigrade 28.8 centigrade 28.0 centigrade 31.0 centigrade
+    27.0 centigrade 26.0 centigrade 25.0 centigrade 29.0 centigrade
+    prompt% 
 
 +----------------+-----------------+-----------------+-----------------+---------------------------+
 | **tempCurent** | **tempAverage** | **tempMinimum** | **tempMaximum** | **Index Value**           |                            
@@ -1295,7 +1413,17 @@ SNMP Temperature Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.3.1
 Memory Stats Table
 ------------------
 
-SNMP Memory Stats Table OID:.1.3.6.1.4.1.12276.1.2.1.4.1
+F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1
+
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    SNMP table: F5-PLATFORM-STATS-MIB::memoryStatsTable
+
+        memAvailable         memFree memPercentageUsed  memPlatformTotal   memPlatformUsed
+    24210726912 bytes 761626624 bytes     28 percentage 33594761216 bytes 12607877120 bytes
+    23474733056 bytes 468787200 bytes     30 percentage 33594761216 bytes 13459021824 bytes
+    prompt% 
 
 
 FPGA Stats Table
@@ -1303,7 +1431,19 @@ FPGA Stats Table
 
 The FPGA Stats table shows the current FPGA version. There are two different FPGA's on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). 
 
-SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
+F5-PLATFORM-STATS-MIB:fpgaTable OID: .1.3.6.1.4.1.12276.1.2.1.5.1
+
+.. code-block:: bash
+
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:fpgaTable       
+    SNMP table: F5-PLATFORM-STATS-MIB::fpgaTable
+
+    fpgaIndex fpgaVersion
+        vqf_0       8.9.5
+        atse_0      7.10.2
+        vqf_0       8.9.5
+        atse_0      7.10.2
+    prompt%
 
 +---------------+-----------------+--------------------------------------------------+
 | **fpgaIndex** | **fpgaVersion** | **Index Value**                                  |                            
@@ -1317,6 +1457,40 @@ SNMP FPGA Stats Table OID: .1.3.6.1.4.1.12276.1.2.1.5.1
 | atse_0        | 7.7.3           | 7.98.108.97.100.101.45.49.6.97.116.115.101.95.48 |  
 +---------------+-----------------+--------------------------------------------------+
 
+
+Firmware Table
+----------------
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:fwTable  
+    SNMP table: F5-PLATFORM-STATS-MIB::fwTable
+
+                        fwName                         fwVersion configurable fwUpdateStatus
+                        QAT0 Lewisburg C62X Crypto/Compression        false              ?
+                        QAT1 Lewisburg C62X Crypto/Compression        false              ?
+                        QAT2 Lewisburg C62X Crypto/Compression        false              ?
+            fw-version-bios                        3.00.222.1        false           none
+            fw-version-cpld                          04.03.02        false           none
+            fw-version-sirr                            1.1.58        false           none
+            fw-version-bios-me                         4.0.4.736        false           none
+            fw-version-lop-app                     2.00.1053.0.1        false              ?
+    fw-version-drives-nvme0n1                                 ?        false           none
+    fw-version-lop-bootloader                      1.02.868.0.1        false           none
+                        QAT0 Lewisburg C62X Crypto/Compression        false              ?
+                        QAT1 Lewisburg C62X Crypto/Compression        false              ?
+                        QAT2 Lewisburg C62X Crypto/Compression        false              ?
+            fw-version-bios                        3.00.222.1        false           none
+            fw-version-cpld                          04.03.02        false           none
+            fw-version-sirr                            1.1.58        false           none
+            fw-version-bios-me                         4.0.4.736        false           none
+            fw-version-lop-app                     2.00.1053.0.1        false              ?
+    fw-version-drives-nvme0n1                                 ?        false           none
+    fw-version-lop-bootloader                      1.02.868.0.1        false           none
+    prompt%
+
+
+    
 
 SNMP Trap Support in F5OS
 ========================
