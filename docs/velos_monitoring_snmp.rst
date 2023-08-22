@@ -1501,7 +1501,7 @@ Below is an example of an SNMP response from a chassis partition.
 Temperature Stats Table
 -----------------------
 
-The table below shows the temperature stats for the current chassis partition.
+The table below shows the temperature stats for the current chassis partition or system controller depending on where the SNMP query is sent.
 
 This MIB is supported on both the VELOS system controller and chassis partition layers.
 
@@ -1521,9 +1521,11 @@ Below is an example of an SNMP response from the system controllers.
 
 
 
-.. code-block:: bash
+
 
 Below is an example of an SNMP response from a chassis partition.
+
+.. code-block:: bash
 
     prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:temperatureStatsTable    
     SNMP table: F5-PLATFORM-STATS-MIB::temperatureStatsTable
