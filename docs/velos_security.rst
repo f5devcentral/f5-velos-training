@@ -1814,39 +1814,41 @@ The API call should return output similar to what is seen below.
 
 
 Audit Logging
-=============
+============
 
-F5OS has the ability to log all configuration changes and access to the F5OS layer in audit logs. In versions prior to F5OS-C 1.6.0, all access and configuration changes are logged in one of two separate **audit.log** files. The files reside in the in one of the following paths in the F5OS filesystem when logged in as root; **/var/F5/system/log/audit.log** or **/var/log/audit/audit.log**. If you are logged into the F5OS CLI as admin, then the actual paths are simplified to **log/system/audit.log** and **/log/host/audit/audit.log**.
+F5OS has the ability to log all configuration changes and access to the F5OS layer in audit logs. In versions prior to F5OS-C 1.6.0, all access and configuration changes for the system controller layer are logged in one of two separate **audit.log** files. The files reside in the in one of the following paths in the F5OS filesystem when logged in as root; **/var/F5/controller/log/audit.log** or **/var/log/audit/audit.log**. If you are logged into the F5OS CLI as admin, then the actual paths are simplified to **log/controller/audit.log** and **/log/host/audit/audit.log** for the system controller layer.
+
+In versions prior to F5OS-C 1.6.0, all access and configuration changes for the chassis partition layer are logged in one of two separate **audit.log** files. The files reside in the in one of the following paths in the F5OS filesystem when logged in as root on the system controller; **/var/F5/partition<ID#>/log/audit.log** or **/var/log/audit/audit.log**. If you are logged into the F5OS CLI as admin, then the actual paths are simplified to **log/audit.log** and **/log/host/audit/audit.log** for the system controller layer.
 
 In versions prior to F5OS-C 1.6.0, the audit.log files may only be viewed locally within the F5OS layer, the audit logs cannot be sent to a remote syslog location. F5OS-A 1.6.0 adds the ability to allow audit.log entries to be redirected to a remote syslog location, as well as changing the log format to conform to standard F5OS syslog format of all audit related events. Details on the two different implementations are below.
 
 Viewing Audit Logs via F5OS CLI (F5OS-A 1.6.0 and Later)
 --------------------------------------------------------
 
-Any information related to login/logout or configuration changes are logged in the **log/system/audit.log** location. By default these events are not sent to a configured remote syslog location. If you would like to send informational audit level messages to a remote syslog server, then you must explicitly enable audit events.
+Any information related to login/logout or configuration changes are logged in the **log/controller/audit.log** location. By default these events are not sent to a configured remote syslog location. If you would like to send informational audit level messages to a remote syslog server, then you must explicitly enable audit events.
 
-First you must configure the remote syslog destination. As part of that configuration, you will specify the IP address, port, and protocol of the remote syslog server. To send audit.log events to the remote server you must add the command **selectors selector AUTHPRIV DEBUG** as seen below.
+First, you must configure the remote syslog destination. As part of that configuration, you will specify the IP address, port, and protocol of the remote syslog server. To send audit.log events to the remote server you must add the command **selectors selector AUTHPRIV DEBUG** as seen below.
 
 .. code-block:: bash
 
-    r10900(config)# system logging remote-servers remote-server 10.255.0.139
-    r10900(config-remote-server-10.255.0.139)# config remote-port 514
-    r10900(config-remote-server-10.255.0.139)# config proto udp
-    r10900(config-remote-server-10.255.0.139)# selectors selector LOCAL0 INFORMATIONAL
-    r10900(config-remote-server-10.255.0.139)# selectors selector AUTHPRIV DEBUG
-    r10900(config-remote-server-10.255.0.139)# commit
-    % No modifications to commit.
-    r10900(config-remote-server-10.255.0.139)#
+    syscon-1-active(config)# system logging remote-servers remote-server 10.255.85.164
+    syscon-1-active(config-remote-server-10.255.0.139)# config remote-port 514
+    syscon-1-active(config-remote-server-10.255.0.139)# config proto udp
+    syscon-1-active(config-remote-server-10.255.0.139)# selectors selector LOCAL0 INFORMATIONAL
+    syscon-1-active(config-remote-server-10.255.0.139)# selectors selector AUTHPRIV DEBUG
+    syscon-1-active(config-remote-server-10.255.0.139)# commit
+    Commit complete.
+    syscon-1-active(config-remote-server-10.255.0.139)#
 
 Then, you can control the level of events that will be logged to the local audit.log file by configuring the **audit-service** **sw-component**. By default all audit events will be logged, but you can turn down the level of events
 
 .. code-block:: bash
 
-    r10900# show running-config system logging sw-components sw-component audit-service
+    syscon-1-active(config)# do show running-config system logging sw-components sw-component audit-service 
     system logging sw-components sw-component audit-service
     config name audit-service
     config description "Audit message handling service"
-    config severity DEBUG
+    config severity INFORMATIONAL
     !
 
 The formatting of audit logs provide the date/time in UTC, the account and ID who performed the action, the type of event, the asset affected, the type of access, and success or failure of the request. Separate log entries provide details on user access (login/login failures) information such as IP address and port and whether access was granted or not.
@@ -1855,46 +1857,368 @@ The formatting of audit logs provide the date/time in UTC, the account and ID wh
 Viewing Audit Logs via F5OS CLI
 -------------------------------
 
-Most audit events go to the **log/system/audit.log** location, while a few others such as CLI login failures are logged to **log/host/audit.log** in the current F5OS releases. In the F5OS CLI, the paths are simplified so that you don’t have to know the underlying directory structure. You can use the **file list path** command to see the files inside the **log/system/** directory; use the tab complete to see the options. You may choose either the **log/system** directory or the **log/host** directory. Note the **audit.log** file. 
+Most audit events go to the **log/controller/audit.log** location, while a few others such as CLI login failures are logged to **log/host/audit/audit.log** in the current F5OS releases. In the F5OS CLI, the paths are simplified so that you don’t have to know the underlying directory structure. You can use the **file list path** command to see the files inside the **log/controller/** directory; use the tab complete to see the options. You may choose either the **log/controller** directory or the **log/host/audit** directory. Note the **audit.log** file. 
 
 .. code-block:: bash
 
-    appliance-1# file list path log/
+    syscon-1-active# file list path log/
     Possible completions:
-    confd/  host/  system/
-    appliance-1# file list path log/system/
-    Possible completions:
-    audit.log                      confd.log          devel.log     devel.log.1    lcd.log           lcd.log.1           lcd.log.2.gz       
-    lcd.log.3.gz                   lcd.log.4.gz       lcd.log.5.gz  logrotate.log  logrotate.log.1   logrotate.log.2.gz  platform.log       
-    reprogram_chassis_network.log  rsyslogd_init.log  snmp.log      startup.log    startup.log.prev  trace/              vconsole_auth.log  
-    vconsole_startup.log           velos.log          webUI/        
-    appliance-1# file list path log/system/
+    confd/  controller/  host/
+    syscon-1-active# file list path log/controller/
+    entries {
+        name afu-cookie
+        date Wed Jul 12 20:22:09 UTC 2023
+        size 33B
+    }
+    entries {
+        name audit.log
+        date Wed Aug 23 18:38:05 UTC 2023
+        size 7.0MB
+    }
+    entries {
+        name audit.log.1
+        date Wed Jul 12 19:39:02 UTC 2023
+        size 11MB
+    }
+    entries {
+        name audit.log.2.gz
+        date Mon May 22 21:23:01 UTC 2023
+        size 512KB
+    }
+    entries {
+        name audit.log.3.gz
+        date Tue May  2 21:30:59 UTC 2023
+        size 498KB
+    }
+    entries {
+        name audit.log.4.gz
+        date Fri Apr  7 18:53:58 UTC 2023
+        size 512KB
+    }
+    entries {
+        name audit.log.5.gz
+        date Thu Apr  6 17:26:46 UTC 2023
+        size 507KB
+    }
+    entries {
+        name cc-confd
+        date Wed Aug  2 23:17:42 UTC 2023
+        size 1.2MB
+    }
+    entries {
+        name cc-confd-hal
+        date Wed Jul 12 20:21:45 UTC 2023
+        size 0B
+    }
+    entries {
+        name cc-confd-health
+        date Wed Aug 23 18:38:03 UTC 2023
+        size 74MB
+    }
+    entries {
+        name cc-confd-health-diag-agent
+        date Wed Jul 12 20:21:46 UTC 2023
+        size 0B
+    }
+    entries {
+        name cc-confd-init
+        date Wed Jul 12 20:21:44 UTC 2023
+        size 228KB
+    }
+    entries {
+        name cc-upgrade.dbg
+        date Wed Jul 12 20:22:04 UTC 2023
+        size 149KB
+    }
+    entries {
+        name chassis-manager
+        date Sun Aug 13 02:48:15 UTC 2023
+        size 76MB
+    }
+    entries {
+        name chassis-manager.1
+        date Mon Feb 27 01:46:02 UTC 2023
+        size 101MB
+    }
+    entries {
+        name confd
+        date Thu Jan 26 22:00:08 UTC 2023
+        size 0B
+    }
+    entries {
+        name confd_go_standby
+        date Wed Feb  1 19:40:21 UTC 2023
+        size 128B
+    }
+    entries {
+        name confd_image_remove
+        date Wed Jul 12 19:59:42 UTC 2023
+        size 142KB
+    }
+    entries {
+        name config-object-manager
+        date Wed Jul 12 20:21:50 UTC 2023
+        size 55MB
+    }
+    entries {
+        name config-object-manager-hal
+        date Wed Jul 12 20:21:45 UTC 2023
+        size 0B
+    }
+    entries {
+        name events/
+        date Wed Aug  2 23:18:00 UTC 2023
+        size 4.0KB
+    }
+    entries {
+        name ha
+        date Tue Aug 22 21:47:05 UTC 2023
+        size 29MB
+    }
+    entries {
+        name ha-hal
+        date Wed Jul 12 20:21:53 UTC 2023
+        size 0B
+    }
+    entries {
+        name ha.1
+        date Tue Mar 14 13:02:02 UTC 2023
+        size 101MB
+    }
+    entries {
+        name host-config
+        date Wed Aug 23 18:38:02 UTC 2023
+        size 23MB
+    }
+    entries {
+        name host-config-hal
+        date Wed Jul 12 20:21:48 UTC 2023
+        size 0B
+    }
+    entries {
+        name host-config.1
+        date Fri Aug 18 05:03:04 UTC 2023
+        size 101MB
+    }
+    entries {
+        name host-config.2.gz
+        date Fri Jul 14 08:29:04 UTC 2023
+        size 2.8MB
+    }
+    entries {
+        name host-config.3.gz
+        date Sun Jun 18 00:08:04 UTC 2023
+        size 2.8MB
+    }
+    entries {
+        name host-config.4.gz
+        date Tue May 16 09:18:04 UTC 2023
+        size 2.8MB
+    }
+    entries {
+        name host-config.5.gz
+        date Tue Apr 11 00:16:04 UTC 2023
+        size 2.9MB
+    }
+    entries {
+        name http_error_log
+        date Wed Jul 12 20:21:54 UTC 2023
+        size 9.5KB
+    }
+    entries {
+        name httpd/
+        date Sun May  7 18:26:04 UTC 2023
+        size 4.0KB
+    }
+    entries {
+        name image-server
+        date Mon Aug 21 16:27:13 UTC 2023
+        size 1.9MB
+    }
+    entries {
+        name image-server-dhcp
+        date Wed Aug 23 18:34:48 UTC 2023
+        size 6.9MB
+    }
+    entries {
+        name image-server-hal
+        date Wed Jul 12 20:21:54 UTC 2023
+        size 0B
+    }
+    entries {
+        name image-server-httpd
+        date Thu Jan 26 22:00:12 UTC 2023
+        size 0B
+    }
+    entries {
+        name image-server-monitor
+        date Mon Aug 21 16:27:13 UTC 2023
+        size 36KB
+    }
+    entries {
+        name lcd.log
+        date Wed Jul 12 20:07:03 UTC 2023
+        size 416KB
+    }
+    entries {
+        name logrotate.log
+        date Wed Aug 23 18:38:01 UTC 2023
+        size 2.2MB
+    }
+    entries {
+        name logrotate.log.1
+        date Wed Aug 23 12:17:01 UTC 2023
+        size 5.1MB
+    }
+    entries {
+        name logrotate.log.2.gz
+        date Tue Aug 22 21:29:01 UTC 2023
+        size 35KB
+    }
+    entries {
+        name partition-agent
+        date Wed Aug  2 23:17:43 UTC 2023
+        size 2.2MB
+    }
+    entries {
+        name partition-software-manager
+        date Wed Aug 23 18:38:07 UTC 2023
+        size 31MB
+    }
+    entries {
+        name partition-software-manager.1
+        date Tue Aug 22 11:46:03 UTC 2023
+        size 101MB
+    }
+    entries {
+        name partition-software-manager.2.gz
+        date Fri Aug 18 07:09:04 UTC 2023
+        size 3.9MB
+    }
+    entries {
+        name partition-software-manager.3.gz
+        date Mon Aug 14 02:32:03 UTC 2023
+        size 3.9MB
+    }
+    entries {
+        name partition-software-manager.4.gz
+        date Wed Aug  9 21:56:03 UTC 2023
+        size 3.9MB
+    }
+    entries {
+        name partition-software-manager.5.gz
+        date Sat Aug  5 17:21:04 UTC 2023
+        size 3.8MB
+    }
+    entries {
+        name partition-update
+        date Wed Aug 23 18:34:45 UTC 2023
+        size 35MB
+    }
+    entries {
+        name partition-update.1
+        date Sat Jul  1 17:53:02 UTC 2023
+        size 101MB
+    }
+    entries {
+        name pel_log
+        date Wed Aug 23 18:34:49 UTC 2023
+        size 69MB
+    }
+    entries {
+        name reprogram_chassis_network
+        date Wed Jul 12 20:22:05 UTC 2023
+        size 50KB
+    }
+    entries {
+        name rsyslogd_init.log
+        date Wed Aug 23 18:34:30 UTC 2023
+        size 97KB
+    }
+    entries {
+        name run/
+        date Wed Jul 12 20:21:45 UTC 2023
+        size 4.0KB
+    }
+    entries {
+        name sshd.terminal-server
+        date Wed Jul 12 20:22:13 UTC 2023
+        size 5.7KB
+    }
+    entries {
+        name switchd
+        date Wed Aug  2 23:17:42 UTC 2023
+        size 7.5MB
+    }
+    entries {
+        name switchd-hal
+        date Wed Jul 12 20:21:46 UTC 2023
+        size 0B
+    }
+    entries {
+        name system-update
+        date Wed Jul 12 20:12:46 UTC 2023
+        size 26KB
+    }
+    entries {
+        name terminal-server.default
+        date Wed Aug  2 23:17:41 UTC 2023
+        size 141KB
+    }
+    entries {
+        name tftp.log
+        date Wed Jul 12 20:31:43 UTC 2023
+        size 977B
+    }
+    entries {
+        name vcc-confd-go-standby-hal.102476
+        date Wed Feb  1 19:40:21 UTC 2023
+        size 0B
+    }
+    entries {
+        name vcc-confd-go-standby-hal.97587
+        date Mon Jan 30 18:49:00 UTC 2023
+        size 0B
+    }
+    entries {
+        name velos.log
+        date Wed Aug 23 18:34:24 UTC 2023
+        size 148MB
+    }
+    entries {
+        name velos.log.1
+        date Tue May  2 16:11:57 UTC 2023
+        size 513MB
+    }
+    syscon-1-active# 
 
-To view the contents of the **audit.log** file, use the command **file show path /log/system/audit.log**. This will show the entire log file from the beginning, but may not be the best way to troubleshoot a recent event:
+
+To view the contents of the **audit.log** file, use the command **file show path /log/controller/audit.log**. This will show the entire log file from the beginning, but may not be the best way to troubleshoot a recent event. You can append **| more** to the command to go through the file in pages.
 
 .. code-block:: bash
 
-    r10900# file show log/system/audit.log
-    <INFO> 9-Dec-2021::17:13:57.506 appliance-1 confd[106]: audit user: admin/20518 assigned to groups: admin
-    <INFO> 9-Dec-2021::17:13:57.506 appliance-1 confd[106]: audit user: admin/20518 created new session via cli from 172.27.196.47:52582 with ssh
-    <INFO> 9-Dec-2021::17:13:57.589 appliance-1 confd[106]: audit user: admin/20518 terminated session (reason: normal)
-    <INFO> 9-Dec-2021::17:13:57.633 appliance-1 confd[106]: audit user: admin/20519 assigned to groups: admin
-    <INFO> 9-Dec-2021::17:13:57.633 appliance-1 confd[106]: audit user: admin/20519 created new session via cli from 172.27.196.47:52582 with ssh
-    <INFO> 9-Dec-2021::18:14:14.380 appliance-1 confd[106]: audit user: admin/20519 terminated session (reason: timeout)
-    <INFO> 9-Dec-2021::18:19:38.135 appliance-1 confd[106]: audit user: admin/0 external authentication succeeded via rest from 172.18.3.162:0 with http, member of groups: admin
-    <INFO> 9-Dec-2021::18:19:38.135 appliance-1 confd[106]: audit user: admin/0 logged in via rest from 172.18.3.162:0 with http using external authentication
-    <INFO> 9-Dec-2021::18:19:38.136 appliance-1 confd[106]: audit user: admin/21353 assigned to groups: admin
-    <INFO> 9-Dec-2021::18:19:38.136 appliance-1 confd[106]: audit user: admin/21353 created new session via rest from 172.18.3.162:0 with http
-    <INFO> 9-Dec-2021::18:19:38.136 appliance-1 confd[106]: audit user: admin/21353 RESTCONF: request with http: GET /restconf/ HTTP/1.1
-    <INFO> 9-Dec-2021::18:19:38.137 appliance-1 confd[106]: audit user: admin/21353 terminated session (reason: normal)
-    <INFO> 9-Dec-2021::18:19:38.137 appliance-1 confd[106]: audit user: admin/21353 RESTCONF: response with http: HTTP/1.1 /restconf/ 200 duration 62361 ms
-
+    syscon-1-active# file show log/controller/audit.log | more
+    2023-07-12T15:39:16.116053-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external token authentication succeeded via rest from 172.18.105.146:0 with http, member of groups: admin session-id:admin1689190708".
+    2023-07-12T15:39:16.119912-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.105.146:0 with http using externalvalidation authentication".
+    2023-07-12T15:39:16.127755-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/16891639" cmd="created new session via rest from 172.18.105.146:0 with http".
+    2023-07-12T15:39:16.130932-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/16891639" cmd="RESTCONF: request with http: GET /restconf//data/openconfig-system:system/f5-system-redundancy:redundancy HTTP/1.1".
+    2023-07-12T15:39:16.218346-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external token authentication succeeded via rest from 172.18.105.146:0 with http, member of groups: admin session-id:admin1689190708".
+    2023-07-12T15:39:16.221913-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.105.146:0 with http using externalvalidation authentication".
+    2023-07-12T15:39:16.244875-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/16891641" cmd="created new session via rest from 172.18.105.146:0 with http".
+    2023-07-12T15:39:16.248800-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/16891641" cmd="RESTCONF: request with http: GET /restconf// HTTP/1.1".
+    2023-07-12T15:39:16.253615-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/16891641" cmd="terminated session (reason: normal)".
+    2023-07-12T15:39:16.261907-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/16891641" cmd="RESTCONF: response with http: HTTP/1.1 /restconf// 200 duration 205219 us".
+    2023-07-12T15:39:16.266997-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/16891639" cmd="RESTCONF: response with http: HTTP/1.1 /restconf//data/openconfig-system:system/f5-system-redundancy:redundancy 200 duration 283532 us".
+    2023-07-12T15:39:16.271005-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/16891639" cmd="terminated session (reason: normal)".
+    2023-07-12T15:39:17.538995-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external token authentication succeeded via rest from 172.18.105.146:0 with http, member of groups: admin session-id:admin1689190708".
+    2023-07-12T15:39:17.543055-04:00 controller-1 audit-service[8]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.105.146:0 with http using externalvalidation authentication".
+    2023-07-12T15:39:17.550559-04:00 controller-1 audit-
 
 There are options to manipulate the output of the file. Add **| ?** to the command to see the options available to manipulate the file output.
 
 .. code-block:: bash
 
-    r10900# file show log/system/audit.log | ?
+    syscon-1-active# file show log/controller/audit.log | ?
     Possible completions:
     append    Append output text to a file
     begin     Begin with the line that matches
@@ -1906,112 +2230,135 @@ There are options to manipulate the output of the file. Add **| ?** to the comma
     nomore    Suppress pagination
     save      Save output text to a file
     until     End with the line that matches
-    r10900# file show log/system/audit.log | 
+    syscon-1-active# file show log/controller/audit.log |
 
 There are other file options that allow the user to tail the log file using **file tail -f** for a live tail,  or **file tail -n <number of lines>** to view a specific number of the most recent lines.
 
 .. code-block:: bash
 
-    r10900# file tail -f log/system/audit.log
-    <INFO> 7-Dec-2022::15:05:01.996 appliance-1 confd[125]: audit user: admin/13692368 assigned to groups: admin
-    <INFO> 7-Dec-2022::15:05:01.996 appliance-1 confd[125]: audit user: admin/13692368 created new session via cli from 172.18.104.73:60301 with ssh
-    <INFO> 7-Dec-2022::15:05:02.007 appliance-1 confd[125]: audit user: admin/13692368 CLI 'show system state hostname'
-    <INFO> 7-Dec-2022::15:05:02.008 appliance-1 confd[125]: audit user: admin/13692368 CLI done
-    <INFO> 7-Dec-2022::15:05:02.009 appliance-1 confd[125]: audit user: admin/13692368 terminated session (reason: normal)
-    <INFO> 7-Dec-2022::15:05:02.052 appliance-1 confd[125]: audit user: admin/13692371 assigned to groups: admin
-    <INFO> 7-Dec-2022::15:05:02.053 appliance-1 confd[125]: audit user: admin/13692371 created new session via cli from 172.18.104.73:60301 with ssh
-    <INFO> 7-Dec-2022::15:05:19.428 appliance-1 confd[125]: audit user: admin/13692371 CLI 'file show log/system/audit.log'
-    <INFO> 7-Dec-2022::15:05:21.784 appliance-1 confd[125]: audit user: admin/13692371 CLI done
-    <INFO> 7-Dec-2022::15:08:59.462 appliance-1 confd[125]: audit user: admin/13692371 CLI 'file tail -f log/system/audit.log'
-
-
-
-    r10900# file tail -n 20 log/system/audit.log
-    <INFO> 7-Dec-2022::14:46:50.546 appliance-1 confd[125]: audit user: admin/13672920 RESTCONF: response with http: HTTP/1.1 /restconf/ 200 duration 37668 ms
-    <INFO> 7-Dec-2022::14:47:05.976 appliance-1 confd[125]: audit user: admin/0 external token authentication succeeded via rest from 172.18.104.73:0 with http, member of groups: admin session-id:admin1670421700
-    <INFO> 7-Dec-2022::14:47:05.976 appliance-1 confd[125]: audit user: admin/0 logged in via rest from 172.18.104.73:0 with http using externalvalidation authentication
-    <INFO> 7-Dec-2022::14:47:05.976 appliance-1 confd[125]: audit user: admin/13673201 assigned to groups: admin
-    <INFO> 7-Dec-2022::14:47:05.976 appliance-1 confd[125]: audit user: admin/13673201 created new session via rest from 172.18.104.73:0 with http
-    <INFO> 7-Dec-2022::14:47:05.977 appliance-1 confd[125]: audit user: admin/13673201 RESTCONF: request with http: GET /restconf/ HTTP/1.1
-    <INFO> 7-Dec-2022::14:47:05.980 appliance-1 confd[125]: audit user: admin/13673201 terminated session (reason: normal)
-    <INFO> 7-Dec-2022::14:47:05.981 appliance-1 confd[125]: audit user: admin/13673201 RESTCONF: response with http: HTTP/1.1 /restconf/ 200 duration 35923 ms
-    <INFO> 7-Dec-2022::15:05:01.996 appliance-1 confd[125]: audit user: admin/13692368 assigned to groups: admin
-    <INFO> 7-Dec-2022::15:05:01.996 appliance-1 confd[125]: audit user: admin/13692368 created new session via cli from 172.18.104.73:60301 with ssh
-    <INFO> 7-Dec-2022::15:05:02.007 appliance-1 confd[125]: audit user: admin/13692368 CLI 'show system state hostname'
-    <INFO> 7-Dec-2022::15:05:02.008 appliance-1 confd[125]: audit user: admin/13692368 CLI done
-    <INFO> 7-Dec-2022::15:05:02.009 appliance-1 confd[125]: audit user: admin/13692368 terminated session (reason: normal)
-    <INFO> 7-Dec-2022::15:05:02.052 appliance-1 confd[125]: audit user: admin/13692371 assigned to groups: admin
-    <INFO> 7-Dec-2022::15:05:02.053 appliance-1 confd[125]: audit user: admin/13692371 created new session via cli from 172.18.104.73:60301 with ssh
-    <INFO> 7-Dec-2022::15:05:19.428 appliance-1 confd[125]: audit user: admin/13692371 CLI 'file show log/system/audit.log'
-    <INFO> 7-Dec-2022::15:05:21.784 appliance-1 confd[125]: audit user: admin/13692371 CLI done
-    <INFO> 7-Dec-2022::15:08:59.462 appliance-1 confd[125]: audit user: admin/13692371 CLI 'file tail -f log/system/audit.log'
-    <INFO> 7-Dec-2022::15:09:22.907 appliance-1 confd[125]: audit user: admin/13692371 CLI done
-    <INFO> 7-Dec-2022::15:09:31.142 appliance-1 confd[125]: audit user: admin/13692371 CLI 'file tail -n 20 log/system/audit.log' 
-
-Within the bash shell if you are logged in as root, the path for the logging is different; **/var/F5/system/log**. Note that older audit.log files are gzipped and rotated.
+    syscon-1-active# file tail -f log/controller/audit.log
+    2023-08-23T14:42:45.935724-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI aborted".
+    2023-08-23T14:43:34.069068-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show log/controller/audit.log | |'".
+    2023-08-23T14:43:37.917156-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:43:53.082404-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
+    2023-08-23T14:43:53.232138-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:08.501123-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
+    2023-08-23T14:44:08.534215-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:23.639199-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show /log/controller/audit.log'".
+    2023-08-23T14:44:23.676737-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:45.535136-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f log/controller/audit.log'".
 
 .. code-block:: bash
 
-    [root@appliance-1(r10900.f5demo.net) ~]# ls -al /var/F5/system/log/
-    total 2541432
-    drwxr-xr-x.  4 root root       4096 Dec  6 20:14 .
-    drwxr-xr-x. 26 root root       4096 Nov 28 12:38 ..
-    -rw-r--r--.  1 root root   71290161 Dec  7 10:10 audit.log
-    -rw-r--r--.  1 root root    1743543 Dec  9  2021 audit.log.1
-    -rw-r--r--.  1 root root         20 Dec  7  2021 audit.log.2.gz
-    -rw-r--r--.  1 root root         20 Dec  7  2021 audit.log.3.gz
-    -rw-r--r--.  1 root root    1847232 Dec  7  2021 audit.log.4.gz
-    -rw-r--r--.  1 root root    9848782 Nov 28 12:35 confd.log
-    -rw-r--r--.  1 root root      29979 Dec  9  2021 confd.log.1
-    -rw-r--r--.  1 root root         20 Dec  7  2021 confd.log.2.gz
-    -rw-r--r--.  1 root root         20 Dec  7  2021 confd.log.3.gz
-    -rw-r--r--.  1 root root      33306 Dec  7  2021 confd.log.4.gz
-    -rw-r--r--.  1 root root   81663088 Dec  7 10:10 devel.log
-    -rw-r--r--.  1 root root  104858977 Nov 13 15:11 devel.log.1
-    -rw-r--r--.  1 root root    4541548 Oct 14 02:37 devel.log.2.gz
-    -rw-r--r--.  1 root root    4838903 Aug 23 01:14 devel.log.3.gz
-    -rw-r--r--.  1 root root    4747221 Jun 22 18:45 devel.log.4.gz
-    -rw-r--r--.  1 root root    4788922 Apr 13  2022 devel.log.5.gz
-    -rw-r--r--.  1 root root   24263778 Nov 28 13:40 k3s_events.log
-    -rw-r--r--.  1 root root  105344182 Nov 28 12:54 k3s_events.log.1
-    -rw-r--r--.  1 root root    8073081 Sep 19 11:30 k3s_events.log.2.gz
-    -rw-r--r--.  1 root root   68972233 Jan 23  2022 lacp_out_132
-    -rw-r--r--.  1 root root   50821845 Dec  7 10:10 lcd.log
-    -rw-r--r--.  1 root root  104858247 Oct  6 23:13 lcd.log.1
-    -rw-r--r--.  1 root root    6501076 Jun 27 10:24 lcd.log.2.gz
-    -rw-r--r--.  1 root root    6518411 Jun  8 00:41 lcd.log.3.gz
-    -rw-r--r--.  1 root root    6541114 May 19  2022 lcd.log.4.gz
-    -rw-r--r--.  1 root root    6561702 Apr 22  2022 lcd.log.5.gz
-    -rw-r--r--.  1 root root    1909130 Dec  7 10:10 logrotate.log
-    -rw-r--r--.  1 root root    5244641 Dec  6 20:14 logrotate.log.1
-    -rw-r--r--.  1 root root      31197 Dec  5 05:57 logrotate.log.2.gz
-    -rw-r--r--.  1 root root  607087556 Dec  7 10:09 platform.log
-    -rw-r--r--.  1 root root 1073833624 Jan 12  2022 platform.log.1
-    -rw-r--r--.  1 root root   60136728 Jan  4  2022 platform.log.2.gz
-    -rw-r--r--.  1 root root     454400 Dec  8  2021 platform.log.3.gz
-    -rw-r--r--.  1 root root        621 Dec  7  2021 platform.log.4.gz
-    -rw-r--r--.  1 root root       7841 Dec  7  2021 platform.log.5.gz
-    -rw-r--r--.  1 root root       7734 Dec  7  2021 platform.log.6.gz
-    -rw-r--r--.  1 root root  152724547 Dec  7  2021 platform.log.7.gz
-    -rw-r--r--.  1 root root          0 Sep 30  2021 reprogram_chassis_network.log
-    -rw-r--r--.  1 root root      41122 Nov 28 12:34 rsyslogd_init.log
-    -rw-r--r--.  1 root root   16070999 Dec  5 23:48 snmp.log
-    -rw-r--r--.  1 root root          0 Dec  9  2021 snmp.log.1
-    -rw-r--r--.  1 root root         20 Dec  7  2021 snmp.log.2.gz
-    -rw-r--r--.  1 root root         20 Dec  7  2021 snmp.log.3.gz
-    -rw-r--r--.  1 root root         20 Dec  7  2021 snmp.log.4.gz
-    -rw-r--r--.  1 root root        435 Nov 28 12:34 startup.log
-    -rw-r--r--.  1 root root        190 Nov 28 12:27 startup.log.prev
-    drwxr-xr-x.  2 root root       4096 Sep 28  2021 trace
-    -rw-r--r--.  1 root root       8424 Nov 28 12:34 vconsole_auth.log
-    -rw-r--r--.  1 root root      31966 Nov 28 12:34 vconsole_startup.log
-    -rw-r--r--.  1 root root          0 Dec  9  2021 velos.log
-    -rw-r--r--.  1 root root          0 Dec  7  2021 velos.log.1
-    -rw-r--r--.  1 root root         20 Dec  7  2021 velos.log.2.gz
-    -rw-r--r--.  1 root root    5960344 Oct 18  2021 velos.log.3.gz
-    -rw-r--r--.  1 root root       4096 Oct 15  2021 .velos.log.swp
-    drwxr-xr-x.  2 root root       4096 Nov 28 12:34 webui
-    [root@appliance-1(r10900.f5demo.net) ~]# 
+    syscon-1-active# file tail -f log/controller/audit.log
+    2023-08-23T14:42:45.935724-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI aborted".
+    2023-08-23T14:43:34.069068-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show log/controller/audit.log | |'".
+    2023-08-23T14:43:37.917156-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:43:53.082404-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
+    2023-08-23T14:43:53.232138-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:08.501123-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
+    2023-08-23T14:44:08.534215-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:23.639199-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show /log/controller/audit.log'".
+    2023-08-23T14:44:23.676737-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:45.535136-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f log/controller/audit.log'".
+    syscon-1-active# file tail -n 20 log/controller/audit.log
+    2023-08-23T14:34:24.310736-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'commit'".
+    2023-08-23T14:34:56.335916-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'do show running-config system logging sw-components sw-component audit-service'".
+    2023-08-23T14:34:56.349423-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:37:35.759037-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'exit'".
+    2023-08-23T14:37:35.764733-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:38:05.691301-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file list path log/controller/'".
+    2023-08-23T14:38:07.742916-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:41:01.594309-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show log/controller/audit.log | more'".
+    2023-08-23T14:42:45.935724-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI aborted".
+    2023-08-23T14:43:34.069068-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show log/controller/audit.log | |'".
+    2023-08-23T14:43:37.917156-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:43:53.082404-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
+    2023-08-23T14:43:53.232138-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:08.501123-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
+    2023-08-23T14:44:08.534215-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:23.639199-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show /log/controller/audit.log'".
+    2023-08-23T14:44:23.676737-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:44:45.535136-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f log/controller/audit.log'".
+    2023-08-23T14:45:08.714615-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
+    2023-08-23T14:45:15.503353-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -n 20 log/controller/audit.log'".
+    syscon-1-active# 
+
+Within the bash shell if you are logged in as root, the path for the logging is different; **/var/F5/controller/log**. Note that older audit.log files are gzipped and rotated.
+
+.. code-block:: bash
+
+    [root@controller-1(velos-chassis1.f5demo.net) ~]# ls -al /var/F5/controller/log/
+    total 1660524
+    drwxr-xr-x.  5 root admin      4096 Aug 23 08:17 .
+    drwxr-xr-x. 42 root root       4096 Jul 12 16:18 ..
+    -rw-r--r--.  1 root root         33 Jul 12 16:22 afu-cookie
+    -rw-r--r--.  1 root root    7284136 Aug 23 14:48 audit.log
+    -rw-r--r--.  1 root root   10497945 Jul 12 15:39 audit.log.1
+    -rw-r--r--.  1 root root     523988 May 22 17:23 audit.log.2.gz
+    -rw-r--r--.  1 root root     509551 May  2 17:30 audit.log.3.gz
+    -rw-r--r--.  1 root root     523266 Apr  7 14:53 audit.log.4.gz
+    -rw-r--r--.  1 root root     518826 Apr  6 13:26 audit.log.5.gz
+    -rw-r--r--.  1 root root    1205241 Aug  2 19:17 cc-confd
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 cc-confd-hal
+    -rw-r--r--.  1 root root   76585515 Aug 23 14:50 cc-confd-health
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 cc-confd-health-diag-agent
+    -rw-r--r--.  1 root root     232487 Jul 12 16:21 cc-confd-init
+    -rw-r--r--.  1 root root     151721 Jul 12 16:22 cc-upgrade.dbg
+    -rw-r--r--.  1 root root   79548584 Aug 12 22:48 chassis-manager
+    -rw-r--r--.  1 root root  104871484 Feb 26 20:46 chassis-manager.1
+    -rw-------.  1 root root          0 Jan 26  2023 confd
+    -rw-r--r--.  1 root root        128 Feb  1  2023 confd_go_standby
+    -rw-r--r--.  1 root root     144673 Jul 12 15:59 confd_image_remove
+    -rw-r--r--.  1 root root   57388358 Jul 12 16:21 config-object-manager
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 config-object-manager-hal
+    drwxr-xr-x.  3 root root       4096 Aug  2 19:18 events
+    -rw-r--r--.  1 root root   29851294 Aug 22 17:47 ha
+    -rw-r--r--.  1 root root  104858514 Mar 14 09:02 ha.1
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 ha-hal
+    -rw-r--r--.  1 root root   23173914 Aug 23 14:50 host-config
+    -rw-r--r--.  1 root root  104859854 Aug 18 01:03 host-config.1
+    -rw-r--r--.  1 root root    2847624 Jul 14 04:29 host-config.2.gz
+    -rw-r--r--.  1 root root    2900382 Jun 17 20:08 host-config.3.gz
+    -rw-r--r--.  1 root root    2895659 May 16 05:18 host-config.4.gz
+    -rw-r--r--.  1 root root    2968617 Apr 10 20:16 host-config.5.gz
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 host-config-hal
+    drwxr-xr-x.  2 root root       4096 May  7 14:26 httpd
+    -rw-r--r--.  1 root root       9632 Jul 12 16:21 http_error_log
+    -rw-r--r--.  1 root root    1973541 Aug 21 12:27 image-server
+    -rw-r--r--.  1 root root    7147228 Aug 23 14:44 image-server-dhcp
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 image-server-hal
+    -rw-r--r--.  1 root root          0 Jan 26  2023 image-server-httpd
+    -rw-r--r--.  1 root root      36310 Aug 21 12:27 image-server-monitor
+    -rw-r--r--.  1 root root     425076 Jul 12 16:07 lcd.log
+    -rw-r--r--.  1 root root    2325778 Aug 23 14:50 logrotate.log
+    -rw-r--r--.  1 root root    5244230 Aug 23 08:17 logrotate.log.1
+    -rw-r--r--.  1 root root      34979 Aug 22 17:29 logrotate.log.2.gz
+    -rw-r--r--.  1 root root    2252844 Aug  2 19:17 partition-agent
+    -rw-r--r--.  1 root root   32388160 Aug 23 14:50 partition-software-manager
+    -rw-r--r--.  1 root root  104866813 Aug 22 07:46 partition-software-manager.1
+    -rw-r--r--.  1 root root    4004398 Aug 18 03:09 partition-software-manager.2.gz
+    -rw-r--r--.  1 root root    4004370 Aug 13 22:32 partition-software-manager.3.gz
+    -rw-r--r--.  1 root root    4001982 Aug  9 17:56 partition-software-manager.4.gz
+    -rw-r--r--.  1 root root    3952042 Aug  5 13:21 partition-software-manager.5.gz
+    -rw-r--r--.  1 root root   36115660 Aug 23 14:49 partition-update
+    -rw-r--r--.  1 root root  104859587 Jul  1 13:53 partition-update.1
+    -rw-r--r--.  1 root root   72268655 Aug 23 14:49 pel_log
+    -rw-r--r--.  1 root root      50325 Jul 12 16:22 reprogram_chassis_network
+    -rw-r--r--.  1 root root      98627 Aug 23 14:34 rsyslogd_init.log
+    drwxr-xr-x.  2 root root       4096 Jul 12 16:21 run
+    -rw-r--r--.  1 root root       5737 Jul 12 16:22 sshd.terminal-server
+    -rw-r--r--.  1 root root    7775788 Aug  2 19:17 switchd
+    -rw-r--r--.  1 root root          0 Jul 12 16:21 switchd-hal
+    -rw-r--r--.  1 root root      25772 Jul 12 16:12 system-update
+    -rw-r--r--.  1 root root     144138 Aug  2 19:17 terminal-server.default
+    -rw-r--r--.  1 root root        977 Jul 12 16:31 tftp.log
+    -rw-r--r--.  1 root root          0 Feb  1  2023 vcc-confd-go-standby-hal.102476
+    -rw-r--r--.  1 root root          0 Jan 30  2023 vcc-confd-go-standby-hal.97587
+    -rw-r--r--.  1 root root  154851081 Aug 23 14:46 velos.log
+    -rw-r--r--.  1 root root  536871152 May  2 12:11 velos.log.1
+    [root@controller-1(velos-chassis1.f5demo.net) ~]# 
+
   
 Viewing Logs from the webUI
 --------------------------
