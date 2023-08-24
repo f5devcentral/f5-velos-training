@@ -2248,19 +2248,10 @@ There are other file options that allow the user to tail the log file using **fi
     2023-08-23T14:44:23.676737-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
     2023-08-23T14:44:45.535136-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f log/controller/audit.log'".
 
+Below is an example of tailing the last 20 lines of the audit.log.
+
 .. code-block:: bash
 
-    syscon-1-active# file tail -f log/controller/audit.log
-    2023-08-23T14:42:45.935724-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI aborted".
-    2023-08-23T14:43:34.069068-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show log/controller/audit.log | |'".
-    2023-08-23T14:43:37.917156-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
-    2023-08-23T14:43:53.082404-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
-    2023-08-23T14:43:53.232138-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
-    2023-08-23T14:44:08.501123-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f /log/controller/audit.log'".
-    2023-08-23T14:44:08.534215-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
-    2023-08-23T14:44:23.639199-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file show /log/controller/audit.log'".
-    2023-08-23T14:44:23.676737-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI done".
-    2023-08-23T14:44:45.535136-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'file tail -f log/controller/audit.log'".
     syscon-1-active# file tail -n 20 log/controller/audit.log
     2023-08-23T14:34:24.310736-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'commit'".
     2023-08-23T14:34:56.335916-04:00 controller-1 audit-service[8]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22379288" cmd="CLI 'do show running-config system logging sw-components sw-component audit-service'".
@@ -2377,14 +2368,14 @@ If you want to download the main **audit.log**, select the directory **/log/cont
   :scale: 70%
 
 
-Viewing Audit Logs via F5OS API
+Viewing Audit Logs via F5OS CLI
 -------------------------------
 
 Example Audit Logging for Login, Logout, Login Failure, and Account Lockout
 ---------------------------------------------------------------------------
 
 
-Below are examples seen on a remote syslog server for various login, logout, login failure, and account lockout events for F5OS. These examples are based on F5OS-A 1.4.0 or later.
+Below are examples seen on a remote syslog server for various login, logout, login failure, and account lockout events for F5OS. These examples are based on F5OS-C 1.6.0 or later.
 
 ----------------
 Login Audit Logs
@@ -2394,14 +2385,21 @@ Below is an example of a client logging into the F5OS webUI. Note that the logs 
 
 .. code-block:: bash
 
-
-    2023-01-06T16:56:17.475631-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external token authentication succeeded via rest from 172.18.104.40:0 with http, member of groups: admin session-id:admin1673042162".
-    2023-01-06T16:56:17.475645-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.104.40:0 with http using externalvalidation authentication".
-    2023-01-06T16:56:17.475855-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/14985364" cmd="assigned to groups: admin".
-    2023-01-06T16:56:17.476077-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/14985364" cmd="created new session via rest from 172.18.104.40:0 with http".
-    2023-01-06T16:56:17.477346-05:00 appliance-1 audit-service[12]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/14985364" cmd="RESTCONF: request with http: GET /restconf/ HTTP/1.1".
-    2023-01-06T16:56:17.479784-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/14985364" cmd="terminated session (reason: normal)".
-    2023-01-06T16:56:17.480672-05:00 appliance-1 audit-service[12]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/14985364" cmd="RESTCONF: response with http: HTTP/1.1 /restconf/ 200 duration 50243 ms".
+    2023-08-23T18:15:51.435131-04:00 controller-1 external-authenticator:  pam_unix(password-auth:session): session opened for user admin by (uid=0)
+    2023-08-23T18:15:51.461896-04:00 controller-1 external-authenticator:  pam_unix(password-auth:session): session closed for user admin
+    2023-08-23T18:15:51.614165-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external authentication succeeded via rest from 172.18.105.188:0 with http, member of groups: admin session-id:admin1692828951".
+    2023-08-23T18:15:51.616976-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.105.188:0 with http using external authentication".
+    2023-08-23T18:15:51.622308-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22488445" cmd="created new session via rest from 172.18.105.188:0 with http".
+    2023-08-23T18:15:51.625067-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22488445" cmd="RESTCONF: request with http: GET /restconf// HTTP/1.1".
+    2023-08-23T18:15:51.627694-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22488445" cmd="terminated session (reason: normal)".
+    2023-08-23T18:15:51.630328-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22488445" cmd="RESTCONF: response with http: HTTP/1.1 /restconf// 200 duration 284517 us".
+    2023-08-23T18:15:51.814562-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external token authentication succeeded via rest from 172.18.105.188:0 with http, member of groups: admin session-id:admin1692828951".
+    2023-08-23T18:15:51.820628-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.105.188:0 with http using externalvalidation authentication".
+    2023-08-23T18:15:51.831604-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22488453" cmd="created new session via rest from 172.18.105.188:0 with http".
+    2023-08-23T18:15:51.835919-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22488453" cmd="RESTCONF: request with http: GET /restconf//data/openconfig-system:system/f5-system-licensing:licensing HTTP/1.1".
+    2023-08-23T18:15:51.965080-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22488453" cmd="RESTCONF: response with http: HTTP/1.1 /restconf//data/openconfig-system:system/f5-system-licensing:licensing 200 duration 261382 us".
+    2023-08-23T18:15:51.992819-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22488453" cmd="terminated session (reason: normal)".
+    
 
 Below is an example of a client logging into the F5OS CLI. Note that the logs identify which user has logged in as well as what IP address they have logged in from.
 
@@ -2419,13 +2417,14 @@ Below is an example of a client authentication to the F5OS REST API. Note that t
 
 .. code-block:: bash
 
-    2023-01-06T17:09:23.296905-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external authentication succeeded via rest from 172.18.104.40:0 with http, member of groups: admin session-id:admin1673042963".
-    2023-01-06T17:09:23.296919-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.104.40:0 with http using external authentication".
-    2023-01-06T17:09:23.296926-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/15004795" cmd="assigned to groups: admin".
-    2023-01-06T17:09:23.296969-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/15004795" cmd="created new session via rest from 172.18.104.40:0 with http".
-    2023-01-06T17:09:23.297161-05:00 appliance-1 audit-service[12]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/15004795" cmd="RESTCONF: request with http: GET /restconf/data/openconfig-system:system/aaa HTTP/1.1".
-    2023-01-06T17:09:23.389320-05:00 appliance-1 audit-service[12]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/15004795" cmd="RESTCONF: response with http: HTTP/1.1 /restconf/data/openconfig-system:system/aaa 200 duration 151730 ms".
-    2023-01-06T17:09:23.390141-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/15004795" cmd="terminated session (reason: normal)".
+    2023-08-23T18:20:29.802066-04:00 controller-1 external-authenticator:  pam_unix(password-auth:session): session opened for user admin by (uid=0)
+    2023-08-23T18:20:29.826675-04:00 controller-1 external-authenticator:  pam_unix(password-auth:session): session closed for user admin
+    2023-08-23T18:20:29.964792-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="external authentication succeeded via rest from 172.18.105.188:0 with http, member of groups: admin session-id:admin1692829229".
+    2023-08-23T18:20:29.967513-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/0" cmd="logged in via rest from 172.18.105.188:0 with http using external authentication".
+    2023-08-23T18:20:29.973108-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22490815" cmd="created new session via rest from 172.18.105.188:0 with http".
+    2023-08-23T18:20:29.976046-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22490815" cmd="RESTCONF: request with http: GET /restconf/data/openconfig-system:system/aaa HTTP/1.1".
+    2023-08-23T18:20:30.214489-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22490815" cmd="RESTCONF: response with http: HTTP/1.1 /restconf/data/openconfig-system:system/aaa 200 duration 516052 us".
+    2023-08-23T18:20:30.221196-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22490815" cmd="terminated session (reason: normal)".
 
 ----------------
 Logout Audit Logs
@@ -2435,8 +2434,10 @@ Below is an example of a client logging out of the F5OS CLI. Note that the logs 
 
 .. code-block:: bash
 
-    2023-01-06T17:16:05.536108-05:00 appliance-1 audit-service[12]: priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/15014425" cmd="CLI 'logout'".
-    2023-01-06T17:16:05.736047-05:00 appliance-1 audit-service[12]: priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/15014425" cmd="terminated session (reason: normal)".
+    2023-08-23T18:23:18.543593-04:00 controller-1 audit-service[8]:  priority="Info" version=1.0 msgid=0x1f03000000000001 msg="audit" user="admin/22491444" cmd="CLI 'logout'".
+    2023-08-23T18:23:18.747115-04:00 controller-1 audit-service[8]:  priority="Notice" version=1.0 msgid=0x1f03000000000002 msg="audit" user="admin/22491444" cmd="terminated session (reason: normal)".
+    2023-08-23T18:23:18.769546-04:00 controller-1 sshd[125181]:  pam_unix(sshd:session): session closed for user admin
+    2023-08-23T18:23:28.528444-04:00 controller-1 HOST-audit/audit.log:  type=USER_LOGOUT msg=audit(1692829398.745:236): pid=125181 uid=0 auid=1000 ses=247494 subj=system_u:system_r:sshd_t:s0-s0:c0.c1023 msg='op=login id=1000 exe="/usr/sbin/sshd" hostname=? addr=? terminal=/dev/pts/0 res=success'
 
 
 --------------------------
@@ -2449,38 +2450,44 @@ To forward the contents of the host audit logs add **config files file audit/aud
 
 .. code-block:: bash
 
-    default-1# show running-config system logging host-logs
+    syscon-1-active# show running-config system logging host-logs 
     system logging host-logs
     config remote-forwarding enabled
+    config remote-forwarding include-standby
     config selectors selector AUTHPRIV DEBUG
     config files file audit/audit.log
     !
+    syscon-1-active#
 
 In addition, you'll want to ensure that **selectors selector AUTHPRIV INFORMATIONAL** is added to the **system logging remote-servers** configuration for your configured syslog location.
 
 .. code-block:: bash
 
-    default-1# show running-config system logging remote-servers
-    system logging remote-servers remote-server 10.255.85.182
+    syscon-1-active# show running-config system logging remote-servers 
+    system logging remote-servers remote-server 10.255.85.164
     config remote-port 514
     config proto udp
-    selectors selector LOCAL0 DEBUG
+    selectors selector LOCAL0 INFORMATIONAL
     selectors selector AUTHPRIV INFORMATIONAL
     !
+    syscon-1-active#
 
 Below is remote syslog example of a client logging into the F5OS CLI and entering an invalid password multiple times, resulting in an account lockout event. The configured password-policy for **max-login-failures** has been set to two, meaning once the client issues two invalid passwords the account will be temporarily locked for the **unlock-time** of sixty seconds. 
 
 
 .. code-block:: bash
 
-    r10900-1# show running-config system aaa password-policy 
+    syscon-1-active# show running-config system aaa password-policy 
     system aaa password-policy config min-length 6
     system aaa password-policy config required-numeric 0
     system aaa password-policy config required-uppercase 0
     system aaa password-policy config required-lowercase 0
     system aaa password-policy config required-special 0
+    system aaa password-policy config max-letter-repeat 3
+    system aaa password-policy config max-sequence-repeat 0
+    system aaa password-policy config max-class-repeat 0
     system aaa password-policy config required-differences 8
-    system aaa password-policy config reject-username true
+    system aaa password-policy config reject-username false
     system aaa password-policy config apply-to-root true
     system aaa password-policy config retries 3
     system aaa password-policy config max-login-failures 2
@@ -2488,7 +2495,7 @@ Below is remote syslog example of a client logging into the F5OS CLI and enterin
     system aaa password-policy config root-lockout true
     system aaa password-policy config root-unlock-time 60
     system aaa password-policy config max-age 0
-    r10900-1#
+    syscon-1-active# 
 
 In the logs below, a local user **testuser** has entered two consecutive bad passwords resulting in a temporary lock of the account.
 
