@@ -166,77 +166,416 @@ The output will confirm the upload has begun.
 Logging
 =======
 
-Many functions inside the F5OS layer will log their events to the **velos.log** file that resides in the **/var/log_controller** path in the underlying system controller shell. In the F5OS CLI the paths are simplified in v1.2.x so that you don’t have to know the underlying directory structure. You can use the **file list path** command to see the files inside the **log/controller** directory:
+The VELOS system will log messages to various log files. The main log being the **velos.log** file. There are many other log files for specific tasks, which can be used for troubleshooting. F5 publishes and maintains a log error catalog for F5OS-C (VELOS) here:
+
+`F5OS-C/VELOS Error Catalog <https://clouddocs.f5.com/f5os-error-catalog/velos/velos-errors-index.html>`_
+
+Logs can be viewed via the F5OS CLI, or they can be downloaded for remote viewing via CLI or webUI. Logs can also be sent to an external SYSLOG location. When troubleshooting specific issues, the logging subsystems (sw-components) logging levels can be adjusted temporarily to provide more information.
+
+Many functions inside the F5OS layer will log their events to the main **velos.log** file that resides in the **/var/log_controller** path in the underlying system controller shell. In the F5OS CLI the paths are simplified so that you don’t have to know the underlying directory structure. You can use the **file list path** command to see the files inside the **log/controller** directory:
 
 .. code-block:: bash
 
-    syscon-1-active# file list path log/controller/
+    syscon-2-active# file list path log/ 
+    Possible completions:
+    confd/  controller/  host/
+    syscon-2-active# file list path log/controller/
     entries {
-        name 
-    afu-cookie
-    cc-confd
-    cc-confd-hal
-    cc-confd-health
-    cc-confd-health-diag-agent
-    cc-confd-init
-    cc-confd.1
-    cc-confd.2.gz
-    cc-confd.3.gz
-    cc-confd.4.gz
-    cc-confd.5.gz
-    cc-upgrade.dbg
-    chassis-manager
-    chassis-manager.1
-    chassis-manager.2.gz
-    chassis-manager.3.gz
-    chassis-manager.4.gz
-    chassis-manager.5.gz
-    confd
-    confd_image_remove
-    config-object-manager
-    config-object-manager-hal
-    events/
-    ha
-    ha-hal
-    host-config
-    host-config-hal
-    host-config.1
-    host-config.2.gz
-    host-config.3.gz
-    httpd/
-    image-server
-    image-server-dhcp
-    image-server-hal
-    image-server-httpd
-    logrotate.log
-    logrotate.log.1
-    logrotate.log.2.gz
-    partition-agent
-    partition-agent.1
-    partition-software-manager
-    partition-software-manager-hal
-    partition-software-manager.1
-    partition-software-manager.2.gz
-    partition-software-manager.3.gz
-    partition-update
-    pel_log
-    reprogram_chassis_network
-    rsyslogd_init.log
-    run/
-    sshd.terminal-server
-    switchd
-    switchd-hal
-    switchd.1
-    switchd.2.gz
-    switchd.3.gz
-    switchd.4.gz
-    system-update
-    terminal-server.default
-    tftp.log
-    velos.log
-    velos.log.1
+        name afu-cookie
+        date Wed Aug 23 23:03:27 UTC 2023
+        size 33B
     }
-    syscon-1-active# 
+    entries {
+        name audit.log
+        date Fri Aug 25 15:17:24 UTC 2023
+        size 6.9MB
+    }
+    entries {
+        name audit.log.1
+        date Wed Jul 12 16:58:15 UTC 2023
+        size 11MB
+    }
+    entries {
+        name audit.log.2.gz
+        date Tue Jun  6 16:43:01 UTC 2023
+        size 505KB
+    }
+    entries {
+        name audit.log.3.gz
+        date Thu May  4 22:39:02 UTC 2023
+        size 500KB
+    }
+    entries {
+        name audit.log.4.gz
+        date Mon Apr 24 16:22:54 UTC 2023
+        size 493KB
+    }
+    entries {
+        name audit.log.5.gz
+        date Tue Apr  4 15:03:32 UTC 2023
+        size 499KB
+    }
+    entries {
+        name cc-confd
+        date Thu Aug 24 00:34:34 UTC 2023
+        size 2.2MB
+    }
+    entries {
+        name cc-confd-hal
+        date Wed Aug 23 23:02:54 UTC 2023
+        size 0B
+    }
+    entries {
+        name cc-confd-health
+        date Fri Aug 25 15:16:58 UTC 2023
+        size 44MB
+    }
+    entries {
+        name cc-confd-health-diag-agent
+        date Wed Aug 23 23:02:57 UTC 2023
+        size 0B
+    }
+    entries {
+        name cc-confd-health.1
+        date Fri Apr 21 16:19:02 UTC 2023
+        size 101MB
+    }
+    entries {
+        name cc-confd-init
+        date Wed Aug 23 23:02:53 UTC 2023
+        size 388KB
+    }
+    entries {
+        name cc-upgrade.dbg
+        date Wed Aug 23 23:03:12 UTC 2023
+        size 277KB
+    }
+    entries {
+        name chassis-manager
+        date Fri Aug 25 15:17:25 UTC 2023
+        size 66MB
+    }
+    entries {
+        name chassis-manager.1
+        date Sun Jul  9 09:51:03 UTC 2023
+        size 101MB
+    }
+    entries {
+        name chassis-manager.2.gz
+        date Sat Jul  1 17:59:04 UTC 2023
+        size 2.9MB
+    }
+    entries {
+        name chassis-manager.3.gz
+        date Sat Jun 24 02:13:04 UTC 2023
+        size 2.9MB
+    }
+    entries {
+        name chassis-manager.4.gz
+        date Fri Jun 16 09:09:04 UTC 2023
+        size 2.9MB
+    }
+    entries {
+        name chassis-manager.5.gz
+        date Thu Jun  8 18:58:04 UTC 2023
+        size 3.0MB
+    }
+    entries {
+        name confd
+        date Thu Jul 14 17:50:32 UTC 2022
+        size 0B
+    }
+    entries {
+        name confd_go_standby
+        date Mon Jan 30 15:57:56 UTC 2023
+        size 207B
+    }
+    entries {
+        name confd_image_remove
+        date Mon May  8 15:41:49 UTC 2023
+        size 6.5KB
+    }
+    entries {
+        name config-object-manager
+        date Wed Aug 23 23:21:09 UTC 2023
+        size 23MB
+    }
+    entries {
+        name config-object-manager-hal
+        date Wed Aug 23 23:02:54 UTC 2023
+        size 0B
+    }
+    entries {
+        name events/
+        date Wed Aug 23 23:03:36 UTC 2023
+        size 4.0KB
+    }
+    entries {
+        name ha
+        date Thu Aug 24 01:01:25 UTC 2023
+        size 5.3MB
+    }
+    entries {
+        name ha-hal
+        date Wed Aug 23 23:02:54 UTC 2023
+        size 0B
+    }
+    entries {
+        name host-config
+        date Fri Aug 25 15:17:23 UTC 2023
+        size 76MB
+    }
+    entries {
+        name host-config-hal
+        date Wed Aug 23 23:02:57 UTC 2023
+        size 0B
+    }
+    entries {
+        name host-config.1
+        date Thu Jul 20 23:48:03 UTC 2023
+        size 101MB
+    }
+    entries {
+        name host-config.2.gz
+        date Thu Jun 22 03:52:03 UTC 2023
+        size 2.8MB
+    }
+    entries {
+        name host-config.3.gz
+        date Fri May 19 10:59:04 UTC 2023
+        size 2.8MB
+    }
+    entries {
+        name host-config.4.gz
+        date Sat Apr  8 17:36:04 UTC 2023
+        size 2.7MB
+    }
+    entries {
+        name host-config.5.gz
+        date Sun Mar 12 08:13:04 UTC 2023
+        size 2.7MB
+    }
+    entries {
+        name http_error_log
+        date Wed Aug 23 23:03:04 UTC 2023
+        size 17KB
+    }
+    entries {
+        name httpd/
+        date Fri May  5 04:24:03 UTC 2023
+        size 4.0KB
+    }
+    entries {
+        name image-server
+        date Wed Aug 23 23:27:41 UTC 2023
+        size 2.6MB
+    }
+    entries {
+        name image-server-dhcp
+        date Fri Aug 25 15:09:19 UTC 2023
+        size 14MB
+    }
+    entries {
+        name image-server-hal
+        date Wed Aug 23 23:03:04 UTC 2023
+        size 0B
+    }
+    entries {
+        name image-server-httpd
+        date Thu Jul 14 17:50:37 UTC 2022
+        size 0B
+    }
+    entries {
+        name image-server-monitor
+        date Wed Aug 23 23:03:04 UTC 2023
+        size 87KB
+    }
+    entries {
+        name lcd.log
+        date Wed Aug 23 23:08:44 UTC 2023
+        size 123KB
+    }
+    entries {
+        name logrotate.log
+        date Fri Aug 25 15:17:01 UTC 2023
+        size 40KB
+    }
+    entries {
+        name logrotate.log.1
+        date Fri Aug 25 15:11:02 UTC 2023
+        size 5.1MB
+    }
+    entries {
+        name logrotate.log.2.gz
+        date Fri Aug 25 00:23:01 UTC 2023
+        size 34KB
+    }
+    entries {
+        name partition-agent
+        date Wed Aug 23 23:27:39 UTC 2023
+        size 11MB
+    }
+    entries {
+        name partition-software-manager
+        date Fri Aug 25 15:17:25 UTC 2023
+        size 1.6MB
+    }
+    entries {
+        name partition-software-manager.1
+        date Fri Aug 25 13:56:04 UTC 2023
+        size 101MB
+    }
+    entries {
+        name partition-software-manager.2.gz
+        date Tue Aug 22 05:38:03 UTC 2023
+        size 3.6MB
+    }
+    entries {
+        name partition-software-manager.3.gz
+        date Sat Aug 19 01:36:04 UTC 2023
+        size 3.6MB
+    }
+    entries {
+        name partition-software-manager.4.gz
+        date Tue Aug 15 21:39:03 UTC 2023
+        size 3.6MB
+    }
+    entries {
+        name partition-software-manager.5.gz
+        date Sat Aug 12 17:42:04 UTC 2023
+        size 3.6MB
+    }
+    entries {
+        name partition-update
+        date Fri Aug 25 15:13:08 UTC 2023
+        size 96MB
+    }
+    entries {
+        name partition-update.1
+        date Mon Mar 27 04:12:04 UTC 2023
+        size 101MB
+    }
+    entries {
+        name partition-update.2.gz
+        date Mon Nov 21 21:24:01 UTC 2022
+        size 678KB
+    }
+    entries {
+        name pel_log
+        date Thu Aug 24 23:50:27 UTC 2023
+        size 48MB
+    }
+    entries {
+        name reprogram_chassis_network
+        date Wed Aug 23 23:03:40 UTC 2023
+        size 111KB
+    }
+    entries {
+        name rsyslogd_init.log
+        date Thu Aug 24 00:59:03 UTC 2023
+        size 75MB
+    }
+    entries {
+        name run/
+        date Wed Aug 23 23:02:54 UTC 2023
+        size 4.0KB
+    }
+    entries {
+        name sshd.terminal-server
+        date Wed Aug 23 23:03:46 UTC 2023
+        size 3.0KB
+    }
+    entries {
+        name switchd
+        date Wed Aug 23 23:31:22 UTC 2023
+        size 4.7MB
+    }
+    entries {
+        name switchd-hal
+        date Wed Aug 23 23:02:55 UTC 2023
+        size 0B
+    }
+    entries {
+        name switchd.1
+        date Wed Feb  1 23:25:01 UTC 2023
+        size 705MB
+    }
+    entries {
+        name switchd.2.gz
+        date Tue Jan 31 09:26:46 UTC 2023
+        size 79MB
+    }
+    entries {
+        name switchd.3.gz
+        date Mon Jan 30 22:08:45 UTC 2023
+        size 79MB
+    }
+    entries {
+        name switchd.4.gz
+        date Mon Jan 30 10:37:45 UTC 2023
+        size 80MB
+    }
+    entries {
+        name switchd.5.gz
+        date Sun Jan 29 23:21:46 UTC 2023
+        size 80MB
+    }
+    entries {
+        name system-update
+        date Wed Aug 23 22:53:48 UTC 2023
+        size 49KB
+    }
+    entries {
+        name terminal-server.default
+        date Wed Aug 23 23:03:00 UTC 2023
+        size 109KB
+    }
+    entries {
+        name tftp.log
+        date Wed Aug 23 23:13:05 UTC 2023
+        size 1.7KB
+    }
+    entries {
+        name vcc-confd-go-standby-hal.3451
+        date Mon Jan 30 15:57:56 UTC 2023
+        size 0B
+    }
+    entries {
+        name vcc-confd-go-standby-hal.579
+        date Tue Sep 13 17:19:41 UTC 2022
+        size 0B
+    }
+    entries {
+        name velos.log
+        date Fri Aug 25 15:14:07 UTC 2023
+        size 157MB
+    }
+    entries {
+        name velos.log.1
+        date Fri Apr 28 09:46:11 UTC 2023
+        size 513MB
+    }
+    entries {
+        name velos.log.2.gz
+        date Sat Mar 11 00:35:13 UTC 2023
+        size 23MB
+    }
+    entries {
+        name velos.log.3.gz
+        date Sun Sep 25 04:16:08 UTC 2022
+        size 19MB
+    }
+    entries {
+        name velos.log.4.gz
+        date Fri Jul 15 05:53:11 UTC 2022
+        size 16MB
+    }
+    entries {
+        name velos.log.5.gz
+        date Thu Jul 14 23:12:01 UTC 2022
+        size 16MB
+    }
+    syscon-2-active#
 
 To view the contents of the velos.log file use the command **file show path /log/controller/velos.log**:
 
@@ -284,7 +623,9 @@ There are also other file options to tail the log file using **file tail -f** fo
     2021-02-23T16:57:51.752978+00:00 controller-1 partition-software-manager[9]: priority="Err" version=1.0 msgid=0x1101000000000052 msg="unknown class_tag:" field_tag=1537040122.
     2021-02-23T16:57:56+00:00 controller-2 partition-software-manager[8]: priority="Err" version=1.0 msgid=0x1101000000000052 msg="unknown class_tag:" field_tag=1537040122.
 
+Below output is showing an example of tailing the last 20 lines of the vleos.log file.
 
+.. code-block:: bash
 
     syscon-1-active# file tail -n 20 log/controller/velos.log
     2021-02-23T16:42:41.077215+00:00 controller-1 vcc-lacpd[7]: priority="Debug" version=1.0 msgid=0x401000000000024 msg="Send Message" time=1614098561077203609 id="1614045762610008304:2" seq=207646 mtype="SEND_TYPE" src="lacpd CC2 sender" dest="addr:tcp://10.1.5.62:1053".
@@ -313,6 +654,8 @@ Within a chassis partition the path for the logging is different. You can use th
     2021-02-22T23:46:23+00:00 10.1.18.2 blade-2(p2) partition-ha[1]: priority="Info" version=1.0 msgid=0x6602000000000005 msg="DB is not ready".
     2021-02-22T23:46:23+00:00 10.1.18.2 blade-2(p2) /usr/sbin/fips-service[13]: priority="Info" version=1.0 msgid=0x6602000000000005 msg="DB is not ready".
     2021-02-22T23:46:23+00:00 10.1.18.1 blade-1(p2) platform-mgr[11]: priority="Info" version=1.0 msgid=0x6602000000000005 msg="DB is not ready".
+
+.. code-block:: bash
 
     Production-1# file tail -f log/velos.log
     2021-02-23T17:38:10+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000048 msg="" debug_str="velocityDatapathHandler.pollPdu() called".
