@@ -2502,7 +2502,7 @@ Drive Utilization Traps
 
 **drive-utilization              .1.3.6.1.4.1.12276.1.1.1.65551**
 
-The system will monitor the storage utilization of the rSeries disks and warn if the disk usage gets too high. There are 3 levels of events that can occur as seen below:
+The system will monitor the storage utilization of the VELOS disks and warn if the disk usage gets too high. There are 3 levels of events that can occur as seen below:
 
 - drive-capacity:critical-limit - Drive Usage exceeded 97%
 - drive-capacity:failure-limit  - Drive Usage exceeded 90%
