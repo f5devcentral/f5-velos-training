@@ -681,10 +681,13 @@ Currently in both the system controller and chassis partition webUIs logging lev
   :scale: 70%
 
 Adjusting Software Component Logging Levels via CLI
+----------------------------------------------------
 
 Adjusting Software Component Logging Levels via webUI
+----------------------------------------------------
 
 Adjusting Software Component Logging Levels via API
+----------------------------------------------------
 
 
 ---------------------------------------
