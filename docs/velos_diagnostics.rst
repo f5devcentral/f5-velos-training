@@ -5,7 +5,6 @@ VELOS Diagnostics
 Qkviews
 =======
 
-
 VELOS supports the ability to generate qkview reporte to collect and bundle configuration and diagnostic data that can be sent to support or uploaded to iHealth. It is important to understand the VELOS architecture when generating qkview reports. Generating a qkview report from the system controller will capture OS data and container information related to the system controller software, while generating a qkview report inside a chassis partition will capture data and container information related to the partition layer. To capture tenant level information, you’ll need to run a qkview report inside the TMOS layer of the tenant.
 
 https://support.f5.com/csp/article/K02521182
@@ -31,6 +30,7 @@ https://support.f5.com/csp/article/K02521182
     - Collects blade host information, including logs
     - Collects information for each partition service container
 
+---------------------------------
 Generating Qkviews from the webUI
 ---------------------------------
 
@@ -49,6 +49,7 @@ To generate a qkview report, click the button in the upper right-hand corner. It
 .. image:: images/velos_diagnostics/image3.png
   :width: 45%
 
+---------------------------------
 Generating Qkviews from the CLI
 ---------------------------------
 
@@ -90,6 +91,7 @@ You can view the status of the capture using the command system diagnostics qkvi
     
     resultint 0
 
+---------------------------------
 Generating Qkviews from the API
 ---------------------------------
 
@@ -664,6 +666,7 @@ Within a chassis partition the path for the logging is different. You can use th
     2021-02-23T17:38:11+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000045 msg="PDU:" direction="Transmitted" interface="2/1.0" length=124.
     2021-02-23T17:38:11+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000045 msg="PDU:" direction="Transmitted" interface="1/1.0" length=124.
 
+--------------------------------------------------
 Adjusting the Logging Software Components Levels
 --------------------------------------------------
 
@@ -673,6 +676,14 @@ Currently in both the system controller and chassis partition webUIs logging lev
   :align: center
   :scale: 70%
 
+Adjusting Software Component Logging Levels via CLI
+
+Adjusting Software Component Logging Levels via webUI
+
+Adjusting Software Component Logging Levels via API
+
+
+---------------------------------------
 Logging Software Component Descriptions
 ---------------------------------------
 
@@ -683,7 +694,7 @@ Below is a brief description of what each sw-component is responsible for, and s
 https://docs.f5net.com/display/PDDESIGN/Vanquish+Alert+Service+Spec
 
 
-**api-svc-gateway** - API service gateway is designed to share information between the BIG-IP hypervisor and the VM Tenant.
+**api-svc-gateway** - API service gateway is designed to share information between the F5OS layer and the F5OS Tenant layer.
 
 https://docs.f5net.com/pages/viewpage.action?pageId=835144208
 
@@ -727,7 +738,7 @@ https://docs.f5net.com/pages/viewpage.action?pageId=835144208
     2023-03-07T19:57:46.611093-05:00 appliance-1 authd[8]: priority="Debug" version=1.0 msgid=0x3901000000000115 msg="HTTPD configuration file unchanged from previous config." name="/etc/auth-config/tls/httpd-options.conf".
 
 
-**confd-key-migrationd** -Confd Primary Key Migration Service
+**confd-key-migrationd** - Confd Primary Key Migration Service
 
 .. code-block:: bash
 
