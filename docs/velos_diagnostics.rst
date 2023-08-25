@@ -683,7 +683,7 @@ Below is a brief description of what each sw-component is responsible for, and s
 https://docs.f5net.com/display/PDDESIGN/Vanquish+Alert+Service+Spec
 
 
-**api-svc-gateway** - API service gateway is designed to share information between the BIG-IP hypervisor and the VM Tenant.
+-**api-svc-gateway** - API service gateway is designed to share information between the BIG-IP hypervisor and the VM Tenant.
 
 https://docs.f5net.com/pages/viewpage.action?pageId=835144208
 
