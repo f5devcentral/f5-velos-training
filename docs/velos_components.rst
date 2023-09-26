@@ -91,11 +91,11 @@ Each CX410 chassis ships with two SX410 system controllers already installed. Th
 
 -	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110)
 
-  - They operate in an active/active manner from a layer2 switching perspective
+   - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
 
-  - They operate in an active/standby manner for these functions
+   - They operate in an active/standby manner for these functions
 
 It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller, and will fail over to the standby if the active should fail. 
 
