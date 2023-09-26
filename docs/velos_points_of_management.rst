@@ -48,7 +48,7 @@ VLANs are created in the F5OS platform layer, and then they can be assigned to s
   :align: center
   :scale: 50%
 
-Monitoring for a bare metal iSeries of VIPRION is all done within TMOS, whereas in VELOS there are now two layers that can be monitored. Interfaces, LAGs, and other platform layer objects such as CPU, memory, temperature, disks can be monitored at the F5OS layer via CLI, GUI, API, or SNMP. Higher level monitoring of virtual servers, pools and L4-7 objects continue to be done inside the TMOS layer of the F5OS tenant.
+Monitoring for a bare metal iSeries or VIPRION is all done within TMOS, whereas in VELOS there are now two layers that can be monitored. Interfaces, LAGs, and other platform layer objects such as CPU, memory, temperature, disks can be monitored at the F5OS layer via CLI, GUI, API, or SNMP. Higher level monitoring of virtual servers, pools and L4-7 objects continue to be done inside the TMOS layer of the F5OS tenant.
 
 .. image:: images/velos_points_of_management/image6.png
   :align: center
