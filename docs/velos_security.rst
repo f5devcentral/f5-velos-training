@@ -23,9 +23,9 @@ Allow List for F5OS Management
 
 F5OS only allows management access via the out-of-band management interfaces on VELOS, there is no in-band access to the F5OS management layer. Within VELOS there are two layers for F5OS; the **system controller** layer, and the **chassis partition** layer. Each of these layers have their own management IP addresses, and access control which can restrict access through the out-of-band network. 
 
-Each of the two system controllers has a static IP address assigned, and there is a floating IP address which should be use to access the active system controller. As chassis partitions are deployed they also have a single IP address which is assigned. Access to those F5OS management interfaces may be restricted to specific IP addresses (both IPv4 and IPv6), subnets (via Prefix Length), as well as protocols - 443 (HTTPS), 80 (HTTP), 8888 (RESTCONF), 161 (SNMP), 7001 (VCONSOLE), and 22 (SSH) with version F5OS-C 1.6.0 and later. An administrator can add one or more Allow List entries via the CLI, webUI (webUI will be added in F5OS-C 1.7.0) or API at the system controller layer and the chassis partition layer to lock down access to specific endpoints.
+Each of the two system controllers has a static IP address assigned, and there is a floating IP address which should be used to access the active system controller. As chassis partitions are deployed, they also have a single IP address which is assigned. Access to those F5OS management interfaces may be restricted to specific IP addresses (both IPv4 and IPv6), subnets (via Prefix Length), as well as protocols - 443 (HTTPS), 80 (HTTP), 8888 (RESTCONF), 161 (SNMP), 7001 (VCONSOLE), and 22 (SSH) with version F5OS-C 1.6.0 and later. An administrator can add one or more Allow List entries via the CLI, webUI (webUI will be added in F5OS-C 1.7.0) or API at the system controller layer and the chassis partition layer to lock down access to specific endpoints.
 
-By default, all ports except for 161 (SNMP) are enabled for access, meaning ports 80, 443, 8888, 7001, and 22 are allowed access. Port 80 is only open to allow a redirect to port 443 in case someone tries to access the webUI over port 80. The webUI itself is not accessible over port 80. Port 161 is typically viewed as un-secure, and is therefore not accessible until an allow list entry is created for the endpoint trying to access F5OS using SNMP queries. Ideally SNMPv3 should be utilized to provide additional layers of security on an otherwise un-secure protocol. VCONSOLE access also has to be explicitly configured before access to the tenants is possible over port 7001. 
+By default, all ports except for 161 (SNMP) are enabled for access, meaning ports 80, 443, 8888, 7001, and 22 are allowed access. Port 80 is only open to allow a redirect to port 443 in case someone tries to access the webUI over port 80. The webUI itself is not accessible over port 80. Port 161 is typically viewed as un-secure and is therefore not accessible until an allow list entry is created for the endpoint trying to access F5OS using SNMP queries. Ideally SNMPv3 should be utilized to provide additional layers of security on an otherwise un-secure protocol. VCONSOLE access also must be explicitly configured before access to the tenants is possible over port 7001. 
 
 To further lock down access you may add an Allow List entry including an IP address and optional prefix for each of the protocols listed above. As an example, if you wanted to restrict API and webUI access to a particular IP address and/or subnet, you can add an Allow List entry for the desired IP or subnet (using the prefix length), specify port 443 and all access from other IP endpoints will be prevented.
 
@@ -34,7 +34,7 @@ The examples below can be applied at either the system controller layer logging 
 Adding Allow List Entries via CLI
 -----------------------------------
 
-If you would like to lock down one of the protocols to either a single IP address or subnet, use the **system allowed-ips** command. Be sure to commit any changes. The **prefix-length** parameter is optional. If you omit it, then you will lock down access to a specific IP endpoint, if you add it you can lock down access to a specific subnet.
+If you would like to lock down one of the protocols to either a single IP address or subnet, use the **system allowed-ips** command. Be sure to commit any changes. The **prefix-length** parameter is optional. If you omit it, then you will lock down access to a specific IP endpoint, if you add it, you can lock down access to a specific subnet.
 
 .. code-block:: bash
 
@@ -43,7 +43,7 @@ If you would like to lock down one of the protocols to either a single IP addres
     Commit complete.
     syscon-2-active(config-allowed-ip-snmp)#
 
-Currently you can add one IP address/port pair per **allowed-ip** name with an optional prefix length to specify a CIDR block containing multiple addresses. If you require more than one non-contiguous IP address or subnets you can add it under another name as seen below. 
+Currently you can add one IP address/port pair per **allowed-ip** name with an optional prefix length to specify a CIDR block containing multiple addresses. If you require more than one non-contiguous IP address or subnets, you can add it under another name as seen below. 
 
 .. code-block:: bash
 
@@ -110,7 +110,7 @@ Within the body of the API call, specific IP address/port, and optional prefix-l
 
 
 
-To view the allowed IP's in the API, use the following call.
+To view the allowed IPs in the API, use the following call.
 
 .. code-block:: bash
 
@@ -209,7 +209,7 @@ Note that the hash key can be used to check and compare the status of the primar
 Certificates for Device Management
 ==================================
 
-F5OS supports TLS device certificates and keys to secure connections to the management interface. You can either create a self-signed certificate, or load your own certificates and keys into the system. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. More details can be found in the link below.
+F5OS supports TLS device certificates and keys to secure connections to the management interface. You can either create a self-signed certificate or load your own certificates and keys into the system. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. More details can be found in the link below.
 
 `VELOS Certificate Management Overview <https://techdocs.f5.com/en-us/velos-1-5-0/velos-systems-administration-configuration/title-system-settings.html#cert-mgmt-overview>`_
 
@@ -217,7 +217,7 @@ F5OS supports TLS device certificates and keys to secure connections to the mana
 Managing Device Certificates, Keys, CSRs, and CAs via CLI
 --------------------------------------------------------
 
-By default, F5OS uses a self-signed certificate and key for device management. If you would like to create your own private key and self-signed certificate use the following CLI command:
+By default, F5OS uses a self-signed certificate and key for device management. If you would like to create your own private key and self-signed certificate, use the following CLI command:
 
 .. code-block:: bash
 
@@ -366,7 +366,7 @@ The screen below shows the options when creating a self-signed certificate.
   :align: center
   :scale: 70%
 
-If you choose the **Store TLS** option of **False** then the certiicate details will be displayed, and you will be given the option to copy them to the clipboard. If you want to store them on the system, then set the **Store TLS** option to **True**.
+If you choose the **Store TLS** option of **False** then the certificate details will be displayed, and you will be given the option to copy them to the clipboard. If you want to store them on the system, then set the **Store TLS** option to **True**.
 
 .. image:: images/velos_security/imagecert4.png
   :align: center
@@ -382,7 +382,7 @@ You can then use the **Show** options to display the current certificate, key, a
   :align: center
   :scale: 70%
 
-You can also create a Certificate Signing Request (CSR) for the self-signed certificate for use when submitting the certificate to the Certificate Authourity (CA).
+You can also create a Certificate Signing Request (CSR) for the self-signed certificate for use when submitting the certificate to the Certificate Authority (CA).
 
 .. image:: images/velos_security/imagecsr1.png
   :align: center
@@ -394,7 +394,7 @@ After clicking **Save** the CSR will appear, and you will be able to **Copy to C
   :align: center
   :scale: 70%
 
-When you install an SSL certificate on the system, you also install a certificate authority (CA) bundle, which is a file that contains root and intermediate certificates. The combination of these two files complete the SSL chain of trust.
+When you install an SSL certificate on the system, you also install a certificate authority (CA) bundle, which is a file that contains root and intermediate certificates. The combination of these two files completes the SSL chain of trust.
 
 .. image:: images/velos_security/imageca1.png
   :align: center
@@ -456,7 +456,7 @@ In the body of the API call enter the following JSON syntax.
 Encrypt Management TLS Private Key
 =======================
 
-Previously, F5OS allowed an admin to import a TLS certificate and key in clear text. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. This is similar to the BIG-IP functionality defined in the link below.
+Previously, F5OS allowed an admin to import a TLS certificate and key in clear text. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. This is like the BIG-IP functionality defined in the link below.
 
 `K14912: Adding and removing encryption from private SSL keys (11.x - 16.x) <https://my.f5.com/manage/s/article/K14912>`_
 
@@ -464,7 +464,7 @@ Previously, F5OS allowed an admin to import a TLS certificate and key in clear t
 Appliance Mode for F5OS
 =======================
 
-If you would like to prevent root / bash level access to the F5OS layer, you can enable **Appliance Mode**, which operates in a similar manner as TMOS appliance mode. Both the F5OS-C system controller and chassis partition layers have a setting where appliance mode can be enabled. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled. The admin account to the F5OS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
+If you would like to prevent root / bash level access to the F5OS layer, you can enable **Appliance Mode**, which operates in a similar manner as TMOS appliance mode. Both the F5OS-C system controller and chassis partition layers have a setting where appliance mode can be enabled. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled. The admin account to the F5OS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower-level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
 
 Enabling Appliance Mode via the CLI
 -----------------------------------
@@ -510,14 +510,14 @@ Appliance mode can be enabled or disabled via the webUI under the **System Setti
 Enabling Appliance Mode via the API
 -----------------------------------
 
-Appliance mode can be enabled or disabled via the API. To view the current status of appliance mode use the following API call.
+Appliance mode can be enabled or disabled via the API. To view the current status of appliance mode, use the following API call.
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-security-appliance-mode:appliance-mode
 
 
-You will see output similar to the response below showing the config and state of appliance mode for F5OS.
+You will see output like the response below showing the config and state of appliance mode for F5OS.
 
 .. code-block:: json
 
@@ -551,13 +551,13 @@ In the body of the API call add the following:
 Session Timeouts and Token Lifetime
 ===================================
 
-Idle timeouts were configurable in previous releases, but the configuration only applied to the current session and was not persistent. F5OS-A 1.3.0 added the ability to configure persistent idle timeouts for F5OS for both the CLI and webUI. The F5OS CLI timeout is configured under system settings, and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
+Idle timeouts were configurable in previous releases, but the configuration only applied to the current session and was not persistent. F5OS-A 1.3.0 added the ability to configure persistent idle timeouts for F5OS for both the CLI and webUI. The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
 
 In F5OS-A 1.4.0, a new **sshd-idle-timeout** option has been added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn't apply to console sessions. 
 
 There is one case that is not covered by either of the above idle-timeout settings. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session. Only console connections to the F5OS CLI are covered via the idle-timeout setting. An enhancement has been filed, and in the future this case will be addressed. If this is a concern, then appliance mode could be enabled preventing root/bash access to the system.
 
-For the webUI, a token based timeout is now configurable under the **system aaa** settings. A restconf-token config lifetime option has been added. Once a client to the webUI has a token they are allowed to refresh it up to five times. If the token lifetime is set to 1 minute, then a timeout won't occur until five times that value, or five minutes later. This is because the token refresh has to fail five times before disconnecting the client.  
+For the webUI, a token-based timeout is now configurable under the **system aaa** settings. A restconf-token config lifetime option has been added. Once a client to the webUI has a token, they are allowed to refresh it up to five times. If the token lifetime is set to 1 minute, then a timeout won't occur until five times that value, or five minutes later. This is because the token refresh has to fail five times before disconnecting the client.  
 
 Configuring SSH and CLI Timeouts via CLI
 -----------------------------------------
@@ -646,7 +646,7 @@ Currently only the HTTPS token lifetime is configurable in the webUI. SSH and CL
 Token Lifetime via CLI
 ----------------------
 
-As mentioned in the introduction, the webUI and API use token based authentication and the timeout is based on five token refreshes failing, so the value is essentially five times the configured token lifetime. Use the command **system aaa restconf-token config lifetime <value-in-minutes>** to set the token lifetime. You may configure the restconf-token lifetime via the CLI. The value is in minutes, and the client is able to refresh the token five times before it expires. As an example, if the restconf-token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in a webUI session or API timing out after 5 minutes.
+As mentioned in the introduction, the webUI and API use token-based authentication and the timeout is based on five token refreshes failing, so the value is essentially five times the configured token lifetime. Use the command **system aaa restconf-token config lifetime <value-in-minutes>** to set the token lifetime. You may configure the restconf-token lifetime via the CLI. The value is in minutes, and the client can refresh the token five times before it expires. As an example, if the restconf-token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in a webUI session or API timing out after 5 minutes.
 
 .. code-block:: bash
 
@@ -733,7 +733,7 @@ To display the current restconf-token lifetime setting, use the command **show s
 Token Lifetime via webUI
 ------------------------
 
-You may configure the restconf-token lifetime via the webUI (new feature added in F5OS-A 1.6.0). The value is in minutes, and the client is able to refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
+You may configure the restconf-token lifetime via the webUI (new feature added in F5OS-A 1.6.0). The value is in minutes, and the client can refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
 
 .. image:: images/velos_security/image6.png
   :align: center
@@ -742,7 +742,7 @@ You may configure the restconf-token lifetime via the webUI (new feature added i
 Token Lifetime via API
 ----------------------
 
-You may configure the restconf-token lifetime via the API. The value is in minutes, and the client is able to refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session or API session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
+You may configure the restconf-token lifetime via the API. The value is in minutes, and the client can refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session or API session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
 
 Use the following API PATCH call to set the restconf-token lifetime, or any other password policy parameter.
 
@@ -793,7 +793,7 @@ In the body of the API call adjust the restconf-token lifetime setting to the de
 Disabling Basic Authentication
 ==============================
 
-F5OS utilizes basic authentication (username/password) as well as token based authentication for both the API and the webUI. Generally, username/password is issued by the client in order to obtain a token from F5OS, which is then used to make further inquiries or changes. Tokens have a relatively short lifetime for security reasons, and the user is allowed to refresh that token a certain number of times before they are forced to re-authenticate using basic authentication again. Although token based authentication is supported, basic authentication can still be utilized to access F5OS and make changes by default. A new option was added in F5OS-A 1.3.0 to allow basic authentication to be disabled, except for the means of obtaining a token. Once a token is issued to a client, it will be the only way to make changes via the webUI or the API. 
+F5OS utilizes basic authentication (username/password) as well as token-based authentication for both the API and the webUI. Generally, username/password is issued by the client to obtain a token from F5OS, which is then used to make further inquiries or changes. Tokens have a relatively short lifetime for security reasons, and the user is allowed to refresh that token a certain number of times before they are forced to re-authenticate using basic authentication again. Although token-based authentication is supported, basic authentication can still be utilized to access F5OS and make changes by default. A new option was added in F5OS-A 1.3.0 to allow basic authentication to be disabled, except for the means of obtaining a token. Once a token is issued to a client, it will be the only way to make changes via the webUI or the API. 
 
 
 Disabling Basic Auth via the CLI
@@ -964,7 +964,7 @@ In the body of the API call adjust the restconf-token:basic setting to **true** 
 Disabling Basic Auth via the webUI
 ----------------------------------
 
-Disabling basic authentication via the webUI is a new feature that has been added in F5OS-A 1.4.0. In the webUI go to **User Management -> Authentication Settings** and you'll see a drop down box to enable or disable **Basic Authentication**.
+Disabling basic authentication via the webUI is a new feature that has been added in F5OS-A 1.4.0. In the webUI go to **User Management -> Authentication Settings** and you'll see a drop-down box to enable or disable **Basic Authentication**.
 
 .. image:: images/velos_security/image5.png
   :align: center
@@ -973,7 +973,7 @@ Disabling basic authentication via the webUI is a new feature that has been adde
 Confirming Basic Auth is Disallowed
 -----------------------------------
 
-With basic authentication enabled (default setting), you can make any API call using username/password (basic auth) autentication. Using the Postman utility this can be demonstrated on any configuration change by setting The Auth Type to **Basic Auth**, and configuring a username and password as seen below.
+With basic authentication enabled (default setting), you can make any API call using username/password (basic auth) authentication. Using the Postman utility this can be demonstrated on any configuration change by setting The Auth Type to **Basic Auth**, and configuring a username and password as seen below.
 
 .. image:: images/velos_security/imagebasicauth.png
   :align: center
@@ -996,7 +996,7 @@ While basic auth is enabled, any API call using username/password will complete 
         }
     }
 
-When basic authentication is enabled, a client will be allowed to obtain an auth token using username/password at any URI. The client can then choose to use the auth token for subsequent requests, or they can continue to use basic auth (username/password) authenticaton. As an example, the curl command below uses basic auth successfully to the URI endpoint **restconf/data/openconfig-system:system/config**. In the response you can see the **X-Auth-Token** header, which contains the auth token that can then be used by the client for subsequent requests:
+When basic authentication is enabled, a client will be allowed to obtain an auth token using username/password at any URI. The client can then choose to use the auth token for subsequent requests, or they can continue to use basic auth (username/password) authentication. As an example, the curl command below uses basic auth successfully to the URI endpoint **restconf/data/openconfig-system:system/config**. In the response you can see the **X-Auth-Token** header, which contains the auth token that can then be used by the client for subsequent requests:
 
 .. code-block:: bash
 
@@ -1055,7 +1055,7 @@ Here is an example of the client issuing the same request with the auth token it
     }
     user1$ 
 
-If the same exercise is repeated after basic auth is disabled, then the user will not be able to run the intial request using basic auth (username/password). It will fail to any non-root URI as seen below. The response will contain and **access-denied** error.
+If the same exercise is repeated after basic auth is disabled, then the user will not be able to run the initial request using basic auth (username/password). It will fail to any non-root URI as seen below. The response will contain and **access-denied** error.
 
 .. code-block:: bash
 
@@ -1086,7 +1086,7 @@ If the same exercise is repeated after basic auth is disabled, then the user wil
     }
     user1$
 
-By changing the URI to use the top level API endpoint: (:8888/restconf/data) or (:443/api/data), the client will now be able to obtain a token using basic authentication, but the token will be needed for any other API endpoints.
+By changing the URI to use the top-level API endpoint: (:8888/restconf/data) or (:443/api/data), the client will now be able to obtain a token using basic authentication, but the token will be needed for any other API endpoints.
 
 .. code-block:: bash
 
@@ -1184,7 +1184,7 @@ Local Password Policies can be set in the **User Management -> Authentication Se
 Setting Password Policies via API
 ---------------------------------
 
-Local Password Policies can be viewed or set via the API using the following API calls. To view the current password policy settings issue the following GET API call.
+Local Password Policies can be viewed or set via the API using the following API calls. To view the current password policy settings, issue the following GET API call.
 
 .. code-block:: bash
 
@@ -1264,7 +1264,7 @@ In the payload of the API call adjust the appropriate parameters under **f5-open
 Remote Authentication
 =====================
 
-The F5OS platform layer supports both local and remote authentication. By default, there are local users enabled for both admin and root access. You will be forced to change passwords for both of these accounts on initial login. Many users will prefer to configure the F5OS layer to use remote authentication via LDAP, RADIUS, AD, or TACACS+. The F5OS TMOS based tenants maintain their own local or remote authentication, and details are covered in standard TMOS documentation.
+The F5OS platform layer supports both local and remote authentication. By default, there are local users enabled for both admin and root access. You will be forced to change passwords for both accounts on initial login. Many users will prefer to configure the F5OS layer to use remote authentication via LDAP, RADIUS, AD, or TACACS+. The F5OS TMOS based tenants maintain their own local or remote authentication, and details are covered in standard TMOS documentation.
 
 `Configuring Remote User Authentication and Authorization on TMOS <https://techdocs.f5.com/kb/en-us/products/big-ip_ltm/manuals/product/tmos-implementations-13-0-0/10.html>`_
 
@@ -1345,7 +1345,7 @@ To view the current mappings use the **show system aaa authentication roles** CL
 Login Banner / Message of the Day
 ===================
 
-Some environments require warning or acceptance messages to be displayed to clients connecting to the F5OS layer at initial connection time and/or upon successful login. The F5OS layer supports configurable Message of the Day (MoTD) and Login Banners that are displayed to clients connecting to the F5OS layer via both CLI and the webUI. The MoTD and Login Banner can be configured via CLI, webUI, or API. The Login Banner is displayed at initial connect time and is commonly used to notify users they are connecting to a specific resource, and that they should not connect if they are not authorized. The MoTD is displayed after successful login, and may also display some information about the resource the user is connecting to.
+Some environments require warning or acceptance messages to be displayed to clients connecting to the F5OS layer at initial connection time and/or upon successful login. The F5OS layer supports configurable Message of the Day (MoTD) and Login Banners that are displayed to clients connecting to the F5OS layer via both CLI and the webUI. The MoTD and Login Banner can be configured via CLI, webUI, or API. The Login Banner is displayed at initial connect time and is commonly used to notify users they are connecting to a specific resource, and that they should not connect if they are not authorized. The MoTD is displayed after successful login and may also display some information about the resource the user is connecting to.
 
 Configuring Login Banner / MoTD via CLI
 ---------------------------------------
@@ -1476,7 +1476,7 @@ F5OS-A 1.2.0 added support for SNMPv3. Earlier versions of F5OS-A only supported
 NTP Authentication
 ==================
 
-NTP Authentication can be enabled to provide a secure communication channel for Network Time Protocol queries from the F5OS platform layer. In order to utilize NTP authentication you must first enable NTP authentication and then add keys in order to secure communication to your NTP servers.
+NTP Authentication can be enabled to provide a secure communication channel for Network Time Protocol queries from the F5OS platform layer. To utilize NTP authentication you must first enable NTP authentication and then add keys in order to secure communication to your NTP servers.
 
 Enabling NTP Authentication via CLI
 -----------------------------------
@@ -1816,7 +1816,7 @@ The API call should return output similar to what is seen below.
 Audit Logging
 ============
 
-F5OS has the ability to log all configuration changes and access to the F5OS layer in audit logs. In versions prior to F5OS-C 1.6.0, all access and configuration changes for the system controller layer are logged in one of two separate **audit.log** files. The files reside in the in one of the following paths in the F5OS filesystem when logged in as root; **/var/F5/controller/log/audit.log** or **/var/log/audit/audit.log**. If you are logged into the F5OS CLI as admin, then the actual paths are simplified to **log/controller/audit.log** and **/log/host/audit/audit.log** for the system controller layer.
+F5OS can log all configuration changes and access to the F5OS layer in audit logs. In versions prior to F5OS-C 1.6.0, all access and configuration changes for the system controller layer are logged in one of two separate **audit.log** files. The files reside in the in one of the following paths in the F5OS filesystem when logged in as root; **/var/F5/controller/log/audit.log** or **/var/log/audit/audit.log**. If you are logged into the F5OS CLI as admin, then the actual paths are simplified to **log/controller/audit.log** and **/log/host/audit/audit.log** for the system controller layer.
 
 In versions prior to F5OS-C 1.6.0, all access and configuration changes for the chassis partition layer are logged in one of two separate **audit.log** files. The files reside in the in one of the following paths in the F5OS filesystem when logged in as root on the system controller; **/var/F5/partition<ID#>/log/audit.log** or **/var/log/audit/audit.log**. If you are logged into the F5OS CLI as admin, then the actual paths are simplified to **log/audit.log** and **/log/host/audit/audit.log** for the system controller layer.
 
@@ -1825,7 +1825,7 @@ In versions prior to F5OS-C 1.6.0, the audit.log files may only be viewed locall
 Viewing Audit Logs via F5OS CLI (F5OS-A 1.6.0 and Later)
 --------------------------------------------------------
 
-Any information related to login/logout or configuration changes are logged in the **log/controller/audit.log** location. By default these events are not sent to a configured remote syslog location. If you would like to send informational audit level messages to a remote syslog server, then you must explicitly enable audit events.
+Any information related to login/logout or configuration changes are logged in the **log/controller/audit.log** location. By default, these events are not sent to a configured remote syslog location. If you would like to send informational audit level messages to a remote syslog server, then you must explicitly enable audit events.
 
 First, you must configure the remote syslog destination. As part of that configuration, you will specify the IP address, port, and protocol of the remote syslog server. To send audit.log events to the remote server you must add the command **selectors selector AUTHPRIV DEBUG** as seen below.
 
@@ -1851,7 +1851,7 @@ Then, you can control the level of events that will be logged to the local audit
     config severity INFORMATIONAL
     !
 
-The formatting of audit logs provide the date/time in UTC, the account and ID who performed the action, the type of event, the asset affected, the type of access, and success or failure of the request. Separate log entries provide details on user access (login/login failures) information such as IP address and port and whether access was granted or not.
+The formatting of audit logs provides the date/time in UTC, the account and ID who performed the action, the type of event, the asset affected, the type of access, and success or failure of the request. Separate log entries provide details on user access (login/login failures) information such as IP address and port and whether access was granted or not.
 
 
 Viewing Audit Logs via F5OS CLI
@@ -2193,7 +2193,7 @@ Most audit events go to the **log/controller/audit.log** location, while a few o
     syscon-1-active# 
 
 
-To view the contents of the **audit.log** file, use the command **file show path /log/controller/audit.log**. This will show the entire log file from the beginning, but may not be the best way to troubleshoot a recent event. You can append **| more** to the command to go through the file in pages.
+To view the contents of the **audit.log** file, use the command **file show path /log/controller/audit.log**. This will show the entire log file from the beginning but may not be the best way to troubleshoot a recent event. You can append **| more** to the command to go through the file in pages.
 
 .. code-block:: bash
 
@@ -2232,7 +2232,7 @@ There are options to manipulate the output of the file. Add **| ?** to the comma
     until     End with the line that matches
     syscon-1-active# file show log/controller/audit.log |
 
-There are other file options that allow the user to tail the log file using **file tail -f** for a live tail,  or **file tail -n <number of lines>** to view a specific number of the most recent lines.
+There are other file options that allow the user to tail the log file using **file tail -f** for a live tail or **file tail -n <number of lines>** to view a specific number of the most recent lines.
 
 .. code-block:: bash
 
@@ -2444,7 +2444,7 @@ Below is an example of a client logging out of the F5OS CLI. Note that the logs 
 Account Lockout Audit Logs
 --------------------------
 
-In order to capture all events related to account lockout, you will need to configure F5OS to send both standard syslog events as well as host audit log events to a remote server. This is because some of the audit events related to account lockout are captured before the F5OS layer in the host/audit.log and by default that log is not sent remotely.
+To capture all events related to account lockout, you will need to configure F5OS to send both standard syslog events as well as host audit log events to a remote server. This is because some of the audit events related to account lockout are captured before the F5OS layer in the host/audit.log and by default that log is not sent remotely.
 
 To forward the contents of the host audit logs add **config files file audit/audit.log** to the **system logging host-logs** configuration as seen below.
 
@@ -2561,7 +2561,7 @@ Below is an example audit log of the user **jim-test** using the webUI and then 
 Example Audit Logging of API Changes
 ------------------------------------
 
-Below is an example audit log of the user **admin** using the API and then adding a new VLAN to the configuration. In F5OS release prior to F5OS-A 1.4.0 API audit logs captured configuration changes, but did not log the full configuration payload. 
+Below is an example audit log of the user **admin** using the API and then adding a new VLAN to the configuration. In F5OS release prior to F5OS-A 1.4.0 API audit logs captured configuration changes but did not log the full configuration payload. 
 
 .. code-block:: bash
 
@@ -2579,7 +2579,7 @@ Below is an example audit log of the user **admin** using the API and then addin
 Downloading Audit Logs via CLI
 ------------------------------
 
-Audit logs can be sent to a remote server as outlined above, but they can also be downloaded from the system if needed. Before transferring a file using the CLI, use the **file list** command to see the contents of the  directory and ensure the file is there. There are two audit.log locations: **log/system/audit.log** where most of the audit.log events are logged, and **log/host/audit/audit.log** where some lower level events are logged.
+Audit logs can be sent to a remote server as outlined above, but they can also be downloaded from the system if needed. Before transferring a file using the CLI, use the **file list** command to see the contents of the directory and ensure the file is there. There are two audit.log locations: **log/system/audit.log** where most of the audit.log events are logged, and **log/host/audit/audit.log** where some lower-level events are logged.
 
 The path below is the main audit.log.
 
@@ -2691,13 +2691,13 @@ In the response the latest file transfer status will be displayed.
 Downloading Audit Logs via webUI
 -------------------------------
 
-You can download either of the audit.log files from the **System -> File Utilities** page in the webUI. In the drop down menu for the **Base Directory** select log/host, and then you can select the audit directory as seen below.  
+You can download either of the audit.log files from the **System -> File Utilities** page in the webUI. In the drop-down menu for the **Base Directory** select log/host, and then you can select the audit directory as seen below.  
 
 .. image:: images/velos_security/imageaudit1.png
   :align: center
   :scale: 70%
 
-Inside the audit directory you can then select the audit.log and then either **Download** to copy the file to your local machine via the browser, or select **Export** to copy to a remote HTTPS server.
+Inside the audit directory you can then select the audit.log and then either **Download** to copy the file to your local machine via the browser or select **Export** to copy to a remote HTTPS server.
 
 .. image:: images/velos_security/imageaudit2.png
   :align: center

@@ -2,7 +2,7 @@
 Initial Setup Within the Chassis Partition
 ==========================================
 
-Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own F5OS-C CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band IP interfaces. At first login you will be prompted to change the default chassis partition password.
+Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own F5OS-C CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address, and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band IP interfaces. At first login you will be prompted to change the default chassis partition password.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image1.png
   :align: center
@@ -12,7 +12,7 @@ Chassis partitions are completely separate management entities that are managed 
 Chassis Partition Dashboard
 ---------------------------
 
-The chassis partition **Dashboard** will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly it will display **System Summary** stats under the tab of that name..
+The chassis partition **Dashboard** will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly it will display **System Summary** stats under the tab of that name.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image2.png
   :align: center
@@ -24,7 +24,7 @@ If you click on the **Network** tab, then each front panel port will be displaye
   :align: center
   :scale: 70%
 
-If you click on the **CPU** tab, then CPU utlization across different time periods will be displyed for each of the blades in this chassis partition.
+If you click on the **CPU** tab, then CPU utilization across different time periods will be displayed for each of the blades in this chassis partition.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image4.png
   :align: center
@@ -57,7 +57,7 @@ Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure 
   :width: 45%
 
 
-**NOTE: Both ports on the BX110 blade must be configured in the same mode in current F5OS versions i.e. both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
+**NOTE: Both ports on the BX110 blade must be configured in the same mode in current F5OS versions i.e., both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
 
 Configuring PortGroups from the webUI
 -----------------------------------
@@ -68,7 +68,7 @@ To configure Portgroups go to **Network Settings > Port Groups** in the chassis 
   :align: center
   :scale: 70% 
 
-If you do make a change the blade will be forced to reboot to load a new bitstream image into the FPGA.
+If you make a change the blade will be forced to reboot to load a new bitstream image into the FPGA.
 
 Configuring PortGroups from the CLI
 -----------------------------------
@@ -242,7 +242,7 @@ To list the current portgroup configuration issue the following API call:
 Network Settings -> Interfaces
 ------------------------------
 
-Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. A breakout cable is require to separate the different ports. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. A breakout cable is required to separate the different ports. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image9.png
   :align: center
@@ -263,7 +263,7 @@ Within the chassis partition webUI the physical ports of all blades within that 
   :align: center
   :scale: 70%  
 
-You can click on any interface to view its settings or edit them. You can currently change the interface State via the webUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG then the VLAN configuration is done within the LAG rather than the interface.
+You can click on any interface to view its settings or edit them. You can currently change the interface State via the webUI or the **Native VLAN** (untagged) and **Trunk VLANs** (tagged) as long as the interface is not part of a LAG. If the interface is part of the LAG, then the VLAN configuration is done within the LAG rather than the interface.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image12.png
   :align: center
@@ -638,7 +638,7 @@ The **show vlan-listeners** command will show the current state:
 Configuring VLANs from the API
 ------------------------------
 
-To configure VLANs use the following API command and JSON body. This will configure mul;tiple VLANs along with their VLAN ID’s. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
+To configure VLANs use the following API command and JSON body. This will configure multiple VLANs along with their VLAN IDs. After the VLANs are created you will be able to assign then to either interfaces or LAGs.
 
 .. code-block:: bash
 
@@ -824,13 +824,15 @@ Link Aggregation Groups (LAGs) can be configured in the chassis partition webUI 
 
 You can add a new LAG or edit an existing one. For **LAG Type** the options are **LACP** or **STATIC**. If you choose LACP, then you have additional options for **LACP Interval** (**SLOW** or **FAST**) and **LACP Mode** (**ACTIVE** or **PASSIVE**). LACP best practices should follow previous BIG-IP examples as outlined in the links below. Note in BIG-IP the term **Trunks** is used in place of **LAG** which is used in the F5OS layer in VELOS: 
 
-https://support.f5.com/csp/article/K1689
+`K1689: Overview of trunks on BIG-IP platforms <https://my.f5.com/manage/s/article/K1689>`_
 
-https://support.f5.com/csp/article/K13142
+`K13142: Configure the BIG-IP system to interface with Cisco virtual PortChannel <https://my.f5.com/manage/s/article/K13142>`_
+
 
 The following solution article provides guidance for setting up VELOS LAG interfaces and LACP with Cisco Nexus 9000 series switches:
 
-https://support.f5.com/csp/article/K33431212
+
+`K33431212: Configure LAGs with LACP between the VELOS system and Cisco Nexus 9000 series switches <https://my.f5.com/manage/s/article/K33431212>`_
 
 
 Once you have configured the LAG Type and LACP options, you can add any physical interfaces within this chassis partition to be part of a LAG. Note you cannot add physical interfaces that reside in other chassis partitions as they are completely isolated from each other. Finally, you can configure the **Native VLAN** (for untagged VLAN), and what **Trunked VLANs** (tagged) you’d like to add to this LAG interface.
@@ -1212,7 +1214,7 @@ The final step is adding LACP configuration for each LAG:
       }
   }
 
-To view the final LAG configuration via the API use the following API call:
+To view the final LAG configuration via the API, use the following API call:
 
 .. code-block:: bash
 

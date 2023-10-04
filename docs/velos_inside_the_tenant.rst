@@ -3,7 +3,7 @@ Inside the Tenant
 =================
 
 
-Once a tenant is deployed you can connect/communicate directly to one of its CLI, webUI, or API interfaces. At this layer you are interacting with TMOS, i.e. the experience should be almost identical to a vCMP guest with some minor exceptions. Day to day management of the tenant will use the same CLI (tmsh), API (iControl) and webUI as TMOS instances or hardware devices running within customer envronments today. If you are using vCMP today, then many of the concepts will be familiar. If you run and appliance or VIPRION in a bare metal mode, then there will be some differences as VELOS will be configured with at least one tenant, and lower layer configuration and stats will come from the F5OS layer.
+Once a tenant is deployed you can connect/communicate directly to one of its CLI, webUI, or API interfaces. At this layer you are interacting with TMOS, i.e. the experience should be almost identical to a vCMP guest with some minor exceptions. Day to day management of the tenant will use the same CLI (tmsh), API (iControl) and webUI as TMOS instances or hardware devices running within customer environments today. If you are using vCMP today, then many of the concepts will be familiar. If you run and appliance or VIPRION in a bare metal mode, then there will be some differences as VELOS will be configured with at least one tenant, and lower layer configuration and stats will come from the F5OS layer.
 
 VLAN Behavior
 =============
@@ -16,7 +16,7 @@ VELOS follows a similar behavior as far as tenants inheriting VLANs from the F5O
   :align: center
   :scale: 70%
 
-These are the VLANs as they appear in the F5OS platform layer. Notice that the tenant does not see all VLAN’s, only the ones that are assigned to it by the administrator:
+These are the VLANs as they appear in the F5OS platform layer. Notice that the tenant does not see all VLANs, only the ones that are assigned to it by the administrator:
 
 .. image:: images/velos_inside_the_tenant/image2.png
   :align: center
@@ -28,7 +28,7 @@ You can delete the VLANs inside the tenant and then recreate them with a new nam
 Interface Behavior
 ==================
 
-The number of interfaces within a tenant will be based upon the number of vCPUs assigned to the tenant and the number of slots the tenant is running on. The screenshot below shows the interfaces inside the tenant lining up with the number of physical cores per slot. In the first example there are 6 vCPUs on a single slot tenant, this will equate to 3 physical CPUs. Likewise for a dual slot tenant with 10 vCPUs per slot. You’ll see 5 physical CPU’s per slot.
+The number of interfaces within a tenant will be based upon the number of vCPUs assigned to the tenant and the number of slots the tenant is running on. The screenshot below shows the interfaces inside the tenant lining up with the number of physical cores per slot. In the first example there are 6 vCPUs on a single slot tenant, this will equate to 3 physical CPUs. Likewise for a dual slot tenant with 10 vCPUs per slot. You’ll see 5 physical CPUs per slot.
 
 .. image:: images/velos_inside_the_tenant/image3.png
   :align: center

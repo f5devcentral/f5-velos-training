@@ -7,9 +7,9 @@ F5OS-C System Controller Upgrades
 
 The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C have introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
 
-This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and failover all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an acitve state, and the remaining controller will be upgraded.
+This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and failover all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an active state, and the remaining controller will be upgraded.
 
-When upgrading the system controllers, you will have a choice of upgrading either a bundled release, meaning **OS** and **Services** are **bundled** together in an ISO image, or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled/ISO option for upgrades at this time. In the future, unbundled options may be utilized for some upgrades.
+When upgrading the system controllers, you will have a choice of upgrading either a bundled release, meaning **OS** and **Services** are **bundled** together in an ISO image, or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled/ISO option for upgrades currently. In the future, unbundled options may be utilized for some upgrades.
 
 .. image:: images/velos_software_upgrades/image1.png
   :align: center
@@ -196,7 +196,7 @@ A response like the one below will provide the status of the transfer:
         }
     }
 
-After transferring the file you can view the contents of the images/staging directory. The file will then go through an import process before it is ready for use.
+After transferring the file, you can view the contents of the images/staging directory. The file will then go through an import process before it is ready for use.
 
 .. code-block:: bash
 
@@ -234,7 +234,7 @@ You can then monitor the images/import/iso directory to see when the file is rea
     "f5-utils-file-transfer:path": "images/import/iso"
     }
 
-You’ll see output similar to the example below. Once the file shows up here you are ready to upgrade.
+You’ll see output like the example below. Once the file shows up here you are ready to upgrade.
 
 .. code-block:: json
 
@@ -455,7 +455,7 @@ To upgrade the system controllers via the API you must first run the check versi
         "f5-system-controller-image:iso-version": "{{Controller_ISO_Image_Full}}"
     }
 
-If the compatability check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
 
 .. code-block:: json
 
@@ -495,7 +495,7 @@ Chassis Partition Upgrades
 Upgrading a Chassis Partition via the webUI
 -----------------------------------------
 
-Upgrade of chassis partitions is performed from the system controller webUI **Partition Management** screen. You must first select the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. At this time a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
+Upgrade of chassis partitions is performed from the system controller webUI **Partition Management** screen. You must first select the checkmark next to the chassis partition you wish to upgrade and then click **Edit**. You’ll now be able perform either a **bundled** or **unbundled** software upgrade of the chassis partition. Currently, a bundled upgrade using the ISO image is recommended. Once you click **Save**, the partition will be brought offline and back online after the upgrade. All tenants will be suspended during this time so an outage will occur for this chassis partition only. 
 
 .. image:: images/velos_software_upgrades/image8.png
   :align: center
@@ -626,7 +626,7 @@ To upgrade a chassis partition via the API you must first run the check version 
         }
     }
 
-If the compatability check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
 
 .. code-block:: json
 
@@ -752,7 +752,7 @@ To copy a tenant image into a chassis partition, use the following API call to t
         ]
     }
 
-To list the current tenant images available on the chassis partition use the following API Call:
+To list the current tenant images available on the chassis partition, use the following API Call:
 
 .. code-block:: bash
 
@@ -783,7 +783,7 @@ Below is output generated from the previous command:
 Tenant Upgrades
 ---------------
 
-Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release, and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant from inside the F5OS layer, you must perform the upgrade from inside the tenant.
+Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant from inside the F5OS layer, you must perform the upgrade from inside the tenant.
 
 **NOTE: Currently VELOS does not provide a shared image repository for all tenants to upgrade from. With vCMP guests, VIPRION allowed for an image to be loaded once into the host layer, and all tenants had access to that repository to use to upgrade.**
 

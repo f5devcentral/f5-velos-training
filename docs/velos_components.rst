@@ -15,7 +15,7 @@ The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can 
 Rack Mounting the Chassis
 =========================
 
-An ideal environment for VELOS, is to use a minimum of a 30” rack. The rackmount kits that ship with the system will support the minimum depth of 30”, and can telescope to longer depths if needed. If the rack depth is less than 30”, then custom rack mount kits will need to be ordered.   
+An ideal environment for VELOS, is to use a minimum of a 30” rack. The rackmount kits that ship with the system will support the minimum depth of 30” and can telescope to longer depths if needed. If the rack depth is less than 30”, then custom rack mount kits will need to be ordered.   
 
 .. image:: images/velos_components/image2.png
   :align: center
@@ -50,7 +50,7 @@ The PSU controllers are accessible in the upper left-hand corner of the back of 
   :width: 45%
 
 
-A DC power version of the CX410 chassis is also avilable, and runs the same system controllers and line cards.
+A DC power version of the CX410 chassis is also available and runs the same system controllers and line cards.
 
 .. image:: images/velos_components/image8.png
   :align: center
@@ -59,7 +59,7 @@ A DC power version of the CX410 chassis is also avilable, and runs the same syst
 Fan Tray & Cooling
 ===================
 
-The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS is not intaking hot airflow from other devices. The fan tray is removable if it needs to be replaced, but should not be removed for long periods of time, as overheating may occur. 
+The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS is not intaking hot airflow from other devices. The fan tray is removable if it needs to be replaced but should not be removed for long periods of time, as overheating may occur. 
 
 .. image:: images/velos_components/image9.png
   :align: center
@@ -87,7 +87,7 @@ In the initial release of VELOS most of the LCD functionality has not been enabl
 SX410 System Controller
 ========================
 
-Each CX410 chassis ships with two SX410 system controllers already installed. They are not optional, and are not ordered separately. The system controllers perform two main functions:
+Each CX410 chassis ships with two SX410 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
 *	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110)
 
@@ -97,7 +97,7 @@ Each CX410 chassis ships with two SX410 system controllers already installed. Th
 
      * They operate in an active/standby manner for these functions
 
-It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller, and will fail over to the standby if the active should fail. 
+It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller and will fail over to the standby if the active should fail. 
 
 .. image:: images/velos_components/image14.png
   :align: center
@@ -125,7 +125,7 @@ The BX110 blade is a next generation data plane/line card. It has 2 high speed (
   :align: center
   :scale: 60%
 
-The BX110 has 14 physical cores, which are hyperthreaded into 28 vCPUs. Six of the vCPUs are reserved for the F5OS-C platform layer, leaving 22 vCPUs available for multitenancy. Each blade comes with a 1TB SSD drive, and is populated with 128GB of RAM (double the current generation VIPRION B2250). Each BX110 has two Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Application Traffic Service Engine (ATSE) is the “front panel FPGA”, which does initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, similar to how previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
+The BX110 has 14 physical cores, which are hyperthreaded into 28 vCPUs. Six of the vCPUs are reserved for the F5OS-C platform layer, leaving 22 vCPUs available for multitenancy. Each blade comes with a 1TB SSD drive and is populated with 128GB of RAM (double the current generation VIPRION B2250). Each BX110 has two Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Application Traffic Service Engine (ATSE) is the “front panel FPGA”, which does initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
 
 .. image:: images/velos_components/image18.png
   :align: center

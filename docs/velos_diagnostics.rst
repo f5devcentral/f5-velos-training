@@ -5,7 +5,7 @@ VELOS Diagnostics
 Qkviews
 =======
 
-VELOS supports the ability to generate qkview reporte to collect and bundle configuration and diagnostic data that can be sent to support or uploaded to iHealth. It is important to understand the VELOS architecture when generating qkview reports. Generating a qkview report from the system controller will capture OS data and container information related to the system controller software, while generating a qkview report inside a chassis partition will capture data and container information related to the partition layer. To capture tenant level information, you’ll need to run a qkview report inside the TMOS layer of the tenant.
+VELOS supports the ability to generate qkview reports to collect and bundle configuration and diagnostic data that can be sent to support or uploaded to iHealth. It is important to understand the VELOS architecture when generating qkview reports. Generating a qkview report from the system controller will capture OS data and container information related to the system controller software, while generating a qkview report inside a chassis partition will capture data and container information related to the partition layer. To capture tenant level information, you’ll need to run a qkview report inside the TMOS layer of the tenant.
 
 
 K02521182: Generating diagnostic data for the VELOS system using the qkview utility 
@@ -44,7 +44,7 @@ In both the system controller and the chassis partition the qkview can be genera
   :align: center
   :scale: 70%
 
-To generate a qkview report, click the button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously, and can be cleared if you want to use another account. You can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
+To generate a qkview report, click the button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously and can be cleared if you want to use another account. You can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
 
 
 .. image:: images/velos_diagnostics/image2.png
@@ -142,13 +142,13 @@ The output of the command will show the percentage complete of the qkview.
         }
     }
 
-If you'd like to copy the qkview directly to iHealth once it is completed use the following API command referencing the previously completed qkview file.
+If you'd like to copy the qkview directly to iHealth once it is completed, use the following API command referencing the previously completed qkview file.
 
 .. code-block:: bash
 
     POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
 
-In the body of the API call add details with the filename, optional description and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
+In the body of the API call add details with the filename, optional description, and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
 
 .. code-block:: json
 
@@ -696,7 +696,7 @@ Logging Software Component Descriptions
 
 Below is a brief description of what each sw-component is responsible for, and some example logging messages when DEBUG is enabled. Note that when DEBUG level is set these messages are not intended for customers, they are for F5 developers and support personnel.
 
-**alert-service** - The Alert Service runs on the both System Controllers and also each blade. "Alarm" is the user-facing term for alerts. Applications can send an AlertNotification or ThresholdNotification message over ZeroMQ to their local alert service. The blades and the standby controller forward all of their alert messages to the alert service running on the active controller. It aggregates all alerts and publishes them to ConfD.
+**alert-service** - The Alert Service runs on the both System Controllers and also each blade. "Alarm" is the user-facing term for alerts. Applications can send an AlertNotification or ThresholdNotification message over ZeroMQ to their local alert service. The blades and the standby controller forward all alert messages to the alert service running on the active controller. It aggregates all alerts and publishes them to ConfD.
 
 https://docs.f5net.com/display/PDDESIGN/Vanquish+Alert+Service+Spec
 
@@ -1287,7 +1287,7 @@ You can use the **tcpdump** utility on the VELOS system to capture traffic in ch
 
 When you use the tcpdump utility to capture traffic on a VELOS system, traffic is captured based on the chassis partition in which the command was run. Only the traffic that occurs on that chassis partition is captured. This includes traffic traversing the front panel ports on the chassis blades in the chassis partition as well as backplane traffic for the chassis partition.
 
-When you run tcpdump in a chassis partition, a secondary tcpdump operation runs on each member blade in the chassis partition. The packets captured by the secondary tcpdumps are collected together in the command output.
+When you run tcpdump in a chassis partition, a secondary tcpdump operation runs on each member blade in the chassis partition. The packets captured by the secondary tcpdumps are collected in the command output.
 
 In addition to the normal tcpdump output, the following fields have been added that are specific to the VELOS system:
 
@@ -1306,7 +1306,7 @@ https://support.f5.com/csp/article/K12313135
 
 You can capture traffic for a specific interface on a blade using the interface keyword in the tcpdump command. The interface is specified as <blade>/<port>.<subport>. If the interface keyword is not supplied, or if 0/0.0 is specified for the interface, no interface filtering occurs and the command captures all interfaces in the partition.
 
-Important: The interfaces on the VELOS system are capable of very high traffic rates. To prevent dropped packets during traffic capture, you should specify appropriate filters in order to capture only the intended traffic and reduce the total amount of captured traffic.
+Important: The interfaces on the VELOS system are capable of very high traffic rates. To prevent dropped packets during traffic capture, you should specify appropriate filters to capture only the intended traffic and reduce the total amount of captured traffic.
 
 For example, the following command captures traffic on interface 1.0 on blade number 2:
 
@@ -1337,7 +1337,7 @@ system diagnostics tcpdump bpf "src host 10.10.1.1 and dst port 443"
 Specify an output file
 ----------------------
 
-To send the captured traffic to a file, specify the filename using the outfile keyword. The resulting file is placed in the /var/F5/<partiton>/ directory by default, or you can specify the directory in which to save the file.
+To send the captured traffic to a file, specify the filename using the outfile keyword. The resulting file is placed in the /var/F5/<partition>/ directory by default, or you can specify the directory in which to save the file.
 
 For example, the following command sends the output of the tcpdump command to the /var/F5/partition/shared/example_capture.pcap file:
 
@@ -1362,11 +1362,11 @@ You may have a need to access the console of a VELOS BX110 blade, one of the sys
 •	System controller ports 7100 and 7200 map to system controllers 1 & 2
 •	Chassis partition ports 700x map to tenant ID’s (requires tenant name as username)
 
-You can connect to any blade by SSH’ing to the floating IP address of the system controller and specifying the proper port for the blade you want to connect with. Port 7001 maps to blade-1, 7002 to blade-2 etc. Once connected to the terminal server, you will need to log in as root to the blade. The blade will have the default root password and will need to be changed on first reboot. The example below shows connecting to blade 2 ( port 7002) through a terminal server.
+You can connect to any blade by SSH’ing to the floating IP address of the system controller and specifying the proper port for the blade you want to connect with. Port 7001 maps to blade-1, 7002 to blade-2 etc. Once connected to the terminal server, you will need to log in as root to the blade. The blade will have the default root password and will need to be changed on first reboot. The example below shows connecting to blade 2 (port 7002) through a terminal server.
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.255.0.147 -p 7002
+    $ ssh -l admin 10.255.0.147 -p 7002
     admin@10.255.0.147's password: 
 
     Terminal session established
@@ -1384,7 +1384,7 @@ Connecting to a system controller follows the same general process but uses port
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.255.0.147 -p 7100
+    $ ssh -l admin 10.255.0.147 -p 7100
     admin@10.255.0.147's password: 
     Terminal session established
 

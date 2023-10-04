@@ -9,7 +9,7 @@ Some admins may want CLI commands to monitor, or API calls to query the system, 
 Accessing the F5OS API
 ======================
 
-The VELOS platform API’s for the system controllers and chassis partitions can be reached on port 8888. In this document we will use the Postman tool to access VELOS platform layer API’s. You can download the Postman tool at:
+The VELOS platform APIs for the system controllers and chassis partitions can be reached on port 8888. In this document we will use the Postman tool to access VELOS platform layer APIs. You can download the Postman tool at:
 
 https://www.postman.com/downloads/
 
@@ -422,7 +422,7 @@ Or:
 
 The output of the API call above will be broken out into the following detail:
 
-The beginning of the output highlights any equipment failures or mismatches and whether or not the chassis is NEBS enabled. Next is the current status of the platform memory for this system controller showing available, used, and used-precent. Next are the thermal readings for temperature showing **current**, **average**, **minimum**, & **maximum** readings.
+The beginning of the output highlights any equipment failures or mismatches and whether the chassis is NEBS enabled. Next is the current status of the platform memory for this system controller showing available, used, and used-precent. Next are the thermal readings for temperature showing **current**, **average**, **minimum**, & **maximum** readings.
 
 .. code-block:: json
 
@@ -787,7 +787,7 @@ Recent system level alerts can be accessed via the API.
 System Controller Monitoring via CLI
 ------------------------------------
 
-To see if the openshift cluster is up and running use the **show cluster** command. You should see status for each installed blade and controller in the **Ready** state. Each section under **Stage Name** should show a **Status** of **Done**. During the bootup process you can monitor the status of the individual stages. The most recent openshift logs are displayed, and you can determine if the chassis is healthy or having issues.
+To see if the Openshift cluster is up and running use the **show cluster** command. You should see status for each installed blade and controller in the **Ready** state. Each section under **Stage Name** should show a **Status** of **Done**. During the bootup process you can monitor the status of the individual stages. The most recent Openshift logs are displayed, and you can determine if the chassis is healthy or having issues.
 
 .. code-block:: bash
 
@@ -863,7 +863,7 @@ Monitoring the Layer2 Switch Fabric on the System Controllers
 
 This section will outline what status should and can be monitored for the Layer2 switch fabric function on the system controllers. Administrators will want to monitor the internal and external interfaces and LAGs for both status and to view stats to understand current utilization. They will be looking to understand what the utilization of each port is and how is traffic balanced between the two switch fabrics on the system controllers. This section will detail what sort of monitoring is currently supported via CLI, webUI, API, and SNMP, and will also detail any altering, logging, or SNMP traps that are available.
 
-Before getting into what monitoring is supported, it is important to understand how things connect together and their labeling. The diagram below provides the internal interface numbering on the system controllers so that an admin can monitor the status and statistics of each interface. This will give them visibility into the traffic distribution across the backplane and dual switch fabrics.  Link Aggregation is configured on the blade side of the connection, but not on the system controller side. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/3.1** and one to system controller 2 interface **2/3.1**, the numbering follows the same logic for other slots:
+Before getting into what monitoring is supported, it is important to understand how things connect and their labeling. The diagram below provides the internal interface numbering on the system controllers so that an admin can monitor the status and statistics of each interface. This will give them visibility into the traffic distribution across the backplane and dual switch fabrics.  Link Aggregation is configured on the blade side of the connection, but not on the system controller side. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/3.1** and one to system controller 2 interface **2/3.1**, the numbering follows the same logic for other slots:
 
 .. image:: images/monitoring_velos/image6.png
   :align: center
@@ -932,7 +932,7 @@ There is a CLI command to monitor all the internal and external ports and LAGs o
     ethernet state counters out-8021q-frames 0
 
 
-The **show lacp** CLI command will show both external LAG interfaces if the management ports are bonded together, and internal LAG’s to each slot. In the output below there are 3 blades installed in slots 1-3. They will be labeled **cplagg_1.<slot#>**. The **mgmt_aggr** is a name provided by the admin when the LAG for the external management piorts were configured. This name will be different depending on what the admin chooses for a name.
+The **show lacp** CLI command will show both external LAG interfaces if the management ports are bonded together, and internal LAG’s to each slot. In the output below there are 3 blades installed in slots 1-3. They will be labeled **cplagg_1.<slot#>**. The **mgmt_aggr** is a name provided by the admin when the LAG for the external management ports were configured. This name will be different depending on what the admin chooses for a name.
 
 .. code-block:: bash
 
@@ -4244,7 +4244,7 @@ The following API command will show all system controller Ethernet interfaces an
 Link Aggregation Status of System Controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following API call will list the current status of all backplane LACP interfaces, as well as front panel management port lacp interfaces:
+The following API call will list the status of all backplane LACP interfaces, as well as front panel management port lacp interfaces:
 
 .. code-block:: bash
 

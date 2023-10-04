@@ -128,7 +128,7 @@ To transfer a file using the CLI use the **file list** command to see the conten
     }
 
 
-To transfer the file from the CLI you can use the **file export** command. The option below is exporting to a remote HTTPS server. there are options to trasnfer using SFTP, and SCP as well.
+To transfer the file from the CLI you can use the **file export** command. The option below is exporting to a remote HTTPS server. there are options to transfer using SFTP, and SCP as well.
 
 .. code-block:: bash
 
@@ -148,7 +148,7 @@ To check on status of the export use the **file transfer-status** command:
     2    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |chassis1-sys-controller-backup-2-26-21                      |Failed to open/read local data from file/application
     3    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |/backup                                                     |Failed to open/read local data from file/application
 
-If you don’t have an external HTTPS server that allows uploads, then you can log into the system controllers floating IP address with root access and scp the file from the shell. Go to the **/var/confd/configs** directory and scp the file to an external location. Note in the CLI and webUI the path is simplified to configs, but in the underlying file system it is actually stored in the **/var/confd/configs** directory.
+If you don’t have an external HTTPS server that allows uploads, then you can log into the system controllers floating IP address with root access and scp the file from the shell. Go to the **/var/confd/configs** directory and scp the file to an external location. Note in the CLI and webUI the path is simplified to configs, but in the underlying file system it is stored in the **/var/confd/configs** directory.
 
 .. code-block:: bash
 
@@ -189,7 +189,7 @@ To copy a ConfD configuration backup file from the system controller to a remote
 Backing Up Chassis Partition Databases
 ======================================
 
-In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below there are two chassis partitions currently in use; **Production** and **Development**. Both must be backed up and archived off of the VELOS system.
+In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below there are two chassis partitions currently in use: **Production** and **Development**. Both must be backed up and archived off of the VELOS system.
 
 Backing Up Chassis Partition Databases via CLI
 ----------------------------------------------
@@ -318,7 +318,7 @@ You can use the CLI command **file transfer-status** to see if the file was copi
     Production-1# 
 
 
-If you do not have a remote HTTPS, SCP, or SFTP server with the proper access to POST files, then you can copy the chassis partition backups from the system controller shell (Note, there is no shelll access via the chassis partition IP). You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice **partition<ID>** directories, where <ID> equals the ID assigned to each partition.
+If you do not have a remote HTTPS, SCP, or SFTP server with the proper access to POST files, then you can copy the chassis partition backups from the system controller shell (Note, there is no shell access via the chassis partition IP). You’ll need to login to the system controllers shell using the root account. Once logged in list the contents of the **/var/F5** directory. You’ll notice **partition<ID>** directories, where <ID> equals the ID assigned to each partition.
 
 .. code-block:: bash
 
@@ -361,7 +361,7 @@ Now repeat the same steps for each chassis partition in the system.
 Export Backup From the Chassis Partition API
 --------------------------------------------
 
-Each chassis partition in the system needs to be backed up independently. Below is an API example of exportinh the backuo up the chassis partition **Development**. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS, SCP, or SFTP server is required to export the copy of the configuration backup.
+Each chassis partition in the system needs to be backed up independently. Below is an API example exporting the backup of the chassis partition **Development**. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS, SCP, or SFTP server is required to export the copy of the configuration backup.
 
 .. code-block:: bash
 
@@ -480,7 +480,7 @@ For the final step, reset the system controllers ConfD database. This will essen
     syscon-2-active(config)# system database config reset-default-config true
     syscon-2-active(config)# commit
 
-Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back to back.
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
 
 .. code-block:: bash
 
@@ -575,7 +575,7 @@ The last step in the reset procedure is to set the system controllers ConfD data
     "f5-database:reset-default-config": "true"
     }
 
-Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back to back.
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
 
 .. code-block:: bash
 
@@ -673,7 +673,7 @@ To transfer files into the system controller you’ll have to manually configure
 Importing System Controller Backups
 ===================================
 
-Once the system is configured and out-of-band connectivity is restored, you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controllers configuration as outlined earlier.
+Once the system is configured and out-of-band connectivity is restored, you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controller's configuration as outlined earlier.
 
 
 Next SCP the file from a remote server:
@@ -1135,7 +1135,7 @@ You can check on the file transfer status by issubg the following API call:
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
-A status similar to the one below will show a status of completed if successful:
+A status like the one below will show a status of completed if successful:
 
 .. code-block:: json
 
