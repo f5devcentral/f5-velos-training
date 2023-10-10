@@ -50,17 +50,34 @@ The CX1610 VELOS chassis supports 32 slots in a 16RU footprint.
 
 The second major difference compared to VIPRION, is the introduction of centralized/redundant SX410/SX1610 system controllers. The pictures above show the two redundant system controllers that are standard with the VELOS 4RU CX410 & the 16RU VELOS CX1610 chassis:
 
-For the CX410 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
+For the CX410 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
 
 .. image:: images/velos_introduction/image3.png
   :align: center
   :scale: 40%
 
-For the CX1610 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 32 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX1610 chassis with 32 BX110 blades installed. 
+Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 4 BX520 blades installed. 
 
-.. image:: images/velos_introduction/image3cx160.png
+.. image:: images/velos_introduction/bx520cx410.png
+  :align: center
+  :scale: 40%   
+
+For the CX1610 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 32 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 32 BX110 blades installed. 
+
+.. image:: images/velos_introduction/bx110cx1610.png
   :align: center
   :scale: 40%
+ 
+ Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb connectivity. The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 16 BX520 blades installed. 
+
+.. image:: images/velos_introduction/bx520cx1610.png
+  :align: center
+  :scale: 40%  
+
+
+
+
+
 
 While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots. Note that the BX110 line cards currently have a L4/L7 throughput rating of 95Gbs each, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. This is still more bandwith than the current generation of line cards (BX110) support. The backplane ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG), thus utilizing both controllers for forwarding between slots.
 
