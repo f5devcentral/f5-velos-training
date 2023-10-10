@@ -68,7 +68,7 @@ For the CX1610 chassis, the system controllers are responsible for providing non
   :align: center
   :scale: 70%
  
- Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb connectivity. The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 16 BX520 blades installed. 
+Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb connectivity. The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 16 BX520 blades installed. 
 
 .. image:: images/velos_introduction/bx520cx1610.png
   :align: center
