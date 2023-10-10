@@ -2,7 +2,7 @@
 Introduction
 =============
 
-VELOS is F5's next generation chassis-based solution that has replaced the current VIPRION platforms. Specifically, the new CX410 chassis is the direct replacement for the current VIPRION c2400/c2200 chassis families. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures, and then provide details on how to configure, monitor, and troubleshoot the new platform. This will assist customers considering adoption of VELOS to understand how it will fit within their environment. 
+VELOS is F5's next generation chassis-based solution that has replaced the current VIPRION platforms. Specifically, the new CX410 chassis is the direct replacement for the current VIPRION c2400/c2200 chassis families, and the CX1610 is a direct replacement for the VIPRION 4xxx family of chassis although there are cases where either chassis could replace the other. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures, and then provide details on how to configure, monitor, and troubleshoot the new platform. This will assist customers considering adoption of VELOS to understand how it will fit within their environment. 
 
 
 VELOS Overview
@@ -35,17 +35,30 @@ BIG-IP Next tenants will be able to be provisioned within the same chassis, whic
 Smaller Footprint, Higher Density
 ---------------------------------
 
-The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades, and now support double the number of slots in the same 4RU chassis footprint. The VELOS CX410 chassis supports 8 slots instead of only 4 on the VIPRION C2400 chassis.
+The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades, and now support double the number of slots in the same 4RU chassis footprint as the VIPRION c2400 chassis. The VELOS CX410 chassis supports 8 slots instead of only 4 on the VIPRION C2400 chassis.
 
 .. image:: images/velos_introduction/image2.png
   :align: center
   :scale: 70%
 
-The second major difference compared to VIPRION, is the introduction of centralized/redundant SX410 system controllers. The picture above shows the two redundant system controllers that are standard with the VELOS 4RU CX410 chassis:
+The CX1610 VELOS chassis supports 32 slots in a 16RU footprint. 
 
-The system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot.  Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Future generation line cards may leverage additional connections. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
+.. image:: images/velos_introduction/imagecx1610.png
+  :align: center
+  :scale: 70%
+
+
+The second major difference compared to VIPRION, is the introduction of centralized/redundant SX410/SX1610 system controllers. The pictures above show the two redundant system controllers that are standard with the VELOS 4RU CX410 & the 16RU VELOS CX1610 chassis:
+
+For the CX410 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 8 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 8 BX110 blades installed. 
 
 .. image:: images/velos_introduction/image3.png
+  :align: center
+  :scale: 40%
+
+For the CX1610 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 32 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX1610 chassis with 32 BX110 blades installed. 
+
+.. image:: images/velos_introduction/image3cx160.png
   :align: center
   :scale: 40%
 
