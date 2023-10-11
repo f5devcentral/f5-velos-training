@@ -72,14 +72,11 @@ Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb bac
 
 .. image:: images/velos_introduction/bx520cx1610.png
   :align: center
-  :scale: 40%  
+  :scale: 70%  
 
+While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots on the CX410 chassis, and a non-blocking 6.4Tbs backplane between the 32 slots on the CX1610 chassis. Note that the BX110 line cards currently have a L4/L7 throughput rating of 95Gbs each, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. This is still more bandwith than the first generation of line cards (BX110) support. The BX520 line cards currently have a L4/L7 throughput rating of ~350Gbs each, but that is not a limitation of the backplane.   
 
-
-
-
-
-While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots. Note that the BX110 line cards currently have a L4/L7 throughput rating of 95Gbs each, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. This is still more bandwith than the current generation of line cards (BX110) support. The backplane ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG), thus utilizing both controllers for forwarding between slots.
+The backplane for both the BX110 and BX520 ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG), thus utilizing both controllers for forwarding between slots.
 
 A VIPRION chassis in comparison does not have a centralized switch fabric, and all blades are connected across the passive backplane in a full mesh fashion. The backplane in VIPRION was blocking, meaning the front panel bandwidth of a blade was greater than the blades backplane connectivity. Below is an example of the VIPRION C2400 chassis with B2250 blades. Each blade had a single 40Gb connection to every other blade. The total backplane bandwidth is 6 x 40 Gb = 240 Gb.
 
@@ -93,10 +90,24 @@ The system controllers in VELOS are also the central point of management for the
   :align: center
   :scale: 40%
 
+The VIPRION C4xxx chassis had a similar design that required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. 
 
-With VELOS, only the system controllers need to be cabled for out-of-band management, and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis management as seen below:
+.. image:: images/velos_introduction/image5a.png
+  :align: center
+  :scale: 40%
+
+
+With VELOS, only the system controllers need to be cabled for out-of-band management, and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis managementfor the CX410 chassis as seen below:
 
 .. image:: images/velos_introduction/image6.png
+  :align: center
+  :scale: 40%
+
+Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together to form a Link Aggregation Group for added resiliency.
+
+The VELOS CX1610 has a similar design where only the system controllers need to be cabled for out-of-band management, and console connections.
+
+.. image:: images/velos_introduction/image6a.png
   :align: center
   :scale: 40%
 
@@ -122,7 +133,7 @@ The Kubernetes control plane is responsible for deploying workloads to the blade
 Chassis Partitions
 ------------------
 
-Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation, in addition to tenancy (like vCMP guests) that VIPRION didn’t support. This could be used to separate production from development/test environments, or to provide different security zones for different classes of applications. Within a VELOS chassis, an administrator can group together one or more blades to form a chassis partition. A chassis may contain multiple chassis partitions, and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade, and the maximum is 8 blades within the CX410 chassis.
+Another exciting new feature is the notion of grouping multiple VELOS blades together to form “mini VIPRIONS” within the same VELOS chassis. This will allow for another layer of isolation, in addition to tenancy (like vCMP guests) that VIPRION didn’t support. This could be used to separate production from development/test environments, or to provide different security zones for different classes of applications. Within a VELOS chassis, an administrator can group together one or more blades to form a chassis partition. A chassis may contain multiple chassis partitions, and a blade may belong to only one chassis partition at a time. The minimum unit for a chassis partition is one blade, and the maximum is 8 BX110 blades within the CX410 chassis and 16 BX110 blades within the CX160 chassis. For the BX520 blades the maximum chassis partition size is 4 blades in the CX410 chassis, and 8 blades in the CX1610 chassis.
  
 **Note: Chassis partitions are not related to TMOS admin partitions, which are typically used to provide admin separation within a TMOS instance.** 
  
