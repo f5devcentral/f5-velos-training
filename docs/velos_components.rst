@@ -251,19 +251,19 @@ BX520 Blade
 
 The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropiate break out cable). The second port can be configured for either 4 x 100Gb(with the appropiate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
 
-.. image:: images/velos_components/image17.png
+.. image:: images/velos_components/image17a.png
   :align: center
   :scale: 60%
 
 The BX520 has 56 physical cores, which are hyperthreaded into 112 vCPUs. Eighteen of the vCPUs are reserved for the F5OS-C platform layer, leaving 96 vCPUs available for multitenancy. Each blade comes with a 4TB SSD drive and is populated with 512GB of RAM. Each BX520 has three Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Traffic Aggregation Module (TAM) FPGA handles all front panel connections. The Application Traffic Service Engine (ATSE) handles initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
 
-.. image:: images/velos_components/image18.png
+.. image:: images/velos_components/image18a.png
   :align: center
   :scale: 50%
 
 The SSD is removable, but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
 
-.. image:: images/velos_components/image19.png
+.. image:: images/velos_components/image19a.png
   :align: center
 
 
