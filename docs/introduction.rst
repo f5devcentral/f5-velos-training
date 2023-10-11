@@ -88,7 +88,7 @@ The system controllers in VELOS are also the central point of management for the
 
 .. image:: images/velos_introduction/image5.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 The VIPRION C4xxx chassis had a similar design that required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. 
 
@@ -101,7 +101,7 @@ With VELOS, only the system controllers need to be cabled for out-of-band manage
 
 .. image:: images/velos_introduction/image6.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together to form a Link Aggregation Group for added resiliency.
 
