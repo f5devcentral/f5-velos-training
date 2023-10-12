@@ -2282,7 +2282,7 @@ Enter the **Security Model**, **IP Address** and **Port** of the SNMP Trap recei
 Enabling SNMP Traps in the API
 ------------------------------
 
-To enable SNMP traps via the API, use the followin PATCH API call.
+To enable SNMP traps via the API, use the following PATCH API call.
 
 .. code-block:: bash
 
