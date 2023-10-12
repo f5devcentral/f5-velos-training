@@ -961,6 +961,219 @@ You may display the SNMP user configuration by entering the command **show syste
 
     Production-1(config)# 
 
+Enabling SNMP via webUI 
+-------------------------
+
+SNMP **Communities**, **Users**, and **Targets** can be setup on the **System Settings -> SNMP Configuration** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
+
+.. image:: images/velos_monitoring_snmp/snmp.png
+  :align: center
+  :scale: 70% 
+
+Enabling SNMP via API 
+-------------------------
+
+SNMP **Communities**, **Users**, and **Targets** can be setup via the API. An admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
+
+To create an SNMPv3 user use the following API call.
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp
+
+Within the body of the API call, add the following JSON to add a user.
+
+.. code-block:: bash
+
+    {
+        "f5-system-snmp:snmp": {
+            "users": {
+                "user": [
+                    {
+                        "name": "snmpv3-user3",
+                        "config": {
+                            "name": "snmpv3-user3",
+                            "authentication-protocol": "md5",
+                            "f5-system-snmp:authentication-password": "{{velos_system_controller_password}}",
+                            "privacy-protocol": "aes",
+                            "f5-system-snmp:privacy-password": "{{velos_system_controller_password}}"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+If you are using SNMPv1/v2c then communities are the means of access. You can create an SNMP community via the API with the following API call: 
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp
+
+In the body of the API call, add the community name you want to use to allow access to SNMP on the VELOS system. IN this case a community called **public2** is being used to enable access.
+
+.. code-block:: bash
+
+    {
+        "f5-system-snmp:snmp": {
+            "communities": {
+                "community": [
+                    {
+                        "name": "public2",
+                        "config": {
+                            "name": "public2",
+                            "security-model": [
+                                "v1",
+                                "v2c"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }    
+
+
+
+To view the current SNMP configuration, issue the following API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp
+
+The output should appear similar to the example below.
+
+.. code-block:: bash
+
+    {
+        "f5-system-snmp:snmp": {
+            "users": {
+                "user": [
+                    {
+                        "name": "snmpv3-user",
+                        "config": {
+                            "name": "snmpv3-user",
+                            "authentication-protocol": "md5",
+                            "privacy-protocol": "aes"
+                        },
+                        "state": {
+                            "name": "snmpv3-user",
+                            "authentication-protocol": "md5",
+                            "privacy-protocol": "aes"
+                        }
+                    },
+                    {
+                        "name": "snmpv3-user2",
+                        "config": {
+                            "name": "snmpv3-user2",
+                            "authentication-protocol": "md5",
+                            "privacy-protocol": "aes"
+                        },
+                        "state": {
+                            "name": "snmpv3-user2",
+                            "authentication-protocol": "md5",
+                            "privacy-protocol": "aes"
+                        }
+                    }
+                ]
+            },
+            "targets": {
+                "target": [
+                    {
+                        "name": "snmp-trap-receiver",
+                        "config": {
+                            "name": "snmp-trap-receiver",
+                            "user": "snmpv3-user",
+                            "ipv4": {
+                                "address": "10.255.0.144",
+                                "port": 162
+                            }
+                        },
+                        "state": {
+                            "name": "snmp-trap-receiver",
+                            "user": "snmpv3-user",
+                            "ipv4": {
+                                "address": "10.255.0.144",
+                                "port": 162
+                            }
+                        }
+                    },
+                    {
+                        "name": "test",
+                        "config": {
+                            "name": "test",
+                            "community": "public",
+                            "security-model": "v2c",
+                            "ipv4": {
+                                "address": "10.255.0.139",
+                                "port": 162
+                            }
+                        },
+                        "state": {
+                            "name": "test",
+                            "community": "public",
+                            "security-model": "v2c",
+                            "ipv4": {
+                                "address": "10.255.0.139",
+                                "port": 162
+                            }
+                        }
+                    },
+                    {
+                        "name": "v2c-target",
+                        "config": {
+                            "name": "v2c-target",
+                            "community": "public",
+                            "security-model": "v2c",
+                            "ipv4": {
+                                "address": "10.255.0.144",
+                                "port": 162
+                            }
+                        },
+                        "state": {
+                            "name": "v2c-target",
+                            "community": "public",
+                            "security-model": "v2c",
+                            "ipv4": {
+                                "address": "10.255.0.144",
+                                "port": 162
+                            }
+                        }
+                    }
+                ]
+            },
+            "communities": {
+                "community": [
+                    {
+                        "name": "public",
+                        "config": {
+                            "name": "public",
+                            "security-model": [
+                                "v1",
+                                "v2c"
+                            ]
+                        },
+                        "state": {
+                            "name": "public",
+                            "security-model": [
+                                "v1",
+                                "v2c"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "engine-id": {
+                "config": {
+                    "value": "mac"
+                },
+                "state": {
+                    "engine-id": "80:00:2f:f4:03:00:94:a1:8e:d0:00",
+                    "type": "mac"
+                }
+            }
+        }
+    }
 
 Polling SNMP Endpoints
 ======================
@@ -2069,71 +2282,130 @@ Enter the **Security Model**, **IP Address** and **Port** of the SNMP Trap recei
 Enabling SNMP Traps in the API
 ------------------------------
 
+To enable SNMP traps via the API, use the followin PATCH API call.
+
 .. code-block:: bash
 
-    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/SNMP-NOTIFICATION-MIB:SNMP-NOTIFICATION-MIB
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp
 
+In the body of the API call add the SNMP trap target along with the IP address/port and optional user.
 
 .. code-block:: json
 
     {
-        "SNMP-NOTIFICATION-MIB:SNMP-NOTIFICATION-MIB": {
-            "snmpNotifyTable": {
-                "snmpNotifyEntry": [
-                    {
-                        "snmpNotifyName": "v2_trap",
-                        "snmpNotifyTag": "v2_trap",
-                        "snmpNotifyType": "trap",
-                        "snmpNotifyStorageType": "nonVolatile"
+        "f5-system-snmp:snmp": {
+            "targets": {
+                "target": {
+                    "name": "snmp-trap-receiver2",
+                    "config": {
+                        "name": "snmp-trap-receiver2",
+                        "user": "snmpv3-user",
+                        "ipv4": {
+                            "address": "10.255.0.143",
+                            "port": 162
+                        }
                     }
-                ]
+                }
             }
         }
     }
 
+To view the current SNMP configuration, issue the following API call:
 
 .. code-block:: bash
 
-    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/SNMP-TARGET-MIB:SNMP-TARGET-MIB
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp/targets
 
-.. code-block:: json
+The output should appear similar to the example below.
+
+.. code-block:: bash
 
     {
-        "SNMP-TARGET-MIB:SNMP-TARGET-MIB": {
-            "snmpTargetAddrTable": {
-                "snmpTargetAddrEntry": [
-                    {
-                        "snmpTargetAddrName": "group2",
-                        "snmpTargetAddrTDomain": "1.3.6.1.6.1.1",
-                        "snmpTargetAddrTAddress": "10.255.0.144.0.161",
-                        "snmpTargetAddrTimeout": 1500,
-                        "snmpTargetAddrRetryCount": 3,
-                        "snmpTargetAddrTagList": "v2_trap",
-                        "snmpTargetAddrParams": "group2",
-                        "snmpTargetAddrStorageType": "nonVolatile",
-                        "snmpTargetAddrEngineID": "",
-                        "snmpTargetAddrTMask": "",
-                        "snmpTargetAddrMMS": 2048,
-                        "enabled": true
+        "f5-system-snmp:targets": {
+            "target": [
+                {
+                    "name": "snmp-trap-receiver",
+                    "config": {
+                        "name": "snmp-trap-receiver",
+                        "user": "snmpv3-user",
+                        "ipv4": {
+                            "address": "10.255.0.144",
+                            "port": 162
+                        }
+                    },
+                    "state": {
+                        "name": "snmp-trap-receiver",
+                        "user": "snmpv3-user",
+                        "ipv4": {
+                            "address": "10.255.0.144",
+                            "port": 162
+                        }
                     }
-                ]
-            },
-            "snmpTargetParamsTable": {
-                "snmpTargetParamsEntry": [
-                    {
-                        "snmpTargetParamsName": "group2",
-                        "snmpTargetParamsMPModel": 1,
-                        "snmpTargetParamsSecurityModel": 2,
-                        "snmpTargetParamsSecurityName": "public",
-                        "snmpTargetParamsSecurityLevel": "noAuthNoPriv",
-                        "snmpTargetParamsStorageType": "nonVolatile"
+                },
+                {
+                    "name": "snmp-trap-receiver2",
+                    "config": {
+                        "name": "snmp-trap-receiver2",
+                        "user": "snmpv3-user",
+                        "ipv4": {
+                            "address": "10.255.0.143",
+                            "port": 162
+                        }
+                    },
+                    "state": {
+                        "name": "snmp-trap-receiver2",
+                        "user": "snmpv3-user",
+                        "ipv4": {
+                            "address": "10.255.0.143",
+                            "port": 162
+                        }
                     }
-                ]
-            }
+                },
+                {
+                    "name": "test",
+                    "config": {
+                        "name": "test",
+                        "community": "public",
+                        "security-model": "v2c",
+                        "ipv4": {
+                            "address": "10.255.0.139",
+                            "port": 162
+                        }
+                    },
+                    "state": {
+                        "name": "test",
+                        "community": "public",
+                        "security-model": "v2c",
+                        "ipv4": {
+                            "address": "10.255.0.139",
+                            "port": 162
+                        }
+                    }
+                },
+                {
+                    "name": "v2c-target",
+                    "config": {
+                        "name": "v2c-target",
+                        "community": "public",
+                        "security-model": "v2c",
+                        "ipv4": {
+                            "address": "10.255.0.144",
+                            "port": 162
+                        }
+                    },
+                    "state": {
+                        "name": "v2c-target",
+                        "community": "public",
+                        "security-model": "v2c",
+                        "ipv4": {
+                            "address": "10.255.0.144",
+                            "port": 162
+                        }
+                    }
+                }
+            ]
         }
     }
-
-
 
 SNMP Trap Details
 =================
