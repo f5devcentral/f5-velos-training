@@ -151,11 +151,11 @@ CX1610 LCD Panel
 
 In the initial release of VELOS most of the LCD functionality has not been enabled yet. The LCD will go through self-tests, and display the product name and F5 logo, but no diagnostics or configuration is supported at this time. The LCD assembly can be removed to gain access to the power supplies if needed. 
 
-.. image:: images/velos_components/image12.png
+.. image:: images/velos_components/cx1610lcd1.png
   :align: center
 
 
-.. image:: images/velos_components/image13.png
+.. image:: images/velos_components/cx1610lcd2.png
   :align: center
 
 System Controllers
