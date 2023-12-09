@@ -26,4 +26,7 @@ Planning for VELOS Guide
    monitoring_velos_health_status.rst
    monitoring_velos.rst
    velos_monitoring_snmp.rst
+   automating_velos.rst
+   velos_api_workflows.rst
    migration_to_velos.rst
+   velos_references.rst
