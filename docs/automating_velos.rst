@@ -71,9 +71,9 @@ To capture the token and save it for use in subsequent API calls, go to the **Te
 .. code-block:: bash
 
     var headerValue = pm.response.headers.get("x-auth-token");
-    pm.environment.set("x-auth-token_rseries_appliance1", headerValue);
+    pm.environment.set("x-auth-token_velos_chassis1_system_controller", headerValue);
 
-This will capture the auth token and store it in a variable called **x-auth-token_rseries_appliance1**.
+This will capture the auth token and store it in a variable called **x-auth-token_velos_chassis1_system_controller**.
 
 .. image:: images/automating_velos/image6b.png
   :align: center
@@ -86,13 +86,13 @@ This will be stored as a variable in the Postman **Environment** as seen below.
   :scale: 70%
 
 
-Once the variable is stored with the auth token, it can be used instead of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note, Postman references variables by encasing the variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{x-auth-token_rseries_appliance1}}**. 
+Once the variable is stored with the auth token, it can be used instead of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note, Postman references variables by encasing the variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{x-auth-token_velos_chassis1_system_controller}}**. 
 
 .. image:: images/automating_velos/image6d.png
   :align: center
   :scale: 70%
 
-You must also add some required headers to any API calls sent to F5OS. It is important to include the header **Content-Type** **application/yang-data+json** and the Token header **X-Auth-Token** with a value of **{{x-auth-token_rseries_appliance1}}**. The variable and header will change depending on the destination of the API call. It can be sent to a second appliance if desired.
+You must also add some required headers to any API calls sent to F5OS. It is important to include the header **Content-Type** **application/yang-data+json** and the Token header **X-Auth-Token** with a value of **{{x-auth-token_velos_chassis1_system_controller}}**. The variable and header will change depending on the destination of the API call. It can be sent to a second chassis if desired.
 
 .. image:: images/automating_velos/image6e.png
   :align: center
