@@ -99,7 +99,7 @@ You must also add some required headers to any API calls sent to F5OS. It is imp
   :scale: 70%
 
 
-Below is an example of using the API. To set the DNS configuration (servers and search domains) for the appliance, use the following API call. For any API calls to the rSeries F5OS layer it is important to include the header **Content-Type** **application/yang-data+json** and use port 8888 as seen below:
+Below is an example of using the API. To set the DNS configuration (servers and search domains) for the chassis, use the following API call. For any API calls to the VELOS F5OS layer it is important to include the header **Content-Type** **application/yang-data+json** and use port 8888 as seen below:
 
 .. code-block:: bash
 
@@ -175,16 +175,16 @@ Below is an API call using Curl to an rSeries system. Note, that the Curl reques
 
 .. code-block:: bash
 
-    prompt% curl -i -sku admin:password -H "Content-Type: application/yang-data+json"  https://10.255.2.40:443/api
+    prompt% curl -i -sku admin:password -H "Content-Type: application/yang-data+json"  https://10.255.2.3:443/api
     HTTP/1.1 200 OK
-    Date: Fri, 17 Nov 2023 20:17:18 GMT
+    Date: Sun, 10 Dec 2023 03:11:22 GMT
     Server: Apache
     Strict-Transport-Security: max-age=63072000; includeSubdomains;
     Cache-Control: private, no-cache, must-revalidate, proxy-revalidate
     Content-Length: 90
     Content-Type: application/yang-data+json
     Pragma: no-cache
-    X-Auth-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uIElEIjoiYWRtaW4xNzAwMjUyMjM4IiwiYXV0aGluZm8iOiJhZG1pbiAxMDAwIDkwMDAgXC92YXJcL0Y1XC9zeXN0ZW0iLCJidWZmZXJ0aW1lbGltaXQiOiIzMDAiLCJleHAiOjE3MDAyNTMxMzgsImlhdCI6MTcwMDI1MjIzOCwicmVuZXdsaW1pdCI6IjUiLCJ1c2VyaW5mbyI6ImFkbWluIDE3Mi4xOC4xMDUuMjAyIn0.bT9yAXQIaihrAJrluVAIVsKIvuCsWLr97T5M1UjRGUs
+    X-Auth-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uIElEIjoiYWRtaW4xNzAyMTc3ODgyIiwiYXV0aGluZm8iOiJhZG1pbiAxMDAwIDkwMDAgXC92YXJcL0Y1XC9zeXN0ZW0iLCJidWZmZXJ0aW1lbGltaXQiOiIxMDAiLCJleHAiOjE3MDIxNzgxODIsImlhdCI6MTcwMjE3Nzg4MiwicmVuZXdsaW1pdCI6IjUiLCJ1c2VyaW5mbyI6ImFkbWluIDE3Mi4xOC4wLjIwMCJ9.4XGOmqj_h0b6fmyVxhpjTNdoVVMfdBlpeL9BQHp7O4c
     Content-Security-Policy: default-src 'self'; block-all-mixed-content; base-uri 'self'; frame-ancestors 'none';
     Strict-Transport-Security: max-age=15552000; includeSubDomains
     X-Content-Type-Options: nosniff
@@ -192,23 +192,24 @@ Below is an API call using Curl to an rSeries system. Note, that the Curl reques
     X-XSS-Protection: 1; mode=block
     Content-Security-Policy: default-src 'self'; upgrade-insecure-requests; frame-ancestors 'none'; script-src  'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; connect-src 'self'; font-src 'self'; frame-src 'self'; img-src 'self' data:; manifest-src 'self'; media-src 'self'; worker-src 'none';
 
-    {"ietf-restconf:restconf":{"data":{},"operations":{},"yang-library-version":"2019-01-04"}}%                                                                                                                                                                                                  prompt% 
+    {"ietf-restconf:restconf":{"data":{},"operations":{},"yang-library-version":"2019-01-04"}}%                                                                                                prompt% 
+
 
 You may send API calls to either port 8888 or port 443. The URI path will change slightly depending on which TCP port you choose to use. For API calls sent to port 443, the initial path will be **/api**, while API calls to port 8888 will start with **/restconf**. F5OS also listens on port 80 and will redirect to TCP port 443. The API call below is sent to port 443, note the intial path will be **/api/data**. 
 
 .. code-block:: bash
 
-    prompt% curl -i -sku admin:password -H "Content-Type: application/yang-data+json"  https://10.255.2.40:443/api/data/openconfig-system:system/f5-system-snmp:snmp 
+    prompt% curl -i -sku admin:password -H "Content-Type: application/yang-data+json"  https://10.255.2.3:443/api/data/openconfig-system:system/f5-system-snmp:snmp 
     HTTP/1.1 200 OK
-    Date: Fri, 17 Nov 2023 20:25:01 GMT
+    Date: Sun, 10 Dec 2023 03:13:23 GMT
     Server: Apache
     Strict-Transport-Security: max-age=63072000; includeSubdomains;
-    Last-Modified: Fri, 17 Nov 2023 19:34:16 GMT
+    Last-Modified: Fri, 01 Dec 2023 22:26:28 GMT
     Cache-Control: private, no-cache, must-revalidate, proxy-revalidate
-    Etag: "1700-249656-981804"
+    Etag: "1701-469588-456629@master"
     Content-Type: application/yang-data+json
     Pragma: no-cache
-    X-Auth-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uIElEIjoiYWRtaW4xNzAwMjUyNzAxIiwiYXV0aGluZm8iOiJhZG1pbiAxMDAwIDkwMDAgXC92YXJcL0Y1XC9zeXN0ZW0iLCJidWZmZXJ0aW1lbGltaXQiOiIzMDAiLCJleHAiOjE3MDAyNTM2MDEsImlhdCI6MTcwMDI1MjcwMSwicmVuZXdsaW1pdCI6IjUiLCJ1c2VyaW5mbyI6ImFkbWluIDE3Mi4xOC4xMDUuMjAyIn0.iqwf4h4190pvUUMDsScM7X357b1sAMyG0rK7jj4AWs4
+    X-Auth-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uIElEIjoiYWRtaW4xNzAyMTc4MDAzIiwiYXV0aGluZm8iOiJhZG1pbiAxMDAwIDkwMDAgXC92YXJcL0Y1XC9zeXN0ZW0iLCJidWZmZXJ0aW1lbGltaXQiOiIxMDAiLCJleHAiOjE3MDIxNzgzMDMsImlhdCI6MTcwMjE3ODAwMywicmVuZXdsaW1pdCI6IjUiLCJ1c2VyaW5mbyI6ImFkbWluIDE3Mi4xOC4wLjIwMCJ9.m8uC4cgmRdsTQmb8SWze1hDGf3A5d5b1USjfaYLzAkc
     Content-Security-Policy: default-src 'self'; block-all-mixed-content; base-uri 'self'; frame-ancestors 'none';
     Strict-Transport-Security: max-age=15552000; includeSubDomains
     X-Content-Type-Options: nosniff
@@ -222,14 +223,27 @@ You may send API calls to either port 8888 or port 443. The URI path will change
         "users": {
         "user": [
             {
-            "name": "jim",
+            "name": "snmpv3-user",
             "config": {
-                "name": "jim",
+                "name": "snmpv3-user",
                 "authentication-protocol": "md5",
                 "privacy-protocol": "aes"
             },
             "state": {
-                "name": "jim",
+                "name": "snmpv3-user",
+                "authentication-protocol": "md5",
+                "privacy-protocol": "aes"
+            }
+            },
+            {
+            "name": "snmpv3-user2",
+            "config": {
+                "name": "snmpv3-user2",
+                "authentication-protocol": "md5",
+                "privacy-protocol": "aes"
+            },
+            "state": {
+                "name": "snmpv3-user2",
                 "authentication-protocol": "md5",
                 "privacy-protocol": "aes"
             }
@@ -246,18 +260,89 @@ You may send API calls to either port 8888 or port 443. The URI path will change
                 "authentication-protocol": "md5",
                 "privacy-protocol": "aes"
             }
-            },
+            }
+        ]
+        },
+        "targets": {
+        "target": [
             {
-            "name": "snmpv3user",
+            "name": "snmp-trap-receiver",
             "config": {
-                "name": "snmpv3user",
-                "authentication-protocol": "md5",
-                "privacy-protocol": "aes"
+                "name": "snmp-trap-receiver",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
             },
             "state": {
-                "name": "snmpv3user",
-                "authentication-protocol": "md5",
-                "privacy-protocol": "aes"
+                "name": "snmp-trap-receiver",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
+            }
+            },
+            {
+            "name": "snmp-trap-receiver2",
+            "config": {
+                "name": "snmp-trap-receiver2",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.143",
+                "port": 162
+                }
+            },
+            "state": {
+                "name": "snmp-trap-receiver2",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.143",
+                "port": 162
+                }
+            }
+            },
+            {
+            "name": "test",
+            "config": {
+                "name": "test",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.139",
+                "port": 162
+                }
+            },
+            "state": {
+                "name": "test",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.139",
+                "port": 162
+                }
+            }
+            },
+            {
+            "name": "v2c-target",
+            "config": {
+                "name": "v2c-target",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
+            },
+            "state": {
+                "name": "v2c-target",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
             }
             }
         ]
@@ -293,34 +378,28 @@ You may send API calls to either port 8888 or port 443. The URI path will change
             "value": "mac"
         },
         "state": {
-            "engine-id": "80:00:2f:f4:03:00:94:a1:69:59:02",
+            "engine-id": "80:00:2f:f4:03:00:94:a1:8e:d0:00",
             "type": "mac"
         }
-        },
-        "config": {
-        "port": 161
-        },
-        "state": {
-        "port": 161
         }
     }
     }
-    prompt% 
+    prompt%
 
 You may send API calls to either port 8888 or port 443. The URI path will change slightly depending on which TCP port you choose to use. For API calls sent to port 443, the initial path will be **/api**, while API calls to port 8888 will start with **/restconf**. F5OS also listens on port 80 and will redirect to TCP port 443. The API call below is sent to port 8888, note the intial path will be **/restconf/data**. 
 
 .. code-block:: bash
 
-    prompt% curl -i -sku admin:password -H "Content-Type: application/yang-data+json"  https://10.255.2.40:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp 
+    prompt% curl -i -sku admin:password -H "Content-Type: application/yang-data+json"  https://10.255.2.3:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp 
     HTTP/1.1 200 OK
-    Date: Fri, 17 Nov 2023 20:26:46 GMT
+    Date: Sun, 10 Dec 2023 03:15:23 GMT
     Server: Apache
-    Last-Modified: Fri, 17 Nov 2023 19:34:16 GMT
+    Last-Modified: Fri, 01 Dec 2023 22:26:28 GMT
     Cache-Control: private, no-cache, must-revalidate, proxy-revalidate
-    Etag: "1700-249656-981804"
+    Etag: "1701-469588-456629@master"
     Content-Type: application/yang-data+json
     Pragma: no-cache
-    X-Auth-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uIElEIjoiYWRtaW4xNzAwMjUyODA2IiwiYXV0aGluZm8iOiJhZG1pbiAxMDAwIDkwMDAgXC92YXJcL0Y1XC9zeXN0ZW0iLCJidWZmZXJ0aW1lbGltaXQiOiIzMDAiLCJleHAiOjE3MDAyNTM3MDYsImlhdCI6MTcwMDI1MjgwNiwicmVuZXdsaW1pdCI6IjUiLCJ1c2VyaW5mbyI6ImFkbWluIDE3Mi4xOC4xMDUuMjAyIn0.nxhAQcNikgIQ0LU6HeuY2zSG7ysPb2jdjeVgkjYCltg
+    X-Auth-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uIElEIjoiYWRtaW4xNzAyMTc4MTIzIiwiYXV0aGluZm8iOiJhZG1pbiAxMDAwIDkwMDAgXC92YXJcL0Y1XC9zeXN0ZW0iLCJidWZmZXJ0aW1lbGltaXQiOiIxMDAiLCJleHAiOjE3MDIxNzg0MjMsImlhdCI6MTcwMjE3ODEyMywicmVuZXdsaW1pdCI6IjUiLCJ1c2VyaW5mbyI6ImFkbWluIDE3Mi4xOC4wLjIwMCJ9.qMobGzZ1KHzJum73Bnd1TGpoKP9A9xZTDAGq0tWLBn0
     Content-Security-Policy: default-src 'self'; block-all-mixed-content; base-uri 'self'; frame-ancestors 'none';
     Strict-Transport-Security: max-age=15552000; includeSubDomains
     X-Content-Type-Options: nosniff
@@ -333,14 +412,27 @@ You may send API calls to either port 8888 or port 443. The URI path will change
         "users": {
         "user": [
             {
-            "name": "jim",
+            "name": "snmpv3-user",
             "config": {
-                "name": "jim",
+                "name": "snmpv3-user",
                 "authentication-protocol": "md5",
                 "privacy-protocol": "aes"
             },
             "state": {
-                "name": "jim",
+                "name": "snmpv3-user",
+                "authentication-protocol": "md5",
+                "privacy-protocol": "aes"
+            }
+            },
+            {
+            "name": "snmpv3-user2",
+            "config": {
+                "name": "snmpv3-user2",
+                "authentication-protocol": "md5",
+                "privacy-protocol": "aes"
+            },
+            "state": {
+                "name": "snmpv3-user2",
                 "authentication-protocol": "md5",
                 "privacy-protocol": "aes"
             }
@@ -357,18 +449,89 @@ You may send API calls to either port 8888 or port 443. The URI path will change
                 "authentication-protocol": "md5",
                 "privacy-protocol": "aes"
             }
-            },
+            }
+        ]
+        },
+        "targets": {
+        "target": [
             {
-            "name": "snmpv3user",
+            "name": "snmp-trap-receiver",
             "config": {
-                "name": "snmpv3user",
-                "authentication-protocol": "md5",
-                "privacy-protocol": "aes"
+                "name": "snmp-trap-receiver",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
             },
             "state": {
-                "name": "snmpv3user",
-                "authentication-protocol": "md5",
-                "privacy-protocol": "aes"
+                "name": "snmp-trap-receiver",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
+            }
+            },
+            {
+            "name": "snmp-trap-receiver2",
+            "config": {
+                "name": "snmp-trap-receiver2",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.143",
+                "port": 162
+                }
+            },
+            "state": {
+                "name": "snmp-trap-receiver2",
+                "user": "snmpv3-user",
+                "ipv4": {
+                "address": "10.255.0.143",
+                "port": 162
+                }
+            }
+            },
+            {
+            "name": "test",
+            "config": {
+                "name": "test",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.139",
+                "port": 162
+                }
+            },
+            "state": {
+                "name": "test",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.139",
+                "port": 162
+                }
+            }
+            },
+            {
+            "name": "v2c-target",
+            "config": {
+                "name": "v2c-target",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
+            },
+            "state": {
+                "name": "v2c-target",
+                "community": "public",
+                "security-model": "v2c",
+                "ipv4": {
+                "address": "10.255.0.144",
+                "port": 162
+                }
             }
             }
         ]
@@ -404,17 +567,11 @@ You may send API calls to either port 8888 or port 443. The URI path will change
             "value": "mac"
         },
         "state": {
-            "engine-id": "80:00:2f:f4:03:00:94:a1:69:59:02",
+            "engine-id": "80:00:2f:f4:03:00:94:a1:8e:d0:00",
             "type": "mac"
         }
-        },
-        "config": {
-        "port": 161
-        },
-        "state": {
-        "port": 161
         }
     }
     }
-    prompt% 
+    prompt%
 
