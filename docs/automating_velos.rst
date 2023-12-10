@@ -4,7 +4,7 @@ Automating F5OS on VELOS
 
 Since F5OS is an API first architecture, everything is automatable at the F5OS layer. There are F5OS API's for every function, and the GUI and CLI are built on top of the API. API reference materials are published on clouddocs.f5.com in addtion to the most common API workflows. In addition, Terraform providers and Ansible collections are also available for F5OS, and more functionality is being added with each release of those packages.
 
-If you want to see what API functions are available you can view the API reference documentation for the specific F5OS version you are running. As you can see, VELOS / F5OS-C have its own API reference pages and F5OS-A / rSeries have similar pages, most of the API calls are common expcept for those that are specific to the platform.
+If you want to see what API functions are available you can view the API reference documentation for the specific F5OS version you are running. As you can see, VELOS / F5OS-C have its own API reference pages and F5OS-A / rSeries have similar pages, most of the API calls are common except for those that are specific to the platform.
 
 `F5OS-C/F5 VELOS - API <https://clouddocs.f5.com/api/velos-api/velos-api-index.html>`_
 
@@ -16,7 +16,7 @@ The API workflows section has an index which maps to all the common API workflow
 
 `F5 VELOS API Workflows <https://clouddocs.f5.com/api/velos-api/velos-api-workflows.html>`_
 
-Below is a smaple of some of the workflows available in the link above, and there are many more.
+Below is a sample of some of the workflows available in the link above, and there are many more.
 
 .. image:: images/automating_velos/image2.png
   :align: center
@@ -62,7 +62,7 @@ Example of API call using port 443. Replace **/restconf** with **/api**.
  
 You can send a standard API call with user/password-based authentication (basic auth), and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth. The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes. If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password-based authentication to the VELOS F5OS management IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth** and enter the username and password to log into your rSeries appliance.
 
-.. image:: images/automating_velos/image5a.png
+.. image:: images/automating_velos/image6a.png
   :align: center
   :scale: 70%
 
@@ -75,26 +75,26 @@ To capture the token and save it for use in subsequent API calls, go to the **Te
 
 This will capture the auth token and store it in a variable called **x-auth-token_rseries_appliance1**.
 
-.. image:: images/automating_velos/image5b.png
+.. image:: images/automating_velos/image6b.png
   :align: center
   :scale: 70%
 
 This will be stored as a variable in the Postman **Environment** as seen below.
 
-.. image:: images/automating_velos/image5c.png
+.. image:: images/automating_velos/image6c.png
   :align: center
   :scale: 70%
 
 
 Once the variable is stored with the auth token, it can be used instead of using basic auth on all subsequent API calls. On any subsequent API call under the **Auth** option, set the **Type** to **Bearer Token**, and set the **Token** to the variable name. Note, Postman references variables by encasing the variable name in these types of parentheses **{{Variable-Name}}**. In this case the **Token** is set to **{{x-auth-token_rseries_appliance1}}**. 
 
-.. image:: images/automating_velos/image5d.png
+.. image:: images/automating_velos/image6d.png
   :align: center
   :scale: 70%
 
 You must also add some required headers to any API calls sent to F5OS. It is important to include the header **Content-Type** **application/yang-data+json** and the Token header **X-Auth-Token** with a value of **{{x-auth-token_rseries_appliance1}}**. The variable and header will change depending on the destination of the API call. It can be sent to a second appliance if desired.
 
-.. image:: images/automating_velos/image5e.png
+.. image:: images/automating_velos/image6e.png
   :align: center
   :scale: 70%
 
