@@ -964,7 +964,7 @@ You'll get the following confirmation that the license has been installed succes
 
 
 Automatic Licensing via API
-===========================
+----------------------------
 
 You can very easily apply a license automatically with the following API call. This assumes the VELOS system controllers are on the network, have internet access and DNS has been configured. This will allow the system to resolve the domain name for the F5 licensing server to apply the license.
 
