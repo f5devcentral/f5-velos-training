@@ -453,7 +453,7 @@ Below is output generated from the previous command:
 Uploading Tenant Images from a Client Machine via the API
 =========================================================
 
-You can upload an F5OS tenant image from a client machine to the chassis partition over the API. First you must obtain an **upload-id** using the following API call.
+You can upload an F5OS tenant image from a client machine to the chassis partition over the API. First, you must obtain an **upload-id** using the following API call.
 
 
 .. code-block:: bash
@@ -479,7 +479,7 @@ If you are using Postman, the API call above will generate an upload-id that wil
 
 Below is an example of how this would appear inside the Postman interface under the **Tests** section.
 
-.. image:: images/rseries_deploying_a_tenant/upload-id.png
+.. image:: images/velos_deploying_a_tenant/upload-id.png
   :align: center
   :scale: 70%
 
@@ -491,13 +491,13 @@ Once the upload-id is captured, you can then initiate a file upload of the F5OS 
 
 In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS tenant image you want to upload as seen in the example below.
 
-.. image:: images/rseries_deploying_a_tenant/file-upload-tenant-body.png
+.. image:: images/velos_deploying_a_tenant/file-upload-tenant-body.png
   :align: center
   :scale: 70%
 
 In the **Headers** section ensure you add the **file-upload-id** header, with the variable used to capture the id in the previous API call.
 
-.. image:: images/rseries_deploying_a_tenant/file-upload-tenant-headers.png
+.. image:: images/velos_deploying_a_tenant/file-upload-tenant-headers.png
   :align: center
   :scale: 70%
 
