@@ -498,7 +498,7 @@ You can validate the status of all tenants within the chassis partition using th
 
 .. code-block:: bash
 
-  GET https://{{Chassis1_Partition_IP}}:8888/restconf/data/f5-tenants:tenants
+  GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
 
 Below is an example output from a VELOS system:
 
@@ -722,35 +722,6 @@ Resizing a Tenant
 
 VELOS tenants have static CPU and memory allocations. These can be changed after a tenant has been deployed, but the tenant will have to be temporarily suspended (put in the **provisioned** state), then the change to CPU and/or memory allocation can be made. A tenant can be expanded within a single blade, or it can be configured to extend across blades assuming adequate resources are available. Once the changes are completed the tenant can be put into the **deployed** state and returned to service.
 
-Expanding a Tenant within the Same Blade via webUI
-------------------------------------------------
-
-Below is webUI output of a single tenant that is in the deployed and running state configured with 2 vCPUs per slot, 7680 memory per slot, and the tenant is allowed to run on only slot1. The workflow below will cover expanding the tenant from 2 to 4 vCPUs and the memory from 7680 to 14848 per slot. Click the check box next to the tenant, and then select the **Provision** button. 
-
-.. image:: images/velos_deploying_a_tenant/image12.png
-  :align: center
-  :scale: 70% 
-
-Click **OK**. This will move the tenant from **deployed** to **provisioned** state. You will see the tenant go from **running**, to **stopping**, to **stopped**.
-
-.. image:: images/velos_deploying_a_tenant/image13.png
-  :align: center
-  :scale: 70% 
-
-.. image:: images/velos_deploying_a_tenant/image14.png
-  :align: center
-  :scale: 70% 
-
-Next click on the hyperlink for tenant1. This will bring you into the configuration page for that tenant.  Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848** and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
-
-.. image:: images/velos_deploying_a_tenant/image15.png
-  :align: center
-  :scale: 70% 
-
-.. image:: images/velos_deploying_a_tenant/image16.png
-  :align: center
-  :scale: 70% 
-
 
 Expanding a Tenant within the Same Blade via CLI
 ------------------------------------------------
@@ -826,6 +797,37 @@ You can monitor the tenant transition to provisioned state using the show comman
   Production-1(config)# tenants tenant tenant1 config vcpu-cores-per-node 4 memory 14848 running-state deployed    
   Production-1(config-tenant-tenant1)# commit 
     Commit complete.
+
+
+
+Expanding a Tenant within the Same Blade via webUI
+------------------------------------------------
+
+Below is webUI output of a single tenant that is in the deployed and running state configured with 2 vCPUs per slot, 7680 memory per slot, and the tenant is allowed to run on only slot1. The workflow below will cover expanding the tenant from 2 to 4 vCPUs and the memory from 7680 to 14848 per slot. Click the check box next to the tenant, and then select the **Provision** button. 
+
+.. image:: images/velos_deploying_a_tenant/image12.png
+  :align: center
+  :scale: 70% 
+
+Click **OK**. This will move the tenant from **deployed** to **provisioned** state. You will see the tenant go from **running**, to **stopping**, to **stopped**.
+
+.. image:: images/velos_deploying_a_tenant/image13.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/velos_deploying_a_tenant/image14.png
+  :align: center
+  :scale: 70% 
+
+Next click on the hyperlink for tenant1. This will bring you into the configuration page for that tenant.  Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848** and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
+
+.. image:: images/velos_deploying_a_tenant/image15.png
+  :align: center
+  :scale: 70% 
+
+.. image:: images/velos_deploying_a_tenant/image16.png
+  :align: center
+  :scale: 70% 
 
 
 Expanding a Tenant within the Same Blade via API
@@ -1090,6 +1092,8 @@ If the tenant is already deployed, then you must first change the tenant to a pr
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/running-state
 
+In the body of the API call set the **runnning-state** to provisioned.
+
 .. code-block:: json
 
   {
@@ -1101,6 +1105,9 @@ Once the tenant is in the provisioned state you can issue another API call to mo
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/vcpu-cores-per-node
+
+
+In the body of the API call set the changes you would like to make and then set the **runnning-state** to deployed.
 
 .. code-block:: json
 
@@ -1114,11 +1121,13 @@ Once the tenant is in the provisioned state you can issue another API call to mo
       "running-state": "deployed"
   }
 
-The last part is to verify the tenant’s status, and that the config change has taken affect:
+The last part is to verify the tenant’s status, and that the config change has taken affect. Use the API call below, and be sure to set the proper tenant name in the URL.
 
 .. code-block:: bash
 
   GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config
+
+The response should be similar to the output below, which will show the tenant's configuration.
 
 .. code-block:: json
 
@@ -1147,3 +1156,231 @@ The last part is to verify the tenant’s status, and that the config change has
           }
       }
   }
+
+You can validate the status of all tenants within the chassis partition using the following API call.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
+
+Below is an example output from a VELOS system:
+
+.. code-block:: json
+
+  {
+      "f5-tenants:tenants": {
+          "tenant": [
+              {
+                  "name": "tenant1",
+                  "config": {
+                      "name": "tenant1",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-15.1.5-0.0.10.T4-F5OS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "10.255.0.149",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "vlans": [
+                          501,
+                          3010,
+                          3011
+                      ],
+                      "cryptos": "enabled",
+                      "tenant-auth-support": "disabled",
+                      "vcpu-cores-per-node": 2,
+                      "memory": "7680",
+                      "storage": {
+                          "size": 70
+                      },
+                      "running-state": "configured",
+                      "appliance-mode": {
+                          "enabled": false
+                      }
+                  },
+                  "state": {
+                      "name": "tenant1",
+                      "unit-key-hash": "3LKG3f3UTbc5Talm3+D5uKodIC/LsO5w43m0n3EYHLOMEJM0E4E0Q27OK3WLWma4tBpY6Nu59i1m4HA+hR81hA==",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-15.1.5-0.0.10.T4-F5OS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "10.255.0.149",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "mac-ndi-set": [
+                          {
+                              "ndi": "default",
+                              "mac": "00:94:a1:8e:d0:09"
+                          }
+                      ],
+                      "vlans": [
+                          501,
+                          3010,
+                          3011
+                      ],
+                      "cryptos": "enabled",
+                      "tenant-auth-support": "disabled",
+                      "vcpu-cores-per-node": 2,
+                      "memory": "7680",
+                      "storage": {
+                          "size": 70
+                      },
+                      "running-state": "configured",
+                      "mac-data": {
+                          "base-mac": "00:94:a1:8e:d0:0b",
+                          "mac-pool-size": 1
+                      },
+                      "appliance-mode": {
+                          "enabled": false
+                      },
+                      "status": "Configured"
+                  }
+              },
+              {
+                  "name": "tenant2",
+                  "config": {
+                      "name": "tenant2",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-15.1.5-0.0.10.T4-F5OS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "10.255.0.205",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "vlans": [
+                          502,
+                          3010,
+                          3011
+                      ],
+                      "cryptos": "enabled",
+                      "tenant-auth-support": "disabled",
+                      "vcpu-cores-per-node": 6,
+                      "memory": "22016",
+                      "storage": {
+                          "size": 76
+                      },
+                      "running-state": "deployed",
+                      "appliance-mode": {
+                          "enabled": false
+                      }
+                  },
+                  "state": {
+                      "name": "tenant2",
+                      "unit-key-hash": "cDzVBaFAZD+kHosgnwjzteF9D13BsmvcgXCdz2xMi8kztd0uxouyTNkvPt8uSaNLu5i5VyTLSRFt8fkcJahEvg==",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-15.1.5-0.0.10.T4-F5OS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "10.255.0.205",
+                      "prefix-length": 24,
+                      "gateway": "10.255.0.1",
+                      "mac-ndi-set": [
+                          {
+                              "ndi": "default",
+                              "mac": "00:94:a1:8e:d0:0a"
+                          }
+                      ],
+                      "vlans": [
+                          502,
+                          3010,
+                          3011
+                      ],
+                      "cryptos": "enabled",
+                      "tenant-auth-support": "disabled",
+                      "vcpu-cores-per-node": 6,
+                      "memory": "22016",
+                      "storage": {
+                          "size": 76
+                      },
+                      "running-state": "deployed",
+                      "mac-data": {
+                          "base-mac": "00:94:a1:8e:d0:0c",
+                          "mac-pool-size": 1
+                      },
+                      "appliance-mode": {
+                          "enabled": false
+                      },
+                      "status": "Starting",
+                      "instances": {
+                          "instance": [
+                              {
+                                  "node": 1,
+                                  "pod-name": "tenant2-1",
+                                  "instance-id": 1,
+                                  "phase": "Pending",
+                                  "creation-time": "2022-03-29T04:49:41Z",
+                                  "ready-time": "",
+                                  "status": "0/5 nodes are available: 2 Insufficient devices.kubevirt.io/kvm, 2 Insufficient devices.kubevirt.io/tun, 2 Insufficient devices.kubevirt.io/vhost-net, 2 Insufficient hugepages-2Mi, 4 node(s) didn't match node selector, 5 Insufficient f5.com/qat.",
+                                  "mgmt-mac": "00:00:00:00:00:00"
+                              }
+                          ]
+                      }
+                  }
+              },
+              {
+                  "name": "tenant3",
+                  "config": {
+                      "name": "tenant3",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-15.1.5-0.0.10.T4-F5OS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "5.5.5.5",
+                      "prefix-length": 24,
+                      "gateway": "5.5.5.254",
+                      "cryptos": "enabled",
+                      "tenant-auth-support": "disabled",
+                      "vcpu-cores-per-node": 2,
+                      "memory": "7680",
+                      "storage": {
+                          "size": 76
+                      },
+                      "running-state": "configured",
+                      "appliance-mode": {
+                          "enabled": false
+                      }
+                  },
+                  "state": {
+                      "name": "tenant3",
+                      "unit-key-hash": "LopnQ/ImnqSeOnTTraC84M9FITYVz2//d6lS4wpQxoc5AzQr/dtjy6aU2Q225JURT4viuWj9HwjB19KZSW6KEA==",
+                      "type": "BIG-IP",
+                      "image": "BIGIP-15.1.5-0.0.10.T4-F5OS.qcow2.zip.bundle",
+                      "nodes": [
+                          1
+                      ],
+                      "mgmt-ip": "5.5.5.5",
+                      "prefix-length": 24,
+                      "gateway": "5.5.5.254",
+                      "cryptos": "enabled",
+                      "tenant-auth-support": "disabled",
+                      "vcpu-cores-per-node": 2,
+                      "memory": "7680",
+                      "storage": {
+                          "size": 76
+                      },
+                      "running-state": "configured",
+                      "mac-data": {
+                          "base-mac": "00:94:a1:8e:d0:0d",
+                          "mac-pool-size": 1
+                      },
+                      "appliance-mode": {
+                          "enabled": false
+                      },
+                      "status": "Configured"
+                  }
+              }
+          ]
+      }
+  }
+
+
+
+
+
+
