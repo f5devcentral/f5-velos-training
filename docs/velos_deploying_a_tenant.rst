@@ -405,6 +405,8 @@ The upload utility requires a remote HTTPS, SCP, or SFTP server that is hosting 
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
+In the body of the API call enter the details about the local and remote file locations.
+
 .. code-block:: json
 
     {
@@ -455,6 +457,8 @@ Tenant creation via the API is as simple as defining the parameters below and se
 .. code-block:: bash
 
   POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
+
+In the body of the API call enter the tenant details.
 
 .. code-block:: json
 
