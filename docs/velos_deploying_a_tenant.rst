@@ -921,6 +921,8 @@ Send a PATCH API command to change the CPU and memory configuration so the tenan
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/vcpu-cores-per-node
 
+In the body of the API call enter the desired vCPU and memory values.
+
 .. code-block:: json
 
   {
@@ -933,6 +935,8 @@ Finally change the tenant status back to **deployed** and then check the status 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{New_Tenant1_Name}}/config/running-state
+
+Set **running-state** to deployed in the body of the API call.
 
 .. code-block:: json
 
