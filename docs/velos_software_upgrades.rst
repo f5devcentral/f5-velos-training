@@ -263,7 +263,7 @@ You’ll see output like the example below. Once the file shows up here you are 
 Upgrading the System Controllers via webUI
 ------------------------------------------
 
-Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support traffic disruption should be minimal during the upgrade process.
+Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support traffic disruption should be minimal during the upgrade process of the system controllers.
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
@@ -374,7 +374,7 @@ In the system controller CLI you can use the **show image** command to see the c
 
     syscon-1-active# 
 
-The command show running-config image will show the current configuration for software images. You can enter config mode and change the configuration using the system image set-version command and then commit to initiate an upgrade.
+The command **show running-config image** will show the current configuration for software images. You can enter config mode and change the configuration using the **system image set-version** command and then commit to initiate an upgrade.
 
 .. code-block:: bash
 
