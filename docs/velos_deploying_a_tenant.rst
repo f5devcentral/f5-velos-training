@@ -433,6 +433,18 @@ The tenant deployment options are almost identical to deploying a vCMP guest, wi
 Validating Tenant Status via webUI
 ===================================
 
+You can validate the current high level status of a VELOS tenant in the webUI by clicking on the **Tenant Management** -> **Tenant Deployments** page. Here you can see the software version of the tenant (if it is running), as well as the high-level configuration for that tenant.
+
+.. image:: images/velos_deploying_a_tenant/tenantstatus1.png
+  :align: center
+  :scale: 70% 
+
+You can get further detail abd status of the tenant by clicking on the **Tenant Management** -> **Tenant Details** page. If a tenant encountered an issue during startup, it would show details here, and sometimes hovering over the status will provide even more details.
+
+
+.. image:: images/velos_deploying_a_tenant/tenantstatus2.png
+  :align: center
+  :scale: 70% 
 
 
 
