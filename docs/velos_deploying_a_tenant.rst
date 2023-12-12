@@ -74,7 +74,7 @@ Tenant Deployment via CLI
 Uploading a Tenant Image via CLI
 ================================
 
-Tenant software images are loaded directly into the F5OS chassis partition layer. For the initial release of VELOS, supported tenant versions are v14.1.4 and later and 15.1.4 and later. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software, and upgrades to newer versions happen within the tenant itself, not in the F5OS layer. The images inside F5OS are for initial deployment only. VELOS tenants do not support versions 16.0, 16.0 or 17.0, you can run either the minimum 14.1.4/15.1.4 releases or later or any versions 17.1.x and later.
+Tenant software images are loaded directly into the F5OS chassis partition layer. For the initial release of VELOS, supported tenant versions were v14.1.4 and then later version of 14.1.x. Support for 15.1.4 and later was subsequently added. VELOS tenants do not support versions 16.0, 16.0 or 17.0, you can run either the minimum 14.1.4/15.1.4 releases or later or any versions 17.1.x and later.. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software, and upgrades to newer versions happen within the tenant itself, not in the F5OS layer. The images inside F5OS are for initial deployment of tenants only. 
 
 Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the F5OS chassis partition layer. If an HTTPS/SCP/SFTP server is not available, you may upload a tenant image using scp directly to the F5OS platform layer. Simply SCP an image to the out-of-band management IP address using the admin account and a path of **IMAGES**. There are also other upload options available in the webUI (Upload from Browser) or API (HTTPS/SCP/SFTP). Below is an example of using SCP from a remote client to the IP address of the VELOS chassis partition.
 
@@ -251,64 +251,6 @@ After the tenant is created you can run the command **show running-config tenant
   config appliance-mode disabled
   !
 
-To see the actual status of the tenants, issue the CLI command **show tenants**.
-
-.. code-block:: bash
-
-  Production-1# show tenants 
-  tenants tenant bigtenant
-  state name          bigtenant
-  state type          BIG-IP
-  state mgmt-ip       10.255.0.149
-  state prefix-length 24
-  state gateway       10.255.0.1
-  state vlans         [ 444 500 555 ]
-  state cryptos       enabled
-  state vcpu-cores-per-node 6
-  state memory        22016
-  state running-state deployed
-  state mac-data base-mac 00:94:a1:8e:d0:0b
-  state mac-data mac-pool-size 1
-  state appliance-mode disabled
-  state status        Running
-  state primary-slot  1
-  state image-version "BIG-IP 14.1.4 0.0.619"
-  NDI      MAC                
-  ----------------------------
-  default  00:94:a1:8e:d0:09  
-
-        INSTANCE                                                                                                                                                    
-  NODE  ID        PHASE    IMAGE NAME                                       CREATION TIME         READY TIME            STATUS                   MGMT MAC           
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  1     1         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:15:00Z  Started tenant instance  0a:27:45:20:90:c4  
-  2     2         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:14:59Z  Started tenant instance  52:02:73:bf:ee:ac  
-
-  tenants tenant tenant2
-  state name          tenant2
-  state type          BIG-IP
-  state mgmt-ip       10.255.0.205
-  state prefix-length 24
-  state gateway       10.255.0.1
-  state vlans         [ 444 500 555 ]
-  state cryptos       enabled
-  state vcpu-cores-per-node 4
-  state memory        14848
-  state running-state deployed
-  state mac-data base-mac 00:94:a1:8e:d0:0d
-  state mac-data mac-pool-size 1
-  state appliance-mode disabled
-  state status        Starting
-  NDI      MAC                
-  ----------------------------
-  default  00:94:a1:8e:d0:0e  
-
-        INSTANCE                                                                                                  CREATION  READY          MGMT  
-  NODE  ID        PHASE                                          IMAGE NAME                                       TIME      TIME   STATUS  MAC   
-  -----------------------------------------------------------------------------------------------------------------------------------------------
-  2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                           -     
-
-
-
 Validating Tenant Status via CLI
 ================================
 
@@ -333,7 +275,7 @@ After the tenant is created you can run the command **show running-config tenant
   config appliance-mode disabled
   !
 
-To see the actual status of the tenants, issue the CLI command **show tenants**.
+To see the actual status of the tenants, issue the CLI command **show tenants** to see all tenants, or **show tenants <tenant-name>** to see a specific tenant.
 
 .. code-block:: bash
 
@@ -408,7 +350,7 @@ You can upload a tenant image via the webUI in two different places. The first i
 
 After the image is uploaded you need to wait until it shows **Replicated** status before deploying a tenant.
 
-Alternatively, you can upload from the **System Settings > File Utilities** page.
+Alternatively, you can upload from the **System Settings > File Utilities** page, and then select the **images** directory from the drop down list.
 
 .. image:: images/velos_deploying_a_tenant/image9a.png
   :align: center
@@ -439,7 +381,7 @@ You can validate the current high level status of a VELOS tenant in the webUI by
   :align: center
   :scale: 70% 
 
-You can get further detail abd status of the tenant by clicking on the **Tenant Management** -> **Tenant Details** page. If a tenant encountered an issue during startup, it would show details here, and sometimes hovering over the status will provide even more details.
+You can get further detail and status of the tenant by clicking on the **Tenant Management** -> **Tenant Details** page. If a tenant encountered an issue during startup, it would show details here, and sometimes hovering over the status will provide even more details.
 
 
 .. image:: images/velos_deploying_a_tenant/tenantstatus2.png
