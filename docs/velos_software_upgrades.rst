@@ -5,7 +5,7 @@ Software Upgrades
 F5OS-C System Controller Upgrades
 =================================
 
-The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C have introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
+The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
 
 This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and failover all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an active state, and the remaining controller will be upgraded.
 
@@ -14,6 +14,8 @@ When upgrading the system controllers, you will have a choice of upgrading eithe
 .. image:: images/velos_software_upgrades/image1.png
   :align: center
   :scale: 70%
+
+Below are examples of the subcomponents that make up the OS and Service levels within both the system controller layer, and the chassis partition layer.
 
 .. image:: images/velos_software_upgrades/image2.png
   :align: center
@@ -24,7 +26,7 @@ The outage for a service-only upgrade on the system controller is smaller than i
 Uploading Controller and Partition Images via the webUI
 -----------------------------------------------------
 
-You can do this from the **Software Management -> Partitions Image** and **Controller Images** pages.
+You can upload F5OS controller and partition images from the **Software Management -> Controllers Images** and **Partition Images** pages.
 
 .. image:: images/velos_software_upgrades/image3.png
   :align: center
@@ -34,7 +36,7 @@ You can do this from the **Software Management -> Partitions Image** and **Contr
   :align: center
   :scale: 70%
 
-Click **Add** and you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. You will need to have a remote HTTPS server that allows downloads in order to import images into the system via the webUI. You can alternatively use the **Upload** option to upload an F5OS-C system controller or chassis partition ISO file from a client machine through the browser.
+Click **Add**, and you will be prompted to provide the configuration details for a remote HTTPS server where the images can be downloaded from. You will need to have a remote HTTPS server that allows downloads in order to import images into the system via the webUI. You can alternatively use the **Upload** option to upload an F5OS-C system controller or chassis partition ISO file from a client machine through the browser.
 
 You can also upload or import F5OS-C images for both the system controllers and the chassis partitions using the **System Settings > File Utilities** page.
 
@@ -53,7 +55,7 @@ After the upload completes, it will take some time for it to be replicated to th
 Uploading Controller and Partition Images via the CLI
 -----------------------------------------------------
 
-The current implementation of **file import** in the CLI relies on either a remote HTTPS, SCP, or SFTP server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated, you can check its status using the **file transfer-status** command.
+The **file import** utility in the CLI relies on either a remote HTTPS, SCP, or SFTP server hosting the image files that need to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated, you can check its status using the **file transfer-status** command.
 
 
 .. code-block:: bash
@@ -114,6 +116,8 @@ You can then query the **images/import** directory for various image types like 
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
 
+In the body of the API call, enter the path you want to query.
+
 .. code-block:: json
 
     {
@@ -140,6 +144,8 @@ To import images, use the following API examples for controller and partition im
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
+In the body of the API call, enter the local and remote file details.
+
 .. code-block:: json
 
     {
@@ -160,6 +166,8 @@ To import the **partition** image:
 .. code-block:: bash
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+
+In the body of the API call, enter the local and remote file details.
 
 .. code-block:: json
 
@@ -202,6 +210,8 @@ After transferring the file, you can view the contents of the images/staging dir
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
 
+In the body of the API call, enter the path you want to query.
+
 .. code-block:: json
 
     {
@@ -227,6 +237,8 @@ You can then monitor the images/import/iso directory to see when the file is rea
 .. code-block:: bash
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call, enter the path you want to query.
 
 .. code-block:: json
 
