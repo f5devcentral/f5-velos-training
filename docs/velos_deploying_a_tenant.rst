@@ -61,6 +61,340 @@ However, the 76GB image is allocated in a sparse manner meaning the tenant is on
 
 This is analogous to thin provisioning in a hypervisor, where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4 image. There may be rare instances where a tenant running in production for a long time can end up with lots of extra space consumed on disk. This could be due to many in-place software upgrades, local logging, core files, database use and other factors. There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over-utilized, you could back up the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
 
+
+------------------
+Tenant Deployments
+------------------
+
+Tenants can easily be deployed via the F5OS CLI, webUI, or API.
+
+Tenant Deployment via CLI
+-------------------------
+
+Uploading a Tenant Image via CLI
+================================
+
+Tenant software images are loaded directly into the F5OS chassis partition layer. For the initial release of VELOS, supported tenant versions are v14.1.4 and later and 15.1.4 and later. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software, and upgrades to newer versions happen within the tenant itself, not in the F5OS layer. The images inside F5OS are for initial deployment only. VELOS tenants do not support versions 16.0, 16.0 or 17.0, you can run either the minimum 14.1.4/15.1.4 releases or later or any versions 17.1.x and later.
+
+Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the F5OS chassis partition layer. If an HTTPS/SCP/SFTP server is not available, you may upload a tenant image using scp directly to the F5OS platform layer. Simply SCP an image to the out-of-band management IP address using the admin account and a path of **IMAGES**. There are also other upload options available in the webUI (Upload from Browser) or API (HTTPS/SCP/SFTP). Below is an example of using SCP from a remote client to the IP address of the VELOS chassis partition.
+
+.. code-block:: bash
+
+    scp BIGIP-15.1.5-0.0.8.ALL-F5OS.qcow2.zip.bundle admin@10.255.0.132:IMAGES
+
+You may also import the tenant image file from the F5OS CLI. Use the **file import** command to get the tenant image file from a remote HTTPS server or from a remote server over SCP or SFTP. Below is an example of importing from a remote HTTPS server. Note the target directory should be **images/tenant**:
+
+.. code-block:: bash
+
+    Production1# file import remote-host 10.255.0.142 remote-file /upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username corpuser insecure
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle)
+
+If a remote HTTPS server is not available, you may also import the file from the CLI over SCP by adding the **protocol scp** option to the command line:
+
+.. code-block:: bash
+
+    Production1# file import remote-host 10.255.0.142 remote-file /var/www/server/1/upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username root insecure protocol scp
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle)
+
+
+The command **file transfer-status** will provide details of the transfer progress and any errors:
+
+.. code-block:: bash
+
+    Production1# file import remote-host 10.255.0.142 remote-file /var/www/server/1/upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username root insecure protocol scp
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle)
+
+.. code-block:: bash
+
+  Production-1# show file transfer-operations 
+  file transfer-operations transfer-operation "" "" "" "" ""
+  status    "    HTTP Error 302"
+  timestamp "Wed Apr 26 15:53:38 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.13.0-2.13.6.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.13.0/test-candidate/2.13.6/velos/BIG-IP-Next-0.13.0-2.13.6.tar.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Fri Apr 14 03:08:44 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.29.0.tar.bundle sea.artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/test-candidate/2.29.0/velos/BIG-IP-Next-0.14.0-2.29.0.tar.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Tue May 16 02:56:59 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/release-candidate/2.45.3+0.0.12/velos/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tar.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Thu Jun  8 13:42:22 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tgz.512.sig artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/release-candidate/2.45.3+0.0.12/ve-upgrade/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tgz.512.sig "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Thu Jun  8 13:38:55 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.45.3+0.0.24.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/release-candidate/2.45.3+0.0.24/velos/BIG-IP-Next-0.14.0-2.45.3+0.0.24.tar.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Wed Jun 21 19:33:45 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.15.0-2.94.0+0.0.1.tar.bundle sea.artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.15.0/test-candidate/2.94.0+0.0.1/velos/BIG-IP-Next-0.15.0-2.94.0+0.0.1.tar.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Fri Jul 14 16:56:37 2023"
+  file transfer-operations transfer-operation images/BIG-IP-Next-0.15.0-2.94.0+0.0.3.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.15.0/test-candidate/2.94.0+0.0.3/velos/BIG-IP-Next-0.15.0-2.94.0+0.0.3.tar.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Wed Jul 19 19:48:46 2023"
+  file transfer-operations transfer-operation images/BIGIP-15.1.6.1-0.0.10.ALL-F5OS.qcow2.zip.bundle spkapexsrvc01.olympus.f5net.com v15.1.6.1/daily/build10.0/VM/BIGIP-15.1.6.1-0.0.10.ALL-F5OS.qcow2.zip.bundle "Import file" "HTTPS   "
+  status    "         Completed"
+  timestamp "Wed May  3 14:07:22 2023"
+  file transfer-operations transfer-operation images/BIGIP-17.1.0.1-0.0.2.ALL-F5OS.qcow2.zip.bundle nibs.olympus.f5net.com build/bigip/v17.1.0.1/daily/build2.0/VM/BIGIP-17.1.0.1-0.0.2.ALL-F5OS.qcow2.zip.bundle "Import file" "HTTPS   "
+  status    "    HTTP Error 302"
+  timestamp "Wed Apr 26 15:53:38 2023"
+  Production-1# 
+ 
+
+You can view the current tenant images and their status in the F5OS CLI by using the **show images** command:
+
+.. code-block:: bash
+
+  Production-1# show images 
+                                                  IN                                     
+  NAME                                             USE    TYPE                STATUS      
+  ----------------------------------------------------------------------------------------
+  BIG-IP-Next-0.13.0-2.13.6                        false  helm-image          replicated  
+  BIG-IP-Next-0.13.0-2.13.6.tar.bundle             false  helm-bundle         replicated  
+  BIG-IP-Next-0.13.0-2.13.6.yaml                   false  helm-specification  replicated  
+  BIG-IP-Next-0.13.0-4.88.0                        false  helm-image          replicated  
+  BIG-IP-Next-0.13.0-4.88.0.tar.bundle             false  helm-bundle         replicated  
+  BIG-IP-Next-0.13.0-4.88.0.yaml                   false  helm-specification  replicated  
+  BIG-IP-Next-0.14.0-2.45.3+0.0.24                 false  helm-image          replicated  
+  BIG-IP-Next-0.14.0-2.45.3+0.0.24.tar.bundle      false  helm-bundle         replicated  
+  BIG-IP-Next-0.14.0-2.45.3+0.0.24.yaml            false  helm-specification  replicated  
+  BIG-IP-Next-0.15.0-2.94.0+0.0.3                  true   helm-image          replicated  
+  BIG-IP-Next-0.15.0-2.94.0+0.0.3.tar.bundle       true   helm-bundle         replicated  
+  BIG-IP-Next-0.15.0-2.94.0+0.0.3.yaml             true   helm-specification  replicated  
+  BIGIP-15.1.6.1-0.0.10.ALL-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
+
+  Production-1#
+
+
+Creating a Tenant via CLI
+=========================
+
+Tenant lifecycle can be fully managed via the CLI using the **tenants** command in **config** mode on the chassis partition. Using command tab completion and question marks will help display all the tenant options. Enter **config** mode and enter the command **tenants tenant <tenant-name>** where **<tenant-name>** is the name of the tenant you would like to create. This will put you into a mode for that tenant and you will be prompted for some basic information to create the tenant via a CLI wizard. After answering basic information you may configure additional tenant parameters by entering **config ?** within the tenant mode, and that will provide all the additional configuration options:
+
+.. code-block:: bash
+
+
+    Production-1(config)# tenants tenant tenant2                        
+    Value for 'config image' (<string>): BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
+    Value for 'config mgmt-ip' (<IPv4 address>): 10.255.0.205
+    Value for 'config prefix-length' (<unsignedByte, 1 .. 32>): 24
+    Value for 'config gateway' (<IPv4 address>): 10.255.0.1
+
+When you are inside the tenant mode you can enter each configuration item one line at a time using tab completion and question mark for help. 
+
+.. code-block:: bash
+
+  Production-1# config
+  Entering configuration mode terminal
+  Production-1(config)# tenants tenant tenant2 
+  Production-1(config-tenant-tenant2)# config ?
+  Possible completions:
+    appliance-mode        
+    cryptos               Enable crypto devices for the tenant.
+    gateway               User-specified gateway for the tenant mgmt-ip.
+    image                 User-specified image for tenant.
+    memory                User-specified memory in MBs for the tenant.
+    mgmt-ip               User-specified mgmt-ip for the tenant management access.
+    nodes                 User-specified node-number(s) in the partition to schedule the tenant.
+    prefix-length         User-specified prefix-length for the tenant mgmt-ip.
+    running-state         User-specified desired state for the tenant.
+    storage               User-specified storage information
+    tenant-auth-support   Security can be enabled/disabled when tenant is Not in deployed state.
+    type                  Tenant type.
+    vcpu-cores-per-node   User-specified number of logical cpu cores for the tenant.
+    vlans                 User-specified vlan-id from partition vlan table for the tenant.
+  Production-1(config-tenant-tenant2)# config cryptos enabled 
+  Production-1(config-tenant-tenant2)# config vcpu-cores-per-node 4
+  Production-1(config-tenant-tenant2)# config type BIG-IP 
+  Production-1(config-tenant-tenant2)# config nodes 2
+  Production-1(config-tenant-tenant2)# config vlans 444        
+  Production-1(config-tenant-tenant2)# config vlans 500
+  Production-1(config-tenant-tenant2)# config vlans 555
+  Production-1(config-tenant-tenant3)# config storage size 76
+  Production-1(config-tenant-tenant2)# config running-state deployed
+  Production-1(config-tenant-tenant2)# config memory 14848
+
+Any changes must be committed for them to be executed:
+
+.. code-block:: bash
+
+  Production-1(config-tenant-tenant2)# commit
+	
+You may also put all the parameters on one line:
+
+.. code-block:: bash
+
+  Production-1(config)# tenants tenant tenant2 config image BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle vcpu-cores-per-node 2 nodes [ 1 2 ] vlans [ 2001 3001 ] mgmt-ip 10.144.140.107 prefix-length 24 gateway 10.144.140.254 name cbip3 running-state configured
+  Production-1 (tenant2)# commit
+  Commit complete.
+
+After the tenant is created you can run the command **show running-config tenant** to see what has been configured:
+
+.. code-block:: bash
+
+  Production-1# show run tenant
+  tenants tenant bigtenant
+  config name         bigtenant
+  config type         BIG-IP
+  config image        BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
+  config nodes        [ 1 2 ]
+  config mgmt-ip      10.255.0.149
+  config prefix-length 24
+  config gateway      10.255.0.1
+  config vlans        [ 444 500 555 ]
+  config cryptos      enabled
+  config vcpu-cores-per-node 6
+  config memory       22016
+  config running-state deployed
+  config appliance-mode disabled
+  !
+
+To see the actual status of the tenants, issue the CLI command **show tenants**.
+
+.. code-block:: bash
+
+  Production-1# show tenants 
+  tenants tenant bigtenant
+  state name          bigtenant
+  state type          BIG-IP
+  state mgmt-ip       10.255.0.149
+  state prefix-length 24
+  state gateway       10.255.0.1
+  state vlans         [ 444 500 555 ]
+  state cryptos       enabled
+  state vcpu-cores-per-node 6
+  state memory        22016
+  state running-state deployed
+  state mac-data base-mac 00:94:a1:8e:d0:0b
+  state mac-data mac-pool-size 1
+  state appliance-mode disabled
+  state status        Running
+  state primary-slot  1
+  state image-version "BIG-IP 14.1.4 0.0.619"
+  NDI      MAC                
+  ----------------------------
+  default  00:94:a1:8e:d0:09  
+
+        INSTANCE                                                                                                                                                    
+  NODE  ID        PHASE    IMAGE NAME                                       CREATION TIME         READY TIME            STATUS                   MGMT MAC           
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1     1         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:15:00Z  Started tenant instance  0a:27:45:20:90:c4  
+  2     2         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:14:59Z  Started tenant instance  52:02:73:bf:ee:ac  
+
+  tenants tenant tenant2
+  state name          tenant2
+  state type          BIG-IP
+  state mgmt-ip       10.255.0.205
+  state prefix-length 24
+  state gateway       10.255.0.1
+  state vlans         [ 444 500 555 ]
+  state cryptos       enabled
+  state vcpu-cores-per-node 4
+  state memory        14848
+  state running-state deployed
+  state mac-data base-mac 00:94:a1:8e:d0:0d
+  state mac-data mac-pool-size 1
+  state appliance-mode disabled
+  state status        Starting
+  NDI      MAC                
+  ----------------------------
+  default  00:94:a1:8e:d0:0e  
+
+        INSTANCE                                                                                                  CREATION  READY          MGMT  
+  NODE  ID        PHASE                                          IMAGE NAME                                       TIME      TIME   STATUS  MAC   
+  -----------------------------------------------------------------------------------------------------------------------------------------------
+  2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                           -     
+
+
+
+Validating Tenant Status via CLI
+================================
+
+After the tenant is created you can run the command **show running-config tenant** to see what has been configured:
+
+.. code-block:: bash
+
+  Production-1# show run tenant
+  tenants tenant bigtenant
+  config name         bigtenant
+  config type         BIG-IP
+  config image        BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
+  config nodes        [ 1 2 ]
+  config mgmt-ip      10.255.0.149
+  config prefix-length 24
+  config gateway      10.255.0.1
+  config vlans        [ 444 500 555 ]
+  config cryptos      enabled
+  config vcpu-cores-per-node 6
+  config memory       22016
+  config running-state deployed
+  config appliance-mode disabled
+  !
+
+To see the actual status of the tenants, issue the CLI command **show tenants**.
+
+.. code-block:: bash
+
+  Production-1# show tenants 
+  tenants tenant bigtenant
+  state name          bigtenant
+  state type          BIG-IP
+  state mgmt-ip       10.255.0.149
+  state prefix-length 24
+  state gateway       10.255.0.1
+  state vlans         [ 444 500 555 ]
+  state cryptos       enabled
+  state vcpu-cores-per-node 6
+  state memory        22016
+  state running-state deployed
+  state mac-data base-mac 00:94:a1:8e:d0:0b
+  state mac-data mac-pool-size 1
+  state appliance-mode disabled
+  state status        Running
+  state primary-slot  1
+  state image-version "BIG-IP 14.1.4 0.0.619"
+  NDI      MAC                
+  ----------------------------
+  default  00:94:a1:8e:d0:09  
+
+        INSTANCE                                                                                                                                                    
+  NODE  ID        PHASE    IMAGE NAME                                       CREATION TIME         READY TIME            STATUS                   MGMT MAC           
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1     1         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:15:00Z  Started tenant instance  0a:27:45:20:90:c4  
+  2     2         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:14:59Z  Started tenant instance  52:02:73:bf:ee:ac  
+
+  tenants tenant tenant2
+  state name          tenant2
+  state type          BIG-IP
+  state mgmt-ip       10.255.0.205
+  state prefix-length 24
+  state gateway       10.255.0.1
+  state vlans         [ 444 500 555 ]
+  state cryptos       enabled
+  state vcpu-cores-per-node 4
+  state memory        14848
+  state running-state deployed
+  state mac-data base-mac 00:94:a1:8e:d0:0d
+  state mac-data mac-pool-size 1
+  state appliance-mode disabled
+  state status        Starting
+  NDI      MAC                
+  ----------------------------
+  default  00:94:a1:8e:d0:0e  
+
+        INSTANCE                                                                                                  CREATION  READY          MGMT  
+  NODE  ID        PHASE                                          IMAGE NAME                                       TIME      TIME   STATUS  MAC   
+  -----------------------------------------------------------------------------------------------------------------------------------------------
+  2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle     
+
+
+
+Tenant Deployment via webUI
+---------------------------
+
+
 Tenant Deployment via CLI
 -------------------------
 

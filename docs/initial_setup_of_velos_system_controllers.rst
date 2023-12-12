@@ -689,65 +689,69 @@ In the body of the API call enter the edited license in the proper area. Below i
     #
     #       Module List 
     #
-    active module :                    Best Bundle, r10900|E135699-1129899|Rate Shaping|DNS Services|BIG-IP, DNS (Max)|Routing Bundle|Access Policy Manager, Base, r109XX|Advanced Web Application Firewall, r10XXX|Max Compression, r10900|Max SSL, r10900|Advanced Firewall Manager, r10XXX|DNSSEC|Anti-Virus Checks|Base Endpoint Security Checks|Firewall Checks|Machine Certificate Checks|Network Access|Protected Workspace|Secure Virtual Keyboard|APM, Web Application|App Tunnel|Remote Desktop|DNS Rate Fallback, Unlimited|DNS Licensed Objects, Unlimited|DNS Rate Limit, Unlimited QPS|GTM Rate Fallback, (UNLIMITED)|GTM Licensed Objects, Unlimited|GTM Rate, Unlimited|DNS RATE LIMITED, MAX|Carrier Grade NAT (AFM ONLY)|Protocol Security Manager
-    optional module :                  Advanced Protocols
-    optional module :                  APM, Max Access Sessions, i108XX
-    optional module :                  Basic Policy Enforcement Manager, r10XXX
-    optional module :                  BIG-IP, Multicast Routing
-    optional module :                  BIG-IP, Privileged User Access, 100 Endpoints
-    optional module :                  BIG-IP, Privileged User Access, 1000 Endpoints
-    optional module :                  BIG-IP, Privileged User Access, 250 Endpoints
-    optional module :                  BIG-IP, Privileged User Access, 50 Endpoints
-    optional module :                  BIG-IP, Privileged User Access, 500 Endpoints
-    optional module :                  Carrier-Grade NAT, r10XXX
-    optional module :                  Concurrent Users
-    optional module :                  DDOS, r10XXX
-    optional module :                  Dynamic Policy Provisioning, r10XXX
+    active module :                    Best Bundle, CX410|XXXXXXX-XXXXXXX|Max Compression, CX410|Rate Shaping|Max SSL, CX410|DNS, Max QPS, CX410|Advanced Firewall Manager, CX410|Advanced Web Application Firewall, CX410|Access Policy Manager, Base, CX410|Carrier Grade NAT (AFM ONLY)|Advanced Routing, CX410
+    optional module :                  Advanced Protocols, CX410
+    optional module :                  Anti-Bot Mobile, CX410
+    optional module :                  APM, 1000 VPN Users
+    optional module :                  APM, 10000 VPN Users
+    optional module :                  APM, 25000 VPN Users
+    optional module :                  APM, 500 VPN Users
+    optional module :                  APM, 5000 VPN Users
+    optional module :                  Basic Policy Enforcement Manager, CX410
+    optional module :                  BPEM, Traffic Classification, CX410
+    optional module :                  DataSafe, CX410
+    optional module :                  Dynamic Policy Provisioning, CX410
     optional module :                  External Interface and Network HSM
-    optional module :                  FIPS 140 License, r10XXX
-    optional module :                  FIX Low Latency
-    optional module :                  Intrusion Prevention System, r10XXX
-    optional module :                  IP Intelligence, 1Yr
-    optional module :                  IP Intelligence, 3Yr
-    optional module :                  IPS, 1Yr
-    optional module :                  IPS, 3Yr
-    optional module :                  Link Controller
-    optional module :                  Policy Enforcement Manager, r10XXX
+    optional module :                  FIPS 140 Compliant Mode, Level 1, CX410
+    optional module :                  FIX Low Latency, CX410
+    optional module :                  Intrusion Prevention System, CX410
+    optional module :                  IP Intelligence, 1Yr, CX410
+    optional module :                  IP Intelligence, 3Yr, CX410
+    optional module :                  IPS Signatures, 1Yr, CX410
+    optional module :                  IPS Signatures, 3Yr, CX410
+    optional module :                  Multicast Routing, CX410
+    optional module :                  PEM URL Filtering, 1Yr, CX410
+    optional module :                  PEM URL Filtering, 3Yr, CX410
+    optional module :                  PEM, Quota Management, CX410
+    optional module :                  Policy Enforcement Manager, CX410
+    optional module :                  Privileged User Access, 100 End-Points
+    optional module :                  Privileged User Access, 1000 End-Points
+    optional module :                  Privileged User Access, 250 End-Points
+    optional module :                  Privileged User Access, 50 End-Points
+    optional module :                  Privileged User Access, 500 End-Points
+    optional module :                  Secure Web Gateway, 1Yr, 30K Sessions, CX410
+    optional module :                  Secure Web Gateway, 1Yr, 60K Sessions, CX410
+    optional module :                  Secure Web Gateway, 3Yr, 30K Sessions, CX410
+    optional module :                  Secure Web Gateway, 3Yr, 60K Sessions, CX410
     optional module :                  SM2_SM3_SM4
-    optional module :                  SSL Orchestrator, r10XXX
-    optional module :                  Subscriber Discovery, r10XXX
-    optional module :                  SWG Max, 1Yr, 10XXX/i10XXX/12250v/r10XXX
-    optional module :                  SWG Max, 3Yr, 10XXX/i10XXX/12250v/r10XXX
-    optional module :                  SWG, 1Yr, 10XXX/i10XXX/12250v/r10XXX
-    optional module :                  SWG, 3Yr, 10XXX/i10XXX/12250v/r10XXX
-    optional module :                  Threat Campaigns, 1Yr
-    optional module :                  Threat Campaigns, 3Yr
-    optional module :                  Traffic Classification, r10XXX
-    optional module :                  URL Filtering, 1Yr
-    optional module :                  URL Filtering, 1Yr, Max
-    optional module :                  URL Filtering, 3Yr
-    optional module :                  URL Filtering, 3Yr, Max
-    optional module :                  VPN Users
+    optional module :                  Subscriber Discovery, CX410
+    optional module :                  Threat Campaigns, 1Yr, CX410
+    optional module :                  Threat Campaigns, 3Yr, CX410
+    optional module :                  Traffic Classification, CX410
+    optional module :                  URL Filtering, 1Yr, 30K Sessions, CX410
+    optional module :                  URL Filtering, 1Yr, 60K Sessions, CX410
+    optional module :                  URL Filtering, 3Yr, 30K Sessions, CX410
+    optional module :                  URL Filtering, 3Yr, 60K Sessions, CX410
     #
     #       Accumulated Tokens for Module
-    #       Max SSL, r10900  perf_SSL_Mbps 1  key XXXXXXX-XXXXXXX
+    #       Max SSL, CX410  perf_SSL_Mbps 1  key XXXXXXX-XXXXXXX
     #
     perf_SSL_Mbps :                    1
     #
     #       Accumulated Tokens for Module
-    #       Access Policy Manager, Base, r109XX  apm_access_sessions 100000000  key XXXXXXX-XXXXXXX
+    #       Access Policy Manager, Base, CX410  apm_access_sessions 100000000  key XXXXXXX-XXXXXXX
     #
     #       Accumulated Tokens for Module
-    #       Access Policy Manager, Base, r109XX  apm_sessions 500  key XXXXXXX-XXXXXXX
+    #       Access Policy Manager, Base, CX410  apm_sessions 500  key XXXXXXX-XXXXXXX
     #
     #       Accumulated Tokens for Module
-    #       Access Policy Manager, Base, r109XX  apm_urlf_limited_sessions 100000000  key XXXXXXX-XXXXXXX
+    #       Access Policy Manager, Base, CX410  apm_urlf_limited_sessions 100000000  key XXXXXXX-XXXXXXX
     #
     apm_access_sessions :              100000000
     apm_sessions :                     500
     apm_urlf_limited_sessions :        100000000
     #
-    #       License Tokens for Module Advanced Web Application Firewall, r10XXX key XXXXXXX-XXXXXXX
+    #       License Tokens for Module Advanced Web Application Firewall, CX410 key XXXXXXX-XXXXXXX
     #
     waf_gc :                           enabled
     mod_waf :                          enabled
@@ -764,30 +768,37 @@ In the body of the API call enter the edited license in the proper area. Below i
     ltm_lb :                           enabled
     asm_apps :                         unlimited
     #
-    #       License Tokens for Module Best Bundle, r10900 key XXXXXXX-XXXXXXX
+    #       License Tokens for Module Best Bundle, CX410 key XXXXXXX-XXXXXXX
     #
-    throttle_level :                   900
-    perf_vcmp_max_guests :             UNLIMITED
+    perf_vcmp_max_guests :             100000
     perf_PVA_dram_limit :              enabled
-    perf_CPU_cores :                   UNLIMITED
     nw_vlan_groups :                   enabled
     mod_ltm :                          enabled
     mod_lbl :                          enabled
     mod_ilx :                          enabled
     ltm_network_virtualization :       enabled
+    fpga_performance :                 enabled
     #
-    #       License Tokens for Module Max SSL, r10900 key XXXXXXX-XXXXXXX
+    #       License Tokens for Module Advanced Firewall Manager, CX410 key XXXXXXX-XXXXXXX
     #
     perf_SSL_total_TPS :               UNLIMITED
+    nw_l2_transparent :                enabled
+    mod_afw :                          enabled
+    mod_afm :                          enabled
+    ltm_netflow_switching :            enabled
+    ltm_monitor_rule :                 enabled
+    #
+    #       License Tokens for Module Max SSL, CX410 key XXXXXXX-XXXXXXX
+    #
     perf_SSL_per_core :                enabled
     perf_SSL_cmp :                     enabled
     #
-    #       License Tokens for Module Max Compression, r10900 key XXXXXXX-XXXXXXX
+    #       License Tokens for Module Max Compression, CX410 key XXXXXXX-XXXXXXX
     #
     perf_http_compression_Mbps :       UNLIMITED
     perf_http_compression_hw :         enabled
     #
-    #       License Tokens for Module Routing Bundle key XXXXXXX-XXXXXXX
+    #       License Tokens for Module Advanced Routing, CX410 key XXXXXXX-XXXXXXX
     #
     nw_routing_rip :                   enabled
     nw_routing_ospf :                  enabled
@@ -795,18 +806,18 @@ In the body of the API call enter the edited license in the proper area. Below i
     nw_routing_bgp :                   enabled
     nw_routing_bfd :                   enabled
     #
-    #       License Tokens for Module Advanced Firewall Manager, r10XXX key XXXXXXX-XXXXXXX
-    #
-    nw_l2_transparent :                enabled
-    mod_afm :                          enabled
-    ltm_netflow_switching :            enabled
-    ltm_monitor_rule :                 enabled
-    #
-    #       License Tokens for Module BIG-IP, DNS (Max) key XXXXXXX-XXXXXXX
+    #       License Tokens for Module DNS, Max QPS, CX410 key XXXXXXX-XXXXXXX
     #
     mod_dnsgtm :                       enabled
+    ltm_dnssec :                       enabled
     ltm_dns_v13 :                      enabled
+    ltm_dns_rate_limit :               UNLIMITED
+    ltm_dns_rate_fallback :            UNLIMITED
     ltm_dns_lite :                     enabled
+    ltm_dns_licensed_objects :         UNLIMITED
+    gtm_rate_limit :                   UNLIMITED
+    gtm_rate_fallback :                UNLIMITED
+    gtm_licensed_objects :             UNLIMITED
     #
     #       License Tokens for Module Carrier Grade NAT (AFM ONLY) key XXXXXXX-XXXXXXX
     #
@@ -821,43 +832,23 @@ In the body of the API call enter the edited license in the proper area. Below i
     dslite :                           enabled
     cgnat :                            enabled
     #
-    #       License Tokens for Module Access Policy Manager, Base, r109XX key XXXXXXX-XXXXXXX
+    #       License Tokens for Module Access Policy Manager, Base, CX410 key XXXXXXX-XXXXXXX
     #
     mod_apm :                          enabled
+    apm_web_applications :             enabled
+    apm_remote_desktop :               enabled
     apm_pingaccess :                   enabled
+    apm_na :                           enabled
     apm_logon_page_fraud_protection :  enabled
+    apm_ep_svk :                       enabled
+    apm_ep_pws :                       enabled
+    apm_ep_machinecert :               enabled
+    apm_ep_fwcheck :                   enabled
+    apm_ep_avcheck :                   enabled
+    apm_ep :                           enabled
+    apm_app_tunnel :                   enabled
     apm_api_protection :               enabled
     api_protection_infra :             enabled
-    #
-    #       License Tokens for Module Protocol Security Manager key XXXXXXX-XXXXXXX
-    #
-    mod_afw :                          enabled
-    #
-    #       License Tokens for Module DNS Services key XXXXXXX-XXXXXXX
-    #
-    ltm_rule_dns_write :               enabled
-    ltm_dnsexpress :                   enabled
-    ltm_dns64 :                        enabled
-    ltm_dns_switching :                enabled
-    ltm_dns_mgmt :                     enabled
-    ltm_dns_cache_resolver :           enabled
-    admin_dns_mgmt :                   enabled
-    #
-    #       License Tokens for Module DNSSEC key XXXXXXX-XXXXXXX
-    #
-    ltm_dnssec :                       enabled
-    #
-    #       License Tokens for Module DNS Rate Limit, Unlimited QPS key XXXXXXX-XXXXXXX
-    #
-    ltm_dns_rate_limit :               UNLIMITED
-    #
-    #       License Tokens for Module DNS Rate Fallback, Unlimited key XXXXXXX-XXXXXXX
-    #
-    ltm_dns_rate_fallback :            UNLIMITED
-    #
-    #       License Tokens for Module DNS Licensed Objects, Unlimited key XXXXXXX-XXXXXXX
-    #
-    ltm_dns_licensed_objects :         UNLIMITED
     #
     #       License Tokens for Module Rate Shaping key XXXXXXX-XXXXXXX
     #
@@ -867,72 +858,25 @@ In the body of the API call enter the edited license in the proper area. Below i
     ltm_bandw_rate_classl4 :           enabled
     ltm_bandw_rate_classes :           enabled
     #
-    #       License Tokens for Module GTM Rate, Unlimited key XXXXXXX-XXXXXXX
+    # Debug Msg - Is sol18346625 affected; New module/key without already existing keys before cut-off date of 2016-04-15 00.00.00
     #
-    gtm_rate_limit :                   UNLIMITED
+    # LC disabled in accordance with https://support.f5.com/kb/en-us/solutions/public/k/18/sol18346625.html
     #
-    #       License Tokens for Module GTM Rate Fallback, (UNLIMITED) key XXXXXXX-XXXXXXX
-    #
-    gtm_rate_fallback :                UNLIMITED
-    #
-    #       License Tokens for Module GTM Licensed Objects, Unlimited key XXXXXXX-XXXXXXX
-    #
-    gtm_licensed_objects :             UNLIMITED
-    #
-    #       License Tokens for Module APM, Web Application key XXXXXXX-XXXXXXX
-    #
-    apm_web_applications :             enabled
-    #
-    #       License Tokens for Module Remote Desktop key XXXXXXX-XXXXXXX
-    #
-    apm_remote_desktop :               enabled
-    #
-    #       License Tokens for Module Network Access key XXXXXXX-XXXXXXX
-    #
-    apm_na :                           enabled
-    #
-    #       License Tokens for Module Secure Virtual Keyboard key XXXXXXX-XXXXXXX
-    #
-    apm_ep_svk :                       enabled
-    #
-    #       License Tokens for Module Protected Workspace key XXXXXXX-XXXXXXX
-    #
-    apm_ep_pws :                       enabled
-    #
-    #       License Tokens for Module Machine Certificate Checks key XXXXXXX-XXXXXXX
-    #
-    apm_ep_machinecert :               enabled
-    #
-    #       License Tokens for Module Firewall Checks key XXXXXXX-XXXXXXX
-    #
-    apm_ep_fwcheck :                   enabled
-    #
-    #       License Tokens for Module Anti-Virus Checks key XXXXXXX-XXXXXXX
-    #
-    apm_ep_avcheck :                   enabled
-    #
-    #       License Tokens for Module Base Endpoint Security Checks key XXXXXXX-XXXXXXX
-    #
-    apm_ep :                           enabled
-    #
-    #       License Tokens for Module App Tunnel key XXXXXXX-XXXXXXX
-    #
-    apm_app_tunnel :                   enabled
-    #
+    gtm_lc :                           disabled
     #
     #       Licensing Information 
     #
-    Licensed date :                    20231115
-    License start :                    20231114
-    License end :                      20231216
-    Service check date :               20231115
+    Licensed date :                    20231211
+    License start :                    20231210
+    License end :                      20240111
+    Service check date :               20231211
     #
     #       Platform Information 
     #
     Registration Key :                 XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX
-    Licensed version :                 1.7.0
-    Platform ID :                      C128
-    Appliance SN :                     f5-xxxx-xxxx
+    Licensed version :                 1.6.1
+    Platform ID :                      F101
+    Appliance SN :                     chs600032s
     #
     #       Outbound License Dossier Validation
     #

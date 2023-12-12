@@ -18,7 +18,9 @@ Initial Setup of System Controllers
 
 `Configure System Settings From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-from-the-api>`_
 
-`Apply License via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#apply-license-via-api>`_
+`Manual Licensing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#manual-licensing-via-api>`_
+
+`Automatic Licensing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#automatic-licensing-via-api>`_
 
 Creating Chassis Partitions
 ---------------------------
@@ -38,6 +40,11 @@ Configuring Networking
 
 Tenant Deployments
 ------------------
+
+
+`Loading Tenant Images from a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/rseries_deploying_a_tenant.html#loading-tenant-images-from-a-remote-server-via-api>`_
+
+`Uploading Tenant Images from a Client Machine via the API <https://clouddocs.f5.com/training/community/velos-training/html/rseries_deploying_a_tenant.html#uploading-tenant-images-from-a-client-machine-via-the-api>`_
 
 `Tenant Deployment via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#tenant-deployment-via-api>`_
 
