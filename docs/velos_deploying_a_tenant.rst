@@ -390,156 +390,11 @@ To see the actual status of the tenants, issue the CLI command **show tenants**.
   2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle     
 
 
-
 Tenant Deployment via webUI
 ---------------------------
 
-
-Tenant Deployment via CLI
--------------------------
-
-Tenant lifecycle can be fully managed via the CLI using the **tenants** command in config mode. Using command tab completion and question marks will help display all the tenant options. Enter **config** mode and enter the command tenants **tenant <tenant-name>** where <tenant-name> is the name of the tenant you would like to create. This will put you into a mode for that tenant and you will be prompted for some basic information to create the tenant via a CLI wizard. After answering basic information, you may configure additional tenant parameters by entering **config ?** within the tenant mode, that will provide all the available options:
-
-.. code-block:: bash
-
-  Production-1(config)# tenants tenant tenant2                        
-  Value for 'config image' (<string>): BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
-  Value for 'config mgmt-ip' (<IPv4 address>): 10.255.0.205
-  Value for 'config prefix-length' (<unsignedByte, 1 .. 32>): 24
-  Value for 'config gateway' (<IPv4 address>): 10.255.0.1
-
-
-When you are inside the tenant mode you can enter each configuration item one line at a time using tab completion and question mark for help. 
-
-.. code-block:: bash
-
-  Production-1# config
-  Entering configuration mode terminal
-  Production-1(config)# tenants tenant tenant2 
-  Production-1(config-tenant-tenant2)# config ?
-  Possible completions:
-    appliance-mode        
-    cryptos               Enable crypto devices for the tenant.
-    gateway               User-specified gateway for the tenant mgmt-ip.
-    image                 User-specified image for tenant.
-    memory                User-specified memory in MBs for the tenant.
-    mgmt-ip               User-specified mgmt-ip for the tenant management access.
-    nodes                 User-specified node-number(s) in the partition to schedule the tenant.
-    prefix-length         User-specified prefix-length for the tenant mgmt-ip.
-    running-state         User-specified desired state for the tenant.
-    storage               User-specified storage information
-    tenant-auth-support   Security can be enabled/disabled when tenant is Not in deployed state.
-    type                  Tenant type.
-    vcpu-cores-per-node   User-specified number of logical cpu cores for the tenant.
-    vlans                 User-specified vlan-id from partition vlan table for the tenant.
-  Production-1(config-tenant-tenant2)# config cryptos enabled 
-  Production-1(config-tenant-tenant2)# config vcpu-cores-per-node 4
-  Production-1(config-tenant-tenant2)# config type BIG-IP 
-  Production-1(config-tenant-tenant2)# config nodes 2
-  Production-1(config-tenant-tenant2)# config vlans 444        
-  Production-1(config-tenant-tenant2)# config vlans 500
-  Production-1(config-tenant-tenant2)# config vlans 555
-  Production-1(config-tenant-tenant3)# config storage size 76
-  Production-1(config-tenant-tenant2)# config running-state deployed
-  Production-1(config-tenant-tenant2)# config memory 14848
-
-Any changes must be committed for them to be executed:
-
-.. code-block:: bash
-
-  Production-1(config-tenant-tenant2)# commit
-	
-You may also put all the parameters on one line:
-
-.. code-block:: bash
-
-  Production-1(config)# tenants tenant tenant2 config image BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle vcpu-cores-per-node 2 nodes [ 1 2 ] vlans [ 2001 3001 ] mgmt-ip 10.144.140.107 prefix-length 24 gateway 10.144.140.254 name cbip3 running-state configured
-  Production-1 (tenant2)# commit
-  Commit complete.
-
-After the tenant is created you can run the command **show running-config tenant** to see what has been configured:
-
-.. code-block:: bash
-
-  Production-1# show run tenant
-  tenants tenant bigtenant
-  config name         bigtenant
-  config type         BIG-IP
-  config image        BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle
-  config nodes        [ 1 2 ]
-  config mgmt-ip      10.255.0.149
-  config prefix-length 24
-  config gateway      10.255.0.1
-  config vlans        [ 444 500 555 ]
-  config cryptos      enabled
-  config vcpu-cores-per-node 6
-  config memory       22016
-  config running-state deployed
-  config appliance-mode disabled
-  !
-
-To see the actual status of the tenants, issue the CLI command **show tenants**.
-
-.. code-block:: bash
-
-  Production-1# show tenants 
-  tenants tenant bigtenant
-  state name          bigtenant
-  state type          BIG-IP
-  state mgmt-ip       10.255.0.149
-  state prefix-length 24
-  state gateway       10.255.0.1
-  state vlans         [ 444 500 555 ]
-  state cryptos       enabled
-  state vcpu-cores-per-node 6
-  state memory        22016
-  state running-state deployed
-  state mac-data base-mac 00:94:a1:8e:d0:0b
-  state mac-data mac-pool-size 1
-  state appliance-mode disabled
-  state status        Running
-  state primary-slot  1
-  state image-version "BIG-IP 14.1.4 0.0.619"
-  NDI      MAC                
-  ----------------------------
-  default  00:94:a1:8e:d0:09  
-
-        INSTANCE                                                                                                                                                    
-  NODE  ID        PHASE    IMAGE NAME                                       CREATION TIME         READY TIME            STATUS                   MGMT MAC           
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  1     1         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:15:00Z  Started tenant instance  0a:27:45:20:90:c4  
-  2     2         Running  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle  2021-01-15T17:15:03Z  2021-01-15T17:14:59Z  Started tenant instance  52:02:73:bf:ee:ac  
-
-  tenants tenant tenant2
-  state name          tenant2
-  state type          BIG-IP
-  state mgmt-ip       10.255.0.205
-  state prefix-length 24
-  state gateway       10.255.0.1
-  state vlans         [ 444 500 555 ]
-  state cryptos       enabled
-  state vcpu-cores-per-node 4
-  state memory        14848
-  state running-state deployed
-  state mac-data base-mac 00:94:a1:8e:d0:0d
-  state mac-data mac-pool-size 1
-  state appliance-mode disabled
-  state status        Starting
-  NDI      MAC                
-  ----------------------------
-  default  00:94:a1:8e:d0:0e  
-
-        INSTANCE                                                                                                  CREATION  READY          MGMT  
-  NODE  ID        PHASE                                          IMAGE NAME                                       TIME      TIME   STATUS  MAC   
-  -----------------------------------------------------------------------------------------------------------------------------------------------
-  2     2         Allocating resources to tenant is in progress  BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                           -     
-
-
-Tenant Deployment via webUI
--------------------------
-
-Uploading a Tenant Image
-^^^^^^^^^^^^^^^^^^^^^^^^
+Uploading a Tenant Image via webUI
+==================================
 
 You can upload a tenant image via the webUI in two different places. The first is by going to the **Tenant Management > Tenant Images** page. Click the **Add** button and you will receive a pop-up asking for the URL of a remote HTTPS server with optional credentials, and the ability to ignore certificate warnings. There is also an option to upload directly from a computer via the browser using the **Upload** option.
 
@@ -559,8 +414,8 @@ Alternatively, you can upload from the **System Settings > File Utilities** page
   :align: center
   :scale: 70% 
 
-Creating a Tenant
-^^^^^^^^^^^^^^^^^
+Creating a Tenant via webUI
+============================
 
 You can deploy a tenant from the webUI using the **Add** button in the **Tenant Management > Tenant Deployments** screen.
 
@@ -575,13 +430,20 @@ The tenant deployment options are almost identical to deploying a vCMP guest, wi
   :scale: 70% 
 
 
+Validating Tenant Status via webUI
+===================================
+
+
+
+
+
 Tenant Deployment via API
 -------------------------
 
 The VELOS tenant lifecycle is fully supported in the F5OS API. This section will cover common examples.
 
-Uploading a Tenant Image
-^^^^^^^^^^^^^^^^^^^^^^^^
+Uploading a Tenant Image via API
+================================
 
 The upload utility requires a remote HTTPS, SCP, or SFTP server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition. To copy a tenant image into a chassis partition from a remote HTTPS server, use the following API call to the chassis partition IP address:
 
@@ -631,8 +493,8 @@ Below is output generated from the previous command:
         }
     }
 
-Creating a Tenant
-^^^^^^^^^^^^^^^^^
+Creating a Tenant via API
+=========================
 
 Tenant creation via the API is as simple as defining the parameters below and sending the POST to the chassis partition.
 
@@ -671,8 +533,8 @@ Tenant creation via the API is as simple as defining the parameters below and se
       ]
   }
 
-Validating Tenant Status
-^^^^^^^^^^^^^^^^^^^^^^^^
+Validating Tenant Status via API
+================================
 
 You can validate the status of all tenants within the chassis partition using the following API call.
 
