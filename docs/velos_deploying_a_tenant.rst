@@ -483,7 +483,7 @@ Below is an example of how this would appear inside the Postman interface under 
   :align: center
   :scale: 70%
 
-Once the upload-id is captured, you can then initiate a file upload of the F5OS TENANT_NAME image using the following API call.
+Once the upload-id is captured, you can then initiate a file upload of the F5OS tenant image using the following API call.
 
 .. code-block:: bash
 
