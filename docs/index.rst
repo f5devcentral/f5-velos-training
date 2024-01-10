@@ -3,7 +3,7 @@ Planning for VELOS Guide
 ========================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
 
    introduction.rst
