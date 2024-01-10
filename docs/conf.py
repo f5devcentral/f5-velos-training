@@ -241,7 +241,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, '%s.tex' % cleanname, u'%s Documentation' % classname,
-     u'F5, Inc.', 'manual', True),
+     u'F5, Inc.', 'manual', False),
 ]
 
 # -- Options for manual page output ---------------------------------------

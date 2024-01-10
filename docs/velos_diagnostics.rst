@@ -2,15 +2,28 @@
 VELOS Diagnostics
 =================
 
+This section will go through some of the diagnostic capabilities within the F5OS platform layer. Inside the TMOS tenant, the same BIG-IP diagnostic utilities that customers are used to are still available.
+
 Qkviews
 =======
 
 VELOS supports the ability to generate qkview reports to collect and bundle configuration and diagnostic data that can be sent to support or uploaded to iHealth. It is important to understand the VELOS architecture when generating qkview reports. Generating a qkview report from the system controller will capture OS data and container information related to the system controller software, while generating a qkview report inside a chassis partition will capture data and container information related to the partition layer. To capture tenant level information, you’ll need to run a qkview report inside the TMOS layer of the tenant.
 
 
-K02521182: Generating diagnostic data for the VELOS system using the qkview utility 
+`K2633: Submit a support case <https://my.f5.com/manage/s/article/K2633>`_
 
 `K02521182: Generating diagnostic data for the VELOS system using the qkview utility  <https://support.f5.com/csp/article/K02521182>`_
+
+In general, you can use the qkview utility on VELOS systems to automatically collect configuration and diagnostic information from the system. The qkview utility provided in F5OS-C software captures diagnostic information from the VELOS system and associated containers. 
+
+Note: The qkview utility on the VELOS system does not capture diagnostic data from tenant BIG-IP systems. To generate diagnostic data for a tenant BIG-IP, log in to the tenant system and perform the relevant procedure in:
+
+`K12878: Generating diagnostic data using the qkview utility <https://support.f5.com/csp/article/K12878>`_
+
+
+The qkview utility on the VELOS system generates machine-readable JavaScript Object Notation (JSON) diagnostic data and combines the data into a single compressed Tape ARchive (TAR) format file. The single TAR file is comprised of embedded TAR files containing the diagnostic data of individual containers running on the system, as well as diagnostic data from the VELOS system. You can upload this file, called a qkview file, to iHealth, or give it to F5 Support to help them troubleshoot any issues.
+
+Note: F5 Support requires a qkview file in all cases in which remote access to the product is not available.
 
 
 **System Controller qkview**:
@@ -95,6 +108,55 @@ You can view the status of the capture using the command system diagnostics qkvi
     
     resultint 0
 
+You may also confirm the file has been created by using the **file list** command, or the **system diagnostics qkview list** command to see more details about the size and creation date of the file:
+
+.. code-block:: bash
+
+    syscon-1-active# file list path diags/shared/qkview/
+    entries {
+        name jim-test.tgz
+        date Fri Dec  1 22:38:59 UTC 2023
+        size 783MB
+    }
+    syscon-1-active# 
+
+    syscon-1-active# system diagnostics qkview list
+    result  {"Qkviews":[{"Filename":"jim-test.tgz","Date":"2023-12-01T17:38:59.08874537-05:00","Size":820585633}]}
+    
+    resultint 0
+    syscon-1-active#
+
+Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal, and then store them on your VELOS system in order to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the CLI.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# system diagnostics ihealth config clientid 123456789v1HW5xr3a8g clientsecret                                                                 
+    (<AES encrypted string>) ($8$CxtyXKfHxVDccMkiRoJXo9i6vIa+ZFA1FW+aGURndTjQEBY9TKfl+nH12cWYudLcBWiQJ2BH\nL+KtEAHaQ3EQmH7svB2bKsBT2XPZ+FR1XuNnTZx40KLMilAnxSsN/Ob9): 1234567892QlwE-dkwpxRCTX8PF_TynN8xzCzOlwnLOUZMzcGvXXwvcj5Ewiv6Gp
+    syscon-2-active(config)# 
+
+If your environment has a proxy server and does not allow direct access to the Internet, then you can optionally add in the proxy server configuration to the VELOS system so that uploads will utilize the environment's proxy server when uploading qkviews to iHealth. Below is an example of adding a proxy server configuration vai the CLI.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# system diagnostics proxy config proxy-server https://myproxy.com:3128 proxy-username proxy-upload proxy-password 
+    (<AES encrypted string>): *************
+    syscon-2-active(config)#
+
+
+To upload the qkview file to iHealth using the CLI use the following command: **system diagnostics ihealth upload qkview-file <file-name> description "Text for description" service-request-number <SR Number>**.
+
+.. code-block:: bash
+
+    syscon-2-active# system diagnostics ihealth upload qkview-file controller-qkview-9-27.tar description "This is a test"
+    message HTTP/1.1 202 Accepted
+    Location: /support/ihealth/status/6OzdPmV9
+    Date: Wed, 03 Jan 2024 19:41:02 GMT
+    Content-Length: 0
+
+
+    errorcode false
+    syscon-2-active#
+
 ---------------------------------
 Generating Qkviews from the API
 ---------------------------------
@@ -142,13 +204,113 @@ The output of the command will show the percentage complete of the qkview.
         }
     }
 
+Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal, and then store them on your VELOS system in order to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the API.
+
+.. code-block:: bash
+
+    PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:config/f5-system-diagnostics-ihealth:clientid
+
+In the body of the API call, add your client ID:
+
+.. code-block:: json
+
+    {
+    "f5-system-diagnostics-ihealth:clientid": "123yaodlfvsD4f6fBnmo"
+    }
+
+To confirm the client ID has been set, send the folowing API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:config/f5-system-diagnostics-ihealth:clientid
+
+You should see something like the output below.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-ihealth:clientid": "123yaodlfvsD4f6fBnmo"
+    }
+
+
+Next, you'll need to enter your client secret from myf5.com. Use the following API call to add your client secret.
+
+.. code-block:: bash
+
+    PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:config/f5-system-diagnostics-ihealth:clientsecret
+
+In the body of the API call, enter the client secret as seen below:
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-ihealth:clientsecret": "1234567890QlwE-Qrh2TcCTX8PF_fjlrXvf57hpnLOUZMzcGvXXwvslk3iV4xsq#"
+    }
+
+To view the current client secret enter the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:config/f5-system-diagnostics-ihealth:clientsecret
+
+In the body of the API call, you'll see the encrypted client secret as seen below.
+
+.. code-block:: json
+
+
+    {
+        "f5-system-diagnostics-ihealth:clientsecret": "$8$CxtyXKfHx12345678901234567890FA1FW+aGURndTjQEBY9TKfl+nH12cWYudLcBWiQJ2BH\nL+KtEAHaQ3EQmH712345678901234567890nTZx40AswvGtx478N/Ob9"
+    }
+
+If your environment has a proxy server and does not allow direct access to the Internet, then you can optionally add in the proxy server configuration to the VELOS system so that uploads will utilize the environment's proxy server when uploading qkviews to iHealth. Below is an example of adding a proxy server configuration via the API.
+
+.. code-block:: bash
+
+    PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-proxy:proxy/f5-system-diagnostics-proxy:config
+
+In the body of the API call add the proxy server configuration as seen below.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-proxy:config": {
+            "f5-system-diagnostics-proxy:proxy-username": "proxy-user",
+            "f5-system-diagnostics-proxy:proxy-password": "password",
+            "f5-system-diagnostics-proxy:proxy-server": "https://myproxy.com:3128"
+        }
+    }
+
+To view the proxy server configuration, enter the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-proxy:proxy
+
+You'll see the configuration returned in the API response.
+
+.. code-block:: json
+
+    {
+        "f5-system-diagnostics-proxy:proxy": {
+            "state": {
+                "proxy-username": "proxy-user",
+                "proxy-server": "https://myproxy.com:3128"
+            },
+            "config": {
+                "proxy-username": "proxy-user",
+                "proxy-password": "$8$h/mg/zHjSFeeBerFdjq2GbaqQTKUzxACY/pxsiJB3Bc=",
+                "proxy-server": "https://myproxy.com:3128"
+            }
+        }
+    }
+
 If you'd like to copy the qkview directly to iHealth once it is completed, use the following API command referencing the previously completed qkview file.
 
 .. code-block:: bash
 
     POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
 
-In the body of the API call add details with the filename, optional description, and SR number. The call below assumes you have previously stored iHealth credentials, otherwise you can add them inside the API call.
+In the body of the API call add details with the filename, optional description, and SR number. The call below assumes you have previously stored the proper iHealth credentials.
 
 .. code-block:: json
 
@@ -168,6 +330,7 @@ The output will confirm the upload has begun.
             "errorcode": false
         }
     }
+
 
 Logging
 =======
@@ -661,6 +824,8 @@ Within a chassis partition the path for the logging is different. You can use th
     2021-02-22T23:46:23+00:00 10.1.18.2 blade-2(p2) /usr/sbin/fips-service[13]: priority="Info" version=1.0 msgid=0x6602000000000005 msg="DB is not ready".
     2021-02-22T23:46:23+00:00 10.1.18.1 blade-1(p2) platform-mgr[11]: priority="Info" version=1.0 msgid=0x6602000000000005 msg="DB is not ready".
 
+The following command will tail the velos.log file on the chassis partition.
+
 .. code-block:: bash
 
     Production-1# file tail -f log/velos.log
@@ -683,12 +848,483 @@ Currently in both the system controller and chassis partition webUIs logging lev
 Adjusting Software Component Logging Levels via CLI
 ----------------------------------------------------
 
+If you would like to change any of the logging levels via the CLI you must be in config mode. Use the **system logging sw-components sw-component <component name> config <logging severity>** command. You must **commit** for this change to take effect. Be sure to set logging levels back to normal after troubleshooting has completed.
+
+
+.. code-block:: bash
+
+    appliance-1(config)# system logging sw-components sw-component ?
+    Possible completions:
+    alert-service     api-svc-gateway         appliance-orchestration-agent  appliance-orchestration-manager  authd         confd-key-migrationd  
+    dagd-service      datapath-cp-proxy       diag-agent                     disk-usage-statd                 dma-agent     fips-service          
+    fpgamgr           ihealth-upload-service  ihealthd                       image-agent                      kubehelper    l2-agent              
+    lacpd             license-service         line-dma-agent                 lldpd                            lopd          network-manager       
+    nic-manager       optics-mgr              platform-diag                  platform-fwu                     platform-hal  platform-mgr          
+    platform-monitor  platform-stats-bridge   qkviewd                        rsyslog-configd                  snmp-trapd    stpd                  
+    sw-rbcast         sys-host-config         system-control                 tcpdumpd-manager                 tmstat-agent  tmstat-merged         
+    upgrade-service   user-manager            vconsole                       
+    appliance-1(config)# system logging sw-components sw-component lacpd ?
+    Possible completions:
+    config   Configuration data for platform sw-component logging
+    <cr>     
+    appliance-1(config)# system logging sw-components sw-component lacpd config ?
+    Possible completions:
+    description   Text that describes the platform sw-component (read-only)
+    name          Name of the platform sw-component (read-only)
+    severity      sw-component logging severity level.
+    appliance-1(config)# system logging sw-components sw-component lacpd config severity ?
+    Description: sw-component logging severity level. Default is INFORMATIONAL.
+    Possible completions:
+    [INFORMATIONAL]  ALERT  CRITICAL  DEBUG  EMERGENCY  ERROR  INFORMATIONAL  NOTICE  WARNING
+    appliance-1(config)# system logging sw-components sw-component lacpd config severity DEBUG
+    appliance-1(config-sw-component-lacpd)# commit
+    Commit complete.
+    appliance-1(config-sw-component-lacpd)# 
+
+
 Adjusting Software Component Logging Levels via webUI
 ----------------------------------------------------
+
+Currently F5OS webUI’s logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbose information going to the remote logging host, you can raise its severity to see additional messages.
+
+.. image:: images/rseries_diagnostics/image6.png
+  :align: center
+  :scale: 70%
 
 Adjusting Software Component Logging Levels via API
 ----------------------------------------------------
 
+You can display all the logging subsystem's logging levels via the following API call:
+
+
+.. code-block:: bash
+
+    GET https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/logging
+
+Every subsystem will be displayed along with its current setting:
+
+.. code-block:: json
+
+    {
+        "openconfig-system:logging": {
+            "f5-openconfig-system-logging:sw-components": {
+                "sw-component": [
+                    {
+                        "name": "alert-service",
+                        "config": {
+                            "name": "alert-service",
+                            "description": "Alert service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "api-svc-gateway",
+                        "config": {
+                            "name": "api-svc-gateway",
+                            "description": "API service gateway",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "appliance-orchestration-agent",
+                        "config": {
+                            "name": "appliance-orchestration-agent",
+                            "description": "Tenant orchestration agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "appliance-orchestration-manager",
+                        "config": {
+                            "name": "appliance-orchestration-manager",
+                            "description": "Appliance orchestration manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "authd",
+                        "config": {
+                            "name": "authd",
+                            "description": "Authentication configuration",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "confd-key-migrationd",
+                        "config": {
+                            "name": "confd-key-migrationd",
+                            "description": "Confd Primary Key Migration Service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "dagd-service",
+                        "config": {
+                            "name": "dagd-service",
+                            "description": "DAG daemon",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "datapath-cp-proxy",
+                        "config": {
+                            "name": "datapath-cp-proxy",
+                            "description": "Data path CP proxy",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "diag-agent",
+                        "config": {
+                            "name": "diag-agent",
+                            "description": "Diag agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "disk-usage-statd",
+                        "config": {
+                            "name": "disk-usage-statd",
+                            "description": "Disk usage agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "dma-agent",
+                        "config": {
+                            "name": "dma-agent",
+                            "description": "DMA agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "fips-service",
+                        "config": {
+                            "name": "fips-service",
+                            "description": "FIPS Service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "fpgamgr",
+                        "config": {
+                            "name": "fpgamgr",
+                            "description": "FPGA manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "ihealth-upload-service",
+                        "config": {
+                            "name": "ihealth-upload-service",
+                            "description": "Upload diagnostics data service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "ihealthd",
+                        "config": {
+                            "name": "ihealthd",
+                            "description": "Communication proxy for ihealth-upload-service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "image-agent",
+                        "config": {
+                            "name": "image-agent",
+                            "description": "Tenant image handling",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "kubehelper",
+                        "config": {
+                            "name": "kubehelper",
+                            "description": "Application that will handle specific tasks for deploying tenants",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "l2-agent",
+                        "config": {
+                            "name": "l2-agent",
+                            "description": "L2 agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "lacpd",
+                        "config": {
+                            "name": "lacpd",
+                            "description": "Link aggregation control protocol",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "license-service",
+                        "config": {
+                            "name": "license-service",
+                            "description": "License service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "line-dma-agent",
+                        "config": {
+                            "name": "line-dma-agent",
+                            "description": "Line DMA agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "lldpd",
+                        "config": {
+                            "name": "lldpd",
+                            "description": "Link layer discovery protocol",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "lopd",
+                        "config": {
+                            "name": "lopd",
+                            "description": "Communication proxy for the Lights Out Processor",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "network-manager",
+                        "config": {
+                            "name": "network-manager",
+                            "description": "Network manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "nic-manager",
+                        "config": {
+                            "name": "nic-manager",
+                            "description": "NIC manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "optics-mgr",
+                        "config": {
+                            "name": "optics-mgr",
+                            "description": "Optics tunning manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-diag",
+                        "config": {
+                            "name": "platform-diag",
+                            "description": "Platform diag service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-fwu",
+                        "config": {
+                            "name": "platform-fwu",
+                            "description": "Platform firmware upgrade",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-hal",
+                        "config": {
+                            "name": "platform-hal",
+                            "description": "Platform hardware abstraction layer",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-mgr",
+                        "config": {
+                            "name": "platform-mgr",
+                            "description": "Appliance platform manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-monitor",
+                        "config": {
+                            "name": "platform-monitor",
+                            "description": "Platform monitor",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-stats-bridge",
+                        "config": {
+                            "name": "platform-stats-bridge",
+                            "description": "Platform stats bridge",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "qkviewd",
+                        "config": {
+                            "name": "qkviewd",
+                            "description": "Diagnostic information",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "rsyslog-configd",
+                        "config": {
+                            "name": "rsyslog-configd",
+                            "description": "Logging configuration",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "snmp-trapd",
+                        "config": {
+                            "name": "snmp-trapd",
+                            "description": "SNMP trap",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "stpd",
+                        "config": {
+                            "name": "stpd",
+                            "description": "Spanning tree protocol (STP)",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "sw-rbcast",
+                        "config": {
+                            "name": "sw-rbcast",
+                            "description": "Software Rebroadcast Service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "sys-host-config",
+                        "config": {
+                            "name": "sys-host-config",
+                            "description": "System host config service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "system-control",
+                        "config": {
+                            "name": "system-control",
+                            "description": "Appliance System control framework",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "tcpdumpd-manager",
+                        "config": {
+                            "name": "tcpdumpd-manager",
+                            "description": "Tcpdump daemon",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "tmstat-agent",
+                        "config": {
+                            "name": "tmstat-agent",
+                            "description": "Appliance stats agent",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "tmstat-merged",
+                        "config": {
+                            "name": "tmstat-merged",
+                            "description": "Stats rollup",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "upgrade-service",
+                        "config": {
+                            "name": "upgrade-service",
+                            "description": "Software upgrade service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "user-manager",
+                        "config": {
+                            "name": "user-manager",
+                            "description": "User manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vconsole",
+                        "config": {
+                            "name": "vconsole",
+                            "description": "Tenant virtual console",
+                            "severity": "INFORMATIONAL"
+                        }
+                    }
+                ]
+            },
+            "f5-openconfig-system-logging:host-logs": {
+                "config": {
+                    "remote-forwarding": {
+                        "enabled": false
+                    }
+                }
+            }
+        }
+    }
+
+If you need to change the logging level to troubleshoot an issue, you can change the logging level via the APIs. Below is an example of changing the logging level for the **l2-agent** subsystem to **DEBUG**.
+
+.. code-block:: bash
+
+    PATCH https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/logging
+
+In the body of the API call, enter the sw-component you want to change, and the severity level you'd like to set.
+
+.. code-block:: json
+
+
+    {
+        "openconfig-system:logging": {
+            "f5-openconfig-system-logging:sw-components": {
+                "sw-component": {
+                    "name": "l2-agent",
+                    "config": {
+                        "name": "l2-agent",
+                        "description": "L2 agent",
+                        "severity": "DEBUG"
+                    }
+                }
+            }
+        }
+    }
+
+When you are finished troubleshooting, you can set the logging level back to default (INFORMATIONAL).
+
+.. code-block:: json
+
+    {
+        "openconfig-system:logging": {
+            "f5-openconfig-system-logging:sw-components": {
+                "sw-component": {
+                    "name": "l2-agent",
+                    "config": {
+                        "name": "l2-agent",
+                        "description": "L2 agent",
+                        "severity": "INFORMATIONAL"
+                    }
+                }
+            }
+        }
+    }
 
 ---------------------------------------
 Logging Software Component Descriptions
@@ -698,12 +1334,12 @@ Below is a brief description of what each sw-component is responsible for, and s
 
 **alert-service** - The Alert Service runs on the both System Controllers and also each blade. "Alarm" is the user-facing term for alerts. Applications can send an AlertNotification or ThresholdNotification message over ZeroMQ to their local alert service. The blades and the standby controller forward all alert messages to the alert service running on the active controller. It aggregates all alerts and publishes them to ConfD.
 
-https://docs.f5net.com/display/PDDESIGN/Vanquish+Alert+Service+Spec
+
 
 
 **api-svc-gateway** - API service gateway is designed to share information between the F5OS layer and the F5OS Tenant layer.
 
-https://docs.f5net.com/pages/viewpage.action?pageId=835144208
+
 
 .. code-block:: bash
 
