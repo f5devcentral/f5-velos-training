@@ -244,7 +244,6 @@ latex_documents = [
      u'F5, Inc.', 'manual', True),
 ]
 
-pdf_use_modindex = True
 
 # -- Options for manual page output ---------------------------------------
 
