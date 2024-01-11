@@ -1,10 +1,34 @@
+:orphan:
+
+.. _latexindex:
+
 ========================
 Planning for VELOS Guide
 ========================
 
+.. frontmatter::
+
+Front Matter
+@@@@@@@@@@@@
+
 .. toctree::
-   :maxdepth: 2
-   :glob:
+   :maxdepth: 1
+
+   copyright
+   typographical-conventions
+   authorintro
+   designdefense
+
+
+.. mainmatter::
+
+.. _tutorials:
+
+Tutorials
+@@@@@@@@@
+
+.. toctree::
+   :maxdepth: 1
 
    introduction.rst
    velos_points_of_management.rst
@@ -30,4 +54,12 @@ Planning for VELOS Guide
    velos_api_workflows.rst
    migration_to_velos.rst
    velos_references.rst
-   
+
+
+Glossary and Index
+@@@@@@@@@@@@@@@@@@
+
+.. toctree::
+  :maxdepth: 1
+
+  glossary
