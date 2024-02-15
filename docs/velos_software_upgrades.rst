@@ -262,7 +262,7 @@ You’ll see output like the example below. Once the file shows up here you are 
 Uploading Controller and Partition Images from a Client Machine via the API
 --------------------------------------------------------------------------
 
-You can upload an F5OS controller or chassis partition image from a client machine over the API. First you must obtain an **upload-id** using the following API call.
+You can upload an F5OS controller or chassis partition image from a client machine over the API. First, you must obtain an **upload-id** using the following API call.
 
 
 .. code-block:: bash
@@ -290,7 +290,7 @@ Below is an example of how this would appear inside the Postman interface.
 
 .. image:: images/velos_software_upgrades/upload-id.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Once the upload-id is captured, you can then initiate a file upload of the F5OS image using the following API call.
 
@@ -298,17 +298,17 @@ Once the upload-id is captured, you can then initiate a file upload of the F5OS 
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
 
-In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS-A image you want to upload as seen in the example below.
+In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS-C image you want to upload as seen in the example below.
 
 .. image:: images/velos_software_upgrades/upload-image-api.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 In the **Headers** section ensure you add the **file-upload-id** header, with the variable used to capture the id in the previous API call.
 
 .. image:: images/velos_software_upgrades/file-upload-tenant-headers-f5os.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Upgrading the System Controllers via webUI
 ------------------------------------------
