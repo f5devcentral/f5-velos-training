@@ -39,7 +39,7 @@ The physical architecture of VELOS differs from the VIPRION platform in several 
 
 .. image:: images/velos_introduction/image2.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 The second major difference compared to VIPRION, is the introduction of centralized/redundant SX410 system controllers. The picture above shows the two redundant system controllers that are standard with the VELOS 4RU CX410 chassis:
 
@@ -55,20 +55,20 @@ A VIPRION chassis in comparison does not have a centralized switch fabric, and a
 
 .. image:: images/velos_introduction/image4.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 The system controllers in VELOS are also the central point of management for the entire chassis. VIPRION required a dedicated out-of-band Ethernet management port and console connection for each blade inserted in the chassis. This meant more cabling, layer2 switch ports, and external terminal servers to fully manage the VIPRION chassis as seen below:
 
 .. image:: images/velos_introduction/image5.png
   :align: center
-  :scale: 40%
+  :scale: 70%
 
 
 With VELOS, only the system controllers need to be cabled for out-of-band management, and console connections. This reduces the amount of cabling, layer2 switch ports, and external terminal servers required for full chassis management as seen below:
 
 .. image:: images/velos_introduction/image6.png
   :align: center
-  :scale: 40%
+  :scale: 70%
 
 Additionally, the out-of-band Ethernet ports on the system controllers can be bundled together to form a Link Aggregation Group for added resiliency.
 
@@ -102,7 +102,7 @@ Below is an example of a VELOS CX410 chassis; divided into 3 chassis partitions 
 
 .. image:: images/velos_introduction/image8.png
   :align: center
-  :scale: 40%
+  :scale: 70%
 
 -------
 Tenants
