@@ -8,9 +8,9 @@ In addition to more modern Intel chipsets, the BX110 blades also have extensive 
 
 Some additional links on the benefits of hardware offload using the ePVA in previous generation BIG-IP solutions:
 
-https://techdocs.f5.com/content/dam/f5/kb/global/solutions/sol12837_pdf.html/12837.pdf
+`Embedded Packet Velocity (ePVA) Acceleration Table <https://techdocs.f5.com/content/dam/f5/kb/global/solutions/sol12837_pdf.html/12837.pdf>`_
 
-https://devcentral.f5.com/s/articles/F5-Fast-L4-Acceleration-and-the-F5-Smart-Coprocessor-prioritized-Fast-L4-Acceleration
+`F5 Fast L4 Acceleration and the F5 Smart Coprocessor (prioritized Fast L4 Acceleration) <https://devcentral.f5.com/s/articles/F5-Fast-L4-Acceleration-and-the-F5-Smart-Coprocessor-prioritized-Fast-L4-Acceleration>`_
 
 In VELOS there are now two distinct FPGAs, the **Application Traffic Services Engine** (ATSE), and the **VELOS Queuing FPGA** (VQF). In addition to supporting previous functions done by the ePVA, there are additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGAs.
 

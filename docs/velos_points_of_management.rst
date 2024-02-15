@@ -11,7 +11,7 @@ There are three main points of management within the VELOS chassis: the **system
 
 Additionally, they each run their own version of software; tenants are able to run specific versions of TMOS which have been approved to run on the VELOS platform, and system controllers and chassis partitions each have their own version of F5OS-C software. The supported TMOS tenant versions and their supported F5OS versions for the various VELOS platforms can be found here:
 
-`K86001294: F5OS hardware/software support matrix <https://my.f5.com/manage/s/article/K86001294>_`
+`K86001294: F5OS hardware/software support matrix <https://my.f5.com/manage/s/article/K86001294>`_
 
 In general, TMOS versions 14.1.4 and later, 15.1.4 and later, and 17.1.x and later are supported on the BX110 blades in the CX410 chasssis. There are no plans to support versions 16.0.x, 16.1.x, or 17.0.x, and there are no plans to support versions prior to 14.1.4. 
 

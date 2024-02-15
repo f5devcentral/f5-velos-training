@@ -6,9 +6,9 @@ Planning for VELOS Guide
    :maxdepth: 1
    :glob:
 
-   introduction.rst
+   introduction_old.rst
    velos_points_of_management.rst
-   velos_components.rst
+   velos_components_old.rst
    velos_networking.rst
    velos_high_availability.rst
    velos_multitenancy.rst
