@@ -51,11 +51,13 @@ When chassis partitions are created, the administrator will assign one or more b
 
 .. image:: images/velos_networking/image6.png
   :align: center
-  :scale: 60%
+  :scale: 80%
+
+In the example below, the chassis partition **Production** is completely isolated from the **QA/Dev Apps** chassis partition.
 
 .. image:: images/velos_networking/image7.png
   :align: center
-  :scale: 60%
+  :scale: 80%
 
 Network Isolation
 =================
@@ -64,7 +66,7 @@ To illustrate the point of how isolated chassis partitions are, the diagram belo
 
 .. image:: images/velos_networking/image8.png
   :align: center
-  :scale: 60%
+  :scale: 80%
 
 Port Groups
 ===========
