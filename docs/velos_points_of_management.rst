@@ -15,8 +15,6 @@ Additionally, they each run their own version of software; tenants are able to r
 
 In general, TMOS versions 14.1.4 and later, 15.1.4 and later, and 17.1.x and later are supported on the BX110 blades in the CX410 chasssis. There are no plans to support versions 16.0.x, 16.1.x, or 17.0.x, and there are no plans to support versions prior to 14.1.4. 
 
-For the BX520 blades ..... NEEDS UPDATE from PM.
-
 
 The F5OS-C platform layer in VELOS runs its own version of F5OS, which is unique to the VELOS chassis. On downloads.f5.com, the VELOS versions of F5OS are referred to as F5OS-C, where the C stands for chassis. The rSeries appliances also run F5OS, but that version is designated as F5OS-A, where A stands for appliance. Most of the code and configuration interfaces of F5OS are common between VELOS and rSeries, but VELOS has unique F5OS features that are chassis specific. VELOS has two layers of F5OS (system controller and chassis partition), and each of these have their own software images, in addition to the tenants that run TMOS.
 
