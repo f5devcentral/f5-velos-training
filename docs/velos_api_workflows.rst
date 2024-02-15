@@ -63,6 +63,9 @@ F5OS-C Software Upgrades
 
 `Upgrading a Chassis Partition via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#upgrading-a-chassis-partition-via-the-api>`_
 
+`Loading Tenant Images from a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#loading-tenant-images-from-a-remote-server-via-api>`_
+
+`Uploading Tenant Images from a Client Machine via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#uploading-tenant-images-from-a-client-machine-via-the-api>`_
 
 F5OS-C Backup and Restore
 -------------------------

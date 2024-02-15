@@ -910,9 +910,9 @@ In the **Headers** section ensure you add the **file-upload-id** header, with th
 
 
 
----------------
+
 Tenant Upgrades
----------------
+===============
 
 Tenants are upgraded via the normal TMOS upgrade process. Find the proper ISO image and ensure it is of a supported VELOS release and upload it into the TMOS tenant. Once uploaded you can upgrade and boot into the new version. Currently VELOS does not allow an upgrade of the tenant from inside the F5OS layer, you must perform the upgrade from inside the tenant.
 
