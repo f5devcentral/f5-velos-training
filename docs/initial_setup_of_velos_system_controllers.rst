@@ -569,9 +569,9 @@ The CLI command **show system licensing** will display the chassis level licensi
 
 **Note: VELOS supports AWAF and not ASM licensing. Modules such as AAM and Link Controller are not supported on the VELOS platform since they have reached End-of-Life.**
 
-https://support.f5.com/csp/article/K70113407
+`K70113407: End of Software Development for BIG-IP AAM <https://support.f5.com/csp/article/K70113407>`_
 
-https://support.f5.com/csp/article/K13328631
+`K13328631: United States of America Only: End of Sale notice -- BIG-IP Link Controller, effective October 31, 2015 <https://support.f5.com/csp/article/K13328631>`_
 
 
 Manual Licensing via API
