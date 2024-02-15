@@ -46,7 +46,9 @@ Tenant Deployments
 
 `Uploading Tenant Images from a Client Machine via the API <https://clouddocs.f5.com/training/community/velos-training/html/rseries_deploying_a_tenant.html#uploading-tenant-images-from-a-client-machine-via-the-api>`_
 
-`Tenant Deployment via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#tenant-deployment-via-api>`_
+`Creating a Tenant via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#creating-a-tenant-via-api>`_
+
+`Validating Tenant Status via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#validating-tenant-status-via-api>`_
 
 `Expanding a Tenant within the Same Blade via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#expanding-a-tenant-within-the-same-blade-via-api>`_
 
