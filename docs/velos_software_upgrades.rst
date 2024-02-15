@@ -727,7 +727,7 @@ If the upgrade is successful, you will get notification like the message below:
 Tenant Images and Upgrades
 ==========================
 
------------------------------------------------
+
 Loading Tenant Images for New Tenants via webUI
 -----------------------------------------------
 
@@ -757,7 +757,7 @@ If an HTTPS server is not available, you may upload a tenant image using SCP dir
     scp BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle admin@10.255.0.148:IMAGES
 
 
----------------------------------------------
+
 Loading Tenant Images for New Tenants via CLI
 ---------------------------------------------
 
@@ -803,7 +803,7 @@ You can view the current tenant images and their status in the chassis partition
     BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle  false  replicated
 
 
---------------------------------------------------
+
 Loading Tenant Images from a Remote Server via API
 ------------------------------------------------
 
@@ -856,7 +856,7 @@ Below is output generated from the previous command:
     }
 
 
---------------------------------------------------------
+
 Uploading Tenant Images from a Client Machine via the API
 ---------------------------------------------------------
 
