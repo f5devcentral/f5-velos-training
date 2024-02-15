@@ -77,8 +77,8 @@ You can alternatively copy the controller and partition images into the floating
     root@xubuntu-vm# scp F5OS-C-1.2.1-10781.PARTITION.iso root@10.255.0.147:/var/import/staging/.
 
 
-Uploading Controller and Partition Images via the API
------------------------------------------------------
+Uploading Controller and Partition Images from a Remote Server via the API
+--------------------------------------------------------------------------
 
 As with the webUI, the current implementation of **file import** in the API relies on either a remote HTTPS, SCP, or SFTP server hosting the image files to be imported. The files should be imported into the **images/staging** directory. Once the file import is initiated you can check its status using the **file transfer-status** API calls.
 
@@ -137,8 +137,7 @@ Below is an example output:
             ]
         }
     }
-
-To import images, use the following API examples for controller and partition images. To import the **controller** image:
+To import an F5OS-C image from a remote HTTPS server, use the following API example. You can optionally import using other protocols such as SFTP or SCP by adding the proper protocol option to the API command below. To import images, use the following API examples for controller and partition images. To import the **controller** image:
 
 .. code-block:: bash
 
@@ -259,6 +258,57 @@ You’ll see output like the example below. Once the file shows up here you are 
             ]
         }
     }
+
+Uploading Controller and Partition Images from a Client Machine via the API
+--------------------------------------------------------------------------
+
+You can upload an F5OS controller or chassis partition image from a client machine over the API. First you must obtain an **upload-id** using the following API call.
+
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-upload-meta-data:upload/start-upload
+
+In the body of the API call enter the **size**, **name**, and **file-path** as seen in the example below.
+
+.. code-block:: json
+
+    {
+        "size":5944377856,
+        "name": "F5OS-C-1.6.2-22734.CONTROLLER.LTS.iso",
+        "file-path": "images/staging/"
+    }
+
+If you are using Postman, the API call above will generate an upload-id that will need to be captured so it can be used in the subsequent API call to upload the file. Below is an example of the code that should be added to the **Test** section of the API call so that the upload-id can be captured and saved to a variable for subsequent API calls.
+
+.. code-block:: bash
+
+    var resp = pm.response.json();
+    pm.environment.set("upload-id", resp["f5-file-upload-meta-data:output"]["upload-id"])
+
+Below is an example of how this would appear inside the Postman interface.
+
+.. image:: images/velos_software_upgrades/upload-id.png
+  :align: center
+  :scale: 70%
+
+Once the upload-id is captured, you can then initiate a file upload of the F5OS image using the following API call.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
+
+In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS-A image you want to upload as seen in the example below.
+
+.. image:: images/velos_software_upgrades/upload-image-api.png
+  :align: center
+  :scale: 70%
+
+In the **Headers** section ensure you add the **file-upload-id** header, with the variable used to capture the id in the previous API call.
+
+.. image:: images/velos_software_upgrades/file-upload-tenant-headers-f5os.png
+  :align: center
+  :scale: 70%
 
 Upgrading the System Controllers via webUI
 ------------------------------------------
