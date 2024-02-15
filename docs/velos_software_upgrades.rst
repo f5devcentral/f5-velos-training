@@ -742,13 +742,13 @@ There is an option to **Import** new releases which will open a pop-up window th
 
 .. image:: images/velos_software_upgrades/image9.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you chose the **Import** option, a pop-up window will appear allowing you the enter the remote server path and credentials to upload the tenant image from a remote HTTPS server. 
 
 .. image:: images/velos_software_upgrades/image10.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If an HTTPS server is not available, you may upload a tenant image using SCP directly to the chassis partition. Simply scp an image to the chassis partitions out-of-band management IP address using the admin account and a path of **IMAGES**. 
 
@@ -888,7 +888,7 @@ Below is an example of how this would appear inside the Postman interface under 
 
 .. image:: images/velos_software_upgrades/upload-id-tenant.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Once the upload-id is captured, you can then initiate a file upload of the F5OS TENANT_NAME image using the following API call.
 
@@ -900,13 +900,13 @@ In the body of the API call select **form-data**, and then in the **Value** sect
 
 .. image:: images/velos_software_upgrades/file-upload-tenant-body.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 In the **Headers** section ensure you add the **file-upload-id** header, with the variable used to capture the id in the previous API call.
 
 .. image:: images/velos_software_upgrades/file-upload-tenant-headers.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 
