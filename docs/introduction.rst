@@ -82,7 +82,7 @@ A combination of Docker Compose and Kubernetes is used within the F5OS layer. Do
 
 .. image:: images/velos_introduction/image7.png
   :align: center
-  :scale: 40%
+  :scale: 60%
 
 The diagram above is somewhat simplified, as it shows a single software stack for the Kubernetes control plane. There are multiple instances that run on the system controllers. There is a software stack for the system controllers themselves which provides F5OS-C CLI, webUI, and API management for the controllers, as well as chassis partition (a grouping of blades) lifecycle management. There is also a unique stack for every chassis partition in the system. This software stack resides on the system controllers and can fail over from one controller to the other for added redundancy. It provides the F5OS CLI, webUI, and API functions for the chassis partition, as well as support for the networking services such as stpd, lldpd, lacpd, that get deployed as workloads on the blades.
 
@@ -102,7 +102,7 @@ Below is an example of a VELOS CX410 chassis; divided into 3 chassis partitions 
 
 .. image:: images/velos_introduction/image8.png
   :align: center
-  :scale: 70%
+  :scale: 60%
 
 -------
 Tenants
