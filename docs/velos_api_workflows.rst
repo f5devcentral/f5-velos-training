@@ -55,7 +55,9 @@ Tenant Deployments
 F5OS-C Software Upgrades
 ------------------------
 
-`Uploading Controller and Partition Images via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#uploading-controller-and-partition-images-via-the-api>`_
+`Uploading Controller and Partition Images from a Remote Server via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#uploading-controller-and-partition-images-from-a-remote-server-via-the-api>`_
+
+`Uploading Controller and Partition Images from a Client Machine via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#uploading-controller-and-partition-images-from-a-client-machine-via-the-api>`_
 
 `Upgrading the System Controllers via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_software_upgrades.html#upgrading-the-system-controllers-via-api>`_
 

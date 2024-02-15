@@ -727,20 +727,24 @@ If the upgrade is successful, you will get notification like the message below:
 Tenant Images and Upgrades
 ==========================
 
--------------------------------------
-Loading Tenant Images for New Tenants
--------------------------------------
+-----------------------------------------------
+Loading Tenant Images for New Tenants via webUI
+-----------------------------------------------
 
-Tenant software images are loaded directly into each chassis partition. If you have more than one chassis partition, you’ll need to load tenant images for each one independently. The first release of VELOS only supported TMOS v14.1.4, and 15.1.4 support has been added with the release of F5OS v1.2.1. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software. 
+Tenant software images are loaded directly into each chassis partition. If you have more than one chassis partition, you’ll need to load tenant images for each one independently. Ensure that you are loading a TMOS version that is supported on the VELOS platform, and that you are using the proper F5OS tenant image file. For details on which TMOS versions are supported on VELOS, consult the following article.
 
-Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the chassis partition. Under **Tenant Management** there is a page for uploading tenant software images. There are TMOS images specifically for VELOS. Only supported VELOS TMOS releases should be loaded into this system. Do not attempt to load older or even newer images unless there are officially supported on VELOS. 
 
-There is an option to **Add** new releases which will open a pop-up window that will ask for remote host, path and optional authentication parameters. You may only upload from a remote HTTPS server using the webUI in the current VELOS release. The **Tenant Images** page will also indicate of an image is in use by a tenant, and if it is replicated to other blades in the chassis partition.
+`K86001294: F5OS hardware/software support matrix <https://my.f5.com/manage/s/article/K86001294>`_
+
+Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the chassis partition. Under **Tenant Management** there is a page for uploading tenant software images. There are BIG-IP TMOS images specifically for F5OS, as well as BIG-IP Next images for F5OS. Only supported VELOS TMOS releases should be loaded into this system. Do not attempt to load older or even newer images unless there are officially supported on VELOS. 
+
+There is an option to **Import** new releases which will open a pop-up window that will ask for remote host, path and optional authentication parameters. Using this method requires a remote HTTPS server with the image loaded. You may also use the **Upload** option in the webUI, which allows for the tenant image file to be uploaded from your local client machine via the browser interface. The **Tenant Images** page will also indicate if an image is in use by a tenant, and if it is replicated to other blades in the chassis partition.
 
 .. image:: images/velos_software_upgrades/image9.png
   :align: center
   :scale: 70%
 
+If you chose the **Import** option, a pop-up window will appear allowing you the enter the remote server path and credentials to upload the tenant image from a remote HTTPS server. 
 
 .. image:: images/velos_software_upgrades/image10.png
   :align: center
@@ -751,6 +755,11 @@ If an HTTPS server is not available, you may upload a tenant image using SCP dir
 .. code-block:: bash
 
     scp BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle admin@10.255.0.148:IMAGES
+
+
+---------------------------------------------
+Loading Tenant Images for New Tenants via CLI
+---------------------------------------------
 
 You may also import the tenant image file from the chassis partition CLI. Use the file import command to get the tenant image file from a remote HTTPS server. You must do this for each chassis partition:
 
@@ -793,7 +802,12 @@ You can view the current tenant images and their status in the chassis partition
     BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                            true   replicated  
     BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle  false  replicated
 
-To copy a tenant image into a chassis partition, use the following API call to the chassis partition IP address:
+
+--------------------------------------------------
+Loading Tenant Images from a Remote Server via API
+------------------------------------------------
+
+To copy a tenant image into the chassis partition over the API, use the following API call to the chassis partition out-of-band management IP address. The example below copies a tenant image from a remote HTTPS server. You may also edit the API call to copy from remote SFTP or SCP servers by adding the proper **protocol** option.
 
 .. code-block:: bash
 
@@ -840,6 +854,61 @@ Below is output generated from the previous command:
             ]
         }
     }
+
+
+--------------------------------------------------------
+Uploading Tenant Images from a Client Machine via the API
+---------------------------------------------------------
+
+You can upload an F5OS tenant image from a client machine over the API. First you must obtain an **upload-id** using the following API call.
+
+
+.. code-block:: bash
+
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-upload-meta-data:upload/start-upload
+
+In the body of the API call enter the **size**, **name**, and **file-path** as seen in the example below.
+
+.. code-block:: json
+
+    {
+        "size":2239554028,
+        "name": "BIGIP-15.1.10.1-0.0.9.ALL-F5OS.qcow2.zip.bundle",
+        "file-path": "images/"
+    }
+
+If you are using Postman, the API call above will generate an upload-id that will need to be captured so it can be used in the API call to upload the file. Below is an example of the code that should be added to the **Test** section of the API call so that the **upload-id** can be captured and saved to a variable called **upload-id** for subsequent API calls.
+
+.. code-block:: bash
+
+    var resp = pm.response.json();
+    pm.environment.set("upload-id", resp["f5-file-upload-meta-data:output"]["upload-id"])
+
+Below is an example of how this would appear inside the Postman interface under the **Tests** section.
+
+.. image:: images/velos_software_upgrades/upload-id-tenant.png
+  :align: center
+  :scale: 70%
+
+Once the upload-id is captured, you can then initiate a file upload of the F5OS TENANT_NAME image using the following API call.
+
+.. code-block:: bash
+
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
+
+In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS tenant image you want to upload as seen in the example below.
+
+.. image:: images/velos_software_upgrades/file-upload-tenant-body.png
+  :align: center
+  :scale: 70%
+
+In the **Headers** section ensure you add the **file-upload-id** header, with the variable used to capture the id in the previous API call.
+
+.. image:: images/velos_software_upgrades/file-upload-tenant-headers.png
+  :align: center
+  :scale: 70%
+
+
 
 ---------------
 Tenant Upgrades
