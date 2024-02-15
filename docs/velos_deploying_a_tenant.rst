@@ -489,7 +489,7 @@ Once the upload-id is captured, you can then initiate a file upload of the F5OS 
 
 .. code-block:: bash
 
-    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
 
 In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS tenant image you want to upload as seen in the example below.
 
