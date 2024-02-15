@@ -396,16 +396,17 @@ Tenant Deployment via API
 
 The VELOS tenant lifecycle is fully supported in the F5OS API. This section will cover common examples.
 
-Uploading a Tenant Image from a Remote Server via API
-=====================================================
 
-The upload utility requires a remote HTTPS, SCP, or SFTP server that is hosting the tenant image file. All API calls for tenant lifecycle are posted to the IP address of the chassis partition. To copy a tenant image into a chassis partition from a remote HTTPS server, use the following API call to the chassis partition IP address:
+
+
+Loading Tenant Images from a Remote Server via API
+==================================================
+
+To copy a tenant image into the chassis partition over the API, use the following API call to the chassis partition out-of-band management IP address. The example below copies a tenant image from a remote HTTPS server. You may also edit the API call to copy from remote SFTP or SCP servers by adding the proper **protocol** option.
 
 .. code-block:: bash
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
-
-In the body of the API call enter the details about the local and remote file locations.
 
 .. code-block:: json
 
@@ -450,10 +451,11 @@ Below is output generated from the previous command:
     }
 
 
+
 Uploading Tenant Images from a Client Machine via the API
 =========================================================
 
-You can upload an F5OS tenant image from a client machine to the chassis partition over the API. First, you must obtain an **upload-id** using the following API call.
+You can upload an F5OS tenant image from a client machine over the API. First you must obtain an **upload-id** using the following API call.
 
 
 .. code-block:: bash
@@ -467,7 +469,7 @@ In the body of the API call enter the **size**, **name**, and **file-path** as s
     {
         "size":2239554028,
         "name": "BIGIP-15.1.10.1-0.0.9.ALL-F5OS.qcow2.zip.bundle",
-        "file-path": "images/tenant/"
+        "file-path": "images/"
     }
 
 If you are using Postman, the API call above will generate an upload-id that will need to be captured so it can be used in the API call to upload the file. Below is an example of the code that should be added to the **Test** section of the API call so that the **upload-id** can be captured and saved to a variable called **upload-id** for subsequent API calls.
@@ -479,27 +481,28 @@ If you are using Postman, the API call above will generate an upload-id that wil
 
 Below is an example of how this would appear inside the Postman interface under the **Tests** section.
 
-.. image:: images/velos_deploying_a_tenant/upload-id.png
+.. image:: images/velos_deploying_a_tenant/upload-id-tenant.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
-Once the upload-id is captured, you can then initiate a file upload of the F5OS tenant image using the following API call.
+Once the upload-id is captured, you can then initiate a file upload of the F5OS TENANT_NAME image using the following API call.
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
 
 In the body of the API call select **form-data**, and then in the **Value** section click **Select Files** and select the F5OS tenant image you want to upload as seen in the example below.
 
 .. image:: images/velos_deploying_a_tenant/file-upload-tenant-body.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 In the **Headers** section ensure you add the **file-upload-id** header, with the variable used to capture the id in the previous API call.
 
 .. image:: images/velos_deploying_a_tenant/file-upload-tenant-headers.png
   :align: center
-  :scale: 70%
+  :scale: 100%
+
 
 
 Creating a Tenant via API

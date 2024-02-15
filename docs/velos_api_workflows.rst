@@ -110,7 +110,3 @@ Monitoring
 `API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
 
 `API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
-
-You can use a RESTful API client like Postman to configure the F5 VELOS platform.
-
-Download the F5 VELOS platform Postman Collection <>`_
