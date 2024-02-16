@@ -93,7 +93,7 @@ F5OS-C Backup and Restore
 Diagnostics
 -----------
 
-`Generating Qkviews from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#generating-qkviews-from-the-api>`_
+`Qkview Creation and Upload to iHealth via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#qkview-creation-and-upload-to-ihealth-via-api>`_
 
 Health
 ------
