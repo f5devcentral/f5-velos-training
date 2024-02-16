@@ -51,44 +51,80 @@ Note: F5 Support requires a qkview file in all cases in which remote access to t
 Generating Qkviews from the webUI
 ---------------------------------
 
-In both the system controller and the chassis partition the qkview can be generated from **System Settings > System Reports** page. Here it also allows an admin to optionally upload them to iHealth. 
+In both the system controller and the chassis partition a qkview can be generated from the **Diagnostics > System Reports** page. Here, you can also optionally download the qkview file or upload them directly to iHealth provided your system is allowed to access the Internet. 
 
 .. image:: images/velos_diagnostics/image1.png
   :align: center
   :scale: 70%
 
-To generate a qkview report, click the button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously and can be cleared if you want to use another account. You can optionally add an **F5 Support Case Number** and **Description** when uploading to iHealth.
+To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **Diagnostics -> iHealth Configuration** page. Note, that the iHelath service recently went through authentication enhancements, and some older version of F5OS-C may not authnticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
 
+You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services using the **Diagnostics -> iHealth Configuration** page. You may also optionally configure a **Proxy Server**for iHealth access if your system requires external traffic to be inspected by a proxy server.
 
-.. image:: images/velos_diagnostics/image2.png
-  :width: 45%
+.. image:: images/velos_diagnostics/image1a.png
+  :align: center
+  :scale: 70%
 
-.. image:: images/velos_diagnostics/image3.png
-  :width: 45%
+Once you have your **Client ID** and **Client Secret** configured you can then upload qkviews directly to iHealth. Your credentials will be automatically added to the upload request as seen below. You may also add an optinal **F5 Support Case Number** and **Description**.
+
+.. image:: images/velos_diagnostics/upload-to-ihealth.png
+  :align: center
+  :scale: 70%
+
+You'll see the status of the upload as it progresses:
+
+.. image:: images/velos_diagnostics/upload-to-ihealth-status.png
+  :align: center
+  :scale: 70%
+
 
 ---------------------------------
 Generating Qkviews from the CLI
 ---------------------------------
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller or chassis partition CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a **username** and **password**.
+You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services via the CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a **clientid** and **clientsecret**.
+
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system diagnostics ihealth config username j.mccarron@f5.com password 
-    (<AES encrypted string>): ********
+    syscon-1-active(config)# system diagnostics ihealth config clientid XXXXXXXXXXXXXXXXXXXX clientsecret
+    (<AES encrypted string>): **********************************************************************************
     syscon-2-active(config)# commit 
     Commit complete.
-    syscon-2-active(config)# do show system diagnostics ihealth 
-    system diagnostics ihealth state username j.mccarron@f5.com
-    system diagnostics ihealth state server https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_webUI=True
-    system diagnostics ihealth state authserver https://api.f5.com/auth/pub/sso/login/ihealth-api
-    syscon-2-active(config)# 
+
+
+
+
+    syscon-1-active(config)# do show system diagnostics ihealth 
+    system diagnostics ihealth state server https://ihealth2-api.f5.com/qkview-analyzer/api/qkviews?visible_in_gui=True
+    system diagnostics ihealth state authserver https://identity.account.f5.com/oauth2/ausp95ykc80HOU7SQ357/v1/token
+    system diagnostics ihealth state clientid XXXXXXXXXXXXXXXXXXXX
+            SERVICE                                                                                                                                           
+    UPLOAD    REQUEST                                                                                                                                           
+    ID        NUMBER   STATUS    IHEALTH LINK                                        DESCRIPTION      DETAILS                                                   
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------
+    reVMzGMd           COMPLETE  https://ihealth.f5.com/qkview-analyzer/qv/22109964  This is a Test!  QKView uploaded successfully with 100 percent completion  
+
+    syscon-1-active(config)#
+
+
+You may also optionally configure a **Proxy Server**for iHealth access if your system requires external traffic to be inspected by a proxy server.
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system diagnostics proxy config ?
+    Possible completions:
+    proxy-password   password for web proxy server.
+    proxy-server     Server for local web proxy server.
+    proxy-username   username for web proxy server.
+    syscon-1-active(config)# system diagnostics proxy config 
+
 
 To generate a qkview from the CLI run the command **system diagnostics qkview capture**.
 
 .. code-block:: bash
 
-    syscon-2-active# system diagnostics qkview capture 
+    syscon-1-active# system diagnostics qkview capture 
     result  Qkview file controller-2.qkview is being collected
     return code 200
     resultint 0
@@ -126,36 +162,6 @@ You may also confirm the file has been created by using the **file list** comman
     resultint 0
     syscon-1-active#
 
-Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal, and then store them on your VELOS system in order to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the CLI.
-
-.. code-block:: bash
-
-    syscon-2-active(config)# system diagnostics ihealth config clientid 123456789v1HW5xr3a8g clientsecret                                                                 
-    (<AES encrypted string>) ($8$CxtyXKfHxVDccMkiRoJXo9i6vIa+ZFA1FW+aGURndTjQEBY9TKfl+nH12cWYudLcBWiQJ2BH\nL+KtEAHaQ3EQmH7svB2bKsBT2XPZ+FR1XuNnTZx40KLMilAnxSsN/Ob9): 1234567892QlwE-dkwpxRCTX8PF_TynN8xzCzOlwnLOUZMzcGvXXwvcj5Ewiv6Gp
-    syscon-2-active(config)# 
-
-If your environment has a proxy server and does not allow direct access to the Internet, then you can optionally add in the proxy server configuration to the VELOS system so that uploads will utilize the environment's proxy server when uploading qkviews to iHealth. Below is an example of adding a proxy server configuration vai the CLI.
-
-.. code-block:: bash
-
-    syscon-2-active(config)# system diagnostics proxy config proxy-server https://myproxy.com:3128 proxy-username proxy-upload proxy-password 
-    (<AES encrypted string>): *************
-    syscon-2-active(config)#
-
-
-To upload the qkview file to iHealth using the CLI use the following command: **system diagnostics ihealth upload qkview-file <file-name> description "Text for description" service-request-number <SR Number>**.
-
-.. code-block:: bash
-
-    syscon-2-active# system diagnostics ihealth upload qkview-file controller-qkview-9-27.tar description "This is a test"
-    message HTTP/1.1 202 Accepted
-    Location: /support/ihealth/status/6OzdPmV9
-    Date: Wed, 03 Jan 2024 19:41:02 GMT
-    Content-Length: 0
-
-
-    errorcode false
-    syscon-2-active#
 
 ---------------------------------
 Generating Qkviews from the API
