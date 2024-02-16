@@ -184,9 +184,6 @@ If you don’t have an external HTTPS server that allows uploads, then you can l
     [root@controller-2 ~]# ls /var/confd/configs/
     controller-backup-08-17-21  my-backup
     [root@controller-2 ~]# scp /var/confd/configs/controller-backup-08-17-21 root@10.255.0.142:/var/www/server/1
-    The authenticity of host '10.255.0.142 (10.255.0.142)' can't be established.
-    ECDSA key fingerprint is SHA256:xexN3pt/7xGgGNFO3Lr77PHO2gobj/lV6vi7ZO7lNuU.
-    ECDSA key fingerprint is MD5:ff:06:0f:a8:5f:64:92:7b:42:31:aa:bf:ea:ee:e8:3b.
     Are you sure you want to continue connecting (yes/no)? yes
     Warning: Permanently added '10.255.0.142' (ECDSA) to the list of known hosts.
     root@10.255.0.142's password: 
@@ -304,19 +301,19 @@ To download a specific config file, use the following API call.
 
 For the **Headers** secion of the Postman request be sure to add the following headers:
 
-.. image:: images/rseries_f5os_configuration_backup_and_restore/configheaders.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/configheaders.png
   :align: center
   :scale: 70%
 
 In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the configuration file named **GSA-Daily_GSA-VELOS-1_20230328070500** file that resides in the **configs/** directory.
 
-.. image:: images/rseries_f5os_configuration_backup_and_restore/configfile.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/configfile.png
   :align: center
   :scale: 70%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
-.. image:: images/rseries_f5os_configuration_backup_and_restore/sendanddownload.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/sendanddownload.png
   :align: center
   :scale: 70%
 
