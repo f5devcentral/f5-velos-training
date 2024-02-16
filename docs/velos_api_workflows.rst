@@ -138,4 +138,4 @@ VELOS F5OS-A SNMP Monitoring and Alerting
 
 `Enabling SNMP Traps in the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#enabling-snmp-traps-in-the-api>`_
 
-`Downloading SNMP Logs from the API <>`_
+`Downloading SNMP Logs from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#downloading-snmp-logs-from-the-api>`_

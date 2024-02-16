@@ -3326,13 +3326,13 @@ In the body of the API call select **form-data**, and then enter the key/value p
 
 .. image:: images/velos_monitoring_snmp/snmplogdownload.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
 .. image:: images/velos_monitoring_snmp/sendanddownload.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 
