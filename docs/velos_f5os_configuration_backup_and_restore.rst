@@ -301,21 +301,21 @@ To download a specific config file, use the following API call.
 
 For the **Headers** secion of the Postman request be sure to add the following headers:
 
-.. image:: images/velos_f5os_configuration_backup_and_restore/configheaders.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/config-headers.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the configuration file named **GSA-Daily_GSA-VELOS-1_20230328070500** file that resides in the **configs/** directory.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/configfile.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/sendanddownload.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 
