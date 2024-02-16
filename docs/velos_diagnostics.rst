@@ -51,7 +51,7 @@ Note: F5 Support requires a qkview file in all cases in which remote access to t
 Generating Qkviews from the webUI
 ---------------------------------
 
-In both the system controller and the chassis partition a qkview can be generated from the **Diagnostics > System Reports** page. Here, you can also optionally download the qkview file or upload them directly to iHealth provided your system is allowed to access the Internet. 
+In both the system controller and the chassis partition a qkview can be generated from the **Diagnostics > System Reports** page. Here, you can also optionally download the qkview file (added in F5OS-C 1.7.0) or upload them directly to iHealth provided your system is allowed to access the Internet. 
 
 .. image:: images/velos_diagnostics/image1.png
   :align: center
