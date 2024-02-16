@@ -221,7 +221,7 @@ In the body of the API call, add your client ID:
 .. code-block:: json
 
     {
-    "f5-system-diagnostics-ihealth:clientid": "123yaodlfvsD4f6fBnmo"
+    "f5-system-diagnostics-ihealth:clientid": "XXXXXXXXXXXXXXXXXXXXXXX"
     }
 
 To confirm the client ID has been set, send the folowing API call:
@@ -235,7 +235,7 @@ You should see something like the output below.
 .. code-block:: json
 
     {
-        "f5-system-diagnostics-ihealth:clientid": "123yaodlfvsD4f6fBnmo"
+        "f5-system-diagnostics-ihealth:clientid": "XXXXXXXXXXXXXXXXXXXXXXXXXX"
     }
 
 
@@ -250,7 +250,7 @@ In the body of the API call, enter the client secret as seen below:
 .. code-block:: json
 
     {
-        "f5-system-diagnostics-ihealth:clientsecret": "1234567890QlwE-Qrh2TcCTX8PF_fjlrXvf57hpnLOUZMzcGvXXwvslk3iV4xsq#"
+        "f5-system-diagnostics-ihealth:clientsecret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     }
 
 To view the current client secret enter the following API call.
@@ -265,7 +265,7 @@ In the body of the API call, you'll see the encrypted client secret as seen belo
 
 
     {
-        "f5-system-diagnostics-ihealth:clientsecret": "$8$CxtyXKfHx12345678901234567890FA1FW+aGURndTjQEBY9TKfl+nH12cWYudLcBWiQJ2BH\nL+KtEAHaQ3EQmH712345678901234567890nTZx40AswvGtx478N/Ob9"
+        "f5-system-diagnostics-ihealth:clientsecret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     }
 
 If your environment has a proxy server and does not allow direct access to the Internet, then you can optionally add in the proxy server configuration to the VELOS system so that uploads will utilize the environment's proxy server when uploading qkviews to iHealth. Below is an example of adding a proxy server configuration via the API.
@@ -304,7 +304,7 @@ You'll see the configuration returned in the API response.
             },
             "config": {
                 "proxy-username": "proxy-user",
-                "proxy-password": "$8$h/mg/zHjSFeeBerFdjq2GbaqQTKUzxACY/pxsiJB3Bc=",
+                "proxy-password": "$8$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
                 "proxy-server": "https://myproxy.com:3128"
             }
         }
