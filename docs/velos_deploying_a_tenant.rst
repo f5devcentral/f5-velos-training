@@ -74,7 +74,7 @@ Tenant Deployment via CLI
 Uploading a Tenant Image via CLI
 ================================
 
-Tenant software images are loaded directly into the F5OS chassis partition layer. For the initial release of VELOS, supported tenant versions were v14.1.4 and then later version of 14.1.x. Support for 15.1.4 and later was subsequently added. VELOS tenants do not support versions 16.0, 16.0 or 17.0, you can run either the minimum 14.1.4/15.1.4 releases or later or any versions 17.1.x and later.. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software, and upgrades to newer versions happen within the tenant itself, not in the F5OS layer. The images inside F5OS are for initial deployment of tenants only. 
+Tenant software images are loaded directly into the F5OS chassis partition layer. For the initial release of VELOS, supported tenant versions were v14.1.4 and then later version of 14.1.x. Support for 15.1.4 and later was subsequently added. VELOS tenants do not support versions 16.0, 16.0 or 17.0, you can run either the minimum 14.1.4/15.1.4 releases or later or any versions 17.1.x and later. No other TMOS versions are supported other than hotfixes or rollups based on those versions of software, and upgrades to newer versions happen within the tenant itself, not in the F5OS layer. The images inside F5OS are for initial deployment of tenants only. 
 
 Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the F5OS chassis partition layer. If an HTTPS/SCP/SFTP server is not available, you may upload a tenant image using scp directly to the F5OS platform layer. Simply SCP an image to the out-of-band management IP address using the admin account and a path of **IMAGES**. There are also other upload options available in the webUI (Upload from Browser) or API (HTTPS/SCP/SFTP). Below is an example of using SCP from a remote client to the IP address of the VELOS chassis partition.
 
@@ -350,7 +350,7 @@ You can upload a tenant image via the webUI in two different places. The first i
 
 After the image is uploaded you need to wait until it shows **Replicated** status before deploying a tenant.
 
-Alternatively, you can upload from the **System Settings > File Utilities** page, and then select the **images** directory from the drop down list.
+Alternatively, you can upload from the **System Settings > File Utilities** page, and then select the **images** directory from the drop-down list.
 
 .. image:: images/velos_deploying_a_tenant/image9a.png
   :align: center
@@ -375,7 +375,7 @@ The tenant deployment options are almost identical to deploying a vCMP guest, wi
 Validating Tenant Status via webUI
 ===================================
 
-You can validate the current high level status of a VELOS tenant in the webUI by clicking on the **Tenant Management** -> **Tenant Deployments** page. Here you can see the software version of the tenant (if it is running), as well as the high-level configuration for that tenant.
+You can validate the current high-level status of a VELOS tenant in the webUI by clicking on the **Tenant Management** -> **Tenant Deployments** page. Here you can see the software version of the tenant (if it is running), as well as the high-level configuration for that tenant.
 
 .. image:: images/velos_deploying_a_tenant/tenantstatus1.png
   :align: center
