@@ -123,6 +123,8 @@ To upload each of the files to a remote HTTPS server use the following command. 
 
 Repeat the same API call but change the filename to the **mibs_netsnmp.tar.gz** file. 
 
+.. code-block:: bash
+
     syscon-1-active# file export local-file mibs/mibs_netsnmp.tar.gz remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
     Value for 'password' (<string>): ********
     result File transfer is initiated.(mibs_netsnmp.tar.gz)
@@ -203,7 +205,7 @@ Exporting MIBs to a Remote Server via the API
 ---------------------------------------------
 
 
-To copy the SNMP MIB files from VELOS to a remote https server use the following API call:
+To copy the SNMP MIB files from VELOS to a remote HTTPS server use the following API call:
 
 .. code-block:: bash
 
@@ -239,8 +241,7 @@ The output will show the status of the file export.
         }
     }
 
-Repeat the same steps for the other MIB file.
-
+Repeat the same steps to download the other MIB file. Then repeat the same steps to download the chassis partition MIB from one of your chassis partitions.
 
 
 Adding Allowed IPs for SNMP
@@ -3256,6 +3257,82 @@ Note: The CLI and webUI abstract the full paths for logs so that they are easier
     <INFO> 24-Sep-2021::17:47:24.760 partition2 confd[103]: snmp get-request reqid=6728306 172.23.81.81:42172 (OCTET STRING sysDescr)
     Production-1# 
 
+
+Downloading SNMP Logs from the API
+----------------------------------
+
+You can download various logs from the F5OS layer using the F5OS API. The snmp.log file resides in the **log/confd/** directory. To list the current log files in the **log/confd/** directory, use the following API call.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call, add the virtual path you want to list.
+
+.. code-block:: json
+ 
+    {
+    "f5-utils-file-transfer:path": "log/confd/"
+    }
+
+The output will show other files, along with the **snmp.log** file.
+
+.. code-block:: json
+
+    {
+    "f5-utils-file-transfer:output": {
+        "entries": [
+            {
+                "name": "confd.log",
+                "date": "Thu Jan 25 07:30:50 UTC 2024",
+                "size": "6.9MB"
+            },
+            {
+                "name": "devel.log",
+                "date": "Fri Feb 16 02:00:51 UTC 2024",
+                "size": "874MB"
+            },
+            {
+                "name": "ext-auth-err.log",
+                "date": "Fri Feb 16 01:58:32 UTC 2024",
+                "size": "0B"
+            },
+            {
+                "name": "ext-val-err.log",
+                "date": "Fri Feb 16 02:00:51 UTC 2024",
+                "size": "0B"
+            },
+            {
+                "name": "snmp.log",
+                "date": "Thu Feb 15 16:29:29 UTC 2024",
+                "size": "14MB"
+            },
+            {
+                "name": "webui/",
+                "date": "Thu Jan 25 07:29:54 UTC 2024",
+                "size": "4.0KB"
+            }
+        ]
+    }
+}
+
+To download the **snmp.log** file use the following API call.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+
+In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the **snmp.log** file that resides in the **log/confd** directory on the system controller.
+
+.. image:: images/rseries_monitoring_snmp/snmplogdownload.png
+  :align: center
+  :scale: 70%
+
+If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
+
+.. image:: images/rseries_monitoring_snmp/sendanddownload.png
+  :align: center
+  :scale: 70%
 
 
 

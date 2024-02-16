@@ -124,11 +124,11 @@ Monitoring
 VELOS F5OS-A SNMP Monitoring and Alerting
 -----------------------------------------
 
-`Downloading MIBs via API <>`_
+`Downloading MIBs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#downloading-mibs-via-api>`_
 
-`Exporting MIBs to a Remote Server via the API <>`_
+`Exporting MIBs to a Remote Server via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#exporting-mibs-to-a-remote-server-via-the-api>`_
 
-`Adding Allowed IPs for SNMP via API <>`_
+`Adding Allowed IPs for SNMP via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-allowed-ips-for-snmp-via-api>`_
 
 `Adding Interface and LAG descriptions via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-out-of-band-interface-and-lag-descriptions-via-api>`_
 
@@ -136,6 +136,6 @@ VELOS F5OS-A SNMP Monitoring and Alerting
 
 `Configuring SNMP Access via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#enabling-snmp-via-api>`_
 
-`Enabling SNMP Traps in the API <>`_
+`Enabling SNMP Traps in the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#enabling-snmp-traps-in-the-api>`_
 
 `Downloading SNMP Logs from the API <>`_
