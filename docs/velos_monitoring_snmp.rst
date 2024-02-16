@@ -3261,7 +3261,7 @@ Note: The CLI and webUI abstract the full paths for logs so that they are easier
 Downloading SNMP Logs from the API
 ----------------------------------
 
-You can download various logs from the F5OS layer using the F5OS API. The snmp.log file resides in the **log/confd/** directory. To list the current log files in the **log/confd/** directory, use the following API call.
+You can download various logs from the F5OS layer using the F5OS API. The snmp.log file resides in the **log/confd/** directory for the system controller snmp logs. To list the current log files in the **log/confd/** directory, use the following API call against the system controller floating IP address.
 
 .. code-block:: bash
 
@@ -3324,13 +3324,13 @@ To download the **snmp.log** file use the following API call.
 
 In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the **snmp.log** file that resides in the **log/confd** directory on the system controller.
 
-.. image:: images/rseries_monitoring_snmp/snmplogdownload.png
+.. image:: images/velos_monitoring_snmp/snmplogdownload.png
   :align: center
   :scale: 70%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
-.. image:: images/rseries_monitoring_snmp/sendanddownload.png
+.. image:: images/velos_monitoring_snmp/sendanddownload.png
   :align: center
   :scale: 70%
 
