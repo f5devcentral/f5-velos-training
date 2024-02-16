@@ -47,9 +47,9 @@ Note: F5 Support requires a qkview file in all cases in which remote access to t
     - Collects blade host information, including logs
     - Collects information for each partition service container
 
----------------------------------
-Generating Qkviews from the webUI
----------------------------------
+
+Qkview Creation and Upload via webUI
+----------------------------------
 
 In both the system controller and the chassis partition a qkview can be generated from the **Diagnostics > System Reports** page. Here, you can also optionally download the qkview file (added in F5OS-C 1.7.0) or upload them directly to iHealth provided your system is allowed to access the Internet. 
 
@@ -78,9 +78,9 @@ You'll see the status of the upload as it progresses:
   :scale: 70%
 
 
----------------------------------
-Generating Qkviews from the CLI
----------------------------------
+
+Qkview Creation and Upload via CLI
+----------------------------------
 
 You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services via the CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a **clientid** and **clientsecret**.
 
@@ -108,7 +108,7 @@ You can configure your iHealth **Client ID** and **Client Secret** to authentica
     syscon-1-active(config)#
 
 
-You may also optionally configure a **Proxy Server**for iHealth access if your system requires external traffic to be inspected by a proxy server.
+You may also optionally configure a **Proxy Server** for iHealth access if your system requires external traffic to be inspected by a proxy server.
 
 .. code-block:: bash
 
@@ -163,11 +163,11 @@ You may also confirm the file has been created by using the **file list** comman
     syscon-1-active#
 
 
----------------------------------
-Generating Qkviews from the API
----------------------------------
 
-A qkview can be generated for the system controller or any chassis partition using the following API call. Note the IP address endpoint will either be the system controller or the desired chassis partition IP address.
+Qkview Creation and Upload to iHealth via API
+---------------------------------------------
+
+A qkview can be generated for the system controller or any chassis partition using the following API call. Note, the IP address endpoint will either be the system controller or the desired chassis partition IP address.
 
 .. code-block:: bash
 
@@ -336,6 +336,71 @@ The output will confirm the upload has begun.
             "errorcode": false
         }
     }
+
+qkview Download to Client via API
+--------------------------------
+
+You can download qkviews direct to a client machine using the F5OS API. First, list the contents of the path **diags/shared/qkview** to see the save qkview files:
+
+.. code-block:: bash
+
+    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call, add the following path:
+
+.. code-block:: json
+
+    {
+    "f5-utils-file-transfer:path": "diags/shared/qkview"
+    }
+
+The output should look similar to the output below.
+
+.. code-block:: json
+
+
+    {
+        "f5-utils-file-transfer:output": {
+            "entries": [
+                {
+                    "name": "jim-test.tgz",
+                    "date": "",
+                    "size": "783MB"
+                },
+                {
+                    "name": "new-qkview-2-15-24.tar",
+                    "date": "",
+                    "size": "674MB"
+                }
+            ]
+        }
+    }
+
+To download one of the qkview files to the local client machine, enter the following API call.
+
+.. code-block:: bash
+
+    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+
+
+For the **Headers** section of the Postman request be sure to add the following headers:
+
+.. image:: images/velos_diagnostics/headers.png
+  :align: center
+  :scale: 70%
+
+If you are using Postman, in the body of the API call select **Body**, then selct **form-data**. Then enter the **file-name**, **path**, and **token** as seen below.
+
+.. image:: images/velos_diagnostics/downloadqkviewapi.png
+  :align: center
+  :scale: 70%
+
+If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
+
+.. image:: images/velos_diagnostics/sendanddownload.png
+  :align: center
+  :scale: 70%
+
 
 
 Logging
