@@ -130,7 +130,7 @@ VELOS F5OS-A SNMP Monitoring and Alerting
 
 `Adding Allowed IPs for SNMP via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-allowed-ips-for-snmp-via-api>`_
 
-`Adding Interface and LAG descriptions via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-out-of-band-interface-and-lag-descriptions-via-api>`_
+`Adding Out-of-Band Interface and LAG descriptions via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-out-of-band-interface-and-lag-descriptions-via-api>`_
 
 `Adding Interface and LAG Descriptions for Chassis Partitions via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-interface-and-lag-descriptions-for-chassis-partitions-via-api>`_
 

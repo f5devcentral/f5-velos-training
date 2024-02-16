@@ -181,25 +181,25 @@ For the **Headers** secion of the Postman request, be sure to add the following 
 
 .. image:: images/velos_monitoring_snmp/snmpheaders.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you are using Postman, in the body of the API call select **Body**, then select **form-data**. Then enter the **file-name**, **path**, and **token** as seen below. 
 
 .. image:: images/velos_monitoring_snmp/downloadmibsapi1.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Repeat the same process for the other MIB file.
 
 .. image:: images/velos_monitoring_snmp/downloadmibsapi2.png
   :align: center
-  :scale: 70%  
+  :scale: 100%  
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
 .. image:: images/velos_monitoring_snmp/sendanddownload.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Exporting MIBs to a Remote Server via the API
 ---------------------------------------------
@@ -629,12 +629,9 @@ Below is the proper formatting for the body of the API call. You will need to ad
                     "description": "VELOS Interface 2/2.0"
                 }
             }
-
-
-
-        ]
+            ]
+        }
     }
-}
 
 
 If Link Aggregation Groups (LAGs) are configured, descriptions should be added to the LAG interfaces as well.
@@ -1170,7 +1167,7 @@ If you are using SNMPv1/v2c then communities are the means of access. You can cr
 
     PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-snmp:snmp
 
-In the body of the API call, add the community name you want to use to allow access to SNMP on the VELOS system. IN this case a community called **public2** is being used to enable access.
+In the body of the API call, add the community name you want to use to allow access to SNMP on the VELOS system. In this case a community called **public2** is being used to enable access.
 
 .. code-block:: bash
 
