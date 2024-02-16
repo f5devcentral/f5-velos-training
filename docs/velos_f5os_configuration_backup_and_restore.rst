@@ -33,7 +33,7 @@ To perform a complete backup of the VELOS system, you must:
 
 More detail is covered in the following solution article:
 
-https://support.f5.com/csp/article/K50135154
+`K50135154: Back up and restore the F5OS-C configuration on a VELOS system <https://support.f5.com/csp/article/K50135154>`_
 
 Backing Up the System Controller Database
 =========================================
@@ -47,18 +47,22 @@ You can back up the system controller configuration database using the **system 
 
     syscon-1-active# config
     Entering configuration mode terminal
-    syscon-1-active(config)# system database config-backup name chassis2-sys-controller-backup-2-26-21
+    syscon-1-active(config)# system database config-backup name GSA-Daily_GSA-VELOS-1_20230328070500
     response Succeeded.
     syscon-1-active(config)# exit 
 
-    syscon-1-active# file list path configs
-    entries {
-        name 
-    chassis2-sys-controller-backup-2-26-21
-    test-backup
-    }
-    syscon-1-active# 
 
+    syscon-1-active# file list path configs/
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230328070500
+        date Thu Jan 25 03:53:06 UTC 2024
+        size 69KB
+    }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230329070500
+        date Thu Jan 25 03:53:06 UTC 2024
+        size 69KB
+    }
 
 
 Backing Up the System Controller Database via webUI
@@ -100,7 +104,7 @@ Once the database backup has been completed, you should copy the file to an exte
 Copying System Controller Database Backup to an External Location via webUI
 ---------------------------------------------------------------------------
 
-In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files form your local browser. 
+In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files from your local browser. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image3.png
   :align: center
@@ -110,6 +114,11 @@ In the webUI use the **System Settings -> File Utilities** page and from the dro
   :align: center
   :scale: 70%
 
+Additionally, you can **Download** individual files from within the **System Settings -> Configuration Backup** page starting with F5OS-C 1.8.0.
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/config-download.png
+  :align: center
+  :scale: 70%
 
 Copying System Controller Database Backup to an External Location via CLI
 -------------------------------------------------------------------------
