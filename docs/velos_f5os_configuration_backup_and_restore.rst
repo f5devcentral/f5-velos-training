@@ -377,7 +377,7 @@ This can also be done from each chassis partition’s webUI interface. Log into 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image5.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Backing Up Chassis Partition Databases via API
 ------------------------------------------------
@@ -389,6 +389,7 @@ You’ll need to do this for each chassis partition in the system. To backup the
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-backup
 
+In the body of the API call, provide the name of the backup.
 
 .. code-block:: json
 
@@ -401,7 +402,7 @@ Repeat this for each chassis partition.
 Export Backups From the Chassis Partitions
 ==========================================
 
-Next copy the backup files to a location outside of VELOS. The file can be copied off via the chassis partitions CLI, webUI, or API. 
+Copy the chassis partition backup files to a location outside of VELOS. The files can be copied off via the chassis partition CLI, webUI, or API. 
 
 Export Backup From the Chassis Partition webUI
 ----------------------------------------------
@@ -410,21 +411,21 @@ You can copy the backup file out of the chassis partition using the **Systems Se
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image6.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
-You can highlight the file and then click the **Export** button. You when then be prompted to enter the details for a remote HTTPS server so that the file can be copied out of the chassis partition:
+You can highlight the file, and then click the **Export** button. You wil then be prompted to enter the details for a remote HTTPS server so that the file can be copied out of the chassis partition:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image7.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
-If you select *Download**, then an option will appear to download through your browser to your local client machine.
+If you select **Download**, then an option will appear to download through your browser to your local client machine.
 
 
 Export Backup From the Chassis Partition CLI
 --------------------------------------------
 
-To transfer a file using the CLI, use the **file list** command to see the contents of the **configs** directory. Note, the previously saved file is listed. You will need to repeat this for all chassis partitions in the VELOS system.
+To transfer a backup file using the CLI, use the **file list** command to see the contents of the **configs** directory. Note, the previously saved file is listed. You will need to repeat this for all chassis partitions in the VELOS system.
 
 To export the backup for the chassis partition **Production**, first list the contents of the configs directory:
 
@@ -437,7 +438,7 @@ To export the backup for the chassis partition **Production**, first list the co
     }
     Production-1# 
 
-To transfer the file from the CLI, you can use the **file export** command. Note that the file export command requires either a remote HTTPS, SFPT, or SCP server that the file can be posted to. 
+To transfer the file from the CLI, you can use the **file export** command. Note that the file export command requires either a remote HTTPS, SFTP, or SCP server that the file can be posted to. 
 
 .. code-block:: bash
 
@@ -502,11 +503,13 @@ Now repeat the same steps for each chassis partition in the system.
 Export Backup From the Chassis Partition to a Remote Server via API
 -------------------------------------------------------------------
 
-Each chassis partition in the system needs to be backed up independently. Below is an API example exporting the backup of the chassis partition **Development**. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS, SCP, or SFTP server is required to export the copy of the configuration backup.
+Each chassis partition in the system needs to be backed up independently. Below is an API example exporting the backup of the chassis partition **Development**. Note the API call is sent to the chassis partition IP address. Currently a remote HTTPS, SCP, or SFTP server is required to export the copy of the configuration backup using this method.
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/api/data/f5-utils-file-transfer:file/export
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/export
+
+In the body of the API call enter the remote server crednetials and connectivity information.
 
 .. code-block:: json
 
@@ -524,9 +527,9 @@ To check on the status of the file export you can use the following API call to 
 
 .. code-block:: bash
 
-  POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+  POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
-In the body of the post use the following json payload to denote the path and file name to be exported.
+In the body of the POST, use the following json payload to denote the path and file name to be exported.
 
 .. code-block:: json
 
@@ -553,7 +556,7 @@ You can download configuration backup files from the F5OS layer using the F5OS A
 
 .. code-block:: bash
 
-    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
 
 In the body of the API call, add the virtual path you want to list.
 
@@ -613,24 +616,24 @@ To download a specific config file, use the following API call.
 
 .. code-block:: bash
 
-    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
 
 For the **Headers** secion of the Postman request be sure to add the following headers:
 
-.. image:: images/rseries_f5os_configuration_backup_and_restore/configheaders.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/configheaders.png
   :align: center
   :scale: 70%
 
 In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the configuration file named **jim-july** file that resides in the **configs/** directory.
 
-.. image:: images/rseries_f5os_configuration_backup_and_restore/configfile.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/configfile.png
   :align: center
   :scale: 70%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
-.. image:: images/rseries_f5os_configuration_backup_and_restore/sendanddownload.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/sendanddownload.png
   :align: center
   :scale: 70%
 
