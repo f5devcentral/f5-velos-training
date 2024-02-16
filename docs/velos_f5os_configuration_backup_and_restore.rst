@@ -953,6 +953,8 @@ Post the following API call to the system controllers IP address to import the a
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
+In the body of the API call, enter the remote server credentials and connectivity information.
+
 .. code-block:: json
 
     {
@@ -971,6 +973,8 @@ You may query the transfer status of the file via the following API command:
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
 
+In the body of the API call, enter the file name you want to query.
+
 .. code-block:: json
 
     {
@@ -982,6 +986,8 @@ If you want to list the contents of the config directory via API use the followi
 .. code-block:: bash
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call, enter the path you want to query.
 
 .. code-block:: json
 
