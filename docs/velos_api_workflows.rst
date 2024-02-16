@@ -8,7 +8,11 @@ At the system controller level, initial configuration consists of defining stati
 
 For more information about configuring your system, see VELOS Systems: Getting Started and VELOS Systems: Administration and Configuration at support.f5.com.
 
-These workflows assume that the initial system controller configuration has been completed and a first chassis partition is ready to be created.
+These workflows assume that the initial system controller configuration has been completed and a first chassis partition is ready to be created. You can also download the VELOS Postman collection which has many of the API workflows below.
+
+`VELOS F5OS-C Postman Collection <https://github.com/f5devcentral/f5-velos-training/raw/main/docs/postman/F5%20Postman%20for%20F5OS-C%20VELOS.zip>`_
+
+
 
 Workflows
 =========
