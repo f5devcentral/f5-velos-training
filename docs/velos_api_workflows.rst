@@ -97,6 +97,13 @@ Diagnostics
 
 `Qkview Download to Client via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#qkview-download-to-client-via-api>`_
 
+`Downloading Logs from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#downloading-logs-from-the-api>`1_20230328070500
+
+`Viewing Event Logs from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#viewing-event-logs-from-the-api>`1_20230328070500
+
+`Adjusting Software Component Logging Levels via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#adjusting-software-component-logging-levels-via-api>`1_20230328070500
+
+`TCPDUMP Download to Client via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#tcpdump-download-to-client-via-api>`_
 
 Health
 ------

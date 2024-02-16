@@ -387,19 +387,19 @@ For the **Headers** section of the Postman request be sure to add the following 
 
 .. image:: images/velos_diagnostics/headers.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you are using Postman, in the body of the API call select **Body**, then selct **form-data**. Then enter the **file-name**, **path**, and **token** as seen below.
 
 .. image:: images/velos_diagnostics/downloadqkviewapi.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
 .. image:: images/velos_diagnostics/sendanddownload.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 
@@ -924,14 +924,14 @@ In the current release you cannot view the F5OS logs directly from the webUI, al
 
 .. image:: images/velos_diagnostics/file-utils.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you want to download the main **velos.log**, select the directory **/log/controller**.
 
 
 .. image:: images/velos_diagnostics/velos-log.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 
@@ -1518,7 +1518,7 @@ This will display all events (not just the active ones) from the beginning in th
     }
 
 
-Logging Subsystems/ Software Component Levels
+Logging Subsystems / Software Component Levels
 -----------------------------------------------
 
 
@@ -1999,7 +1999,7 @@ When you are finished troubleshooting, you can set the logging level back to def
         }
     }
 
----------------------------------------
+
 Logging Software Component Descriptions
 ---------------------------------------
 
