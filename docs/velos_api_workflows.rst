@@ -6,7 +6,9 @@ There are three main points of management within the VELOS chassis: the system c
 
 At the system controller level, initial configuration consists of defining static and floating IP addresses, optional Link Aggregation for the out-of-band management ports, routing, and other system parameters like DNS. Licensing is also configured at the system controller level and is similar to VIPRION in that it is applied at the chassis level and inherited by all chassis partitions and tenants.
 
-For more information about configuring your system, see VELOS Systems: Getting Started and VELOS Systems: Administration and Configuration at support.f5.com.
+For more information about configuring your system, see:
+
+`VELOS Systems: Getting Started and VELOS Systems: Administration and Configuration <https://techdocs.f5.com/kb/en-us/products/f5os-c/manuals/related/doc-f5os-c-velos.html>`_
 
 These workflows assume that the initial system controller configuration has been completed and a first chassis partition is ready to be created. You can also download the VELOS Postman collection which has many of the API workflows below.
 
