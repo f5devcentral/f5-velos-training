@@ -57,7 +57,7 @@ In both the system controller and the chassis partition a qkview can be generate
   :align: center
   :scale: 70%
 
-To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **Diagnostics -> iHealth Configuration** page. Note, that the iHelath service recently went through authentication enhancements, and some older version of F5OS-C may not authnticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
+To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **Diagnostics -> iHealth Configuration** page. Note, that the iHelath service recently went through authentication enhancements, and some older version of F5OS-C may not authenticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
 
 You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services using the **Diagnostics -> iHealth Configuration** page. You may also optionally configure a **Proxy Server** for iHealth access if your system requires external traffic to be inspected by a proxy server.
 
@@ -65,7 +65,7 @@ You can configure your iHealth **Client ID** and **Client Secret** to authentica
   :align: center
   :scale: 70%
 
-Once you have your **Client ID** and **Client Secret** configured you can then upload qkviews directly to iHealth. Your credentials will be automatically added to the upload request as seen below. You may also add an optinal **F5 Support Case Number** and **Description**.
+Once you have your **Client ID** and **Client Secret** configured you can then upload qkviews directly to iHealth. Your credentials will be automatically added to the upload request as seen below. You may also add an optional **F5 Support Case Number** and **Description**.
 
 .. image:: images/velos_diagnostics/upload-to-ihealth.png
   :align: center
@@ -181,7 +181,7 @@ In the body of the API call enter the filename of the qkview to be saved.
         "f5-system-diagnostics-qkview:filename": "qkview{{currentdate}}.tgz"
     }
 
-If the generation of a qkview is successful, you'll receive confirmation similar to the output below.
+If the generation of a qkview is successful, you'll receive confirmation like the output below.
 
 .. code-block:: json
 
@@ -210,7 +210,7 @@ The output of the command will show the percentage complete of the qkview.
         }
     }
 
-Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal, and then store them on your VELOS system in order to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the API.
+Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal, and then store them on your VELOS system to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the API.
 
 .. code-block:: bash
 
@@ -827,7 +827,7 @@ Many functions inside the F5OS layer will log their events to the main **velos.l
     }
     syscon-2-active#
 
-To view the contents of the **velos.log** file use the command **file show path /log/controller/velos.log**:
+To view the contents of the **velos.log** file, use the command **file show path /log/controller/velos.log**:
 
 .. code-block:: bash
 
@@ -1305,7 +1305,7 @@ You should see similar output as displayed below.
     }
 
 
-To download a specific log file use the following API call.
+To download a specific log file, use the following API call.
 
 .. code-block:: bash
 
@@ -2005,7 +2005,7 @@ Logging Software Component Descriptions
 
 Below is a brief description of what each sw-component is responsible for, and some example logging messages when DEBUG is enabled. Note that when DEBUG level is set these messages are not intended for customers, they are for F5 developers and support personnel.
 
-**alert-service** - The Alert Service runs on the both System Controllers and also each blade. "Alarm" is the user-facing term for alerts. Applications can send an AlertNotification or ThresholdNotification message over ZeroMQ to their local alert service. The blades and the standby controller forward all alert messages to the alert service running on the active controller. It aggregates all alerts and publishes them to ConfD.
+**alert-service** - The Alert Service runs on both System Controllers and also each blade. "Alarm" is the user-facing term for alerts. Applications can send an AlertNotification or ThresholdNotification messages to their local alert service. The blades and the standby controller forward all alert messages to the alert service running on the active controller. It aggregates all alerts and publishes them to ConfD.
 
 
 
@@ -2107,7 +2107,7 @@ Below is a brief description of what each sw-component is responsible for, and s
 
 **Fpgamgr** - FPGA manager
 
-**http-server** - Runs Apache. It is used for confd SSL termination, the GUI, and the REST API. 
+**http-server** - It is used for confd SSL termination, the GUI, and the REST API. 
 
 **ihealth-upload-service** - Upload diagnostics data service. Events related to uploading qkviews to iHealth service.
 
@@ -2188,7 +2188,7 @@ Below is a brief description of what each sw-component is responsible for, and s
     2023-03-07T20:19:05.683733-05:00 appliance-1 l2-agent[11]: priority="Debug" version=1.0 msgid=0x208000000000005 msg="" text="IfOperCallpointHdlr::get_object_reply 1.0".
 
 
-**Lacpd** -  Link Aggregation Control Protocol (LACP) related events. This would be used when troubleshooting issues when setting up a LAG with LACP enabled. You could set to debug temporarily to see LACAP related events in the platfrom.log
+**Lacpd** -  Link Aggregation Control Protocol (LACP) related events. This would be used when troubleshooting issues when setting up a LAG with LACP enabled. You could set to debug temporarily to see LACP related events in the platfrom.log.
 
 .. code-block:: bash
 
@@ -2212,7 +2212,7 @@ Below is a brief description of what each sw-component is responsible for, and s
 
 
 
-**license-service** - logs events related to licensing of the rSeries appliance.
+**license-service** - logs events related to licensing.
 
 .. code-block:: bash
 
@@ -2338,9 +2338,9 @@ Below is a brief description of what each sw-component is responsible for, and s
 
 **Lopd** - Communication proxy for the Lights Out Processor
 
-**network-manager** - Network manager "Network manager is responsible for managing network resource for Velocity platform, like vlan, services, fdb, etc. Network manager allocates a default service for each BIGIP virtual tenant. API service gateway forwards the L2 listener request from BIGIP virtual tenant to network manager, and then network manager create/update the L2 listener in confd database
+**network-manager** - Network manager "Network manager is responsible for managing network resource for VELOS, like vlans, services, fdb, etc. Network manager allocates a default service for each BIGIP virtual tenant.
 
-**optics-mgr** - Optics tunning manager Provides the F5 tuning parameters for the optics in Velocity blades and appliances
+**optics-mgr** - Optics tunning manager Provides the F5 tuning parameters for the optics in VELOS blades.
 
 
 
@@ -2353,6 +2353,7 @@ Below is a brief description of what each sw-component is responsible for, and s
 **platform-fwu** - Platform firmware upgrade
 
 **platform-hal** - The Platform Hardware Abstraction Layer (HAL) service "is responsible for accessing the hardware. It provides low level data into the following areas:
+
 	• Drives
 	• Capacity, SMART attributes, wear, IO
 	• LOP
@@ -2554,9 +2555,9 @@ Below is a brief description of what each sw-component is responsible for, and s
 
 **tmstat-merged** - Stats rollup
 
-**upgrade-service** - Software upgrade service "Independent container for upgrading Velos software after checking the new schema is compatible with the old one.
+**upgrade-service** - Software upgrade service "Independent container for upgrading VELOS software after checking the new schema is compatible with the old one.
 
-**user-manager** - Events related to f5OS user management
+**user-manager** - Events related to F5OS user management
 
 .. code-block:: bash
 
@@ -2610,10 +2611,11 @@ You can see this in the following example output:
 02:28:55.385343 IP 10.10.11.12 > 10.10.11.13: ICMP echo request, id 19463, seq 4, length 64 did:0F sid:04 sep:F svc:08 ld:1 rd:0
 More detail on configuration and filtering of tcpdump is provide here:
 
-https://support.f5.com/csp/article/K12313135
+`K12313135: Overview of the tcpdump utility on the VELOS system <https://support.f5.com/csp/article/K12313135>`1_20230328070500
 
 
-You can capture traffic for a specific interface on a blade using the interface keyword in the tcpdump command. The interface is specified as <blade>/<port>.<subport>. If the interface keyword is not supplied, or if 0/0.0 is specified for the interface, no interface filtering occurs and the command captures all interfaces in the partition.
+
+You can capture traffic for a specific interface on a blade using the interface keyword in the tcpdump command. The interface is specified as <blade>/<port>.<subport>. If the interface keyword is not supplied, or if 0/0.0 is specified for the interface, no interface filtering occurs, and the command captures all interfaces in the partition.
 
 Important: The interfaces on the VELOS system are capable of very high traffic rates. To prevent dropped packets during traffic capture, you should specify appropriate filters to capture only the intended traffic and reduce the total amount of captured traffic.
 
@@ -2738,7 +2740,7 @@ The output should look similar to the output below.
                     "date": "",
                     "size": "23KB"
                 }
-            ]
+            ]   
         }
     }
 
@@ -2748,7 +2750,7 @@ To copy one of the tcpdump files to the local client machine enter the following
 
     POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
-For the **Headers** secion of the Postman request be sure to add the following headers:
+For the **Headers** section of the Postman request be sure to add the following headers:
 
 .. image:: images/velos_diagnostics/headers.png
   :align: center
