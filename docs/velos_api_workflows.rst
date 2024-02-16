@@ -95,6 +95,9 @@ Diagnostics
 
 `Qkview Creation and Upload to iHealth via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#qkview-creation-and-upload-to-ihealth-via-api>`_
 
+`Qkview Download to Client via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#qkview-download-to-client-via-api>`_
+
+
 Health
 ------
 

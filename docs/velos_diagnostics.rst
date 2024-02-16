@@ -314,7 +314,7 @@ If you'd like to copy the qkview directly to iHealth once it is completed, use t
 
 .. code-block:: bash
 
-    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/f5-system-diagnostics-ihealth:ihealth/f5-system-diagnostics-ihealth:upload
 
 In the body of the API call add details with the filename, optional description, and SR number. The call below assumes you have previously stored the proper iHealth credentials.
 
@@ -344,7 +344,7 @@ You can download qkviews direct to a client machine using the F5OS API. First, l
 
 .. code-block:: bash
 
-    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
 
 In the body of the API call, add the following path:
 
@@ -380,7 +380,7 @@ To download one of the qkview files to the local client machine, enter the follo
 
 .. code-block:: bash
 
-    POST https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
 
 For the **Headers** section of the Postman request be sure to add the following headers:
@@ -406,9 +406,19 @@ If you are using Postman, instead of clicking **Send**, click on the arrow next 
 Logging
 =======
 
-The VELOS system will log messages to various log files. The main log being the **velos.log** file. There are many other log files for specific tasks, which can be used for troubleshooting. F5 publishes and maintains a log error catalog for F5OS-C (VELOS) here:
+
+F5OS has extensive logging and diagnostic capabilities, logs are stored locally on disk and can optionally be sent to a remote syslog server. In addition, there are multiple logging subsystems that can be tweaked to be more or less verbose via the **Software Component Log Levels**. Many functions inside the F5OS layer will log their important events to the default **velos.log** file that resides in the **/log/controller/** path. This is the file that will also redirect all logs to a remote location (in addition to local disk) when **Remote Log Servers** are added. There are many other log files available local on the disk (some can also be redirected to be sent remotely) for various functions. As an example, there is an **snmp.log** which logs all SNMP requests and traps that the system sends and receives. Another example is the **audit.log** that captures audit related information such as "who has logged in?", "What changes were made?", "Who made the changes?", and unsuccessful login attempts. This section will provide more details on the various logging subsystems, and how to configure them.
+
+F5 publishes and maintains a log error catalog for F5OS-C (VELOS) here:
 
 `F5OS-C/VELOS Error Catalog <https://clouddocs.f5.com/f5os-error-catalog/velos/velos-errors-index.html>`_
+
+Viewing Logs
+------------
+
+
+Viewing Logs from the CLI
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Logs can be viewed via the F5OS CLI, or they can be downloaded for remote viewing via CLI or webUI. Logs can also be sent to an external SYSLOG location. When troubleshooting specific issues, the logging subsystems (sw-components) logging levels can be adjusted temporarily to provide more information.
 
@@ -817,7 +827,7 @@ Many functions inside the F5OS layer will log their events to the main **velos.l
     }
     syscon-2-active#
 
-To view the contents of the velos.log file use the command **file show path /log/controller/velos.log**:
+To view the contents of the **velos.log** file use the command **file show path /log/controller/velos.log**:
 
 .. code-block:: bash
 
@@ -906,9 +916,613 @@ The following command will tail the velos.log file on the chassis partition.
     2021-02-23T17:38:11+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000045 msg="PDU:" direction="Transmitted" interface="2/1.0" length=124.
     2021-02-23T17:38:11+00:00 10.1.18.2 blade-2(p2) lacpd[1]: priority="Debug" version=1.0 msgid=0x3401000000000045 msg="PDU:" direction="Transmitted" interface="1/1.0" length=124.
 
---------------------------------------------------
-Adjusting the Logging Software Components Levels
---------------------------------------------------
+
+Viewing Logs from the webUI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the current release you cannot view the F5OS logs directly from the webUI, although you can download them from the webUI. To view the logs, you can use the CLI or API, or download the files and then view, or use a remote syslog server. To download log files from the webUI, go to the **System Settings -> File Utilities** page. Here there are various logs directories you can download files from. You have the option to **Export** files to a remote HTTPS server or **Download** the files directly to your client machine through the browser.
+
+.. image:: images/velos_diagnostics/file-utils.png
+  :align: center
+  :scale: 70%
+
+If you want to download the main **velos.log**, select the directory **/log/controller**.
+
+
+.. image:: images/velos_diagnostics/velos-log.png
+  :align: center
+  :scale: 70%
+
+
+
+Downloading Logs from the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can download various logs from the F5OS layer using the F5OS API. To list the current log files in the **log/system/** directory use the following API call.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call, add the virtual path you want to list.
+
+.. code-block:: json
+ 
+    {
+    "f5-utils-file-transfer:path": "log/controller/"
+    }
+
+
+You should see similar output as displayed below.
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:output": {
+            "entries": [
+                {
+                    "name": "afu-cookie",
+                    "date": "Thu Jan 25 07:30:19 UTC 2024",
+                    "size": "33B"
+                },
+                {
+                    "name": "audit.log",
+                    "date": "Fri Feb 16 04:13:06 UTC 2024",
+                    "size": "2.4MB"
+                },
+                {
+                    "name": "audit.log.1",
+                    "date": "Fri Feb 16 02:46:58 UTC 2024",
+                    "size": "11MB"
+                },
+                {
+                    "name": "audit.log.2.gz",
+                    "date": "Mon Nov 27 18:29:00 UTC 2023",
+                    "size": "497KB"
+                },
+                {
+                    "name": "audit.log.3.gz",
+                    "date": "Wed Sep 27 14:22:31 UTC 2023",
+                    "size": "492KB"
+                },
+                {
+                    "name": "audit.log.4.gz",
+                    "date": "Thu Aug 24 00:58:56 UTC 2023",
+                    "size": "503KB"
+                },
+                {
+                    "name": "audit.log.5.gz",
+                    "date": "Wed Jul 12 19:39:02 UTC 2023",
+                    "size": "501KB"
+                },
+                {
+                    "name": "cc-confd",
+                    "date": "Thu Jan 25 07:31:14 UTC 2024",
+                    "size": "1.5MB"
+                },
+                {
+                    "name": "cc-confd-hal",
+                    "date": "Thu Jan 25 07:29:49 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "cc-confd-health",
+                    "date": "Fri Feb 16 04:13:05 UTC 2024",
+                    "size": "36MB"
+                },
+                {
+                    "name": "cc-confd-health-diag-agent",
+                    "date": "Thu Jan 25 07:29:53 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "cc-confd-health.1",
+                    "date": "Tue Nov  7 08:12:01 UTC 2023",
+                    "size": "101MB"
+                },
+                {
+                    "name": "cc-confd-init",
+                    "date": "Thu Jan 25 07:29:49 UTC 2024",
+                    "size": "363KB"
+                },
+                {
+                    "name": "cc-upgrade.dbg",
+                    "date": "Thu Jan 25 07:30:42 UTC 2024",
+                    "size": "361KB"
+                },
+                {
+                    "name": "chassis-manager",
+                    "date": "Thu Jan 25 07:31:07 UTC 2024",
+                    "size": "77MB"
+                },
+                {
+                    "name": "chassis-manager.1",
+                    "date": "Mon Feb 27 01:46:02 UTC 2023",
+                    "size": "101MB"
+                },
+                {
+                    "name": "confd",
+                    "date": "Thu Jan 26 22:00:08 UTC 2023",
+                    "size": "0B"
+                },
+                {
+                    "name": "confd_go_standby",
+                    "date": "Wed Feb  1 19:40:21 UTC 2023",
+                    "size": "128B"
+                },
+                {
+                    "name": "confd_image_remove",
+                    "date": "Thu Feb 15 21:41:00 UTC 2024",
+                    "size": "142KB"
+                },
+                {
+                    "name": "config-object-manager",
+                    "date": "Thu Feb 15 21:56:47 UTC 2024",
+                    "size": "55MB"
+                },
+                {
+                    "name": "config-object-manager-hal",
+                    "date": "Thu Jan 25 07:29:49 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "events/",
+                    "date": "Thu Jan 25 05:01:22 UTC 2024",
+                    "size": "4.0KB"
+                },
+                {
+                    "name": "ha",
+                    "date": "Fri Feb 16 04:03:29 UTC 2024",
+                    "size": "30MB"
+                },
+                {
+                    "name": "ha-hal",
+                    "date": "Thu Jan 25 07:29:50 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "ha.1",
+                    "date": "Tue Mar 14 13:02:02 UTC 2023",
+                    "size": "101MB"
+                },
+                {
+                    "name": "host-config",
+                    "date": "Fri Feb 16 04:13:07 UTC 2024",
+                    "size": "17MB"
+                },
+                {
+                    "name": "host-config-hal",
+                    "date": "Thu Jan 25 07:29:52 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "host-config.1",
+                    "date": "Sun Feb 11 21:13:04 UTC 2024",
+                    "size": "101MB"
+                },
+                {
+                    "name": "host-config.2.gz",
+                    "date": "Wed Jan 17 08:22:04 UTC 2024",
+                    "size": "2.7MB"
+                },
+                {
+                    "name": "host-config.3.gz",
+                    "date": "Tue Dec 19 23:58:04 UTC 2023",
+                    "size": "2.7MB"
+                },
+                {
+                    "name": "host-config.4.gz",
+                    "date": "Fri Nov 24 12:24:04 UTC 2023",
+                    "size": "2.7MB"
+                },
+                {
+                    "name": "host-config.5.gz",
+                    "date": "Mon Oct 30 02:38:03 UTC 2023",
+                    "size": "2.7MB"
+                },
+                {
+                    "name": "http_error_log",
+                    "date": "Thu Jan 25 07:28:10 UTC 2024",
+                    "size": "15KB"
+                },
+                {
+                    "name": "httpd/",
+                    "date": "Sun May  7 18:26:04 UTC 2023",
+                    "size": "4.0KB"
+                },
+                {
+                    "name": "image-server",
+                    "date": "Fri Feb 16 04:04:16 UTC 2024",
+                    "size": "2.6MB"
+                },
+                {
+                    "name": "image-server-dhcp",
+                    "date": "Fri Feb 16 04:04:16 UTC 2024",
+                    "size": "15MB"
+                },
+                {
+                    "name": "image-server-hal",
+                    "date": "Thu Jan 25 07:28:10 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "image-server-httpd",
+                    "date": "Thu Jan 26 22:00:12 UTC 2023",
+                    "size": "0B"
+                },
+                {
+                    "name": "image-server-monitor",
+                    "date": "Fri Feb 16 04:04:16 UTC 2024",
+                    "size": "181KB"
+                },
+                {
+                    "name": "lcd.log",
+                    "date": "Wed Jan  3 18:47:35 UTC 2024",
+                    "size": "418KB"
+                },
+                {
+                    "name": "logrotate.log",
+                    "date": "Fri Feb 16 04:13:01 UTC 2024",
+                    "size": "2.4MB"
+                },
+                {
+                    "name": "logrotate.log.1",
+                    "date": "Thu Feb 15 21:14:01 UTC 2024",
+                    "size": "5.1MB"
+                },
+                {
+                    "name": "logrotate.log.2.gz",
+                    "date": "Thu Feb 15 06:26:01 UTC 2024",
+                    "size": "34KB"
+                },
+                {
+                    "name": "partition-agent",
+                    "date": "Thu Feb 15 21:56:53 UTC 2024",
+                    "size": "2.5MB"
+                },
+                {
+                    "name": "partition-software-manager",
+                    "date": "Fri Feb 16 04:13:08 UTC 2024",
+                    "size": "12MB"
+                },
+                {
+                    "name": "partition-software-manager.1",
+                    "date": "Thu Feb 15 19:25:04 UTC 2024",
+                    "size": "101MB"
+                },
+                {
+                    "name": "partition-software-manager.2.gz",
+                    "date": "Mon Feb 12 17:52:04 UTC 2024",
+                    "size": "3.7MB"
+                },
+                {
+                    "name": "partition-software-manager.3.gz",
+                    "date": "Fri Feb  9 16:20:04 UTC 2024",
+                    "size": "3.7MB"
+                },
+                {
+                    "name": "partition-software-manager.4.gz",
+                    "date": "Tue Feb  6 14:46:04 UTC 2024",
+                    "size": "3.7MB"
+                },
+                {
+                    "name": "partition-software-manager.5.gz",
+                    "date": "Sat Feb  3 13:12:03 UTC 2024",
+                    "size": "3.7MB"
+                },
+                {
+                    "name": "partition-update",
+                    "date": "Fri Feb 16 04:10:14 UTC 2024",
+                    "size": "47MB"
+                },
+                {
+                    "name": "partition-update.1",
+                    "date": "Sat Dec  2 15:33:03 UTC 2023",
+                    "size": "101MB"
+                },
+                {
+                    "name": "partition-update.2.gz",
+                    "date": "Sat Jul  1 17:53:02 UTC 2023",
+                    "size": "673KB"
+                },
+                {
+                    "name": "pel_log",
+                    "date": "Thu Feb 15 22:06:11 UTC 2024",
+                    "size": "5.3MB"
+                },
+                {
+                    "name": "pel_log.1",
+                    "date": "Sat Dec 16 03:15:02 UTC 2023",
+                    "size": "101MB"
+                },
+                {
+                    "name": "reprogram_chassis_network",
+                    "date": "Thu Jan 25 07:30:47 UTC 2024",
+                    "size": "59KB"
+                },
+                {
+                    "name": "rsyslogd_init.log",
+                    "date": "Thu Jan 25 07:30:55 UTC 2024",
+                    "size": "114KB"
+                },
+                {
+                    "name": "run/",
+                    "date": "Thu Jan 25 07:29:49 UTC 2024",
+                    "size": "4.0KB"
+                },
+                {
+                    "name": "sshd.terminal-server",
+                    "date": "Thu Jan 25 07:30:51 UTC 2024",
+                    "size": "8.1KB"
+                },
+                {
+                    "name": "switchd",
+                    "date": "Tue Feb 13 20:10:53 UTC 2024",
+                    "size": "11MB"
+                },
+                {
+                    "name": "switchd-hal",
+                    "date": "Thu Jan 25 07:29:52 UTC 2024",
+                    "size": "0B"
+                },
+                {
+                    "name": "system-update",
+                    "date": "Wed Jan  3 18:55:21 UTC 2024",
+                    "size": "35KB"
+                },
+                {
+                    "name": "terminal-server.default",
+                    "date": "Thu Jan 25 07:30:06 UTC 2024",
+                    "size": "144KB"
+                },
+                {
+                    "name": "tftp.log",
+                    "date": "Thu Jan 25 07:38:20 UTC 2024",
+                    "size": "1.6KB"
+                },
+                {
+                    "name": "vcc-confd-go-standby-hal.102476",
+                    "date": "Wed Feb  1 19:40:21 UTC 2023",
+                    "size": "0B"
+                },
+                {
+                    "name": "vcc-confd-go-standby-hal.97587",
+                    "date": "Mon Jan 30 18:49:00 UTC 2023",
+                    "size": "0B"
+                },
+                {
+                    "name": "velos.log",
+                    "date": "Fri Feb 16 04:13:02 UTC 2024",
+                    "size": "244MB"
+                },
+                {
+                    "name": "velos.log.1",
+                    "date": "Tue May  2 16:11:57 UTC 2023",
+                    "size": "513MB"
+                }
+            ]
+        }
+    }
+
+
+To download a specific log file use the following API call.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+
+In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the **velos.log** file that resides in the **log/controller* directory.
+
+.. image:: images/velos_diagnostics/veloslogapi.png
+  :align: center
+  :scale: 70%
+
+
+For the **Headers** secion of the Postman request be sure to add the following headers:
+
+.. image:: images/velos_diagnostics/headers-velos-log.png
+  :align: center
+  :scale: 70%
+
+If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
+
+.. image:: images/velos_diagnostics/sendanddownload.png
+  :align: center
+  :scale: 70%
+
+If you wanted to download another log file in the same directory such as the **audit.log** file, simply change the file name in the **form-data** section as seen below.
+
+.. image:: images/velos_diagnostics/auditlog.png
+  :align: center
+  :scale: 70%
+
+Viewing Event Logs from the API
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the system currently has any active alarms, you can view them via the following API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/alarms
+
+If there are no active alarms, then no output will be displayed.
+
+
+.. code-block:: json
+
+
+You can display the F5OS Event Log via the following API call:
+
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-event-log:events
+
+This will display all events (not just the active ones) from the beginning in the F5OS Event log:
+
+.. code-block:: json
+
+    {
+        "f5-event-log:events": {
+            "event": [
+                {
+                    "log": "65793 psu-3 psu-fault EVENT NA \"Deasserted: PSU 3 present\" \"2023-10-09 15:17:25.590783542 UTC\""
+                },
+                {
+                    "log": "65793 psu-3 psu-fault EVENT NA \"Deasserted: PSU 3 input OK\" \"2023-10-09 15:17:25.697411943 UTC\""
+                },
+                {
+                    "log": "65793 psu-4 psu-fault EVENT NA \"Deasserted: PSU 4 present\" \"2023-10-09 15:17:25.865224822 UTC\""
+                },
+                {
+                    "log": "65793 psu-4 psu-fault EVENT NA \"Deasserted: PSU 4 input OK\" \"2023-10-09 15:17:25.868507303 UTC\""
+                },
+                {
+                    "log": "65793 psu-4 psu-fault EVENT NA \"Deasserted: PSU 4 output OK\" \"2023-10-09 15:17:25.871668123 UTC\""
+                },
+                {
+                    "log": "66048 controller-1 arbitration-state EVENT NA \"Deasserted: peer arbitration health state\" \"2023-10-09 15:17:25.875765168 UTC\""
+                },
+                {
+                    "log": "66048 controller-1 arbitration-state EVENT NA \"Deasserted: peer arbitration health state\" \"2023-10-09 15:17:25.879797733 UTC\""
+                },
+                {
+                    "log": "66048 controller-1 arbitration-state EVENT NA \"Asserted: peer arbitration health state\" \"2023-10-09 15:23:59.285049747 UTC\""
+                },
+                {
+                    "log": "65546 controller-2 thermal-fault EVENT NA \"CPU TCTL-Delta at -45.0 degC\" \"2023-10-09 15:20:05.466308600 UTC\""
+                },
+                {
+                    "log": "66048 controller-2 arbitration-state EVENT NA \"Asserted: local arbitration health state\" \"2023-10-09 15:20:07.464237779 UTC\""
+                },
+                {
+                    "log": "326781 controller-2 reboot EVENT NA \"reboot - controller-2.chassis.local F5OS-C controller version 1.6.1-18991\" \"2023-10-09 15:20:20.656236104 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"Deasserted: VQF Thermtrip\" \"2023-10-09 15:59:11.287952620 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"Deasserted: ATSE Thermtrip\" \"2023-10-09 15:59:11.291913806 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"Deasserted: VQF hot\" \"2023-10-09 15:59:13.284937388 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"Deasserted: ATSE hot\" \"2023-10-09 15:59:13.290565535 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"Deasserted: ATSE Thermtrip\" \"2023-10-09 15:59:13.294731490 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"Deasserted: VQF hot\" \"2023-10-09 15:59:13.305101666 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"Deasserted: ATSE hot\" \"2023-10-09 15:59:13.309989489 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"Deasserted: VQF Thermtrip\" \"2023-10-09 15:59:13.314486891 UTC\""
+                },
+                {
+                    "log": "65536 blade-1 hardware-device-fault EVENT NA \"Deasserted: CPU machine check error\" \"2023-10-09 15:59:13.318842371 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"BWE at +40.3 degC\" \"2023-10-09 15:59:13.332817116 UTC\""
+                },
+                {
+                    "log": "65536 blade-2 hardware-device-fault EVENT NA \"Deasserted: CPU machine check error\" \"2023-10-09 15:59:15.288433804 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"BWE at +36.5 degC\" \"2023-10-09 15:59:15.300134311 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"VQF1 at +45.6 degC\" \"2023-10-09 15:59:15.307162918 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"ATSE5 at +47.1 degC\" \"2023-10-09 15:59:17.285244897 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"ATSE1 at +46.3 degC\" \"2023-10-09 15:59:17.290907800 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"ATSE2 at +46.8 degC\" \"2023-10-09 15:59:17.295233766 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"ATSE3 at +46.9 degC\" \"2023-10-09 15:59:17.299505749 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"ATSE4 at +46.9 degC\" \"2023-10-09 15:59:17.303687937 UTC\""
+                },
+                {
+                    "log": "65546 blade-1 thermal-fault EVENT NA \"VQF2 at +46.2 degC\" \"2023-10-09 15:59:17.307745308 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"VQF1 at +44.0 degC\" \"2023-10-09 15:59:17.314931399 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"VQF2 at +45.0 degC\" \"2023-10-09 15:59:17.319608487 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"ATSE1 at +43.8 degC\" \"2023-10-09 15:59:17.326570152 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"ATSE2 at +44.8 degC\" \"2023-10-09 15:59:17.330799112 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"ATSE3 at +44.5 degC\" \"2023-10-09 15:59:17.335193886 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"ATSE4 at +43.7 degC\" \"2023-10-09 15:59:17.347510071 UTC\""
+                },
+                {
+                    "log": "65546 blade-2 thermal-fault EVENT NA \"ATSE5 at +43.9 degC\" \"2023-10-09 15:59:17.352626694 UTC\""
+                },
+                {
+                    "log": "65536 blade-2 hardware-device-fault EVENT NA \"Deasserted: CPU machine check error\" \"2023-10-09 15:59:21.369228251 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"Deasserted: VQF hot\" \"2023-10-09 15:59:33.300107701 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"Deasserted: ATSE hot\" \"2023-10-09 15:59:33.306066434 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"Deasserted: VQF Thermtrip\" \"2023-10-09 15:59:33.365177931 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"Deasserted: ATSE Thermtrip\" \"2023-10-09 15:59:33.369903466 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"BWE at +35.7 degC\" \"2023-10-09 15:59:35.283246598 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"ATSE1 at +40.9 degC\" \"2023-10-09 15:59:39.288933173 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"ATSE2 at +42.2 degC\" \"2023-10-09 15:59:39.302401579 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"ATSE3 at +41.8 degC\" \"2023-10-09 15:59:39.343269968 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"VQF1 at +46.0 degC\" \"2023-10-09 15:59:39.347217437 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"VQF2 at +47.1 degC\" \"2023-10-09 15:59:39.351551030 UTC\""
+                },
+                {
+                    "log": "65546 blade-3 thermal-fault EVENT NA \"ATSE4 at +41.4 degC\" \"2023-10-09 15:59:39.362056270 UTC\""
+                }
+
+            ]
+        }
+    }
+
+
+Logging Subsystems/ Software Component Levels
+-----------------------------------------------
+
+
+
 
 Currently in both the system controller and chassis partition webUIs logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level, which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
 
@@ -916,61 +1530,63 @@ Currently in both the system controller and chassis partition webUIs logging lev
   :align: center
   :scale: 70%
 
-Adjusting Software Component Logging Levels via CLI
-----------------------------------------------------
+Changing the Software Component Log Levels via CLI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you would like to change any of the logging levels via the CLI you must be in config mode. Use the **system logging sw-components sw-component <component name> config <logging severity>** command. You must **commit** for this change to take effect. Be sure to set logging levels back to normal after troubleshooting has completed.
 
 
 .. code-block:: bash
 
-    appliance-1(config)# system logging sw-components sw-component ?
+    syscon-1-active(config)# system logging sw-components sw-component ?
     Possible completions:
-    alert-service     api-svc-gateway         appliance-orchestration-agent  appliance-orchestration-manager  authd         confd-key-migrationd  
-    dagd-service      datapath-cp-proxy       diag-agent                     disk-usage-statd                 dma-agent     fips-service          
-    fpgamgr           ihealth-upload-service  ihealthd                       image-agent                      kubehelper    l2-agent              
-    lacpd             license-service         line-dma-agent                 lldpd                            lopd          network-manager       
-    nic-manager       optics-mgr              platform-diag                  platform-fwu                     platform-hal  platform-mgr          
-    platform-monitor  platform-stats-bridge   qkviewd                        rsyslog-configd                  snmp-trapd    stpd                  
-    sw-rbcast         sys-host-config         system-control                 tcpdumpd-manager                 tmstat-agent  tmstat-merged         
-    upgrade-service   user-manager            vconsole                       
-    appliance-1(config)# system logging sw-components sw-component lacpd ?
-    Possible completions:
-    config   Configuration data for platform sw-component logging
-    <cr>     
-    appliance-1(config)# system logging sw-components sw-component lacpd config ?
-    Possible completions:
-    description   Text that describes the platform sw-component (read-only)
-    name          Name of the platform sw-component (read-only)
-    severity      sw-component logging severity level.
-    appliance-1(config)# system logging sw-components sw-component lacpd config severity ?
+    alert-service     audit-service           authd                confd-key-migrationd  config-object-manager  diag-agent                fips-service                
+    firewall-manager  ihealth-upload-service  ihealthd             license-service       lopd                   orchestration-manager     partition-software-manager  
+    platform-diag     platform-fwu            platform-hal         platform-monitor      platform-stats         platform-stats-bridge-cc  qkviewd                     
+    rsyslog-configd   snmp-service            snmp-trapd           sshd-crypto           switchd                system-service            terminal-server             
+    upgrade-service   user-manager            vcc-chassis-manager  vcc-confd             vcc-ha                 vcc-host-config           vcc-image-server            
+    vcc-lacpd         vcc-partition-agent     
+    syscon-1-active(config)# 
+
+
+
+Below is an example of setting the sw-subsystem **authd** to **DEBUG**, and then setting it back to **INFORMATIONAL**.
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system logging sw-components sw-component authd config severity ?
     Description: sw-component logging severity level. Default is INFORMATIONAL.
     Possible completions:
     [INFORMATIONAL]  ALERT  CRITICAL  DEBUG  EMERGENCY  ERROR  INFORMATIONAL  NOTICE  WARNING
-    appliance-1(config)# system logging sw-components sw-component lacpd config severity DEBUG
-    appliance-1(config-sw-component-lacpd)# commit
+    syscon-1-active(config)# system logging sw-components sw-component authd config severity DEBUG
+    syscon-1-active(config-sw-component-authd)# commit
     Commit complete.
-    appliance-1(config-sw-component-lacpd)# 
+    syscon-1-active(config-sw-component-authd)# 
+    syscon-1-active(config-sw-component-authd)# exit
+    syscon-1-active(config)# system logging sw-components sw-component authd config severity INFORMATIONAL 
+    syscon-1-active(config-sw-component-authd)# commit
+    Commit complete.
+    syscon-1-active(config-sw-component-authd)#
 
 
 Adjusting Software Component Logging Levels via webUI
-----------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently F5OS webUI’s logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbose information going to the remote logging host, you can raise its severity to see additional messages.
+Currently F5OS webUI’s logging levels can be configured for local logging, and remote logging servers can be added as well. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbose information going to the remote logging host, you can raise its severity to see additional messages.
 
-.. image:: images/rseries_diagnostics/image6.png
+.. image:: images/velos_diagnostics/image6.png
   :align: center
   :scale: 70%
 
 Adjusting Software Component Logging Levels via API
-----------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can display all the logging subsystem's logging levels via the following API call:
 
 
 .. code-block:: bash
 
-    GET https://{{velos_velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/logging
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/logging
 
 Every subsystem will be displayed along with its current setting:
 
@@ -978,6 +1594,38 @@ Every subsystem will be displayed along with its current setting:
 
     {
         "openconfig-system:logging": {
+            "remote-servers": {
+                "remote-server": [
+                    {
+                        "host": "10.255.85.164",
+                        "config": {
+                            "host": "10.255.85.164",
+                            "remote-port": 514,
+                            "f5-openconfig-system-logging:proto": "udp"
+                        },
+                        "selectors": {
+                            "selector": [
+                                {
+                                    "facility": "f5-system-logging-types:LOCAL0",
+                                    "severity": "INFORMATIONAL",
+                                    "config": {
+                                        "facility": "f5-system-logging-types:LOCAL0",
+                                        "severity": "INFORMATIONAL"
+                                    }
+                                },
+                                {
+                                    "facility": "f5-system-logging-types:AUTHPRIV",
+                                    "severity": "INFORMATIONAL",
+                                    "config": {
+                                        "facility": "f5-system-logging-types:AUTHPRIV",
+                                        "severity": "INFORMATIONAL"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
             "f5-openconfig-system-logging:sw-components": {
                 "sw-component": [
                     {
@@ -989,26 +1637,10 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "api-svc-gateway",
+                        "name": "audit-service",
                         "config": {
-                            "name": "api-svc-gateway",
-                            "description": "API service gateway",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "appliance-orchestration-agent",
-                        "config": {
-                            "name": "appliance-orchestration-agent",
-                            "description": "Tenant orchestration agent",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "appliance-orchestration-manager",
-                        "config": {
-                            "name": "appliance-orchestration-manager",
-                            "description": "Appliance orchestration manager",
+                            "name": "audit-service",
+                            "description": "Audit message handling service",
                             "severity": "INFORMATIONAL"
                         }
                     },
@@ -1029,18 +1661,10 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "dagd-service",
+                        "name": "config-object-manager",
                         "config": {
-                            "name": "dagd-service",
-                            "description": "DAG daemon",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "datapath-cp-proxy",
-                        "config": {
-                            "name": "datapath-cp-proxy",
-                            "description": "Data path CP proxy",
+                            "name": "config-object-manager",
+                            "description": "Configuration object manager",
                             "severity": "INFORMATIONAL"
                         }
                     },
@@ -1053,34 +1677,18 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "disk-usage-statd",
-                        "config": {
-                            "name": "disk-usage-statd",
-                            "description": "Disk usage agent",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "dma-agent",
-                        "config": {
-                            "name": "dma-agent",
-                            "description": "DMA agent",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
                         "name": "fips-service",
                         "config": {
                             "name": "fips-service",
-                            "description": "FIPS Service",
+                            "description": "FIPS service",
                             "severity": "INFORMATIONAL"
                         }
                     },
                     {
-                        "name": "fpgamgr",
+                        "name": "firewall-manager",
                         "config": {
-                            "name": "fpgamgr",
-                            "description": "FPGA manager",
+                            "name": "firewall-manager",
+                            "description": "Firewall Manager",
                             "severity": "INFORMATIONAL"
                         }
                     },
@@ -1101,58 +1709,10 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "image-agent",
-                        "config": {
-                            "name": "image-agent",
-                            "description": "Tenant image handling",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "kubehelper",
-                        "config": {
-                            "name": "kubehelper",
-                            "description": "Application that will handle specific tasks for deploying tenants",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "l2-agent",
-                        "config": {
-                            "name": "l2-agent",
-                            "description": "L2 agent",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "lacpd",
-                        "config": {
-                            "name": "lacpd",
-                            "description": "Link aggregation control protocol",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
                         "name": "license-service",
                         "config": {
                             "name": "license-service",
                             "description": "License service",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "line-dma-agent",
-                        "config": {
-                            "name": "line-dma-agent",
-                            "description": "Line DMA agent",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "lldpd",
-                        "config": {
-                            "name": "lldpd",
-                            "description": "Link layer discovery protocol",
                             "severity": "INFORMATIONAL"
                         }
                     },
@@ -1165,26 +1725,18 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "network-manager",
+                        "name": "orchestration-manager",
                         "config": {
-                            "name": "network-manager",
-                            "description": "Network manager",
+                            "name": "orchestration-manager",
+                            "description": "Orchestration manager",
                             "severity": "INFORMATIONAL"
                         }
                     },
                     {
-                        "name": "nic-manager",
+                        "name": "partition-software-manager",
                         "config": {
-                            "name": "nic-manager",
-                            "description": "NIC manager",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "optics-mgr",
-                        "config": {
-                            "name": "optics-mgr",
-                            "description": "Optics tunning manager",
+                            "name": "partition-software-manager",
+                            "description": "Partition software manager",
                             "severity": "INFORMATIONAL"
                         }
                     },
@@ -1213,14 +1765,6 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "platform-mgr",
-                        "config": {
-                            "name": "platform-mgr",
-                            "description": "Appliance platform manager",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
                         "name": "platform-monitor",
                         "config": {
                             "name": "platform-monitor",
@@ -1229,9 +1773,17 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "platform-stats-bridge",
+                        "name": "platform-stats",
                         "config": {
-                            "name": "platform-stats-bridge",
+                            "name": "platform-stats",
+                            "description": "Collects platform statistics like cpu and memory utilization",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "platform-stats-bridge-cc",
+                        "config": {
+                            "name": "platform-stats-bridge-cc",
                             "description": "Platform stats bridge",
                             "severity": "INFORMATIONAL"
                         }
@@ -1253,6 +1805,14 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
+                        "name": "snmp-service",
+                        "config": {
+                            "name": "snmp-service",
+                            "description": "SNMP service",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
                         "name": "snmp-trapd",
                         "config": {
                             "name": "snmp-trapd",
@@ -1261,58 +1821,34 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "stpd",
+                        "name": "sshd-crypto",
                         "config": {
-                            "name": "stpd",
-                            "description": "Spanning tree protocol (STP)",
+                            "name": "sshd-crypto",
+                            "description": "Enable Information logging for sshd-crypto",
                             "severity": "INFORMATIONAL"
                         }
                     },
                     {
-                        "name": "sw-rbcast",
+                        "name": "switchd",
                         "config": {
-                            "name": "sw-rbcast",
-                            "description": "Software Rebroadcast Service",
+                            "name": "switchd",
+                            "description": "Switch daemon",
                             "severity": "INFORMATIONAL"
                         }
                     },
                     {
-                        "name": "sys-host-config",
+                        "name": "system-service",
                         "config": {
-                            "name": "sys-host-config",
-                            "description": "System host config service",
+                            "name": "system-service",
+                            "description": "System Configuration service",
                             "severity": "INFORMATIONAL"
                         }
                     },
                     {
-                        "name": "system-control",
+                        "name": "terminal-server",
                         "config": {
-                            "name": "system-control",
-                            "description": "Appliance System control framework",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "tcpdumpd-manager",
-                        "config": {
-                            "name": "tcpdumpd-manager",
-                            "description": "Tcpdump daemon",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "tmstat-agent",
-                        "config": {
-                            "name": "tmstat-agent",
-                            "description": "Appliance stats agent",
-                            "severity": "INFORMATIONAL"
-                        }
-                    },
-                    {
-                        "name": "tmstat-merged",
-                        "config": {
-                            "name": "tmstat-merged",
-                            "description": "Stats rollup",
+                            "name": "terminal-server",
+                            "description": "Terminal server",
                             "severity": "INFORMATIONAL"
                         }
                     },
@@ -1333,10 +1869,58 @@ Every subsystem will be displayed along with its current setting:
                         }
                     },
                     {
-                        "name": "vconsole",
+                        "name": "vcc-chassis-manager",
                         "config": {
-                            "name": "vconsole",
-                            "description": "Tenant virtual console",
+                            "name": "vcc-chassis-manager",
+                            "description": "Chassis manager",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vcc-confd",
+                        "config": {
+                            "name": "vcc-confd",
+                            "description": "System controller ConfD",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vcc-ha",
+                        "config": {
+                            "name": "vcc-ha",
+                            "description": "High availability",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vcc-host-config",
+                        "config": {
+                            "name": "vcc-host-config",
+                            "description": "Host configuration",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vcc-image-server",
+                        "config": {
+                            "name": "vcc-image-server",
+                            "description": "Image server",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vcc-lacpd",
+                        "config": {
+                            "name": "vcc-lacpd",
+                            "description": "Link aggregation control protocol",
+                            "severity": "INFORMATIONAL"
+                        }
+                    },
+                    {
+                        "name": "vcc-partition-agent",
+                        "config": {
+                            "name": "vcc-partition-agent",
+                            "description": "Partition agent",
                             "severity": "INFORMATIONAL"
                         }
                     }
@@ -1345,7 +1929,25 @@ Every subsystem will be displayed along with its current setting:
             "f5-openconfig-system-logging:host-logs": {
                 "config": {
                     "remote-forwarding": {
-                        "enabled": false
+                        "enabled": true,
+                        "f5-system-logging-controller:include-standby": [
+                            null
+                        ]
+                    },
+                    "selectors": {
+                        "selector": [
+                            {
+                                "facility": "openconfig-system-logging:AUTHPRIV",
+                                "severity": "DEBUG"
+                            }
+                        ]
+                    },
+                    "files": {
+                        "file": [
+                            {
+                                "name": "audit/audit.log"
+                            }
+                        ]
                     }
                 }
             }
@@ -1367,10 +1969,10 @@ In the body of the API call, enter the sw-component you want to change, and the 
         "openconfig-system:logging": {
             "f5-openconfig-system-logging:sw-components": {
                 "sw-component": {
-                    "name": "l2-agent",
+                    "name": "audit-service",
                     "config": {
-                        "name": "l2-agent",
-                        "description": "L2 agent",
+                        "name": "audit-service",
+                        "description": "Audit message handling service",
                         "severity": "DEBUG"
                     }
                 }
@@ -1386,10 +1988,10 @@ When you are finished troubleshooting, you can set the logging level back to def
         "openconfig-system:logging": {
             "f5-openconfig-system-logging:sw-components": {
                 "sw-component": {
-                    "name": "l2-agent",
+                    "name": "audit-service",
                     "config": {
-                        "name": "l2-agent",
-                        "description": "L2 agent",
+                        "name": "audit-service",
+                        "description": "Audit message handling service",
                         "severity": "INFORMATIONAL"
                     }
                 }
@@ -2026,7 +2628,7 @@ The following command captures traffic-only packets in and out of the host of bl
 .. code-block:: bash
     system diagnostics tcpdump interface "2/0.0"
 
-----------------
+
 Specify a filter
 ----------------
 
@@ -2040,7 +2642,7 @@ The following command captures traffic if the source IP address is 10.10.1.1 and
 
 system diagnostics tcpdump bpf "src host 10.10.1.1 and dst port 443"
 
-----------------------
+
 Specify an output file
 ----------------------
 
@@ -2052,13 +2654,122 @@ For example, the following command sends the output of the tcpdump command to th
 
     system diagnostics tcpdump outfile /var/F5/partition/shared/example_capture.pcap
 
----------------
+
 Combine options
 ---------------
 
 The following example combines options to only capture traffic on interface 2.0 on blade 1 if the source IP address is 10.10.1.1 and the destination port is 80, and send the output to the /var/F5/partition/shared/example_capture.pcap file:
 
 system diagnostics tcpdump interface "1/2.0" bpf "src host 10.10.1.1 and dst port 80" outfile /var/F5/partition/shared/example_capture.pcap    
+
+
+
+Export TCPDUMP From CLI
+-----------------------
+
+You can export the tcpdump output file from the VELOS system using the command line file utility in F5OS-C or using the scp utility as the root user. To export a tcpdump output file using the file utility, perform the following procedure.
+
+**Note: When using the file utility for export, first copy the tcpdump output file to the /var/shared/ directory. The local-file path for the file export command is then diags/shared/<filename>, as shown in the following example.**
+
+Impact of procedure: Performing the following procedure should not have a negative impact on your system.
+
+Log in to the command line on the rSeries system as the admin user. To export a file, use the following syntax:
+
+.. code-block:: bash
+
+    file export protocol <https | scp | sftp> local-file diags/shared/<tcpdump_filename> remote-host <host_address> remote-file <path/to/remote_file> username <user>
+
+For example, to export the **/var/shared/example_capture.pcap** file to the /tmp/ directory of the remote host at 10.10.10.100 using scp protocol, enter the following command:
+
+**Note: To disable remote system identity verification, use the insecure option to the file command.**
+
+.. code-block:: bash
+
+    file export protocol scp local-file diags/shared/example_capture.pcap remote-host 10.10.10.100 remote-file /tmp/example_capture.pcap username admin
+
+At the prompt, to transfer the file, enter the password for the remote host. To check the status of the file transfer, enter the following command: **file transfer-status**. When complete, your output is similar to the following example:
+
+.. code-block:: bash
+
+    3    |Export file|SCP     |diags/shared/example_capture.pcap                         |10.10.10.100       |/tmp/example_capture.pcap                          |         Completed|
+
+TCPDUMP Download to Client via API
+--------------------------------
+
+You can download tcpdump files direct to a client machine using the F5OS API. First list the contents of the path **diags/shared/tcpdump** to see the save qkview files:
+
+.. code-block:: bash
+
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call add the follwowing path:
+
+.. code-block:: json
+
+    {
+    "f5-utils-file-transfer:path": "diags/shared/tcpdump"
+    }
+
+The output should look similar to the output below.
+
+.. code-block:: json
+
+
+    {
+        "f5-utils-file-transfer:output": {
+            "entries": [
+                {
+                    "name": "132.pcap",
+                    "date": "",
+                    "size": "574KB"
+                },
+                {
+                    "name": "132_28.pcap",
+                    "date": "",
+                    "size": "442KB"
+                },
+                {
+                    "name": "jimtcpdump.pcap",
+                    "date": "",
+                    "size": "4.3KB"
+                },
+                {
+                    "name": "test.pcap",
+                    "date": "",
+                    "size": "23KB"
+                }
+            ]
+        }
+    }
+
+To copy one of the tcpdump files to the local client machine enter the following API call.
+
+.. code-block:: bash
+
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+
+For the **Headers** secion of the Postman request be sure to add the following headers:
+
+.. image:: images/velos_diagnostics/headers.png
+  :align: center
+  :scale: 70%
+
+
+If you are using Postman, in the body of the API call select **Body**, then select **form-data**. Then enter the **file-name**, **path**, and **token** as seen below. Note, that the path for downloading is currently **diags/shared/** and not the full path of **diags/shared/tcpdump/**. This may change in a future release.
+
+.. image:: images/velos_diagnostics/downloadtcpdumpapi.png
+  :align: center
+  :scale: 70%
+
+If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
+
+.. image:: images/velos_diagnostics/sendanddownload.png
+  :align: center
+  :scale: 70%
+
+
+
+
 
 Console Access to System Controllers and Blades via Built-In Terminal Server
 ============================================================================
