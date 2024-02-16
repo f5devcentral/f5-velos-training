@@ -75,6 +75,7 @@ Using the system controller webUI you can backup the ConfD configuration databas
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image2.png
    :width: 45%
+ 
 
 Backing Up the System Controller Database via API
 -------------------------------------------------
@@ -127,24 +128,43 @@ To transfer a file using the CLI use the **file list** command to see the conten
 
 .. code-block:: bash
 
-    syscon-2-active# file list path configs/
+    syscon-1-active# file list path configs/
     entries {
-        name 
-    CONTROLLER-API-DB-BACKUP2021-08-19
-    SYSTEM-CONTROLLER-DB-BACKUP2021-08-27
-    controller-backup-08-17-21
-    my-backup
+        name GSA-Daily_GSA-VELOS-1_20230328070500
+        date Thu Jan 25 03:53:06 UTC 2024
+        size 69KB
     }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230329070500
+        date Thu Jan 25 03:53:06 UTC 2024
+        size 69KB
+    }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230330070500
+        date Thu Jan 25 03:53:06 UTC 2024
+        size 71KB
+    }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230331070500
+        date Fri Mar 31 14:05:06 UTC 2023
+        size 71KB
+    }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230402070500
+        date Sun Apr  2 14:05:16 UTC 2023
+        size 71KB
+    }
+
 
 
 To transfer the file from the CLI you can use the **file export** command. The option below is exporting to a remote HTTPS server. there are options to transfer using SFTP, and SCP as well.
 
 .. code-block:: bash
 
-    syscon-2-active# file export local-file configs/SYSTEM-CONTROLLER-DB-BACKUP2021-08-27 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure 
+    syscon-1-active# file export local-file configs/GSA-Daily_GSA-VELOS-1_20230328070500 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure 
     Value for 'password' (<string>): ********
-    result File transfer is initiated.(configs/SYSTEM-CONTROLLER-DB-BACKUP2021-08-27)
-    syscon-2-active#
+    result File transfer is initiated.(configs/GSA-Daily_GSA-VELOS-1_20230328070500)
+    syscon-1-active#
 
 To check on status of the export use the **file transfer-status** command:
 
@@ -153,7 +173,7 @@ To check on status of the export use the **file transfer-status** command:
     syscon-1-active# file transfer-status                                                                                                                                   
     result 
     S.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            
-    1    |Export file|HTTPS   |configs/SYSTEM-CONTROLLER-DB-BACKUP2021-08-27                |10.255.0.142        |/upload/upload.php                                          |Completed|Fri Aug 27 19:48:41 2021
+    1    |Export file|HTTPS   |configs/GSA-Daily_GSA-VELOS-1_20230328070500                |10.255.0.142        |/upload/upload.php                                          |Completed|Fri Aug 27 19:48:41 2023
     2    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |chassis1-sys-controller-backup-2-26-21                      |Failed to open/read local data from file/application
     3    |Export file|HTTPS   |/mnt/var/confd/configs/chassis1-sys-controller-backup-2-26-21|10.255.0.142        |/backup                                                     |Failed to open/read local data from file/application
 
@@ -182,6 +202,8 @@ To copy a ConfD configuration backup file from the system controller to a remote
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/export
 
+In the body of the API call, enter the credentials and remote server information. You can optionally add other protocols such as SFTP, or SCP instead of HTTPS.
+
 .. code-block:: json
 
     {
@@ -198,7 +220,7 @@ To copy a ConfD configuration backup file from the system controller to a remote
 Backing Up Chassis Partition Databases
 ======================================
 
-In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below there are two chassis partitions currently in use: **Production** and **Development**. Both must be backed up and archived off of the VELOS system.
+In addition to backing up the system controller database, you should backup the configuration database on each chassis partition within the VELOS system. In the example below, there are two chassis partitions currently in use: **Production** and **Development**. Both must be backed up and archived off of the VELOS system.
 
 Backing Up Chassis Partition Databases via CLI
 ----------------------------------------------
@@ -207,34 +229,42 @@ Log directly into the chassis partition Production's management IP address and e
 
 .. code-block:: bash
 
-    Production-1# config
+    syscon-2-active# config
     Entering configuration mode terminal
-    Production-1(config)# system database config-backup name chassis-partition-production-08-17-2021
-    result Database backup successful.
-    Production-1(config)# exit
-    Production-1# file list path configs/
+    syscon-2-active(config)# system database config-backup name chassis-partition-production-02-15-2024
+    response Database backup successful. configs/chassis-partition-production-02-15-2024 is saved.
+    syscon-2-active(config)# exit
+
+
+
+    syscon-2-active# file list path configs/chassis-partition-production-02-15-2024 
     entries {
-        name 
-    chassis-partition-production-08-17-2021
+        name chassis-partition-production-02-15-2024
+        date Fri Feb 16 00:27:51 UTC 2024
+        size 64KB
     }
-    Production-1# 
+    syscon-2-active# 
 
 
 Log directly into the chassis partition development's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
 
 .. code-block:: bash
 
-    development-1# config
+    syscon-2-active# config
     Entering configuration mode terminal
-    development-1(config)# system database config-backup name chassis-partition-development-08-17-2021
-    result Database backup successful.
-    development-1(config)# exit
-    development-1# file list path configs/
+    syscon-2-active(config)# system database config-backup name chassis-partition-production-02-15-2024
+    response Database backup successful. configs/chassis-partition-production-02-15-2024 is saved.
+    syscon-2-active(config)# exit
+
+    
+       
+    syscon-2-active# file list path configs/chassis-partition-production-02-15-2024 
     entries {
-        name 
-    chassis-partition-development-08-17-2021
+        name chassis-partition-production-02-15-2024
+        date Fri Feb 16 00:27:51 UTC 2024
+        size 64KB
     }
-    development-1# 
+    syscon-2-active# 
 
 
 Backing Up Chassis Partition Databases via webUI

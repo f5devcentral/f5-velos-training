@@ -90,8 +90,8 @@ F5OS-C Backup and Restore
 
 `Restoring Chassis Partitions from Database Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-chassis-partitions-from-database-backups-via-api>`_
 
-F5OS-C Diagnostics
-------------------
+Diagnostics
+-----------
 
 `Generating Qkviews from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#generating-qkviews-from-the-api>`_
 
@@ -101,6 +101,13 @@ Health
 `Checking Active Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-active-alerts-via-api>`_
 
 `Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
+
+
+Monitoring VELOS Health & Alert Status
+---------------------------------------
+
+
+
 
 Monitoring
 ----------
@@ -112,3 +119,23 @@ Monitoring
 `API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
 
 `API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
+
+
+VELOS F5OS-A SNMP Monitoring and Alerting
+-----------------------------------------
+
+`Downloading MIBs via API <>`_
+
+`Exporting MIBs to a Remote Server via the API <>`_
+
+`Adding Allowed IPs for SNMP via API <>`_
+
+`Adding Interface and LAG descriptions via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-out-of-band-interface-and-lag-descriptions-via-api>`_
+
+`Adding Interface and LAG Descriptions for Chassis Partitions via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#adding-interface-and-lag-descriptions-for-chassis-partitions-via-api>`_
+
+`Configuring SNMP Access via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_monitoring_snmp.html#enabling-snmp-via-api>`_
+
+`Enabling SNMP Traps in the API <>`_
+
+`Downloading SNMP Logs from the API <>`_

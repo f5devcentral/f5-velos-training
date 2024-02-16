@@ -71,8 +71,16 @@ NetSNMP MIBs Chassis Partition:
 - SNMPv2-TC
 - TRANSPORT-ADDRESS-MIB
 
+Downloading MIBs
+================
 
-MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files. There are two separate MIB files: NetSNMP and F5OS MIBs for the controller. Download both MIB files and extract them to see the individual MIB files.
+SNMP MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5.x. 
+
+
+Downloading MIBs via webUI
+--------------------------
+
+From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files. There are two separate MIB files: NetSNMP and F5OS MIBs for the controller. Download both MIB files and extract them to see the individual MIB files.
 
 .. image:: images/velos_monitoring_snmp/image1.png
   :align: center
@@ -83,6 +91,157 @@ You can then download the F5OS controller MIBS and the standard Net SNMP MIBS as
 .. image:: images/velos_monitoring_snmp/image2.png
   :align: center
   :scale: 70%
+
+Uploading MIBs to a Remote Server via CLI
+-----------------------------------------
+
+From the CLI, use the **file export** command to transfer the MIB files to a remote server. First, list the MIB files using the **file list** command as seen below.
+
+.. code-block:: bash
+
+    syscon-1-active# file list path mibs/
+    entries {
+        name mibs_f5os_controller.tar.gz
+        date Thu Jan 25 07:29:49 UTC 2024
+        size 7.2KB
+    }
+    entries {
+        name mibs_netsnmp.tar.gz
+        date Thu Jan 25 07:29:49 UTC 2024
+        size 110KB
+    }
+    syscon-1-active#
+
+To upload each of the files to a remote HTTPS server use the following command. You can also upload using SCP or SFTP by using the proper protocol option.
+
+.. code-block:: bash
+
+    syscon-1-active# file export local-file mibs/mibs_f5os_controller.tar.gz remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(mibs_f5os_controller.tar.gz)
+    syscon-1-active#
+
+Repeat the same API call but change the filename to the **mibs_netsnmp.tar.gz** file. 
+
+    syscon-1-active# file export local-file mibs/mibs_netsnmp.tar.gz remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure
+    Value for 'password' (<string>): ********
+    result File transfer is initiated.(mibs_netsnmp.tar.gz)
+    syscon-1-active#
+
+To get the chassis partition MIBs repeat the same steps on one of your chassis partitions to get the file **mibs_f5os_partition.tar.gz**.
+
+
+Downloading MIBs via API
+--------------------------
+
+You can utilize the F5OS API to download the MIB files directly to a client machine, or to upload to a remote server over HTTPS, SCP, or SFTP. First, list the contents of the **mibs/** directory on the VELOS system controller using the following API call to get the filenames.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/list
+
+In the body of the API call add the following:
+
+.. code-block:: json
+
+    {
+    "f5-utils-file-transfer:path": "mibs/"
+    }
+
+This will list the contents of the mibs directory as seen below.
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:output": {
+            "entries": [
+                {
+                    "name": "mibs_f5os_controller.tar.gz",
+                    "date": "Thu Jan 25 07:29:49 UTC 2024",
+                    "size": "7.2KB"
+                },
+                {
+                    "name": "mibs_netsnmp.tar.gz",
+                    "date": "Thu Jan 25 07:29:49 UTC 2024",
+                    "size": "110KB"
+                }
+            ]
+        }
+    }
+
+You'll notice there are two separate MIB files, one is for Enterprise MIBs, while the other is for F5 specific MIBs. You'll need to download both files and add them to your SNMP manager. Below are example API calls to download each of the SNMP MIB files.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
+
+For the **Headers** secion of the Postman request, be sure to add the following headers:
+
+.. image:: images/velos_monitoring_snmp/snmpheaders.png
+  :align: center
+  :scale: 70%
+
+If you are using Postman, in the body of the API call select **Body**, then select **form-data**. Then enter the **file-name**, **path**, and **token** as seen below. 
+
+.. image:: images/velos_monitoring_snmp/downloadmibsapi1.png
+  :align: center
+  :scale: 70%
+
+Repeat the same process for the other MIB file.
+
+.. image:: images/velos_monitoring_snmp/downloadmibsapi2.png
+  :align: center
+  :scale: 70%  
+
+If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
+
+.. image:: images/velos_monitoring_snmp/sendanddownload.png
+  :align: center
+  :scale: 70%
+
+Exporting MIBs to a Remote Server via the API
+---------------------------------------------
+
+
+To copy the SNMP MIB files from VELOS to a remote https server use the following API call:
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/export
+
+In the body of the API call, add the remote server info and local file you want to export.
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:insecure": "",
+        "f5-utils-file-transfer:protocol": "https",
+        "f5-utils-file-transfer:username": "corpuser",
+        "f5-utils-file-transfer:password": "password",
+        "f5-utils-file-transfer:remote-host": "10.255.0.142",
+        "f5-utils-file-transfer:remote-file": "/upload/upload.php",
+        "f5-utils-file-transfer:local-file": "mibs/mibs_f5os_controller.tar.gz"
+    }
+    
+You can then check on the status of the export via the following API call:
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+
+The output will show the status of the file export.
+
+.. code-block:: json
+
+    {
+        "f5-utils-file-transfer:output": {
+            "result": "\nS.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            |Time                \n1    |Export file|HTTPS   |mibs/mibs_f5os_controller.tar.gz.gz                               |10.255.0.142        |/upload/upload.php                                          |         Completed|Thu Jan 20 05:11:44 2022"
+        }
+    }
+
+Repeat the same steps for the other MIB file.
+
+
 
 Adding Allowed IPs for SNMP
 ===========================
