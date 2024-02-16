@@ -621,21 +621,21 @@ To download a specific config file, use the following API call.
 
 For the **Headers** secion of the Postman request be sure to add the following headers:
 
-.. image:: images/velos_f5os_configuration_backup_and_restore/configheaders.png
+.. image:: images/velos_f5os_configuration_backup_and_restore/config-headers.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the configuration file named **jim-july** file that resides in the **configs/** directory.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/configfile.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you are using Postman, instead of clicking **Send**, click on the arrow next to Send, and then select **Send and Download**. You will then be prompted to save the file to your local file system.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/sendanddownload.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 
@@ -804,6 +804,8 @@ The last step in the reset procedure is to set the system controllers ConfD data
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config
 
+In the body of the API call, ensure the **f5-database:reset-default-config** is set to **true**.
+
 .. code-block:: json
 
     {
@@ -911,7 +913,7 @@ Importing System Controller Backups
 Once the system is configured and out-of-band connectivity is restored, you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controller's configuration as outlined earlier.
 
 
-Next SCP the file from a remote server:
+Next, SCP the file from a remote server:
 
 .. code-block:: bash
 
@@ -1106,6 +1108,8 @@ To restore the system controller ConfD database use the following API call:
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
+In the body of the API call, enter the file name.
+
 .. code-block:: json
 
     {
@@ -1137,6 +1141,8 @@ To reboot blades from the API, using the following API commands to list nodes (B
 .. code-block:: bash
 
     GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-cluster:cluster/nodes
+
+The output will list all the nodes and blades.
 
 .. code-block:: json
 
@@ -1409,6 +1415,8 @@ Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SC
 
     POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
+In the body of the API call, enter the remote server credentials and connectivty information.
+
 .. code-block:: json
 
     {
@@ -1442,6 +1450,8 @@ Repeat similar steps for remaining chassis partitions:
 .. code-block:: bash
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
+
+In the body of the API call, enter the remote server credentials and connectivty information.
 
 .. code-block:: json
 
@@ -1534,15 +1544,21 @@ The following API commands will restore the database backups on the two chassis 
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
+Enter the backupfile to be restored in the body of the API call.
+
 .. code-block:: json
 
     {
     "f5-database:name": "Production-DB-BACKUP2021-09-10"
     }
 
+Repeat the same process for other partitions on the system.
+
 .. code-block:: bash
 
     POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
+
+Enter the backupfile to be restored in the body of the API call.
 
 .. code-block:: json
 
@@ -1561,6 +1577,8 @@ You will need to load the image that the tenant was running when it was archived
 .. code-block:: bash
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+
+Enter the remote server information.
 
 .. code-block:: json
 
@@ -1582,6 +1600,8 @@ You can verify the tenant has successfully started once the image has been loade
 .. code-block:: bash
 
     GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
+
+The tenant status will be displayed.
 
 .. code-block:: json
 
