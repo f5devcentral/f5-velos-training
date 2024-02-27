@@ -1406,8 +1406,8 @@ Repeat this process for each chassis partition in the system.
     }
     development-1# 
 
-Importing Archived Chassis Partition Configs via API
-----------------------------------------------------
+Importing Archived Chassis Partition Configs form a Remote Server via API
+-------------------------------------------------------------------------
 
 Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SCP server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
 
@@ -1464,6 +1464,59 @@ In the body of the API call, enter the remote server credentials and connectivty
         "f5-utils-file-transfer:remote-file": "/upload/Production-DB-BACKUP2021-09-10",
         "f5-utils-file-transfer:local-file": "configs/Production-DB-BACKUP2021-09-10"
     }
+
+
+Uploading Archived Chassis Partition Configs form a Client Machine via API
+-------------------------------------------------------------------------
+
+Post the following API call to the chassis partition IP address to upload the archived ConfD backup file from a client machine to the configs directory on the chassis partition.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-upload-meta-data:upload/start-upload
+
+In the body of the API call, enter the file name, size, and destination file-path.
+
+.. code-block:: json
+
+    {
+        "size":65385,
+        "name": "testrestore5",
+        "file-path": "configs/"
+    }
+
+If using Postman, you'll want to setup a **Test** to capture the **upload-id** that can be used in the subsequent API call to upload the file. Below is the code to use in the Postman test to capture the upload-id as a variable.
+
+.. code-block:: bash
+
+    var resp = pm.response.json();
+    pm.environment.set("upload-id", resp["f5-file-upload-meta-data:output"]["upload-id"])
+
+Here is what it looks like inside of the Postman UI.
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/postman-test-file-upload.png
+  :align: center
+  :scale: 100%
+
+Once the upload-id has been obtained, you can now upload the file using the following API call. 
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-image-upload:image/upload-image
+
+Ensure the following headers are set in the API call. You want to ensure the **content-type** and **file-upload-id** match what is seen below.
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/headers-file-upload-config.png
+  :align: center
+  :scale: 100%
+
+Finally, ensure the body is set for **form-data**, and you'll want to browse your file system to select the file you are uploading. 
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/body-file-upload-config.png
+  :align: center
+  :scale: 100%
+
+
 
 Importing Archived Chassis Partition Configs via webUI
 ----------------------------------------------------
