@@ -150,39 +150,39 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 Below are the current VELOS optic SKUs:
 
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPGVELQSFP28LR4   | MY   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS             |
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPGVELQSFP28PSM4  | TH   | VELOS Field Upgrade: QSFP28 Transceiver (100G-PSM4, 500M, MPO/APC, SMF, DDM) ROHS       |
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPGVELQSFP28-SR4  | PH   | VELOS Field Upgrade: QSFP28 Transceiver (100G-SR4, 100M, MPO MMF, DDM) ROHS             |
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VELQSFP28SRBD | PH   | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VEL-QSFP+LR4  | MY   | VELOS Field Upgrade: QSFP+ Transceiver (40G-LR, 1310NM, 10KM, LC, SMF, DDM Support)     |
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VEL-QSFP+PSM4 | PH   | VELOS Field Upgrade: QSFP+ Transceiver (40G-PSM4, 1310NM, 10KM, MPO/APC, SMF, DDM )     |
-+----------------------+------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VEL-QSFP+SR4  | CN   | VELOS Field Upgrade: QSFP+ Transceiver (40G-SR4, 850NM, 100M, MPO, DDM Support)         |
-+----------------------+------+-----------------------------------------------------------------------------------------+
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28LR4   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS             |
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28PSM4  | VELOS Field Upgrade: QSFP28 Transceiver (100G-PSM4, 500M, MPO/APC, SMF, DDM) ROHS       |
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28-SR4  | VELOS Field Upgrade: QSFP28 Transceiver (100G-SR4, 100M, MPO MMF, DDM) ROHS             |
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPG-VELQSFP28SRBD | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP+LR4  | VELOS Field Upgrade: QSFP+ Transceiver (40G-LR, 1310NM, 10KM, LC, SMF, DDM Support)     |
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP+PSM4 | VELOS Field Upgrade: QSFP+ Transceiver (40G-PSM4, 1310NM, 10KM, MPO/APC, SMF, DDM )     |
++----------------------+-----------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP+SR4  | VELOS Field Upgrade: QSFP+ Transceiver (40G-SR4, 850NM, 100M, MPO, DDM Support)         |
++----------------------+-----------------------------------------------------------------------------------------+
 
 The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
 
-+---------------------+------+--------------------------------------------------------------------------------------------+
-| F5-UPGVELSR4XSR3M   | CN   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (3 Meter 2 Pack)  |
-+---------------------+------+--------------------------------------------------------------------------------------------+
-| F5-UPGVELSR4XSR1M   | CN   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (1 Meter 2 Pack)  |
-+---------------------+------+--------------------------------------------------------------------------------------------+
-| F5-UPGVELSR4XSR10M  | CN   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (10 Meter 2 Pack) |
-+---------------------+------+--------------------------------------------------------------------------------------------+
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPGVELSR4XSR3M   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (3 Meter 2 Pack)  |
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPGVELSR4XSR1M   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (1 Meter 2 Pack)  |
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPGVELSR4XSR10M  | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (10 Meter 2 Pack) |
++---------------------+--------------------------------------------------------------------------------------------+
 
 Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pack):
 
-+---------------------+------+----------------------------------------------------------------------------------------------+
-| F5-UPG-VELPSMXLR10M   | CN   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (10 Meter)  |
-+---------------------+------+----------------------------------------------------------------------------------------------+
-| F5-UPG-VELPSM4XLR3M   | CN   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
-+---------------------+------+----------------------------------------------------------------------------------------------+
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPG-VELPSMXLR10M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (10 Meter)  |
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
++---------------------+--------------------------------------------------------------------------------------------+
 
 VLANs
 =====
