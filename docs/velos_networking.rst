@@ -126,7 +126,9 @@ Only F5 branded optics are officially supported on VELOS. The BX110 blade suppor
 | 40G-PSM4 (QSFP+)       | OPT-0045   | TRANSCEIVER, QSFP+, 40GIG-PSM4, 1310NM, 10KM, MPO, SMF, DDM, F5 BRANDED      |
 +------------------------+------------+------------------------------------------------------------------------------+
 
-**Dual Rate 40Gb/100Gb BIDI QSFP+ options:**
+**Dual Rate 40Gb/100Gb BiDi QSFP28 (Backward compatible with QSFP+):**
+
+The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in QSFP28 slot. 
 
 +------------------------------------------------------------------+------------+-----------------------------------------------------------------------------------------+
 | Dual Rate 40G/100G BIDI (QSFP28 backward compatible with QSFP+)  | OPT-0060   | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
@@ -147,8 +149,6 @@ Only F5 branded optics are officially supported on VELOS. The BX110 blade suppor
 **Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G SR4 VEOS is OPT-0052 (as shown above)**.
 
 Below are the current VELOS optic SKUs:
-
-**Note: 100G BiDi is planned (please contact product management to discuss your requirements, as there are different standards available in the market)**.
 
 +----------------------+------+-----------------------------------------------------------------------------------------+
 | F5-UPGVELQSFP28LR4   | MY   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS             |
