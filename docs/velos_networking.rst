@@ -113,7 +113,15 @@ Below is an example of port numbering when all interfaces are unbundled.
 Supported Optics
 ================
 
-Only F5 branded optics are officially supported on VELOS. The BX110 blade supports speeds of 10Gb, 25Gb, 40Gb, and 100Gb depending on the type of optics used, and the port group configuration. VELOS interfaces will accept F5 approved QSFP+ or QSFP28 optics. Third-party optics are not officially supported per F5 support policies: https://support.f5.com/csp/article/K8153. 
+Only F5 branded optics are officially supported on VELOS. The BX110 blade supports speeds of 10Gb, 25Gb, 40Gb, and 100Gb depending on the type of optics used, and the port group configuration. VELOS interfaces will accept F5 approved QSFP+ or QSFP28 optics. 3rd party optics are not officially supported per F5’s support policies: 
+
+
+
+`K8153: F5 support of third-party hardware components <https://my.f5.com/manage/s/article/K8153>`_
+
+More details on each optic can be found in the F5 Platforms Accessories guide:
+
+`F5 Platforms: Accessories <https://techdocs.f5.com/en-us/hw-platforms/f5-plat-accessories.html>`_
 
 **40Gb QSFP+ options:**
 
