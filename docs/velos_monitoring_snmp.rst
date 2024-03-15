@@ -2311,13 +2311,13 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 Enabling SNMP Traps
 ===================
 
-------------------------------
+
 Enabling SNMP Traps in the CLI
 ------------------------------
 
 
 Enabling SNMP Traps in the CLI for F5OS-C 1.5.0 or Later
---------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The SNMP trap CLI configuration has been simplified in the F5OS-A 1.2.0 release and later. Use the **system snmp target** command to configure the SNMP trap destination. The example below uses SNMP v2c and a community string.
 
@@ -2355,7 +2355,7 @@ You can then view the current SNMP configuration with the **show system snmp tar
 
 
 Enabling SNMP Traps in the CLI for Releases Prior to F5OS-C 1.5.0
------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Enter **config** mode and enter the following commands to enable SNMP traps. Specify your SNMP trap receiver's IP address and port after the **snmpTargetAddrTAddress** field. Make sure to **commit** any changes.
 
@@ -2420,7 +2420,7 @@ There are various SNMP show commands in the CLI to provide configuration and sta
 
 
 Enabling SNMP Traps in the webUI
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As of F5OS-C version 1.6.0 you can enable SNMP traps in the webUI. Go to the **System Settings** page, and then select **SNMP Configuration**. Under the **Targets** section, select **Add**. If you are going to use SNMPv3, you should setup an SNMP user first.
 
@@ -2437,7 +2437,7 @@ Enter the **Security Model**, **IP Address** and **Port** of the SNMP Trap recei
 
 
 Enabling SNMP Traps in the API
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To enable SNMP traps via the API, use the following PATCH API call.
 
@@ -2595,9 +2595,47 @@ r10900-1# file show log/system/snmp.log | include 11-Jul-2022::06:32
 <INFO> 11-Jul-2022::06:32:53.391 appliance-1 confd[127]: snmp snmpv2-trap reqid=1257440817 10.255.0.145:161 (TimeTicks sysUpTime=29911)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:32:53.292347336 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 <INFO> 11-Jul-2022::06:32:53.391 appliance-1 confd[127]: snmp snmpv2-trap reqid=1257440817 10.255.0.144:161 (TimeTicks sysUpTime=29911)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:32:53.292347336 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 
+Generic SNMP Traps
+------------------
+
+**coldStart         	1.3.6.1.6.3.1.1.5.1**  
+
+
+A coldStart trap signifies that the SNMP entity,supporting a notification originator application, is reinitializing itself and that its configuration may have been altered.
+
+.. code-block:: bash
+
+    <INFO> 15-Mar-2024::12:34:38.428 partition2 confd[102]: snmp snmpv2-trap reqid=1834217795 10.255.0.139:162 (TimeTicks sysUpTime=717)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+
+**warmStart         	1.3.6.1.6.3.1.1.5.2**  
+
+A warmStart trap signifies that the SNMP entity, supporting a notification originator application, is reinitializing itself such that its configuration is unaltered.
+
+.. code-block:: bash
+
+
+**link down         	1.3.6.1.6.3.1.1.5.3**  
+
+A linkDown trap signifies that the SNMP entity, acting in an agent role, has detected that the ifOperStatus object for one of its communication links is about to enter the down state from some other state (but not from the notPresent state). This other state is indicated by the included value of ifOperStatus.
+
+.. code-block:: bash
+
+    <INFO> 15-Mar-2024::13:44:56.045 partition2 confd[112]: snmp snmpv2-trap reqid=1524445192 10.255.0.139:162 (TimeTicks sysUpTime=296420)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
+
+**link up         	1.3.6.1.6.3.1.1.5.4**  
+
+A linkUp trap signifies that the SNMP entity, acting in an agent role, has detected that the ifOperStatus object for one of its communication links left the down state and transitioned into some other state (but not into the notPresent state). This other state is indicated by the included value of ifOperStatus.
+
+
+.. code-block:: bash
+
+    <INFO> 15-Mar-2024::13:44:53.737 partition2 confd[112]: snmp snmpv2-trap reqid=1524445191 10.255.0.139:162 (TimeTicks sysUpTime=296189)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
+
+F5OS Specific Traps
+------------------
 
 Device Fault Traps
-------------------
+^^^^^^^^^^^^^^^^^^^
 
 **hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**   
 
@@ -2912,7 +2950,7 @@ The output below is from an rSeries unit:
 
 
 Firmware Update Status Traps
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **firmware-update-status         .1.3.6.1.4.1.12276.1.1.1.65550**
 
@@ -2950,7 +2988,7 @@ The CLI command below shows how to filter the **snmp.log** file to only show fir
 
 
 Drive Utilization Traps
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 **drive-utilization              .1.3.6.1.4.1.12276.1.1.1.65551**
 
@@ -3000,7 +3038,7 @@ The output below is from an rSeries unit:
 
 
 FIPS Related Traps
-------------------
+^^^^^^^^^^^^^^^^^^^
 
 **fips-fault                     .1.3.6.1.4.1.12276.1.1.1.196308**
 
@@ -3021,7 +3059,7 @@ The output below is from an rSeries unit:
     syscon-1-active# file show log/confd/snmp.log | include fipsError    
 
 System Event Traps
-------------------
+^^^^^^^^^^^^^^^^^^^
 
 **core-dump                      .1.3.6.1.4.1.12276.1.1.1.327680**
 
@@ -3060,7 +3098,7 @@ This trap will indicate that the system has rebooted. It's possible this was a p
     syscon-1-active# file show log/confd/snmp.log | include backplane   
 
 Interface / Optic Related Traps
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The SNMP traps below will correspond to the Digital Diagnostics Monitoring (DDM) that the F5OS layer runs to check the status and health of the fiberoptic transceivers installed. The **show portgroups** CLI command in the VELOS chassis partition will display the current ddm thresholds for warning and alarm as well as current values.
 
