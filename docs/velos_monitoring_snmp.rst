@@ -1861,6 +1861,51 @@ Below is an example of an SNMP response from a chassis partition.
                     ? 43878413 IOPs  106619 IOPs             57 2466797568 bytes          56394 ms 467008954 IOPs       400818555 4270643787264 bytes        12735703 ms
     prompt%
 
+Componenent Info Table
+----------------------------
+
+The table below shows the current VELOS component information for the chassis level or partition level.
+
+This MIB is supported on both the VELOS system controller and chassis partition layers.
+
+**F5-PLATFORM-STATS-MIB:componentInfoTable OID: .1.3.6.1.4.1.12276.1.2.1.8.1**
+
+Below is the component info table from the system controller layer.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:componentInfoTable
+    SNMP table: F5-PLATFORM-STATS-MIB::componentInfoTable
+
+        serialNo                    model
+    sub0811g002h                        ?
+    19331BPJ0075                        ?
+    19332BPJ0129                        ?
+    bld422435s CloudScale Viprion BX110
+    bld424551s CloudScale Viprion BX110
+    bld422573s CloudScale Viprion BX110
+    chs600032s CloudScale Viprion CX410
+    sub0772g006w                        ?
+    bld422584s CloudScale Viprion SX410
+    bld424548s CloudScale Viprion SX410
+    sub0759g003u                        ?
+    sub0759g003z                        ?
+    prompt% 
+
+Below is the component info table from the chassis partition layer.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 F5-PLATFORM-STATS-MIB:componentInfoTable
+    SNMP table: F5-PLATFORM-STATS-MIB::componentInfoTable
+
+    serialNo model
+    bld422435s     ?
+    bld424551s     ?
+    prompt%
+
+
+
 Power Supply Unit Stats Table
 ----------------------------
 
