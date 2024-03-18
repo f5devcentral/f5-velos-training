@@ -2045,6 +2045,8 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | **Alert**                            | **OID**                          |                            
 +======================================+==================================+
+| coldStart                            | .1.3.6.1.6.3.1.1.5.1             |
++--------------------------------------+----------------------------------+
 | lcd-fault                            | .1.3.6.1.4.1.12276.1.1.1.65792   |
 +--------------------------------------+----------------------------------+
 | psu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65793   |
@@ -2172,6 +2174,10 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 +---------------------------------------+-----------------------------------+
 | **Alert**                             | **OID**                           |                            
 +=======================================+===================================+
+| linkDown                              | .1.3.6.1.6.3.1.1.5.3              |
++---------------------------------------+-----------------------------------+
+| linkUp                                | .1.3.6.1.6.3.1.1.5.4              |
++---------------------------------------+-----------------------------------+
 | hardware-device-fault                 |  .1.3.6.1.4.1.12276.1.1.1.65536   |
 +---------------------------------------+-----------------------------------+
 | firmware-fault                        |  .1.3.6.1.4.1.12276.1.1.1.65537   |
@@ -2608,12 +2614,6 @@ A coldStart trap signifies that the SNMP entity,supporting a notification origin
 .. code-block:: bash
 
     <INFO> 15-Mar-2024::12:34:38.428 partition2 confd[102]: snmp snmpv2-trap reqid=1834217795 10.255.0.139:162 (TimeTicks sysUpTime=717)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
-
-**warmStart         	1.3.6.1.6.3.1.1.5.2**  
-
-A warmStart trap signifies that the SNMP entity, supporting a notification originator application, is reinitializing itself such that its configuration is unaltered.
-
-.. code-block:: bash
 
 
 **link down         	1.3.6.1.6.3.1.1.5.3**  
