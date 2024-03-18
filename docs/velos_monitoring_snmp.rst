@@ -1336,7 +1336,7 @@ Polling SNMP Endpoints
 ======================
 
 
-Once SNMP is properly setup and allow-lists are enabled (in both the system controllers and chassis partitions) you can poll SNMP objects from remote endpoints. If you have an SNMP manager, it is recommended you download the appropriate MIBs from the VELOS chassis and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilities from a remote client to validate the SNMP endpoints. You can then poll/query either the chassis partition or the system controller via SNMP to get stats from the system using the following SNMP OID's:
+Once SNMP is properly setup and allow-lists are enabled (in both the system controllers and chassis partitions), you can poll SNMP objects from remote endpoints. If you have an SNMP manager, it is recommended you download the appropriate MIBs from the VELOS chassis and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilities from a remote client to validate the SNMP endpoints. You can then poll/query either the chassis partition or the system controller via SNMP to get stats from the system using the following SNMP OID's:
 
 
 SNMP System
@@ -1350,22 +1350,16 @@ Example output:
 
 .. code-block:: bash
 
-    prompt%  snmpwalk -ObenU -v2c -c public 10.255.2.4 .1.3.6.1.2.1.1
-    .1.3.6.1.2.1.1.1.0 = STRING: Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : Partition services version 1.6.0-12952
-    .1.3.6.1.2.1.1.2.0 = OID: .1.3.6.1.4.1.12276.1.3.1.6
-    .1.3.6.1.2.1.1.3.0 = Timeticks: (14137257) 1 day, 15:16:12.57
+    prompt% snmpwalk -ObenU -v2c -c public 10.255.2.3 .1.3.6.1.2.1.1     
+    .1.3.6.1.2.1.1.1.0 = STRING: F5 VELOS-CX410 : Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : System controller services version 1.8.0-8738
+    .1.3.6.1.2.1.1.2.0 = OID: .1.3.6.1.4.1.12276.1.3.1.5
+    .1.3.6.1.2.1.1.3.0 = Timeticks: (25484697) 2 days, 22:47:26.97
     .1.3.6.1.2.1.1.4.0 = STRING: jim@f5.com
-    .1.3.6.1.2.1.1.5.0 = STRING: VELOS-Production
+    .1.3.6.1.2.1.1.5.0 = STRING: velos-chassis1.f5demo.net
     .1.3.6.1.2.1.1.6.0 = STRING: Boston
     .1.3.6.1.2.1.1.7.0 = INTEGER: 72
-    .1.3.6.1.2.1.1.8.0 = Timeticks: (53) 0:00:00.53
-    .1.3.6.1.2.1.1.9.1.2.1 = OID: .1.3.6.1.4.1.12276.1
-    .1.3.6.1.2.1.1.9.1.2.2 = OID: .1.3.6.1.2.1.31
-    .1.3.6.1.2.1.1.9.1.3.1 = STRING: F5 Networks enterprise Platform MIB
-    .1.3.6.1.2.1.1.9.1.3.2 = STRING: The MIB module to describe generic objects for network interface sub-layers
-    .1.3.6.1.2.1.1.9.1.4.1 = Timeticks: (53) 0:00:00.53
-    .1.3.6.1.2.1.1.9.1.4.2 = Timeticks: (53) 0:00:00.53
-    prompt% 
+    .1.3.6.1.2.1.1.8.0 = Timeticks: (0) 0:00:00.00
+    prompt%
 
 
 SNMP ifTable & ifXTable
