@@ -1344,7 +1344,7 @@ SNMP System
 
 You can view system parameters such as SysDescr, sysObjectID, sysUptime, sysContact, sysName, sysLocation, sysServices, sysORLastChange, sysORTable, sysDateAndTime by SNMP walking the following OID.
 
-SNMP System OID: .1.3.6.1.2.1.1
+**SNMP System OID: .1.3.6.1.2.1.1**
 
 Example output:
 
@@ -1861,6 +1861,27 @@ Below is an example of an SNMP response from a chassis partition.
                     ? 43878413 IOPs  106619 IOPs             57 2466797568 bytes          56394 ms 467008954 IOPs       400818555 4270643787264 bytes        12735703 ms
     prompt%
 
+Power Supply Unit Stats Table
+----------------------------
+
+The table below shows the current status and health of the VELOS power supply units. This MIB is added in F5OS-C 1.8.0.
+
+This MIB is supported on the VELOS system controller layer.
+
+**F5-PLATFORM-STATS-MIB:psuStatsTable OID: .1.3.6.1.4.1.12276.1.2.1.9.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:psuStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::psuStatsTable
+
+    psuName  psuSerialNo  psuPartNo psuCurrentIn psuCurrentOut psuVoltageIn psuVoltageOut psuTemperature1 psuTemperature2 psuTemperature3 psuFan1Speed psuFan2Speed psuPowerIn psuPowerOut
+    psu-1 19331BPJ0075 SPAFFIV-07     2.097 mA     33.375 mA   206.750 mV     12.340 mV        17.0 °C        32.5 °C        31.2 °C     7520 RPM     7040 RPM 443.000 mW  412.000 mW
+    psu-2 19332BPJ0129 SPAFFIV-07     2.207 mA     34.187 mA   206.750 mV     12.337 mV        16.2 °C        32.0 °C        30.5 °C     7328 RPM     7008 RPM 455.000 mW  430.500 mW
+    prompt %
+
+
+
 
 Temperature Stats Table
 -----------------------
@@ -1882,9 +1903,6 @@ Below is an example of an SNMP response from the system controllers.
     10.4 centigrade 10.4 centigrade  9.7 centigrade 13.1 centigrade
     19.3 centigrade 19.2 centigrade 18.5 centigrade 22.3 centigrade
     prompt%
-
-
-
 
 
 Below is an example of an SNMP response from a chassis partition.
@@ -1944,6 +1962,8 @@ Firmware Table
 This MIB provides the current firmware status and version for all subsystems. This MIB is supported at both the system controller and chassis partition layers.
 
 Below is an example of an SNMP response from the system controllers.
+
+**F5-PLATFORM-STATS-MIB:fwTable OID: .1.3.6.1.4.1.12276.1.2.1.6.1**
 
 .. code-block:: bash
 
