@@ -1371,6 +1371,8 @@ You can poll the following SNMP OIDs to get detailed Interface stats for each ph
 
 This MIB is supported on both the VELOS system controller and chassis partition layers.
 
+**SNMP ifTable OID: .1.3.6.1.2.1.2.2**
+
 Below is an example of the ifTable on the VELOS system controller.
 
 .. code-block:: bash
@@ -1444,6 +1446,7 @@ Below is an example of the ifTable on the VELOS chassis partition.
     67108866 Interface HA-Interconnect LAG  ieee8023adLag  9600 4294967295 0:94:a1:8e:d0:1a            up           up            ?          ?             ?              ?            ?          ?                 ?           ?              ?               ?             ?           ?         ?          ?
     prompt % 
 
+**SNMP ifXTable OID: .1.3.6.1.2.1.31.1.1**
 
 Below is an example of the ifXTable on the VELOS chassis partition.
 
