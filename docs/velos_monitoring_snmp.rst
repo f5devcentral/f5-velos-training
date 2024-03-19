@@ -1367,8 +1367,6 @@ SNMP ifTable & ifXTable
 
 You can poll the following SNMP OIDs to get detailed Interface stats for each physical port on the BX110 blades, and for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chassis partitions directly. Below are the table views of the ifTable and ifXTable, you can poll individual interfaces if needed.
 
-**NOTE: Stats for LAG interfaces are not currently populated.**
-
 This MIB is supported on both the VELOS system controller and chassis partition layers.
 
 **SNMP ifTable OID: .1.3.6.1.2.1.2.2**
@@ -1434,17 +1432,16 @@ Below is an example of the ifTable on the VELOS chassis partition.
 
 .. code-block:: bash
 
-    prompt % snmptable -v 2c  -c public -m ALL 10.255.2.4 ifTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 ifTable        
     SNMP table: IF-MIB::ifTable
 
     ifIndex                       ifDescr         ifType ifMtu    ifSpeed    ifPhysAddress ifAdminStatus ifOperStatus ifLastChange ifInOctets ifInUcastPkts ifInNUcastPkts ifInDiscards ifInErrors ifInUnknownProtos ifOutOctets ifOutUcastPkts ifOutNUcastPkts ifOutDiscards ifOutErrors ifOutQLen ifSpecific
-    33554441         VELOS Interface 1/1.0 ethernetCsmacd  9600 4294967295  0:94:a1:8e:d0:0            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
-    33554442         VELOS Interface 1/2.0 ethernetCsmacd  9600 4294967295  0:94:a1:8e:d0:1            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    33554445         VELOS Interface 1/1.0 ethernetCsmacd  9600 4294967295  0:94:a1:8e:d0:0            up         down            ?          ?             ?              ?            0        364                 ?           ?              ?               ?             0           0         ?          ?
     33554449         VELOS Interface 2/1.0 ethernetCsmacd  9600 4294967295 0:94:a1:8e:d0:80            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
-    33554450         VELOS Interface 2/2.0 ethernetCsmacd  9600 4294967295 0:94:a1:8e:d0:81            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
-    67108865          Interface Arista LAG  ieee8023adLag  9600 4294967295 0:94:a1:8e:d0:19            up           up            ?          ?             ?              ?            ?          ?                 ?           ?              ?               ?             ?           ?         ?          ?
-    67108866 Interface HA-Interconnect LAG  ieee8023adLag  9600 4294967295 0:94:a1:8e:d0:1a            up           up            ?          ?             ?              ?            ?          ?                 ?           ?              ?               ?             ?           ?         ?          ?
-    prompt % 
+    33554450         VELOS Interface 2/2.0 ethernetCsmacd  9600 4294967295 0:94:a1:8e:d0:81            up         down            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    67108865          Interface Arista LAG  ieee8023adLag  9600 4294967295 0:94:a1:8e:d0:19            up           up            ?          ?             ?              ?            0          0                 ?           ?              ?               ?             0           0         ?          ?
+    67108866 Interface HA-Interconnect LAG  ieee8023adLag  9600          0 0:94:a1:8e:d0:1a            up         down            ?          ?             ?              ?            0        364                 ?           ?              ?               ?             0           0         ?          ?
+    prompt%
 
 **SNMP ifXTable OID: .1.3.6.1.2.1.31.1.1**
 
@@ -1452,29 +1449,16 @@ Below is an example of the ifXTable on the VELOS chassis partition.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 384  -c public 10.255.2.4 ifXTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 ifXTable
     SNMP table: IF-MIB::ifXTable
 
-    Name            InMulticastPkts InBroadcastPkts OutMulticastPkt OutBroadcastPkt HCInOctets      HCInUcastPkts   HCInMulticastPk HCInBroadcastPk HCOutOctets     HCOutUcastPkts  HCOutMulticastP HCOutBroadcastP LinkUpDownTrapE HighSpeed       PromiscuousMode ConnectorPresen Alias           CounterDisconti 
-
-    index: [33554441]
-    1/1.0           ?               ?               ?               ?               18883720        0               146777          0               19241160        0               147273          0               ?               ?               ?               ?               ?               ?               
-
-    index: [33554442]
-    1/2.0           ?               ?               ?               ?               28240312        1               218521          116             18072960        0               141195          0               ?               ?               ?               ?               ?               ?               
-
-    index: [33554449]
-    2/1.0           ?               ?               ?               ?               20343389        3               147723          9982            18145664        0               141763          0               ?               ?               ?               ?               ?               ?               
-
-    index: [33554450]
-    2/2.0           ?               ?               ?               ?               18832188        0               146463          0               19084361        0               146479          0               ?               ?               ?               ?               ?               ?               
-
-    index: [67108865]
-    Arista          ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               
-
-    index: [67108866]
-    HA-Interconnect ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               ?               
-    prompt%
+            ifName ifInMulticastPkts ifInBroadcastPkts ifOutMulticastPkts ifOutBroadcastPkts ifHCInOctets ifHCInUcastPkts ifHCInMulticastPkts ifHCInBroadcastPkts ifHCOutOctets ifHCOutUcastPkts ifHCOutMulticastPkts ifHCOutBroadcastPkts ifLinkUpDownTrapEnable ifHighSpeed ifPromiscuousMode ifConnectorPresent ifAlias ifCounterDiscontinuityTime
+            1/1.0                 ?                 ?                  ?                  ?       460216               0                3479                   0      11302515                0                77018                    0                      ?      100000                 ?                  ?       ?                          ?
+            2/1.0                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?      100000                 ?                  ?       ?                          ?
+            2/2.0                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?      100000                 ?                  ?       ?                          ?
+            Arista                 ?                 ?                  ?                  ?     72771870               0              559045                1834      45967104                0               359118                    0                      ?   552894464                 ?                  ?       ?                          ?
+    HA-Interconnect                 ?                 ?                  ?                  ?       460216               0                3479                   0      11302515                0                77018                    0                      ?           0                 ?                  ?       ?                          ?
+    prompt %
 
 
 
@@ -1823,13 +1807,13 @@ Below is an example of an SNMP response from a chassis partition.
 
 .. code-block:: bash
 
-    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskInfoTable    
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 F5-PLATFORM-STATS-MIB:diskInfoTable
     SNMP table: F5-PLATFORM-STATS-MIB::diskInfoTable
 
-    diskName           diskModel diskVendor diskVersion     diskSerialNo  diskSize diskType
-    nvme0n1 INTEL SSDPELKX010T8      Intel    VCV10301 BTLJ832408MW1P0I 1000.00GB     nvme
-    nvme0n1 INTEL SSDPELKX010T8      Intel    VCV10301 BTLJ83040J6T1P0I 1000.00GB     nvme
-    prompt%
+    diskName                  diskModel diskVendor diskVersion   diskSerialNo diskSize diskType
+    nvme0n1 SAMSUNG MZ1LB960HAJQ-00007    Samsung    EDA7602Q S435NE0MA02828 733.00GB     nvme
+    nvme0n1 SAMSUNG MZ1LB960HAJQ-00007    Samsung    EDA7602Q S435NE0MA00227 733.00GB     nvme
+    prompt% 
 
 Disk Utilization Stats Table
 ----------------------------
