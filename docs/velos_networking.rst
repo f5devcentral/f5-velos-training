@@ -15,13 +15,38 @@ This allows customers to run a secure/locked-down out-of-band management network
 Out-of-Band Management Network
 ==============================
 
-All out-of-band networking is handled through the system controllers. Each system controller has its own static IP address, and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network, and the out-of-band management VLAN inside the chassis. There is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions, and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. VLAN tagging is not supported on the out-of-band management ports on the system controllers.
+All out-of-band networking for VELOS is handled through the system controllers. Each system controller has its own static IP address, and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network, and the out-of-band management VLAN inside the chassis. There is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions, and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. VLAN tagging is not supported on the out-of-band management ports on the system controllers.
 
 Below is an example deployment; where each system controller has its own unique IP address, and an administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured, and that IP address will follow the active system controller, so that an admin using the F5OS API, CLI, or webUI can always connect to the active system controller. Note, the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
 .. image:: images/velos_networking/image2.png
   :align: center
   :scale: 50%
+
+It is recommended to connect both management intferaces from controller-1 and controller-2 to your switching infrastructure for resiliency and for increased bandwidth. Link Aggregation (LAG) is recommmended when setting up the system controller management ports. This will provide a better failover/reachabilty experience as well as double the bandwidth than having both ports connected to an upstream switch in an un-aggregated fashion . When un-aggregated the port on the standby system controller will be put in a blocking mode to prevent a bridge loop from occuring so you will be limited to 10Gb of bandwidth. The the internal switchd process monitors the HA status of the local controller and will disable forwarding on the mgmt port if the system controller is in standby mode. If a controller's mgmt interface goes down, it will fail over to the other system controller and will not assume the active role. 
+
+.. image:: images/velos_networking/sys-con-mgmt-ports.png
+  :align: center
+  :scale: 50%
+
+Even though each system controller has a static IP adddress, they will still both be reachable even if one of the controller mgmt interfaces is down. This is due to the fact that there is an internal switch connecting the two system controllers so they they both have equal external connectivity, even if one of the interfaces is down. As an example, if the mgmt interface for controller-2 is disconnected, you might assume that controller-2 would be unreachable via its static IP address. But this is not the case. Since each mgmt port on the system controller is wired internally to a local controlplane switch and the two switches are cross-connected, you can still reach the fixed address of either controller even if only one mgmt interface is available. 
+
+You can see this behavior when in an un-aggregated mode by looking at the mgmt interfaces of each controller in F5OS. The example below filters on the properties of interest and uses 'repeat' to watch how the counters change.
+
+
+.. code-block:: bash
+
+  syscon-2-active# show interfaces interface */mgmt0 state admin-status | select state oper-status | select state counters in-pkts | select state counters out-pkts | repeat 1
+          ADMIN   OPER              OUT
+  NAME     STATUS  STATUS  IN PKTS   PKTS
+  --------------------------------------------
+  1/mgmt0  UP      UP      18715364  9974457      <-- out-pkts does not increment while a controller is standby.
+  2/mgmt0  UP      UP      13286300  3112348
+
+Controller-2 is active and controller-1 is standby. The mgmt interface on each controller is 'UP'. While both controllers show incrementing ingress packets, only the active controller shows egress packets incrementing. This is because the front-panel mgmt port on the standby controller has forwarding disabled, so there is no egresses traffic. Yet the standby controller still has full L2 connectivity since its traffic is ultimately carried over the management port of the active controller.
+
+
+
 
 Chassis Partitions and Networking
 =================================
