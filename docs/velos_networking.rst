@@ -27,7 +27,7 @@ It is recommended to connect both management intferaces from controller-1 and co
 
 .. image:: images/velos_networking/sys-con-mgmt-ports.png
   :align: center
-  :scale: 50%
+  :scale: 100%
 
 Even though each system controller has a static IP adddress, they will still both be reachable even if one of the controller mgmt interfaces is down. This is due to the fact that there is an internal switch connecting the two system controllers so they they both have equal external connectivity, even if one of the interfaces is down. As an example, if the mgmt interface for controller-2 is disconnected, you might assume that controller-2 would be unreachable via its static IP address. But this is not the case. Since each mgmt port on the system controller is wired internally to a local controlplane switch and the two switches are cross-connected, you can still reach the fixed address of either controller even if only one mgmt interface is available. 
 
