@@ -88,7 +88,6 @@ Note that the hash key can be used to check and compare the status of the primar
     system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
     syscon-1-active#
 
-    test
 
 Backing Up the System Controller Database
 =========================================
