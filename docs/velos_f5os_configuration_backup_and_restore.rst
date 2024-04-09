@@ -1640,7 +1640,7 @@ This can be seen in the chassis partition CLI by using the **show tenants** comm
 
 Copy the proper tenant image into each partition and the tenant should then deploy successfully. Below is a **show images** output before and after an image is successfully uploaded. Note the **STATUS** of **not-present** and then **replicated** after the image has been uploaded:   
 
- .. code-block:: bash
+.. code-block:: bash
 
     Production-1# show images 
                                                     IN                  
