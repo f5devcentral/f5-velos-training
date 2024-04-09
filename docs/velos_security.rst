@@ -194,14 +194,31 @@ To set the primary-key issue the following command in config mode.
 
 .. code-block:: bash
 
-    system aaa primary-key set passphrase <passphrase string> confirm-passphrase <passphrase string> salt <salt string> confirm-salt <salt string>
+    syscon-1-active(config)# system aaa primary-key set passphrase               
+    Value for 'passphrase' (<string, min: 6 chars, max: 255 chars>): **************
+    Value for 'confirm-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
+    Value for 'salt' (<string, min: 6 chars, max: 255 chars>): **************
+    Value for 'confirm-salt' (<string, min: 6 chars, max: 255 chars>): **************
+    response Info: Key migration is initiated. Use 'show system aaa primary-key state status' to get status
+
+    syscon-1-active(config)#
+
+You can view the status of the primary-key being set with the **show system aaa primary-key state status** CLI command.
+
+.. code-block:: bash
+
+    syscon-1-active# show system aaa primary-key state status
+    system aaa primary-key state status "IN_PROGRESS        Initiated: Tue Apr  9 19:46:14 2024"
+    syscon-1-active# show system aaa primary-key state status
+    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
+    syscon-1-active# 
 
 Note that the hash key can be used to check and compare the status of the primary-key on both the source and the replacement devices if restoring to a different device. To view the current primary-key hash, issue the following CLI command.
 
 .. code-block:: bash
 
     syscon-2-active# show system aaa primary-key 
-    system aaa primary-key state hash sj2GslitH9XYbmW/cpY0TJhMWkU+CpvAU9vqoiL4aZcfE6qnSUDU3PWx+lCZO5KrqVzlWu/3mRugCNniNyQhSA==
+    system aaa primary-key state hash sj2GslitH9XY14h/cpY0TJhMWkU+CpvAU9vxxiL4aZcfE6qnSUDU3PWx+lCZO5KrqVzlWu/3mRugCNniNyQhSA==
     system aaa primary-key state status NONE
     syscon-2-active#
 
