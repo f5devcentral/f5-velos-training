@@ -1117,9 +1117,17 @@ In the body of the API call, enter the file name.
     }
 
 Restoring the System Controller from a Database Backup via webUI
---------------------------------------------------------------
+----------------------------------------------------------------
 
-Currently there is no webUI support for restoration of the ConfD database, so you’ll need to use either the CLI or API to restore the system controller’s database. Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you need to reboot the blades in-order for the config to be deployed successfully.
+Currently there is no webUI support for restoration of the ConfD database, so you’ll need to use either the CLI or API to restore the system controller’s database. 
+
+Rebooting Blades 
+================
+
+Rebooting Blades from the webUI
+-------------------------------
+
+Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you'll need to reboot the blades in-order for the config to be deployed successfully. 
 
 To reboot blades from the webUI log into each chassis partition. You will be prompted to change the password on first login. 
 
@@ -1136,7 +1144,10 @@ Once logged in you’ll notice no configuration inside the chassis partition. Go
 
 Wait for each blade to return to the **Ready** status before going onto the next step.
 
-To reboot blades from the API, using the following API commands to list nodes (Blades), and then reboot them. The command below will list the current nodes and their names that can then be used to reboot. Send the API call to the chassis partition IP address:
+Rebooting Blades from the API
+-------------------------------
+
+Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you'll need to reboot the blades in-order for the config to be deployed successfully. You will have to change the default password on the partition first, once that is done follow the procedure below. To reboot blades from the API, using the following API commands to list nodes (Blades), and then reboot them. The command below will list the current nodes and their names that can then be used to reboot. Send the API call to the chassis partition IP address:
 
 .. code-block:: bash
 
@@ -1349,6 +1360,64 @@ You must reboot each blade that was previously assigned to a partition:
 
     POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/f5-cluster:cluster/nodes/node=blade-3/reboot
 
+Rebooting Blades from the CLI
+-------------------------------
+
+Once the database has been restored (you may need to wait a few minutes for the restoration to complete.) you'll need to reboot the blades in-order for the config to be deployed successfully. You will have to change the default password on the partition first, once that is done follow the procedure below.
+
+First, list the blades within the current chassis partition. In the example below, the production chassis partition has 2 blades (blade-1 & blade-2). You'll need to reboot both these blades from within the chassis partition. 
+
+.. code-block:: bash
+
+    production-2# show cluster nodes summary 
+                                        NODE                                                 
+                    VIRTUAL            RUNNING           PLATFORM                           
+    NAME     ENABLED  SLOT     ASSIGNED  STATE    PRESENT  ID        SLOTS  NODE STATUS       
+    ------------------------------------------------------------------------------------------
+    blade-1  true     1        true      running  single   BX110     [ 1 ]  services running  
+    blade-2  true     2        true      running  single   BX110     [ 2 ]  services running  
+    blade-3  -        -        false     -        -        -         -      -                 
+    blade-4  -        -        false     -        -        -         -      -                 
+    blade-5  -        -        false     -        -        -         -      -                 
+    blade-6  -        -        false     -        -        -         -      -                 
+    blade-7  -        -        false     -        -        -         -      -                 
+    blade-8  -        -        false     -        -        -         -      -                 
+
+    production-2# 
+
+To reboot **blade-1** and **blade-2**, use the following CLI commands.
+
+.. code-block:: bash
+
+    production-2# cluster reboot node blade-1 
+    result 
+    blade-1 reboot requested.
+    production-2# cluster reboot node blade-2
+    result 
+    blade-2 reboot requested.
+    production-2#
+
+You can then use the command **show cluster nodes summary** to see the reboot status:
+
+.. code-block:: bash
+
+    production-2# show cluster nodes summary
+                                        NODE                                                   
+                    VIRTUAL            RUNNING           PLATFORM                             
+    NAME     ENABLED  SLOT     ASSIGNED  STATE    PRESENT  ID        SLOTS  NODE STATUS         
+    --------------------------------------------------------------------------------------------
+    blade-1  true     1        true      running  single   BX110     [ 1 ]  reboot in-progress  
+    blade-2  true     2        true      running  single   BX110     [ 2 ]  reboot in-progress  
+    blade-3  -        -        false     -        -        -         -      -                   
+    blade-4  -        -        false     -        -        -         -      -                   
+    blade-5  -        -        false     -        -        -         -      -                   
+    blade-6  -        -        false     -        -        -         -      -                   
+    blade-7  -        -        false     -        -        -         -      -                   
+    blade-8  -        -        false     -        -        -         -      -                   
+
+    production-2# 
+
+Wait until the blades are back in **services running** node status before moving on. If you have additional chassis partitions repeat the same steps above.
 
 
 
