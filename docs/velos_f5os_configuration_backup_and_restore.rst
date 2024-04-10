@@ -704,6 +704,8 @@ UCS Backup is covered in the following solution article on askf5:
 
 `K13132: Backing up and restoring BIG-IP configuration files with a UCS archive <https://support.f5.com/csp/article/K13132>`_
 
+As with any UCS backup and restore it is critical that you set and save the tenants master key, as you will need it when restoring the UCS if it contains encrypted configuration elements.
+
 The following video provides a demo of backing up UCS files from the BIG-IP webUI; this is the same for VELOS tenants.
 
 .. raw:: html
