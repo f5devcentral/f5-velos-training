@@ -1868,13 +1868,13 @@ Below is the component info table from the system controller layer.
     sub0811g002h                        ?
     19331BPJ0075                        ?
     19332BPJ0129                        ?
-    bld422435s CloudScale Viprion BX110
-    bld424551s CloudScale Viprion BX110
-    bld422573s CloudScale Viprion BX110
-    chs600032s CloudScale Viprion CX410
+    bld422435s                VELOS BX110
+    bld424551s                VELOS BX110
+    bld422573s                VELOS BX110
+    chs600032s                VELOS CX410
     sub0772g006w                        ?
-    bld422584s CloudScale Viprion SX410
-    bld424548s CloudScale Viprion SX410
+    bld422584s                VELOS SX410
+    bld424548s                VELOS SX410
     sub0759g003u                        ?
     sub0759g003z                        ?
     prompt% 
