@@ -1132,6 +1132,49 @@ Enabling SNMP via API
 
 SNMP **Communities**, **Users**, and **Targets** can be setup via the API. An admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
 
+To configure the SNMP system parameters via API use the following API call:
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/SNMPv2-MIB:SNMPv2-MIB/system
+
+In the body of the API add the SNMP sysContact, sysName, and sysLocation.
+
+.. code-block:: json
+
+    {
+    "SNMPv2-MIB:system": {
+        "sysContact": "jim@f5.com",
+        "sysName": "velos-chassis1.f5demo.net",
+        "sysLocation": "Boston"
+        }
+    }
+
+To view the SNMP system parameters use the following API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/SNMPv2-MIB:SNMPv2-MIB/system
+
+A response similar to the one below will be displayed.
+
+.. code-block:: json
+
+    {
+    "SNMPv2-MIB:system": {
+        "sysDescr": "F5 VELOS-CX410 : Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : System controller services version 1.8.0-9671",
+        "sysObjectID": "1.3.6.1.4.1.12276.1.3.1.5",
+        "sysUpTime": 50894041,
+        "sysContact": "jim@f5.com",
+        "sysName": "velos-chassis1.f5demo.net",
+        "sysLocation": "Boston",
+        "sysServices": 72,
+        "sysORLastChange": 0
+        }
+    }
+
+
+
 To create an SNMPv3 user use the following API call.
 
 .. code-block:: bash
