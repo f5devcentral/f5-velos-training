@@ -1723,26 +1723,64 @@ This can be seen in the chassis partition CLI by using the **show tenants** comm
 
 .. code-block:: bash
 
-    Placeholder
+    Production-2# show tenants 
+    tenants tenant tenant1
+    state unit-key-hash    dhDnf4YaHd+hkKuPm6qg0slHZooGjGa24PI3X9jAG4UFy1mRFn0T7N4ddcVP3gVdcrJbMo9coIDBPjWGkjwk0g==
+    state type             BIG-IP
+    state image            BIGIP-17.1.1.2-0.0.10.ALL-F5OS.qcow2.zip.bundle
+    state nodes            [ 1 2 ]
+    state mgmt-ip          10.255.2.27
+    state prefix-length    24
+    state dag-ipv6-prefix-length 128
+    state gateway          10.255.2.252
+    state vlans            [ 501 3010 3011 ]
+    state cryptos          enabled
+    state tenant-auth-support disabled
+    state vcpu-cores-per-node 22
+    state qat-vf-count     33
+    state memory           79360
+    state storage size 82
+    state running-state    deployed
+    state appliance-mode disabled
+    state feature-flags stats-stream-capable false
+    state status           Pending
+    state mac-data base-mac 00:94:a1:8e:58:09
+    state mac-data mac-pool-size 1
+    MAC                
+    -------------------
+    00:94:a1:8e:58:09  
+
+                    INSTANCE                                                                                           CREATION  READY                                 MGMT  
+    NODE  POD NAME   ID        PHASE                                                                                    TIME      TIME   STATUS                         MAC   
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    1     tenant1-1  1         Tenant image not found - Verify node is synchronized and image is present on the system                   Retrying tenant deployment...  -     
+    2     tenant1-2  2         Tenant image not found - Verify node is synchronized and image is present on the system                   Retrying tenant deployment...  -     
+
+    Production-2# 
+
 
 Copy the proper tenant image into each partition and the tenant should then deploy successfully. Below is a **show images** output before and after an image is successfully uploaded. Note the **STATUS** of **not-present** and then **replicated** after the image has been uploaded:   
 
 .. code-block:: bash
 
-    Production-1# show images 
-                                                    IN                  
-    NAME                                            USE    STATUS       
-    --------------------------------------------------------------------
-    BIGIP-15.1.4-0.0.46.ALL-VELOS.qcow2.zip.bundle  false  not-present  
+    Production-2# show images
+                                                     IN                           
+    NAME                                             USE    TYPE      STATUS      
+    ------------------------------------------------------------------------------
+    BIGIP-17.1.1.2-0.0.10.ALL-F5OS.qcow2.zip.bundle  false  vm-image  not-present  
+
+    Production-2# 
 
 
-    Production-1# show images
-                                                    IN                 
-    NAME                                            USE    STATUS      
-    -------------------------------------------------------------------
-    BIGIP-15.1.4-0.0.46.ALL-VELOS.qcow2.zip.bundle  false  replicated  
+    Production-2# show images
+                                                    IN                           
+    NAME                                             USE    TYPE      STATUS      
+    ------------------------------------------------------------------------------
+    BIGIP-17.1.1.2-0.0.10.ALL-F5OS.qcow2.zip.bundle  false  vm-image  replicated  
 
-Once the tenant is deployed you may login, and the upload and restore the tenant UCS image.
+    Production-2#  
+
+Once the tenant is deployed and fully booted you may login, change the default password, and then upload and restore the tenant UCS image. Repeat this step for each tenant on the system.
 
 Restoring Chassis Partitions from Database Backups via API
 ----------------------------------------------------------
@@ -2000,4 +2038,4 @@ The tenant status will be displayed.
     }
 
 
-The final step is to restore the backups on each individual tenant. This will follow the normal BIG-IP UCS restore process. Test
+The final step is to restore the backups on each individual tenant. This will follow the normal BIG-IP UCS restore process.
