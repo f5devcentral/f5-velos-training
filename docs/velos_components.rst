@@ -32,7 +32,7 @@ There is also an optional 2 post shelf based rack mount kit that can be purchase
 More detailed instructions and images of each type of rackmount option is covered in the CX410 Platform Guide. 
 
 
-'CX410 Platform Guide <https://techdocs.f5.com/en-us/hardware/platform-guide-velos-cx-series/title-platform-installation.html>_`
+`CX410 Platform Guide <https://techdocs.f5.com/en-us/hardware/platform-guide-velos-cx-series/title-platform-installation.html>_`
 
 Power Supplies & Controllers
 ============================
