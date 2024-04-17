@@ -23,7 +23,7 @@ VELOS ships with a 4 post quick-install rail (SHP-0270-00). The rack is adjustab
   :align: center
   :scale: 60%
 
-There is also an optional 2 post shelf based rack mount kit that can be purchased, with the caveat that the chassis will protrude out the front of the rack.
+There is also an optional 2 post shelf based rack mount kit that can be purchased (SHP-0272-00), with the caveat that the chassis will protrude out the front of the rack.
 
 .. image:: images/velos_components/2-post.png
   :align: center
