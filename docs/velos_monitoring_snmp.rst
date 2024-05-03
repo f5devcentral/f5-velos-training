@@ -3292,11 +3292,7 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr instant val-lane4 -0.9     <-- Current Reading
     state ddm rx-pwr high-threshold alarm 3.4   <-- Will trigger SNMP Trap for High Alarm
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
-
-
-.. code-block:: bash
-
-    Production-2# file show log/snmp.log | include ddm   
+  
 
 **txPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262400**
 
@@ -3304,6 +3300,7 @@ The transmit power threshold for a specific transceiver has reached high alarm s
 
 .. code-block:: bash
 
+    partition2# file show log/system/snmp.log | include txPwr
 
 **txPwrHiWarn                    .1.3.6.1.4.1.12276.1.1.1.262401**
 
@@ -3311,6 +3308,7 @@ The transmit power threshold for a specific transceiver has reached high warn st
 
 .. code-block:: bash
 
+    partition2# file show log/system/snmp.log | include txPwr
 
 **txPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
@@ -3328,6 +3326,7 @@ The transmit power threshold for a specific transceiver has reached low txPwrLoW
 
 .. code-block:: bash
 
+    partition2# file show log/system/snmp.log | include txPwr
 
 **rxPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262404**
 
@@ -3335,6 +3334,7 @@ The receive power threshold for a specific transceiver has reached high alarm st
 
 .. code-block:: bash
 
+    partition2# file show log/system/snmp.log | include rxPwr
 
 
 **rxPwrHiWarn                    .1.3.6.1.4.1.12276.1.1.1.262405**
@@ -3343,7 +3343,7 @@ The receive power threshold for a specific transceiver has reached high warn sta
 
 .. code-block:: bash
 
-
+    partition2# file show log/system/snmp.log | include rxPwr
 
 **rxPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262406**
 
@@ -3360,7 +3360,7 @@ The receive power threshold for a specific transceiver has reached low warn stat
 
 .. code-block:: bash
 
-
+    partition2# file show log/system/snmp.log | include rxPwr
 
 **txBiasHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262408**
 
@@ -3368,7 +3368,7 @@ The transmit bias threshold for a specific transceiver has reached high alarm st
 
 .. code-block:: bash
 
-
+    partition2# file show log/system/snmp.log | include txBias
 
 **txBiasHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262409**
 
@@ -3376,7 +3376,7 @@ The transmit bias threshold for a specific transceiver has reached high warn sta
 
 .. code-block:: bash
 
-
+    partition2# file show log/system/snmp.log | include txBias
 
 **txBiasLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262410**
 
@@ -3393,7 +3393,7 @@ The transmit bias threshold for a specific transceiver has reached low warn stat
 
 .. code-block:: bash
 
-
+    partition2# file show log/system/snmp.log | include txBias
 
 **ddmTempHiAlarm                 .1.3.6.1.4.1.12276.1.1.1.262412**
 
