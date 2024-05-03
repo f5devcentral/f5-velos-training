@@ -2095,26 +2095,26 @@ Below is an example of an SNMP response from the chassis partition.
     SNMP table: F5-PLATFORM-STATS-MIB::fwTable
 
                         fwName                         fwVersion configurable fwUpdateStatus
-                        QAT0 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT1 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT2 Lewisburg C62X Crypto/Compression        false              ?
-            fw-version-bios                        3.00.222.1        false           none
-            fw-version-cpld                          04.03.02        false           none
-            fw-version-sirr                            1.1.58        false           none
+                          QAT0 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT1 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT2 Lewisburg C62X Crypto/Compression        false              ?
+               fw-version-bios                        3.00.222.1        false           none
+               fw-version-cpld                          04.03.02        false           none
+               fw-version-sirr                            1.1.58        false           none
             fw-version-bios-me                         4.0.4.736        false           none
             fw-version-lop-app                     2.00.1053.0.1        false              ?
-    fw-version-drives-nvme0n1                                 ?        false           none
-    fw-version-lop-bootloader                      1.02.868.0.1        false           none
-                        QAT0 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT1 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT2 Lewisburg C62X Crypto/Compression        false              ?
-            fw-version-bios                        3.00.222.1        false           none
-            fw-version-cpld                          04.03.02        false           none
-            fw-version-sirr                            1.1.58        false           none
+     fw-version-drives-nvme0n1                                 ?        false           none
+     fw-version-lop-bootloader                      1.02.868.0.1        false           none
+                          QAT0 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT1 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT2 Lewisburg C62X Crypto/Compression        false              ?
+               fw-version-bios                        3.00.222.1        false           none
+               fw-version-cpld                          04.03.02        false           none
+               fw-version-sirr                            1.1.58        false           none
             fw-version-bios-me                         4.0.4.736        false           none
             fw-version-lop-app                     2.00.1053.0.1        false              ?
-    fw-version-drives-nvme0n1                                 ?        false           none
-    fw-version-lop-bootloader                      1.02.868.0.1        false           none
+     fw-version-drives-nvme0n1                                 ?        false           none
+     fw-version-lop-bootloader                      1.02.868.0.1        false           none
     prompt%
 
 
@@ -2713,6 +2713,14 @@ A linkDown trap signifies that the SNMP entity, acting in an agent role, has det
 
     <INFO> 15-Mar-2024::13:44:56.045 partition2 confd[112]: snmp snmpv2-trap reqid=1524445192 10.255.0.139:162 (TimeTicks sysUpTime=296420)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
 
+Note: In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel of the generic linkup/down traps. The enterprise linkup/down traps adds a human readable interface name as seen below.
+
+.. code-block:: bash
+
+    <INFO> 30-Apr-2024::15:14:38.582 partition2 confd[123]: snmp snmpv2-trap reqid=677841658 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
+
+    <INFO> 30-Apr-2024::15:14:38.577 partition2 confd[123]: snmp snmpv2-trap reqid=677841657 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-30 19:14:38.516399590 UTC)(OCTET STRING alertDescription=Interface down)
+
 **link up         	1.3.6.1.6.3.1.1.5.4**  
 
 A linkUp trap signifies that the SNMP entity, acting in an agent role, has detected that the ifOperStatus object for one of its communication links left the down state and transitioned into some other state (but not into the notPresent state). This other state is indicated by the included value of ifOperStatus.
@@ -2721,6 +2729,16 @@ A linkUp trap signifies that the SNMP entity, acting in an agent role, has detec
 .. code-block:: bash
 
     <INFO> 15-Mar-2024::13:44:53.737 partition2 confd[112]: snmp snmpv2-trap reqid=1524445191 10.255.0.139:162 (TimeTicks sysUpTime=296189)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
+
+Note: In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel of the generic linkup/down traps. The enterprise linkup/down traps adds a human readable interface name as seen below.
+
+
+.. code-block:: bash
+
+    <INFO> 30-Apr-2024::15:14:51.956 partition2 confd[123]: snmp snmpv2-trap reqid=677841662 10.255.80.251:162 (TimeTicks sysUpTime=51041)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
+    
+    <INFO> 30-Apr-2024::15:14:51.995 partition2 confd[123]: snmp snmpv2-trap reqid=677841663 10.255.80.251:162 (TimeTicks sysUpTime=51045)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-30 19:14:51.909205675 UTC)(OCTET STRING alertDescription=Interface up)
+    test1-1#     
 
 F5OS Specific Traps
 ------------------
