@@ -505,13 +505,15 @@ You must also add some required headers to any API calls sent to F5OS. It is imp
   :scale: 70%
 
 Configure System Settings DNS From the API
-------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To set the DNS configuration for the system controllers, use the following API call with the headers and auth settings from above. Don't forget to acquire the auth token first, otherwise the API call will fail.
 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+In the body of the API call add the desired DNS configuration.
 
 .. code-block:: json
 
@@ -553,13 +555,16 @@ To set the DNS configuration for the system controllers, use the following API c
   }
 
 Configure System Settings NTP, Timezone From the API
-----------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To set System Time settings, use the following API call as an example:
 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+
+In the body of the API call add the desired NTP & Timezone configuration.
 
 .. code-block:: json
 
@@ -588,14 +593,17 @@ To set System Time settings, use the following API call as an example:
       }
   }
 
-Configure System Settings Syslog From the API
-----------------------------------------------------
+Configure System Settings SYSLOG From the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To set a Remote Logging destination, use the following API call:
 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+
+In the body of the API call add the desired SYSLOG configuration.
 
 .. code-block:: json
 
