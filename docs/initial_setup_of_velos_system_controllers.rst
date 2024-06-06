@@ -69,6 +69,10 @@ The out-of-band Ethernet interfaces on each system controller can be configured 
 Internal Chassis IP Ranges
 --------------------------
 
+
+Internal Chassis IP Ranges via CLI
+----------------------------------
+
 VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/12. This should be sufficient for most production environments. You can verify this with the following command.
 
 .. code-block:: bash
@@ -131,6 +135,63 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
   Commit complete.
 
 **Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
+
+
+Internal Chassis IP Ranges via API
+----------------------------------
+
+To view the currently configured internal network ranges via API use the following API call.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-network:network
+
+The response will show the current configured network ranges for use internal to the VELOS chassis.
+
+
+.. code-block:: json
+
+
+  {
+      "f5-system-network:network": {
+          "config": {
+              "network-range-type": "RFC6598",
+              "prefix": 0,
+              "chassis-id": 1
+          },
+          "state": {
+              "configured-network-range-type": "RFC6598",
+              "configured-network-prefix": 0,
+              "configured-network-range": "100.64.0.0/12",
+              "configured-chassis-id": 1,
+              "active-network-range-type": "RFC6598",
+              "active-network-prefix": 0,
+              "active-network-range": "100.64.0.0/12",
+              "active-chassis-id": 1
+          }
+      }
+  }
+
+To configure the internal network ranges via CLI use the following API call.
+
+.. code-block:: bash
+
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-network:network
+
+In the body of the API call, add the desired network-range-type as seen below.
+
+
+.. code-block:: json
+
+  {
+      "f5-system-network:network": {
+          "config": {
+              "network-range-type": "RFC6598",
+              "prefix": 0,
+              "chassis-id": 1
+          }
+      }
+  }
 
 -------------------------------
 IP Address Assignment & Routing
