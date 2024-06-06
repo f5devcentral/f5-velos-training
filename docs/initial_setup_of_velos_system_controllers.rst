@@ -385,14 +385,14 @@ You can then run the API GET command again to see status:
 
 .. code-block:: json
 
-{
-    "f5-primary-key:primary-key": {
-        "state": {
-            "hash": "sUwBWJYT/VCne4xBVIdSfmjylG7QjMUskI1gtAKIfHifeahm/3/Ywq8zSdV2wn+RsiHdG+3EM/Ilih9GXQoyMA==",
-            "status": "COMPLETE        Initiated: Thu May 30 19:22:13 2024"
-        }
-    }
-}
+  {
+      "f5-primary-key:primary-key": {
+          "state": {
+              "hash": "sUwBWJYT/VCne4xBVIdSfmjylG7QjMUskI1gtAKIfHifeahm/3/Ywq8zSdV2wn+RsiHdG+3EM/Ilih9GXQoyMA==",
+              "status": "COMPLETE        Initiated: Thu May 30 19:22:13 2024"
+          }
+      }
+  }
 
 
 ---------------
@@ -401,7 +401,7 @@ System Settings
 
 Once the IP addresses have been defined, system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, webUI, or API.
 
-Configure System Settings From the CLI
+Configure System Settings (DNS, NTP, Logging) From the CLI
 ---------------------------------------
 
 In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can be set as seen in the example below.
@@ -419,7 +419,7 @@ In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can 
   syscon-2-active(config-remote-server-10.255.0.142)# exit
   syscon-2-active(config)# commit
 
-Configure System Settings From the WebUI
+Configure System Settings (DNS, NTP, Logging) From the WebUI
 ----------------------------------------
 
 You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
@@ -448,8 +448,8 @@ You can also configure logging subsystem levels individually. The remote logging
   :scale: 70%
 
 
-Configure System Settings From the API
----------------------------------------
+Configure System Settings (DNS, NTP, Logging) From the API
+----------------------------------------------------------
 
 If you would prefer to automate the setup of the VELOS chassis, there are F5OS-C API calls for all the examples above. F5OS supports token-based authentication for the F5OS API’s. You may send API calls to either port 8888 or port 443. The URI path will change slightly depending on which TCP port you choose to use. For API calls sent to port 443, the initial path will be /api, while API calls to port 888 will start with /restconf. F5OS also listens on port 80 and will redirect to TCP port 443.
 
@@ -504,6 +504,8 @@ You must also add some required headers to any API calls sent to F5OS. It is imp
   :align: center
   :scale: 70%
 
+Configure System Settings DNS From the API
+------------------------------------------
 
 To set the DNS configuration for the system controllers, use the following API call with the headers and auth settings from above. Don't forget to acquire the auth token first, otherwise the API call will fail.
 
@@ -550,6 +552,8 @@ To set the DNS configuration for the system controllers, use the following API c
       }
   }
 
+Configure System Settings NTP, Timezone From the API
+----------------------------------------------------
 
 To set System Time settings, use the following API call as an example:
 
@@ -583,6 +587,9 @@ To set System Time settings, use the following API call as an example:
           }
       }
   }
+
+Configure System Settings Syslog From the API
+----------------------------------------------------
 
 To set a Remote Logging destination, use the following API call:
 
