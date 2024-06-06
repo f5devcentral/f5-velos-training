@@ -22,6 +22,10 @@ Workflows
 Initial Setup of System Controllers
 -----------------------------------
 
+`Configure Internal Network Ranges via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#internal-chassis-ip-ranges-via-api>`_
+
+`Configure Primary-Key via API <>`_
+
 `Configure System Settings From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-from-the-api>`_
 
 `Manual Licensing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#manual-licensing-via-api>`_
