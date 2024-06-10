@@ -28,6 +28,12 @@ Initial Setup of System Controllers
 
 `Configure System Settings From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-from-the-api>`_
 
+`Configure System Settings DNS From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-dns-from-the-api>`_
+
+`Configure System Settings NTP & Timezone From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-ntp-timezone-from-the-api>`_
+
+`Configure System Settings SYSLOG From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-syslog-from-the-api>`_
+
 `Manual Licensing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#manual-licensing-via-api>`_
 
 `Automatic Licensing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#automatic-licensing-via-api>`_
