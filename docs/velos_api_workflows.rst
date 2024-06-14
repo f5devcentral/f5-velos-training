@@ -108,7 +108,7 @@ F5OS-C Backup and Restore
 
 `Importing Archived Chassis Partition Configs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-via-api>`_
 
-`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`
+`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
 
 `Restoring Chassis Partitions from Database Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-chassis-partitions-from-database-backups-via-api>`_
 
