@@ -64,6 +64,8 @@ Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb bac
 
 For the CX1610 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 32 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards supported: the BX110 and BX520. Each BX110 blade has one 100Gb backplane connection to each system controller (200Gb total). The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 32 BX110 blades installed. 
 
+.. note:: BX110 support in the CX1610 chassis is a future item as is mixing of blade types in the same chassis.
+
 .. image:: images/velos_introduction/bx110cx1610.png
   :align: center
   :scale: 70%
