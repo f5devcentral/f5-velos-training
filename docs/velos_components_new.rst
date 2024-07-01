@@ -23,11 +23,25 @@ The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots th
 Rack Mounting the Chassis
 =========================
 
-An ideal environment for VELOS, is to use a minimum of a 30” rack. The rackmount kits that ship with the system will support the minimum depth of 30” and can telescope to longer depths if needed. If the rack depth is less than 30”, then custom rack mount kits will need to be ordered.   
 
-.. image:: images/velos_components/image2.png
+VELOS ships with a 4 post quick-install rail (SHP-0270-00). The rack is adjustable from 28” to 40”. 
+
+
+.. image:: images/velos_components/4-post.png
   :align: center
   :scale: 60%
+
+There is also an optional 2 post shelf based rack mount kit that can be purchased (SHP-0272-00), with the caveat that the chassis will protrude out the front of the rack.
+
+.. image:: images/velos_components/2-post.png
+  :align: center
+  :scale: 60%
+
+More detailed instructions and images of each type of rackmount option is covered in the CX410 Platform Guide. 
+
+
+`CX410 Platform Guide <https://techdocs.f5.com/en-us/hardware/platform-guide-velos-cx-series/title-platform-installation.html>`_
+
 
 Power Supplies & Controllers
 ============================
