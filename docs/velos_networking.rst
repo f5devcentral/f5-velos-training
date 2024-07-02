@@ -119,6 +119,16 @@ Below is an example of the chassis partition webUI Port Groups screen. Note that
    :align: center
    :scale: 70%
 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that will support either 100Gb optics or 4 x 100Gb (future) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, but 4 x 100Gb support will be added in a future release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and will support the option of 4 x 100Gb with the proper optic and breakout cables in a future release. 
+
+.. image:: images/velos_networking/image11a.png
+  :width: 45%
+
+.. image:: images/velos_networking/image11b.png
+  :width: 45%
+
+.. image:: images/velos_networking/image11c.png
+  :width: 45%
 
 Interfaces
 ==========
