@@ -85,12 +85,15 @@ CX1610 Power Supplies and Controllers
 
 The VELOS CX1610 comes standard with 6 power supplies. Additional power supplies can be added to provide N+1, or N+N redundancy. The initial version of VELOS supports AC power, and up to 12 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis is also available. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
 
-.. image:: images/velos_components/image3.png
+
+.. image:: images/velos_components/cx1610lcd2.png
+  :align: center
+  :width: 45%
+  
+.. image:: images/velos_components/cx1610lcd1.png
+  :align: center
   :width: 45%
 
-
-.. image:: images/velos_components/image4.png
-  :width: 45%
 
 
 In the back of the chassis are 12 separate AC power inputs, and 4 redundant PSU controllers which are removable. Six of the power supplies and 2 of the power supply controllers are at the top of the chassis, and the remaining six power supplies and two more power supply controllers are at the bottom of the chassis.
@@ -153,10 +156,12 @@ In the initial release of VELOS most of the LCD functionality has not been enabl
 
 .. image:: images/velos_components/image12.png
   :align: center
-
+  :width: 45%
 
 .. image:: images/velos_components/image13.png
   :align: center
+  :width: 45%
+
 
 CX1610 LCD Panel
 ----------------
@@ -165,10 +170,12 @@ In the initial release of VELOS most of the LCD functionality has not been enabl
 
 .. image:: images/velos_components/cx1610lcd1.png
   :align: center
-
+  :width: 45%
 
 .. image:: images/velos_components/cx1610lcd2.png
   :align: center
+  :width: 45%
+
 
 System Controllers
 ===================
