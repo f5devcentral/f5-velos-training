@@ -113,7 +113,7 @@ In releases prior to F5OS-C 1.5.1 both ports on a BX110 blade must be configured
 
 
 
-Below is an example of the chassis partition webUI Port Groups screen. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
+Below is an example of the chassis partition webUI Port Groups screen with BX110 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
 
 .. image:: images/velos_networking/image11.png
    :align: center
@@ -130,6 +130,12 @@ For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP
 .. image:: images/velos_networking/image11c.png
   :align: center
   :width: 45%
+
+Below is an example of the chassis partition webUI Port Groups screen with BX520 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image. Port1 is currently hardcoded for 100Gb, and port2 is currently hard coded at 400gb. Breakout options will be added in a future release.
+
+.. image:: images/velos_networking/image11d.png
+   :align: center
+   :scale: 70%
 
 Interfaces
 ==========
