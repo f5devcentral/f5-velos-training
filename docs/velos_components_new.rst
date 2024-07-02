@@ -101,17 +101,15 @@ In the back of the chassis are 12 separate AC power inputs, and 4 redundant PSU 
 
 The first two PSU controllers are accessible in the upper left-hand corner of the back of the system and the remaining two are accessible in the lower left-hand corner of the back of the system.
 
-.. image:: images/velos_components/image6.png
+
+.. image:: images/velos_components/cx1610-psu-controllers.png
+  :align: center
   :width: 45%
 
 
-.. image:: images/velos_components/image7.png
-  :width: 45%
+A DC power version of the CX1610 chassis is also available and runs the same system controllers and line cards.
 
-
-A DC power version of the CX410 chassis is also available and runs the same system controllers and line cards.
-
-.. image:: images/velos_components/image8.png
+.. image:: images/velos_components/image5-dc.png
   :align: center
 
 Fan Trays & Cooling
@@ -120,7 +118,7 @@ Fan Trays & Cooling
 CX410 Fan Trays and Cooling
 ----------------------------
 
-The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS is not intaking hot airflow from other devices. The fan tray is removable if it needs to be replaced but should not be removed for long periods of time, as overheating may occur. 
+The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS does not intake hot airflow from other devices. The fan tray is removable if it needs to be replaced but should not be removed for long periods of time, as overheating may occur. 
 
 .. image:: images/velos_components/image9.png
   :align: center
@@ -134,7 +132,7 @@ The VELOS chassis implements front-to-back cooling/airflow, and it is recommende
 CX1610 Fan Trays and Cooling
 ----------------------------
 
-The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS is not intaking hot airflow from other devices. The CX1610 chassis has four removable fan trays. The fan trays are removable if one needs to be replaced, but should not be removed for long periods of time, as overheating may occur. 
+The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS does not intake hot airflow from other devices. The CX1610 chassis has four removable fan trays. The fan trays are removable if one needs to be replaced, but should not be removed for long periods of time, as overheating may occur. 
 
 .. image:: images/velos_components/image9.png
   :align: center
@@ -183,11 +181,11 @@ Each CX410 chassis ships with two SX410 system controllers already installed. Th
 
 *	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 and BX520)
 
-     * They operate in an active/active manner from a layer2 switching perspective
+  * They operate in an active/active manner from a layer2 switching perspective
 
 *	They host the Kubernetes control plane functions
 
-     * They operate in an active/standby manner for these functions
+  * They operate in an active/standby manner for these functions
 
 It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller and will fail over to the standby if the active should fail. 
 
@@ -215,11 +213,11 @@ Each CX1610 chassis ships with two SX1610 system controllers already installed. 
 
 *	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 & BX520)
 
-     * They operate in an active/active manner from a layer2 switching perspective
+  * They operate in an active/active manner from a layer2 switching perspective
 
 *	They host the Kubernetes control plane functions
 
-     * They operate in an active/standby manner for these functions
+  * They operate in an active/standby manner for these functions
 
 It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 6.4Tbps to 3.2Tbps in the CX1610 chassis. The Kubernetes control plane will run on the active system controller and will fail over to the standby if the active should fail. 
 
@@ -239,6 +237,11 @@ Looking at the left-hand side of the diagram below, you’ll notice the system c
 .. image:: images/velos_components/image16a.png
   :align: center
   :scale: 50%
+
+.. image:: images/velos_components/sx1610-controller.png
+  :align: center
+  :scale: 60%
+
 
 BX110 Blade
 ===========
@@ -263,7 +266,7 @@ The SSD is removable, but not field replaceable. This allows customers who requi
 BX520 Blade
 ===========
 
-The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropiate break out cable). The second port can be configured for either 4 x 100Gb(with the appropiate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
+The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropriate break out cable). The second port can be configured for either 4 x 100Gb(with the appropriate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
 
 .. image:: images/velos_components/image17a.png
   :align: center
