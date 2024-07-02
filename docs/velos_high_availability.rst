@@ -5,7 +5,7 @@ VELOS High Availability
 System Controller HA
 ====================
 
-The system controllers perform two main functions for the VELOS chassis. They are the centralized layer2 switch fabric connecting all blades within the system, and they also host the Kubernetes control plane which manages the F5OS layer. The CX410 system ships with redundant system controllers. 
+The system controllers perform two main functions for the VELOS chassis. They are the centralized layer2 switch fabric connecting all blades within the system, and they also host the Kubernetes control plane which manages the F5OS layer. Both the CX410 & CX1610 systems ship with redundant system controllers, although the system controllers are different between the chassis families. 
 
 The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX110 blade is dual homed with a 100Gb backplane connection to each system controller (200Gb total). On the BX110 blade, the two 100Gb ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
 
@@ -15,6 +15,13 @@ The layer2 switch fabric function performed by the system controllers runs in an
   :scale: 70%
 
 While both switch fabrics are active, there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane, and each blade will be limited to 100Gbs of backplane capacity. Note that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity, even if there is a single system controller failure.
+
+The architecture is similar in the CX1610 chassis, although the system controllers have much higher capacity (3.2Tbs each). The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX520 blade is dual homed (from each slot) with a 100Gb backplane connection to each system controller (200Gb total per slot). Each BX520 blade takes up 2 slots in the CX1610 chassis, so the blade has an aggregate of 400gb (4 x 100gb) backplane connectivity. On the BX5200 blade, the four 100Gb backplane ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
+
+.. image:: images/velos_high_availability/bx520-cx1610-backplane.png
+  :align: center
+  :scale: 70%
+
 
 The second function the system controllers perform is the management of the control plane for the new Kubernetes platform layer (F5OS). At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, webUI services, etc. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
 
@@ -27,6 +34,13 @@ You may view the current high availability status in the dashboard of the system
 .. image:: images/velos_high_availability/image3.png
   :align: center
   :scale: 70%
+
+Below is a similar screen for the CX1610 chassis with Bx520 blades. Note how the Bx520 blade is a s lot blade, so the 2nd slot will show up **Aux**. 
+
+.. image:: images/velos_high_availability/cx1610-partitions.png
+  :align: center
+  :scale: 70%
+  
 
 The **Controller Overview** tab will show CPU utilization, controller role and status, system memory utilization, system storage utilization and the Base OS and Service versions running on the controllers.
 
@@ -156,6 +170,15 @@ Each VELOS BX110 blade has two physical ports, that currently support the follow
 .. image:: images/velos_high_availability/image12.png
   :align: center
   :scale: 90%
+
+VELOS BX520 Blade 
+-----------------
+
+Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0: 100Gb, prt 2.0 400Gb. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
+
+.. image:: images/velos_high_availability/image12-bx520.png
+  :align: center
+  :scale: 90%  
 
 HA Topology Options
 -------------------
