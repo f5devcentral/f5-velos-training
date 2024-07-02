@@ -20,8 +20,8 @@ The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots th
   :align: center
   :scale: 60%
 
-Rack Mounting the Chassis
-=========================
+Rack Mounting the CX410 Chassis
+===============================
 
 
 VELOS ships with a 4 post quick-install rail (SHP-0270-00). The rack is adjustable from 28” to 40”. 
@@ -49,7 +49,7 @@ Power Supplies & Controllers
 CX410 Power Supplies and Controllers
 ------------------------------------
 
-The VELOS CX410 comes standard with 2 power supplies. Additional power supplies can be added to provide N+1, or N+N redundancy. The initial version of VELOS supports AC power, and up to 4 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis is also available. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
+The VELOS CX410 comes standard with 2 power supplies. Additional power supplies can be added to provide N+1, or N+N redundancy. VELOS supports AC power, and up to 4 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis is also available. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
 
 .. image:: images/velos_components/image3.png
   :width: 45%
@@ -59,7 +59,7 @@ The VELOS CX410 comes standard with 2 power supplies. Additional power supplies 
   :width: 45%
 
 
-In the back of the chassis are 4 separate AC power inputs, and 2 redundant PSU controllers which are removable as well as a removable fan tray.
+In the back of the chassis are 4 separate AC power inputs, 2 redundant PSU controllers, as well as a removable fan tray.
 
 .. image:: images/velos_components/cx1410-rear.png
   :align: center
@@ -83,7 +83,7 @@ A DC power version of the CX410 chassis is also available and runs the same syst
 CX1610 Power Supplies and Controllers
 ------------------------------------
 
-The VELOS CX1610 comes standard with 6 power supplies. Additional power supplies can be added to provide N+1, or N+N redundancy. The initial version of VELOS supports AC power, and up to 12 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis is also available. Power supplies are removable from the front of the unit, by removing the LCD panel assembly. 
+The VELOS CX1610 comes standard with 6 power supplies. Additional power supplies can be added to provide N+1, or N+N redundancy. VELOS supports AC power, and up to 12 power supplies (each with their own input) can be installed within the chassis. A DC power version of the chassis is also available. Power supplies are removable from the front of the unit, either at the top by removing the LCD panel assembly, or on the bottom of the chassis.
 
 
 .. image:: images/velos_components/cx1610lcd2.png
@@ -96,7 +96,7 @@ The VELOS CX1610 comes standard with 6 power supplies. Additional power supplies
 
 
 
-In the back of the chassis are 12 separate AC power inputs, and 4 redundant PSU controllers which are removable. Six of the power supplies and 2 of the power supply controllers are at the top of the chassis, and the remaining six power supplies and two more power supply controllers are at the bottom of the chassis.
+In the back of the chassis are 12 separate AC power inputs, and 4 redundant PSU controllers which are removable. Six of the power supplies (3) and 2 of the power supply controllers (1,2) are at the top of the chassis, and the remaining six power supplies (8) and two more power supply controllers (6,7) are at the bottom of the chassis.
 
 .. image:: images/velos_components/image5.png
   :align: center
@@ -171,13 +171,16 @@ CX1610 LCD Panel
 
 In the initial release of VELOS most of the LCD functionality has not been enabled yet. The LCD will go through self-tests, and display the product name and F5 logo, but no diagnostics or configuration is supported at this time. The LCD assembly can be removed to gain access to the power supplies if needed. 
 
-.. image:: images/velos_components/cx1610lcd1.png
-  :align: center
-  :width: 45%
 
 .. image:: images/velos_components/cx1610lcd2.png
   :align: center
   :width: 45%
+
+.. image:: images/velos_components/cx1610lcd1.png
+  :align: center
+  :width: 45%
+
+
 
 
 System Controllers
@@ -190,11 +193,9 @@ SX410 System Controllers
 Each CX410 chassis ships with two SX410 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
 -	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 and BX520)
-
   - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
-
   - They operate in an active/standby manner for these functions
 
 It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 1.6Tbps to 800Gbps. The Kubernetes control plane will run on the active system controller and will fail over to the standby if the active should fail. 
@@ -222,11 +223,9 @@ SX1610 System Controllers
 Each CX1610 chassis ships with two SX1610 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
 -	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 & BX520)
-
   - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
-
   - They operate in an active/standby manner for these functions
 
 It is recommended that a system always operate with two system controllers for redundancy. If one should fail, the remaining system controller can take over, however backplane capacity will drop from 6.4Tbps to 3.2Tbps in the CX1610 chassis. The Kubernetes control plane will run on the active system controller and will fail over to the standby if the active should fail. 
