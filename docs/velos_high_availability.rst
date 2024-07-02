@@ -7,7 +7,7 @@ System Controller HA
 
 The system controllers perform two main functions for the VELOS chassis. They are the centralized layer2 switch fabric connecting all blades within the system, and they also host the Kubernetes control plane which manages the F5OS layer. Both the CX410 & CX1610 systems ship with redundant system controllers, although the system controllers are different between the chassis families. 
 
-The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX110 blade is dual homed with a 100Gb backplane connection to each system controller (200Gb total). On the BX110 blade, the two 100Gb ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
+The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX110 blade is dual homed with a 100Gb backplane connection to each system controller (200Gb total). On the BX110 blade, the two 100Gb ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both system controllers are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
 
 
 .. image:: images/velos_high_availability/image1.png
@@ -16,7 +16,7 @@ The layer2 switch fabric function performed by the system controllers runs in an
 
 While both switch fabrics are active, there is 1.6Tbs of switching capacity between all the blades in the system. If one of the switch fabrics should fail, then the total bandwidth will be cut in half to 800Gbs on the backplane, and each blade will be limited to 100Gbs of backplane capacity. Note that the current throughput rating on the BX110 blades (95Gb) will not push the backplane to full capacity, even if there is a single system controller failure.
 
-The architecture is similar in the CX1610 chassis, although the system controllers have much higher capacity (3.2Tbs each). The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX520 blade is dual homed (from each slot) with a 100Gb backplane connection to each system controller (200Gb total per slot). Each BX520 blade takes up 2 slots in the CX1610 chassis, so the blade has an aggregate of 400gb (4 x 100gb) backplane connectivity. On the BX5200 blade, the four 100Gb backplane ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the two links (assuming both are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
+The architecture is similar in the CX1610 chassis, although the system controllers have much higher capacity (3.2Tbs each). The layer2 switch fabric function performed by the system controllers runs in an active-active manner. Both switch fabrics are active, and each BX520 blade is dual homed (from each slot) with a 100Gb backplane connection to each system controller (200Gb total per slot). Each BX520 blade takes up 2 slots in the CX1610 chassis, so the blade has an aggregate of 400Gb (4 x 100Gb) backplane connectivity. On the BX520 blade, the four 100Gb backplane ports are bonded together in a static Link Aggregation Group (LAG). Traffic destined for other blades in the system will hash over the four links (assuming both system controllers are active), then traverse the switch fabrics on the system controllers on its way to the destination blade. 
 
 .. image:: images/velos_high_availability/bx520-cx1610-backplane.png
   :align: center
@@ -35,7 +35,7 @@ You may view the current high availability status in the dashboard of the system
   :align: center
   :scale: 70%
 
-Below is a similar screen for the CX1610 chassis with Bx520 blades. Note how the Bx520 blade is a s lot blade, so the 2nd slot will show up **Aux**. 
+Below is a similar screen for the CX1610 chassis with BX520 blades. Note how the BX520 blade is a s lot blade, so the 2nd slot will show up **Aux**. 
 
 .. image:: images/velos_high_availability/cx1610-partitions.png
   :align: center
@@ -92,6 +92,9 @@ This approach is better than terminating a LAG on a single blade. Incoming conne
 .. image:: images/velos_high_availability/image7.png
   :align: center
   :scale: 50%
+
+Although the diagrams above explain the behavior with the CX410 chassis with BX110 blades installed, it is a similar situation with the CX1610 chassis, with the BX520 blades installed. Both blades have 2 physical ports, and the only difference is that the BX520 takes 2 slots in the system, and has 4 x 100Gb backplane connections. The DAG process operates in the same manner, so all of the traffic engineering concepts within and across blades apply equally.
+
 
 Tenant Level HA Across Chassis
 ==============================
@@ -174,7 +177,7 @@ Each VELOS BX110 blade has two physical ports, that currently support the follow
 VELOS BX520 Blade 
 -----------------
 
-Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0: 100Gb, prt 2.0 400Gb. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
+Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0 - 100Gb, port 2.0 - 400Gb. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
 
 .. image:: images/velos_high_availability/image12-bx520.png
   :align: center
