@@ -140,7 +140,7 @@ The VELOS chassis implements front-to-back cooling/airflow, and it is recommende
 .. image:: images/velos_components/image9.png
   :align: center
 
-.. image:: images/velos_components/image10.png
+.. image:: images/velos_components/cx1610-fan-trays.png
   :align: center
 
 .. image:: images/velos_components/image11.png
