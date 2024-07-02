@@ -59,9 +59,9 @@ The VELOS CX410 comes standard with 2 power supplies. Additional power supplies 
   :width: 45%
 
 
-In the back of the chassis are 4 separate AC power inputs, and 2 redundant PSU controllers which are removable.
+In the back of the chassis are 4 separate AC power inputs, and 2 redundant PSU controllers which are removable as well as a removable fan tray.
 
-.. image:: images/velos_components/image5.png
+.. image:: images/velos_components/cx1410-rear.png
   :align: center
  
 
