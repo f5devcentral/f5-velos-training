@@ -166,6 +166,10 @@ For the BX520 the default memory allocations for Recommended mode are shown belo
 | BX520 96vCPU Tenant | 48                 |  96                      | 344,576,000,000   | 3,589,333,333   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 
+Each BX520 blade has 512GB of memory. The F5OS layer takes about 33GB of RAM leaving ~479GB of RAM for use by tenants. Using the Recommended values per tenant; ~344GB of RAM will be used, leaving ~135GB of additional RAM. You may over-allocate RAM to a tenant until the 135GB of RAM is depleted. There is a formula for figuring out the minimum amount of RAM a particular tenant size will receive using the recommended values:
+
+**min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
+
 Each BX520 blade has 48 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. Below is a diagram depicting the CPU/vCPUs on a single BX110 blade.
 
 .. image:: images/velos_multitenancy/bx520-tenants.png
