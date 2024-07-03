@@ -166,6 +166,15 @@ For the BX520 the default memory allocations for Recommended mode are shown belo
 | BX520 96vCPU Tenant | 48                 |  96                      | 344,576,000,000   | 3,589,333,333   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 
+Each BX520 blade has 48 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. Below is a diagram depicting the CPU/vCPUs on a single BX110 blade.
+
+.. image:: images/velos_multitenancy/bx520-tenants.png
+  :align: center
+  :scale: 70%
+
+Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 96 single vCPU tenants per BX520 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is because a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior, only a very lightly loaded LTM/DNS-only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
+
+
 A VELOS tenant supports 3 states: (**Configured**, **Provisioned**, and **Deployed**):
 
 **Configured**
