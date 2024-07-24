@@ -2123,11 +2123,11 @@ Below is an example of an SNMP response from the chassis partition.
 SNMP Trap Support in F5OS
 ========================
 
-You can enable SNMP traps for F5OS-C in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.6.x.
+You can enable SNMP traps for F5OS-C in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.8.x.
 
 **NOTE: the file will contain alerts for both F5OS-A (rSeries appliances) and F5OS-C (VELOS chassis). You only need to rely on one file if you are using both platforms. Some traps may be specific to one platform or the other.** 
 
-For the system controllers, the following SNMP Traps are supported as of F5OS 1.6.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
+For the system controllers, the following SNMP Traps are supported as of F5OS 1.8.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
 
 SNMP Trap events that note a fault should also trigger an alert that can be viewed in the show alerts in the CLI, webUI, and API. Once a clear SNMP Trap is sent, it should clear the event from the **show events** output.
 
@@ -2248,6 +2248,12 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | core-dump                            | .1.3.6.1.4.1.12276.1.1.1.327680  |
 +--------------------------------------+----------------------------------+
+| reboot                               | .1.3.6.1.4.1.12276.1.1.1.327681  |
++--------------------------------------+----------------------------------+
+| incompatible-image                   | .1.3.6.1.4.1.12276.1.1.1.327682  |
++--------------------------------------+----------------------------------+
+| login-failed                         | .1.3.6.1.4.1.12276.1.1.1.327683  |
++--------------------------------------+----------------------------------+
 | nebsEnabled                          | .1.3.6.1.4.1.12276.1.1.1.131072  |
 +--------------------------------------+----------------------------------+
 | nebsDisabled                         | .1.3.6.1.4.1.12276.1.1.1.131073  |
@@ -2256,9 +2262,15 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | bladeNebsMismatch                    | .1.3.6.1.4.1.12276.1.1.1.131329  |
 +--------------------------------------+----------------------------------+
+| openshiftCertsExpWithinNinetyDays    | .1.3.6.1.4.1.12276.1.1.1.458752  |
++--------------------------------------+----------------------------------+
+| openshiftCertificatesExpiring        | .1.3.6.1.4.1.12276.1.1.1.458753  |
++--------------------------------------+----------------------------------+
+| openshiftUpgradeNeeded               | .1.3.6.1.4.1.12276.1.1.1.459008  |
++--------------------------------------+----------------------------------+
 
 
-For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
+For the chassis partitions the following SNMP Traps are supported as of F5OS 1.8.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
 
 +---------------------------------------+-----------------------------------+
 | **Alert**                             | **OID**                           |                            
@@ -2361,46 +2373,33 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 +---------------------------------------+-----------------------------------+
 | backplane                             |  .1.3.6.1.4.1.12276.1.1.1.262144  |
 +---------------------------------------+-----------------------------------+
-| txPwrHiAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262400  |
+| txPwr                                 |  .1.3.6.1.4.1.12276.1.1.1.262400  |
 +---------------------------------------+-----------------------------------+
-| txPwrHiWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262401  |
+| rxPwr                                 |  .1.3.6.1.4.1.12276.1.1.1.262401  |
 +---------------------------------------+-----------------------------------+
-| txPwrLoAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262402  |
+| txBias                                |  .1.3.6.1.4.1.12276.1.1.1.262402  |
 +---------------------------------------+-----------------------------------+
-| txPwrLoWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262403  |
+| ddmTemp                               |  .1.3.6.1.4.1.12276.1.1.1.262403  |
 +---------------------------------------+-----------------------------------+
-| rxPwrHiAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262404  |
+| ddmVcc                                |  .1.3.6.1.4.1.12276.1.1.1.262404  |
 +---------------------------------------+-----------------------------------+
-| rxPwrHiWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262405  |
+| initialization                        |  .1.3.6.1.4.1.12276.1.1.1.262656  |
 +---------------------------------------+-----------------------------------+
-| rxPwrLoAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262406  |
+| ePVA                                  |  .1.3.6.1.4.1.12276.1.1.1.262912  |
 +---------------------------------------+-----------------------------------+
-| rxPwrLoWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262407  |
+| up                                    |  .1.3.6.1.4.1.12276.1.1.1.263168  |
 +---------------------------------------+-----------------------------------+
-| txBiasHiAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262408  |
+| down                                  |  .1.3.6.1.4.1.12276.1.1.1.263169  |
 +---------------------------------------+-----------------------------------+
-| txBiasHiWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262409  |
+| speed                                 |  .1.3.6.1.4.1.12276.1.1.1.263170  |
 +---------------------------------------+-----------------------------------+
-| txBiasLoAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262410  |
+| lacp-mac-failure                      |  .1.3.6.1.4.1.12276.1.1.1.590081  |
 +---------------------------------------+-----------------------------------+
-| txBiasLoWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262411  |
+| mac-exhaustion                        |  .1.3.6.1.4.1.12276.1.1.1.590082  |
 +---------------------------------------+-----------------------------------+
-| ddmTempHiAlarm                        |  .1.3.6.1.4.1.12276.1.1.1.262412  |
+| inaccessibleMemory                    |  .1.3.6.1.4.1.12276.1.1.1.458752  |
 +---------------------------------------+-----------------------------------+
-| ddmTempHiWarn                         |  .1.3.6.1.4.1.12276.1.1.1.262413  |
-+---------------------------------------+-----------------------------------+
-| ddmTempLoAlarm                        |  .1.3.6.1.4.1.12276.1.1.1.262414  |
-+---------------------------------------+-----------------------------------+
-| ddmTempLoWarn                         |  .1.3.6.1.4.1.12276.1.1.1.262415  |
-+---------------------------------------+-----------------------------------+
-| ddmVccHiAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262416  |
-+---------------------------------------+-----------------------------------+
-| ddmVccHiWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262417  |
-+---------------------------------------+-----------------------------------+
-| ddmVccLoAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262418  |
-+---------------------------------------+-----------------------------------+
-| ddmVccLoWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262419  |
-+---------------------------------------+-----------------------------------+
+
 
 
 Enabling SNMP Traps
@@ -3071,9 +3070,79 @@ The output below is from an rSeries unit:
     <INFO> 12-Apr-2023::11:51:45.255 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130730 10.255.8.22:6011 (TimeTicks sysUpTime=72549)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.156764576 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 
 
+**psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
 
- 
+PSU redundancy fault detected.
 
+**psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
+
+Fault detected in PSU Controller health.
+
+**fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
+
+Fault detected in Fan Controller health.
+
+**arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
+
+Change detected in System Controller Arbitration State.
+
+**switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
+
+Switch port status.
+
+**link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
+
+Management link state is down.
+
+**service-health         .1.3.6.1.4.1.12276.1.1.1.65552**
+
+Service health status.
+
+
+**datapath-fault         .1.3.6.1.4.1.12276.1.1.1.65578**
+
+Hardware datapath fault.
+
+**boot-time-integrity-status         .1.3.6.1.4.1.12276.1.1.1.65579**
+
+Boot time integrity failure detected.
+
+**incompatible-image         .1.3.6.1.4.1.12276.1.1.1.327682**
+
+Trap notification when the platform incompatible image is imported.
+
+**login-failed         .1.3.6.1.4.1.12276.1.1.1.327683**
+
+Trap notification when a bad F5OS login is happened.
+
+**nebsEnabled         .1.3.6.1.4.1.12276.1.1.1.131072**
+
+Chassis is operating with NEBS temperature thresholds.
+
+**nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
+
+Chassis is operating with non-NEBS temperature thresholds.
+
+**systemControllerNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131328**
+
+Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis)
+
+**bladeNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131329**
+
+Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)
+
+**openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.458752**
+
+One or more openshift certificates expiring within 90 days.
+
+**openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.458753**
+
+One or more openshift certificates has expired or is expiring.
+
+
+**openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.459008**
+
+The openshift cluster requires a manual rebuild to use the latest containers.
 
 Firmware Update Status Traps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3165,6 +3234,7 @@ The output below is from an rSeries unit:
 
 FIPS Related Traps
 ^^^^^^^^^^^^^^^^^^^
+
 
 **fips-fault                     .1.3.6.1.4.1.12276.1.1.1.196308**
 
