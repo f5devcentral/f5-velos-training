@@ -3132,7 +3132,7 @@ Switch port status.
 
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
-Traps for the management link state on the VELOS system controllers.
+Traps for the management port link state on the VELOS system controllers.
 
 .. code-block:: bash
     
@@ -3497,13 +3497,7 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr instant val-lane4 -0.9     <-- Current Reading
     state ddm rx-pwr high-threshold alarm 3.4   <-- Will trigger SNMP Trap for High Alarm
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
-  
 
-txPwr	.1.3.6.1.4.1.12276.1.1.1.262400
-rxPwr	.1.3.6.1.4.1.12276.1.1.1.262401
-txBias	.1.3.6.1.4.1.12276.1.1.1.262402
-ddmTemp	.1.3.6.1.4.1.12276.1.1.1.262403
-ddmVcc	.1.3.6.1.4.1.12276.1.1.1.262404
 
 
 **txPwr                   .1.3.6.1.4.1.12276.1.1.1.262400**
