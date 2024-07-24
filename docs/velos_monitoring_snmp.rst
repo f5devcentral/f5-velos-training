@@ -3494,168 +3494,54 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
   
 
-**txPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262400**
+txPwr	.1.3.6.1.4.1.12276.1.1.1.262400
+rxPwr	.1.3.6.1.4.1.12276.1.1.1.262401
+txBias	.1.3.6.1.4.1.12276.1.1.1.262402
+ddmTemp	.1.3.6.1.4.1.12276.1.1.1.262403
+ddmVcc	.1.3.6.1.4.1.12276.1.1.1.262404
 
-The transmit power threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
 
-.. code-block:: bash
+**txPwr                   .1.3.6.1.4.1.12276.1.1.1.262400**
 
-    partition2# file show log/system/snmp.log | include txPwr
-
-**txPwrHiWarn                    .1.3.6.1.4.1.12276.1.1.1.262401**
-
-The transmit power threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include txPwr
-
-**txPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262402**
-
-The transmit power threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
+The transmit power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
 .. code-block:: bash
 
-    partition2# file show log/system/snmp.log | include txPwr
-    <INFO> 3-May-2024::16:04:12.402 partition2 confd[123]: snmp snmpv2-trap reqid=677841671 10.255.80.251:162 (TimeTicks sysUpTime=26267086)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-05-03 20:04:12.327680287 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low alarm)
-
-**txPwrLoWarn                    .1.3.6.1.4.1.12276.1.1.1.262403**
+    chassis1-prod-partition-2# file show  log/snmp.log | include txPwr
+    <INFO> 23-Jul-2024::23:25:34.238 partition2 confd[122]: snmp snmpv2-trap reqid=1370215022 10.255.80.251:162 (TimeTicks sysUpTime=3571244)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218591376 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low alarm)
 
 
-The transmit power threshold for a specific transceiver has reached low txPwrLoWarn status. Run the show portgroups command to see what the current values are for that transceiver. 
+**rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include txPwr
-
-**rxPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262404**
-
-The receive power threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
+The receive power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
 .. code-block:: bash
 
-    partition2# file show log/system/snmp.log | include rxPwr
+    chassis1-prod-partition-2# file show  log/snmp.log | include rxPwr
+    <INFO> 23-Jul-2024::23:25:34.302 partition2 confd[122]: snmp snmpv2-trap reqid=1370215023 10.255.80.251:162 (TimeTicks sysUpTime=3571250)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218508824 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
+**txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
-**rxPwrHiWarn                    .1.3.6.1.4.1.12276.1.1.1.262405**
-
-The receive power threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include rxPwr
-
-**rxPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262406**
-
-The receive power threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
+The transmit bias threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
 .. code-block:: bash
 
-    partition2# file show log/system/snmp.log | include rxPwr
-    <INFO> 3-May-2024::16:04:12.346 partition2 confd[123]: snmp snmpv2-trap reqid=677841670 10.255.80.251:162 (TimeTicks sysUpTime=26267080)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-05-03 20:04:12.326883722 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
+    chassis1-prod-partition-2# file show  log/snmp.log | include txBias
+    <INFO> 23-Jul-2024::23:25:34.465 partition2 confd[122]: snmp snmpv2-trap reqid=1370215024 10.255.80.251:162 (TimeTicks sysUpTime=3571267)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218760526 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter bias low alarm)
 
-**rxPwrLoWarn                    .1.3.6.1.4.1.12276.1.1.1.262407**
+**ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
 
-The receive power threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include rxPwr
-
-**txBiasHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262408**
-
-The transmit bias threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include txBias
-
-**txBiasHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262409**
-
-The transmit bias threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include txBias
-
-**txBiasLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262410**
-
-The transmit bias threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include txBias
-    <INFO> 3-May-2024::16:04:12.519 partition2 confd[123]: snmp snmpv2-trap reqid=677841672 10.255.80.251:162 (TimeTicks sysUpTime=26267098)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-05-03 20:04:12.327919273 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter bias low alarm)
-
-**txBiasLoWarn                   .1.3.6.1.4.1.12276.1.1.1.262411**
-
-The transmit bias threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-.. code-block:: bash
-
-    partition2# file show log/system/snmp.log | include txBias
-
-**ddmTempHiAlarm                 .1.3.6.1.4.1.12276.1.1.1.262412**
-
-The ddm temperature threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
+The ddm temperature threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
 
 .. code-block:: bash
 
 
 
-**ddmTempHiWarn                  .1.3.6.1.4.1.12276.1.1.1.262413**
+**ddmVcc                   .1.3.6.1.4.1.12276.1.1.1.262404**
 
-The ddm temperature threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver.
-
-.. code-block:: bash
-
-
-**ddmTempLoAlarm                 .1.3.6.1.4.1.12276.1.1.1.262414**
-
-The ddm temperature threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver.
+The ddm voltage threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
 
 .. code-block:: bash
-
-
-
-**ddmTempLoWarn                  .1.3.6.1.4.1.12276.1.1.1.262415**
-
-The ddm temperature threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver.
-
-.. code-block:: bash
-
-
-
-**ddmVccHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262416**
-
-The ddm vcc (Voltage) threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver.
-
-.. code-block:: bash
-
-
-
-**ddmVccHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262417**
-
-The ddm vcc (Voltage) threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver.
-
-.. code-block:: bash
-
-
-
-**ddmVccLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262418**
-
-The ddm vcc (Voltage) threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver.
-
-.. code-block:: bash
-
-
-
-**ddmVccLoWarn                   .1.3.6.1.4.1.12276.1.1.1.262419**
-
-The ddm vcc (Voltage) threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver.
-
-.. code-block:: bash
-
 
 
 
