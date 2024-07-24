@@ -3080,75 +3080,186 @@ The output below is from an rSeries unit:
 
 PSU redundancy fault detected.
 
+.. code-block:: bash
+
+
 **psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
 
 Fault detected in PSU Controller health.
+
+.. code-block:: bash
+    
 
 **fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
 
 Fault detected in Fan Controller health.
 
+.. code-block:: bash
+    
+
 **arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
 
 Change detected in System Controller Arbitration State.
+
+.. code-block:: bash
+    
 
 **switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
 
 Switch port status.
 
+.. code-block:: bash
+    
+
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
 Management link state is down.
 
+.. code-block:: bash
+    
+
 **service-health         .1.3.6.1.4.1.12276.1.1.1.65552**
 
 Service health status.
+
+.. code-block:: bash
+    
 
 
 **datapath-fault         .1.3.6.1.4.1.12276.1.1.1.65578**
 
 Hardware datapath fault.
 
+.. code-block:: bash
+    
+
 **boot-time-integrity-status         .1.3.6.1.4.1.12276.1.1.1.65579**
 
 Boot time integrity failure detected.
+
+.. code-block:: bash
+    
 
 **incompatible-image         .1.3.6.1.4.1.12276.1.1.1.327682**
 
 Trap notification when the platform incompatible image is imported.
 
+.. code-block:: bash
+    
+
 **login-failed         .1.3.6.1.4.1.12276.1.1.1.327683**
 
 Trap notification when a bad F5OS login is happened.
+
+.. code-block:: bash
+    
 
 **nebsEnabled         .1.3.6.1.4.1.12276.1.1.1.131072**
 
 Chassis is operating with NEBS temperature thresholds.
 
+.. code-block:: bash
+    
+
 **nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
 
 Chassis is operating with non-NEBS temperature thresholds.
 
+.. code-block:: bash
+    
+
 **systemControllerNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131328**
 
-Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis)
+Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
+
+.. code-block:: bash
+    
 
 **bladeNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131329**
 
-Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)
+Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis).
+
+.. code-block:: bash
+    
 
 **openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.458752**
 
 One or more openshift certificates expiring within 90 days.
 
+.. code-block:: bash
+    
+
 **openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.458753**
 
 One or more openshift certificates has expired or is expiring.
+
+.. code-block:: bash
+    
 
 
 **openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.459008**
 
 The openshift cluster requires a manual rebuild to use the latest containers.
+
+.. code-block:: bash
+    
+
+**initialization         .1.3.6.1.4.1.12276.1.1.1.262656**
+
+Critical issue in fpga and datapath initialization process.
+
+.. code-block:: bash
+    
+
+
+**ePVA         .1.3.6.1.4.1.12276.1.1.1.262912**
+
+Could not initialize ePVA.
+
+.. code-block:: bash
+    
+
+**up         .1.3.6.1.4.1.12276.1.1.1.263168**
+
+Interface up.
+
+.. code-block:: bash
+    
+
+**down         .1.3.6.1.4.1.12276.1.1.1.263169**
+
+Interface down.
+
+.. code-block:: bash
+    
+
+**speed         .1.3.6.1.4.1.12276.1.1.1.263170**
+
+Port speed change event.
+
+.. code-block:: bash
+    
+
+**lacp-mac-failure         .1.3.6.1.4.1.12276.1.1.1.590081**
+
+Failed to publish LACP MAC address to the database.
+
+.. code-block:: bash
+    
+
+**mac-exhaustion         .1.3.6.1.4.1.12276.1.1.1.590082**
+
+Partition MAC pool is exhausted.
+
+.. code-block:: bash
+    
+
+**inaccessibleMemory         .1.3.6.1.4.1.12276.1.1.1.458752**
+
+Notification indicating unusable hugepage memory.
+
+.. code-block:: bash
+    
 
 Firmware Update Status Traps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
