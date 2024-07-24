@@ -3132,10 +3132,15 @@ Switch port status.
 
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
-Management link state is down.
+Traps for the management link state on the VELOS system controllers.
 
 .. code-block:: bash
     
+    <INFO> 23-Jul-2024::23:50:08.503 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934240 10.255.80.251:162 (TimeTicks sysUpTime=4040110)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:50:08.433629827 UTC)(OCTET STRING alertDescription=Management link state is down)
+    <INFO> 23-Jul-2024::23:50:08.516 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934241 10.255.80.251:162 (TimeTicks sysUpTime=4040111)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:50:08.433666735 UTC)(OCTET STRING alertDescription=Front-panel management port link status is down)
+    <INFO> 23-Jul-2024::23:51:08.493 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934242 10.255.80.251:162 (TimeTicks sysUpTime=4046108)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471133766 UTC)(OCTET STRING alertDescription=Management link state is down)
+    <INFO> 23-Jul-2024::23:51:08.547 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934243 10.255.80.251:162 (TimeTicks sysUpTime=4046114)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471162616 UTC)(OCTET STRING alertDescription=Front-panel management port link status is up)
+
 
 **service-health         .1.3.6.1.4.1.12276.1.1.1.65552**
 
