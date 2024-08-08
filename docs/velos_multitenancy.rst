@@ -60,6 +60,13 @@ Each BX110 blade has 28 vCPUs, however 6 of those vCPUs are dedicated to the F5O
 
 Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is because a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior, only a very lightly loaded LTM/DNS-only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
 
++--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
+| **VELOS Blade Type**     | **Memory per Blade** | **Memory Use by F5OS** | **Memory Available to Tenants** | **Minimum RAM used (Max vCPU)**   | **Extra RAM Available for Tenants** | **Max vCPUs** |
++==========================+======================+========================+=================================+===================================+=====================================+===============+
+| BX110                    | 128GB RAM            |  33GB                  |  95GB                           |  79GB                             |  15GB                               |   22          |
++--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
+| BX520                    | 512GB RAM            |  33GB                  |  479GB                          |  345GB                            |  134GB                              |   96          |
++--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
 
 For the BX520 the default memory allocations for Recommended mode are shown below.
 
