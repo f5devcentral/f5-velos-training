@@ -2680,28 +2680,6 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | **Alert**                            | **OID**                          |                            
 +======================================+==================================+
-| coldStart                            | .1.3.6.1.6.3.1.1.5.1             |
-+--------------------------------------+----------------------------------+
-| lcd-fault                            | .1.3.6.1.4.1.12276.1.1.1.65792   |
-+--------------------------------------+----------------------------------+
-| psu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65793   |
-+--------------------------------------+----------------------------------+
-| module-present                       | .1.3.6.1.4.1.12276.1.1.1.65794   |
-+--------------------------------------+----------------------------------+
-| module-communication-error           | .1.3.6.1.4.1.12276.1.1.1.65795   |
-+--------------------------------------+----------------------------------+
-| psu-redundancy-fault                 | .1.3.6.1.4.1.12276.1.1.1.65796   |
-+--------------------------------------+----------------------------------+
-| psu-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65797   |
-+--------------------------------------+----------------------------------+
-| fan-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65798   |
-+--------------------------------------+----------------------------------+
-| arbitration-state                    | .1.3.6.1.4.1.12276.1.1.1.66048   |
-+--------------------------------------+----------------------------------+
-| switch-status                        | .1.3.6.1.4.1.12276.1.1.1.66049   |
-+--------------------------------------+----------------------------------+
-| link-state                           | .1.3.6.1.4.1.12276.1.1.1.66050   |
-+--------------------------------------+----------------------------------+
 | hardware-device-fault                | .1.3.6.1.4.1.12276.1.1.1.65536   |
 +--------------------------------------+----------------------------------+
 | firmware-fault                       | .1.3.6.1.4.1.12276.1.1.1.65537   |
@@ -2790,6 +2768,34 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | boot-time-integrity-status           | .1.3.6.1.4.1.12276.1.1.1.65579   |
 +--------------------------------------+----------------------------------+
+| lcd-fault                            | .1.3.6.1.4.1.12276.1.1.1.65792   |
++--------------------------------------+----------------------------------+
+| psu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65793   |
++--------------------------------------+----------------------------------+
+| module-present                       | .1.3.6.1.4.1.12276.1.1.1.65794   |
++--------------------------------------+----------------------------------+
+| module-communication-error           | .1.3.6.1.4.1.12276.1.1.1.65795   |
++--------------------------------------+----------------------------------+
+| psu-redundancy-fault                 | .1.3.6.1.4.1.12276.1.1.1.65796   |
++--------------------------------------+----------------------------------+
+| psu-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65797   |
++--------------------------------------+----------------------------------+
+| fan-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65798   |
++--------------------------------------+----------------------------------+
+| arbitration-state                    | .1.3.6.1.4.1.12276.1.1.1.66048   |
++--------------------------------------+----------------------------------+
+| switch-status                        | .1.3.6.1.4.1.12276.1.1.1.66049   |
++--------------------------------------+----------------------------------+
+| link-state                           | .1.3.6.1.4.1.12276.1.1.1.66050   |
++--------------------------------------+----------------------------------+
+| nebsEnabled                          | .1.3.6.1.4.1.12276.1.1.1.131072  |
++--------------------------------------+----------------------------------+
+| nebsDisabled                         | .1.3.6.1.4.1.12276.1.1.1.131073  |
++--------------------------------------+----------------------------------+
+| systemControllerNebsMismatch         | .1.3.6.1.4.1.12276.1.1.1.131929  |
++--------------------------------------+----------------------------------+
+| bladeNebsMismatch                    | .1.3.6.1.4.1.12276.1.1.1.131329  |
++--------------------------------------+----------------------------------+
 | fipsError                            | .1.3.6.1.4.1.12276.1.1.1.196608  |
 +--------------------------------------+----------------------------------+
 | core-dump                            | .1.3.6.1.4.1.12276.1.1.1.327680  |
@@ -2800,22 +2806,15 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +--------------------------------------+----------------------------------+
 | login-failed                         | .1.3.6.1.4.1.12276.1.1.1.327683  |
 +--------------------------------------+----------------------------------+
-| nebsEnabled                          | .1.3.6.1.4.1.12276.1.1.1.131072  |
-+--------------------------------------+----------------------------------+
-| nebsDisabled                         | .1.3.6.1.4.1.12276.1.1.1.131073  |
-+--------------------------------------+----------------------------------+
-| systemControllerNebsMismatch         | .1.3.6.1.4.1.12276.1.1.1.131929  |
-+--------------------------------------+----------------------------------+
-| bladeNebsMismatch                    | .1.3.6.1.4.1.12276.1.1.1.131329  |
-+--------------------------------------+----------------------------------+
 | openshiftCertsExpWithinNinetyDays    | .1.3.6.1.4.1.12276.1.1.1.458752  |
 +--------------------------------------+----------------------------------+
 | openshiftCertificatesExpiring        | .1.3.6.1.4.1.12276.1.1.1.458753  |
 +--------------------------------------+----------------------------------+
 | openshiftUpgradeNeeded               | .1.3.6.1.4.1.12276.1.1.1.459008  |
 +--------------------------------------+----------------------------------+
-| authenticationFailure                | .1.3.6.1.6.3.1.1.5.5             |
+| coldStart                            | .1.3.6.1.6.3.1.1.5.1             |
 +--------------------------------------+----------------------------------+
+
 
 For the chassis partitions the following SNMP Traps are supported as of F5OS 1.8.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
 
@@ -2952,8 +2951,7 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.8
 +---------------------------------------+-----------------------------------+
 | inaccessibleMemory                    |  .1.3.6.1.4.1.12276.1.1.1.458752  |
 +---------------------------------------+-----------------------------------+
-| authenticationFailure                 | .1.3.6.1.6.3.1.1.5.5              |
-+---------------------------------------+-----------------------------------+
+
 
 
 Enabling SNMP Traps
@@ -3304,23 +3302,7 @@ In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trig
     test1-1# 
 
 
-**authenticationFailure     1.3.6.1.6.3.1.1.5.5**
 
-An SNMP Trap will be generated for login failures to the F5OS interfaces. Below is an example of an authentication failure trap generated on a system controller.
-
-.. code-block:: bash
-
-    velos-chassis2-1-active# file tail -f log/confd/snmp.log 
-    <INFO> 22-Aug-2024::13:18:24.022 controller-1 confd[656]: snmp snmpv2-trap reqid=174749401 10.255.80.251:162 (TimeTicks sysUpTime=5306232)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:23.991872061 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
-    <INFO> 22-Aug-2024::13:18:28.121 controller-1 confd[656]: snmp snmpv2-trap reqid=174749402 10.255.80.251:162 (TimeTicks sysUpTime=5306642)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:28.071075669 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
-    <INFO> 22-Aug-2024::13:18:31.330 controller-1 confd[656]: snmp snmpv2-trap reqid=174749403 10.255.80.251:162 (TimeTicks sysUpTime=5306963)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:31.324417671 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
-
-Below is an example of an authentication failure trap generated on a chassis partition.
-
-.. code-block:: bash
-
-    Production-2# file tail -f log/snmp.log 
-    <INFO> 22-Aug-2024::13:00:33.112 partition2 confd[123]: snmp snmpv2-trap reqid=1289508594 10.255.80.251:162 (TimeTicks sysUpTime=5028649)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=partition2(Production))(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:00:33.100340535 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
 
 F5OS Specific Traps
 ------------------
@@ -3742,14 +3724,23 @@ Trap notification when the platform incompatible image is imported.
 
 .. code-block:: bash
     
+**login-failed     .1.3.6.1.4.1.12276.1.1.1.327683**
 
-**login-failed         .1.3.6.1.4.1.12276.1.1.1.327683**
-
-Trap notification when a login attempt has failed to either the system controller or the chassis partition.
+An SNMP Trap will be generated for login failures to the F5OS interfaces. Below is an example of an authentication failure trap generated on a system controller.
 
 .. code-block:: bash
-    
-    <INFO> 23-Jul-2024::20:17:16.336 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934239 10.255.80.251:162 (TimeTicks sysUpTime=2762893)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 00:17:16.328681225 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.2.112)
+
+    velos-chassis2-1-active# file tail -f log/confd/snmp.log 
+    <INFO> 22-Aug-2024::13:18:24.022 controller-1 confd[656]: snmp snmpv2-trap reqid=174749401 10.255.80.251:162 (TimeTicks sysUpTime=5306232)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:23.991872061 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+    <INFO> 22-Aug-2024::13:18:28.121 controller-1 confd[656]: snmp snmpv2-trap reqid=174749402 10.255.80.251:162 (TimeTicks sysUpTime=5306642)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:28.071075669 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+    <INFO> 22-Aug-2024::13:18:31.330 controller-1 confd[656]: snmp snmpv2-trap reqid=174749403 10.255.80.251:162 (TimeTicks sysUpTime=5306963)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:31.324417671 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+
+Below is an example of an authentication failure trap generated on a chassis partition.
+
+.. code-block:: bash
+
+    Production-2# file tail -f log/snmp.log 
+    <INFO> 22-Aug-2024::13:00:33.112 partition2 confd[123]: snmp snmpv2-trap reqid=1289508594 10.255.80.251:162 (TimeTicks sysUpTime=5028649)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=partition2(Production))(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:00:33.100340535 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
 
 **nebsEnabled         .1.3.6.1.4.1.12276.1.1.1.131072**
 
