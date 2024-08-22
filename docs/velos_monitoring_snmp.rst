@@ -3702,7 +3702,13 @@ Switch port status.
 
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
-Traps for the management port link state on the VELOS system controllers.
+Traps for the front panel system controller management port link state. Each system controller has a single 10Gb Ethernet port. Traps will be generated when these ports change status. The Source of the trap will either be controller-1 or controller-2, and the body of the trap will indicate the status of the port (up or down). Traps will be sent with either an **assert** when an alarm occurs, a **clear** when the alarm is cleared, or an **event** which is providing an update to a raised alarm event.
+
+- assert(1) is reported in alertEffect when alarm is raised.
+- clear(0) is reported in alertEffect when alarm is cleared.
+- event(2) is updated in alertEffect when event notification is reported.
+
+As an example, the following set of traps are from a Link Down event on controller-1. The first trap has **alertEffect=1** indicating an assert. The second trap has **alertEffect=2** indicating an additional infromation about the assert. The 3rd trap is a clear event of the original alert indicated by the **alertEffect=0**. Fianlly addtional information is provided **alertEffect=2** in the 4th trap, indicating the link is back up.
 
 .. code-block:: bash
     
