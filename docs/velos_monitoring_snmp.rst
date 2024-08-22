@@ -4,7 +4,7 @@ VELOS F5OS SNMP Monitoring and Alerting
 
 SNMP support for F5OS will vary by release. In the initial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**. F5OS-C 1.5.x added additional SNMP MIB and trap coverage and F5OS-C 1.6.0 added SNMPv3 support. The **F5-PLATFORM-STATS-MIB** and **F5-OS-SYSTEM-MIB** were not supported on the system controllers until F5OS-C 1.6.0.
 
-As of F5OS-C 1.6.0 the list of SNMP MIBs available are as follows:
+As of F5OS-C 1.8.0 the list of SNMP MIBs available are as follows:
 
 **VELOS System Controller MIBs**
 
@@ -19,7 +19,7 @@ F5OS Controller MIBs:
 NetSNMP MIBs System Controller:
 
 - EtherLike-MIB
-- HOST-RESOURCES-MIB (Included for dependency reasons, not supported)
+- HOST-RESOURCES-MIB
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
@@ -41,19 +41,20 @@ NetSNMP MIBs System Controller:
 
 F5OS Chassis Partition MIBs:
 
-- F5-ALERT-DEF-MIB
-- F5-COMMON-SMI-MIB
-- F5-OS-LLDP-MIB
-- F5-OS-PLATFORM-SMI-MIB
-- F5-OS-SYSTEM-MIB
-- F5-PARTITION-ALERT-NOTIF-MIB
 - F5-PLATFORM-STATS-MIB
+- F5-PARTITION-ALERT-NOTIF-MIB
+- F5-OS-TENANT-MIB
+- F5-OS-SYSTEM-MIB
+- F5-OS-PLATFORM-SMI-MIB
+- F5-OS-LLDP-MIB
+- F5-COMMON-SMI-MIB
+- F5-ALERT-DEF-MIB
 
 
 NetSNMP MIBs Chassis Partition:
 
 - EtherLike-MIB
-- HOST-RESOURCES-MIB (Included for dependency reasons, not supported)
+- HOST-RESOURCES-MIB
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
@@ -1382,8 +1383,8 @@ Polling SNMP Endpoints
 Once SNMP is properly setup and allow-lists are enabled (in both the system controllers and chassis partitions), you can poll SNMP objects from remote endpoints. If you have an SNMP manager, it is recommended you download the appropriate MIBs from the VELOS chassis and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilities from a remote client to validate the SNMP endpoints. You can then poll/query either the chassis partition or the system controller via SNMP to get stats from the system using the following SNMP OID's:
 
 
-SNMP System
------------
+System
+------
 
 You can view system parameters such as SysDescr, sysObjectID, sysUptime, sysContact, sysName, sysLocation, sysServices, sysORLastChange, sysORTable, sysDateAndTime by SNMP walking the following OID.
 
@@ -1405,8 +1406,8 @@ Example output:
     prompt%
 
 
-SNMP ifTable & ifXTable
------------------------
+ifTable & ifXTable
+------------------
 
 You can poll the following SNMP OIDs to get detailed Interface stats for each physical port on the BX110 blades, and for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chassis partitions directly. Below are the table views of the ifTable and ifXTable, you can poll individual interfaces if needed.
 
@@ -1871,24 +1872,107 @@ Below is an example of an SNMP response from the system controllers.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
     SNMP table: F5-PLATFORM-STATS-MIB::diskUtilizationStatsTable
 
-    diskPercentageUsed  diskTotalIops diskReadIops diskReadMerged     diskReadBytes diskReadLatencyMs   diskWriteIops diskWriteMerged       diskWriteBytes diskWriteLatencyMs
-                    ? 225124465 IOPs  754014 IOPs         616139  9625482752 bytes         146668 ms 1141617894 IOPs      1017149001 10947930554880 bytes        32045027 ms
-                    ? 230817683 IOPs  772963 IOPs         722503 10391336960 bytes         132484 ms 1171208497 IOPs       929037671 10557217084416 bytes        31396802 ms
-    prompt%
+    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged     diskReadBytes diskReadLatencyMs diskWriteIops diskWriteMerged    diskWriteBytes diskWriteLatencyMs
+        12 percentage        0 IOPs     204 IOPs              0     8749056 bytes            185 ms        0 IOPs               0           0 bytes               0 ms
+        12 percentage        0 IOPs  666228 IOPs        1115473 10110011392 bytes         272411 ms  2118902 IOPs         2351220 28983360512 bytes         5512882 ms
+        17 percentage        0 IOPs     201 IOPs              0     8355840 bytes            182 ms        0 IOPs               0           0 bytes               0 ms
+        17 percentage        0 IOPs  547803 IOPs         858905  8188963328 bytes          80584 ms  1404623 IOPs         1786639 22982436864 bytes         2349522 ms
+    prompt %
 
 Below is an example of an SNMP response from a chassis partition.
 
 .. code-block:: bash
 
-    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
     SNMP table: F5-PLATFORM-STATS-MIB::diskUtilizationStatsTable
 
-    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged    diskReadBytes diskReadLatencyMs  diskWriteIops diskWriteMerged      diskWriteBytes diskWriteLatencyMs
-                    ? 61438858 IOPs  385138 IOPs             39 5277251584 bytes         133577 ms 715914107 IOPs       488863893 7439268038144 bytes        49397122 ms
-                    ? 43878413 IOPs  106619 IOPs             57 2466797568 bytes          56394 ms 467008954 IOPs       400818555 4270643787264 bytes        12735703 ms
+    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged    diskReadBytes diskReadLatencyMs diskWriteIops diskWriteMerged   diskWriteBytes diskWriteLatencyMs
+        3 percentage        0 IOPs  119946 IOPs              0 4526585856 bytes          86491 ms   189810 IOPs          187943 6725282304 bytes         3824236 ms
+        3 percentage        0 IOPs  127245 IOPs              0 4551145472 bytes          87063 ms   193734 IOPs          193829 6859720192 bytes         6429589 ms
+    prompt%
+
+Host Resources Storage Table
+----------------------------
+
+The table below shows the current file system utilization on an VELOS chassis.
+
+**hrStorageTable OID: 1.3.6.1.2.1.25.2.3**
+
+The table below is from a VELOS System Controller:
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 hrStorageTable
+    SNMP table: HOST-RESOURCES-MIB::hrStorageTable
+
+    hrStorageIndex                            hrStorageType                         hrStorageDescr hrStorageAllocationUnits hrStorageSize hrStorageUsed hrStorageAllocationFailures
+            65537 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-1 /dev               4096 Bytes       4085896             0                           ?
+            65538 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-1 /dev/shm               4096 Bytes       4100923             0                           ?
+            65539 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-1 /run               4096 Bytes       4100923          5725                           ?
+            65540 HOST-RESOURCES-TYPES::hrStorageFixedDisk            controller-1 /sys/fs/cgroup               4096 Bytes       4100923             0                           ?
+            65541 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-1 /sysroot               4096 Bytes     118410536      14566508                           ?
+            65542 HOST-RESOURCES-TYPES::hrStorageFixedDisk                     controller-1 /boot               4096 Bytes        121909         36321                           ?
+            65543 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 controller-1 /boot/efi               4096 Bytes        127930          3218                           ?
+            65544 HOST-RESOURCES-TYPES::hrStorageFixedDisk       controller-1 /var/export/chassis               4096 Bytes      90050865      21728365                           ?
+            65545 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition1               4096 Bytes       2618880          8274                           ?
+            65546 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition1/IMAGES               4096 Bytes       3929600          8260                           ?
+            65547 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition1/shared               4096 Bytes       2618880          8260                           ?
+            65548 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition2               4096 Bytes       2618880         37687                           ?
+            65549 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509948                           ?
+            65550 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
+            65551 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition3               4096 Bytes       2618880         38662                           ?
+            65552 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition3/IMAGES               4096 Bytes       3929600       1067005                           ?
+            65553 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition3/shared               4096 Bytes       2618880          8303                           ?
+            131073 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-2 /dev               4096 Bytes       4085896             0                           ?
+            131074 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-2 /dev/shm               4096 Bytes       4100923             0                           ?
+            131075 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-2 /run               4096 Bytes       4100923          5815                           ?
+            131076 HOST-RESOURCES-TYPES::hrStorageFixedDisk            controller-2 /sys/fs/cgroup               4096 Bytes       4100923             0                           ?
+            131077 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-2 /sysroot               4096 Bytes      86403125      15398397                           ?
+            131078 HOST-RESOURCES-TYPES::hrStorageFixedDisk                     controller-2 /boot               4096 Bytes        121909         36316                           ?
+            131079 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 controller-2 /boot/efi               4096 Bytes        127930          3218                           ?
+            131080 HOST-RESOURCES-TYPES::hrStorageFixedDisk       controller-2 /var/export/chassis               4096 Bytes      66054144      17751119                           ?
+            131081 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition1               4096 Bytes       2618880          8248                           ?
+            131082 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition1/IMAGES               4096 Bytes       3929600          8260                           ?
+            131083 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition1/shared               4096 Bytes       2618880          8260                           ?
+            131084 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition2               4096 Bytes       2618880         37808                           ?
+            131085 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509956                           ?
+            131086 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
+            131087 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition3               4096 Bytes       2618880         37752                           ?
+            131088 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition3/IMAGES               4096 Bytes       3929600       1067013                           ?
+            131089 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition3/shared               4096 Bytes       2618880          8303                           ?
+    prompt% 
+
+It can also be run against a VELOS chassis partition:
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 hrStorageTable
+    SNMP table: HOST-RESOURCES-MIB::hrStorageTable
+
+    hrStorageIndex                            hrStorageType                         hrStorageDescr hrStorageAllocationUnits hrStorageSize hrStorageUsed hrStorageAllocationFailures
+            65537 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-1 /dev               4096 Bytes      16432028             0                           ?
+            65538 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-1 /dev/shm               4096 Bytes      16447028             0                           ?
+            65539 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-1 /run               4096 Bytes      16447028         14531                           ?
+            65540 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 blade-1 /sys/fs/cgroup               4096 Bytes      16447028             0                           ?
+            65541 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-1 /sysroot               4096 Bytes     239039335       7523014                           ?
+            65542 HOST-RESOURCES-TYPES::hrStorageFixedDisk                          blade-1 /boot               4096 Bytes        121909         36037                           ?
+            65543 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      blade-1 /boot/efi               4096 Bytes        127930          5256                           ?
+            131073 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-2 /dev               4096 Bytes      16432028             0                           ?
+            131074 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-2 /dev/shm               4096 Bytes      16447028             0                           ?
+            131075 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-2 /run               4096 Bytes      16447028         14865                           ?
+            131076 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 blade-2 /sys/fs/cgroup               4096 Bytes      16447028             0                           ?
+            131077 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-2 /sysroot               4096 Bytes     239039335      11878572                           ?
+            131078 HOST-RESOURCES-TYPES::hrStorageFixedDisk                          blade-2 /boot               4096 Bytes        121909         36041                           ?
+            131079 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      blade-2 /boot/efi               4096 Bytes        127930          5256                           ?
+            6619137 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition2               4096 Bytes       2618880         37294                           ?
+            6619138 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509948                           ?
+            6619139 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
+            6684673 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition2               4096 Bytes       2618880         37821                           ?
+            6684674 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509956                           ?
+            6684675 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
     prompt%
 
 Componenent Info Table
@@ -1904,37 +1988,72 @@ Below is the component info table from the system controller layer.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:componentInfoTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:componentInfoTable
+
     SNMP table: F5-PLATFORM-STATS-MIB::componentInfoTable
 
-        serialNo                    model
-    sub0811g002h                        ?
-    19331BPJ0075                        ?
-    19332BPJ0129                        ?
-    bld422435s                VELOS BX110
-    bld424551s                VELOS BX110
-    bld422573s                VELOS BX110
-    chs600032s                VELOS CX410
-    sub0772g006w                        ?
-    bld422584s                VELOS SX410
-    bld424548s                VELOS SX410
-    sub0759g003u                        ?
-    sub0759g003z                        ?
+        serialNo                     model baudRate
+    sub0811g000m                         ?        ?
+    19010BPJ0038                         ?        ?
+    19010BPJ0020                         ?        ?
+    bld424257s                       BX110        ?
+    bld424258s                       BX110        ?
+    bld422437s                       BX110        ?
+    chs600148s                       CX410        ?
+    Sub0772g001b                         ?        ?
+    bld424389s                       SX410      19200
+    bld424501s                       SX410      19200
+    sub0759g0014                         ?        ?
+    sub0759g000z                         ?        ?
     prompt% 
+
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable and each component and its coresponding serial number will be displayed.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:componentInfoTable
+    F5-PLATFORM-STATS-MIB::serialNo."lcd" = STRING: sub0811g000m
+    F5-PLATFORM-STATS-MIB::serialNo."psu-1" = STRING: 19010BPJ0038
+    F5-PLATFORM-STATS-MIB::serialNo."psu-2" = STRING: 19010BPJ0020
+    F5-PLATFORM-STATS-MIB::serialNo."blade-1" = STRING: bld424257s
+    F5-PLATFORM-STATS-MIB::serialNo."blade-2" = STRING: bld424258s
+    F5-PLATFORM-STATS-MIB::serialNo."blade-3" = STRING: bld422437s
+    F5-PLATFORM-STATS-MIB::serialNo."chassis" = STRING: chs600148s
+    F5-PLATFORM-STATS-MIB::serialNo."fantray-1" = STRING: Sub0772g001b
+    F5-PLATFORM-STATS-MIB::serialNo."controller-1" = STRING: bld424389s
+    F5-PLATFORM-STATS-MIB::serialNo."controller-2" = STRING: bld424501s
+    F5-PLATFORM-STATS-MIB::serialNo."psu-controller-1" = STRING: sub0759g0014
+    F5-PLATFORM-STATS-MIB::serialNo."psu-controller-2" = STRING: sub0759g000z
+    F5-PLATFORM-STATS-MIB::model."blade-1" = STRING: BX110
+    F5-PLATFORM-STATS-MIB::model."blade-2" = STRING: BX110
+    F5-PLATFORM-STATS-MIB::model."blade-3" = STRING: BX110
+    F5-PLATFORM-STATS-MIB::model."chassis" = STRING: CX410
+    F5-PLATFORM-STATS-MIB::baudRate."controller-1" = INTEGER: 19200
+    F5-PLATFORM-STATS-MIB::baudRate."controller-2" = INTEGER: 19200
+    prompt%
+
 
 Below is the component info table from the chassis partition layer.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 F5-PLATFORM-STATS-MIB:componentInfoTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:componentInfoTable
+
     SNMP table: F5-PLATFORM-STATS-MIB::componentInfoTable
 
-    serialNo model
-    bld422435s     ?
-    bld424551s     ?
-    prompt%
+    serialNo    model baudRate
+    bld424257s  BX110        ?
+    bld424258s  BX110        ?
+    prompt% 
 
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable within the chassis partition and each blade and its coresponding serial number will be displayed.
 
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:componentInfoTable
+    F5-PLATFORM-STATS-MIB::serialNo."blade-1" = STRING: bld424257s
+    F5-PLATFORM-STATS-MIB::serialNo."blade-2" = STRING: bld424258s
+    prompt% 
 
 Power Supply Unit Stats Table
 ----------------------------
@@ -1979,8 +2098,22 @@ Below is an example of an SNMP response from the system controllers.
     19.3 centigrade 19.2 centigrade 18.5 centigrade 22.3 centigrade
     prompt%
 
+You can also walk the F5-PLATFORM-STATS-MIB:temperatureStatsTable and each component and its corresponding temperature reading will be displayed.
 
-Below is an example of an SNMP response from a chassis partition.
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:temperatureStatsTable 
+    F5-PLATFORM-STATS-MIB::tempCurrent."controller-1" = INTEGER: 18.1 centigrade
+    F5-PLATFORM-STATS-MIB::tempCurrent."controller-2" = INTEGER: 16.6 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."controller-1" = INTEGER: 16.4 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."controller-2" = INTEGER: 15.1 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."controller-1" = INTEGER: 15.7 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."controller-2" = INTEGER: 14.3 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."controller-1" = INTEGER: 18.8 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."controller-2" = INTEGER: 18.0 centigrade
+    prompt%
+
+Below is an example of an SNMP response from a chassis partition and each blade and its corresponding temperature reading will be displayed.
 
 .. code-block:: bash
 
@@ -1992,18 +2125,31 @@ Below is an example of an SNMP response from a chassis partition.
     27.0 centigrade 26.0 centigrade 25.0 centigrade 29.0 centigrade
     prompt% 
 
+You can also walk the F5-PLATFORM-STATS-MIB:temperatureStatsTable within a chassis partition and each blade within the partition and its corresponding temperature reading will be displayed.
 
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:temperatureStatsTable
+    F5-PLATFORM-STATS-MIB::tempCurrent."blade-1" = INTEGER: 21.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempCurrent."blade-2" = INTEGER: 19.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."blade-1" = INTEGER: 19.9 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."blade-2" = INTEGER: 18.6 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."blade-1" = INTEGER: 19.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."blade-2" = INTEGER: 18.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."blade-1" = INTEGER: 23.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."blade-2" = INTEGER: 21.0 centigrade
+    prompt%
 
 Memory Stats Table
 ------------------
 
-This MIB displays the memory utilization for the system controllers. It is not currently supported on the chassis partitions. 
+This MIB displays the memory utilization for the system controllers as well as the chassis partitions. Below is the table view for the system ccontrollers:
 
 **F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1**
 
 .. code-block:: bash
 
-    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:memoryStatsTable 
     SNMP table: F5-PLATFORM-STATS-MIB::memoryStatsTable
 
         memAvailable         memFree memPercentageUsed  memPlatformTotal   memPlatformUsed
@@ -2011,11 +2157,58 @@ This MIB displays the memory utilization for the system controllers. It is not c
     23474733056 bytes 468787200 bytes     30 percentage 33594761216 bytes 13459021824 bytes
     prompt% 
 
+You can also walk the F5-PLATFORM-STATS-MIB:memoryStatsTable within a system controller and each controller and its corresponding memory readings will be displayed.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    F5-PLATFORM-STATS-MIB::memAvailable."controller-1" = Counter64: 25858002944 bytes
+    F5-PLATFORM-STATS-MIB::memAvailable."controller-2" = Counter64: 25343537152 bytes
+    F5-PLATFORM-STATS-MIB::memFree."controller-1" = Counter64: 696377344 bytes
+    F5-PLATFORM-STATS-MIB::memFree."controller-2" = Counter64: 288727040 bytes
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."controller-1" = INTEGER: 23 percentage
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."controller-2" = INTEGER: 24 percentage
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."controller-1" = Counter64: 33594761216 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."controller-2" = Counter64: 33594761216 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."controller-1" = Counter64: 9703399424 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."controller-2" = Counter64: 10094477312 bytes
+    prompt%   
+
+Below is a table view of the memory consumption for all the blades within a chassis partition. In the example below there are two blades.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    SNMP table: F5-PLATFORM-STATS-MIB::memoryStatsTable
+
+        memAvailable           memFree memPercentageUsed  memPlatformTotal  memPlatformUsed
+    19053563904 bytes 15529746432 bytes     85 percentage 26843971584 bytes 7043231744 bytes
+    18955780096 bytes 15364800512 bytes     85 percentage 26843971584 bytes 7147962368 bytes
+    prompt%
+
+
+You can also walk the F5-PLATFORM-STATS-MIB:memoryStatsTable within a chassis partition and each blade within the partition and its corresponding memory readings will be displayed.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:memoryStatsTable      
+    F5-PLATFORM-STATS-MIB::memAvailable."blade-1" = Counter64: 19054059520 bytes
+    F5-PLATFORM-STATS-MIB::memAvailable."blade-2" = Counter64: 18947096576 bytes
+    F5-PLATFORM-STATS-MIB::memFree."blade-1" = Counter64: 15540944896 bytes
+    F5-PLATFORM-STATS-MIB::memFree."blade-2" = Counter64: 15365103616 bytes
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."blade-1" = INTEGER: 85 percentage
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."blade-2" = INTEGER: 85 percentage
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."blade-1" = Counter64: 26843971584 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."blade-2" = Counter64: 26843971584 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."blade-1" = Counter64: 7042252800 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."blade-2" = Counter64: 7156518912 bytes
+    prompt% 
+
 
 FPGA Stats Table
 ----------------
 
-The FPGA Stats table shows the current FPGA versions. There are two different FPGAs on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer.
+The FPGA Stats table shows the current FPGA versions. There are two different FPGAs on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer. Below is the table view.
 
 **F5-PLATFORM-STATS-MIB:fpgaTable OID: .1.3.6.1.4.1.12276.1.2.1.5.1**
 
@@ -2031,6 +2224,22 @@ The FPGA Stats table shows the current FPGA versions. There are two different FP
         atse_0      7.10.2
     prompt%
 
+You can also walk the MIB to get more information.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:fpgaTable 
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-1"."vqf_0" = STRING: vqf_0
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-1"."atse_0" = STRING: atse_0
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-2"."vqf_0" = STRING: vqf_0
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-2"."atse_0" = STRING: atse_0
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-1"."vqf_0" = STRING: 8.10.0
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-1"."atse_0" = STRING: 7.10.6
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-2"."vqf_0" = STRING: 8.10.0
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-2"."atse_0" = STRING: 7.10.6
+    prompt%
+
+
 Firmware Table
 ----------------
 
@@ -2042,31 +2251,22 @@ Below is an example of an SNMP response from the system controllers.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:fwTable  
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:fwTable  
     SNMP table: F5-PLATFORM-STATS-MIB::fwTable
 
                                 fwName     fwVersion configurable fwUpdateStatus
-                    fw-version-lop-app             ?        false           none
-                fw-version-fpga-vqf0             ?        false           none
-                fw-version-fpga-atse0             ?        false           none
-                    fw-version-lop-app             ?        false           none
-                fw-version-fpga-vqf0             ?        false           none
-                fw-version-fpga-atse0             ?        false           none
-                    fw-version-lop-app             ?        false           none
-                fw-version-fpga-vqf0             ?        false           none
-                fw-version-fpga-atse0             ?        false           none
                         fw-version-bios    2.02.170.1        false           none
                         fw-version-cpld      01.03.0A        false           none
                         fw-version-sirr        1.1.52        false           none
-                    fw-version-drive      EDA7602Q        false           none
+                    fw-version-drive      VCV10301        false           none
                     fw-version-bios-me     4.0.4.705        false           none
                     fw-version-lcd-app 2.02.141.00.1        false           none
-                    fw-version-lop-app 2.01.1228.0.1        false           none
+                    fw-version-lop-app 2.01.1276.0.1        false           none
             fw-version-lcd-bootloader 2.01.109.00.1        false           none
             fw-version-lop-bootloader 1.02.1019.0.1        false           none
-            fw-version-vfc-app-fanCtrl1  2.00.960.0.1        false           none
-            fw-version-vpc-app-psuCtrl1  2.00.827.0.1        false           none
-            fw-version-vpc-app-psuCtrl2  2.00.827.0.1        false           none
+            fw-version-vfc-app-fanCtrl1 2.00.1008.0.1        false           none
+            fw-version-vpc-app-psuCtrl1  2.00.875.0.1        false           none
+            fw-version-vpc-app-psuCtrl2  2.00.875.0.1        false           none
     fw-version-vfc-bootloader-fanCtrl1  1.02.798.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl1  1.02.669.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl2  1.02.669.0.1        false           none
@@ -2076,16 +2276,16 @@ Below is an example of an SNMP response from the system controllers.
                     fw-version-drive      EDA7602Q        false           none
                     fw-version-bios-me     4.0.4.705        false           none
                     fw-version-lcd-app 2.02.141.00.1        false           none
-                    fw-version-lop-app 2.01.1228.0.1        false           none
+                    fw-version-lop-app 2.01.1282.0.1        false              ?
             fw-version-lcd-bootloader 2.01.109.00.1        false           none
             fw-version-lop-bootloader 1.02.1019.0.1        false           none
-            fw-version-vfc-app-fanCtrl1  2.00.960.0.1        false           none
-            fw-version-vpc-app-psuCtrl1  2.00.827.0.1        false           none
-            fw-version-vpc-app-psuCtrl2  2.00.827.0.1        false           none
+            fw-version-vfc-app-fanCtrl1 2.00.1008.0.1        false           none
+            fw-version-vpc-app-psuCtrl1  2.00.875.0.1        false           none
+            fw-version-vpc-app-psuCtrl2  2.00.875.0.1        false           none
     fw-version-vfc-bootloader-fanCtrl1  1.02.798.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl1  1.02.669.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl2  1.02.669.0.1        false           none
-    prompt%
+    prompt% 
 
 Below is an example of an SNMP response from the chassis partition.
 
@@ -2117,7 +2317,353 @@ Below is an example of an SNMP response from the chassis partition.
      fw-version-lop-bootloader                      1.02.868.0.1        false           none
     prompt%
 
+SNMP Fantray Stats Table
+----------------------
 
+Query the following SNMP OID to get detailed fan speeds.
+
+**F5-PLATFORM-STATS-MIB:fantrayStatsTable  OID: .1.3.6.1.4.1.12276.1.2.1.7.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:fantrayStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::fantrayStatsTable
+
+    fan-1-speed fan-2-speed fan-3-speed fan-4-speed fan-5-speed fan-6-speed fan-7-speed fan-8-speed fan-9-speed fan-10-speed fan-11-speed fan-12-speed fantray-temperature inlet-fan-1-speed inlet-fan-2-speed inlet-fan-3-speed exhaust-fan-1-speed exhaust-fan-2-speed exhaust-fan-3-speed
+            ?           ?           ?           ?           ?           ?           ?           ?           ?            ?            ?            ?            18.0 °C          6570 RPM          6560 RPM          6516 RPM            6534 RPM            6538 RPM            6538 RPM
+    prompt% 
+
+Licensing Info
+--------------
+
+Query the following SNMP OID to get detailed licensing information.
+
+**F5-OS-SYSTEM-MIB:licenseActiveModuleTable  OID: 1.3.6.1.4.1.12276.1.3.3.9**
+
+The licenseActiveModuleTable will display all actively licensed modules.
+
+.. code-block:: bash
+
+    prompt% snmptable -v2c -c public -m ALL 10.255.2.23 F5-OS-SYSTEM-MIB:licenseActiveModuleTable
+    SNMP table: F5-OS-SYSTEM-MIB::licenseActiveModuleTable
+
+                                                                                                                                                                                                                                                                    activeModule
+    Best Bundle, CX410|Y307926-5850731|Max Compression, CX410|Rate Shaping|Max SSL, CX410|DNS, Max QPS, CX410|Advanced Web Application Firewall, CX410|Access Policy Manager, Base, CX410|Advanced Firewall Manager, CX410|Carrier Grade NAT (AFM ONLY)|Advanced Routing, CX410
+    prompt% 
+
+You can also snmpwalk from the OID 1.3.6.1.4.1.12276.1.3 to get more licensing details:
+
+.. code-block:: bash
+
+    prompt% snmpwalk -ObenU -v2c -c public 10.255.2.23 1.3.6.1.4.1.12276.1.3
+    .1.3.6.1.4.1.12276.1.3.3.1.0 = STRING: "1.6.2"
+    .1.3.6.1.4.1.12276.1.3.3.2.0 = STRING: "S7446-04251-28413-73770-4543519"
+    .1.3.6.1.4.1.12276.1.3.3.3.0 = STRING: "2024/08/21"
+    .1.3.6.1.4.1.12276.1.3.3.4.0 = STRING: "2024/04/08"
+    .1.3.6.1.4.1.12276.1.3.3.5.0 = STRING: "2024/09/20"
+    .1.3.6.1.4.1.12276.1.3.3.6.0 = STRING: "2024/08/21"
+    .1.3.6.1.4.1.12276.1.3.3.7.0 = STRING: "F101"
+    .1.3.6.1.4.1.12276.1.3.3.8.0 = STRING: "chs600148s"
+    .1.3.6.1.4.1.12276.1.3.3.9.1.2.1 = STRING: "Best Bundle, CX410|Y307926-5850731|Max Compression, CX410|Rate Shaping|Max SSL, CX410|DNS, Max QPS, CX410|Advanced Web Application Firewall, CX410|Access Policy Manager, Base, CX410|Advanced Firewall Manager, CX410|Carrier Grade NAT (AFM ONLY)|Advanced Routing, CX410"
+    prompt% 
+
+
+
+
+LLDP Configuration Table
+-----------------------------
+
+Query the following SNMP OID to get detailed LLDP configuration table. LLDP is only supported on the VELOS chassis partition interfaces, and not on the system controller management ports.
+
+**F5-OS-LLDP-MIB:lldpIfConfigTable  OID: 1.3.6.1.4.1.12276.1.4.1.1.3.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-LLDP-MIB:lldpIfConfigTable 
+    SNMP table: F5-OS-LLDP-MIB::lldpIfConfigTable
+
+    lldpIfName lldpIfEnabled lldpIfTlvAdvertisement lldpIfTlvmap
+        1/1.0          true                   txrx       130943
+        1/2.0          true                   txrx       130943
+        2/1.0          true                   txrx       130943
+        2/2.0          true                   txrx       130943
+    prompt%
+
+
+LLDP Neighbors Table
+-----------------------------
+
+Query the following SNMP OID to get detailed LLDP neighbors table.
+
+**F5-OS-LLDP-MIB:lldpNeighborsTable  OID: 1.3.6.1.4.1.12276.1.4.1.1.4.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-LLDP-MIB:lldpNeighborsTable
+    SNMP table: F5-OS-LLDP-MIB::lldpNeighborsTable
+
+    lldpLocalInterface lldpNeighborPortId lldpNeighborChassisId                           lldpNeighborPortDesc           lldpNeighborSysName                                                            lldpNeighborSysDesc lldpNeighborSysCap lldpNeighborMgmtAddr lldpNeighborPvid lldpNeighborPpvid lldpNeighborVlanName lldpNeighborVlanTag lldpNeighborProtocolIdentity lldpNeighborAutoNego lldpNeighborPmd lldpNeighborMau lldpNeighborAggStatus lldpNeighborAggPortid lldpNeighborMfs lldpNeighborF5ProductModel
+                1/2.0       Ethernet30/1     98:5d:82:1d:2c:a9 \"Port Channel to VELOS#2 Chassis Partition1\" BOSPDTSTB0401.pdbos.f5net.com Arista Networks EOS version 4.26.5M running on an Arista Networks DCS-7170-32C            1310724            10.39.0.3                1                 0                    ?                   0                            0                    0               0               0                     3                    75            9236                          ?
+                2/1.0       Ethernet29/1     98:5d:82:1d:2c:a9 \"Port Channel to VELOS#2 Chassis Partition1\" BOSPDTSTB0401.pdbos.f5net.com Arista Networks EOS version 4.26.5M running on an Arista Networks DCS-7170-32C            1310724            10.39.0.3                1                 0                    ?                   0                            0                    0               0               0                     3                    75            9236                          ?
+    prompt% 
+
+Tenant State Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.1.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantStateTable
+
+            tenantName tenantType                                     tenantImage                   tenantDeploymentFile tenantMgmtIP tenantPrefixLength tenantDagIPv6PrefixLength tenantGateway tenantCryptos tenantVcpuCoresPerNode tenantMemory tenantStorageSize tenantRunningState tenantMacDataSize tenantApplianceMode                                                                        tenantUnitKeyHash tenantFloatingAddress tenantHAState tenantNameSpace tenantPrimarySlot tenantQatVFCount tenantImageVersion tenantStatus tenantTargetDeploymentFile tenantTargetImage tenantUpgradeStatus    tenantBaseMac tenantMgmtMac
+            mtb-test1      bigip BIGIP-17.1.1.2-0.0.10.ALL-F5OS.qcow2.zip.bundle                                      ?     10.1.1.2                 24                       128      10.1.1.1       enabled                     22     90000 MB            700 GB         configured                16            disabled Cc48+QSpnn/7NlSasw9+iLFhqako4baE/IaNMb0gemVHEDNoxXwdx85n9qz4o61UgVH2X5qp/p1GvyeOIZEzvw==                     ?             ?               ?                 ?               33                  ?   Configured                          ?                 ?                   ? 0:94:a1:8e:58:1c             ?
+    tenant1-f5demo-net  bigipnext               BIG-IP-Next-20.2.1-2.430.2+0.0.37 BIG-IP-Next-20.2.1-2.430.2+0.0.37.yaml  10.255.2.15                 24                       128  10.255.2.252       enabled                      4     14848 MB             25 GB           deployed                 1            disabled iIld1ZOJRAQ0J68/2h8tsWDyl/vL6BJtuPcoEMrBAsg7Lm52bEL3lyXPBMgfh2UwvRzgUx1qeC9hz+Pz2BwbHA==                     ?    standalone               ?                 ?                8                  ?      Running                          ?                 ?          notstarted  0:94:a1:8e:58:9             ?
+    tenant2-f5demo-net  bigipnext               BIG-IP-Next-20.2.1-2.430.2+0.0.48 BIG-IP-Next-20.2.1-2.430.2+0.0.48.yaml  10.255.2.14                 24                       128  10.255.2.252       enabled                      4     14848 MB             25 GB           deployed                 1            disabled uIc2yU238abhyqSDm1N0T7sltuN9YFbQumYzYgXFnk/YXaX8cGoMrMVbvAJgqNK7fzKogP/XvpZtNAZwZFbNfw==                     ?    standalone               ?                 ?                8                  ?      Running                          ?                 ?          notstarted  0:94:a1:8e:58:c             ?
+    prompt%
+
+Tenant Virtual Wires Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantVirtualWiresTable  OID: 1.3.6.1.4.1.12276.1.5.1.2.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantVirtualWiresTable
+
+Tenant VLANs Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantVlansTable  OID: 1.3.6.1.4.1.12276.1.5.1.3.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantVlansTable
+    SNMP table: F5-OS-TENANT-MIB::tenantVlansTable
+
+    tenantVlan
+            500
+        3010
+        3011
+        3010
+        3011
+    prompt%
+
+Tenant Nodes Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantNodesTable  OID: 1.3.6.1.4.1.12276.1.5.1.4.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantNodesTable
+    SNMP table: F5-OS-TENANT-MIB::tenantNodesTable
+
+    tenantNode
+            1
+            2
+            1
+            2
+    prompt%
+
+Tenant CPU Allocation Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantCPUAllocationsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.5.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantCPUAllocationsStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantCPUAllocationsStateTable
+
+    tenantCPU
+            11
+            17
+            35
+            41
+            7
+            9
+            31
+            33
+    prompt%
+
+Tenant Feature Flags Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantFeatureFlagsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.6.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantFeatureFlagsStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantFeatureFlagsStateTable
+
+    tenantClusteringAsServiceFlag tenantStatsStreamCapableFlag
+                          true                         true
+                             ?                         true
+    prompt%
+
+
+Tenant Instances Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantInstancesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.7.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantInstancesStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantInstancesStateTable
+
+                                        tenantPodName tenantInstanceId tenantInstanceSlot tenantInstancePhase tenantInstanceCreationTime tenantInstanceReadyTime                                                                                                       tenantInstanceStatus tenantInstanceMgmtMac
+                            tenant1-f5demo-net-f5-avcl                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:45Z                                                                                                    Started tenant instance                     ?
+                            tenant1-f5demo-net-f5-dssm                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:38Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-data-store                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:56Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-appsvcs                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:33Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-cmsg-mq                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:18Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-csm-icb                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:13:08Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-fsm-tmm                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:25Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-csm-bird                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:07Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-fcdn-sync                1                  ?             Running       2024-08-21T23:11:26Z    2024-08-21T23:11:39Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-csm-qkview                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:49Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-eesv-vault                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:15Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-onboarding                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:27Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-access-apmd                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-toda-server                1                  ?             Running       2024-08-21T23:11:06Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-toda-logpull                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:26Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-toda-observer                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:41Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-csm-api-engine                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:13:12Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-eesv-licensing                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:12Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-platform-agent                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:14:01Z                                                                                                    Started tenant instance                     ?
+                tenant1-f5demo-net-f5-access-renderer                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:21Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-toda-otel-collector                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:34Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-asec-ip-intelligence                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:10:59Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-asec-policy-compiler                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:08Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-access-session-manager                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:18Z                                                                                                    Started tenant instance                     ?
+    tenant1-f5demo-net-f5-asec-clientside-js-obfuscator                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:30Z                                                                                                    Started tenant instance                     ?
+                                    tenant2-f5demo-net-1                1                  ?             Pending                          ?                       ? 0/5 nodes are available: 2 node(s) didn't match node selector, 3 node(s) were not ready, 3 node(s) were out of disk space.                     ?
+                            tenant2-f5demo-net-f5-avcl                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:42Z                                                                                                    Started tenant instance                     ?
+                            tenant2-f5demo-net-f5-dssm                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:25Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-data-store                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:15Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-appsvcs                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:43Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-cmsg-mq                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:07Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-csm-icb                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:13:04Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-fsm-tmm                2                  ?             Running       2024-08-21T23:10:54Z    2024-08-21T23:12:22Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-csm-bird                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:09Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-fcdn-sync                2                  ?             Running       2024-08-21T23:10:56Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-csm-qkview                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:04Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-eesv-vault                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:22Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-onboarding                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:27Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-access-apmd                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:01Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-toda-server                2                  ?             Running       2024-08-21T23:11:38Z    2024-08-21T23:11:44Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-toda-logpull                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:29Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-toda-observer                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:33Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-csm-api-engine                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:13:10Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-eesv-licensing                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:01Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-platform-agent                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:14:46Z                                                                                                    Started tenant instance                     ?
+                tenant2-f5demo-net-f5-access-renderer                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:02Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-toda-otel-collector                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:24Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-asec-ip-intelligence                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:27Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-asec-policy-compiler                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-access-session-manager                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:03Z                                                                                                    Started tenant instance                     ?
+    tenant2-f5demo-net-f5-asec-clientside-js-obfuscator                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:17Z                                                                                                    Started tenant instance                     ?
+    prompt%
+
+Tenant MAC Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantMacBlockStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.8.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantMacBlockStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantMacBlockStateTable
+
+            tenantMAC
+    00:94:a1:8e:58:1c
+    00:94:a1:8e:58:1d
+    00:94:a1:8e:58:1e
+    00:94:a1:8e:58:1f
+    00:94:a1:8e:58:20
+    00:94:a1:8e:58:21
+    00:94:a1:8e:58:22
+    00:94:a1:8e:58:23
+    00:94:a1:8e:58:24
+    00:94:a1:8e:58:25
+    00:94:a1:8e:58:26
+    00:94:a1:8e:58:27
+    00:94:a1:8e:58:28
+    00:94:a1:8e:58:29
+    00:94:a1:8e:58:2a
+    00:94:a1:8e:58:2b
+    00:94:a1:8e:58:09
+    00:94:a1:8e:58:0c
+    prompt% 
+
+
+Tenant Sub Modules Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantSubModulesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.9.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModulesStateTable
+
+Tenant Sub Modules VLAN Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantSubModuleVlansStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.10.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModuleVlansStateTable
+
+Tenant Sub Modules Hugepage Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantSubModuleHugepagesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.11.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModuleHugepagesStateTable
+
+Tenant Upgrade Events Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantUpgradeEventsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.12.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantUpgradeEventsStateTable
+
+
+
+
+Tenant
 
 
 SNMP Trap Support in F5OS
@@ -2751,10 +3297,20 @@ In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trig
 
 .. code-block:: bash
 
-    <INFO> 30-Apr-2024::15:14:51.956 partition2 confd[123]: snmp snmpv2-trap reqid=677841662 10.255.80.251:162 (TimeTicks sysUpTime=51041)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
-    
+    <INFO> 30-Apr-2024::15:14:51.956 partition2 confd[123]: snmp snmpv2-trap reqid=677841662 10.255.80.251:162 (TimeTicks sysUpTime=51041)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1) 
     <INFO> 30-Apr-2024::15:14:51.995 partition2 confd[123]: snmp snmpv2-trap reqid=677841663 10.255.80.251:162 (TimeTicks sysUpTime=51045)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-30 19:14:51.909205675 UTC)(OCTET STRING alertDescription=Interface up)
-    test1-1#     
+    test1-1# 
+
+
+**authenticationFailure     1.3.6.1.6.3.1.1.5.5**
+
+An SNMP Trap will be generated for login failures to the F5OS interfaces.
+
+<INFO> 21-Aug-2024::17:34:15.907 r10900-1 confd[155]: snmp snmpv2-trap reqid=1741940007 10.255.80.251:162 (TimeTicks sysUpTime=174675762)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=appliance-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 21:34:15.904163686 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.105.181)
+<INFO> 21-Aug-2024::17:34:15.907 r10900-1 confd[155]: snmp snmpv2-trap reqid=1741940007 10.255.0.144:161 (TimeTicks sysUpTime=174675762)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=appliance-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 21:34:15.904163686 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.105.181)
+<INFO> 21-Aug-2024::17:40:32.211 r10900-1 confd[155]: snmp snmpv2-trap reqid=1741940008 10.255.80.251:162 (TimeTicks sysUpTime=174713392)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=appliance-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 21:40:32.207725999 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.105.181)
+<INFO> 21-Aug-2024::17:40:32.211 r10900-1 confd[155]: snmp snmpv2-trap reqid=1741940008 10.255.0.144:161 (TimeTicks sysUpTime=174713392)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=appliance-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 21:40:32.207725999 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.105.181)
+    
 
 F5OS Specific Traps
 ------------------
