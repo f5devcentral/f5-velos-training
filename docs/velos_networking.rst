@@ -204,7 +204,7 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 Below are the **current** VELOS optic SKUs:
 
-.. Note:: Some older SKU's may operate in VELOS but are no longer available to purchase. They are listed in the following document.
+.. Note:: Some older SKU's may operate in VELOS, but are no longer available to purchase. They are listed in the following document.
   
 `K6097: Specifications of the Fiber Gigabit Ethernet SFP, XFP, SFP+, QSFP+, and QSFP28 module ports on BIG-IP system platforms <https://my.f5.com/manage/s/article/K6097>`_
 
