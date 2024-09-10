@@ -161,9 +161,11 @@ Only F5 branded optics are officially supported on VELOS. The BX110 blade suppor
 
 `K8153: F5 support of third-party hardware components <https://my.f5.com/manage/s/article/K8153>`_
 
-More details on each optic can be found in the F5 Platforms Accessories guide:
+More details on each optic can be found in the F5 Platforms Accessories guide & in the solution article below:
 
 `F5 Platforms: Accessories <https://techdocs.f5.com/en-us/hw-platforms/f5-plat-accessories.html>`_
+
+`K6097: Specifications of the Fiber Gigabit Ethernet SFP, XFP, SFP+, QSFP+, and QSFP28 module ports on BIG-IP system platforms <https://my.f5.com/manage/s/article/K6097>`_
 
 **40Gb QSFP+ options:**
 
@@ -179,6 +181,8 @@ More details on each optic can be found in the F5 Platforms Accessories guide:
 **Dual Rate 40Gb/100Gb BiDi QSFP28 (Backward compatible with QSFP+):**
 
 The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in QSFP28 slot. 
+
+.. Note:: The OPT-0060 SKU (40G/100G dual rate BiDi) below replaces the previous OPT-0043 SKU (40G BiDi).
 
 +------------------------------------------------------------------+------------+-----------------------------------------------------------------------------------------+
 | Dual Rate 40G/100G BIDI (QSFP28 backward compatible with QSFP+)  | OPT-0060   | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
