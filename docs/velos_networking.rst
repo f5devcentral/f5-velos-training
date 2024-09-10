@@ -202,23 +202,33 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 **Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G LR4 VELOS is OPT-0052 (as shown above)**.
 
-Below are the current VELOS optic SKUs:
+Below are the **current** VELOS optic SKUs:
 
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPGVELQSFP28LR4   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS             |
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPGVELQSFP28PSM4  | VELOS Field Upgrade: QSFP28 Transceiver (100G-PSM4, 500M, MPO/APC, SMF, DDM) ROHS       |
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPGVELQSFP28-SR4  | VELOS Field Upgrade: QSFP28 Transceiver (100G-SR4, 100M, MPO MMF, DDM) ROHS             |
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VELQSFP28SRBD | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VEL-QSFP+LR4  | VELOS Field Upgrade: QSFP+ Transceiver (40G-LR, 1310NM, 10KM, LC, SMF, DDM Support)     |
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VEL-QSFP+PSM4 | VELOS Field Upgrade: QSFP+ Transceiver (40G-PSM4, 1310NM, 10KM, MPO/APC, SMF, DDM )     |
-+----------------------+-----------------------------------------------------------------------------------------+
-| F5-UPG-VEL-QSFP+SR4  | VELOS Field Upgrade: QSFP+ Transceiver (40G-SR4, 850NM, 100M, MPO, DDM Support)         |
-+----------------------+-----------------------------------------------------------------------------------------+
+.. Note:: Some older SKU's may operate in VELOS but are no longer available to purchase. They are listed in the following document.
+  
+`K6097: Specifications of the Fiber Gigabit Ethernet SFP, XFP, SFP+, QSFP+, and QSFP28 module ports on BIG-IP system platforms <https://my.f5.com/manage/s/article/K6097>`_
+
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28LR4   | VELOS Field Upgrade: QSFP28 Transceiver (100G-LR4, 10KM, LC, SMF, DDM) ROHS             | `F5-UPG-QSFP28-LR4 (OPT-0039-01) - QSFP28 TRANSCEIVER (100G-LR4, 10KM, LC, SMF, 4.5W, DDM) <https://my.f5.com/manage/s/article/K6097#OPT0039>`_                       |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28PSM4  | VELOS Field Upgrade: QSFP28 Transceiver (100G-PSM4, 500M, MPO/APC, SMF, DDM) ROHS       | `F5-UPGVELQSFP28PSM4 (OPT-0055-01) - QSFP28 TRANSCEIVER (100G-PSM4, 1310nm, 500M, MPO/MTP, DDM) <https://my.f5.com/manage/s/article/K6097#OPT0055>`_                  |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28-SR4  | VELOS Field Upgrade: QSFP28 Transceiver (100G-SR4, 100M, MPO MMF, DDM) ROHS             | `F5-UPG-QSFP28-SR4 (OPT-0031-01) - QSFP28 TRANSCEIVER (100G-SR4, 850NM, 100M, MMF, MPO, DDM) <https://my.f5.com/manage/s/article/K6097#OPT0031>`_                     |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPG-VELQSFP28SRBD | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF | `F5-UPG-QSFP28-SRBD (OPT-0060-XX) - QSFP28 TRANSCEIVER (100G BIDI, 850-910 nm, 100M, MMF, Duplex LC, DDM) <https://my.f5.com/manage/s/article/K6097#OPT0060>`_        |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP+LR4  | VELOS Field Upgrade: QSFP+ Transceiver (40G-LR, 1310NM, 10KM, LC, SMF, DDM Support)     | `F5-UPG-QSFP+LR4 (OPT-0030-01) - 40GBase-LR4 10km QSFP+ 40G Transceiver with DDM Support <https://my.f5.com/manage/s/article/K6097#OPT0030>`_                         |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP+PSM4 | VELOS Field Upgrade: QSFP+ Transceiver (40G-PSM4, 1310NM, 10KM, MPO/APC, SMF, DDM )     | `F5-UPG-QSFP+PSM4 (OPT-0045-01) - 40GBase-LR-PSM4 QSFP+ 4x10LR PSM4 40G Transceiver with DDM Support <https://my.f5.com/manage/s/article/K6097#OPT0045>`_             |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP+SR4  | VELOS Field Upgrade: QSFP+ Transceiver (40G-SR4, 850NM, 100M, MPO, DDM Support)         | `F5-UPG-QSFP+SR4 (OPT-0036-01) - 40GBase-SR4 100m QSFP+ 40G Transceiver with DDM Support <https://my.f5.com/manage/s/article/K6097#OPT0036>`_                         |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPGVELQSFP28LR4B  |                                                                                         | `F5-UPGVELQSFP28LR4B (OPT-0052-01) - QSFP28 TRANSCEIVER  (100G-LR4, 1295-1310 nm, 10KM, LC, SMF, DDM) <https://my.f5.com/manage/s/article/K6097#OPT0052>`_            |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPG-VELQSFP28LRSL |                                                                                         | `F5-UPG-QSFP28-LR-SL (OPT-0061-01) - TRANSCEIVER, QSFP28, 100G, LR, SINGLE LAMBDA, 10KM, LC UPC, SMF, F5 BRANDED <https://my.f5.com/manage/s/article/K6097#OPT0061>`_ |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| F5-UPG-VEL-QSFP28-DR |                                                                                         | `F5-UPG-QSFP28-DR (OPT-0062-01) - TRANSCEIVER, QSFP28, 100G, DR, SINGLE LAMBDA, 500M, LC UPC, SMF, F5 BRANDED <https://my.f5.com/manage/s/article/K6097#OPT0062>`_    |
++----------------------+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
 
