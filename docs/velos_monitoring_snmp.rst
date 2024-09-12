@@ -2317,7 +2317,7 @@ Below is an example of an SNMP response from the chassis partition.
      fw-version-lop-bootloader                      1.02.868.0.1        false           none
     prompt%
 
-SNMP Fantray Stats Table
+Fantray Stats Table
 ----------------------
 
 Query the following SNMP OID to get detailed fan speeds.
