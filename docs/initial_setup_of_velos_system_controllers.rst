@@ -237,15 +237,9 @@ As seen in previous diagrams, each system controller has its own independent out
 
 To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, webUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG, configure as follows:
 
-On the active controller, create a management LACP interface:
 
-.. code-block:: bash
-
-  lacp interfaces interface mgmt-aggr
-  config name mgmt-aggr
-  !
  
-Next, create a management aggregate interface and set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**.
+Create a management aggregate interface and set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**.
 
 .. code-block:: bash
 
@@ -253,6 +247,14 @@ Next, create a management aggregate interface and set the **config type** to **i
   config name mgmt-aggr
   config type ieee8023adLag
   aggregation config lag-type LACP
+  !
+
+On the active controller, create a management LACP interface:
+
+.. code-block:: bash
+
+  lacp interfaces interface mgmt-aggr
+  config name mgmt-aggr
   !
 
 Finally, add the aggregate that you created by name to each of the management interfaces on the two controllers: 
