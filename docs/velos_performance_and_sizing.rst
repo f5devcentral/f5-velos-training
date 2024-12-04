@@ -4,7 +4,7 @@ VELOS Performance and Sizing
 
 VELOS blades are a new generation of hardware using the latest Intel CPUs for processing in addition to FPGAs. Intel CPUs perform SSL processing and compression offload as was done with previous generation BIG-IP solutions such as iSeries and the VIPRION B4450. Older VIPRION blades such as the B2100, B2150, & B2250 use Intel processing, but use Cavium Nitrox for SSL offload. The newer generation Intel chipsets provide more modern SSL cipher support and can offload ECC (Elliptical Curve) based ciphers in hardware, which most previous generations of VIPRION blades could not.
 
-In addition to more modern Intel chipsets, the BX110 blades also have extensive FPGA support. In previous generations of F5 hardware the ePVA was used to offload varying workloads from FASTL4 to DDoS mitigation, and that functionality is brought forward and expanded upon in the new generation of VELOS hardware. 
+In addition to more modern Intel chipsets, both the BX110 and BX520 blades also have extensive FPGA support. In previous generations of F5 hardware the ePVA was used to offload varying workloads from FASTL4 to DDoS mitigation, and that functionality is brought forward and expanded upon in the new generation of VELOS hardware. 
 
 Some additional links on the benefits of hardware offload using the ePVA in previous generation BIG-IP solutions:
 
@@ -12,13 +12,11 @@ Some additional links on the benefits of hardware offload using the ePVA in prev
 
 `F5 Fast L4 Acceleration and the F5 Smart Coprocessor (prioritized Fast L4 Acceleration) <https://devcentral.f5.com/s/articles/F5-Fast-L4-Acceleration-and-the-F5-Smart-Coprocessor-prioritized-Fast-L4-Acceleration>`_
 
-In VELOS there are now two distinct FPGAs, the **Application Traffic Services Engine** (ATSE), and the **VELOS Queuing FPGA** (VQF). In addition to supporting previous functions done by the ePVA, there are additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGAs.
+In VELOS for the BX110 blade there are now two distinct FPGAs, the **Application Traffic Services Engine** (ATSE), and the **VELOS Queuing FPGA** (VQF). The BX520 balde also leverages the VQF and ATSE, but the BX520 has two ATSE FPGs compared to just one for the BX110. There is an additional FPGA called the Traffic Aggregation Module (TAM) on the BX520 which handles the 100Gb and 400Gb physical interface management. In addition to supporting functions done by the ePVA in previous generations, there are additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGAs.
 
 .. image:: images/velos_performance_and_sizing/image1.png
   :align: center
   :scale: 70%
-
-**Note: In the initial 1.x.x versions of F5OS-C, not all hardware offload functions were enabled. SSL/TLS offload, FASTL4, and compression were all supported, but some features like hardware DDoS mitigation were not, but have since been added in the subsequent TMOS v15.1.4/F5OS 1.2.1 releases.** 
 
 When comparing performance of VELOS to VIPRION C2400 it is important to note that VELOS is more scalable as it has double the number of slots (8 in VELOS compared to 4 in VIPRION), so the amount of performance in the same RU (Rack Unit) is significantly increased. The VELOS blades are half the width of the current B2250 blades in VIPRION. Looking at comparisons of VIPRION B2150 and B2250 against a single VELOS BX110 blade you can see a 1.5x-3x increase in Layer 7 Requests Per Second (RPS) performance depending on which blade you may be migrating from. From an SSL perspective the increase is 2.3x-10x for RSA based ciphers, and for Elliptical Curve the BX110 can now offload that to hardware, whereas the B2150 and B2250 had to process those ciphers in software consuming more CPU.
 
@@ -206,95 +204,49 @@ For the BX520 the default memory allocations for Recommended mode are shown belo
 +=====================+====================+==========================+===================+=================+
 | BX520 4vCPU Tenant  | 2                  |  4                       | 14,848,000,000    | 3,712,000,000   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 6vCPU Tenant  | 3                  |  6                       | 22,016,000,000    | 3,669,333,333   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 8vCPU Tenant  | 4                  |  8                       | 29,184,000,000    | 3,648,000,000   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 10vCPU Tenant | 5                  |  10                      | 36,352,000,000    | 3,635,200,000   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 12vCPU Tenant | 6                  |  12                      | 43,520,000,000    | 3,626,666,667   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 14vCPU Tenant | 7                  |  14                      | 50,688,000,000    | 3,620,571,429   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 16vCPU Tenant | 8                  |  16                      | 57,856,000,000    | 3,616,000,000   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 18vCPU Tenant | 9                  |  18                      | 65,024,000,000    | 3,612,444,444   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 20vCPU Tenant | 10                 |  20                      | 72,192,000,000    | 3,609,600,000   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 22vCPU Tenant | 11                 |  22                      | 79,360,000,000    | 3,605,333,333   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 24vCPU Tenant | 12                 |  24                      | 86,528,000,000    | 3,603,692,308   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 26vCPU Tenant | 13                 |  26                      | 93,696,000,000    | 3,602,285,714   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 28vCPU Tenant | 14                 |  28                      | 100,864,000,000   | 3,601,066,667   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 30vCPU Tenant | 15                 |  30                      | 108,032,000,000   | 3,600,000,000   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 32vCPU Tenant | 16                 |  32                      | 115,200,000,000   | 3,599,058,824   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 34vCPU Tenant | 17                 |  34                      | 122,368,000,000   | 3,598,222,222   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 36vCPU Tenant | 18                 |  36                      | 129,546,000,000   | 3,597,473,684   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 38vCPU Tenant | 19                 |  38                      | 136,704,000,000   | 3,596,800,000   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 40vCPU Tenant | 20                 |  40                      | 143,872,000,000   | 3,596,190,476   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 42vCPU Tenant | 21                 |  42                      | 151,040,000,000   | 3,595,190,476   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 44vCPU Tenant | 22                 |  44                      | 158,208,000,000   | 3,595,636,364   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 46vCPU Tenant | 23                 |  46                      | 165,376,000,000   | 3,595,130,435   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 48vCPU Tenant | 24                 |  48                      | 172,544,000,000   | 3,594,666,667   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 50vCPU Tenant | 25                 |  50                      | 179,712,000,000   | 3,594,240,000   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 52vCPU Tenant | 26                 |  52                      | 186,880,000,000   | 3,593,846,154   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 54vCPU Tenant | 27                 |  54                      | 194,048,000,000   | 3,593,481,481   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 56vCPU Tenant | 28                 |  56                      | 201,216,000,000   | 3,593,142,857   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 58vCPU Tenant | 29                 |  58                      | 208,384,000,000   | 3,592,827,586   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 60vCPU Tenant | 30                 |  60                      | 215,552,000,000   | 3,592,533,333   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 62vCPU Tenant | 31                 |  62                      | 222,720,000,000   | 3,592,258,065   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 64vCPU Tenant | 32                 |  64                      | 229,888,000,000   | 3,592,000,000   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 66vCPU Tenant | 33                 |  66                      | 237,056,000,000   | 3,591,757,576   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 68vCPU Tenant | 34                 |  68                      | 244,224,000,000   | 3,591,529,412   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 70vCPU Tenant | 35                 |  70                      | 251,392,000,000   | 3,591,314,286   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 72vCPU Tenant | 36                 |  72                      | 258,560,000,000   | 3,591,111,111   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 74vCPU Tenant | 37                 |  74                      | 265,728,000,000   | 3,590,918,919   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 76vCPU Tenant | 38                 |  76                      | 272,896,000,000   | 3,590,736,842   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 78vCPU Tenant | 39                 |  78                      | 280,064,000,000   | 3,590,564,103   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 80vCPU Tenant | 40                 |  80                      | 287,232,000,000   | 3,590,400,000   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 82vCPU Tenant | 41                 |  82                      | 294,400,000,000   | 3,590,243,902   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 84vCPU Tenant | 42                 |  84                      | 301,568,000,000   | 3.590,095,238   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 86vCPU Tenant | 43                 |  86                      | 308,736,000,000   | 3,589,953,488   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 88vCPU Tenant | 44                 |  88                      | 315,904,000,000   | 3,589,818,182   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 90vCPU Tenant | 45                 |  90                      | 323,072,000,000   | 3,589,688,889   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 92vCPU Tenant | 46                 |  92                      | 330,240,000,000   | 3,589,565,217   |
-+---------------------+--------------------+--------------------------+-------------------+-----------------+
-| BX520 94vCPU Tenant | 47                 |  94                      | 337,408,000,000   | 3,589,446,809   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | BX520 96vCPU Tenant | 48                 |  96                      | 344,576,000,000   | 3,589,333,333   |
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
