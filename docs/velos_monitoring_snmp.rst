@@ -3598,7 +3598,22 @@ F5OS Specific Traps
 Device Fault Traps
 ^^^^^^^^^^^^^^^^^^^
 
-**hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**   
+**hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**
+
++------------------+-----------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                     |
++==================+=======================================================================+
+| ASSERT           | Hardware device fault detected                                        |
++------------------+-----------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >> :  << hardware sensor or machine error >> |
+|                  |                                                                       |
+|                  | Example:                                                              | 
+|                  |                                                                       |
+|                  | Asserted: CPU machine check error                                     |
+|                  |                                                                       |
++------------------+-----------------------------------------------------------------------+
+| CLEAR            | Hardware device fault detected                                        |
++------------------+-----------------------------------------------------------------------+
 
 This set of taps may indicate a fault with various hardware components on the VELOS chassis like CPUs or fans. Examine the trap for specific details of what subsystem has failed to determine the proper troubleshooting steps to pursue. 
 
@@ -3631,6 +3646,12 @@ This set of taps may indicate a fault with various hardware components on the VE
 
 **firmware-fault                 .1.3.6.1.4.1.12276.1.1.1.65537**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | <<ARM Exception data available | Heap running low | Task stack usage warning | Watchdog timer warning >> |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 This set of taps may indicate a fault or temporary warning with the firmware upgrade process. Monitor the firmware upgrade process via SNMP traps, or via the CLI, API, or webUI alerts. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
 
@@ -3656,6 +3677,14 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **unknown-alarm                  .1.3.6.1.4.1.12276.1.1.1.65538**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+Unregistered alarm detected.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include unknown-alarm
@@ -3671,11 +3700,76 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **memory-fault                   .1.3.6.1.4.1.12276.1.1.1.65539**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+
 .. code-block:: bash
 
     file show log/confd/snmp.log | include memory-fault
 
 **drive-fault                    .1.3.6.1.4.1.12276.1.1.1.65540**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Fault in drive detected                                                            |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | Event can either of these below issues:                                            |
+|                  |                                                                                    |
+|                  |  Drive Available Spare is below threshold                                          |
+|                  |                                                                                    |
+|                  |  Drive Volatile Memory Backup System has failed                                    |
+|                  |                                                                                    |
+|                  |  Drive Endurance consumed has exceeded threshold                                   |
+|                  |                                                                                    |
+|                  |  Drive has encountered Media Errors                                                |
+|                  |                                                                                    |
+|                  |  Allowable program fail count is below 50 percent                                  |
+|                  |                                                                                    |
+|                  |  Allowable program fail count is below 80 percent                                  |
+|                  |                                                                                    |
+|                  |  Allowable erase fail count is below 50 percent                                    |
+|                  |                                                                                    |
+|                  |  Allowable erase fail count is below 80 percent                                    |
+|                  |                                                                                    |
+|                  |  Drive Reliability is degraded due to excessive media or internal errors           |
+|                  |                                                                                    |
+|                  |  More number of CRC errors encountered                                             |
+|                  |                                                                                    |
+|                  |  Less than 50 Percentage of erase cycles remaining                                 |
+|                  |                                                                                    |
+|                  |  Less than 80 Percentage of erase cycles remaining                                 |
+|                  |                                                                                    |
+|                  |  Drive Media is not in read-only mode                                              |
+|                  |                                                                                    |
+|                  | Clear descriptions:                                                                |
+|                  |                                                                                    |
+|                  |  Event can either of these below issues:                                           |
+|                  |                                                                                    |
+|                  |  Drive Available Spare is as expected                                              |
+|                  |                                                                                    |
+|                  |  Drive Volatile Memory Backup System is healthy                                    |
+|                  |                                                                                    |
+|                  |  Drive Endurance consumed is normal                                                |
+|                  |                                                                                    |
+|                  |  Drive has no Internal or Media Errors / Drive has no Media Errors                 |
+|                  |                                                                                    |
+|                  |  Allowable program fail count is above 80 percent                                  |
+|                  |                                                                                    |
+|                  |  Allowable erase fail count is above 80 percent                                    |
+|                  |                                                                                    |
+|                  |  Number of CRC errors are in allowed range                                         |
+|                  |                                                                                    |
+|                  |  More than 80 Percentage of erase cycles remaining                                 |
+|                  |                                                                                    |
+|                  |  Drive Media is placed in read-only mode                                           |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Fault in drive detected                                                            |
++------------------+------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -3683,11 +3777,23 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **cpu-fault                      .1.3.6.1.4.1.12276.1.1.1.65541**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include cpu-fault  
 
 **pcie-fault                     .1.3.6.1.4.1.12276.1.1.1.65542**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -3695,12 +3801,95 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **aom-fault                      .1.3.6.1.4.1.12276.1.1.1.65543**
 
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Fault detected in the AOM                                                          |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >>: <<sensor name>>                                       |
+|                  |                                                                                    |
+|                  | Sensor names include:                                                              |
+|                  |                                                                                    |
+|                  | I2C-1 PEL EEPROM Ack Fault                                                         |
+|                  |                                                                                    |
+|                  | I2C-1 CPLD EEPROM Ack Fault                                                        |
+|                  |                                                                                    |
+|                  | I2C-1 Platform EEPROM Ack Fault                                                    |
+|                  |                                                                                    |
+|                  | I2C-3 TMP421 Outlet Ack Fault                                                      |
+|                  |                                                                                    |
+|                  | I2C-3 MAX31730 VQF Ack Fault                                                       |
+|                  |                                                                                    |
+|                  | I2C-3 TMP423 Ack Fault                                                             |
+|                  |                                                                                    |
+|                  | I2C-3 MAX31730 ATSE1 Ack Fault                                                     |
+|                  |                                                                                    |
+|                  | I2C-3 MAX31730 ATSE2 Ack Fault                                                     |
+|                  |                                                                                    |
+|                  | I2C-3 LM25066 Hotswap Controller Ack Fault                                         |
+|                  |                                                                                    |
+|                  | I2C-4 TMP468 ATSE Ack Fault                                                        |
+|                  |                                                                                    |
+|                  | I2C-4 TMP421 Inlet Ack Fault                                                       |
+|                  |                                                                                    |
+|                  | I2C-1 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | I2C-2 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | I2C-3 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | I2C-4 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | LOP FIT Forced Bad Health                                                          |
+|                  |                                                                                    |
+|                  | Blade-LOP NC-SI / RMII Failure                                                     |
+|                  |                                                                                    |
+|                  | Power-On Self Test (POST) failure                                                  |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Fault detected in the AOM                                                          |
++------------------+------------------------------------------------------------------------------------+
+
+The example logs below are from a VELOS system controller.
+
 .. code-block:: bash
 
-    syscon-1-active# file show log/confd/snmp.log | include aom-fault
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include aom-fault
+    <INFO> 3-Jan-2024::14:05:47.699 controller-2 confd[571]: snmp snmpv2-trap reqid=638913575 10.255.0.139:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 3-Jan-2024::14:05:47.700 controller-2 confd[571]: snmp snmpv2-trap reqid=638913575 10.255.0.144:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 3-Jan-2024::14:05:47.702 controller-2 confd[571]: snmp snmpv2-trap reqid=638913576 10.255.0.144:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 3-Jan-2024::14:05:47.703 controller-2 confd[571]: snmp snmpv2-trap reqid=638913576 10.255.0.143:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 16-Feb-2024::01:17:44.032 controller-2 confd[583]: snmp snmpv2-trap reqid=338839460 10.255.80.251:162 (TimeTicks sysUpTime=62379)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-02-16 06:15:59.868305865 UTC)(OCTET STRING alertDescription=LOP is receiving health reports from all installed VFC cards)
+    <INFO> 5-Mar-2024::15:16:16.696 controller-2 confd[581]: snmp snmpv2-trap reqid=220801582 10.255.80.251:162 (TimeTicks sysUpTime=21586)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.605975998 UTC)(OCTET STRING alertDescription=Fault detected in the AOM)
+    <INFO> 5-Mar-2024::15:16:16.732 controller-2 confd[581]: snmp snmpv2-trap reqid=220801583 10.255.80.251:162 (TimeTicks sysUpTime=21590)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.606020613 UTC)(OCTET STRING alertDescription=LOP is not receiving health reports from all installed VPC cards)
+    <INFO> 5-Mar-2024::15:16:16.784 controller-2 confd[581]: snmp snmpv2-trap reqid=220801584 10.255.80.251:162 (TimeTicks sysUpTime=21595)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.643891161 UTC)(OCTET STRING alertDescription=Fault detected in the AOM)
+    <INFO> 5-Mar-2024::15:16:16.834 controller-2 confd[581]: snmp snmpv2-trap reqid=220801585 10.255.80.251:162 (TimeTicks sysUpTime=21600)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.643912339 UTC)(OCTET STRING alertDescription=LOP is not receiving health reports from all installed VPC cards)
+    <INFO> 5-Mar-2024::15:23:15.878 controller-2 confd[581]: snmp snmpv2-trap reqid=220801597 10.255.80.251:162 (TimeTicks sysUpTime=63505)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:21:35.736268196 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    velos-1-gsa-2-active#
 
 **drive-capacity-fault           .1.3.6.1.4.1.12276.1.1.1.65544**
 
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Running out of drive capacity                                                      |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << value >> percent of drive capacity left                                         |
+|                  |                                                                                    |
+|                  | Drive capacity is available                                                        |
+|                  |                                                                                    |
+|                  | Example:                                                                           |
+|                  |                                                                                    |
+|                  | Ten percent of drive capacity left                                                 |
+|                  |                                                                                    |
+|                  | Three percent of drive capacity left                                               |
+|                  |                                                                                    |
+|                  | Fifteen percent of drive capacity left                                             |
+|                  |                                                                                    |
+|                  | Drive capacity is available                                                        |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Running out of drive capacity                                                      |
++------------------+------------------------------------------------------------------------------------+
 
 The output below is from an rSeries appliance: 
 
@@ -3713,6 +3902,20 @@ The output below is from an rSeries appliance:
     <INFO> 12-Apr-2023::11:54:35.217 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130734 10.255.8.22:6011 (TimeTicks sysUpTime=89545)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162734807 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=54%)
 
 **power-fault                    .1.3.6.1.4.1.12276.1.1.1.65545**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Power fault detected in hardware                                                   |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >>: <<sensor name>>                                       |
+|                  |                                                                                    |
+|                  | Example:                                                                           |
+|                  |                                                                                    |
+|                  | Asserted: +5.0V_STBY power fault                                                   |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Power fault detected in hardware                                                   |
++------------------+------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -3736,6 +3939,18 @@ The output below is from an rSeries appliance:
 
 
 **thermal-fault                  .1.3.6.1.4.1.12276.1.1.1.65546**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Thermal fault detected in hardware                                                 |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Thermal sensor >> at <<temperature>>                                            |
+|                  |                                                                                    |
+|                  | Example: VQF at +38.1 degC                                                         |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Thermal fault detected in hardware                                                 |
++------------------+------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -3762,11 +3977,47 @@ The output below is from an rSeries appliance:
 
 **drive-thermal-throttle         .1.3.6.1.4.1.12276.1.1.1.65547**
 
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Drive has entered a thermal throttle condition                                     |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | Drive's thermal throttling is more than <<value>> percent                          |
+|                  |                                                                                    |
+|                  | Drive has entered a thermal throttle condition                                     |
+|                  |                                                                                    |
+|                  | Examples:                                                                          |
+|                  |                                                                                    |
+|                  | Drive's thermal throttling is more than 15 percent                                 |
+|                  |                                                                                    |
+|                  | Drive's thermal throttling is more than 80 percent                                 | 
+|                  |                                                                                    |
+|                  | Drive has entered a thermal throttle condition                                     |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Drive has entered a thermal throttle condition                                     |
++------------------+------------------------------------------------------------------------------------+
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include drive-thermal-throttle | more
 
 **blade-thermal-fault            .1.3.6.1.4.1.12276.1.1.1.65548**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Thermal fault detected in blade                                                    |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | Drive Temperature has exceeded threshold                                           |
+|                  |                                                                                    |
+|                  | Drive Sensor Temperature is outside operating range                                |
+|                  |                                                                                    |
+|                  | Drive Temperature is as expected                                                   |
+|                  |                                                                                    |
+|                  | Drive Sensor Temperature is within normal range                                    |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Thermal fault detected in blade                                                    |
++------------------+------------------------------------------------------------------------------------+
 
 This SNMP Trap is for the VELOS system, and it monitors various temperature sensors on each VELOS blade. The sensors monitor CPU, FGPA, and memory temperatures and will warn if the temperature goes beyond recommended guidelines. If a thermal fault occurs, you can verify if it has cleared due to a temporary condition. You can also check the system fans to ensure they are operating properly in the VELOS system via the command **show components component fantray-1**. You can also check the environment in which the VELOS system is running to ensure the data center is not operating at too high temperature.
 
@@ -3796,6 +4047,105 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 
 **blade-hardware-fault           .1.3.6.1.4.1.12276.1.1.1.65549**
 
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Hardware fault detected in blade                                                   |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >> : << ras error>>                                       |
+|                  |                                                                                    |
+|                  | Ras errors list is:                                                                |
+|                  |                                                                                    |
+|                  | RAS AER correctable advisory non-fatal error                                       |
+|                  |                                                                                    |
+|                  | RAS AER correctable BAD DLLP error                                                 |
+|                  |                                                                                    |
+|                  | RAS AER correctable BAD TLP error                                                  |
+|                  |                                                                                    |
+|                  | RAS AER correctable Receiver error                                                 |
+|                  |                                                                                    |
+|                  | RAS AER correctable RELAY_NUM rollover error                                       |
+|                  |                                                                                    |
+|                  | RAS AER correctable replay timer timeout error                                     |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable completer abort error                                        |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable completion timeout error                                     |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable data link protocol error                                     |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable ECRC error                                                   |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable flow control protocol error                                  |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable malformed TLP error                                          |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable Poisoned TLP Error                                           |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable receiver overflow error                                      |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable unexpected completion error                                  |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable unsupported request error                                    |
+|                  |                                                                                    |
+|                  | RAS AER unknown error                                                              |
+|                  |                                                                                    |
+|                  | RAS Extlog invalid address error                                                   |
+|                  |                                                                                    |
+|                  | RAS Extlog master abort error                                                      |
+|                  |                                                                                    |
+|                  | RAS Extlog memory sparing error                                                    |
+|                  |                                                                                    |
+|                  | RAS Extlog mirror broken error                                                     |
+|                  |                                                                                    |
+|                  | RAS Extlog multi-bit ECC error                                                     |
+|                  |                                                                                    |
+|                  | RAS Extlog multi-symbol chipkill ECC error                                         |
+|                  |                                                                                    |
+|                  | RAS Extlog no error                                                                |
+|                  |                                                                                    |
+|                  | RAS Extlog Parity error                                                            |
+|                  |                                                                                    |
+|                  | RAS Extlog physical memory map-out error                                           |
+|                  |                                                                                    |
+|                  | RAS Extlog scrub corrected error                                                   |
+|                  |                                                                                    |
+|                  | RAS Extlog scrub uncorrected error                                                 |
+|                  |                                                                                    |
+|                  | RAS Extlog single-bit ECC error                                                    |
+|                  |                                                                                    |
+|                  | RAS Extlog single-symbol chipkill ECC error                                        |
+|                  |                                                                                    |
+|                  | RAS Extlog target abort error                                                      |
+|                  |                                                                                    |
+|                  | RAS Extlog Unknown error                                                           |
+|                  |                                                                                    |
+|                  | RAS Extlog unknown type error                                                      |
+|                  |                                                                                    |
+|                  | RAS Extlog watchdog timeout error                                                  |
+|                  |                                                                                    |
+|                  | RAS MCE processor temperature throttling disabled error                            |
+|                  |                                                                                    |
+|                  | RAS MCE address/command error                                                      |
+|                  |                                                                                    |
+|                  | RAS MCE generic undefined request error                                            |
+|                  |                                                                                    |
+|                  | RAS MCE memory read error                                                          |
+|                  |                                                                                    |
+|                  | RAS MCE memory scrubbing error                                                     |
+|                  |                                                                                    |
+|                  | RAS MCE memory write error                                                         |
+|                  |                                                                                    |
+|                  | RAS MCE unknown error                                                              |
+|                  |                                                                                    |
+|                  | RAS memory controller fatal event                                                  |
+|                  |                                                                                    |
+|                  | RAS memory controller uncorrected event                                            |
+|                  |                                                                                    |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Hardware fault detected in blade                                                   |
++------------------+------------------------------------------------------------------------------------+
+
 Traps will be generated for blade-hardware-faults. A Reliability, Availability, and Servieability (RAS) monitoring system monitors blade hardware utilizing Advanced Error Reporting (AER) for PCIe devices.
 
 .. code-block:: bash
@@ -3813,6 +4163,16 @@ Traps will be generated for blade-hardware-faults. A Reliability, Availability, 
 
 
 **sensor-fault                   .1.3.6.1.4.1.12276.1.1.1.65577**
+
++------------------+-------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                 |
++==================+===================================================================+
+| ASSERT           | Sensor fault detected in hardware                                 |
++------------------+-------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >> : sensor fault: <<sensor name>>       |
++------------------+-------------------------------------------------------------------+
+| CLEAR            | Sensor fault detected in hardware                                 |
++------------------+-------------------------------------------------------------------+
 
 Traps will be generated for sensor faults or communication failures. In the example below, an Inlet Sensor fault was detetected (Asserted) and then cleared (Deasserted).
 
@@ -3838,6 +4198,14 @@ Traps will be generated for sensor faults or communication failures. In the exam
 
 
 **module-present                 .1.3.6.1.4.1.12276.1.1.1.66304**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| EVENT            | <<module>> <<present|removed>>                            |
+|                  |                                                           |
+|                  | Example: blade1 removed                                   |
++------------------+-----------------------------------------------------------+
 
 Traps will be generated for componenents being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is presenet or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
 
@@ -3874,6 +4242,51 @@ Traps will be generated for componenents being present or removed. As an example
 
 **psu-fault                      .1.3.6.1.4.1.12276.1.1.1.66305**
 
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | PSU fault detected                                                                 |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | <<< Asserted| Deasserted >>: PSU <<psu number>> << sensor that caused the issue>>  |
+|                  |                                                                                    |
+|                  | Examples:                                                                          |
+|                  |                                                                                    |
+|                  | Asserted: PSU 1 input under-voltage warning                                        |
+|                  |                                                                                    |
+|                  | Deasserted: PSU 1 input under-voltage warning                                      |
+|                  |                                                                                    |
+|                  | Sensor could be:                                                                   |
+|                  |                                                                                    |
+|                  | input over-power warning                                                           |
+|                  |                                                                                    |
+|                  | input over-current warning                                                         |
+|                  |                                                                                    |
+|                  | input over-current fault                                                           |
+|                  |                                                                                    |
+|                  | unit off for low input voltage                                                     |
+|                  |                                                                                    |
+|                  | input under-voltage fault                                                          |
+|                  |                                                                                    |
+|                  | input under-voltage warning                                                        |
+|                  |                                                                                    |
+|                  | input over-voltage warning                                                         | 
+|                  |                                                                                    |
+|                  | input over-voltage fault                                                           |
+|                  |                                                                                    |
+|                  | PSU present                                                                        |
+|                  |                                                                                    |
+|                  | PSU input-ok                                                                       |
+|                  |                                                                                    |
+|                  | PSU output-ok                                                                      |
+|                  |                                                                                    |
+|                  | PSU unsupported                                                                    |
+|                  |                                                                                    |
+|                  | PSU mismatch                                                                       |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | PSU fault detected                                                                 |
++------------------+------------------------------------------------------------------------------------+
+
+
 This set of SNMP traps will relate to the health of the power supplies in the VELOS chassis. You may see traps related to insertion or removal of power supplies, inputs, and voltage thresholds. It is best to determine if the trap was a temporary condition, and if not and an error state persists, then determine if the inputs of the power supplies have become disconnected or changed. If the problem only occurs on one power supply, then you can try swapping inputs/power supplies during a maintenance window to see if the issue follows the power supply or the input source. 
 
 .. code-block:: bash
@@ -3893,6 +4306,17 @@ This set of SNMP traps will relate to the health of the power supplies in the VE
 
 
 **lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.66306**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Fault detected in LCD module                              |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<LCD is in fault state | LCD is in healthy state >>      |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Fault detected in LCD module                              |
++------------------+-----------------------------------------------------------+
+
 
 This set of SNMP traps will relate to the health of the LCD subsystem on the VELOS chassis. You may notice lcd-fault traps as the firmware on the LCD is updated as part of an upgrade as seen below. These should be temporary states and eventually the system will generate an **LCD Health is OK** trap. If the system continues to show an LCD fault, a support case should be opened to determine if there is a legitimate hardware issue.
 
@@ -3916,6 +4340,23 @@ The output below is from an rSeries unit:
 
 
 **module-communication-error     .1.3.6.1.4.1.12276.1.1.1.66307**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Module communication error detected                       |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<module>> communication error detected                   |
+|                  |                                                           |
+|                  | <<module>> communication is OK                            |
+|                  |                                                           |
+|                  | Example:                                                  |
+|                  |                                                           |
+|                  | lcd communication error detected.                         |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Module communication error detected                       |
++------------------+-----------------------------------------------------------+
 
 Power Supply Module
 
@@ -3947,12 +4388,24 @@ The output below is from an rSeries unit:
 
 **psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 PSU redundancy fault detected.
 
 .. code-block:: bash
 
 
 **psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Fault detected in PSU Controller health.
 
@@ -3961,12 +4414,24 @@ Fault detected in PSU Controller health.
 
 **fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 Fault detected in Fan Controller health.
 
 .. code-block:: bash
     
 
 **arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Change detected in System Controller Arbitration State.
 
@@ -3979,6 +4444,12 @@ Change detected in System Controller Arbitration State.
 
 
 **switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Switch port status.
 
@@ -4006,15 +4477,13 @@ As an example, the following set of traps are from a Link Down event on controll
     <INFO> 23-Jul-2024::23:51:08.547 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934243 10.255.80.251:162 (TimeTicks sysUpTime=4046114)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471162616 UTC)(OCTET STRING alertDescription=Front-panel management port link status is up)
 
 
-**service-health         .1.3.6.1.4.1.12276.1.1.1.65552**
-
-Service health status.
-
-.. code-block:: bash
-    
-
-
 **datapath-fault         .1.3.6.1.4.1.12276.1.1.1.65578**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Hardware datapath fault.
 
@@ -4022,6 +4491,12 @@ Hardware datapath fault.
     
 
 **boot-time-integrity-status         .1.3.6.1.4.1.12276.1.1.1.65579**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Boot time integrity failure detected.
 
@@ -4036,11 +4511,26 @@ Boot time integrity failure detected.
 
 **incompatible-image         .1.3.6.1.4.1.12276.1.1.1.327682**
 
++------------------+-------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                         |
++==================+===========================================================================================+
+| EVENT            | Unsupported platform <Platform Type>                                                      |
+|                  | import file <file path and name> removed incorrect file name                              |
+|                  | import file <file path and name> removed File name has special characters                 |
+|                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32. |
++------------------+-------------------------------------------------------------------------------------------+
+
 Trap notification when the platform incompatible image is imported.
 
 .. code-block:: bash
     
 **login-failed     .1.3.6.1.4.1.12276.1.1.1.327683**
+
++------------------+-------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                         |
++==================+===========================================================================================+
+| EVENT            | F5OS login attempt failed for the user: <username>, rhost: <remote host IP>               |
++------------------+-------------------------------------------------------------------------------------------+
 
 An SNMP Trap will be generated for login failures to the F5OS interfaces. Below is an example of an authentication failure trap generated on a system controller.
 
@@ -4060,12 +4550,24 @@ Below is an example of an authentication failure trap generated on a chassis par
 
 **nebsEnabled         .1.3.6.1.4.1.12276.1.1.1.131072**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 Chassis is operating with NEBS temperature thresholds.
 
 .. code-block:: bash
     
 
 **nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Chassis is operating with non-NEBS temperature thresholds.
 
@@ -4074,12 +4576,24 @@ Chassis is operating with non-NEBS temperature thresholds.
 
 **systemControllerNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131328**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
 
 .. code-block:: bash
     
 
 **bladeNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131329**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis).
 
@@ -4088,12 +4602,24 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 
 **openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.458752**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 One or more openshift certificates expiring within 90 days.
 
 .. code-block:: bash
     
 
 **openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.458753**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 One or more openshift certificates has expired or is expiring.
 
@@ -4103,12 +4629,24 @@ One or more openshift certificates has expired or is expiring.
 
 **openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.459008**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 The openshift cluster requires a manual rebuild to use the latest containers.
 
 .. code-block:: bash
     
 
 **initialization         .1.3.6.1.4.1.12276.1.1.1.262656**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Critical issue in fpga and datapath initialization process.
 
@@ -4117,6 +4655,12 @@ Critical issue in fpga and datapath initialization process.
 
 
 **ePVA         .1.3.6.1.4.1.12276.1.1.1.262912**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Could not initialize ePVA.
 
@@ -4147,6 +4691,12 @@ Partition MAC pool is exhausted.
 
 **inaccessibleMemory         .1.3.6.1.4.1.12276.1.1.1.458752**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 Notification indicating unusable hugepage memory.
 
 .. code-block:: bash
@@ -4156,6 +4706,14 @@ Firmware Update Status Traps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **firmware-update-status         .1.3.6.1.4.1.12276.1.1.1.65550**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | Firmware update is <<running | completed >> for <<module>>                                               |
+|                  |                                                                                                          |
+|                  | Example: Firmware update is running for vqf 0                                                            |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
@@ -4194,6 +4752,19 @@ Drive Utilization Traps
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 **drive-utilization              .1.3.6.1.4.1.12276.1.1.1.65551**
+
++------------------+-------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                 |
++==================+===================================================================+
+| ASSERT           | Drive utilization growth rate is high                             |
++------------------+-------------------------------------------------------------------+
+| EVENT            | Drive usage growth rate exceeded 10%, growth={{.growthPercent}}   |
+|                  |                                                                   |
+|                  | Drive usage growth rate with in range, growth={{.growthPercent}}% |
+|                  |                                                                   |
++------------------+-------------------------------------------------------------------+
+| CLEAR            | Drive utilization growth rate is high                             |
++------------------+-------------------------------------------------------------------+
 
 The system will monitor the storage utilization of the VELOS disks and warn if the disk usage gets too high. There are 3 levels of events that can occur as seen below:
 
@@ -4246,6 +4817,12 @@ FIPS Related Traps
 
 **fips-fault                     .1.3.6.1.4.1.12276.1.1.1.196308**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
 The output below is from an rSeries unit:
 
 .. code-block:: bash
@@ -4258,6 +4835,14 @@ The output below is from an rSeries unit:
 
 **fipsError                      .1.3.6.1.4.1.12276.1.1.1.196608**
 
++------------------+-------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                 |
++==================+===================================================================+
+| ASSERT           | FIPS error identified in one or more services                     |
++------------------+-------------------------------------------------------------------+
+| CLEAR            | FIPS error identified in one or more services                     |
++------------------+-------------------------------------------------------------------+
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include fipsError    
@@ -4266,6 +4851,12 @@ System Event Traps
 ^^^^^^^^^^^^^^^^^^^
 
 **core-dump                      .1.3.6.1.4.1.12276.1.1.1.327680**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            | Core dumped on Appliance. process=<service name> location=<core file location>           |
++------------------+------------------------------------------------------------------------------------------+
 
 This trap will indicate that the system has generated a core-dump file. A support case should be opened to diagnose the failure and a qkview should be taken and uploaded to iHealth to capture the diagnostic information for F5 support to analyze. Below is an example of an SNMP trap indicating that the orchestration manager has generated a core dump Files.
 
@@ -4281,6 +4872,12 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 
 
 **reboot                         .1.3.6.1.4.1.12276.1.1.1.327681**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            | reboot - appliance-1.chassis.local F5OS-A [R5R10 | R2R4 ] version <Version>              |
++------------------+------------------------------------------------------------------------------------------+
 
 This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator. Below is an example of a reboot trap.
 
