@@ -208,7 +208,7 @@ All out-of-band management, and console access for the chassis is proxied throug
 
 .. image:: images/velos_components/viprion-c2400-before.png
   :align: center
-  :scale: 60%
+  :scale: 40%
 
 
 
@@ -217,7 +217,7 @@ The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s
 
 .. image:: images/velos_components/cx410-after.png
   :align: center
-  :scale: 60%
+  :scale: 40%
 
 Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
@@ -252,7 +252,7 @@ All out-of-band management, and console access for the chassis is proxied throug
 
 .. image:: images/velos_components/viprion-c4800-before.png
   :align: center
-  :scale: 60%
+  :scale: 40%
 
 
 
@@ -261,11 +261,11 @@ The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s
 
 .. image:: images/velos_components/cx1610-after.png
   :align: center
-  :scale: 60%
+  :scale: 40%
 
 Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
-.. image:: images/velos_components/image5a.png
+.. image:: images/velos_components/sx410.png
   :align: center
   :scale: 60%
 
