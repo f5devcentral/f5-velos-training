@@ -5,7 +5,7 @@ VELOS Components
 CX410 Chassis
 =============
 
-The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 (requires F5OS-C 1.8.2) line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/image1.png
   :align: center
@@ -14,7 +14,7 @@ The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can 
 CX1610 Chassis
 =============
 
-The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by the BX110 or BX520 line cards, as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by the BX110 (future) or BX520 line cards, as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/imagecx1610.png
   :align: center
@@ -204,12 +204,26 @@ It is recommended that a system always operate with two system controllers for r
   :align: center
   :scale: 40%
 
-All out-of-band management, and console access for the chassis is proxied through the system controllers. There is no need to cable these connections to the blades themselves, as was the case with VIPRION. The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s now centralized on the system controllers.
+All out-of-band management, and console access for the chassis is proxied through the system controllers. There is no need to cable these connections to the blades themselves, as was the case with the VIPRION c2400 chassis and blades. In the diagram below each blade had to have its own wired out-of-band Ethernet connection, as well as a console connection typically connected to an external terminal server. This required a lot of extra layer2 switch ports, as well as terminal server connections.
 
-.. image:: images/velos_components/image15.png
+.. image:: images/velos_components/viprion-c2400-before.png
   :align: center
-  :scale: 100%
+  :scale: 60%
 
+
+
+The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s now centralized on the system controllers.
+
+
+.. image:: images/velos_components/cx410-after.png
+  :align: center
+  :scale: 60%
+
+Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
+
+.. image:: images/velos_components/image5a.png
+  :align: center
+  :scale: 60%
 
 Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there are 2 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the first generation of BX110 blades. The BX520 blades utilize both 100Gb connections from each of the two slots the blade occupies (total 400Gb). 
 
@@ -222,7 +236,7 @@ SX1610 System Controllers
 
 Each CX1610 chassis ships with two SX1610 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
--	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 & BX520)
+-	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 (future) & BX520)
 - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
@@ -234,7 +248,22 @@ It is recommended that a system always operate with two system controllers for r
   :align: center
   :scale: 60%
 
-All out-of-band management, and console access for the chassis is proxied through the system controllers. There is no need to cable these connections to the blades themselves, as was the case with VIPRION. The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s now centralized on the system controllers.
+All out-of-band management, and console access for the chassis is proxied through the system controllers. There is no need to cable these connections to the blades themselves, as was the case with the VIPRION c4800 chassis and blades. In the diagram below each blade had to have its own wired out-of-band Ethernet connection, as well as a console connection typically connected to an external terminal server. This required a lot of extra layer2 switch ports, as well as terminal server connections.
+
+.. image:: images/velos_components/viprion-c4800-before.png
+  :align: center
+  :scale: 60%
+
+
+
+The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s now centralized on the system controllers.
+
+
+.. image:: images/velos_components/cx1610-after.png
+  :align: center
+  :scale: 60%
+
+Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
 .. image:: images/velos_components/image5a.png
   :align: center
@@ -246,10 +275,6 @@ Looking at the left-hand side of the diagram below, you’ll notice the system c
 .. image:: images/velos_components/image16a.png
   :align: center
   :scale: 50%
-
-.. image:: images/velos_components/sx1610-controller.png
-  :align: center
-  :scale: 60%
 
 
 BX110 Blade
@@ -275,7 +300,7 @@ The SSD is removable, but not field replaceable. This allows customers who requi
 BX520 Blade
 ===========
 
-The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropriate break out cable). The second port can be configured for either 4 x 100Gb(with the appropriate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
+The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropriate break out cable). The second port can be configured for either 4 x 100Gb (with the appropriate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
 
 .. image:: images/velos_components/image17a.png
   :align: center
