@@ -12,7 +12,7 @@ VELOS Overview
 Kubernetes Based Platform Layer
 -------------------------------
 
-The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer called F5OS that will allow for exciting new capabilities. Luckily customers won’t need to learn Kubernetes to manage the new chassis, it will be abstracted from the administrator. who will be able to manage the new platform layer via familiar F5 CLI, webUI, or API interfaces. 
+The major difference between VELOS and VIPRION is the introduction of a new Kubernetes-based platform layer called F5OS that will allow for exciting new capabilities. Luckily customers won’t need to learn Kubernetes to manage the new chassis, it will be abstracted from the administrator who will be able to manage the new platform layer via familiar F5 CLI, webUI, or API interfaces. 
 
 VELOS will continue to provide hardware acceleration and offload capabilities in a similar way that VIPRION did, however more modern FPGA, CPU, and crypto offload capabilities have been introduced. The new F5OS platform layer allows VELOS to run different types of tenants within the same chassis. As an example, VELOS will be able to run:
 

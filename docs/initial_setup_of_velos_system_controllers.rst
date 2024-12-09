@@ -5,7 +5,11 @@ Initial Setup of VELOS System Controllers
 System Controller Setup
 =======================
 
-Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. F5OS utilizes **ConfD** for configuration management and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?**, and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
+Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. Follow the details in the link below to run the setup wizard.
+
+`Run the VELOS Setup Wizard <https://techdocs.f5.com/en-us/hardware/velos-systems-getting-started/gs-system-initial-config.html#velos-setup-wizard-overview>_'
+
+F5OS utilizes **ConfD** for configuration management and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?**, and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
 
 Once logged in, you can display the current running configuration by issuing the command **show running-config**.
 
