@@ -4622,9 +4622,9 @@ Chassis is operating with non-NEBS temperature thresholds.
 +------------------+----------------------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                                    |
 +==================+======================================================================================================================+
-| ASSERT           | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          |
+| ASSERT           | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          
 +------------------+----------------------------------------------------------------------------------------------------------------------+
-| CLEAR            | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          |
+| CLEAR            | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          
 +------------------+----------------------------------------------------------------------------------------------------------------------+
 
 Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
@@ -4637,9 +4637,9 @@ Chassis operating with non-NEBS temperature thresholds (non-NEBS system controll
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| ASSERT           | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          |
+| ASSERT           | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          
 +------------------+----------------------------------------------------------------------------------------------------------+
-| CLEAR            | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          |
+| CLEAR            | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis).
