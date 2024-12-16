@@ -4619,13 +4619,13 @@ Chassis is operating with non-NEBS temperature thresholds.
 
 **systemControllerNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131328**
 
-+------------------+----------------------------------------------------------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                                                                        |
-+==================+==========================================================================================================+
-| ASSERT           | Chassis operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)      |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
-| CLEAR            | Chassis operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)      |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
++------------------+----------------------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                                    |
++==================+======================================================================================================================+
+| ASSERT           | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------------------+
+| CLEAR            | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------------------+
 
 Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
 
@@ -4637,9 +4637,9 @@ Chassis operating with non-NEBS temperature thresholds (non-NEBS system controll
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| ASSERT           | Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)        |                                                                                                          |
+| ASSERT           | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          |
 +------------------+----------------------------------------------------------------------------------------------------------+
-| CLEAR            | Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)        |                                                                                                          |
+| CLEAR            | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis).
@@ -4723,6 +4723,12 @@ Could not initialize ePVA.
 
 **speed         .1.3.6.1.4.1.12276.1.1.1.263170**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 Port speed change event.
 
 .. code-block:: bash
@@ -4730,12 +4736,24 @@ Port speed change event.
 
 **lacp-mac-failure         .1.3.6.1.4.1.12276.1.1.1.590081**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 Failed to publish LACP MAC address to the database.
 
 .. code-block:: bash
     
 
 **mac-exhaustion         .1.3.6.1.4.1.12276.1.1.1.590082**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 Partition MAC pool is exhausted.
 
