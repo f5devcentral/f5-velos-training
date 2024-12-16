@@ -3917,6 +3917,8 @@ The output below is from an rSeries appliance:
 | CLEAR            | Power fault detected in hardware                                                   |
 +------------------+------------------------------------------------------------------------------------+
 
+Power fault detected in hardware.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include power-fault | more
@@ -3951,6 +3953,8 @@ The output below is from an rSeries appliance:
 +------------------+------------------------------------------------------------------------------------+
 | CLEAR            | Thermal fault detected in hardware                                                 |
 +------------------+------------------------------------------------------------------------------------+
+
+Thermal fault detected in hardware.
 
 .. code-block:: bash
 
@@ -3996,6 +4000,8 @@ The output below is from an rSeries appliance:
 +------------------+------------------------------------------------------------------------------------+
 | CLEAR            | Drive has entered a thermal throttle condition                                     |
 +------------------+------------------------------------------------------------------------------------+
+
+Drive has entered a thermal throttle condition.
 
 .. code-block:: bash
 
@@ -4197,7 +4203,7 @@ Traps will be generated for sensor faults or communication failures. In the exam
     <INFO> 9-Nov-2023::19:26:08.991 controller-1 confd[604]: snmp snmpv2-trap reqid=1548244114 10.255.0.143:162 (TimeTicks sysUpTime=271139401)(OBJECT IDENTIFIER snmpTrapOID=sensor-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-11-10 00:26:08.911332002 UTC)(OCTET STRING alertDescription=Deasserted: sensor fault: Inlet)
 
 
-**module-present                 .1.3.6.1.4.1.12276.1.1.1.66304**
+**module-present                 .1.3.6.1.4.1.12276.1.1.1.65794**
 
 +------------------+-----------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                         |
@@ -4240,7 +4246,7 @@ Traps will be generated for componenents being present or removed. As an example
     <INFO> 21-Aug-2024::22:50:51.725 controller-1 confd[656]: snmp snmpv2-trap reqid=174749348 10.255.80.251:162 (TimeTicks sysUpTime=101002)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.048965786 UTC)(OCTET STRING alertDescription=Blade3 present)
 
 
-**psu-fault                      .1.3.6.1.4.1.12276.1.1.1.66305**
+**psu-fault                      .1.3.6.1.4.1.12276.1.1.1.65793**
 
 +------------------+------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                  |
@@ -4305,7 +4311,7 @@ This set of SNMP traps will relate to the health of the power supplies in the VE
     <INFO> 3-Oct-2022::09:34:25.055 controller-1 confd[437]: snmp snmpv2-trap reqid=64689698 10.255.0.143:162 (TimeTicks sysUpTime=2558)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:17.487691756 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage fault)
 
 
-**lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.66306**
+**lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.65792**
 
 +------------------+-----------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                         |
@@ -4339,7 +4345,7 @@ The output below is from an rSeries unit:
     <INFO> 15-Feb-2023::15:59:14.685 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418324 10.255.0.144:161 (TimeTicks sysUpTime=22205)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-02-15 20:59:14.588063311 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 
 
-**module-communication-error     .1.3.6.1.4.1.12276.1.1.1.66307**
+**module-communication-error     .1.3.6.1.4.1.12276.1.1.1.65795**
 
 +------------------+-----------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                         |
@@ -4388,11 +4394,18 @@ The output below is from an rSeries unit:
 
 **psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
 
-+------------------+----------------------------------------------------------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                                                                        |
-+==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | PSU redundancy fault detected                             |
++------------------+-----------------------------------------------------------+
+| EVENT            | Chassis doesnt have enough working power supplies         |
+|                  |                                                           |
+|                  | Chassis has enough working power supplies                 |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | PSU redundancy fault detected                             |
++------------------+-----------------------------------------------------------+
 
 PSU redundancy fault detected.
 
@@ -4401,11 +4414,16 @@ PSU redundancy fault detected.
 
 **psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
 
-+------------------+----------------------------------------------------------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                                                                        |
-+==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Fault detected in PSU Controller health                   |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<Asserted | Deasserted>>: <<PSU controller sensor>>      |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Fault detected in PSU Controller health                   |
++------------------+-----------------------------------------------------------+
 
 Fault detected in PSU Controller health.
 
@@ -4414,11 +4432,16 @@ Fault detected in PSU Controller health.
 
 **fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
 
-+------------------+----------------------------------------------------------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                                                                        |
-+==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Fault detected in Fan Controller health                   |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<Asserted | Deasserted>>: <<Fan controller sensor>>      |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Fault detected in Fan Controller health                   |
++------------------+-----------------------------------------------------------+
 
 Fault detected in Fan Controller health.
 
@@ -4427,11 +4450,15 @@ Fault detected in Fan Controller health.
 
 **arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
 
-+------------------+----------------------------------------------------------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                                                                        |
-+==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
++------------------+---------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                   |
++==================+=====================================================================+
+| EVENT            | <<Asserted| Deasserted>> local arbitration health state             |
++------------------+---------------------------------------------------------------------+
+| EVENT            | <<Asserted| Deasserted>> local arbitration request-active state     |
++------------------+---------------------------------------------------------------------+
+| EVENT            | <<Asserted| Deasserted>> local arbitration grant-active state       |
++------------------+---------------------------------------------------------------------+
 
 Change detected in System Controller Arbitration State.
 
@@ -4445,11 +4472,16 @@ Change detected in System Controller Arbitration State.
 
 **switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
 
-+------------------+----------------------------------------------------------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                                                                        |
-+==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
-+------------------+----------------------------------------------------------------------------------------------------------+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Switch port status                                        |
++------------------+-----------------------------------------------------------+
+| EVENT            |                                                           |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Switch port status                                        |
++------------------+-----------------------------------------------------------+
 
 Switch port status.
 
@@ -4460,6 +4492,17 @@ Switch port status.
     <INFO> 23-Jul-2024::13:39:46.879 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934236 10.255.80.251:162 (TimeTicks sysUpTime=377947)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:46.771763998 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has no FEC uncorrected errors)
 
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Management link state is down                             |
++------------------+-----------------------------------------------------------+
+| EVENT            | Front-panel management port link status is <<down | up >> |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Management link state is down                             |
++------------------+-----------------------------------------------------------+
 
 Traps for the front panel system controller management port link state. Each system controller has a single 10Gb Ethernet port. Traps will be generated when these ports change status. The Source of the trap will either be controller-1 or controller-2, and the body of the trap will indicate the status of the port (up or down). Traps will be sent with either an **assert** when an alarm occurs, a **clear** when the alarm is cleared, or an **event** which is providing an update to a raised alarm event.
 
@@ -4495,7 +4538,7 @@ Hardware datapath fault.
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| EVENT            | Boot time integrity failure detected                                                                     |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Boot time integrity failure detected.
@@ -4553,7 +4596,7 @@ Below is an example of an authentication failure trap generated on a chassis par
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| EVENT            | Chassis is operating with NEBS temperature thresholds                                                    |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Chassis is operating with NEBS temperature thresholds.
@@ -4566,7 +4609,7 @@ Chassis is operating with NEBS temperature thresholds.
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| EVENT            | Chassis is operating with non-NEBS temperature thresholds                                                |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Chassis is operating with non-NEBS temperature thresholds.
@@ -4579,7 +4622,9 @@ Chassis is operating with non-NEBS temperature thresholds.
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Chassis operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)      |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Chassis operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)      |                                                                                                          |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
@@ -4592,7 +4637,9 @@ Chassis operating with non-NEBS temperature thresholds (non-NEBS system controll
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)        |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis)        |                                                                                                          |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis).
@@ -4605,7 +4652,9 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | One or more openshift certificates expiring within 90 days.                                              |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | One or more openshift certificates expiring within 90 days.                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 One or more openshift certificates expiring within 90 days.
@@ -4618,7 +4667,9 @@ One or more openshift certificates expiring within 90 days.
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | One or more openshift certificates has expired or is expiring.                                           |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | One or more openshift certificates has expired or is expiring.                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 One or more openshift certificates has expired or is expiring.
@@ -4632,7 +4683,9 @@ One or more openshift certificates has expired or is expiring.
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | The openshift cluster requires a manual rebuild to use the latest containers.                            |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | The openshift cluster requires a manual rebuild to use the latest containers.                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The openshift cluster requires a manual rebuild to use the latest containers.
@@ -4843,6 +4896,8 @@ The output below is from an rSeries unit:
 | CLEAR            | FIPS error identified in one or more services                     |
 +------------------+-------------------------------------------------------------------+
 
+FIPS error identified in one or more services.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include fipsError    
@@ -4855,7 +4910,7 @@ System Event Traps
 +------------------+------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                        |
 +==================+==========================================================================================+
-| EVENT            | Core dumped on Appliance. process=<service name> location=<core file location>           |
+| EVENT            | Core dumped on Controller-<1|2>. process=<service name> location=<core file location>    |
 +------------------+------------------------------------------------------------------------------------------+
 
 This trap will indicate that the system has generated a core-dump file. A support case should be opened to diagnose the failure and a qkview should be taken and uploaded to iHealth to capture the diagnostic information for F5 support to analyze. Below is an example of an SNMP trap indicating that the orchestration manager has generated a core dump Files.
@@ -4876,7 +4931,7 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 +------------------+------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                        |
 +==================+==========================================================================================+
-| EVENT            | reboot - appliance-1.chassis.local F5OS-A [R5R10 | R2R4 ] version <Version>              |
+| EVENT            | reboot - controller-<1|2>.chassis.local F5OS-C controller version <Version>              |
 +------------------+------------------------------------------------------------------------------------------+
 
 This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator. Below is an example of a reboot trap.
