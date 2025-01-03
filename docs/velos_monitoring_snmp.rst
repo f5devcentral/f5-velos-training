@@ -4961,11 +4961,23 @@ This trap will indicate that the system has rebooted. It's possible this was a p
 
 **raid-event                     .1.3.6.1.4.1.12276.1.1.1.393216**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 .. code-block:: bash
 
     r10900-1# file show log/system/snmp.log | include raid-event
 
 **backplane                      .1.3.6.1.4.1.12276.1.1.1.262144**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -5045,6 +5057,12 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
 
 **txPwr                   .1.3.6.1.4.1.12276.1.1.1.262400**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 The transmit power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
 .. code-block:: bash
@@ -5055,6 +5073,12 @@ The transmit power threshold for a specific transceiver has triggered a warning 
 
 **rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 The receive power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
 .. code-block:: bash
@@ -5063,6 +5087,12 @@ The receive power threshold for a specific transceiver has triggered a warning o
     <INFO> 23-Jul-2024::23:25:34.302 partition2 confd[122]: snmp snmpv2-trap reqid=1370215023 10.255.80.251:162 (TimeTicks sysUpTime=3571250)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218508824 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
 **txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 The transmit bias threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
@@ -5073,6 +5103,12 @@ The transmit bias threshold for a specific transceiver has triggered a warning o
 
 **ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 The ddm temperature threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
 
 .. code-block:: bash
@@ -5080,6 +5116,12 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 
 
 **ddmVcc                   .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 The ddm voltage threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
 
