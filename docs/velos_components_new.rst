@@ -267,7 +267,7 @@ Each system controller has a single 10Gb out-of-band management port, a console 
 
 .. image:: images/velos_components/sx1610.png
   :align: center
-  :scale: 60%
+  :scale: 90%
 
 
 Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there are 2 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the current first generation BX110 blades. The BX520 blades utilize both 100Gb connections from each of the two slots the blade occupies (total 400Gb). 
