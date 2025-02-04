@@ -5,7 +5,7 @@ VELOS Components
 CX410 Chassis
 =============
 
-The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 (requires F5OS-C 1.8.2) line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 (requires F5OS-C 1.8.1) line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/image1.png
   :align: center
@@ -14,7 +14,7 @@ The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can 
 CX1610 Chassis
 =============
 
-The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by the BX110 (future) or BX520 line cards, as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by new BX520 line cards (BX110 blades are not supported in the CX1610 chassis at this time), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/imagecx1610.png
   :align: center
@@ -192,7 +192,7 @@ SX410 System Controllers
 
 Each CX410 chassis ships with two SX410 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
--	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 and BX520)
+-	They provide the active backplane connectivity, and layer2 switching to all BX520 line cards (BX110 is currently unsupported)
 - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
@@ -221,11 +221,11 @@ The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s
 
 Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
-.. image:: images/velos_components/image5a.png
+.. image:: images/velos_components/sx410.png
   :align: center
   :scale: 60%
 
-Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there are 2 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the first generation of BX110 blades. The BX520 blades utilize both 100Gb connections from each of the two slots the blade occupies (total 400Gb). 
+Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there is 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the first generation of BX110 blades. The BX520 blades utilize both 100Gb connections from each of the two slots the blade occupies (total 400Gb). 
 
 .. image:: images/velos_components/image16.png
   :align: center
@@ -265,7 +265,7 @@ The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s
 
 Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
-.. image:: images/velos_components/sx410.png
+.. image:: images/velos_components/sx1610.png
   :align: center
   :scale: 60%
 

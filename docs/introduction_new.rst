@@ -43,6 +43,8 @@ The physical architecture of VELOS differs from the VIPRION platform in several 
 
 The CX1610 VELOS chassis supports 32 slots in a 16RU footprint vs. only 8 slots in the VIPRION C4800 chassis. 
 
+.. note:: The CX1610 chassis and BX520 blade are generally available with F5OS-C 1.8.1
+
 .. image:: images/velos_introduction/imagecx1610.png
   :align: center
   :scale: 70%
@@ -58,18 +60,20 @@ For the CX410 chassis, the system controllers are responsible for providing non-
 
 Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 4 BX520 blades installed. 
 
+.. note:: The CX1610 chassis and BX520 blade are generally available with F5OS-C 1.8.1
+
 .. image:: images/velos_introduction/bx520cx410.png
   :align: center
   :scale: 70%   
 
-For the CX1610 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 32 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards (BX110 and BX520) and only the BX520 is supported in the CX1610 chassis at this time. Since each BX520 takes 2 slots, a maximum of 16 BX520 blades can be installed in the CX1610 chassis. Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 16 BX520 blades installed. 
+For the CX1610 chassis, the system controllers are responsible for providing non-blocking connections and layer 2 switching between the 32 slots within the system. The system controllers are star-wired with multiple connections to each slot. There are currently two different generations of line cards (BX110 and BX520) and only the BX520 is supported in the CX1610 chassis at this time. Since each BX520 blade takes 2 slots, a maximum of 16 BX520 blades can be installed in the CX1610 chassis. Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 16 BX520 blades installed. 
 
 .. image:: images/velos_introduction/bx520cx1610.png
   :align: center
   :scale: 70%  
 
 
-It is technically possible that the BX110 blade could run inside the CX1610 chassis in the future if business demand is great enough, but there is no committed plan at this time. In this case, each BX110 blade would have one 100Gb backplane connection to each system controller (200Gb total). The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis with 32 BX110 blades (currently unsupported) installed. 
+It is technically possible that the BX110 blade could run inside the CX1610 chassis in the future if business demand is great enough, but there is no committed plan at this time. In this case, each BX110 blade would have one 100Gb backplane connection to each system controller (200Gb total). The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis and with 32 BX110 blades (currently unsupported) installed. 
 
 .. note:: BX110 support in the CX1610 chassis is not supported. Mixing of blade types in the same chassis is only supported in the CX410 chassis at this time.
 
@@ -79,7 +83,7 @@ It is technically possible that the BX110 blade could run inside the CX1610 chas
  
 While both system controllers are active, they provide a non-blocking 1.6Tbs backplane between the 8 slots on the CX410 chassis, and a non-blocking 6.4Tbs backplane between the 32 slots on the CX1610 chassis. Note that the BX110 line cards currently have a L4/L7 throughput rating of 95Gbs each, but that is not a limitation of the backplane. If one of the system controllers were to fail, traffic would immediately switch over to the remaining system controller and the backplane bandwidth would be cut in half to 800Gbps. This is still more bandwidth than the first generation of line cards (BX110) support. The BX520 line cards currently have a L4/L7 throughput rating of ~300/375Gbs each, but that is not a limitation of the backplane.   
 
-The backplane for both the BX110 and BX520 ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG), thus utilizing both controllers for forwarding between slots. Therfore, the system controllers operate in active/active manner under normal operation.
+The backplane for both the BX110 and BX520 ports are aggregated together using link aggregation during normal operation, and traffic will be distributed according to the hashing algorithm of the Link Aggregation Group (LAG), thus utilizing both controllers for forwarding between slots. Therefore, the system controllers operate in active/active manner under normal operation.
 
 A VIPRION chassis in comparison does not have a centralized switch fabric, and all blades are connected across the passive backplane in a full mesh fashion. The backplane in VIPRION was blocking, meaning the front panel bandwidth of a blade was greater than the blades backplane connectivity. Below is an example of the VIPRION C2400 chassis with B2250 blades. Each blade had a single 40Gb connection to every other blade. The total backplane bandwidth is 6 x 40 Gb = 240 Gb.
 
