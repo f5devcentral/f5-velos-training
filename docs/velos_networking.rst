@@ -70,7 +70,7 @@ Each chassis partition is a unique entity that has its own set of (local/remote)
 
 In addition to management access being completely isolated and unique, in-band networking (for use by tenants) is configured and completely contained within the chassis partition. Each chassis partition will have its own set of networking components such as PortGroups, VLANs, LAGs, and interfaces. This means that networking within one chassis partition is not accessible or viewable from another chassis partition. 
 
-Isolation at the network level is also enforced via the centralized switch fabrics that reside in the dual system controllers. In the VELOS system each blade has multiple connections into the centralized switch fabrics for redundancy and added bandwidth. Each BX110 blade has 2 x 100Gb backplane connections (one to each system controller), that are bonded together in a static LAG (Link Aggregation Group). This star-wired topology provides fast and reliable backplane connections between all the blades, and also allows for complete isolation at the networking layer.
+Isolation at the network level is also enforced via the centralized switch fabrics that reside in the dual system controllers. In the VELOS system each blade has multiple connections into the centralized switch fabrics for redundancy and added bandwidth. Each BX110 blade has 2 x 100Gb backplane connections (one to each system controller), that are bonded together in a static LAG (Link Aggregation Group). This star-wired topology provides fast and reliable backplane connections between all the blades, and also allows for complete isolation at the networking layer. The same is true with the BX520 blade which has 4 x 100Gb backplane connections (two to each controller).
 
 .. image:: images/velos_networking/image5.png
   :align: center
@@ -124,7 +124,7 @@ Below is an example of the chassis partition webUI Port Groups screen with BX110
    :align: center
    :scale: 70%
 
-For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that will support either 100Gb optics or 4 x 100Gb (future) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, but 4 x 100Gb support will be added in a future release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and will support the option of 4 x 100Gb with the proper optic and breakout cables in a future release. 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (in the F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, but 4 x 100Gb support will be added in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and will support the option of 4 x 100Gb with the proper optic and breakout cables in the F5OS-C 1.8.1 release. 
 
 .. image:: images/velos_networking/image11a.png
   :width: 45%
