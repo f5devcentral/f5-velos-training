@@ -130,11 +130,11 @@ For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP
   :width: 45%
 
 .. image:: images/velos_networking/image11b.png
-  :width: 30%
+  :width: 35%
 
 .. image:: images/velos_networking/image11c.png
   :align: center
-  :width: 45%
+  :width: 55%
 
 Below is an example of the chassis partition webUI Port Groups screen with BX520 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image. Port1 is currently hardcoded for 100Gb, and port2 is currently hard coded at 400gb. Breakout options will be added in a future release.
 
