@@ -116,14 +116,14 @@ Note a BX110 blade is not intended to replace a single B4450 blade. The B4450 ha
 
 .. image:: images/velos_performance_and_sizing/sizing-l7rps-new.png
   :align: center
-  :scale: 80%
+  :scale: 100%
 
 
 Because each blade has a different number of CPUs, a common sizing exercise is to look at the per vCPU performance by using the formulas above to come up with a per vCPU metric. In the graph below it is done for Layer7 RPS (Inf-Inf), but you could use the same math for any metric. Note, the graph below is not derived from a per vCPU test, it is taking a published blade metric and dividing it by the number of available vCPUs to come up with a per vCPU metric. As mentioned above, using the VELOS metric which is (minus the platform CPUs) is the most realistic. As expected, the BX110 provides a better per vCPU Requests Per Second (RPS) than the B2250, but what may be surprising is that it has a higher RPS on a per vCPU basis than the B4450 as well. This is because the B4450 gets its overall speed due to the total number of vCPUs, and it has 2x more CPUs than the BX110. Even though the BX110 CPUs run slower (1.9Ghz vs. 2.2Ghz) than the B4450, the changes in architecture, more modern CPU etc., make it perform faster at the per vCPU metric.
 
 .. image:: images/velos_performance_and_sizing/sizing-l7rps-pervcpu-new.png
   :align: center
-  :scale: 80%
+  :scale: 100%
 
 
 **NOTE: The per vCPU charts above are based on extrapolations, not per vCPU testing, so results may vary. This is generally acceptable for sizing use, as this is more a means of comparison of platform differences than a guarantee of a certain metric.**
