@@ -5,7 +5,9 @@ VELOS Components
 CX410 Chassis
 =============
 
-The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 (requires F5OS-C 1.8.1) line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 (requires F5OS-C 1.8.1) line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm. 
+
+.. Note:: You cannot mix BX110 and BX520 blades in the same CX410 chassis currently.  
 
 .. image:: images/velos_components/image1.png
   :align: center
@@ -14,7 +16,7 @@ The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can 
 CX1610 Chassis
 =============
 
-The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by new BX520 line cards (BX110 blades are not supported in the CX1610 chassis at this time), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by new BX520 line cards (BX110 blades are not supported in the CX1610), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/imagecx1610.png
   :align: center
@@ -192,7 +194,7 @@ SX410 System Controllers
 
 Each CX410 chassis ships with two SX410 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
--	They provide the active backplane connectivity, and layer2 switching to all BX520 line cards (BX110 is currently unsupported)
+-	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 and BX520 cannot be mixed in the same chassis currently)
 - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
@@ -225,7 +227,7 @@ Each system controller has a single 10Gb out-of-band management port, a console 
   :align: center
   :scale: 60%
 
-Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there is 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the first generation of BX110 blades. The BX520 blades utilize both 100Gb connections from each of the two slots the blade occupies (total 400Gb). 
+Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there are 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used. The BX520 blades utilize both 100Gb connections to each controller from each of the two slots the blade occupies (total 400Gb). 
 
 .. image:: images/velos_components/image16.png
   :align: center
@@ -236,7 +238,7 @@ SX1610 System Controllers
 
 Each CX1610 chassis ships with two SX1610 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
--	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 (future) & BX520)
+-	They provide the active backplane connectivity, and layer2 switching to the BX520 line cards (The BX110 blade is not supported on the CX1610 chassis)
 - They operate in an active/active manner from a layer2 switching perspective
 
 -	They host the Kubernetes control plane functions
@@ -270,7 +272,7 @@ Each system controller has a single 10Gb out-of-band management port, a console 
   :scale: 90%
 
 
-Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there are 2 100Gb backplane connections (primary and secondary) to each slot in the system, but only the primary connection is used with the current first generation BX110 blades. The BX520 blades utilize both 100Gb connections from each of the two slots the blade occupies (total 400Gb). 
+Looking at the left-hand side of the diagram below, you’ll notice the system controllers provide console and out-of-band management access to the chassis. This is proxied through the controller to the individual line cards. The system controllers have a built-in terminal server function, that allows direct connection to a blade if required. Each system controller also acts as a centralized switch fabric, interconnecting all blades in the system. Note, there is a single 100Gb backplane connection to each slot in the system from each controller. The BX520 blades utilize both 100Gb connections to each controller from each of the two slots the blade occupies (total 400Gb). 
 
 .. image:: images/velos_components/image16a.png
   :align: center
@@ -286,7 +288,7 @@ The BX110 blade is a next generation data plane/line card. It has 2 high speed (
   :align: center
   :scale: 60%
 
-The BX110 has 14 physical cores, which are hyperthreaded into 28 vCPUs. Six of the vCPUs are reserved for the F5OS-C platform layer, leaving 22 vCPUs available for multitenancy. Each blade comes with a 1TB SSD drive and is populated with 128GB of RAM (double the current generation VIPRION B2250). Each BX110 has two Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Application Traffic Service Engine (ATSE) is the “front panel FPGA”, which does initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
+The BX110 has 14 physical cores, which are hyperthreaded into 28 vCPUs. Six of the vCPUs are reserved for the F5OS-C platform layer (3 for the F5OS Datamover and 3 for F5OS Dedicated), leaving 22 vCPUs available for multitenancy. Each blade comes with a 1TB SSD drive and is populated with 128GB of RAM (double the current generation VIPRION B2250). Each BX110 has two Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Application Traffic Service Engine (ATSE) is the “front panel FPGA”, which does initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
 
 .. image:: images/velos_components/image18.png
   :align: center
@@ -302,15 +304,24 @@ BX520 Blade
 
 The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropriate break out cable). The second port can be configured for either 4 x 100Gb (with the appropriate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
 
+.. Note:: 100Gb breakout cable support is added in F5OS-C 1.8.1.
+
 .. image:: images/velos_components/image17a.png
   :align: center
   :scale: 60%
 
-The BX520 has 56 physical cores, which are hyperthreaded into 112 vCPUs. Sixteen of the vCPUs are reserved for the F5OS-C platform layer, leaving 96 vCPUs available for multitenancy. Each blade comes with a 4TB SSD drive and is populated with 512GB of RAM. Each BX520 has three Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Traffic Aggregation Module (TAM) FPGA handles all front panel connections. The Application Traffic Service Engine (ATSE) handles initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
+The BX520 has 56 physical cores, which are hyperthreaded into 112 vCPUs. Sixteen of the vCPUs are reserved for the F5OS-C platform layer (6 for the F5OS Datamover and 8 for F5OS Dedicated), leaving 96 vCPUs available for multitenancy. Each blade comes with a 4TB SSD drive and is populated with 512GB of RAM. Each BX520 has three Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Traffic Aggregation Module (TAM) FPGA handles all front panel connections. The Application Traffic Service Engine (ATSE) handles initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
 
 .. image:: images/velos_components/image18a.png
   :align: center
   :scale: 50%
+
+Below is a illustration of how the BX520 blade connects to the two system controllers.
+
+.. image:: images/velos_components/bx520-backplane-connectivity.png
+  :align: center
+  :scale: 50%
+
 
 The SSD is removable, but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
 
