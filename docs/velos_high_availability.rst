@@ -35,7 +35,7 @@ You may view the current high availability status in the dashboard of the system
   :align: center
   :scale: 70%
 
-Below is a similar screen for the CX1610 chassis with BX520 blades. Note how the BX520 blade is a s lot blade, so the 2nd slot will show up **Aux**. 
+Below is a similar screen for the CX1610 chassis with BX520 blades. Note how the BX520 blade is a dual slot blade, so the 2nd slot for a blade will show up **Aux**. 
 
 .. image:: images/velos_high_availability/cx1610-partitions.png
   :align: center
@@ -151,6 +151,26 @@ For planning purposes, a single large tenant “SuperVIP” spanning 8 total bla
 | Tenant Cluster Member        |     8 per Tenant (one per slot)  |  x2 for HA = 16    |
 +------------------------------+----------------------------------+--------------------+
 | Total                        |     13                           |  x2 for HA = 26    | 
++------------------------------+----------------------------------+--------------------+
+
+For planning purposes, a single large tenant “SuperVIP” spanning 16 total BX520 blades in the CX1610 chassis would require 21 out-of-band management IP addresses for each chassis. In-band Self-IP and Virtual addresses are not included in this calculation.
+
++------------------------------+----------------------------------+--------------------+
+| **IP Addresses Required**    | **Single Chassis**               | **HA Environment** | 
++==============================+==================================+====================+
+| System Controller 1          |     1                            |  x2 for HA = 2     |
++------------------------------+----------------------------------+--------------------+
+| System Controller 2          |     1                            |  x2 for HA = 2     | 
++------------------------------+----------------------------------+--------------------+
+| System Controller Floating   |     1                            |  x2 for HA = 2     |
++------------------------------+----------------------------------+--------------------+
+| Chassis Partition            |     1 per Chassis Partition      |  x2 for HA = 2     | 
++------------------------------+----------------------------------+--------------------+
+| Tenant Management            |     1 per Tenant                 |  x2 for HA = 2     | 
++------------------------------+----------------------------------+--------------------+
+| Tenant Cluster Member        |     16 per Tenant (one per slot) |  x2 for HA = 32    |
++------------------------------+----------------------------------+--------------------+
+| Total                        |     21                           |  x2 for HA = 42    | 
 +------------------------------+----------------------------------+--------------------+
 
 HA Group Configuration to Control Tenant Failover
