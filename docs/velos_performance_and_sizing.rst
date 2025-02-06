@@ -135,13 +135,13 @@ Memory Sizing
 
 Each VELOS BX110 blade has 128GB of memory, which is double the current memory support of the B2250 blade (64GB) but half the current B4450 blade (256GB). Generally, a BX110 will have more than enough memory to replace a B2250 blade and will provide more memory which may help vCMP guests which are pushing memory limits.  Just like sizing based on L7 it will likely take 2 BX110 blades to replace a B4450 blade when looking at memory only. 
 
-.. image:: images/velos_performance_and_sizing/image16.png
+.. image:: images/velos_performance_and_sizing/sizing-memory-new.png
   :align: center
   :scale: 80%
 
 Breaking down memory to get per vCPU numbers will help when dealing with current vCMP guest configurations where memory is allocated based on the number of vCPUs assigned to the guest. Because VELOS has a different architecture than VIPRION there is a formula for calculating how much memory a vCPU will receive. The chart below shows the default RAM per vCPU allocation with a 1 vCPU tenant. 
 
-.. image:: images/velos_performance_and_sizing/image17.png
+.. image:: images/velos_performance_and_sizing/sizing-memory-new-vcpu.png
   :align: center
   :scale: 70%
 
