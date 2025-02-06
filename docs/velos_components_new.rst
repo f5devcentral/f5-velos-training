@@ -320,7 +320,7 @@ Below is a illustration of how the BX520 blade connects to the two system contro
 
 .. image:: images/velos_components/bx520-backplane-connectivity.png
   :align: center
-  :scale: 50%
+  :scale: 75%
 
 
 The SSD is removable, but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
