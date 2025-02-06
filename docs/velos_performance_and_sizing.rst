@@ -89,11 +89,11 @@ The graphs below compare 1 and 2 blade configurations of the B2250 vs. a single 
 
 .. image:: images/velos_performance_and_sizing/sizing-cpu-vcpu-velos-viprion.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 .. image:: images/velos_performance_and_sizing/sizing-cpu-ghz-velos-viprion.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 .. image:: images/velos_performance_and_sizing/image11.png
   :align: center
