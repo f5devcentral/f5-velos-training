@@ -137,13 +137,13 @@ Each VELOS BX110 blade has 128GB of memory, which is double the current memory s
 
 .. image:: images/velos_performance_and_sizing/sizing-memory-new.png
   :align: center
-  :scale: 80%
+  :scale: 100%
 
 Breaking down memory to get per vCPU numbers will help when dealing with current vCMP guest configurations where memory is allocated based on the number of vCPUs assigned to the guest. Because VELOS has a different architecture than VIPRION there is a formula for calculating how much memory a vCPU will receive. The chart below shows the default RAM per vCPU allocation with a 1 vCPU tenant. 
 
 .. image:: images/velos_performance_and_sizing/sizing-memory-new-vcpu.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 
 With VELOS the amount of RAM per vCPU will change slightly as more vCPUs are added to the tenant. Below are the default values for total RAM, and RAM per vCPU for the VELOS tenants. These are recommended values, but VELOS provides advanced options where memory per tenant can be customized to allocate more memory. See the Multitenancy section for more details on memory customization.
