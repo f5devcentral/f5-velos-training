@@ -12,7 +12,7 @@ Some additional links on the benefits of hardware offload using the ePVA in prev
 
 `F5 Fast L4 Acceleration and the F5 Smart Coprocessor (prioritized Fast L4 Acceleration) <https://devcentral.f5.com/s/articles/F5-Fast-L4-Acceleration-and-the-F5-Smart-Coprocessor-prioritized-Fast-L4-Acceleration>`_
 
-In VELOS for the BX110 blade there are now two distinct FPGAs, the **Application Traffic Services Engine** (ATSE), and the **VELOS Queuing FPGA** (VQF). The BX520 balde also leverages the VQF and ATSE, but the BX520 has two ATSE FPGs compared to just one for the BX110. There is an additional FPGA called the Traffic Aggregation Module (TAM) on the BX520 which handles the 100Gb and 400Gb physical interface management. In addition to supporting functions done by the ePVA in previous generations, there are additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGAs.
+In VELOS for the BX110 blade there are now two distinct FPGAs, the **Application Traffic Services Engine** (ATSE), and the **VELOS Queuing FPGA** (VQF). The BX520 blade also leverages the VQF and ATSE, but the BX520 has two ATSE FPGAs compared to just one for the BX110. There is an additional FPGA called the Traffic Aggregation Module (TAM) on the BX520 which handles the 100Gb and 400Gb physical interface management. In addition to supporting functions done by the ePVA in previous generations, there are additional functions that were performed in software or Broadcom chipsets that are now handled in the FPGAs.
 
 .. image:: images/velos_performance_and_sizing/image1.png
   :align: center
@@ -86,6 +86,14 @@ Each VELOS BX110 blade has 28 vCPUs, but 6 of those vCPUs are reserved for use b
 When sizing, removing the 6 dedicated vCPUs from the equation will give a better representation of what the per vCPU performance will be. Comparing the performance of a single vCPU can be important for control plane sizing and for extrapolation of what a tenant’s performance may be. Below is a comparison on the CPUs on the VIPRION B2250, VELOS BX110, and VIPRION B4450. Note that the VELOS sizing is more complex because of the way the CPUs are used. Since 3 physical / 6 vCPUs are dedicated for use by the platform layer, overall CPU performance can be misleading. 
 
 The graphs below compare 1 and 2 blade configurations of the B2250 vs. a single B4450 blade, and 1 and 2 blade VELOS BX110 configurations. There are comparisons which include all the vCPUs on a BX110, and another set which removes the 6 vCPUs used for the platform layer (more realistic). Instead of showing 14 physical cores and 28 vCPUs, VELOS is sized using 11 physical cores and 22 vCPUs (listed as "minus platform Layer CPU").
+
+.. image:: images/velos_performance_and_sizing/sizing-cpu-vcpu-velos-viprion.png
+  :align: center
+  :scale: 70%
+
+.. image:: images/velos_performance_and_sizing/sizing-cpu-ghz-velos-viprion.png
+  :align: center
+  :scale: 70%
 
 .. image:: images/velos_performance_and_sizing/image11.png
   :align: center
@@ -255,7 +263,7 @@ Each BX520 blade has 512GB of memory. The F5OS layer takes about 34GB of RAM lea
 
 **min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
 
-Each BX520 blade has 48 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. The minimum vCPU size per tenant is 4 vCPU's. Below is a diagram depicting the CPU/vCPUs on a single BX110 blade.
+Each BX520 blade has 48 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. The minimum vCPU size per tenant is 4 vCPU's. Below is a diagram depicting the CPU/vCPUs on a single BX520 blade.
 
 .. image:: images/velos_multitenancy/bx520-tenants.png
   :align: center
