@@ -75,7 +75,7 @@ For the CX1610 chassis, the system controllers are responsible for providing non
 
 It is technically possible that the BX110 blade could run inside the CX1610 chassis in the future if business demand is great enough, but there is no committed plan at this time. In this case, each BX110 blade would have one 100Gb backplane connection to each system controller (200Gb total). The picture below shows the backplane interconnections of a fully populated 32 slot CX1610 chassis and with 32 BX110 blades (currently unsupported) installed. 
 
-.. note:: BX110 support in the CX1610 chassis is not supported. Mixing of blade types in the same chassis is only supported in the CX410 chassis at this time.
+.. note:: BX110 support in the CX1610 chassis is not supported. Mixing of blade types in the same CX410 chassis is not supported in F5OS-C 1.8.1, this is being considered for a future release.
 
 .. image:: images/velos_introduction/bx110cx1610.png
   :align: center

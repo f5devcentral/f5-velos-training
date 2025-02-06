@@ -147,7 +147,7 @@ Interfaces
 
 Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled, or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2. 
 
-If ports are unbundled, then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Breakout cables will be needed to support the unbundled 25Gb, or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering when all interfaces are bundled.
+If ports are unbundled, then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Breakout cables will be needed to support the unbundled 25Gb, or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering when all interfaces are bundled.Below is an example of BX110 blade numbering for both bundled and unbundled configurations.
 
 .. image:: images/velos_networking/image12.png
   :align: center
@@ -156,6 +156,13 @@ Below is an example of port numbering when all interfaces are unbundled.
 
 .. image:: images/velos_networking/image12a.png
   :align: center
+
+
+For the BX520 blades interface numbering is different because the BX520 takes up two slots. The slot reference for the blade will always be the first of the two slots which will always be an odd number. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for a blade that occupies slot 1 and slot 2, and **3/1.0** and **3/2.0** for a blade that occupies slots 3 and 4. Below is an example of four BX520 blades within the CX410 chassis and their interface numbering when all ports are bundled.
+
+.. image:: images/velos_networking/bx520-interfaces.png
+  :align: center
+
 
 Supported Optics
 ================
@@ -206,6 +213,18 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 
 **Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G LR4 VELOS is OPT-0052 (as shown above)**.
+
+
+**400Gb QSFP-DD options:**
+
+The optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade.
+
++------------------------+------------+----------------------------------------------------------------------------------+
+| 400GBASE-FR4 (QSFPDD)  | OPT-       | TRANSCEIVER, QSFPDD, 400G-FR4, 850NM, MMF, MPO, DDM, BRANDED                     |
++------------------------+------------+----------------------------------------------------------------------------------+
+| 400GBASE-DR4 (QSFPDD)  | OPT-       | TRANSCEIVER, QSFPDD, 400G-DR4, 10KM, LC, SMF, 4.5W, DDM, VELOCITY SDK, BRANDED   |
++------------------------+------------+----------------------------------------------------------------------------------+
+
 
 Below are the **current** VELOS optic SKUs:
 
