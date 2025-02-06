@@ -192,7 +192,7 @@ Each VELOS BX110 blade has two physical ports, that currently support the follow
 
 .. image:: images/velos_high_availability/image12.png
   :align: center
-  :scale: 90%
+  :scale: 120%
 
 VELOS BX520 Blade 
 -----------------
@@ -201,7 +201,7 @@ Each VELOS BX520 blade has two physical ports, that currently support the follow
 
 .. image:: images/velos_high_availability/image12-bx520.png
   :align: center
-  :scale: 90%  
+  :scale: 100%  
 
 HA Topology Options
 -------------------
