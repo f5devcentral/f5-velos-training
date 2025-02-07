@@ -152,7 +152,7 @@ If ports are unbundled, then the port numbering will be **1/1.1, 1/1.2, 1/1.3, a
 .. image:: images/velos_networking/image12.png
   :align: center
 
-Below is an example of port numbering when all interfaces are unbundled.
+Below is an example of BX110 port numbering when all interfaces are unbundled.
 
 .. image:: images/velos_networking/image12a.png
   :align: center
@@ -163,6 +163,10 @@ For the BX520 blades interface numbering is different because the BX520 takes up
 .. image:: images/velos_networking/bx520-interfaces.png
   :align: center
 
+Below is an example of BX520 port numbering when all interfaces are unbundled.
+
+.. image:: images/velos_networking/bx520-interfaces-unbundled.png
+  :align: center
 
 Supported Optics
 ================
