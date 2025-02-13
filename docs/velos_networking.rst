@@ -158,12 +158,12 @@ Below is an example of BX110 port numbering when all interfaces are unbundled.
   :align: center
 
 
-For the BX520 blades interface numbering is different because the BX520 takes up two slots. The slot reference for the blade will always be the first of the two slots which will always be an odd number. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for a blade that occupies slot 1 and slot 2, and **3/1.0** and **3/2.0** for a blade that occupies slots 3 and 4. Below is an example of four BX520 blades within the CX410 chassis and their interface numbering when all ports are bundled.
+For the BX520 blades interface numbering is different because the BX520 blade takes up two slots. The slot reference for the blade will always be the first of the two slots where the blade is inserted, which will always be an odd number. If the ports are bundled, then ports will be **1/1.0** and **1/2.0** for a blade that occupies slot 1 and slot 2, and **3/1.0** and **3/2.0** for a blade that occupies slots 3 and 4. Below is an example of four BX520 blades within the CX410 chassis and their interface numbering when all ports are bundled.
 
 .. image:: images/velos_networking/bx520-interfaces.png
   :align: center
 
-Below is an example of BX520 port numbering when all interfaces are unbundled.
+Below is an example of BX520 port numbering when all interfaces are unbundled into 4 x 100gb interfaces.
 
 .. image:: images/velos_networking/bx520-interfaces-unbundled.png
   :align: center
@@ -171,8 +171,7 @@ Below is an example of BX520 port numbering when all interfaces are unbundled.
 Supported Optics
 ================
 
-Only F5 branded optics are officially supported on VELOS. The BX110 blade supports speeds of 10Gb, 25Gb, 40Gb, and 100Gb depending on the type of optics used, and the port group configuration. VELOS interfaces will accept F5 approved QSFP+ or QSFP28 optics. 3rd party optics are not officially supported per F5’s support policies: 
-
+Only F5 branded optics are officially supported on VELOS per F5's third part hardware components policy. The BX110 blade supports speeds of 40Gb and 100Gb as well as 4 x 10Gb and 4 x 25Gb though the use of breakout cables. You must have the proper optics type inserted (and optional breakout cables) as well as the proper port group configuration for links to be established. The BX520 blades supports speeds are 400Gb or 4 x 100Gb (with proper breakout cable). VELOS interfaces will accept F5 approved QSFP+, QSFP28, or QSFP-DD optics depending on the blade type. 3rd party optics are not officially supported per F5’s support policies: 
 
 
 `K8153: F5 support of third-party hardware components <https://my.f5.com/manage/s/article/K8153>`_
@@ -183,7 +182,7 @@ More details on each optic can be found in the F5 Platforms Accessories guide & 
 
 `K6097: Specifications of the Fiber Gigabit Ethernet SFP, XFP, SFP+, QSFP+, and QSFP28 module ports on BIG-IP system platforms <https://my.f5.com/manage/s/article/K6097>`_
 
-**40Gb QSFP+ options:**
+**BX110 40Gb QSFP+ options:**
 
 
 +------------------------+------------+------------------------------------------------------------------------------+
@@ -194,7 +193,7 @@ More details on each optic can be found in the F5 Platforms Accessories guide & 
 | 40G-PSM4 (QSFP+)       | OPT-0045   | TRANSCEIVER, QSFP+, 40GIG-PSM4, 1310NM, 10KM, MPO, SMF, DDM, F5 BRANDED      |
 +------------------------+------------+------------------------------------------------------------------------------+
 
-**Dual Rate 40Gb/100Gb BiDi QSFP28 (Backward compatible with QSFP+):**
+**BX110 Dual Rate 40Gb/100Gb BiDi QSFP28 (Backward compatible with QSFP+):**
 
 The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in QSFP28 slot. 
 
@@ -204,7 +203,7 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 | Dual Rate 40G/100G BIDI (QSFP28 backward compatible with QSFP+)  | OPT-0060   | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
 +------------------------------------------------------------------+------------+-----------------------------------------------------------------------------------------+
 
-**100Gb QSFP28 options:**
+**BX110 100Gb QSFP28 options:**
 
 +------------------------+------------+----------------------------------------------------------------------------------+
 | 100GBASE-SR4 (QSFP28)  | OPT-0031   | TRANSCEIVER, QSFP28, 100G-SR4, 850NM, MMF, MPO, DDM, BRANDED                     |
@@ -219,7 +218,7 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 **Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G LR4 VELOS is OPT-0052 (as shown above)**.
 
 
-**400Gb QSFP-DD options:**
+**BX520 400Gb QSFP-DD options:**
 
 The optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade.
 
@@ -281,7 +280,7 @@ The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out i
 | F5-UPGVELSR4XSR10M  | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (10 Meter 2 Pack) |
 +---------------------+--------------------------------------------------------------------------------------------+
 
-Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to go to 4 x 100Gb.
+Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to go to 4 x 100Gb. The QSFP-DD optics when configured for unbundled mode, will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
 
 +----------------------+--------------------------------------------------------------------------------------------+
 | F5-UPG-VEL-QDD-4X-3M | VELOS Field Upgrade: QSFP-DD Breakout Cable 400G to 4x100G, MPO-12 to 4LC (3 Meter)        |
