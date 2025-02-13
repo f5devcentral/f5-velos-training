@@ -124,7 +124,7 @@ Below is an example of the chassis partition webUI Port Groups screen with BX110
    :align: center
    :scale: 70%
 
-For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (in the F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, but 4 x 100Gb support will be added in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and will support the option of 4 x 100Gb with the proper optic and breakout cables in the F5OS-C 1.8.1 release. 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
 
 .. image:: images/velos_networking/image11a.png
   :width: 45%
@@ -136,7 +136,7 @@ For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP
   :align: center
   :width: 55%
 
-Below is an example of the chassis partition webUI Port Groups screen with BX520 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image. Port1 is currently hardcoded for 100Gb, and port2 is currently hard coded at 400gb. Breakout support for 4 x 100Gb is added in F5OS-C 1.8.1.
+Below is an example of the chassis partition webUI Port Groups screen with BX520 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image. Port1 is currently hardcoded for 100Gb, and port2 is currently hard coded at 400gb. Breakout support for 4 x 100Gb is targeted to be generally available in F5OS-C 1.8.1.
 
 .. image:: images/velos_networking/image11d.png
    :align: center

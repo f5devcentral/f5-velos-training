@@ -304,7 +304,7 @@ BX520 Blade
 
 The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropriate break out cable). The second port can be configured for either 4 x 100Gb (with the appropriate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
 
-.. Note:: 100Gb breakout cable support is added in F5OS-C 1.8.1.
+.. Note:: 100Gb breakout cable support is targeted to be generally available in F5OS-C 1.8.1.
 
 .. image:: images/velos_components/image17a.png
   :align: center
