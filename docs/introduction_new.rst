@@ -2,7 +2,7 @@
 Introduction
 =============
 
-VELOS is F5's next generation chassis-based solution that has replaced the current VIPRION platforms. Specifically, the new CX410 chassis is the direct replacement for the current VIPRION c2400/c2200 chassis families, and the CX1610 is a direct replacement for the VIPRION 4xxx family of chassis although there are cases where either chassis could replace the other. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures, and then provide details on how to configure, monitor, and troubleshoot the new platform. This will assist customers considering adoption of VELOS to understand how it will fit within their environment. 
+VELOS is F5's next generation chassis-based solution that has replaced the current VIPRION platforms. Specifically, the new CX410 chassis is the direct replacement for the current VIPRION C2400/C2200 chassis families, and the CX1610 is a direct replacement for the VIPRION C4xxx family of chassis, although there are cases where either chassis could replace the other. The VELOS platform has many advantages over the current VIPRION architecture. This guide will highlight the differences between the two architectures, and then provide details on how to configure, monitor, and troubleshoot the new platform. This will assist customers considering adoption of VELOS to understand how it will fit within their environment and what operational procedures may need to be adjusted. 
 
 
 VELOS Overview
@@ -27,15 +27,15 @@ VELOS will continue to provide hardware acceleration and offload capabilities in
 
 
 
-Customers will be able to migrate existing BIG-IP devices, or vCMP guests into a **tenant** running on VELOS. A tenant is conceptually like a vCMP guest on the VIPRION platform. Once inside the tenant, the management experience will be like the experience on existing BIG-IP platforms. The BIG-IP tenant will be managed just as a vCMP guest is managed today on VIPRION. The administrator can connect directly to the tenant’s webUI, CLI, or API and have the same experience as they have with their existing BIG-IP platforms. 
+Customers will be able to migrate existing BIG-IP devices, or vCMP guests into one or more **tenants** running on VELOS. A tenant is conceptually similar to a vCMP guest on the VIPRION platform. Once inside the tenant, the management experience will be exactly the same as a vCMP guest on an existing BIG-IP platform. The administrator can connect directly to the tenant’s webUI, CLI, or API and have the same experience as they have with their existing BIG-IP platforms. 
 
-BIG-IP Next tenants will be able to be provisioned within the same chassis, which will allow customers to leverage the next generation of BIG-IP software side-by-side with the existing BIG-IP software. The F5OS platform layer provides a bridge between the current generation of BIG-IP and the newer generation BIG-IP Next. What will differ from an administrator’s perspective, is the initial setup of the F5OS platform layer. The new F5OS platform layer is leveraged in both VELOS chassis (F5OS-C), and rSeries appliances (F5OS-A). We’ll look at some additional architecture differences between VELOS and VIPRION, before exploring how to manage, and monitor the new F5OS platform layer. 
+In the future BIG-IP Next tenants will be able to be provisioned within the same chassis, which will allow customers to leverage the next generation of BIG-IP software side-by-side with the existing BIG-IP software. The F5OS platform layer provides a bridge between the current generation of BIG-IP and the newer generation BIG-IP Next. What will differ from an administrator’s perspective, is the initial setup of the F5OS platform layer. The new F5OS platform layer is leveraged in both VELOS chassis (F5OS-C), and rSeries appliances (F5OS-A). We’ll look at some additional architecture differences between VELOS and VIPRION, before exploring how to manage, and monitor the new F5OS platform layer. 
 
 ---------------------------------
 Smaller Footprint, Higher Density
 ---------------------------------
 
-The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades, and now support double the number of slots in the same 4RU chassis footprint as the VIPRION c2400 chassis. The VELOS CX410 chassis supports 8 slots instead of only 4 on the VIPRION C2400 chassis.
+The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades, and now support double the number of slots in the same 4RU chassis footprint as the VIPRION C2400 chassis. The VELOS CX410 chassis supports 8 slots instead of only 4 on the VIPRION C2400 chassis.
 
 .. image:: images/velos_introduction/image2.png
   :align: center
