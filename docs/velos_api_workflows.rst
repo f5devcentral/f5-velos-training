@@ -141,6 +141,10 @@ Health
 Monitoring VELOS Health & Alert Status
 ---------------------------------------
 
+`Checking Active Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-active-alerts-via-api>`_
+
+`Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
+
 
 
 

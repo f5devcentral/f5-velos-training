@@ -7,7 +7,7 @@ System Controller Setup
 
 Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. Follow the details in the link below to run the setup wizard.
 
-`Run the VELOS Setup Wizard <https://techdocs.f5.com/en-us/hardware/velos-systems-getting-started/gs-system-initial-config.html#velos-setup-wizard-overview>_'
+`Run the VELOS Setup Wizard <https://techdocs.f5.com/en-us/hardware/velos-systems-getting-started/gs-system-initial-config.html#velos-setup-wizard-overview>`_
 
 F5OS utilizes **ConfD** for configuration management and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?**, and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
 
@@ -233,7 +233,9 @@ Now that the out-of-band addresses and routing are configured, you can attempt t
 Interface Aggregation for System Controllers (Optional)
 -------------------------------------------------------
 
-As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
+As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to the floating IP address as well as either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
+
+.. Note:: Although the diagram below depicts the CX410 chassis, the CX1610 chassis operates in the exact same manner.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image3.png
   :align: center
@@ -416,10 +418,10 @@ In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can 
 
   syscon-2-active# config
   Entering configuration mode terminal
-  syscon-2-active(config)# system dns servers server 192.168.19.1 config address 192.168.10.1
+  syscon-2-active(config)# system dns servers server 192.168.19.1
   syscon-2-active(config-server-192.168.19.1)# exit
   syscon-2-active(config)# system ntp config enabled 
-  syscon-2-active(config)# system ntp servers server time.f5net.com config address time.f5net.com
+  syscon-2-active(config)# system ntp servers server time.f5net.com config 
   syscon-2-active(config-server-time.f5net.com)# exit
   syscon-2-active(config)# system logging remote-servers remote-server 10.10.10.142 selectors selector LOCAL0 WARNING
   syscon-2-active(config-remote-server-10.10.10.142)# exit

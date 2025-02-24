@@ -162,11 +162,14 @@ For the BX520 blades interface numbering is different because the BX520 blade ta
 
 .. image:: images/velos_networking/bx520-interfaces.png
   :align: center
+  :scale: 70%
 
 Below is an example of BX520 port numbering when all interfaces are unbundled into 4 x 100gb interfaces.
 
 .. image:: images/velos_networking/bx520-interfaces-unbundled.png
   :align: center
+  :scale: 70%
+
 
 Supported Optics
 ================
