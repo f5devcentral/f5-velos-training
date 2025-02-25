@@ -43,26 +43,189 @@ The **T4-VELOS** image also supports any module combination but has additional d
 
 `K45191957: Overview of the BIG-IP tenant image types <https://support.f5.com/csp/article/K45191957>`_
 
-Note that the image sizes in the chart are the maximum amount of space a tenant could use, not necessarily what it will consume on the physical disk. VELOS tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but in reality, most of the space that is unused is zeroed-out and not consuming any space on the disk. 
 
-.. image:: images/velos_deploying_a_tenant/image5.png
+Note that the image sizes in the chart are the default amount of space a tenant could use, not necessarily what it will consume on the physical disk. rSeries tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but most of the space that is unutilized is zeroed-out and not consuming any space on the disk. 
+
+.. image:: images/rseries_deploying_a_tenant/image5.png
   :align: center
   :scale: 70% 
 
-This means the disk consumption on the chassis partition disk is much smaller than what appears inside the tenant. In the example below the tenant believes it has 77GB of disk allocated:
+This means the disk consumption on the rSeries disk is much smaller than what appears inside the tenant. In the example below the tenant believes it has 77GB of disk allocated:
 
-.. image:: images/velos_deploying_a_tenant/image6.png
+.. image:: images/rseries_deploying_a_tenant/image6.png
   :align: center
   :scale: 70% 
 
-However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs, and on the file system of the blade it is consuming only 11GB on the disk:
+However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs and on the filesystem of the appliance it is consuming only 6.4GB on the disk. You can confirm this by logging into the bash shell of F5OS as root. Then listing the contents of the directory **/var/F5/system/cbip-disks**, here you will see directories for each tenant. Enter the command **ls -lsh <tenant-directory-name>** and the output will show the size the tenant thinks it has (76GB) and the actual size used on disk (in this case 6.4GB).
 
-.. image:: images/velos_deploying_a_tenant/image7.png
+.. image:: images/rseries_deploying_a_tenant/image7.png
   :align: center
   :scale: 70% 
 
-This is analogous to thin provisioning in a hypervisor, where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4 image. There may be rare instances where a tenant running in production for a long time can end up with lots of extra space consumed on disk. This could be due to many in-place software upgrades, local logging, core files, database use and other factors. There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over-utilized, you could back up the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
+This is analogous to thin provisioning in a hypervisor where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4-F5OS image. There may be rare instances where a tenant running in production for a long time can end up with a lot of extra space consumed on disk. This could be due to many in-place software upgrades, local logging, core files, database use etc… There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over-utilized, you could back up the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
 
+The Dashboard in the webUI has been enhanced in F5OS-A 1.8.0 to provide more visibility into the tenants usage of disk vs. what they think they have available to them. 
+
+.. image:: images/rseries_deploying_a_tenant/dashboard.png
+  :align: center
+  :scale: 70% 
+
+There is also more granularity showing **Storage Utilization**. In the below example, you can see that F5OS has utilized 60% of the 109.7GB of disk it has dedicated. You can also see that there is 448.6GB available for **F5OS Tenant Disks** (BIG-IP Tenant) virtual disks, and that currently only 5% is used. This is the space shared by all BIG-IP Tenants virtual disks. It is important to remember that TMOS based BIG-IP virtual disks utilize thin provisioning, so the TMOS tenant may think it has more storage but in reality, it is using much less capacity on the physical disk. You can see this by the **BIG-IP Tenant** utilizations. In the output below, there are two BIG-IP tenants (fix-ll & test-tenant). One has been allocated 80GB of disk while the other has been allocated 82GB of disk, however the actual size on disk is much lower (~5-7GB each). Lastly, there is a single BIG-IP Next tenant that has 25GB allocated to it but is currently utilizing 7% of that space.
+
+.. NOTE:: Storage utilization and allocation may be different on various rSeries platforms.
+
+
+.. image:: images/rseries_deploying_a_tenant/storage-utilization.png
+  :align: center
+  :scale: 70% 
+
+You may also view the storage utilization from the F5OS CLI using the command **show components**.
+
+.. code-block:: bash
+
+    r10900-1# show components component platform 
+    components component platform
+    fantray fan-stats fan-1-speed 16233
+    fantray fan-stats fan-2-speed 16242
+    fantray fan-stats fan-3-speed 16322
+    fantray fan-stats fan-4-speed 16216
+    fantray fan-stats fan-5-speed 16207
+    fantray fan-stats fan-6-speed 16260
+    fantray fan-stats fan-7-speed 16384
+    fantray fan-stats fan-8-speed 16251
+    fantray fan-stats fan-9-speed 16251
+    fantray fan-stats fan-10-speed 16242
+    fantray fan-stats fan-11-speed 16304
+    fantray fan-stats fan-12-speed 16313
+    state description    r10900
+    state serial-no      f5-xpdn-ngmu
+    state part-no        "200-0413-02 REV 2"
+    state empty          false
+    state tpm-integrity-status Valid
+    state memory total    270014504960
+    state memory available 23909154816
+    state memory free     16769794048
+    state memory used-percent 91
+    state memory platform-total 34219122688
+    state memory platform-used 9518714880
+    state memory platform-used-percent 27
+    state temperature current 23.9
+    state temperature average 23.7
+    state temperature minimum 23.5
+    state temperature maximum 24.0
+                                                                                            USED     
+    AREA                          CATEGORY            TOTAL         FREE          USED         PERCENT  
+    ----------------------------------------------------------------------------------------------------
+    platform/sysroot              F5OS System         117807665152  44277043200   67522703360  60       
+    platform/big-ip-tenant-disks  F5OS Tenant Disks   481671176192  434169815040  23010193408  5        
+    tenant/fix-ll                 BIG-IP Tenant       85899345920   77861031936   8038313984   9        
+    tenant/test-tenant            BIG-IP Tenant       88046829568   80219897856   7826931712   8        
+    platform/images               F5OS Images         240700620800  182133891072  46316216320  20       
+    tenant/bigip-next-f5demo-net  BIG-IP Next Tenant  26830438400   24771969024   2058469376   7        
+
+                                                                                UPDATE  
+    NAME                        VALUE                              CONFIGURABLE  STATUS  
+    -------------------------------------------------------------------------------------
+    QAT0                        Lewisburg C62X Crypto/Compression  false         -       
+    QAT1                        Lewisburg C62X Crypto/Compression  false         -       
+    QAT2                        Lewisburg C62X Crypto/Compression  false         -       
+    QAT3                        Lewisburg C62X Crypto/Compression  false         -       
+    QAT4                        Lewisburg C62X Crypto/Compression  false         -       
+    QAT5                        Lewisburg C62X Crypto/Compression  false         -       
+    fw-version-bios             2.02.145.1                         false         none    
+    fw-version-bios-me          4.4.4.603                          false         none    
+    fw-version-cpld             02.0B.00                           false         none    
+    fw-version-drive-nvme0      VDV10170                           false         none    
+    fw-version-drive-nvme1      VDV10170                           false         none    
+    fw-version-drive-u.2.slot1  VDV10184                           false         none    
+    fw-version-drive-u.2.slot2  VDV10184                           false         none    
+    fw-version-lcd-app          1.01.069.00.1                      false         none    
+    fw-version-lcd-bootloader   1.01.027.00.1                      false         none    
+    fw-version-lcd-ui           1.13.12                            false         none    
+    fw-version-lop-app          2.00.357.0.1                       false         none    
+    fw-version-lop-bootloader   1.02.062.0.1                       false         none    
+    fw-version-sirr             1.1.72                             false         none    
+
+                                                                                                                        READ                                       WRITE    
+    DISK                                                                                TOTAL  READ    READ                LATENCY  WRITE     WRITE                   LATENCY  
+    NAME     MODEL                VENDOR  VERSION   SERIAL NO           SIZE      TYPE  IOPS   IOPS    MERGED  READ BYTES  MS       IOPS      MERGED    WRITE BYTES   MS       
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    nvme0n1  INTEL SSDPE2KX010T8  Intel   VDV10184  PHLJ1082028K1P0FGN  684.00GB  nvme  0      364078  329634  7207222272  72559    23708925  23792718  238635919360  1547867  
+    nvme1n1  INTEL SSDPE2KX010T8  Intel   VDV10184  PHLJ108203XB1P0FGN  684.00GB  nvme  0      132095  272411  4044277760  44936    23708924  23792719  238635919360  1769061  
+
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 1
+    cpu state cpu-utilization five-second-avg 2
+    cpu state cpu-utilization one-minute-avg 3
+    cpu state cpu-utilization five-minute-avg 3
+    cpu state cpu-utilization used-by ""
+    CPU               CORE                           THREAD                                             
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                                  
+    ----------------------------------------------------------------------------------------------------
+    0      36864(KB)  24    3099.902(MHz)  6         48      Intel(R) Xeon(R) Gold 6312U CPU @ 2.40GHz  
+
+                            FIVE    ONE     FIVE                           
+    THREAD                   SECOND  MINUTE  MINUTE                         
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     USED BY                
+    ------------------------------------------------------------------------
+    0       cpu0    0        0       1       1       F5OS Dedicated         
+    1       cpu1    0        0       1       1       F5OS Dedicated         
+    2       cpu2    0        0       1       1       F5OS Dedicated         
+    3       cpu3    0        0       0       1       F5OS Dedicated         
+    4       cpu4    0        0       0       1       F5OS Dedicated         
+    5       cpu5    0        0       0       1       F5OS Dedicated         
+    6       cpu6    2        2       3       3       F5OS                   
+    7       cpu7    0        0       0       1       bigip-next-f5demo-net  
+    8       cpu8    3        2       4       3       F5OS                   
+    9       cpu9    0        0       0       1       bigip-next-f5demo-net  
+    10      cpu10   2        2       4       3       F5OS                   
+    11      cpu11   5        5       5       5       fix-ll                 
+    12      cpu12   2        1       4       3       F5OS                   
+    13      cpu13   3        3       4       3       F5OS                   
+    14      cpu14   1        1       3       3       F5OS                   
+    15      cpu15   5        4       3       3       F5OS                   
+    16      cpu16   14       4       5       5       test-tenant            
+    17      cpu17   5        4       5       5       fix-ll                 
+    18      cpu18   2        4       3       3       F5OS                   
+    19      cpu19   4        4       4       5       test-tenant            
+    20      cpu20   2        3       3       3       F5OS                   
+    21      cpu21   3        3       3       3       F5OS                   
+    22      cpu22   4        3       4       3       F5OS                   
+    23      cpu23   1        2       3       3       F5OS                   
+    24      cpu24   2        1       1       1       F5OS Data Mover        
+    25      cpu25   1        1       1       1       F5OS Data Mover        
+    26      cpu26   1        1       1       1       F5OS Data Mover        
+    27      cpu27   0        1       1       1       F5OS Data Mover        
+    28      cpu28   0        1       1       1       F5OS Data Mover        
+    29      cpu29   1        1       1       1       F5OS Data Mover        
+    30      cpu30   5        4       6       6       F5OS                   
+    31      cpu31   0        0       0       1       bigip-next-f5demo-net  
+    32      cpu32   1        1       4       5       F5OS                   
+    33      cpu33   0        0       0       1       bigip-next-f5demo-net  
+    34      cpu34   0        1       5       5       F5OS                   
+    35      cpu35   1        7       6       7       fix-ll                 
+    36      cpu36   1        1       4       5       F5OS                   
+    37      cpu37   1        1       7       5       F5OS                   
+    38      cpu38   0        1       5       5       F5OS                   
+    39      cpu39   1        1       5       5       F5OS                   
+    40      cpu40   5        4       5       5       test-tenant            
+    41      cpu41   0        1       4       5       fix-ll                 
+    42      cpu42   1        1       4       5       F5OS                   
+    43      cpu43   3        5       5       6       test-tenant            
+    44      cpu44   3        1       4       4       F5OS                   
+    45      cpu45   2        2       3       5       F5OS                   
+    46      cpu46   1        2       6       5       F5OS                   
+    47      cpu47   1        5       4       5       F5OS                   
+
+    FPGA                            NUM  NUM   
+    INDEX   VERSION  ID  SLOT  DID  DMS  SEPS  
+    -------------------------------------------
+    asw_0   71.5.1                             
+    atse_0  72.5.4   0   1     15   3    64    
+    atse_1  72.5.4   1   1     63   3    64    
+    nso_0   70.5.1                             
+
+    r10900-1#
 
 ------------------
 Tenant Deployments
