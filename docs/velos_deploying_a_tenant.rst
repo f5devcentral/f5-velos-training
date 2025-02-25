@@ -46,19 +46,19 @@ The **T4-VELOS** image also supports any module combination but has additional d
 
 Note that the image sizes in the chart are the default amount of space a tenant could use, not necessarily what it will consume on the physical disk. rSeries tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but most of the space that is unutilized is zeroed-out and not consuming any space on the disk. 
 
-.. image:: images/rseries_deploying_a_tenant/image5.png
+.. image:: images/velos_deploying_a_tenant/image5.png
   :align: center
   :scale: 70% 
 
 This means the disk consumption on the rSeries disk is much smaller than what appears inside the tenant. In the example below the tenant believes it has 77GB of disk allocated:
 
-.. image:: images/rseries_deploying_a_tenant/image6.png
+.. image:: images/velos_deploying_a_tenant/image6.png
   :align: center
   :scale: 70% 
 
 However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs and on the filesystem of the appliance it is consuming only 6.4GB on the disk. You can confirm this by logging into the bash shell of F5OS as root. Then listing the contents of the directory **/var/F5/system/cbip-disks**, here you will see directories for each tenant. Enter the command **ls -lsh <tenant-directory-name>** and the output will show the size the tenant thinks it has (76GB) and the actual size used on disk (in this case 6.4GB).
 
-.. image:: images/rseries_deploying_a_tenant/image7.png
+.. image:: images/velos_deploying_a_tenant/image7.png
   :align: center
   :scale: 70% 
 
@@ -66,7 +66,7 @@ This is analogous to thin provisioning in a hypervisor where you can over-alloca
 
 The Dashboard in the webUI has been enhanced in F5OS-A 1.8.0 to provide more visibility into the tenants usage of disk vs. what they think they have available to them. 
 
-.. image:: images/rseries_deploying_a_tenant/dashboard.png
+.. image:: images/velos_deploying_a_tenant/dashboard.png
   :align: center
   :scale: 70% 
 
@@ -75,7 +75,7 @@ There is also more granularity showing **Storage Utilization**. In the below exa
 .. NOTE:: Storage utilization and allocation may be different on various rSeries platforms.
 
 
-.. image:: images/rseries_deploying_a_tenant/storage-utilization.png
+.. image:: images/velos_deploying_a_tenant/storage-utilization.png
   :align: center
   :scale: 70% 
 
