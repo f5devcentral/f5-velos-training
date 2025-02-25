@@ -35,13 +35,7 @@ You may view the current high availability status in the dashboard of the system
   :align: center
   :scale: 70%
 
-Below is a similar screen for the CX1610 chassis with BX520 blades. Note how the BX520 blade is a dual slot blade, so the 2nd slot for a blade will show up **Aux**. 
-
-.. image:: images/velos_high_availability/cx1610-partitions.png
-  :align: center
-  :scale: 70%
   
-
 The **Controller Overview** tab will show CPU utilization, controller role and status, system memory utilization, system storage utilization and the Base OS and Service versions running on the controllers.
 
 .. image:: images/velos_high_availability/image3a.png

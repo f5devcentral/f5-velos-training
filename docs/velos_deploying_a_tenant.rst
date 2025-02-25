@@ -9,19 +9,19 @@ Tenant Image Types
 
 Tenant images for F5OS are available on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether they allow in place upgrades. VELOS only supports specific TMOS releases: versions 14.1.4 and later, 15.1.4 and later, and 17.1.x and later are supported. There is no plan to support v16.0, 16.1, or 17.0 tenants. Tenant images for VELOS can be found on downloads.f5.com.
 
-.. image:: images/velos_deploying_a_tenant/image1.png
+.. image:: images/velos_deploying_a_tenant/image1-new.png
   :align: center
   :scale: 70% 
 
 Choose the specific BIG-IP version you wish to download, to get access to the F5OS supported tenant images. Ensure you choose the option that is labeled specifically for F5OS Tenant. As an example, **15.1.5_Tenant-F5OS**:
 
-.. image:: images/velos_deploying_a_tenant/image2.png
+.. image:: images/velos_deploying_a_tenant/image2-new.png
   :align: center
   :scale: 70% 
 
 There are 4 different types of tenant images to choose from (ALL, T1, T2, T4) as seen below; please read the rest of this section to determine the best image type for your environment:
 
-.. image:: images/velos_deploying_a_tenant/image3.png
+.. image:: images/velos_deploying_a_tenant/image3-new.png
   :align: center
   :scale: 70% 
 
