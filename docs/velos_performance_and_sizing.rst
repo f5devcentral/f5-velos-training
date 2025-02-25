@@ -103,7 +103,7 @@ In the past some have used total or aggregate CPU Ghz as a means of comparing di
 
 In the past **Relative CPU Scale** was a numeric grade-based comparison where the overall CPU capacity/horsepower of the system was given a rating. The rating is an easy way to compare different BIG-IP platforms. The Relative CPU Scale is calculated by taking the total # of CPUs in a system (not including those used by VELOS F5OS platform layer) and multiplying that times the speed (Ghz) that the processors run. This will result in an aggregate CPU Ghz for the platform or blade. We then take the Aggregate CPU Ghz of a BIG-IP 2000s platform and give it a grade of 1. All other platforms are then given a numeric grade of how many times faster it is than the 2000s. This results in a simple numeric rating system that combines CPU speed with the number of CPUs without having explain Ghz.
 
-In the graph below you can see that a B2250 blade has 8.5 times more aggregate CPU capacity than the 2000s.  A VELOS BX110 blade will have either 7.4x (minus platform CPUs) or 11.1x (including platform CPUs) and a 4450 blade has 18.8x. What may be deceiving here is how this translates into performance because the BX110 has next generation processors, and a different architecture where some CPUs are dedicated to the platform layer. Using the Aggregate CPU Ghz, or Relative CPU scale would lead you to believe VELOS was less powerful than a B2250. This is not the case.
+In the graph below you can see that a B2250 blade has 8.6 times more aggregate CPU capacity than the 2000s.  A VELOS BX110 blade will have 7.4x (minus platform CPUs) and a 4450 blade has 18.8x. What may be deceiving here is how this translates into performance because the BX110 has next generation processors, and a different architecture where some CPUs are dedicated to the platform layer. Using the Aggregate CPU Ghz, or Relative CPU scale would lead you to believe VELOS was less powerful than a B2250. This is not the case.
 
 
 .. image:: images/velos_performance_and_sizing/relative-scale-new.png
@@ -133,13 +133,15 @@ Also consider that these extrapolations for the VIPRION blades are for bare meta
 Memory Sizing
 =============
 
-Each VELOS BX110 blade has 128GB of memory, which is double the current memory support of the B2250 blade (64GB) but half the current B4450 blade (256GB). Generally, a BX110 will have more than enough memory to replace a B2250 blade and will provide more memory which may help vCMP guests which are pushing memory limits.  Just like sizing based on L7 it will likely take 2 BX110 blades to replace a B4450 blade when looking at memory only. 
+Each VELOS BX110 blade has 128GB of memory, which is double the current memory support of the B2250 blade (64GB) but half the current B4450 blade (256GB). Generally, a BX110 will have more than enough memory to replace a B2250 blade and will provide more memory which may help vCMP guests which are pushing memory limits.  Just like sizing based on L7 it will likely take 2 BX110 blades to replace a B4450 blade when looking at memory only. The BX520 has 512GB of RAM which is 2x more than the previous generation VIPRION B4450.
 
 .. image:: images/velos_performance_and_sizing/sizing-memory-new.png
   :align: center
   :scale: 100%
 
 Breaking down memory to get per vCPU numbers will help when dealing with current vCMP guest configurations where memory is allocated based on the number of vCPUs assigned to the guest. Because VELOS has a different architecture than VIPRION there is a formula for calculating how much memory a vCPU will receive. The chart below shows the default RAM per vCPU allocation with a 1 vCPU tenant. 
+
+.. Note:: The BX520 blade does not support single vCPU tenants, but it is included below for comparison and is useful for calculating larger tenant sizes.
 
 .. image:: images/velos_performance_and_sizing/sizing-memory-new-vcpu.png
   :align: center
@@ -188,7 +190,7 @@ Each BX110 blade has 28 vCPUs, however 6 of those vCPUs are dedicated to the F5O
   :align: center
   :scale: 70%
 
-Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is because a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior, only a very lightly loaded LTM/DNS-only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
+Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is because a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior, only a very lightly loaded LTM/DNS-only type tenant should be considered for this option. Single vCPU tenants are best suited for non-production environments. As always proper sizing should be done to ensure the tenant has enough resources. 
 
 +--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
 | **VELOS Blade Type**     | **Memory per Blade** | **Memory Use by F5OS** | **Memory Available to Tenants** | **Minimum RAM used (Max vCPU)**   | **Extra RAM Available for Tenants** | **Max vCPUs** |

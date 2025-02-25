@@ -76,7 +76,7 @@ In general, F5OS tenants in the VELOS platforms have no visibility into the unde
   :align: center
   :scale: 70%
 
-BIG-IP tenants leverage HT-Split, where the TMM process runs on even numbered hyperthreads as described in the following solution article.
+BIG-IP tenants leverage HT-Split where the TMM process runs on even numbered hyperthreads as described in the following solution article.
 
 `K15003: Data and control plane tasks use separate logical cores when the BIG-IP system CPU uses Intel Hyper-Threading Technology <https://my.f5.com/manage/s/article/K15003>`_
 

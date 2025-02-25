@@ -57,17 +57,7 @@ If you are logged into the standby system controller, then you will not be able 
   syscon-1-standby# config 
   Aborted: node is in readonly mode
 
------------------------
-Interface Configuration
------------------------
 
-The out-of-band Ethernet interfaces on each system controller can be configured to run independently, or they may be put into a common Link Aggregation Group to provide added redundancy. To alter any configuration, you must enter config mode:
-
-.. code-block:: bash
-
-  syscon-2-active# config
-  Entering configuration mode terminal
-  syscon-2-active(config)#
 
 --------------------------
 Internal Chassis IP Ranges
@@ -94,10 +84,11 @@ This address range never leaves the inside of the chassis and will not interfere
 
 Some examples would be any client trying to access the F5OS-C platform layer (system controller or chassis partition), or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services, if there is any address space overlap. Note, this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
 
-If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur before the reboot. Please consult with F5 prior to making any changes to the internal addresses.
+If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur before the reboot. Please consult with F5 prior to making any changes to the internal addresses. Not you mut enter config mode to make any configuration changes in the CLI.
 
 .. code-block:: bash
 
+  syscon-2# config
   syscon-2-active(config)# system network config network-range-type RFC <Hit Tab>
   Possible completions:
     RFC1918   VELOS system uses 10.[0-15]/12 as specified by RFC1918
@@ -207,6 +198,9 @@ Each system controller requires its own unique IP address, and a floating IP add
   :align: center
   :scale: 70%
 
+IP Address Assignment & Routing via CLI
+---------------------------------------
+
 Once logged in, you will configure the static IP addresses (unless DHCP is preferred).
 
 .. code-block:: bash
@@ -228,6 +222,52 @@ Now that the out-of-band addresses and routing are configured, you can attempt t
 .. image:: images/initial_setup_of_velos_system_controllers/image2.png
   :align: center
   :scale: 70%
+
+IP Address Assignment & Routing via WebUI
+-----------------------------------------
+
+You may alter the configuration of the system controllers out-of-band interfaces via the **Network Settings > Management Interfaces** page in the WebUI. Here you can enable or disable DHCP, configure IPv4/IPv6 static and floating IP addresses, gateway and prefix as well as link aggregation parameters.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image2.png
+  :align: center
+  :scale: 70%
+
+IP Address Assignment & Routing via API
+-----------------------------------------
+
+You may alter the configuration of the system controllers out-of-band interfaces via the API. To view the current out-of-band interface IP settings enter the following API call:
+
+.. code-block:: bash
+
+
+The API response will be similar to the output below:
+
+.. code-block:: json
+
+To configure the out-of-band interface IP settings enter the following API call:
+
+.. Note:: Changing the IP address will disrupt connectivity to the out-of-band ports.
+
+.. code-block:: bash
+
+
+In the body of the API call enter the following:
+
+.. code-block:: json
+
+
+-----------------------
+Interface Configuration
+-----------------------
+
+The out-of-band Ethernet interfaces on each system controller can be configured to run independently, or they may be put into a common Link Aggregation Group to provide added redundancy. To alter any configuration, you must enter config mode:
+
+
+.. code-block:: bash
+
+  syscon-2-active# config
+  Entering configuration mode terminal
+  syscon-2-active(config)#
 
 -------------------------------------------------------
 Interface Aggregation for System Controllers (Optional)

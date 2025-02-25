@@ -147,7 +147,7 @@ Interfaces
 
 Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled, or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2. 
 
-If ports are unbundled, then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Breakout cables will be needed to support the unbundled 25Gb, or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering when all interfaces are bundled.Below is an example of BX110 blade numbering for both bundled and unbundled configurations.
+If ports are unbundled, then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Breakout cables will be needed to support the unbundled 25Gb, or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of BX110 blade port numbering when all interfaces are bundled. 
 
 .. image:: images/velos_networking/image12.png
   :align: center
@@ -174,7 +174,7 @@ Below is an example of BX520 port numbering when all interfaces are unbundled in
 Supported Optics
 ================
 
-Only F5 branded optics are officially supported on VELOS per F5's third part hardware components policy. The BX110 blade supports speeds of 40Gb and 100Gb as well as 4 x 10Gb and 4 x 25Gb though the use of breakout cables. You must have the proper optics type inserted (and optional breakout cables) as well as the proper port group configuration for links to be established. The BX520 blades supports speeds are 400Gb or 4 x 100Gb (with proper breakout cable). VELOS interfaces will accept F5 approved QSFP+, QSFP28, or QSFP-DD optics depending on the blade type. 3rd party optics are not officially supported per F5’s support policies: 
+Only F5 branded optics are officially supported on VELOS per F5's third part hardware components policy. The BX110 blade supports speeds of 40Gb and 100Gb as well as 4 x 10Gb and 4 x 25Gb though the use of breakout cables. You must have the proper optic type inserted (and optional breakout cables) as well as the proper port group configuration for links to be established. The BX520 blade supports speeds of 400Gb or 4 x 100Gb (with proper breakout cable). VELOS interfaces will accept F5 approved QSFP+, QSFP28, or QSFP-DD optics depending on the blade type. 3rd party optics are not officially supported per F5’s support policies: 
 
 
 `K8153: F5 support of third-party hardware components <https://my.f5.com/manage/s/article/K8153>`_
@@ -273,7 +273,7 @@ Below are the **current** VELOS optic SKUs:
 +----------------------+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
-The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
+The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX110 blade for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
 
 +---------------------+--------------------------------------------------------------------------------------------+
 | F5-UPGVELSR4XSR3M   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (3 Meter 2 Pack)  |
@@ -283,7 +283,15 @@ The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out i
 | F5-UPGVELSR4XSR10M  | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (10 Meter 2 Pack) |
 +---------------------+--------------------------------------------------------------------------------------------+
 
-Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to go to 4 x 100Gb. The QSFP-DD optics when configured for unbundled mode, will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
+Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pack):
+
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPG-VELPSMXLR10M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (10 Meter)  |
++---------------------+--------------------------------------------------------------------------------------------+
+| F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
++---------------------+--------------------------------------------------------------------------------------------+
+
+Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to support 4 x 100Gb connectivity. The QSFP-DD optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb conectivity. Note, they come in different lengths (3 meters, or 10 meters).
 
 +----------------------+--------------------------------------------------------------------------------------------+
 | F5-UPG-VEL-QDD-4X-3M | VELOS Field Upgrade: QSFP-DD Breakout Cable 400G to 4x100G, MPO-12 to 4LC (3 Meter)        |
@@ -292,13 +300,7 @@ Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to go to 4 x 1
 +----------------------+--------------------------------------------------------------------------------------------+
 
 
-Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pack):
 
-+---------------------+--------------------------------------------------------------------------------------------+
-| F5-UPG-VELPSMXLR10M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (10 Meter)  |
-+---------------------+--------------------------------------------------------------------------------------------+
-| F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
-+---------------------+--------------------------------------------------------------------------------------------+
 
 VLANs
 =====

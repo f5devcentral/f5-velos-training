@@ -23,7 +23,7 @@ The architecture is similar in the CX1610 chassis, although the system controlle
   :scale: 70%
 
 
-The second function the system controllers perform is the management of the control plane for the new Kubernetes platform layer (F5OS). At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, webUI services, etc. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 blades.
+The second function the system controllers perform is the management of the control plane for the new Kubernetes platform layer (F5OS). At this layer the system controllers run in an active/standby fashion. One system controller will be designated primary/active, and the other will be designated secondary/standby. All Kubernetes services will be active on the primary including the API server, scheduler, controller manager, etcd, webUI services, etc. The active system controller can always be reached via the floating IP address that is assigned to the system controllers. The floating address will move in the case of a controller failure. The secondary controller operates in a read-only manner and any changes to configuration must be made on the primary. All changes are replicated from primary to secondary controller, so they should always be in sync, there is no need to manually sync them. The Kubernetes control plane is responsible for deploying workloads on the BX110 and BX520 blades.
 
 .. image:: images/velos_high_availability/image2.png
   :align: center
@@ -197,7 +197,7 @@ Each VELOS BX110 blade has two physical ports, that currently support the follow
 VELOS BX520 Blade 
 -----------------
 
-Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0 - 100Gb, port 2.0 - 400Gb. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
+Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0 - 100Gb, port 2.0 - 400Gb. F5OS-C 1.8.1 will add support for 4 x 100Gb options for both ports. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
 
 .. image:: images/velos_high_availability/image12-bx520.png
   :align: center
@@ -222,7 +222,7 @@ Tenants on different chassis should have the same number of vCPUs and be configu
 HA Topology Considerations
 --------------------------
 
-Most modern environments will have dual upstream layer2 switches that handle the in-band connections from multiple VELOS chassis. The ideal connection mechanism for the in-band connections, is to connect to a switching infrastructure that supports MLAG or VPC between the upstream switches. This will allow LAGs on the VELOS side to be dual homed to both upstream switches, and this will help prevent failover on VELOS in the event of an upstream switch failure. Below is an example of a typical deployment with LAG with members from separate BX110 VELOS blades going to upstream L2 switches:
+Most modern environments will have dual upstream layer2 switches that handle the in-band connections from multiple VELOS chassis. The ideal connection mechanism for the in-band connections, is to connect to a switching infrastructure that supports MLAG or VPC between the upstream switches. This will allow LAGs on the VELOS side to be dual homed to both upstream switches, and this will help prevent failover on VELOS in the event of an upstream switch failure. Below is an example of a typical deployment with LAG with members from separate BX110 VELOS blades going to upstream L2 switches (the same logic will apply to the BX520 blades and CX1610 chassis):
 
 .. image:: images/velos_high_availability/image14.png
   :align: center
@@ -257,6 +257,7 @@ Consider the same number of blades, but instead of terminating the LAG on blade1
 
 Adding two highspeed (100Gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (especially for the 100Gb case) because each BX110 blade is rated for a maximum of 95Gb, so adding an additional port is not going to increase performance. If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
 
+For the BX520 blade only a single 400Gb port is supported on each blade. In an environment that is purely 400Gb Ethernet, you'd require at least 4 BX520 blades in order to have enough ports for full redundancy if you want to dedicate links for HA connectivity. You'd have 2 x 400Gb in a LAG for in-band connectivity and then another 2 x 400Gb LAG for HA connectivity. A better option would be to utilize the additional 100Gb or 4 x 100Gb ports on the BX520 blades for HA connectivity between chassis or to run the HA VLANs over the in-band LAGs to reduce the number of blades/ports required if the environment didn't require the performance of 4 blades.  
 
 Mirroring Considerations
 ------------------------

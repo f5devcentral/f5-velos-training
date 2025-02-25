@@ -221,7 +221,7 @@ The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s
   :align: center
   :scale: 40%
 
-Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
+Each SX410 system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
 .. image:: images/velos_components/sx410.png
   :align: center
@@ -265,7 +265,7 @@ The BX110 and BX520 blades have no console or out-of-band ethernet ports, it’s
   :align: center
   :scale: 40%
 
-Each system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
+Each SX1610 system controller has a single 10Gb out-of-band management port, a console port, and a USB port as well as status LEDs.
 
 .. image:: images/velos_components/sx1610.png
   :align: center
@@ -288,7 +288,7 @@ The BX110 blade is a next generation data plane/line card. It has 2 high speed (
   :align: center
   :scale: 60%
 
-The BX110 has 14 physical cores, which are hyperthreaded into 28 vCPUs. Six of the vCPUs are reserved for the F5OS-C platform layer (3 for the F5OS Datamover and 3 for F5OS Dedicated), leaving 22 vCPUs available for multitenancy. Each blade comes with a 1TB SSD drive and is populated with 128GB of RAM (double the current generation VIPRION B2250). Each BX110 has two Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Application Traffic Service Engine (ATSE) is the “front panel FPGA”, which does initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
+The BX110 has 14 physical CPU cores, which are hyperthreaded into 28 vCPUs. Six of the vCPUs are reserved for the F5OS-C platform layer (3 for the F5OS Datamover and 3 for F5OS Dedicated), leaving 22 vCPUs available for multitenancy. Each blade comes with a 1TB SSD drive and is populated with 128GB of RAM (double the current generation VIPRION B2250). Each BX110 has two Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Application Traffic Service Engine (ATSE) is the “front panel FPGA”, which does initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
 
 .. image:: images/velos_components/image18.png
   :align: center
@@ -310,7 +310,7 @@ The BX520 blade is a next generation data plane/line card. It has 2 high speed (
   :align: center
   :scale: 60%
 
-The BX520 has 56 physical cores, which are hyperthreaded into 112 vCPUs. Sixteen of the vCPUs are reserved for the F5OS-C platform layer (6 for the F5OS Datamover and 8 for F5OS Dedicated), leaving 96 vCPUs available for multitenancy. Each blade comes with a 4TB SSD drive and is populated with 512GB of RAM. Each BX520 has three Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Traffic Aggregation Module (TAM) FPGA handles all front panel connections. The Application Traffic Service Engine (ATSE) handles initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
+The BX520 has 56 physical cores, which are hyperthreaded into 112 vCPUs. Sixteen of the vCPUs are reserved for the F5OS-C platform layer (8 for the F5OS Datamover and 8 for F5OS Dedicated), leaving 96 vCPUs available for multitenancy. Each blade comes with a 4TB SSD drive and is populated with 512GB of RAM. Each BX520 has three Field Programmable Gate Arrays (FPGA's), which provide hardware offload for certain functions and workloads. The Traffic Aggregation Module (TAM) FPGA handles all front panel connections. The Application Traffic Service Engine (ATSE x 2) handles initial classifications and offload, while the VELOS Queuing FPGA (VQF), is the “back panel FPGA” that implements queuing and CoS through the chassis backplane. The CPU complex provides hardware offload for SSL/TLS and compression, like previous generations of BIG-IP (such as iSeries and VIPRION B4450) performed these operations, but with a newer generation of processor. 
 
 .. image:: images/velos_components/image18a.png
   :align: center
