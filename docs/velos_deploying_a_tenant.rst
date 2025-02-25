@@ -64,22 +64,20 @@ However, the 76GB image is allocated in a sparse manner meaning the tenant is on
 
 This is analogous to thin provisioning in a hypervisor where you can over-allocate resources. vCMP as an example today uses an image similar in size to the T4-F5OS image. There may be rare instances where a tenant running in production for a long time can end up with a lot of extra space consumed on disk. This could be due to many in-place software upgrades, local logging, core files, database use etc… There is no utility available to reclaim that space that may have been used at one point but is no longer used. If the disk utilization becomes over-utilized, you could back up the tenant configuration, create a new fresh tenant, and restore the configuration from the old tenant, and then delete the old tenant. This would free up all the unused space again.
 
-The Dashboard in the webUI has been enhanced in F5OS-A 1.8.0 to provide more visibility into the tenants usage of disk vs. what they think they have available to them. 
+The Dashboard in the chassis partition webUI has been enhanced in F5OS-A 1.8.0 to provide more visibility into the tenants usage of disk vs. what they think they have available to them. 
 
 .. image:: images/velos_deploying_a_tenant/dashboard.png
   :align: center
   :scale: 70% 
 
-There is also more granularity showing **Storage Utilization**. In the below example, you can see that F5OS has utilized 60% of the 109.7GB of disk it has dedicated. You can also see that there is 448.6GB available for **F5OS Tenant Disks** (BIG-IP Tenant) virtual disks, and that currently only 5% is used. This is the space shared by all BIG-IP Tenants virtual disks. It is important to remember that TMOS based BIG-IP virtual disks utilize thin provisioning, so the TMOS tenant may think it has more storage but in reality, it is using much less capacity on the physical disk. You can see this by the **BIG-IP Tenant** utilizations. In the output below, there are two BIG-IP tenants (fix-ll & test-tenant). One has been allocated 80GB of disk while the other has been allocated 82GB of disk, however the actual size on disk is much lower (~5-7GB each). Lastly, there is a single BIG-IP Next tenant that has 25GB allocated to it but is currently utilizing 7% of that space.
-
-.. NOTE:: Storage utilization and allocation may be different on various rSeries platforms.
+There is also more granularity showing **Storage Utilization**. In the below example, you can see that F5OS has utilized 6% of the 667.7GB of disk it has dedicated. This is the space shared by all BIG-IP Tenants virtual disks and F5OS. It is important to remember that TMOS based BIG-IP virtual disks utilize thin provisioning, so the TMOS tenant may think it has more storage but in reality, it is using much less capacity on the physical disk. You can see this by the **BIG-IP Tenant** utilizations. In the output below, there are two BIG-IP tenants (pub & test). Both have been allocated 82GB of disk, however the actual size on disk is much lower (~6-7GB each).
 
 
 .. image:: images/velos_deploying_a_tenant/storage-utilization.png
   :align: center
   :scale: 70% 
 
-You may also view the storage utilization from the F5OS CLI using the command **show components**.
+You may also view the storage utilization from the F5OS CLI using the command **show components** in the chassis partition CLI.
 
 .. code-block:: bash
 
