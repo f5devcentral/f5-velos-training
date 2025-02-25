@@ -41,7 +41,7 @@ The **All-F5OS** image is suitable for any module configuration and supports a m
 
 The **T4-VELOS** image also supports any module combination but has additional disk capacity. If you intend to have a lot of software images, databases for modules, run modules like SWG which utilize a lot of disk, and local logging, then the added capacity is recommended. More detail on the image types can be found in the following solution article.
 
-https://support.f5.com/csp/article/K45191957
+`K45191957: Overview of the BIG-IP tenant image types <https://support.f5.com/csp/article/K45191957>`_
 
 Note that the image sizes in the chart are the maximum amount of space a tenant could use, not necessarily what it will consume on the physical disk. VELOS tenants are deployed in sparse mode on the file system when they are created. That means that a tenant may think it has a certain amount of disk space, but in reality, most of the space that is unused is zeroed-out and not consuming any space on the disk. 
 
