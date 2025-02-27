@@ -436,7 +436,7 @@ Interface Aggregation for System Controllers via WebUI
 Interface Aggregation for System Controllers via API
 -------------------------------------------------------
 
-You can view and configure the management interfaces on the two system controllers and aggregate them into a single Link Aggregation Group. To view the management interface on controller-1 run the following API call to see the interface labeled **1/mgmt0**. If you want to see the management interface in controller-2 change 1/mgmt0 to 2/mgmt0.
+You can view and configure the management interfaces on the two system controllers and aggregate them into a single Link Aggregation Group. To view the management interface on controller-1 run the following API call to see the interface labeled **1/mgmt0**. If you want to see the management interface on controller-2 change **1/mgmt0** in the API call below to **2/mgmt0**.
 
 .. code-block:: bash
 
@@ -521,7 +521,85 @@ You should see a response similar to the output below.
       ]
   }
 
+To view the aggregate interface issue the following API call to the aggregate names used previously **mgmt-aggr**.
 
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-lacp:lacp/interfaces/"interface=mgmt-aggr"
+
+In the response you will see output similar to the example below.
+
+.. code-block:: json
+
+    {
+      "openconfig-lacp:interface": [
+          {
+              "name": "mgmt-aggr",
+              "config": {
+                  "name": "mgmt-aggr",
+                  "interval": "SLOW",
+                  "lacp-mode": "ACTIVE"
+              },
+              "state": {
+                  "name": "mgmt-aggr",
+                  "interval": "SLOW",
+                  "lacp-mode": "ACTIVE",
+                  "system-id-mac": "00:94:a1:8e:d0:00",
+                  "system-priority": 53248
+              },
+              "members": {
+                  "member": [
+                      {
+                          "interface": "1/mgmt0",
+                          "state": {
+                              "interface": "1/mgmt0",
+                              "activity": "ACTIVE",
+                              "timeout": "LONG",
+                              "synchronization": "IN_SYNC",
+                              "aggregatable": true,
+                              "collecting": true,
+                              "distributing": true,
+                              "system-id": "00:94:a1:8e:d0:00",
+                              "oper-key": 34,
+                              "partner-id": "98:5d:82:ba:c4:7b",
+                              "partner-key": 50,
+                              "port-num": 4608,
+                              "partner-port-num": 8,
+                              "counters": {
+                                  "lacp-in-pkts": "76908",
+                                  "lacp-out-pkts": "76813",
+                                  "lacp-rx-errors": "0"
+                              }
+                          }
+                      },
+                      {
+                          "interface": "2/mgmt0",
+                          "state": {
+                              "interface": "2/mgmt0",
+                              "activity": "ACTIVE",
+                              "timeout": "LONG",
+                              "synchronization": "IN_SYNC",
+                              "aggregatable": true,
+                              "collecting": true,
+                              "distributing": true,
+                              "system-id": "00:94:a1:8e:d0:00",
+                              "oper-key": 34,
+                              "partner-id": "98:5d:82:ba:c4:7b",
+                              "partner-key": 50,
+                              "port-num": 8704,
+                              "partner-port-num": 7,
+                              "counters": {
+                                  "lacp-in-pkts": "76909",
+                                  "lacp-out-pkts": "76814",
+                                  "lacp-rx-errors": "0"
+                              }
+                          }
+                      }
+                  ]
+              }
+          }
+      ]
+  }
 
 -------------
 Primary Key
