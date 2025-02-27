@@ -201,7 +201,7 @@ Each system controller requires its own unique IP address, and a floating IP add
 IP Address Assignment & Routing via CLI
 ---------------------------------------
 
-Once logged in, you will configure the static IP addresses (unless DHCP is preferred).
+You likely setup the IP addressing via the setup wizard, but if you need to alter the configuration via the CLI an example is below. Once logged in, you will configure the static IP addresses (unless DHCP is preferred).
 
 .. code-block:: bash
 
@@ -217,7 +217,7 @@ To make these changes active, you must commit the changes. No configuration chan
 
   syscon-2-active(config)# commit
 
-Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to monitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in standby state. After logging into the floating IP address, you should see a screen like the one below, and you can verify your management interface settings.
+Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to monitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in standby state. After logging into the floating IP address, you should see a page like the one below. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image2.png
   :align: center
@@ -239,21 +239,126 @@ You may alter the configuration of the system controllers out-of-band interfaces
 
 .. code-block:: bash
 
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
 
 The API response will be similar to the output below:
 
 .. code-block:: json
 
+  {
+      "f5-mgmt-ip:mgmt-ip": {
+          "config": {
+              "dhcp-enabled": false,
+              "ipv4": {
+                  "controller-1": {
+                      "address": "172.22.50.7"
+                  },
+                  "controller-2": {
+                      "address": "172.22.50.8"
+                  },
+                  "floating": {
+                      "address": "172.22.50.9"
+                  },
+                  "prefix-length": 26,
+                  "gateway": "172.22.50.62"
+              },
+              "ipv6": {
+                  "controller-1": {
+                      "address": "::"
+                  },
+                  "controller-2": {
+                      "address": "::"
+                  },
+                  "floating": {
+                      "address": "::"
+                  },
+                  "prefix-length": 0,
+                  "gateway": "::"
+              },
+              "mgmt-vlan": "untagged"
+          },
+          "state": {
+              "fixed-addresses": {
+                  "fixed-address": [
+                      {
+                          "controller": 1,
+                          "ipv4-address": "172.22.50.7",
+                          "ipv4-prefix-length": 26,
+                          "ipv4-gateway": "172.22.50.62",
+                          "ipv6-address": "::",
+                          "ipv6-prefix-length": 0,
+                          "ipv6-gateway": "::",
+                          "mac-address": "00:94:a1:8e:d0:7d"
+                      },
+                      {
+                          "controller": 2,
+                          "ipv4-address": "172.22.50.8",
+                          "ipv4-prefix-length": 26,
+                          "ipv4-gateway": "172.22.50.62",
+                          "ipv6-address": "::",
+                          "ipv6-prefix-length": 0,
+                          "ipv6-gateway": "::",
+                          "mac-address": "00:94:a1:8e:d0:7e"
+                      }
+                  ]
+              },
+              "floating": {
+                  "ipv4-address": "172.22.50.9",
+                  "ipv6-address": "::",
+                  "mac-address": "00:94:a1:8e:d0:7c"
+              },
+              "mgmt-vlan": "untagged"
+          }
+      }
+  }
+
 To configure the out-of-band interface IP settings enter the following API call:
 
 .. Note:: Changing the IP address will disrupt connectivity to the out-of-band ports.
 
+
 .. code-block:: bash
 
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
 
 In the body of the API call enter the following:
 
 .. code-block:: json
+
+  {
+      "f5-mgmt-ip:mgmt-ip": {
+          "config": {
+              "dhcp-enabled": false,
+              "ipv4": {
+                  "controller-1": {
+                      "address": "172.22.50.7"
+                  },
+                  "controller-2": {
+                      "address": "172.22.50.8"
+                  },
+                  "floating": {
+                      "address": "172.22.50.9"
+                  },
+                  "prefix-length": 26,
+                  "gateway": "172.22.50.62"
+              },
+              "ipv6": {
+                  "controller-1": {
+                      "address": "::"
+                  },
+                  "controller-2": {
+                      "address": "::"
+                  },
+                  "floating": {
+                      "address": "::"
+                  },
+                  "prefix-length": 0,
+                  "gateway": "::"
+              },
+              "mgmt-vlan": "untagged"
+          }
+      }
+  }
 
 
 -----------------------
@@ -284,7 +389,9 @@ As seen in previous diagrams, each system controller has its own independent out
 To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, webUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG, configure as follows:
 
 
- 
+Interface Aggregation for System Controllers via CLI
+-------------------------------------------------------
+
 Create a management aggregate interface and set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**.
 
 .. code-block:: bash
@@ -319,6 +426,102 @@ Finally, add the aggregate that you created by name to each of the management in
   config name 2/mgmt0
   config type ethernetCsmacd
   ethernet config aggregate-id mgmt-aggr
+
+You'll then need to commit any changes.
+
+Interface Aggregation for System Controllers via WebUI
+-------------------------------------------------------
+
+
+Interface Aggregation for System Controllers via API
+-------------------------------------------------------
+
+You can view and configure the management interfaces on the two system controllers and aggregate them into a single Link Aggregation Group. To view the management interface on controller-1 run the following API call to see the interface labeled **1/mgmt0**. If you want to see the management interface in controller-2 change 1/mgmt0 to 2/mgmt0.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=1/mgmt0"
+
+You should see a response similar to the output below.
+
+.. code-block:: JSON
+
+  {
+      "openconfig-interfaces:interface": [
+          {
+              "name": "1/mgmt0",
+              "config": {
+                  "name": "1/mgmt0",
+                  "type": "iana-if-type:ethernetCsmacd",
+                  "description": "1/mgmt0-test",
+                  "enabled": true
+              },
+              "state": {
+                  "name": "1/mgmt0",
+                  "type": "iana-if-type:ethernetCsmacd",
+                  "loopback-mode": false,
+                  "enabled": true,
+                  "ifindex": 15,
+                  "admin-status": "UP",
+                  "oper-status": "UP",
+                  "last-change": "1156401594590367",
+                  "counters": {
+                      "in-octets": "7082002218",
+                      "in-pkts": "10635460",
+                      "in-unicast-pkts": "9231057",
+                      "in-broadcast-pkts": "1251751",
+                      "in-multicast-pkts": "152652",
+                      "in-discards": "101",
+                      "in-errors": "0",
+                      "in-unknown-protos": "0",
+                      "in-fcs-errors": "0",
+                      "out-octets": "773465019",
+                      "out-pkts": "8965502",
+                      "out-unicast-pkts": "7400450",
+                      "out-broadcast-pkts": "1488831",
+                      "out-multicast-pkts": "76221",
+                      "out-discards": "0",
+                      "out-errors": "0"
+                  }
+              },
+              "hold-time": {
+                  "config": {
+                      "up": 0,
+                      "down": 0
+                  },
+                  "state": {
+                      "up": 0,
+                      "down": 0
+                  }
+              },
+              "openconfig-if-ethernet:ethernet": {
+                  "config": {
+                      "openconfig-if-aggregate:aggregate-id": "mgmt-aggr"
+                  },
+                  "state": {
+                      "mac-address": "00:94:a1:8e:d0:7d",
+                      "auto-negotiate": true,
+                      "duplex-mode": "FULL",
+                      "port-speed": "openconfig-if-ethernet:SPEED_1GB",
+                      "enable-flow-control": false,
+                      "hw-mac-address": "00:94:a1:8e:d0:7d",
+                      "counters": {
+                          "in-mac-pause-frames": "0",
+                          "in-oversize-frames": "0",
+                          "in-jabber-frames": "0",
+                          "in-fragment-frames": "0",
+                          "in-8021q-frames": "0",
+                          "in-crc-errors": "0",
+                          "out-mac-pause-frames": "0",
+                          "out-8021q-frames": "0"
+                      }
+                  }
+              }
+          }
+      ]
+  }
+
+
 
 -------------
 Primary Key
