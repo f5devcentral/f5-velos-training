@@ -18,15 +18,21 @@ The chassis partition **Dashboard** will provide a visual system summary of the 
   :align: center
   :scale: 70% 
 
+The **Tenant** tab will display all currently running tenants on the chassis partition you are connected to.
+
+.. image:: images/initial_setup_of_velos_chassis_partitions/tenant-dashboard.png
+  :align: center
+  :scale: 70% 
+
 If you click on the **Network** tab, then each front panel port will be displayed, and it will be color coded red or green based on its current status.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image3.png
   :align: center
   :scale: 70%
 
-If you click on the **CPU** tab, then CPU utilization across different time periods will be displayed for each of the blades in this chassis partition.
+If you click on the **CPU** tab, then CPU utilization across different time periods will be displayed for each of the blades and for F5OS and tenants within this chassis partition. You can also see how the vCPUs in this chassis partition are assigned.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image4.png
+.. image:: images/initial_setup_of_velos_chassis_partitions/cpu-dashboard.png
   :align: center
   :scale: 70%     
 
@@ -46,18 +52,46 @@ Before configuring any tenant, you’ll need to setup networking for the chassis
 Network Settings - > Port Groups
 --------------------------------
 
-Before configuring any interfaces, VLANs, or LAG’s you’ll need to configure the portgroups so that physical interfaces on the blade are configured for the proper speed and bundling. The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled and the port speed. The term portgroup is used rather than simply Port because some front panel sockets may accept different types of SFPs. Depending on the portgroup mode value, a different FPGA bitstream version is loaded, and the speed of the port is adjusted accordingly (this will require a reboot of the blade). The portgroup components are created by the system, based on the type of the blades installed. The user can modify the portgroup mode.
+The portgroup component is used to control the mode of the physical port. This controls whether the port is bundled or unbundled, and the port speed. The term portgroup is used rather than simply “port” because some front panel ports may accept different types of optics. Depending on the portgroup mode value, a different FPGA version is loaded, and the speed of the port is adjusted accordingly. The user can modify the portgroup mode as needed through the F5OS CLI, webUI, or API.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image6.png
+
+.. image:: images/velos_networking/image9.png
   :width: 45%
 
-
-
-.. image:: images/initial_setup_of_velos_chassis_partitions/image7.png
+.. image:: images/velos_networking/image10.png
   :width: 45%
 
+In releases prior to F5OS-C 1.5.1 both ports on a BX110 blade must be configured for the same mode, both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB; there was no support for mixing modes on the same blade. You could have different options across different blades within the same chassis partition, but within a single blade, the ports had to be the same. F5OS-C 1.5.1 introduced more flexible options for port group configurations within the same blade. The table below shows the new heterogeneous port modes that were introduced in F5OS-C 1.5.1.
 
-**NOTE: Both ports on the BX110 blade must be configured in the same mode in current F5OS versions i.e., both ports must be configured for 100Gb, or 40Gb, or 4 x 25GB, or 4 x 10Gb. You cannot mix different port group settings on the same blade currently. A future release may provide more granular options.**  
+.. image:: images/velos_networking/image10a.png
+   :align: center
+   :scale: 70%
+
+
+
+Below is an example of the chassis partition webUI Port Groups screen with BX110 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
+
+.. image:: images/velos_networking/image11.png
+   :align: center
+   :scale: 70%
+
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
+
+.. image:: images/velos_networking/image11a.png
+  :width: 45%
+
+.. image:: images/velos_networking/image11b.png
+  :width: 35%
+
+.. image:: images/velos_networking/image11c.png
+  :align: center
+  :width: 55%
+
+Below is an example of the chassis partition webUI Port Groups screen with BX520 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image. Port1 is currently hardcoded for 100Gb, and port2 is currently hard coded at 400gb. Breakout support for 4 x 100Gb is targeted to be generally available in F5OS-C 1.8.1.
+
+.. image:: images/velos_networking/image11d.png
+   :align: center
+   :scale: 70%
 
 Configuring PortGroups from the webUI
 -----------------------------------
@@ -242,17 +276,31 @@ To list the current portgroup configuration issue the following API call:
 Network Settings -> Interfaces
 ------------------------------
 
-Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2 etc…. If ports are unbundled then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. A breakout cable is required to separate the different ports. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of port numbering with all bundled interfaces.
+Interface numbering will vary depending on the current portgroup configuration. Interfaces will always be numbered by **<blade#>/<port#>**. The number of ports on a blade will change depending on if the portgroup is configured as bundled, or unbundled. If the ports are bundled then ports will be **1/1.0** and **1/2.0** for slot 1, and **2/1.0** and **2/2.0** for slot 2. 
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image9.png
+If ports are unbundled, then the port numbering will be **1/1.1, 1/1.2, 1/1.3, and 1/1.4** for the first physical port and **1/2.1, 1/2.2, 1/2.3, and 1/2.4** for the second physical port. Breakout cables will be needed to support the unbundled 25Gb, or 10Gb configurations. Even when multiple chassis partitions are used, the port numbering will stay consistent starting with the blade number. Below is an example of BX110 blade port numbering when all interfaces are bundled. 
+
+.. image:: images/velos_networking/image12.png
   :align: center
-  :scale: 70% 
 
-The following example shows the port numbering when all interfaces are unbundled.
+Below is an example of BX110 port numbering when all interfaces are unbundled.
 
-.. image:: images/initial_setup_of_velos_chassis_partitions/image10.png
+.. image:: images/velos_networking/image12a.png
   :align: center
-  :scale: 70%   
+
+
+For the BX520 blades interface numbering is different because the BX520 blade takes up two slots. The slot reference for the blade will always be the first of the two slots where the blade is inserted, which will always be an odd number. If the ports are bundled, then ports will be **1/1.0** and **1/2.0** for a blade that occupies slot 1 and slot 2, and **3/1.0** and **3/2.0** for a blade that occupies slots 3 and 4. Below is an example of four BX520 blades within the CX410 chassis and their interface numbering when all ports are bundled.
+
+.. image:: images/velos_networking/bx520-interfaces.png
+  :align: center
+  :scale: 70%
+
+Below is an example of BX520 port numbering when all interfaces are unbundled into 4 x 100gb interfaces.
+
+.. image:: images/velos_networking/bx520-interfaces-unbundled.png
+  :align: center
+  :scale: 70%
+
 
 Configuring Interfaces from the webUI
 -----------------------------------
