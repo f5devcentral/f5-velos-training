@@ -459,7 +459,7 @@ called **mgmt-aggr**.
 
   PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=mgmt-aggr"
 
-In the body of the API call enter the following, you'll be creating an interface called **mgmt-aggr**, and setting an aggregate Id of the same name. Once you enter the following API call you will likely be disconnected from the controllers, so you'll need to configure the upstream switch for ink aggregation with LACP.
+In the body of the API call enter the following, you'll be creating an interface called **mgmt-aggr**, and setting an aggregate ID of the same name. Once you enter the following API call you will likely be disconnected from the controllers, so you'll need to configure the upstream switch for link aggregation with LACP.
 
 .. code-block:: json
 
@@ -649,7 +649,7 @@ You should see a response similar to the output below.
       ]
   }
 
-To view the aggregate interface, issue the following API call to the aggregate names used previously **mgmt-aggr**. You'll see that both **q/mgmt0** and **2/mgmt0** are members of the aggregate interface.
+To view the aggregate interface, issue the following API call to the aggregate names used previously **mgmt-aggr**. You'll see that both **1/mgmt0** and **2/mgmt0** are members of the aggregate interface.
 
 .. code-block:: bash
 
@@ -1603,6 +1603,8 @@ To get the current licensing status via API use the following API call. Issue a 
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing
 
+The output will be similar to the below example.
+
 .. code-block:: json
 
   {
@@ -1700,7 +1702,7 @@ Below is an example of the CLI prompting for a new password. You'll then be disc
 
 .. code-block:: bash
 
-  FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.10.10.148
+  prompt$ ssh -l admin 10.10.10.148
   The authenticity of host '10.10.10.148 (10.10.10.148)' can't be established.
   RSA key fingerprint is SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxx.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -1874,7 +1876,7 @@ Once the partitions are started and operational, you can log into each one and c
 
 .. code-block:: bash
 
-  FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.10.10.148
+  prompt$ ssh -l admin 10.10.10.148
   The authenticity of host '10.10.10.148 (10.10.10.148)' can't be established.
   RSA key fingerprint is SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxx.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -1899,6 +1901,8 @@ Before creating any new chassis partitions you should ensure you have the proper
 .. code-block:: bash
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-image:image/partition/config
+
+The output will be similar to the example below.
 
 .. code-block:: json
 
@@ -2101,6 +2105,8 @@ Next import the desired image into the system controller floating IP address usi
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/import
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -2151,6 +2157,8 @@ The system ships with all slots configured in the default chassis partition. Bef
 .. code-block:: bash
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-slot:slots
+
+The output will be similar to the example below.
 
 .. code-block:: json
 
@@ -2207,6 +2215,8 @@ Next remove the default partition from the slots you’d like to assign to any n
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -2238,6 +2248,8 @@ Next, a chassis partition called **Production** will be created. It will be assi
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -2264,6 +2276,8 @@ Next, slots 1 & 2 will be assigned to the chassis partition called **Production*
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -2292,6 +2306,8 @@ Finally, the chassis partition **Production** containing slots 1 & 2 will be ena
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/config/enabled
 
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -2303,6 +2319,8 @@ Next, a chassis partition called **Development** will be created. It will be ass
 .. code-block:: bash
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -2331,6 +2349,8 @@ Next, slot 3 will be assigned to the chassis partition called Development:
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -2351,6 +2371,7 @@ Finally, the chassis partition **Development** containing slot 3 will be enabled
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Development/config/enabled
 
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -2364,6 +2385,8 @@ The chassis partitions will have a default username/password of admin/admin. Whe
 .. code-block:: bash
 
   POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -2383,6 +2406,8 @@ Repeat the same process for the chassis partition Development:
 
   POST https://{{Chassis1_Devlopment_IP}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -2400,6 +2425,8 @@ Once the chassis partitions have been created you can query their status using t
 .. code-block:: bash
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
