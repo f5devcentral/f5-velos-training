@@ -392,51 +392,95 @@ To enable this feature, you would need to enable link aggregation on the system 
 Interface Aggregation for System Controllers via CLI
 -------------------------------------------------------
 
-Create a management aggregate interface and set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**.
+Beware changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
+
+Create a management aggregate interface called **mgmt-aggr** and set the **config name** for the same value. Set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**. Be sure to commit any changes.
+
 
 .. code-block:: bash
 
-  interfaces interface mgmt-aggr
-  config name mgmt-aggr
-  config type ieee8023adLag
-  aggregation config lag-type LACP
-  !
+  velos-1-gsa-1-active(config)# interfaces interface mgmt-aggr                                                                         
+  Value for 'config type' [a12MppSwitch,aal2,aal5,actelisMetaLOOP,...]: ieee8023adLag                                                              
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# config name mgmt-aggr                                                                                                                                                                                                 
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# aggregation config lag-type LACP
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# commit
+  Commit complete.                                                              
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# exit                                                                                           
+  velos-1-gsa-1-active(config)#                                                                                                                    
 
-On the active controller, create a management LACP interface:
 
-.. code-block:: bash
-
-  lacp interfaces interface mgmt-aggr
-  config name mgmt-aggr
-  !
-
-Finally, add the aggregate that you created by name to each of the management interfaces on the two controllers: 
+On the active controller, create a **mgmt-aggr** LACP interface. Be sure to commit any changes.
 
 .. code-block:: bash
 
-  !
-  interfaces interface 1/mgmt0
-  config name 1/mgmt0
-  config type ethernetCsmacd
-  ethernet config aggregate-id mgmt-aggr
-  !
- 
- 
-  interfaces interface 2/mgmt0
-  config name 2/mgmt0
-  config type ethernetCsmacd
-  ethernet config aggregate-id mgmt-aggr
+  velos-1-gsa-1-active(config)# lacp interfaces interface mgmt-aggr                                                                                
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# config name mgmt-aggr                                                                          
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# commit                                                                                         
+  Commit complete.                                                                                                                                 
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)#
 
-You'll then need to commit any changes.
+
+Finally, add the aggregate that you created by name to each of the management interfaces on the two controllers. Be sure to commit any changes.
+
+.. code-block:: bash
+
+  velos-1-gsa-1-active(config)# interfaces interface 1/mgmt0                                                                                       
+  velos-1-gsa-1-active(config-interface-1/mgmt0)# ethernet config aggregate-id mgmt-aggr                                                           
+  velos-1-gsa-1-active(config-interface-1/mgmt0)# exit                                                                                             
+  velos-1-gsa-1-active(config)# interfaces interface 2/mgmt0                                                                                                                                                   
+  velos-1-gsa-1-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr 
+  velos-1-gsa-1-active(config-interface-2/mgmt0)# commit
+  Commit complete.                                                          
+  velos-1-gsa-1-active(config)#  
+
 
 Interface Aggregation for System Controllers via WebUI
 -------------------------------------------------------
+
+Beware changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
+
+.. image:: images/initial_setup_of_velos_system_controllers/webui-controllers.png
+  :align: center
+  :scale: 70%
+
 
 
 Interface Aggregation for System Controllers via API
 -------------------------------------------------------
 
-You can view and configure the management interfaces on the two system controllers and aggregate them into a single Link Aggregation Group. To view the management interface on controller-1 run the following API call to see the interface labeled **1/mgmt0**. If you want to see the management interface on controller-2 change **1/mgmt0** in the API call below to **2/mgmt0**.
+Beware changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
+
+You can view and configure the management interfaces on the two system controllers and aggregate them into a single Link Aggregation Group. First you must create an interface
+called **mgmt-aggr**.
+
+.. code-block:: bash
+
+  PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=mgmt-aggr"
+
+In the body of the API call enter the following, you'll be creating an interface called **mgmt-aggr**, and setting an aggregate Id of the same name.
+
+.. code-block:: json
+
+  {
+      "openconfig-interfaces:interface": [
+          {
+              "name": "mgmt-aggr",
+              "config": {
+                  "name": "mgmt-aggr",
+                  "type": "iana-if-type:ethernetCsmacd",
+                  "description": "mgmt-aggr",
+                  "enabled": true
+              },
+              "openconfig-if-ethernet:ethernet": {
+                  "config": {
+                      "openconfig-if-aggregate:aggregate-id": "mgmt-aggr"
+                  }
+              }
+          }
+      ]
+  }
+
+To view the management interface on controller-1 run the following API call to see the interface labeled **1/mgmt0**. If you want to see the management interface on controller-2 change **1/mgmt0** in the API call below to **2/mgmt0**.
 
 .. code-block:: bash
 
@@ -521,7 +565,7 @@ You should see a response similar to the output below.
       ]
   }
 
-To view the aggregate interface issue the following API call to the aggregate names used previously **mgmt-aggr**.
+To view the aggregate interface, issue the following API call to the aggregate names used previously **mgmt-aggr**. You'll see that both **q/mgmt0** and **2/mgmt0** are members of the aggregate interface.
 
 .. code-block:: bash
 
