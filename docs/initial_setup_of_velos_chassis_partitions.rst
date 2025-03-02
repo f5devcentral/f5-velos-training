@@ -122,7 +122,7 @@ You must commit for any changes to take affect:
   Production-1(config)# commit
 
 
-Possible options for mode are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command **show running-config portgroups**:
+Possible options for mode on the BX110 blade are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. For the BX520 blade supported modes for port1 are: MODE_100GB and MODE_4x100Gb and for port2: MODE_4x100GB and MODE_400Gb. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command **show running-config portgroups**:
 
 .. code-block:: bash
 
@@ -157,6 +157,8 @@ To list the current portgroup configuration issue the following API call:
 .. code-block:: bash
 
   GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-portgroup:portgroups
+
+The output fo the API call will be similar to the example below.
 
 .. code-block:: json
 
@@ -305,7 +307,7 @@ Below is an example of BX520 port numbering when all interfaces are unbundled in
 Configuring Interfaces from the webUI
 -----------------------------------
 
-Within the chassis partition webUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
+Within the chassis partition webUI the physical ports of all blades within that partition will be visible by going to **Network Settings > Interfaces** page. If there are other chassis partitions in the VELOS system, then those ports will only be seen within their own chassis partition. In the example below this VELOS system has 3 BX110 blades installed, but only two are part of this chassis partition, so you will not see ports from the 3rd blade unless you connect directly to the other chassis partition.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image11.png
   :align: center
@@ -389,6 +391,8 @@ The following API command will list all the current interfaces within the curren
 .. code-block:: bash
 
   GET https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+The output of the API call will be similar to the example below.
 
 .. code-block:: json
 
@@ -528,6 +532,8 @@ To configure interfaces (that are not part of a LAG), use the following **PATCH*
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+Enter the following into the body of the API request.
 
 .. code-block:: json
 
@@ -692,6 +698,8 @@ To configure VLANs use the following API command and JSON body. This will config
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -749,6 +757,8 @@ The following command will list the configuration and status of all VLANs within
 .. code-block:: bash
 
   GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-vlan:vlans
+
+The response will be similar to the example below.
 
 .. code-block:: json
 
@@ -1110,6 +1120,8 @@ To create a LAG and add interfaces & proper LACP configuration will take a few d
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -1174,6 +1186,8 @@ The next step is to add physical interfaces into the LAG group. Interfaces will 
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -1233,6 +1247,8 @@ The final step is adding LACP configuration for each LAG:
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -1267,6 +1283,8 @@ To view the final LAG configuration via the API, use the following API call:
 .. code-block:: bash
 
 	GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-lacp:lacp
+
+The output of the API call will be similar to the example below.
 
 .. code-block:: json
 
@@ -1426,6 +1444,8 @@ You can get more granular information down to the interface level using the foll
 .. code-block:: bash
 
 	GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+The output of the API call will be similar to the example below.
 
 .. code-block:: json
 
