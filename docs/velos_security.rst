@@ -808,9 +808,9 @@ The output of the above API call shows the state and status of the tenant.
 Resource Admin & Guest User Role
 ========================
 
-The F5OS-A 1.4.0 release introduced the **Resource Admin** user role, which is similar to the Admin user role but it cannot create additional local user accounts, delete existing local users, change local user authorizations, or change the set of remotely authenticated users allowed to access the system. Below is an example creating a resource admin user via the CLI. When assigning a new user to role **resource-admin**, their access will be restricted as noted above.
+An earlier F5OS release introduced the **Resource Admin** user role, which is similar to the Admin user role but it cannot create additional local user accounts, delete existing local users, change local user authorizations, or change the set of remotely authenticated users allowed to access the system. Below is an example creating a resource admin user via the CLI. When assigning a new user to role **resource-admin**, their access will be restricted as noted above.
 
-F5OS-A 1.8.0 also adds a new "Guest" role called **user**. The new **user** role available at the F5OS-A system level restricts access to the logs similar to BIG-IP Guest user. F5OS has implemented a new role called **user** which provides read-only access to view all the non-sensitive information on the system. The user role cannot modify any system configurations, however users can change account passwords.
+F5OS-C 1.8.0 also adds a new "Guest" role called **user**. The new **user** role available at the F5OS-C system level restricts access to the logs similar to BIG-IP Guest user. F5OS has implemented a new role called **user** which provides read-only access to view all the non-sensitive information on the system. The user role cannot modify any system configurations, however users can change account passwords.
 
 
 Resource Admin & Guest User Role via CLI
@@ -820,88 +820,98 @@ Below is an example of setting up a new user with the built-in resource-admin ro
 
 .. code-block:: bash
 
-    r10900-2(config)# system aaa authentication users user res-admin-user config username res-admin-user role resource-admin             
-    r10900-2(config-user-res-admin-user)# commit
+    velos-1-gsa-1-active(config)# system aaa authentication users user res-admin-user config username res-admin-user role resource-admin
+    velos-1-gsa-1-active(config-user-res-admin-user)# commit
     Commit complete.
-    r10900-2(config-user-res-admin-user)# config set-password password 
-    Value for 'password' (<string>): **************
-    r10900-2(config-user-res-admin-user)# 
+    velos-1-gsa-1-active(config-user-res-admin-user)# config set-password 
+    Value for 'password' (<string>): ********
+    response Password successfully updated.
+    velos-1-gsa-1-active(config-user-res-admin-user)#
 
 When logging in as the resource-admin user, the **aaa** and **aaa authentication** options in the CLI will be limited compared to a normal admin user. The CLI output below shows the full configuration options available to a typical admin user.
 
 
 .. code-block:: bash
 
-    r10900-2(config)# system aaa ?
+    velos-1-gsa-1-active(config)# system aaa ?
     Possible completions:
-    authentication    
+    authentication    Top-level container for authentication settings.
     password-policy   Top-level container for password-policy settings.
     primary-key       
-    restconf-token    restconf-token lifetime.
-    server-groups     
+    restconf-token    restconf-token.
+    server-groups     Top-level container for server-group settings.
     tls               Top-level container for key/certificate settings.
+    velos-1-gsa-1-active(config)# system aaa
 
 Below is a typical output of **system aaa authentication** for an **admin** role.
 
 .. code-block:: bash    
     
-    r10900-2(config)# system aaa authentication ?
+    velos-1-gsa-1-active(config)# system aaa authentication ?
     Possible completions:
     config   
     ldap     Top-level container for LDAP search settings.
+    ocsp     Top-level container for OCSP server configurations.
+    radius   Top-level container for RADIUS settings.
     roles    Enclosing container list of roles.
     users    Enclosing container list of local users.
-    r10900-2(config)# 
+    velos-1-gsa-1-active(config)# system aaa authentication
 
 
 The output below shows the limited **aaa** and **aaa authentication** options available to the resource-admin user. Note, that this role is unable to configure new users, edit users, change password policies, configure the primary-key, server-groups, or rest-conf token timeouts.
 
 .. code-block:: bash
 
-    r10900-2(config)# system aaa ?
+    velos-1-gsa-1-active(config)# system aaa ?
     Possible completions:
-    authentication   
-    tls              Top-level container for key/certificate settings.
+    authentication   Top-level container for authentication settings.
+    primary-key      
+    restconf-token   restconf-token.
+    velos-1-gsa-1-active(config)# system aaa
 
 Below is a limited output of **system aaa authentication** for the **resource-admin** role.
 
 .. code-block:: bash    
     
-    r10900-2(config)# system aaa authentication ?
+    velos-1-gsa-1-active(config)# system aaa authentication ?
     Possible completions:
-    users   Enclosing container list of local users.
-    <cr>    
-    r10900-2(config)#
+    radius   Top-level container for RADIUS settings.
+    users    Enclosing container list of local users.
+    velos-1-gsa-1-active(config)# system aaa authentication
 
 Below is an example of setting up a new user with the built-in **user** role.
 
 .. code-block:: bash
 
-    r10900-1-gsa(config)# system aaa authentication users user guest-user2 config username guest-user2 role user 
-    r10900-1-gsa(config-user-guest-user2)# commit
+    velos-1-gsa-1-active(config)# system aaa authentication users user guest-user2 config username guest-user2 role user 
+    velos-1-gsa-1-active(config-user-guest-user2)# commit
     Commit complete.
-    r10900-1-gsa(config-user-guest-user2)# config set-password
-    Value for 'password' (<string>): **************
+    velos-1-gsa-1-active(config-user-guest-user2)# config set-password 
+    Value for 'password' (<string>): ********
     response Password successfully updated.
-    r10900-1-gsa(config-user-guest-user2)# 
+    velos-1-gsa-1-active(config-user-guest-user2)#
 
 
 When logging in as the user with the **user** role assigned, the configuration mode will be unavailable. The **user** role will prevent the user from entering config mode.
 
 .. code-block:: bash
 
-    r10900-1-gsa# config
-    --------------^
+    velos-1-gsa-1-active# config
+    ----------------------^
     syntax error: expecting 
+    autowizard           - Automatically query for mandatory elements
+    clear                - Clear parameter
+    commit               - Confirm a pending commit
+    complete-on-space    - Enable/disable completion on spac
 
 The **user** role will also prevent the user from running **file** operations from the CLI.
 
 .. code-block:: bash
 
-    r10900-1-gsa# file ?
-                ^
+    velos-1-gsa-1-active# file ?
+                        ^
     % Invalid input detected at '^' marker.
-    r10900-1-gsa# file
+    velos-1-gsa-1-active# file
 
 Resource Admin & Guest User Role via webUI
 --------------------------------
@@ -940,7 +950,7 @@ To view the current user roles:
 
 .. code-block:: bash
 
-    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication
 
 The output will look similar to the response below. Note, the **resource-admin** role.
 
@@ -1161,7 +1171,7 @@ To see the current user accounts on the system.
 
 .. code-block:: bash
 
-    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:users
+    GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:users
 
 The response will detail all the configured user accounts on the system.
 
@@ -1239,7 +1249,7 @@ To create a new user and assign it to the **resource-admin** role, use the follo
 
 .. code-block:: bash
     
-    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa
+    PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/aaa
 
 
 In the body of the API call add the username and role as seen below.
@@ -1267,7 +1277,7 @@ To create a new user and assign it to the **user** role, use the following API c
 
 .. code-block:: bash
     
-    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa
+    PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/aaa
 
 
 In the body of the API call add the username and role as seen below.
