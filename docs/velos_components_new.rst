@@ -16,7 +16,7 @@ The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can 
 CX1610 Chassis
 =============
 
-The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty two ¼ width slots that can be populated by new BX520 line cards (BX110 blades are not supported in the CX1610), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty-two ¼ width slots that can be populated by new BX520 line cards (BX110 blades are not supported in the CX1610), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/imagecx1610.png
   :align: center
@@ -26,14 +26,14 @@ Rack Mounting the CX410 Chassis
 ===============================
 
 
-VELOS ships with a 4 post quick-install rail (SHP-0270-00). The rack is adjustable from 28” to 40”. 
+VELOS ships with a 4-post quick-install rail (SHP-0270-00). The rack is adjustable from 28” to 40”. 
 
 
 .. image:: images/velos_components/4-post.png
   :align: center
   :scale: 60%
 
-There is also an optional 2 post shelf based rack mount kit that can be purchased (SHP-0272-00), with the caveat that the chassis will protrude out the front of the rack.
+There is also an optional 2 post shelf-based rack mount kit that can be purchased (SHP-0272-00), with the caveat that the chassis will protrude out the front of the rack.
 
 .. image:: images/velos_components/2-post.png
   :align: center
@@ -137,7 +137,7 @@ The VELOS chassis implements front-to-back cooling/airflow, and it is recommende
 CX1610 Fan Trays and Cooling
 ----------------------------
 
-The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS does not intake hot airflow from other devices. The CX1610 chassis has four removable fan trays. The fan trays are removable if one needs to be replaced, but should not be removed for long periods of time, as overheating may occur. 
+The VELOS chassis implements front-to-back cooling/airflow, and it is recommended that customers install such that VELOS does not intake hot airflow from other devices. The CX1610 chassis has four removable fan trays. The fan trays are removable if one needs to be replaced but should not be removed for long periods of time, as overheating may occur. 
 
 .. image:: images/velos_components/image9.png
   :align: center
@@ -294,7 +294,7 @@ The BX110 has 14 physical CPU cores, which are hyperthreaded into 28 vCPUs. Six 
   :align: center
   :scale: 50%
 
-The SSD is removable, but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
+The SSD is removable but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
 
 .. image:: images/velos_components/image19.png
   :align: center
@@ -316,14 +316,14 @@ The BX520 has 56 physical cores, which are hyperthreaded into 112 vCPUs. Sixteen
   :align: center
   :scale: 50%
 
-Below is a illustration of how the BX520 blade connects to the two system controllers.
+Below is an illustration of how the BX520 blade connects to the two system controllers.
 
 .. image:: images/velos_components/bx520-backplane-connectivity.png
   :align: center
   :scale: 75%
 
 
-The SSD is removable, but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
+The SSD is removable but not field replaceable. This allows customers who require that disks are destroyed before returning a blade for RMA have easy access to the SSD.
 
 .. image:: images/velos_components/image19a.png
   :align: center

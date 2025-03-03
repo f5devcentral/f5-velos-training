@@ -35,7 +35,7 @@ In the future BIG-IP Next tenants will be able to be provisioned within the same
 Smaller Footprint, Higher Density
 ---------------------------------
 
-The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades, and now support double the number of slots in the same 4RU chassis footprint as the VIPRION C2400 chassis. The VELOS CX410 chassis supports 8 slots instead of only 4 on the VIPRION C2400 chassis.
+The physical architecture of VELOS differs from the VIPRION platform in several ways. First, we’ve shrunk the size of the blades and now support double the number of slots in the same 4RU chassis footprint as the VIPRION C2400 chassis. The VELOS CX410 chassis supports 8 slots instead of only 4 on the VIPRION C2400 chassis.
 
 .. image:: images/velos_introduction/image2.png
   :align: center
@@ -123,7 +123,7 @@ The VELOS CX1610 has a similar design where only the system controllers need to 
 The Kubernetes Control Plane
 ----------------------------
 
-In addition to being the centralized layer2 switch fabric for the entire chassis, the system controllers also host the Kubernetes control plane that is responsible for provisioning resources/workloads within the chassis. VELOS utilizes an open-source distribution of Kubernetes called OpenShift, and specifically uses the OKD project/distribution. This is largely abstracted away from the administrator, as they won’t be configuring or monitoring containers or Kubernetes components. In cases where some Kubernetes features or monitoring needs to be exposed, it is abstracted and exposed through the new VELOS F5OS-C CLI, webUI, or API’s. 
+In addition to being the centralized layer2 switch fabric for the entire chassis, the system controllers also host the Kubernetes control plane that is responsible for provisioning resources/workloads within the chassis. VELOS utilizes an open-source distribution of Kubernetes called OpenShift and specifically uses the OKD project/distribution. This is largely abstracted away from the administrator, as they won’t be configuring or monitoring containers or Kubernetes components. In cases where some Kubernetes features or monitoring needs to be exposed, it is abstracted and exposed through the new VELOS F5OS-C CLI, webUI, or API’s. 
 
 A combination of Docker Compose and Kubernetes is used within the F5OS layer. Docker Compose is used to bring up the system controller and chassis partition software stacks, as they need to be fully functional early in the startup process. Then, Kubernetes takes over and is responsible for deploying workloads to the VELOS blades. One of the system controllers will be chosen to serve as primary, and the other secondary from a Kubernetes control plane perspective. The central VELOS chassis F5OS API, CLI, and webUI are served up from the primary system controller. The floating IP address will always follow the primary controller so CLI, webUI, and API access should not be prevented due to a controller failure.
 

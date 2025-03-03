@@ -12,7 +12,7 @@ Chassis partitions are completely separate management entities that are managed 
 Chassis Partition Dashboard
 ---------------------------
 
-The chassis partition **Dashboard** will provide a visual system summary of the partition and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly it will display **System Summary** stats under the tab of that name.
+The chassis partition **Dashboard** will provide a visual system summary of the partition, and which slots are assigned to it. It will also list the total number of vCPUs available for multitenancy and how many are currently in use.  There is also a tenant overview showing a quick summary of tenant status and basic parameters. Lastly it will display **System Summary** stats under the tab of that name.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image2.png
   :align: center
@@ -36,7 +36,7 @@ If you click on the **CPU** tab, then CPU utilization across different time peri
   :align: center
   :scale: 70%     
 
-If there are any active alarms they will be displayed on the **Active Alarms** page.
+If there are any active alarms, they will be displayed on the **Active Alarms** page.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image5.png
   :align: center
@@ -75,7 +75,7 @@ Below is an example of the chassis partition webUI Port Groups screen with BX110
    :align: center
    :scale: 70%
 
-For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port; however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
 
 .. image:: images/velos_networking/image11a.png
   :width: 45%
@@ -122,7 +122,7 @@ You must commit for any changes to take affect:
   Production-1(config)# commit
 
 
-Possible options for mode on the BX110 blade are: MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. For the BX520 blade supported modes for port1 are: MODE_100GB and MODE_4x100Gb and for port2: MODE_4x100GB and MODE_400Gb. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command **show running-config portgroups**:
+Possible options for mode on the BX110 blade are MODE_4x10GB,  MODE_4x25GB,  MODE_40GB,  MODE_100GB. For the BX520 blade supported modes for port1 are MODE_100GB and MODE_4x100Gb and for port2: MODE_4x100GB and MODE_400Gb. You can optionally configure the portgroup name and ddm poll frequency. You can display the current configuration of the existing portgroups by running the CLI command **show running-config portgroups**:
 
 .. code-block:: bash
 
@@ -869,7 +869,7 @@ The response will be similar to the example below.
 Network Settings -> LAGs
 ------------------------
 
-All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. 
+All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs, and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. 
 
 Configuring LAGs from the webUI
 -----------------------------

@@ -378,7 +378,7 @@ The out-of-band Ethernet interfaces on each system controller can be configured 
 Interface Aggregation for System Controllers (Optional)
 -------------------------------------------------------
 
-As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to the floating IP address as well as either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
+As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to the floating IP address as well as static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
 
 .. Note:: Although the diagram below depicts the CX410 chassis, the CX1610 chassis operates in the exact same manner.
 
@@ -482,7 +482,7 @@ In the body of the API call enter the following, you'll be creating an interface
       ]
   }
 
-Next, you will put each of the interfaces in the **mgmt-aggr** LAG. Below is the exmaple for putting **1/mgmt0** into the mgmt-aggr LAG.
+Next, you will put each of the interfaces in the **mgmt-aggr** LAG. Below is the example for putting **1/mgmt0** into the mgmt-aggr LAG.
 
 .. code-block:: bash
 
@@ -511,7 +511,7 @@ The body of the API call should be configured as follows:
     ]
     } 
 
-Below is the exmaple for putting **2/mgmt0** into the mgmt-aggr LAG.
+Below is the example for putting **2/mgmt0** into the mgmt-aggr LAG.
 
 .. code-block:: bash
 
@@ -790,7 +790,7 @@ Setting the Primary Key via API
 Below is an example of viewing and configuring the passphrase and salt for the primary-key via the API:
 
 
-To view the key use the following API call:
+To view the key, use the following API call:
 
 .. code-block:: bash
 
@@ -885,7 +885,7 @@ You can configure the DNS and Time settings from the webUI if preferred. DNS is 
   :align: center
   :scale: 70%
 
-Configuring Network Time Protocol is highly recommended, so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local timezone for this chassis location.
+Configuring Network Time Protocol is highly recommended, so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local time zone for this chassis location.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image5.png
   :align: center
@@ -923,7 +923,7 @@ Example of API call using port 443. Replace /restconf with /api.
 
   https://{{velos_chassis1_system_controller_ip}}/api/data/openconfig-system:system/aaa
 
-You can send a standard API call with user/password-based authentication (basic auth), and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth. The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes. If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password-based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth** and enter the username and password to log into your system controller.
+You can send a standard API call with user/password-based authentication (basic auth) and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth. The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes. If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password-based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth** and enter the username and password to log into your system controller.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6a.png
   :align: center
@@ -1011,7 +1011,7 @@ In the body of the API call add the desired DNS configuration.
       }
   }
 
-Configure System Settings NTP, Timezone From the API
+Configure System Settings NTP, Time Zone From the API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To set System Time settings, use the following API call as an example:
@@ -1021,7 +1021,7 @@ To set System Time settings, use the following API call as an example:
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
 
-In the body of the API call add the desired NTP & Timezone configuration.
+In the body of the API call add the desired NTP & Time zone configuration.
 
 .. code-block:: json
 
@@ -1098,7 +1098,7 @@ In the body of the API call add the desired SYSLOG configuration.
 Licensing the VELOS Chassis
 ---------------------------
 
-Licensing for the VELOS system is handled at the chassis level. This is like how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression, or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
+Licensing for the VELOS system is handled at the chassis level. This is like how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression, or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP and instead runs tenancy.
 
 Licenses can be applied via the F5OS-C CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems.
 
@@ -1256,7 +1256,7 @@ Then send the Base Reg Key in the body of the get-dossier API call below:
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:get-dossier
 
-Within the body of API call, enter your registation-key. Note, in the example below the actual Registration Key has been obfuscated with XXXX's.
+Within the body of API call, enter your registration-key. Note, in the example below the actual Registration Key has been obfuscated with XXXX's.
 
 
 .. code-block:: json
@@ -1628,7 +1628,7 @@ The output will be similar to the below example.
 Chassis Partition Creation
 --------------------------
 
-Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade or be allowed to span across multiple blades. Conceptually this is like how vCMP guests are defined on VIPRION, but the underlying technology in F5OS is different. 
+Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition, and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade or be allowed to span across multiple blades. Conceptually this is like how vCMP guests are defined on VIPRION, but the underlying technology in F5OS is different. 
 
 If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS-C software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS-C software, as the version that shipped on the system may not be the latest. Note, this is different than the software that the tenants will run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
 
@@ -1772,7 +1772,7 @@ In this case we will mimic the flow in the webUI section where there are 3 blade
   syscon-2-active(config-slot-3)# exit
   syscon-2-active(config)# commit
 
-Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway. Be sure to commit the change. Next, you'll set the version for the partition to run, and then enable it and commit. Note there are still no slots assigned to the chassis partition.
+Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway. Be sure to commit the change. Next, you'll set the version for the partition to run and then enable it and commit. Note there are still no slots assigned to the chassis partition.
 
 .. code-block:: bash
 
@@ -2099,7 +2099,7 @@ The output will be similar to the example below.
       }
   }
 
-Next import the desired image into the system controller floating IP address using the path **images/staging**. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options avialable in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
+Next import the desired image into the system controller floating IP address using the path **images/staging**. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options available in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
 
 .. code-block:: bash
 
@@ -2653,7 +2653,7 @@ System Settings -> Controller Management
 
 System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a Kubernetes control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
 
-An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
+An administrator can failover from one system controller to the other and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
 
 **NOTE: The initial v1.1.x F5OS-C versions did not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades, and updating the standby chassis first is recommended if possible. Rolling upgrade support for the system controllers was added to the 1.2.x release of F5OS-C. Once the system controllers are starting from a 1.2.x release, rolling upgrades are supported.** 
 
@@ -2753,7 +2753,7 @@ Once the QKView is generated, you can click the checkbox next to it, and then se
   :align: center
   :scale: 70% 
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a username and password.
+If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode and then use the **system diagnostics ihealth config** command to configure a username and password.
 
 .. code-block:: bash
 
@@ -2848,7 +2848,7 @@ You may define Server Groups which are collections of remote auth servers that t
 User Management -> Users
 ------------------------
 
-Local Users may be defined, passwords set or changed, and then assigned to specific roles (Admin or Operator). An account may also be locked, and that may be changed here.
+Local Users may be defined, passwords set or changed and then assigned to specific roles (Admin or Operator). An account may also be locked, and that may be changed here.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image49.png
   :align: center

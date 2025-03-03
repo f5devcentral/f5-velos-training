@@ -48,7 +48,7 @@ You can see this behavior when in an un-aggregated mode by looking at the mgmt i
   1/mgmt0  UP      UP      18715364  9974457      <-- out-pkts does not increment while a controller is standby.
   2/mgmt0  UP      UP      13286300  3112348
 
-Controller-2 is active and controller-1 is standby. The mgmt interface on each controller is 'UP'. While both controllers show incrementing ingress packets, only the active controller shows egress packets incrementing. This is because the front-panel mgmt port on the standby controller has forwarding disabled, so there is no egresses traffic. Yet the standby controller still has full L2 connectivity since its traffic is ultimately carried over the management port of the active controller.
+Controller-2 is active, and controller-1 is standby. The mgmt interface on each controller is 'UP'. While both controllers show incrementing ingress packets, only the active controller shows egress packets incrementing. This is because the front-panel mgmt port on the standby controller has forwarding disabled, so there is no egresses traffic. Yet the standby controller still has full L2 connectivity since its traffic is ultimately carried over the management port of the active controller.
 
 
 
@@ -70,7 +70,7 @@ Each chassis partition is a unique entity that has its own set of (local/remote)
 
 In addition to management access being completely isolated and unique, in-band networking (for use by tenants) is configured and completely contained within the chassis partition. Each chassis partition will have its own set of networking components such as PortGroups, VLANs, LAGs, and interfaces. This means that networking within one chassis partition is not accessible or viewable from another chassis partition. 
 
-Isolation at the network level is also enforced via the centralized switch fabrics that reside in the dual system controllers. In the VELOS system each blade has multiple connections into the centralized switch fabrics for redundancy and added bandwidth. Each BX110 blade has 2 x 100Gb backplane connections (one to each system controller), that are bonded together in a static LAG (Link Aggregation Group). This star-wired topology provides fast and reliable backplane connections between all the blades, and also allows for complete isolation at the networking layer. The same is true with the BX520 blade which has 4 x 100Gb backplane connections (two to each controller).
+Isolation at the network level is also enforced via the centralized switch fabrics that reside in the dual system controllers. In the VELOS system each blade has multiple connections into the centralized switch fabrics for redundancy and added bandwidth. Each BX110 blade has 2 x 100Gb backplane connections (one to each system controller), that are bonded together in a static LAG (Link Aggregation Group). This star-wired topology provides fast and reliable backplane connections between all the blades and also allows for complete isolation at the networking layer. The same is true with the BX520 blade which has 4 x 100Gb backplane connections (two to each controller).
 
 .. image:: images/velos_networking/image5.png
   :align: center
@@ -124,7 +124,7 @@ Below is an example of the chassis partition webUI Port Groups screen with BX110
    :align: center
    :scale: 70%
 
-For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port, however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port; however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
 
 .. image:: images/velos_networking/image11a.png
   :width: 45%
@@ -174,7 +174,7 @@ Below is an example of BX520 port numbering when all interfaces are unbundled in
 Supported Optics
 ================
 
-Only F5 branded optics are officially supported on VELOS per F5's third part hardware components policy. The BX110 blade supports speeds of 40Gb and 100Gb as well as 4 x 10Gb and 4 x 25Gb though the use of breakout cables. You must have the proper optic type inserted (and optional breakout cables) as well as the proper port group configuration for links to be established. The BX520 blade supports speeds of 400Gb or 4 x 100Gb (with proper breakout cable). VELOS interfaces will accept F5 approved QSFP+, QSFP28, or QSFP-DD optics depending on the blade type. 3rd party optics are not officially supported per F5’s support policies: 
+Only F5 branded optics are officially supported on VELOS per F5's third party hardware components policy. The BX110 blade supports speeds of 40Gb and 100Gb as well as 4 x 10Gb and 4 x 25Gb through the use of breakout cables. You must have the proper optic type inserted (and optional breakout cables) as well as the proper port group configuration for links to be established. The BX520 blade supports speeds of 400Gb or 4 x 100Gb (with proper breakout cable). VELOS interfaces will accept F5 approved QSFP+, QSFP28, or QSFP-DD optics depending on the blade type. 3rd party optics are not officially supported per F5’s support policies: 
 
 
 `K8153: F5 support of third-party hardware components <https://my.f5.com/manage/s/article/K8153>`_
@@ -291,7 +291,7 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 | F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
 +---------------------+--------------------------------------------------------------------------------------------+
 
-Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to support 4 x 100Gb connectivity. The QSFP-DD optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb conectivity. Note, they come in different lengths (3 meters, or 10 meters).
+Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to support 4 x 100Gb connectivity. The QSFP-DD optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
 
 +----------------------+--------------------------------------------------------------------------------------------+
 | F5-UPG-VEL-QDD-4X-3M | VELOS Field Upgrade: QSFP-DD Breakout Cable 400G to 4x100G, MPO-12 to 4LC (3 Meter)        |

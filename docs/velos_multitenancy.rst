@@ -2,7 +2,7 @@
 Multitenancy
 ============
 
-In previous generation chassis and appliances, F5 supported **vCMP** as a means of providing multitenancy and virtualization. vCMP allowed for configuration of **Guests**; which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience; however it is not based on vCMP. Instead, VELOS allows for **Tenants** to be created, which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
+In previous generation chassis and appliances, F5 supported **vCMP** as a means of providing multitenancy and virtualization. vCMP allowed for configuration of **Guests**, which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience; however, it is not based on vCMP. Instead, VELOS allows for **Tenants** to be created, which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
 
 Unlike VIPRION, where vCMP is an option that can added to the chassis, VELOS is multitenant by default. There is no option for a “bare metal” configuration; tenancy is baked into the architecture. You may configure one large tenant to emulate a “bare-metal” BIG-IP configuration if required. For customers that run bare-metal in VIPRION today, the L4-7 configuration and inherited VLANs will be migrated into a VELOS tenant, and the lower-level networking (interfaces, Link Aggregation Groups, and VLANs) will be configured in the F5OS-C platform layer. Below is a depiction of BIG-IP tenants running on top of the F5OS layer. 
 
