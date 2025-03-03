@@ -1305,7 +1305,7 @@ In the body of the API call add the username and role as seen below.
 Superuser Role
 ===============
 
-F5OS-A 1.8.0 adds a new role called **superuser**. The new **superuser** role available at the F5OS-A system level provides **sudo** privileges and bash access to the system (if enabled). This role is intended for environments where appliance mode (prevent bash level access) is disabled. Some customers prefer to manage BIG-IP from the bash shell and leverage tmsh commands to pipe into various Unix utilities to parse output. A similar feature has been added to F5OS 1.8.0 where F5OS commmands can now be executed from the bash shell via the new f5sh utility. This new role provides a way for a user with "sudo" privileges to be able to be remotely authenticated into the F5OS bash shell, but also provides an audit trail of the users interactions with the new f5sh utility in bash shell. 
+F5OS-C 1.8.0 adds a new role called **superuser**. The new **superuser** role available at the F5OS-C system level provides **sudo** privileges and bash access to the system (if enabled). This role is intended for environments where appliance mode (prevent bash level access) is disabled and it only applies to the system contoller level in VELOS. Some customers prefer to manage BIG-IP from the bash shell and leverage tmsh commands to pipe into various Unix utilities to parse output. A similar feature has been added to F5OS 1.8.0 where F5OS commmands can now be executed from the bash shell via the new f5sh utility. This new role provides a way for a user with "sudo" privileges to be able to be remotely authenticated into the F5OS bash shell, but also provides an audit trail of the users interactions with the new f5sh utility in bash shell. 
 
 RBAC on F5OS has been implemented in a way where **Roles** provide slices of privileges that can be composed with each other. There are **Primary Roles** and **Secondary Roles** which can be combined together to give a particular user multiple privileges. 
 
@@ -1323,27 +1323,28 @@ To enable LDAP remote authentication see an example configuration below.
 
 .. code-block:: bash
 
-    system aaa authentication config authentication-method LDAP_ALL 
-    system aaa authentication ldap base distinguishedName=CN=ABC-ADCAdmins,OU=Groups,OU=XYZ,DC=abc123,DC=root,DC=org 
-    system aaa server-groups server-group ldap-group config name ldap-group type LDAP 
-    servers server 10.10.10.223 config address 10.10.10.223 
-    ldap config auth-port 389 type ldap 
+    velos-1-gsa-1-active(config)# system aaa authentication config authentication-method LDAP_ALL
+    velos-1-gsa-1-active(config)# system aaa authentication ldap base distinguishedName=CN=ABC-ADCAdmins,OU=Groups,OU=XYZ,DC=abc123,DC=root,DC=org 
+    velos-1-gsa-1-active(config)# system aaa server-groups server-group ldap-group config name ldap-group type LDAP 
+    velos-1-gsa-1-active(config-server-group-ldap-group)# servers server 10.10.10.223 config address 10.10.10.223 
+    velos-1-gsa-1-active(config-server-10.10.10.223)# ldap config auth-port 389 type ldap 
+    velos-1-gsa-1-active(config-server-10.10.10.223)# 
 
 If the LDAP server is an Active Directory server, then the following CLI command should be added.
 
 .. code-block:: bash
 
-    r10900-1-gsa(config)# system aaa authentication ldap active_directory true
-    r10900-1-gsa(config)# commit
+    velos-1-gsa-1-active(config)#  system aaa authentication ldap active_directory true
+    velos-1-gsa-1-active(config)#  commit
     Commit complete.
-    r10900-1-gsa(config)#
+    velos-1-gsa-1-active(config)# 
 
 The admin will then need to enable the ldap-group filters for both the primary and supplementary groups/roles which in this case are admin and superuser. In this case, named LADP groups are being used.
 
 .. code-block:: bash
 
-    system aaa authentication roles role admin config ldap-group <filter for remote admin group>
-    system aaa authentication roles role superuser config ldap-group <filter for remote superuser group>
+    velos-1-gsa-1-active(config)# system aaa authentication roles role admin config ldap-group <filter for remote admin group>
+    velos-1-gsa-1-active(config)# system aaa authentication roles role superuser config ldap-group <filter for remote superuser group>
 
 The ldap-group mapping using the group's LDAP distinguished name is only necessary if the user/group records do not contain "posix/unix attributes" ('gidNumber') that identify the Linux GID of the group. If the records on the remote authentication server have Unix attributes, you can use 'system aaa authentication roles role <role> config remote-gid' to specify the remote group by GID, rather than mapping by name.  
 
@@ -1351,58 +1352,100 @@ Because this particular configuration is using named LDAP groups, you must disab
 
 .. code-block:: bash
 
-    r10900-1-gsa(config)# system aaa authentication ldap unix_attributes false
-    r10900-1-gsa(config)# commit
+    velos-1-gsa-1-active(config)#  system aaa authentication ldap unix_attributes false
+    velos-1-gsa-1-active(config)#  commit
     Commit complete.
-    r10900-1-gsa(config)#
+    velos-1-gsa-1-active(config)#
 
 If the configuration were using LDAP Group ID's instead of named LDAP groups, then the above configuration would be set to **true**. The configuration above should be enough to remotely authenticate users who are within one or more of the groups specified. To finalize the superuser configuration, you must also set the following F5OS command to **true** to enable bash shell access for users assigned to the superuser group. 
 
 .. code-block:: bash
 
 
-    r10900-1-gsa(config)# system aaa authentication config superuser-bash-access true
-    r10900-1-gsa(config)# commit
+    velos-1-gsa-1-active(config)#  system aaa authentication config superuser-bash-access true
+    velos-1-gsa-1-active(config)#  commit
     Commit complete.
-    r10900-1-gsa(config)#
+    velos-1-gsa-1-active(config)# 
 
 
 You can view the current state of these parmeters via the following CLI show comands. 
 
 .. code-block:: bash
 
-    appliance-1# show system aaa authentication
+    velos-1-gsa-1-active# show system aaa authentication 
+    system aaa authentication state basic enabled
     system aaa authentication state cert-auth disabled
-    system aaa authentication f5-aaa-token:state basic disabled
-    system aaa authentication state superuser-bash-access true
+    system aaa authentication state superuser-bash-access false
+    system aaa authentication f5-aaa-token:state basic enabled
     system aaa authentication ocsp state override-responder off
     system aaa authentication ocsp state response-max-age -1
     system aaa authentication ocsp state response-time-skew 300
     system aaa authentication ocsp state nonce-request on
     system aaa authentication ocsp state disabled
-                AUTHORIZED  LAST        TALLY  EXPIRY
-    USERNAME       KEYS        CHANGE      COUNT  DATE    ROLE
-    ----------------------------------------------------------------------
-    admin          -           2022-08-31  0      -1      admin
-    big-ip-15-1-6  -           0           0      1       tenant-console
-    big-ip-15-1-8  -           0           0      1       tenant-console
-    root           -           2022-08-31  0      -1      root
+                    AUTHORIZED  LAST    TALLY                  EXPIRY   
+    USERNAME        KEYS        CHANGE  COUNT  ROLE            STATUS   
+    --------------------------------------------------------------------
+    admin           -           19769   0      admin           enabled  
+    guest-user2     -           20150   0      user            enabled  
+    res-admin-user  -           20150   0      resource-admin  enabled  
+    root            -           19825   0      root            enabled  
+    student1        -           19996   0      admin           enabled  
+    student10       -           19996   0      admin           enabled  
+    student11       -           19996   0      admin           enabled  
+    student12       -           19996   0      admin           enabled  
+    student2        -           19996   0      admin           enabled  
+    student3        -           19996   0      admin           enabled  
+    student4        -           19996   0      admin           enabled  
+    student5        -           19996   0      admin           enabled  
+    student6        -           19996   0      admin           enabled  
+    student7        -           19996   0      admin           enabled  
+    student8        -           19996   0      admin           enabled  
+    student9        -           19996   0      admin           enabled  
+    testuser        -           19592   0      admin           enabled  
 
-                        REMOTE
-    ROLENAME        GID   GID     USERS
-    -------------------------------------
-    admin           9000  -       -
-    operator        9001  -       -
-    resource-admin  9003  -       -
-    tenant-console  9100  -       -
-    superuser       9004  -       -
+                        REMOTE  LDAP                                                                                           
+    ROLENAME        GID   GID     GROUP  DESCRIPTION                                                                      USERS  
+    -----------------------------------------------------------------------------------------------------------------------------
+    admin           9000  -       -      Unrestricted read/write access.                                                  -      
+    operator        9001  -       -      Read-only access to system level data.                                           -      
+    partition_1     9101  -       -      Provides console access for partition-1.                                         -      
+    partition_2     9102  -       -      Provides console access for partition-2.                                         -      
+    partition_3     9103  -       -      Provides console access for partition-3.                                         -      
+    partition_4     9104  -       -      Provides console access for partition-4.                                         -      
+    partition_5     9105  -       -      Provides console access for partition-5.                                         -      
+    partition_6     9106  -       -      Provides console access for partition-6.                                         -      
+    partition_7     9107  -       -      Provides console access for partition-7.                                         -      
+    partition_8     9108  -       -      Provides console access for partition-8.                                         -      
+    resource-admin  9003  -       -      Restricted read/write access. No access to modify authentication configuration.  -      
+    superuser       9004  -       -      Sudo privileges and Bash access to the system (if enabled).                      -      
+    ts_admin        9100  -       -      Provides admin access to the terminal server (TS).                               -      
+    user            9002  -       -      Read-only access to non-sensitive system level data.                             -      
 
-    Superuser Role via WebUI
-    --------------------------------
+    velos-1-gsa-1-active# 
 
 
 Superuser Role via WebUI using Named Groups on LDAP/Active Directory
 ---------------------------------------------------------------------
+
+Within the WebUI you can map the superuser role to a remote LDAP group. Go to the **Authentiction and Access -> Users & Roles** page and thgen select **Roles**. Then click on the **superuser** role to edit it.
+
+.. image:: images/velos_security/super-user.png
+  :align: center
+  :scale: 70%  
+
+Here you can map the supoeruser role either to a UNIX GID or an LDAP Remote Group, it does not support the configuration of both, so you must pick one method.
+
+
+.. image:: images/velos_security/super-user-config.png
+  :align: center
+  :scale: 70% 
+
+If you choose to use the LDAP Group mapping, then you must disable the unix attributes setting in the **Common LDAP Configration** section.
+
+
+.. image:: images/velos_security/unix-attributes.png
+  :align: center
+  :scale: 70% 
 
 
 Enable Superuser Bash Access
