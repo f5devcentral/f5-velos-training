@@ -158,7 +158,7 @@ To list the current portgroup configuration issue the following API call:
 
   GET https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-portgroup:portgroups
 
-The output fo the API call will be similar to the example below.
+The output of the API call will be similar to the example below.
 
 .. code-block:: json
 
