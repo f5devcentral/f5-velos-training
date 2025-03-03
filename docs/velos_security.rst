@@ -1191,7 +1191,7 @@ The response will detail all the configured user accounts on the system.
                     "username": "admin",
                     "config": {
                         "username": "admin",
-                        "last-change": "2021-09-29",
+                        "last-change": 19769,
                         "tally-count": 0,
                         "expiry-date": "-1",
                         "role": "admin",
@@ -1200,7 +1200,7 @@ The response will detail all the configured user accounts on the system.
                     "state": {
                         "authorized-keys": "-",
                         "username": "admin",
-                        "last-change": "2021-09-29",
+                        "last-change": 19769,
                         "tally-count": 0,
                         "expiry-date": "-1",
                         "role": "admin",
@@ -1208,22 +1208,42 @@ The response will detail all the configured user accounts on the system.
                     }
                 },
                 {
-                    "username": "operator",
+                    "username": "guest-user2",
                     "config": {
-                        "username": "operator",
-                        "last-change": "2024-04-09",
+                        "username": "guest-user2",
+                        "last-change": 20150,
                         "tally-count": 0,
                         "expiry-date": "-1",
-                        "role": "operator",
+                        "role": "user",
                         "expiry-status": "enabled"
                     },
                     "state": {
                         "authorized-keys": "-",
-                        "username": "operator",
-                        "last-change": "2024-04-09",
+                        "username": "guest-user2",
+                        "last-change": 20150,
                         "tally-count": 0,
                         "expiry-date": "-1",
-                        "role": "operator",
+                        "role": "user",
+                        "expiry-status": "enabled"
+                    }
+                },
+                {
+                    "username": "res-admin-user",
+                    "config": {
+                        "username": "res-admin-user",
+                        "last-change": 20150,
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "res-admin-user",
+                        "last-change": 20150,
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
                         "expiry-status": "enabled"
                     }
                 },
@@ -1231,7 +1251,7 @@ The response will detail all the configured user accounts on the system.
                     "username": "root",
                     "config": {
                         "username": "root",
-                        "last-change": "2021-11-29",
+                        "last-change": 19825,
                         "tally-count": 0,
                         "expiry-date": "-1",
                         "role": "root",
@@ -1239,10 +1259,30 @@ The response will detail all the configured user accounts on the system.
                     },
                     "state": {
                         "username": "root",
-                        "last-change": "2021-11-29",
+                        "last-change": 19825,
                         "tally-count": 0,
                         "expiry-date": "-1",
                         "role": "root",
+                        "expiry-status": "enabled"
+                    }
+                },
+                {
+                    "username": "testuser",
+                    "config": {
+                        "username": "testuser",
+                        "last-change": 19592,
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "testuser",
+                        "last-change": 19592,
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "admin",
                         "expiry-status": "enabled"
                     }
                 }
@@ -1454,23 +1494,19 @@ If you choose to use the LDAP Group mapping, then you must disable the unix attr
   :scale: 70% 
 
 
-Enable Superuser Bash Access
-Go to Authentication Settings screen. 
-Edit the Superuser Bash Access dropdown by selecting 'Enabled' option. 
-Click on Save.
-
-
 Superuser Role via API using Named Groups on LDAP/Active Directory
 ------------------------------------------------------------------
+
+Coming Soon!
 
 Session Timeouts, Token Lifetime, and Deny Root over SSH
 =========================================================
 
-Idle timeouts were configurable in previous releases, but the configuration only applied to the current session and was not persistent. F5OS-A 1.3.0 added the ability to configure persistent idle timeouts for F5OS for both the CLI and webUI. The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
+The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
 
-In F5OS-A 1.4.0, a new **sshd-idle-timeout** option has been added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn't apply to console sessions. 
+A new **sshd-idle-timeout** option has been added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn't apply to console sessions. 
 
-There is one case that is not covered by either of the above idle-timeout settings until version F5OS-A 1.8.0. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session in previous releases. Only console connections to the F5OS CLI are covered via the idle-timeout setting. In F5OS-A 1.8.0 the new **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
+There is one case that is not covered by either of the above idle-timeout settings until version F5OS-C 1.8.0. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session in previous releases. Only console connections to the F5OS CLI are covered via the idle-timeout setting. In F5OS-C 1.8.0 the new **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
 
 +-----------------------------------------------------------+
 |                Appliance-mode = Disabled                  |
@@ -1586,6 +1622,43 @@ You'll see output similar to the example below.
         "f5-system-settings:config": {
             "idle-timeout": "40",
             "sshd-idle-timeout": "20"
+        }
+    }
+
+To configure the deny-root-ssh option enter the following PATCH API call.
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-security-ciphers:security/f5-security-ciphers:config
+
+In the body of the API call alter the enabled setting to true or false.
+
+.. code-block:: json
+
+    {
+        "f5-security-ciphers:config": {
+            "deny-root-ssh": {
+                "enabled": true
+            }
+        }
+    }
+
+
+To view the current deny-root-ssh option over the API issue the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-security-ciphers:security/f5-security-ciphers:config
+
+The output should look similar to the example below.
+
+.. code-block:: json
+
+    {
+        "f5-security-ciphers:config": {
+            "deny-root-ssh": {
+                "enabled": false
+            }
         }
     }
 
