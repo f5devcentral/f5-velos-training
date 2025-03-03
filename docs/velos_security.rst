@@ -168,8 +168,8 @@ The output will show the previously configured allowed-ips.
         }
     }
 
-Adding Allow List Entries via webUI (F5OS-C 1.7.0)
----------------------------------------------------
+Adding Allow List Entries via webUI
+-----------------------------------
 
 You can configure the **Allow List** in the webUI starting with version F5OS-C 1.7.0 under the **System Settings** section. 
 
@@ -180,6 +180,12 @@ You can configure the **Allow List** in the webUI starting with version F5OS-C 1
 Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length of 24) to query the F5OS layer on port 161.
 
 .. image:: images/velos_security/image3.png
+  :align: center
+  :scale: 70%
+
+In later versions, the allow list configuration is now under the **System Settings -> System Security** page.
+
+.. image:: images/velos_security/system-security-allow.png
   :align: center
   :scale: 70%
 
@@ -1457,54 +1463,95 @@ Click on Save.
 Superuser Role via API using Named Groups on LDAP/Active Directory
 ------------------------------------------------------------------
 
-Session Timeouts and Token Lifetime
-===================================
+Session Timeouts, Token Lifetime, and Deny Root over SSH
+=========================================================
 
 Idle timeouts were configurable in previous releases, but the configuration only applied to the current session and was not persistent. F5OS-A 1.3.0 added the ability to configure persistent idle timeouts for F5OS for both the CLI and webUI. The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
 
 In F5OS-A 1.4.0, a new **sshd-idle-timeout** option has been added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn't apply to console sessions. 
 
-There is one case that is not covered by either of the above idle-timeout settings. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session. Only console connections to the F5OS CLI are covered via the idle-timeout setting. An enhancement has been filed, and in the future this case will be addressed. If this is a concern, then appliance mode could be enabled preventing root/bash access to the system.
+There is one case that is not covered by either of the above idle-timeout settings until version F5OS-A 1.8.0. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session in previous releases. Only console connections to the F5OS CLI are covered via the idle-timeout setting. In F5OS-A 1.8.0 the new **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
+
++-----------------------------------------------------------+
+|                Appliance-mode = Disabled                  |
++================+======================+===================+
+| deny-root-ssh  | root console access  | root ssh access   |
++----------------+----------------------+-------------------+
+| enabled        | Yes                  | No                |
++----------------+----------------------+-------------------+
+| disabled       | Yes                  | Yes               |
++----------------+----------------------+-------------------+
+
+
++-----------------------------------------------------------+
+|                Appliance-mode = Enabled                   |
++================+======================+===================+
+| deny-root-ssh  | root console access  | root ssh access   |
++----------------+----------------------+-------------------+
+| enabled        | No                   | No                |
++----------------+----------------------+-------------------+
+| disabled       | No                   | No                |
++----------------+----------------------+-------------------+
+
 
 For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if we set the token lifetime to two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
 
-Configuring SSH and CLI Timeouts via CLI
------------------------------------------
+Configuring SSH and CLI Timeouts & Deny Root SSH Settings via CLI
+----------------------------------------------------------------
+
 
 To configure the F5OS CLI timeout via the CLI, use the command **system settings config idle-timeout <value-in-seconds>**. Be sure to issue a commit to save the changes. In the case below, a CLI session to the F5OS CLI should disconnect after 300 seconds of inactivity. This will apply to connections to the F5OS CLI over both console and SSH.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system settings config idle-timeout 300
-    syscon-2-active(config)# commit
-    Commit complete.
-    syscon-2-active(config)#     
+    velos-1-gsa-1-active(config)# system settings config idle-timeout 300
+    velos-1-gsa-1-active(config)# commit
+    Commit complete.     
 
 To configure the SSH timeout via the CLI, use the command **system settings config sshd-idle-timeout <value-in-seconds>**. This idle-timeout will apply to both bash sessions over SSH, as well as F5OS CLI sessions over SSH. Be sure to issue a commit to save the changes. In the case below, the CLI session should disconnect after 300 seconds of inactivity.
 
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system settings config sshd-idle-timeout 300
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system settings config sshd-idle-timeout 300
+    velos-1-gsa-1-active(config)# commit
+    Commit complete.      
+
+To configure the deny-root-ssh option use the command **system security config deny-ssh-root**.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system security config deny-root-ssh enabled
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)#    
- 
+
 Both timeout settings can be viewed using the **show system settings** command.
 
 .. code-block:: bash
 
-    syscon-2-active# show system settings 
+    velos-1-gsa-1-active# show system settings 
     system settings state idle-timeout 300
     system settings state sshd-idle-timeout 300
     system settings gui advisory state disabled
-    system settings gui advisory state text ""
-    syscon-2-active#
+    velos-1-gsa-1-active# 
 
+The deny-root-ssh setting can be seen by issuing the CLI command **show system security**.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active# show system security 
+    system security firewall state logging disabled
+    system security state deny-root-ssh enabled
+    system security services service httpd
+    state ssl-ciphersuite ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-DSS-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA256:DHE-RSA-AES256-SHA:DHE-DSS-AES256-SHA:DHE-RSA-CAMELLIA256-SHA:DHE-DSS-CAMELLIA256-SHA:ECDH-RSA-AES256-GCM-SHA384:ECDH-ECDSA-AES256-GCM-SHA384:ECDH-RSA-AES256-SHA384:ECDH-ECDSA-AES256-SHA384:ECDH-RSA-AES256-SHA:ECDH-ECDSA-AES256-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:CAMELLIA256-SHA:PSK-AES256-CBC-SHA:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:DHE-DSS-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-SHA256:DHE-DSS-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA:DHE-RSA-CAMELLIA128-SHA:DHE-DSS-CAMELLIA128-SHA:ECDH-RSA-AES128-GCM-SHA256:ECDH-ECDSA-AES128-GCM-SHA256:ECDH-RSA-AES128-SHA256:ECDH-ECDSA-AES128-SHA256:ECDH-RSA-AES128-SHA:ECDH-ECDSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:CAMELLIA128-SHA:PSK-AES128-CBC-SHA
+    system security services service sshd
+    state ciphers [ aes128-cbc aes128-ctr aes128-gcm@openssh.com aes256-cbc aes256-ctr aes256-gcm@openssh.com ]
+    state kexalgorithms [ diffie-hellman-group14-sha1 diffie-hellman-group14-sha256 diffie-hellman-group16-sha512 ecdh-sha2-nistp256 ecdh-sha2-nistp384 ecdh-sha2-nistp521 ]
+    velos-1-gsa-1-active# 
 
  
-Configuring SSH and CLI Timeouts via API
-----------------------------------------
+Configuring SSH and CLI Timeouts & Deny Root SSH Settings via API
+-----------------------------------------------------------------
 
 To configure the CLI or SSH timeouts via the API, use the PATCH API call below. In the case below, the CLI session should disconnect after 300 seconds of inactivity.
 
@@ -1543,14 +1590,17 @@ You'll see output similar to the example below.
     }
 
 
-Configuring SSH and CLI Timeouts via webUI
-------------------------------------------
+Configuring SSH and CLI Timeouts & Deny Root SSH Settings via webUI
+-------------------------------------------------------------------
 
-Currently only the HTTPS token lifetime is configurable in the webUI. SSH and CLI timeouts are not currently configurable via the webUI and must be set via CLI or API. To set the **Token Lifetime** go to the **Authentication & Access -> Authentication Settings** page in either the system controller or the chassis partition webUI.
 
-.. image:: images/velos_security/imagetoken1.png
+
+The CLI timeout, and deny-root-ssh settings are both configurable in the webUI. SSH timeouts are not currently configurable via the webUI. The deny-root-ssh and CLI timeout options can be configured in the **System Settings -> System Security** page.
+
+.. image:: images/velos_security/cli-timeout.png
   :align: center
   :scale: 70%
+
 
 Token Lifetime via CLI
 ----------------------
@@ -1564,7 +1614,7 @@ As mentioned in the introduction, the webUI and API use token-based authenticati
     Commit complete.
     syscon-2-active(config)#
 
-To display the current restconf-token lifetime setting, use the command **show system aaa***.
+To display the current restconf-token lifetime setting, use the command **show system aaa**.
 
 .. code-block:: bash
 
@@ -1642,7 +1692,7 @@ To display the current restconf-token lifetime setting, use the command **show s
 Token Lifetime via webUI
 ------------------------
 
-You may configure the restconf-token lifetime via the webUI (new feature added in F5OS-A 1.6.0). The value is in minutes, and the client can refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes.
+You may configure the restconf-token lifetime via the webUI (new feature added in F5OS-A 1.4.0). The value is in minutes, and the client can refresh the token five times before it expires. As an example, if the token lifetime is set to 1 minute, an inactive webUI session will have a token expire after one minute, but it can be refreshed a maximum of five times. This will result in the webUI session timing out after 5 minutes. The HTTPS Token Lifetime is configurable under the **Authentication & Access -> Authentication Settings** page.
 
 .. image:: images/velos_security/image6.png
   :align: center
