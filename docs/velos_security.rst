@@ -18,6 +18,16 @@ This allows customers to run a secure/locked-down out-of-band management network
 .. image:: images/velos_security/image1.png
   :align: center
 
+Out-of-Band Management Network
+==============================
+
+All out-of-band networking for VELOS is handled through the system controllers. Each system controller has its own static IP address, and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network, and the out-of-band management VLAN inside the chassis. By default, there is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions, and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. 
+
+In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band management ports on VELOS. This new option allows for system controllers, chassis partitions and tenants to be assigned to specific VLANs. This will allow for greater separation on the management VLAN which in previous releases had to be a single shared VLAN. The external ports are configured with specific tagged or untagged VLANs and then those VLANs are presented to the system controllers, partitions, and tenants as untagged, meaning no special configuration is needed to convert to tagged management VLANs inside tenants.  
+
+.. image:: images/velos_networking/tagged-vlans.png
+  :align: center
+
 Allow List for F5OS Management
 ===============================
 
@@ -595,6 +605,804 @@ In the body of the API call add the following:
             "f5-security-appliance-mode:enabled": "true"
         }
     }
+
+
+
+Appliance Mode for BIG-IP Tenants
+=================================
+
+If you would like to prevent root / bash level access to the BIG-IP tenants, you can enable **Appliance Mode** in the tenant settings. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled for BIG-IP. The admin account to the TMOS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower-level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
+
+Enabling BIG-IP Tenant Appliance Mode via the CLI
+--------------------------------------------------
+
+When creating a BIG-IP tenant via the CLI you have the option of enabling or disabling (default) appliance-mode as seen below. 
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1(config-tenant-tenant2)# config ?
+            Possible completions:
+            appliance-mode           Appliance mode can be enabled/disabled at tenant level
+            cryptos                  Enable crypto devices for the tenant.
+            dag-ipv6-prefix-length   Tenant default value of IPv6 networking mask used by disaggregator algorithms
+            gateway                  User-specified gateway for the tenant static mgmt-ip.
+            image                    User-specified image for tenant.
+            mac-data                 
+            memory                   User-specified memory in MBs for the tenant.
+            mgmt-ip                  User-specified mgmt-ip for the tenant management access.
+            mgmt-vlan                Mgmt-vlan for tenant mgmt.
+            nodes                    User-specified node-number(s) in the partition to schedule the tenant.
+            prefix-length            User-specified prefix-length for the tenant static mgmt-ip.
+            running-state            User-specified desired state for the tenant.
+            storage                  User-specified storage information
+            tenant-auth-support      Security can be enabled/disabled when tenant is Not in deployed state.
+            type                     Tenant type.
+            vcpu-cores-per-node      User-specified number of logical cpu cores for the tenant.
+            virtual-wires            User-specified virtual-wires from virtual-wire table for the tenant.
+            vlans                    User-specified vlan-id from vlan table for the tenant.
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config cryptos enabled 
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config vcpu-cores-per-node 4
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config type BIG-IP 
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config nodes 2
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config vlans 444        
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config vlans 500
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config vlans 555
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config storage size 76
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config running-state deployed
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config memory 14848
+        green-partition-chassis1-gsa-1(config-tenant-tenant2)# config appliance-mode enabled
+
+Any changes must be committed for them to be executed:
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1(config-tenant-tenant2)# commit
+    Commit complete.
+    green-partition-chassis1-gsa-1(config-tenant-tenant2)# 
+	
+You may alternatively put all the parameters on one line instead of using the interactive mode above:
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1(config)# tenants tenant tenant2 config image BIGIP-17.1.1.4-0.0.9.ALL-F5OS.qcow2.zip.bundle vcpu-cores-per-node 2 nodes [ 1 ] vlans [ 500 501 ] mgmt-ip 172.22.50.26 prefix-length 26 gateway 172.22.50.62 running-state deployed appliance-mode enabled
+    green-partition-chassis1-gsa-1(config-tenant-tenant2)# commit
+    Commit complete.
+    green-partition-chassis1-gsa-1(config-tenant-tenant2)#
+
+
+Enabling BIG-IP Tenant Appliance Mode via the webUI
+--------------------------------------------
+
+When creating a BIG-IP tenant via the webUI you have the option of enabling or disabling (default) appliance-mode as seen below. 
+
+.. image:: images/velos_security/appliance-mode.png
+  :align: center
+  :scale: 70%
+
+Enabling BIG-IP Tenant Appliance Mode via the API
+------------------------------------------
+
+When creating a BIG-IP tenant via the API you have the option of enabling or disabling (default) appliance-mode as seen below. Tenant creation via the API is as simple as defining the parameters below and sending the POST to the rSeries out-of-band IP address. The API call below will create a tenant; many of the fields are defined as variables in Postman. That way the API calls don't have to be rewritten for different tenant names or IP addressing, or images, and they can be reused easily and adapted to any environment. 
+
+.. code-block:: bash
+
+  POST https://{{velos_chassis1_chassis_partition1_ip}}}:8888/restconf/data/f5-tenants:tenants
+
+
+Below is the body of the API call above.
+
+.. code-block:: json
+
+
+    {
+        "tenant": [
+            {
+                "name": "{{New_Tenant1_Name}}",
+                "config": {
+                    "image": "{{Appliance_Tenant_Image}}",
+                    "nodes": [
+                        1
+                    ],
+                    "mgmt-ip": "{{Appliance1_Tenant1_IP}}",
+                    "gateway": "{{OutofBand_DFGW}}",
+                    "prefix-length": 24,
+                    "vlans": [
+                        3010,
+                        3011,
+                        500
+                    ],
+                    "vcpu-cores-per-node": 2,
+                    "memory": 7680,
+                    "cryptos": "enabled",
+                    "running-state": "configured"
+                    "appliance-mode": "enabled"
+                }
+            }
+        ]
+    }
+
+Validating Tenant Status via API
+================================
+
+The command below will show the current state and status of the tenant. Remember it has not been changed to the **Deployed** state yet.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_chassis_partition1_ip}}}:8888/restconf/data/f5-tenants:tenants
+
+The output of the above API call shows the state and status of the tenant.
+
+.. code-block:: json
+
+    {
+        "f5-tenants:tenants": {
+            "tenant": [
+                {
+                    "name": "tenant1",
+                    "config": {
+                        "name": "tenant1",
+                        "type": "BIG-IP",
+                        "image": "BIGIP-15.1.5-0.0.8.ALL-F5OS.qcow2.zip.bundle",
+                        "nodes": [
+                            1
+                        ],
+                        "mgmt-ip": "10.255.0.149",
+                        "prefix-length": 24,
+                        "gateway": "10.255.0.1",
+                        "vlans": [
+                            500,
+                            3010,
+                            3011
+                        ],
+                        "cryptos": "enabled",
+                        "vcpu-cores-per-node": 2,
+                        "memory": "7680",
+                        "storage": {
+                            "size": 76
+                        },
+                        "running-state": "configured",
+                        "appliance-mode": {
+                            "enabled": true
+                        }
+                    },
+                    "state": {
+                        "name": "tenant1",
+                        "unit-key-hash": "ec+5rtpwnIt6awtkadYqXyWzJ/Oty4tRbfPICaz6OzPSw4KILtQMJZETeq/Q6pbfBh8zXQfBPTetgvPw2dW2ig==",
+                        "type": "BIG-IP",
+                        "mgmt-ip": "10.255.0.149",
+                        "prefix-length": 24,
+                        "gateway": "10.255.0.1",
+                        "mac-ndi-set": [
+                            {
+                                "ndi": "default",
+                                "mac": "00:94:a1:69:59:24"
+                            }
+                        ],
+                        "vlans": [
+                            500,
+                            3010,
+                            3011
+                        ],
+                        "cryptos": "enabled",
+                        "vcpu-cores-per-node": 2,
+                        "memory": "7680",
+                        "storage": {
+                            "size": 76
+                        },
+                        "running-state": "configured",
+                        "mac-data": {
+                            "base-mac": "00:94:a1:69:59:26",
+                            "mac-pool-size": 1
+                        },
+                        "appliance-mode": {
+                            "enabled": false
+                        },
+                        "status": "Configured"
+                    }
+                }
+            ]
+        }
+    }
+
+
+Resource Admin & Guest User Role
+========================
+
+The F5OS-A 1.4.0 release introduced the **Resource Admin** user role, which is similar to the Admin user role but it cannot create additional local user accounts, delete existing local users, change local user authorizations, or change the set of remotely authenticated users allowed to access the system. Below is an example creating a resource admin user via the CLI. When assigning a new user to role **resource-admin**, their access will be restricted as noted above.
+
+F5OS-A 1.8.0 also adds a new "Guest" role called **user**. The new **user** role available at the F5OS-A system level restricts access to the logs similar to BIG-IP Guest user. F5OS has implemented a new role called **user** which provides read-only access to view all the non-sensitive information on the system. The user role cannot modify any system configurations, however users can change account passwords.
+
+
+Resource Admin & Guest User Role via CLI
+--------------------------------
+
+Below is an example of setting up a new user with the built-in resource-admin role.
+
+.. code-block:: bash
+
+    r10900-2(config)# system aaa authentication users user res-admin-user config username res-admin-user role resource-admin             
+    r10900-2(config-user-res-admin-user)# commit
+    Commit complete.
+    r10900-2(config-user-res-admin-user)# config set-password password 
+    Value for 'password' (<string>): **************
+    r10900-2(config-user-res-admin-user)# 
+
+When logging in as the resource-admin user, the **aaa** and **aaa authentication** options in the CLI will be limited compared to a normal admin user. The CLI output below shows the full configuration options available to a typical admin user.
+
+
+.. code-block:: bash
+
+    r10900-2(config)# system aaa ?
+    Possible completions:
+    authentication    
+    password-policy   Top-level container for password-policy settings.
+    primary-key       
+    restconf-token    restconf-token lifetime.
+    server-groups     
+    tls               Top-level container for key/certificate settings.
+
+Below is a typical output of **system aaa authentication** for an **admin** role.
+
+.. code-block:: bash    
+    
+    r10900-2(config)# system aaa authentication ?
+    Possible completions:
+    config   
+    ldap     Top-level container for LDAP search settings.
+    roles    Enclosing container list of roles.
+    users    Enclosing container list of local users.
+    r10900-2(config)# 
+
+
+The output below shows the limited **aaa** and **aaa authentication** options available to the resource-admin user. Note, that this role is unable to configure new users, edit users, change password policies, configure the primary-key, server-groups, or rest-conf token timeouts.
+
+.. code-block:: bash
+
+    r10900-2(config)# system aaa ?
+    Possible completions:
+    authentication   
+    tls              Top-level container for key/certificate settings.
+
+Below is a limited output of **system aaa authentication** for the **resource-admin** role.
+
+.. code-block:: bash    
+    
+    r10900-2(config)# system aaa authentication ?
+    Possible completions:
+    users   Enclosing container list of local users.
+    <cr>    
+    r10900-2(config)#
+
+Below is an example of setting up a new user with the built-in **user** role.
+
+.. code-block:: bash
+
+    r10900-1-gsa(config)# system aaa authentication users user guest-user2 config username guest-user2 role user 
+    r10900-1-gsa(config-user-guest-user2)# commit
+    Commit complete.
+    r10900-1-gsa(config-user-guest-user2)# config set-password
+    Value for 'password' (<string>): **************
+    response Password successfully updated.
+    r10900-1-gsa(config-user-guest-user2)# 
+
+
+When logging in as the user with the **user** role assigned, the configuration mode will be unavailable. The **user** role will prevent the user from entering config mode.
+
+.. code-block:: bash
+
+    r10900-1-gsa# config
+    --------------^
+    syntax error: expecting 
+
+The **user** role will also prevent the user from running **file** operations from the CLI.
+
+.. code-block:: bash
+
+    r10900-1-gsa# file ?
+                ^
+    % Invalid input detected at '^' marker.
+    r10900-1-gsa# file
+
+Resource Admin & Guest User Role via webUI
+--------------------------------
+
+The webUI also supports the assignment of the **resource-admin** role to any user.
+
+.. image:: images/velos_security/imageres-admin.png
+  :align: center
+  :scale: 70%
+
+When logging in as the resource-admin user, any attempt to configure the restricted items above will result in an **Access Denied** error like the one below.
+
+.. image:: images/velos_security/imageaccessdenied.png
+  :align: center
+  :scale: 70%
+
+The webUI also supports the assignment of the **user** role to any user.
+
+.. image:: images/velos_security/guest-user.png
+  :align: center
+  :scale: 70%  
+
+When a user logs in with the **user** role assigned, they can view configuration, but the webUI will prevent any changes from being made by blocking save functions.
+
+.. image:: images/velos_security/guest-user-restricted.png
+  :align: center
+  :scale: 70%  
+
+
+Resource-Admin & Guest User Role via API
+----------------------------------------
+
+The API also supports the assignment of the resource-admin role to any user.
+
+To view the current user roles:
+
+.. code-block:: bash
+
+    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication
+
+The output will look similar to the response below. Note, the **resource-admin** role.
+
+.. code-block:: bash
+
+
+    {
+        "openconfig-system:authentication": {
+            "config": {
+                "f5-aaa-confd-restconf-token:basic": {
+                    "enabled": true
+                },
+                "f5-openconfig-aaa-clientcert:cert-auth": {
+                    "enabled": false
+                },
+                "f5-openconfig-aaa-superuser:superuser-bash-access": false
+            },
+            "state": {
+                "f5-aaa-confd-restconf-token:basic": {
+                    "enabled": true
+                },
+                "f5-openconfig-aaa-clientcert:cert-auth": {
+                    "enabled": false
+                },
+                "f5-openconfig-aaa-superuser:superuser-bash-access": false
+            },
+            "f5-aaa-confd-restconf-token:state": {
+                "basic": {
+                    "enabled": true
+                }
+            },
+            "f5-openconfig-aaa-clientcert:clientcert": {
+                "config": {
+                    "client-cert-name-field": "subjectname-cn",
+                    "OID": "UPN"
+                },
+                "state": {
+                    "client-cert-name-field": "subjectname-cn",
+                    "OID": "UPN"
+                }
+            },
+            "f5-openconfig-aaa-ldap:ldap": {
+                "bind_timelimit": 10,
+                "timelimit": 0,
+                "idle_timelimit": 0,
+                "ldap_version": 3,
+                "ssl": "off",
+                "active_directory": false,
+                "unix_attributes": true,
+                "tls_reqcert": "demand",
+                "chase-referrals": true
+            },
+            "f5-openconfig-aaa-ocsp:ocsp": {
+                "config": {
+                    "override-responder": "off",
+                    "response-max-age": -1,
+                    "response-time-skew": 300,
+                    "nonce-request": "on",
+                    "enabled": false
+                },
+                "state": {
+                    "override-responder": "off",
+                    "response-max-age": -1,
+                    "response-time-skew": 300,
+                    "nonce-request": "on",
+                    "enabled": false
+                }
+            },
+            "f5-openconfig-aaa-radius:radius": {
+                "require_message_authenticator": false
+            },
+            "f5-system-aaa:users": {
+                "user": [
+                    {
+                        "username": "admin",
+                        "config": {
+                            "username": "admin",
+                            "last-change": "2021-09-29",
+                            "tally-count": 0,
+                            "expiry-date": "-1",
+                            "role": "admin",
+                            "expiry-status": "enabled"
+                        },
+                        "state": {
+                            "authorized-keys": "-",
+                            "username": "admin",
+                            "last-change": "2021-09-29",
+                            "tally-count": 0,
+                            "expiry-date": "-1",
+                            "role": "admin",
+                            "expiry-status": "enabled"
+                        }
+                    },
+                    {
+                        "username": "operator",
+                        "config": {
+                            "username": "operator",
+                            "last-change": "2024-04-09",
+                            "tally-count": 0,
+                            "expiry-date": "-1",
+                            "role": "operator",
+                            "expiry-status": "enabled"
+                        },
+                        "state": {
+                            "authorized-keys": "-",
+                            "username": "operator",
+                            "last-change": "2024-04-09",
+                            "tally-count": 0,
+                            "expiry-date": "-1",
+                            "role": "operator",
+                            "expiry-status": "enabled"
+                        }
+                    },
+                    {
+                        "username": "root",
+                        "config": {
+                            "username": "root",
+                            "last-change": "2021-11-29",
+                            "tally-count": 0,
+                            "expiry-date": "-1",
+                            "role": "root",
+                            "expiry-status": "enabled"
+                        },
+                        "state": {
+                            "username": "root",
+                            "last-change": "2021-11-29",
+                            "tally-count": 0,
+                            "expiry-date": "-1",
+                            "role": "root",
+                            "expiry-status": "enabled"
+                        }
+                    }
+                ]
+            },
+            "f5-system-aaa:roles": {
+                "role": [
+                    {
+                        "rolename": "admin",
+                        "config": {
+                            "rolename": "admin",
+                            "gid": 9000,
+                            "description": "Unrestricted read/write access."
+                        },
+                        "state": {
+                            "rolename": "admin",
+                            "gid": 9000,
+                            "remote-gid": "-",
+                            "ldap-group": "-",
+                            "description": "Unrestricted read/write access."
+                        }
+                    },
+                    {
+                        "rolename": "operator",
+                        "config": {
+                            "rolename": "operator",
+                            "gid": 9001,
+                            "description": "Read-only access to system level data."
+                        },
+                        "state": {
+                            "rolename": "operator",
+                            "gid": 9001,
+                            "remote-gid": "-",
+                            "ldap-group": "-",
+                            "description": "Read-only access to system level data."
+                        }
+                    },
+                    {
+                        "rolename": "resource-admin",
+                        "config": {
+                            "rolename": "resource-admin",
+                            "gid": 9003,
+                            "description": "Restricted read/write access. No access to modify authentication configuration."
+                        },
+                        "state": {
+                            "rolename": "resource-admin",
+                            "gid": 9003,
+                            "remote-gid": "-",
+                            "ldap-group": "-",
+                            "description": "Restricted read/write access. No access to modify authentication configuration."
+                        }
+                    },
+                    {
+                        "rolename": "superuser",
+                        "config": {
+                            "rolename": "superuser",
+                            "gid": 9004,
+                            "description": "Sudo privileges and Bash access to the system (if enabled)."
+                        },
+                        "state": {
+                            "rolename": "superuser",
+                            "gid": 9004,
+                            "remote-gid": "-",
+                            "ldap-group": "-",
+                            "description": "Sudo privileges and Bash access to the system (if enabled)."
+                        }
+                    },
+                    {
+                        "rolename": "user",
+                        "config": {
+                            "rolename": "user",
+                            "gid": 9002,
+                            "description": "Read-only access to non-sensitive system level data."
+                        },
+                        "state": {
+                            "rolename": "user",
+                            "gid": 9002,
+                            "remote-gid": "-",
+                            "ldap-group": "-",
+                            "description": "Read-only access to non-sensitive system level data."
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+To see the current user accounts on the system.
+
+.. code-block:: bash
+
+    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:users
+
+The response will detail all the configured user accounts on the system.
+
+.. code-block:: bash
+
+
+    {
+        "f5-system-aaa:users": {
+            "user": [
+                {
+                    "username": "admin",
+                    "config": {
+                        "username": "admin",
+                        "last-change": "2021-09-29",
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "admin",
+                        "last-change": "2021-09-29",
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    }
+                },
+                {
+                    "username": "operator",
+                    "config": {
+                        "username": "operator",
+                        "last-change": "2024-04-09",
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "operator",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "operator",
+                        "last-change": "2024-04-09",
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "operator",
+                        "expiry-status": "enabled"
+                    }
+                },
+                {
+                    "username": "root",
+                    "config": {
+                        "username": "root",
+                        "last-change": "2021-11-29",
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "root",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "username": "root",
+                        "last-change": "2021-11-29",
+                        "tally-count": 0,
+                        "expiry-date": "-1",
+                        "role": "root",
+                        "expiry-status": "enabled"
+                    }
+                }
+            ]
+        }
+    }
+
+
+To create a new user and assign it to the **resource-admin** role, use the following API call.
+
+.. code-block:: bash
+    
+    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa
+
+
+In the body of the API call add the username and role as seen below.
+
+.. code-block:: bash
+
+    {
+    "openconfig-system:aaa": {
+        "authentication": {
+            "f5-system-aaa:users": {
+                "user": [
+                    {
+                        "username": "resource-admin-user",
+                        "config": {
+                            "role": "resource-admin"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+
+To create a new user and assign it to the **user** role, use the following API call.
+
+.. code-block:: bash
+    
+    PATCH https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/aaa
+
+
+In the body of the API call add the username and role as seen below.
+
+.. code-block:: bash
+
+    {
+    "openconfig-system:aaa": {
+        "authentication": {
+            "f5-system-aaa:users": {
+                "user": [
+                    {
+                        "username": "guest-user",
+                        "config": {
+                            "role": "user"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+
+
+Superuser Role
+===============
+
+F5OS-A 1.8.0 adds a new role called **superuser**. The new **superuser** role available at the F5OS-A system level provides **sudo** privileges and bash access to the system (if enabled). This role is intended for environments where appliance mode (prevent bash level access) is disabled. Some customers prefer to manage BIG-IP from the bash shell and leverage tmsh commands to pipe into various Unix utilities to parse output. A similar feature has been added to F5OS 1.8.0 where F5OS commmands can now be executed from the bash shell via the new f5sh utility. This new role provides a way for a user with "sudo" privileges to be able to be remotely authenticated into the F5OS bash shell, but also provides an audit trail of the users interactions with the new f5sh utility in bash shell. 
+
+RBAC on F5OS has been implemented in a way where **Roles** provide slices of privileges that can be composed with each other. There are **Primary Roles** and **Secondary Roles** which can be combined together to give a particular user multiple privileges. 
+
+Users must be assigned to a single primary group/role, and can become members of further supplementary groups/roles by adding them to the users list for that group/role.
+The roles can be combined together to give a particular user multiple privileges. The **superuser** role is intended to be assigned as a supplementary role in addition to another role like **admin**, whether the role is primary or supplementary does not matter (order does not matter), if only the superuser role was applied it would restrict access to services like the webUI, granting the admin role as a supplemental role will provide normal webUI access.
+
+As an example, assigning a Primary Role of **admin** to a user and then adding that same user to the  **superuser** role will give the user access to the webUI via the admin privileges, and if the **system aaa authentication config superuser-bash-access true** command is set (to true) the default CLI login for this user will be the bash shell. The superuser role does not grant webUI access or Confd CLI access on its own. 
+
+
+Superuser Role via CLI using Named Groups on LDAP/Active Directory
+-----------------------------------------------------------------
+
+
+To enable LDAP remote authentication see an example configuration below.
+
+.. code-block:: bash
+
+    system aaa authentication config authentication-method LDAP_ALL 
+    system aaa authentication ldap base distinguishedName=CN=ABC-ADCAdmins,OU=Groups,OU=XYZ,DC=abc123,DC=root,DC=org 
+    system aaa server-groups server-group ldap-group config name ldap-group type LDAP 
+    servers server 10.10.10.223 config address 10.10.10.223 
+    ldap config auth-port 389 type ldap 
+
+If the LDAP server is an Active Directory server, then the following CLI command should be added.
+
+.. code-block:: bash
+
+    r10900-1-gsa(config)# system aaa authentication ldap active_directory true
+    r10900-1-gsa(config)# commit
+    Commit complete.
+    r10900-1-gsa(config)#
+
+The admin will then need to enable the ldap-group filters for both the primary and supplementary groups/roles which in this case are admin and superuser. In this case, named LADP groups are being used.
+
+.. code-block:: bash
+
+    system aaa authentication roles role admin config ldap-group <filter for remote admin group>
+    system aaa authentication roles role superuser config ldap-group <filter for remote superuser group>
+
+The ldap-group mapping using the group's LDAP distinguished name is only necessary if the user/group records do not contain "posix/unix attributes" ('gidNumber') that identify the Linux GID of the group. If the records on the remote authentication server have Unix attributes, you can use 'system aaa authentication roles role <role> config remote-gid' to specify the remote group by GID, rather than mapping by name.  
+
+Because this particular configuration is using named LDAP groups, you must disable the **unix_attributes** via the following CLI command. You cannot mix named LDAP groups with GID based unix groups, you must pick one or the other. In this example we are using the named LDAP groups.
+
+.. code-block:: bash
+
+    r10900-1-gsa(config)# system aaa authentication ldap unix_attributes false
+    r10900-1-gsa(config)# commit
+    Commit complete.
+    r10900-1-gsa(config)#
+
+If the configuration were using LDAP Group ID's instead of named LDAP groups, then the above configuration would be set to **true**. The configuration above should be enough to remotely authenticate users who are within one or more of the groups specified. To finalize the superuser configuration, you must also set the following F5OS command to **true** to enable bash shell access for users assigned to the superuser group. 
+
+.. code-block:: bash
+
+
+    r10900-1-gsa(config)# system aaa authentication config superuser-bash-access true
+    r10900-1-gsa(config)# commit
+    Commit complete.
+    r10900-1-gsa(config)#
+
+
+You can view the current state of these parmeters via the following CLI show comands. 
+
+.. code-block:: bash
+
+    appliance-1# show system aaa authentication
+    system aaa authentication state cert-auth disabled
+    system aaa authentication f5-aaa-token:state basic disabled
+    system aaa authentication state superuser-bash-access true
+    system aaa authentication ocsp state override-responder off
+    system aaa authentication ocsp state response-max-age -1
+    system aaa authentication ocsp state response-time-skew 300
+    system aaa authentication ocsp state nonce-request on
+    system aaa authentication ocsp state disabled
+                AUTHORIZED  LAST        TALLY  EXPIRY
+    USERNAME       KEYS        CHANGE      COUNT  DATE    ROLE
+    ----------------------------------------------------------------------
+    admin          -           2022-08-31  0      -1      admin
+    big-ip-15-1-6  -           0           0      1       tenant-console
+    big-ip-15-1-8  -           0           0      1       tenant-console
+    root           -           2022-08-31  0      -1      root
+
+                        REMOTE
+    ROLENAME        GID   GID     USERS
+    -------------------------------------
+    admin           9000  -       -
+    operator        9001  -       -
+    resource-admin  9003  -       -
+    tenant-console  9100  -       -
+    superuser       9004  -       -
+
+    Superuser Role via WebUI
+    --------------------------------
+
+
+Superuser Role via WebUI using Named Groups on LDAP/Active Directory
+---------------------------------------------------------------------
+
+
+Enable Superuser Bash Access
+Go to Authentication Settings screen. 
+Edit the Superuser Bash Access dropdown by selecting 'Enabled' option. 
+Click on Save.
+
+
+Superuser Role via API using Named Groups on LDAP/Active Directory
+------------------------------------------------------------------
 
 Session Timeouts and Token Lifetime
 ===================================

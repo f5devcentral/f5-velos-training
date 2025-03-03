@@ -687,6 +687,7 @@ In the body of the API call enter the tenant details.
               "name": "{{New_Tenant1_Name}}",
               "config": {
                   "image": "{{Tenant_Image}}",
+                  "type": "BIG-IP",
                   "nodes": [
                       1
                   ],
