@@ -64,7 +64,7 @@ After completing the upload the image will go to the **Verifying** stage on the 
   :align: center
   :scale: 70%
 
-After verifcation it will go to the **Ready** stage on the active controller. It will then begin extracting the ISO into the OS and service images. It will also begin replicating the image to the standby controller.
+After verification it will go to the **Ready** stage on the active controller. It will then begin extracting the ISO into the OS and service images. It will also begin replicating the image to the standby controller.
 
 .. image:: images/velos_software_upgrades/ready.png
   :align: center
@@ -98,7 +98,7 @@ The **file import** utility in the CLI relies on either a remote HTTPS, SCP, or 
     1    |Import file|HTTPS   |images/staging/F5OS-C-1.2.1-10781.CONTROLLER.iso            |10.255.0.142        |/upload/F5OS-C-1.2.1-10781.CONTROLLER.iso                   |In Progress (5.0%)|Thu Sep 16 17:11:51 2021
     2    |Import file|HTTPS   |images/import/iso/F5OS-C-1.2.1-10781.CONTROLLER.iso         |10.255.0.142        |uploads/F5OS-C-1.2.1-10781.CONTROLLER.iso                   |File Not Found, HTTP Error 404|Thu Sep 16 16:18:27 2021
 
-You can alternatively copy the controller and partition images into the floating IP address of the system controllers. You would use the **root** account and the target directory should be **/var/import/staging/**.
+You can alternatively copy the controller and partition images into the floating IP address of the system controllers. You would use the **root** account, and the target directory should be **/var/import/staging/**.
 
 .. code-block:: bash
 
@@ -343,13 +343,13 @@ In the **Headers** section ensure you add the **file-upload-id** header, with th
 Upgrading the System Controllers via webUI
 ------------------------------------------
 
-Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support, traffic disruption should be minimal during the upgrade process of the system controllers as the tenants will still be runnning.
+Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support, traffic disruption should be minimal during the upgrade process of the system controllers as the tenants will still be running.
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
   :scale: 70%
 
-You'll be able to momitor the upgrade status by going to the **System Settings -> Controller Management** page. The upgrade will start with the backup controller and it will move to **In Progress** status while the active controller will show **Pending** status.
+You'll be able to monitor the upgrade status by going to the **System Settings -> Controller Management** page. The upgrade will start with the backup controller, and it will move to **In Progress** status while the active controller will show **Pending** status.
 
 .. image:: images/velos_software_upgrades/pending.png
   :align: center
@@ -361,7 +361,7 @@ You may or may not see the status change to **In-Progress-Firmware** if a firmwa
   :align: center
   :scale: 70%
 
-When the standby controller is finished upgrading it will intiate a failover and become active. Your session to the WebUI will be disconnected, and you'll need to re-connect. The other controller will now start its upgrade process and will show **In Progress** while the other controller will now show **Success**.
+When the standby controller is finished upgrading it will initiate a failover and become active. Your session to the WebUI will be disconnected, and you'll need to re-connect. The other controller will now start its upgrade process and will show **In Progress** while the other controller will now show **Success**.
 
 .. image:: images/velos_software_upgrades/success.png
   :align: center
@@ -919,7 +919,7 @@ If the set-version is successful, you will see a notification like the message b
         }
     }
 
-To monitor the partition upgrade status issue the follwoing API call:
+To monitor the partition upgrade status, issue the following API call:
 
 .. code-block:: bash
 
