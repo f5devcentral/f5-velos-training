@@ -343,26 +343,31 @@ In the **Headers** section ensure you add the **file-upload-id** header, with th
 Upgrading the System Controllers via webUI
 ------------------------------------------
 
-Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support traffic disruption should be minimal during the upgrade process of the system controllers.
+Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support, traffic disruption should be minimal during the upgrade process of the system controllers as the tenants will still be runnning.
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
   :scale: 70%
 
+You'll be able to momitor the upgrade status by going to the **System Settings -> Controller Management** page. The upgrade will start with the backup controller and it will move to **In Progress** status while the active controller will show **Pending** status.
+
 .. image:: images/velos_software_upgrades/pending.png
   :align: center
   :scale: 70%
+
+You may or may not see the status change to **In-Progress-Firmware** if a firmware upgrade is required. Not all upgrades require a firmware upgrade.
 
 .. image:: images/velos_software_upgrades/in-progress-firmware.png
   :align: center
   :scale: 70%
 
-Controller failover.
+When the standby controller is finished upgrading it will intiate a failover and become active. Your session to the WebUI will be disconnected, and you'll need to re-connect. The other controller will now start its upgrade process and will show **In Progress** while the other controller will now shouw **Success**.
 
 .. image:: images/velos_software_upgrades/success.png
   :align: center
   :scale: 70%
 
+Again, you may or may not see a firmware upgrade, but when complete both controllers should show **Success**.
 
 .. image:: images/velos_software_upgrades/success2.png
   :align: center
