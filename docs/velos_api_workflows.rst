@@ -31,7 +31,7 @@ Initial Setup of System Controllers
 
 `Configure Primary-Key via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#setting-the-primary-key-via-api>`_
 
-`Configure System Settings From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-from-the-api>`_
+`Configure System Settings From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-dns-ntp-logging-from-the-api>`_
 
 `Configure System Settings DNS From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-dns-from-the-api>`_
 
@@ -90,7 +90,7 @@ Securing / Hardening F5OS on VELOS
 
 `Resource-Admin & Guest User Role via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#resource-admin-guest-user-role-via-api>`_
 
-`RSuperuser Role via API using Named Groups on LDAP/Active Directory <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#superuser-role-via-api-using-named-groups-on-ldap-active-directory>`_
+`Superuser Role via API using Named Groups on LDAP/Active Directory <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#superuser-role-via-api-using-named-groups-on-ldap-active-directory>`_
 
 `Configuring SSH and CLI Timeouts & Deny Root SSH Settings via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-ssh-and-cli-timeouts-deny-root-ssh-settings-via-api>`_
 
@@ -102,9 +102,9 @@ Securing / Hardening F5OS on VELOS
 
 `Configuring Login Banner / MoTD via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-login-banner-motd-via-api>`_
 
-`Enabling NTP Authentication via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#enabling-ntp-authentication-via-api>`_
+`Enabling NTP Authentication via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-ntp-time-zone-from-the-api>`_
 
-`RConfiguring Management Ciphers via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-management-ciphers-via-api>`_
+`Configuring Management Ciphers via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-management-ciphers-via-api>`_
 
 `Configuring Client Certificate Authentication via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-client-certificate-authentication-via-api>`_
 
@@ -144,17 +144,19 @@ F5OS-C Backup and Restore
 
 `Remove Partitions and Reset Controller via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#remove-partitions-and-reset-controller-via-api>`_
 
-`Importing System Controller Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-system-controller-backups-via-api>`_
+`Importing System Controller Backups from a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-system-controller-backups-from-a-remote-server-via-api>`_
+
+`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
 
 `Restoring the System Controller from a Database Backup via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-the-system-controller-from-a-database-backup-via-api>`_
 
-`Importing Archived Chassis Partition Configs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-via-api>`_
+`Importing Archived Chassis Partition Configs form a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-form-a-remote-server-via-api>`_
+
+`Uploading Archived Chassis Partition Configs form a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-archived-chassis-partition-configs-form-a-client-machine-via-api>`_
 
 `Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
 
 `Restoring Chassis Partitions from Database Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-chassis-partitions-from-database-backups-via-api>`_
-
-`Importing Archived Chassis Partition Configs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-via-api>`_
 
 
 Diagnostics
