@@ -70,10 +70,6 @@ You'll then see the status change on both the active and stanby controllers.
   :align: center
   :scale: 70%
 
-.. image:: images/velos_software_upgrades/ready.png
-  :align: center
-  :scale: 70%
-
 .. image:: images/velos_software_upgrades/ready-verify.png
   :align: center
   :scale: 70%
