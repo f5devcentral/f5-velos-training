@@ -64,21 +64,23 @@ After completing the upload the image will go to the **Verifying** stage on the 
   :align: center
   :scale: 70%
 
-After verification it will go to the **Ready** stage on the active controller. It will then begin extracting the ISO into the OS and service images. It will also begin replicating the image to the standby controller.
+You'll then see the status change on both the active and stanby controllers.
+
+.. image:: images/velos_software_upgrades/verify-verify.png
+  :align: center
+  :scale: 70%
 
 .. image:: images/velos_software_upgrades/ready.png
   :align: center
   :scale: 70%
 
-
-.. image:: images/velos_software_upgrades/verifying-standby.png
+.. image:: images/velos_software_upgrades/ready-verify.png
   :align: center
   :scale: 70%
 
-
 Once the image shows ready on both controllers you are then ready to upgrade the controllers.
 
-.. image:: images/velos_software_upgrades/verifying-standby.png
+.. image:: images/velos_software_upgrades/ready-ready.png
   :align: center
   :scale: 70%
 
