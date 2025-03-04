@@ -5,9 +5,9 @@ Software Upgrades
 F5OS-C System Controller Upgrades
 =================================
 
-The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
+The system controllers are fully redundant and F5OS-C v1.2.x versions of F5OS-C introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
 
-This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and failover all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an active state, and the remaining controller will be upgraded.
+For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an active state, and the remaining controller will be upgraded.
 
 When upgrading the system controllers, you will have a choice of upgrading either a bundled release, meaning **OS** and **Services** are **bundled** together in an ISO image, or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled/ISO option for upgrades currently. In the future, unbundled options may be utilized for some upgrades.
 
@@ -51,6 +51,36 @@ Alternatively, you may also upload images to the controller through the **System
   :scale: 70%
 
 After the upload completes, it will take some time for it to be replicated to the standby system controller. At that point it should show up in the CLI and webUI. If you don’t see it immediately, be patient and wait a few minutes for it to show up, as it will not appear until the internal replication is completed.
+
+You can monitor the status of an image upload in the WebUI as seen below.
+
+.. image:: images/velos_software_upgrades/upgrade-status.png
+  :align: center
+  :scale: 70%
+
+After completing the upload the image will go to the **Verifying** stage on the active controller.
+
+.. image:: images/velos_software_upgrades/verifying.png
+  :align: center
+  :scale: 70%
+
+After verifcation it will go to the **Ready** stage on the active controller. It will then begin extracting the ISO into the OS and service images. It will also begin replicating the image to the standby controller.
+
+.. image:: images/velos_software_upgrades/ready.png
+  :align: center
+  :scale: 70%
+
+
+.. image:: images/velos_software_upgrades/verifying-standby.png
+  :align: center
+  :scale: 70%
+
+
+Once the image shows ready on both controllers you are then ready to upgrade the controllers.
+
+.. image:: images/velos_software_upgrades/verifying-standby.png
+  :align: center
+  :scale: 70%
 
 Uploading Controller and Partition Images via the CLI
 -----------------------------------------------------
@@ -319,6 +349,10 @@ Once the new images are loaded, you can perform the upgrade from the **System Se
   :align: center
   :scale: 70%
 
+.. image:: images/velos_software_upgrades/pending.png
+  :align: center
+  :scale: 70%
+
 
 Upgrading the System Controllers via CLI
 ----------------------------------------
@@ -327,165 +361,198 @@ In the system controller CLI you can use the **show image** command to see the c
 
 .. code-block:: bash
 
-    syscon-1-active# show image
-    VERSION OS                                   IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   1           ready               false  
-    1.2.0-10357  1           ready   2021-08-21  false  
-    1.2.1-10692  1           ready   2021-08-30  false  
-    1.2.1-10781  1           ready   2021-09-01  true   
+    velos-1-gsa-1-active# show image 
+    VERSION OS                                             IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  
+    --------------------------------------------------------------------
+    1.8.0-17531  1           ready   2024-10-01  830.34MB  false  -     
+    1.8.0-18408  1           ready   2024-10-18  830.38MB  false  -     
+    1.8.0-19782  1           ready   2024-11-22  830.34MB  true   LTS   
 
-    VERSION                                             
-    SERVICE                                      IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.0-6101   1           ready   2021-05-09  false  
-    1.1.2-6101   1           ready   2021-05-09  false  
-    1.2.0-10357  1           ready   2021-08-21  false  
-    1.2.1-10692  1           ready   2021-08-30  false  
-    1.2.1-10781  1           ready   2021-09-01  true   
+    VERSION                                                           
+    SERVICE                                              IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.6.0-18695  1           ready   2023-10-08  3.36GB  false  LTS   
+    1.8.0-17531  1           ready   2024-10-01  3.63GB  false  -     
+    1.8.0-18408  1           ready   2024-10-18  3.69GB  false  -     
+    1.8.0-19782  1           ready   2024-11-22  3.69GB  true   LTS   
 
-    VERSION ISO                                  IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   1           ready   2021-05-09  false  
-    1.2.0-10357  1           ready   2021-08-21  false  
-    1.2.1-10692  1           ready   2021-08-30  false  
-    1.2.1-10781  1           ready   2021-09-01  false  
+    VERSION ISO                                          IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.8.0-17531  1           ready   2024-10-01  5.05GB  false  -     
+    1.8.0-18408  1           ready   2024-10-18  5.11GB  false  -     
+    1.8.0-19782  1           ready   2024-11-22  5.11GB  false  LTS   
 
-    VERSION OS                                   IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   2           ready   2021-05-09  false  
-    1.2.0-10357  2           ready   2021-08-21  false  
-    1.2.1-10692  2           ready   2021-08-30  false  
-    1.2.1-10781  2           ready   2021-09-01  true   
+    VERSION OS                                             IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  
+    --------------------------------------------------------------------
+    1.8.0-17531  2           ready   2024-10-01  830.34MB  false  -     
+    1.8.0-18408  2           ready   2024-10-18  830.38MB  false  -     
+    1.8.0-19782  2           ready   2024-11-22  830.34MB  true   LTS   
 
-    VERSION                                             
-    SERVICE                                      IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.0-6101   2           ready   2021-05-09  false  
-    1.1.2-6101   2           ready   2021-05-09  false  
-    1.2.0-10357  2           ready   2021-08-21  false  
-    1.2.1-10692  2           ready   2021-08-30  false  
-    1.2.1-10781  2           ready   2021-09-01  true   
+    VERSION                                                           
+    SERVICE                                              IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.6.0-18695  2           ready   2023-10-08  3.36GB  false  LTS   
+    1.8.0-17531  2           ready   2024-10-01  3.63GB  false  -     
+    1.8.0-18408  2           ready   2024-10-18  3.69GB  false  -     
+    1.8.0-19782  2           ready   2024-11-22  3.69GB  true   LTS   
 
-    VERSION ISO                                  IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   2           ready   2021-05-09  false  
-    1.2.0-10357  2           ready   2021-08-21  false  
-    1.2.1-10692  2           ready   2021-08-30  false  
-    1.2.1-10781  2           ready   2021-09-01  false  
+    VERSION ISO                                          IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.8.0-17531  2           ready   2024-10-01  5.05GB  false  -     
+    1.8.0-18408  2           ready   2024-10-18  5.11GB  false  -     
+    1.8.0-19782  2           ready   2024-11-22  5.11GB  false  LTS   
 
-    VERSION OS                                   IN               
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME  ID  
-    --------------------------------------------------------------
-    1.2.0-10357  1           ready   2021-08-21  false            
-    1.2.1-10692  1           ready   2021-08-30  false            
+    VERSION OS                                             IN                     
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  NAME  ID  
+    ------------------------------------------------------------------------------
+    1.6.0-12952  1           ready   2023-05-31  788.75MB  false  -               
+    1.8.0-17531  1           ready   2024-10-01  832.77MB  false  -               
+    1.8.0-18408  1           ready   2024-10-18  832.80MB  false  -               
+    1.8.0-19782  1           ready   2024-11-22  832.83MB  false  LTS             
 
-    VERSION                                                          
-    SERVICE                                      IN                  
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME     ID  
-    -----------------------------------------------------------------
-    1.2.0-10357  1           ready   2021-08-21  false               
-    1.2.1-10692  1           ready   2021-08-30  true   default  1   
+    VERSION                                                                        
+    SERVICE                                              IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  1           ready   2023-05-31  1.76GB  true   -     default  1   
+    1.8.0-17531  1           ready   2024-10-01  1.61GB  false  -                  
+    1.8.0-18408  1           ready   2024-10-18  1.67GB  false  -                  
+    1.8.0-19782  1           ready   2024-11-22  1.67GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    VERSION ISO                                  IN                         
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
-    ------------------------------------------------------------------------
-    1.2.0-10357  1           ready   2021-08-21  false                      
-    1.2.1-10692  1           ready   2021-08-30  true   Production    2   
-                                                        default         1   
-                                                        smallpartition  3   
+    VERSION ISO                                          IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  1           ready   2023-05-31  3.14GB  true   -     default  1   
+    1.8.0-17531  1           ready   2024-10-01  3.04GB  false  -                  
+    1.8.0-18408  1           ready   2024-10-18  3.10GB  false  -                  
+    1.8.0-19782  1           ready   2024-11-22  3.10GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    VERSION OS                                   IN               
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME  ID  
-    --------------------------------------------------------------
-    1.2.0-10357  2           ready   2021-08-21  false            
-    1.2.1-10692  2           ready   2021-08-30  false            
+    VERSION OS                                             IN                     
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  NAME  ID  
+    ------------------------------------------------------------------------------
+    1.6.0-12952  2           ready   2023-05-31  788.75MB  false  -               
+    1.8.0-17531  2           ready   2024-10-01  832.77MB  false  -               
+    1.8.0-18408  2           ready   2024-10-18  832.80MB  false  -               
+    1.8.0-19782  2           ready   2024-11-22  832.83MB  false  LTS             
 
-    VERSION                                                          
-    SERVICE                                      IN                  
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME     ID  
-    -----------------------------------------------------------------
-    1.2.0-10357  2           ready   2021-08-21  false               
-    1.2.1-10692  2           ready   2021-08-30  true   default  1   
+    VERSION                                                                        
+    SERVICE                                              IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  2           ready   2023-05-31  1.76GB  true   -     default  1   
+    1.8.0-17531  2           ready   2024-10-01  1.61GB  false  -                  
+    1.8.0-18408  2           ready   2024-10-18  1.67GB  false  -                  
+    1.8.0-19782  2           ready   2024-11-22  1.67GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    VERSION ISO                                  IN                         
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
-    ------------------------------------------------------------------------
-    1.2.0-10357  2           ready   2021-08-21  false                      
-    1.2.1-10692  2           ready   2021-08-30  true   Production    2   
-                                                        default         1   
-                                                        smallpartition  3   
+    VERSION ISO                                          IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  2           ready   2023-05-31  3.14GB  true   -     default  1   
+    1.8.0-17531  2           ready   2024-10-01  3.04GB  false  -                  
+    1.8.0-18408  2           ready   2024-10-18  3.10GB  false  -                  
+    1.8.0-19782  2           ready   2024-11-22  3.10GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    syscon-1-active# 
+    velos-1-gsa-1-active#
 
 The command **show running-config image** will show the current configuration for software images. You can enter config mode and change the configuration using the **system image set-version** command and then commit to initiate an upgrade.
 
 .. code-block:: bash
 
-    syscon-1-active# show running-config image 
-    image controller config os os 1.1.2-6101
+    velos-1-gsa-1-active# show running-config image 
+    image controller config os os 1.8.0-17531
     !
-    image controller config os os 1.2.0-10357
+    image controller config os os 1.8.0-18408
     !
-    image controller config os os 1.2.1-10692
+    image controller config os os 1.8.0-19782
     !
-    image controller config os os 1.2.1-10781
+    image controller config services service 1.6.0-18695
     !
-    image controller config services service 1.1.0-6101
+    image controller config services service 1.8.0-17531
     !
-    image controller config services service 1.1.2-6101
+    image controller config services service 1.8.0-18408
     !
-    image controller config services service 1.2.0-10357
+    image controller config services service 1.8.0-19782
     !
-    image controller config services service 1.2.1-10692
+    image controller config iso iso 1.8.0-17531
+    service 1.8.0-17531
+    os      1.8.0-17531
     !
-    image controller config services service 1.2.1-10781
+    image controller config iso iso 1.8.0-18408
+    service 1.8.0-18408
+    os      1.8.0-18408
     !
-    image controller config iso iso 1.1.2-6101
-    service 1.1.2-6101
-    os      1.1.2-6101
+    image controller config iso iso 1.8.0-19782
+    service 1.8.0-19782
+    os      1.8.0-19782
     !
-    image controller config iso iso 1.2.0-10357
-    service 1.2.0-10357
-    os      1.2.0-10357
+    image partition config os os 1.6.0-12952
     !
-    image controller config iso iso 1.2.1-10692
-    service 1.2.1-10692
-    os      1.2.1-10692
+    image partition config os os 1.8.0-17531
     !
-    image controller config iso iso 1.2.1-10781
-    service 1.2.1-10781
-    os      1.2.1-10781
+    image partition config os os 1.8.0-18408
     !
-    image partition config os os 1.2.0-10357
+    image partition config os os 1.8.0-19782
     !
-    image partition config os os 1.2.1-10692
+    image partition config services service 1.6.0-12952
     !
-    image partition config services service 1.2.0-10357
+    image partition config services service 1.8.0-17531
     !
-    image partition config services service 1.2.1-10692
+    image partition config services service 1.8.0-18408
     !
-    image partition config iso iso 1.2.0-10357
-    service 1.2.0-10357
-    os      1.2.0-10357
+    image partition config services service 1.8.0-19782
     !
-    image partition config iso iso 1.2.1-10692
-    service 1.2.1-10692
-    os      1.2.1-10692
+    image partition config iso iso 1.6.0-12952
+    service 1.6.0-12952
+    os      1.6.0-12952
     !
-    syscon-1-active# 
+    image partition config iso iso 1.8.0-17531
+    service 1.8.0-17531
+    os      1.8.0-17531
+    !
+    image partition config iso iso 1.8.0-18408
+    service 1.8.0-18408
+    os      1.8.0-18408
+    !
+    image partition config iso iso 1.8.0-19782
+    service 1.8.0-19782
+    os      1.8.0-19782
+    !
+    velos-1-gsa-1-active#
+
+Before upgrading you need to run the **system image check-version** command on the ISO you want to upgrade to. This will ensure the image is valid and that the system is able to upgrade to that version. IT will also provide an estimate of the upgrade time, along with the number of failovers required to complete the upgrade.
 
 .. code-block:: bash
 
-    syscon-1-active(config)# system image set-version iso-version 1.2.1-10781 
-    response Controller iso version has been set
-    syscon-1-active(config)# 
+    velos-1-gsa-1-active(config)# system image check-version iso-version 1.8.1-24468 
+    response Compatibility verification succeeded.
+    Estimated time: 66 minutes
+    Failover(s): 2
+    velos-1-gsa-1-active(config)#
+
+If the check-version succeeds, you may then run the **system image set-version** command to initiate the upgrade.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system image set-version iso-version 1.8.1-24468 proceed 
+    Value for 'proceed' [no,yes]: yes
+    response Controller ISO version has been set.
+    Estimated time: 66 minutes
+    Failover(s): 2
+    velos-1-gsa-1-active(config)#
 
 
 An upgrade of the system controllers should automatically start after the above command is entered. You can follow the upgrade progress by issuing the command **show system image**:
