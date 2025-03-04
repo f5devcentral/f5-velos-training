@@ -791,7 +791,7 @@ In the system controller CLI you can use the **show image** command to see the c
 
 The command **show running-config image** will show the current configuration for software images. Before upgrading a chassis partition you must first run the **check-version** utility to ensure the system can be upgraded to the new releases, and it will also provide an estimate of how long the upgrade will take.
 
-You can enter **config** mode and chek the version using the **partitions partition {{partition-name}} check-version iso-version 1.8.1-24468** command. As seen below, to upgrade the green partition to version 1.8.1-24468 will take 26 minutes, and there will be 2 reboots for each blade due to a firmware upgrade. Not all releases will require a firmware upgrade.
+You can enter **config** mode and check the version using the **partitions partition {{partition-name}} check-version iso-version {{iso-version}}** command. As seen below, an upgrade on the green partition to version 1.8.1-24468 will take 26 minutes, and there will be 2 reboots for each blade (due to an added firmware upgrade). Not all releases will require a firmware upgrade.
 
 .. code-block:: bash
 
@@ -802,7 +802,7 @@ You can enter **config** mode and chek the version using the **partitions partit
 
     velos-1-gsa-2-active(config)# 
 
-Once the check version has been done you can then run the **set-version** which will initiate the upgrade.
+Once the check version has been done, you can then run the **set-version** which will initiate the upgrade.
 
 .. code-block:: bash
 
@@ -815,7 +815,7 @@ Once the check version has been done you can then run the **set-version** which 
     result Version update successful.
     velos-1-gsa-2-active(config)#
 
-You can then monitor the partition install status using the **show partitions install** command. Note, how the green partition shows **in-progress*.
+You can then monitor the partition install status using the **show partitions install** command. Note, how the green partition shows **in-progress**.
 
 .. code-block:: bash
 
@@ -832,7 +832,7 @@ You can then monitor the partition install status using the **show partitions in
 
     velos-1-gsa-2-active#
 
-It will then go throuygh various statesm as the upgrade procedes.
+It will then go through various states as the upgrade progresses.
 
 .. code-block:: bash
 
@@ -849,7 +849,7 @@ It will then go throuygh various statesm as the upgrade procedes.
 
     velos-1-gsa-2-active#  
 
-When completed the intall status will show **success**.
+When completed, the install status will show **success**.
 
 .. code-block:: bash
 
@@ -883,7 +883,7 @@ In the body of the API call, enter the ISO image version you want to upgrade to.
         "f5-system-partition:iso-version": "{{velos_partition_iso_image}}"
     }
 
-If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call. Note, it will estimate the time for the upgrade to complete, as well as list the number of reboots required.
+If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call. Note, that it will provide an estimate of the time for the upgrade to complete, as well as list the number of reboots required.
 
 .. code-block:: json
 
@@ -893,7 +893,7 @@ If the compatibility check passes then you will get a message like the one below
         }
     }
 
-Once the check version is successful, you may then initiate the upgrade using the set-version option. This is the Set Version API call that will initiate the upgrade:
+Once the check version is successful, you may then initiate the upgrade using the set-version option. This is the set-version API call that will initiate the upgrade:
 
 .. code-block:: bash
 
@@ -1104,13 +1104,18 @@ You can view the current tenant images and their status in the chassis partition
 
 .. code-block:: bash
 
-    Production-1# show images
-                                                                            IN                 
-    NAME                                                                       USE    STATUS      
-    ----------------------------------------------------------------------------------------------
-    BIGIP-14.1.3-0.0.7.ALL-VELOS.qcow2.zip.bundle                              false  replicated  
-    BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                            true   replicated  
-    BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle  false  replicated
+    green-partition-chassis1-gsa-1# show images
+                                                    IN                                     
+    NAME                                             USE    TYPE                STATUS      
+    ----------------------------------------------------------------------------------------
+    BIG-IP-Next-20.3.0-2.716.2+0.0.50                false  helm-image          replicated  
+    BIG-IP-Next-20.3.0-2.716.2+0.0.50.tar.bundle     false  helm-bundle         replicated  
+    BIG-IP-Next-20.3.0-2.716.2+0.0.50.yaml           false  helm-specification  replicated  
+    BIGIP-15.1.10.5-0.0.10.T4-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
+    BIGIP-15.1.10.6-0.0.6.ALL-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
+    BIGIP-17.1.1.4-0.0.9.ALL-F5OS.qcow2.zip.bundle   true   vm-image            replicated  
+
+    green-partition-chassis1-gsa-1# 
 
 
 
@@ -1122,6 +1127,8 @@ To copy a tenant image into the chassis partition over the API, use the followin
 .. code-block:: bash
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+
+In the body of the API request, enter the information as seen below.
 
 .. code-block:: json
 
