@@ -2,7 +2,7 @@
 Multitenancy
 ============
 
-In previous generation chassis and appliances, F5 supported **vCMP** as a means of providing multitenancy and virtualization. vCMP allowed for configuration of **Guests**; which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience; however it is not based on vCMP. Instead, VELOS allows for **Tenants** to be created, which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
+In previous generation chassis and appliances, F5 supported **vCMP** as a means of providing multitenancy and virtualization. vCMP allowed for configuration of **Guests**, which were independent virtualized instances of BIG-IP. VELOS provides a similar type of virtualization experience; however, it is not based on vCMP. Instead, VELOS allows for **Tenants** to be created, which are virtualized instances of BIG-IP on top of the containerized F5OS layer. 
 
 Unlike VIPRION, where vCMP is an option that can added to the chassis, VELOS is multitenant by default. There is no option for a “bare metal” configuration; tenancy is baked into the architecture. You may configure one large tenant to emulate a “bare-metal” BIG-IP configuration if required. For customers that run bare-metal in VIPRION today, the L4-7 configuration and inherited VLANs will be migrated into a VELOS tenant, and the lower-level networking (interfaces, Link Aggregation Groups, and VLANs) will be configured in the F5OS-C platform layer. Below is a depiction of BIG-IP tenants running on top of the F5OS layer. 
 
@@ -10,7 +10,7 @@ Unlike VIPRION, where vCMP is an option that can added to the chassis, VELOS is 
   :align: center
   :scale: 80%
 
-Each tenant will run as a Virtual Machine via a technology called Kubevirt, which allows Virtual Machines to run on top of a containerized architecture. The tenant itself will run TMOS, and it will be managed like a vCMP guest is managed. Note, the tenant is not a Virtual Edition (VE), it is a highly optimized virtual machine that is fully integrated with the underlying hardware and supports all the traditional hardware offload capabilities like SSL/TLS offload, FASTL4 forwarding, DDoS mitigation, and much more. In the future, when BIG-IP Next tenants are supported in VELOS, those tenants will run in their native containerized mode, and not run as a Virtual Machine.
+Each tenant will run as a Virtual Machine via a technology called Kubevirt, which allows Virtual Machines to run on top of a containerized architecture. The tenant itself will run TMOS, and it will be managed like a vCMP guest is managed. Note, the tenant is not a Virtual Edition (VE), it is a highly optimized virtual machine that is fully integrated with the underlying hardware and supports all the traditional hardware offload capabilities like SSL/TLS offload, compression offload, FASTL4 forwarding, DDoS mitigation, and much more. 
 
 Creating a VELOS tenant is nearly identical to creating a vCMP guest on VIPRION, with a few exceptions. When creating a VELOS tenant, you’ll provide a name, a TMOS image for the tenant to run, which slots (blades) the tenant will be configured to run on, out-of-band IP addressing/mask and gateway, and which VLANs the tenant should inherit. Just like a vCMP guest, the VLANs are configured at provision time and not within the tenant itself. The tenant will inherit VLANs that have been configured at the F5OS platform layer and have been added to the tenant configuration by the administrator during provisioning.
 
@@ -19,6 +19,8 @@ Creating a VELOS tenant is nearly identical to creating a vCMP guest on VIPRION,
   :scale: 50%
 
 For resource provisioning, you can use **Recommended** settings or **Advanced** settings. Recommended, will allocate the minimum amount of memory in proportion the number of vCPUs assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant and over-allocate if desired, without having to allocate additional vCPUs. This is something not possible in VIPRION, but now you can over-provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
+
+.. Note:: The BX110 blade has more CPUs than the table below outlines, but they are dedicated for F5OS and not available for tenant use.
 
 +---------------------+--------------------+--------------------------+-------------------+-----------------+
 | **Tenant Size**     | **Physical Cores** | **Logical Cores (vCPU)** | **Min Bytes RAM** | **RAM/vCPU**    |
@@ -58,7 +60,82 @@ Each BX110 blade has 28 vCPUs, however 6 of those vCPUs are dedicated to the F5O
   :align: center
   :scale: 70%
 
-Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is because a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior, only a very lightly loaded LTM/DNS-only type tenant should be considered for this option. As always proper sizing should be done to ensure the tenant has enough resources. 
+Single vCPU (Skinny) tenants are supported, but that option is hidden under **Advanced** mode. This would allow for 22 single vCPU tenants per BX110 blade. While single vCPUs guests are supported, they are not recommended for most environments. This is because a single vCPU tenant is running on a single hyperthread, and performance of a single thread can be influenced by other services running on the other hyperthread of a CPU. Since this can lead to unpredictable behavior, only a very lightly loaded LTM/DNS-only type tenant should be considered for this option. This is best suited for a non-production environment. As always proper sizing should be done to ensure the tenant has enough resources. 
+
+
++--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
+| **VELOS Blade Type**     | **Memory per Blade** | **Memory Use by F5OS** | **Memory Available to Tenants** | **Minimum RAM used (Max vCPU)**   | **Extra RAM Available for Tenants** | **Max vCPUs** |
++==========================+======================+========================+=================================+===================================+=====================================+===============+
+| BX110                    | 128GB RAM            |  33GB                  |  95GB                           |  79GB                             |  15GB                               |   22          |
++--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
+| BX520                    | 512GB RAM            |  34GB                  |  478GB                          |  345GB                            |  133GB                              |   96          |
++--------------------------+----------------------+------------------------+---------------------------------+-----------------------------------+-------------------------------------+---------------+
+
+For the BX520 the default memory allocations for Recommended mode are shown below.
+
+.. Note:: The BX520 blade has more CPUs than the table below outlines, but they are dedicated for F5OS and not available for tenant use.
+
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| **Tenant Size**     | **Physical Cores** | **Logical Cores (vCPU)** | **Min Bytes RAM** | **RAM/vCPU**    |
++=====================+====================+==========================+===================+=================+
+| BX520 4vCPU Tenant  | 2                  |  4                       | 14,848,000,000    | 3,712,000,000   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 8vCPU Tenant  | 4                  |  8                       | 29,184,000,000    | 3,648,000,000   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 12vCPU Tenant | 6                  |  12                      | 43,520,000,000    | 3,626,666,667   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 16vCPU Tenant | 8                  |  16                      | 57,856,000,000    | 3,616,000,000   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 20vCPU Tenant | 10                 |  20                      | 72,192,000,000    | 3,609,600,000   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 24vCPU Tenant | 12                 |  24                      | 86,528,000,000    | 3,603,692,308   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 28vCPU Tenant | 14                 |  28                      | 100,864,000,000   | 3,601,066,667   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 32vCPU Tenant | 16                 |  32                      | 115,200,000,000   | 3,599,058,824   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 36vCPU Tenant | 18                 |  36                      | 129,546,000,000   | 3,597,473,684   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 40vCPU Tenant | 20                 |  40                      | 143,872,000,000   | 3,596,190,476   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 44vCPU Tenant | 22                 |  44                      | 158,208,000,000   | 3,595,636,364   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 48vCPU Tenant | 24                 |  48                      | 172,544,000,000   | 3,594,666,667   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 52vCPU Tenant | 26                 |  52                      | 186,880,000,000   | 3,593,846,154   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 56vCPU Tenant | 28                 |  56                      | 201,216,000,000   | 3,593,142,857   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 60vCPU Tenant | 30                 |  60                      | 215,552,000,000   | 3,592,533,333   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 64vCPU Tenant | 32                 |  64                      | 229,888,000,000   | 3,592,000,000   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 68vCPU Tenant | 34                 |  68                      | 244,224,000,000   | 3,591,529,412   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 72vCPU Tenant | 36                 |  72                      | 258,560,000,000   | 3,591,111,111   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 76vCPU Tenant | 38                 |  76                      | 272,896,000,000   | 3,590,736,842   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 80vCPU Tenant | 40                 |  80                      | 287,232,000,000   | 3,590,400,000   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 84vCPU Tenant | 42                 |  84                      | 301,568,000,000   | 3.590,095,238   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 88vCPU Tenant | 44                 |  88                      | 315,904,000,000   | 3,589,818,182   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 92vCPU Tenant | 46                 |  92                      | 330,240,000,000   | 3,589,565,217   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+| BX520 96vCPU Tenant | 48                 |  96                      | 344,576,000,000   | 3,589,333,333   |
++---------------------+--------------------+--------------------------+-------------------+-----------------+
+
+Each BX520 blade has 512GB of memory. The F5OS layer takes about 34GB of RAM leaving ~478GB of RAM for use by tenants. Using the Recommended values per tenant; ~345GB of RAM will be used, leaving ~133GB of additional RAM. You may over-allocate RAM to a tenant until the additional 133GB of RAM is depleted. There is a formula for figuring out the minimum amount of RAM a particular tenant size will receive using the recommended values:
+
+**min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
+
+Each BX520 blade has 112 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. The minimum vCPU size per tenant is 4 vCPU's. Below is a diagram depicting the CPU/vCPUs on a single BX110 blade.
+
+.. image:: images/velos_multitenancy/bx520-tenants.png
+  :align: center
+  :scale: 70%
 
 A VELOS tenant supports 3 states: (**Configured**, **Provisioned**, and **Deployed**):
 

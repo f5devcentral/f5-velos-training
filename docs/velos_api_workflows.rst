@@ -22,7 +22,22 @@ Workflows
 Initial Setup of System Controllers
 -----------------------------------
 
+
+`Configure Internal Network Ranges via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#internal-chassis-ip-ranges-via-api>`_
+
+`IP Address Assignment & Routing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#ip-address-assignment-routing-via-api>`_
+
+`Interface Aggregation for System Controllers via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#interface-aggregation-for-system-controllers-via-api>`_
+
+`Configure Primary-Key via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#setting-the-primary-key-via-api>`_
+
 `Configure System Settings From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-from-the-api>`_
+
+`Configure System Settings DNS From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-dns-from-the-api>`_
+
+`Configure System Settings NTP & Timezone From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-ntp-timezone-from-the-api>`_
+
+`Configure System Settings SYSLOG From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-syslog-from-the-api>`_
 
 `Manual Licensing via API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#manual-licensing-via-api>`_
 
@@ -59,6 +74,43 @@ Tenant Deployments
 `Expanding a Tenant within the Same Blade via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#expanding-a-tenant-within-the-same-blade-via-api>`_
 
 `Expanding a Tenant Across Blades via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#expanding-a-tenant-across-blades-via-api>`_
+
+Securing / Hardening F5OS on VELOS
+----------------------------------
+
+`Adding Allow List Entries via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#adding-allow-list-entries-via-api>`_
+
+`Managing Device Certificates, Keys, CSRs, and CAs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#managing-device-certificates-keys-csrs-and-cas-via-api>`_
+
+`Enabling Appliance Mode via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#enabling-appliance-mode-via-the-api>`_
+
+`Enabling BIG-IP Tenant Appliance Mode via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#enabling-big-ip-tenant-appliance-mode-via-the-api>`_
+
+`Validating Tenant Status via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#validating-tenant-status-via-api>`_
+
+`Resource-Admin & Guest User Role via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#resource-admin-guest-user-role-via-api>`_
+
+`RSuperuser Role via API using Named Groups on LDAP/Active Directory <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#superuser-role-via-api-using-named-groups-on-ldap-active-directory>`_
+
+`Configuring SSH and CLI Timeouts & Deny Root SSH Settings via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-ssh-and-cli-timeouts-deny-root-ssh-settings-via-api>`_
+
+`Token Lifetime via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#token-lifetime-via-api>`_
+
+`Disabling Basic Auth via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#disabling-basic-auth-via-the-api>`_
+
+`Setting Password Policies via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#setting-password-policies-via-api>`_
+
+`Configuring Login Banner / MoTD via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-login-banner-motd-via-api>`_
+
+`Enabling NTP Authentication via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#enabling-ntp-authentication-via-api>`_
+
+`RConfiguring Management Ciphers via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-management-ciphers-via-api>`_
+
+`Configuring Client Certificate Authentication via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#configuring-client-certificate-authentication-via-api>`_
+
+`Proxy Server via API for Licensing and Qkview Uploads to iHealth <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#proxy-server-via-api-for-licensing-and-qkview-uploads-to-ihealth>`_
+
+`Downloading Audit Logs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#downloading-audit-logs-via-api>`_
 
 F5OS-C Software Upgrades
 ------------------------
@@ -98,7 +150,7 @@ F5OS-C Backup and Restore
 
 `Importing Archived Chassis Partition Configs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-via-api>`_
 
-`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`
+`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
 
 `Restoring Chassis Partitions from Database Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-chassis-partitions-from-database-backups-via-api>`_
 
@@ -130,6 +182,10 @@ Health
 
 Monitoring VELOS Health & Alert Status
 ---------------------------------------
+
+`Checking Active Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-active-alerts-via-api>`_
+
+`Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
 
 
 

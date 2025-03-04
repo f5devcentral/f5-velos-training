@@ -5,7 +5,11 @@ Initial Setup of VELOS System Controllers
 System Controller Setup
 =======================
 
-Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. F5OS utilizes **ConfD** for configuration management and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?**, and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
+Connect a console or terminal server to each of the system controllers console ports. Login as admin/admin (you’ll be prompted to change the password) and access the F5OS CLI. Follow the details in the link below to run the setup wizard.
+
+`Run the VELOS Setup Wizard <https://techdocs.f5.com/en-us/hardware/velos-systems-getting-started/gs-system-initial-config.html#velos-setup-wizard-overview>`_
+
+F5OS utilizes **ConfD** for configuration management and will be a familiar navigation experience if you have used it on other products. The CLI supports **<TAB>** command completion and online help via **?**, and is easy to navigate. There are **show** commands to display current configurations and status, and a **config** mode to alter current configuration.
 
 Once logged in, you can display the current running configuration by issuing the command **show running-config**.
 
@@ -53,21 +57,15 @@ If you are logged into the standby system controller, then you will not be able 
   syscon-1-standby# config 
   Aborted: node is in readonly mode
 
------------------------
-Interface Configuration
------------------------
 
-The out-of-band Ethernet interfaces on each system controller can be configured to run independently, or they may be put into a common Link Aggregation Group to provide added redundancy. To alter any configuration, you must enter config mode:
-
-.. code-block:: bash
-
-  syscon-2-active# config
-  Entering configuration mode terminal
-  syscon-2-active(config)#
 
 --------------------------
 Internal Chassis IP Ranges
 --------------------------
+
+
+Internal Chassis IP Ranges via CLI
+----------------------------------
 
 VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/12. This should be sufficient for most production environments. You can verify this with the following command.
 
@@ -86,10 +84,11 @@ This address range never leaves the inside of the chassis and will not interfere
 
 Some examples would be any client trying to access the F5OS-C platform layer (system controller or chassis partition), or tenant out-of-band interfaces to reach its’ CLI, webUI, or API. Other examples would be external services such as SNMP, DNS, NTP, SNMP, Authentication that have addresses that fall within the RFC6598 address space. You may experience connectivity problems with these types of clients/services, if there is any address space overlap. Note, this does not affect the data plane / in-band interfaces, it only affects communication to the out-of-band interfaces. 
 
-If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur before the reboot. Please consult with F5 prior to making any changes to the internal addresses.
+If there is the potential for conflict with external devices that fall within this range that need to communicate with F5OS, then there are options to change the configured **network-range-type** to one of sixteen different blocks within the RFC1918 address space. Changing this will require a complete chassis power-cycle, rebooting is not sufficient, a **commit** must occur before the reboot. Please consult with F5 prior to making any changes to the internal addresses. Not you mut enter config mode to make any configuration changes in the CLI.
 
 .. code-block:: bash
 
+  syscon-2# config
   syscon-2-active(config)# system network config network-range-type RFC <Hit Tab>
   Possible completions:
     RFC1918   VELOS system uses 10.[0-15]/12 as specified by RFC1918
@@ -132,6 +131,63 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
 
 **Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
 
+
+Internal Chassis IP Ranges via API
+----------------------------------
+
+To view the currently configured internal network ranges via API use the following API call.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-network:network
+
+The response will show the current configured network ranges for use internal to the VELOS chassis.
+
+
+.. code-block:: json
+
+
+  {
+      "f5-system-network:network": {
+          "config": {
+              "network-range-type": "RFC6598",
+              "prefix": 0,
+              "chassis-id": 1
+          },
+          "state": {
+              "configured-network-range-type": "RFC6598",
+              "configured-network-prefix": 0,
+              "configured-network-range": "100.64.0.0/12",
+              "configured-chassis-id": 1,
+              "active-network-range-type": "RFC6598",
+              "active-network-prefix": 0,
+              "active-network-range": "100.64.0.0/12",
+              "active-chassis-id": 1
+          }
+      }
+  }
+
+To configure the internal network ranges via CLI use the following API call.
+
+.. code-block:: bash
+
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-network:network
+
+In the body of the API call, add the desired network-range-type as seen below.
+
+
+.. code-block:: json
+
+  {
+      "f5-system-network:network": {
+          "config": {
+              "network-range-type": "RFC6598",
+              "prefix": 0,
+              "chassis-id": 1
+          }
+      }
+  }
+
 -------------------------------
 IP Address Assignment & Routing
 -------------------------------
@@ -142,15 +198,18 @@ Each system controller requires its own unique IP address, and a floating IP add
   :align: center
   :scale: 70%
 
-Once logged in, you will configure the static IP addresses (unless DHCP is preferred).
+IP Address Assignment & Routing via CLI
+---------------------------------------
+
+You likely setup the IP addressing via the setup wizard, but if you need to alter the configuration via the CLI an example is below. Once logged in, you will configure the static IP addresses (unless DHCP is preferred).
 
 .. code-block:: bash
 
-  syscon-2-active(config)# system mgmt-ip config ipv4 controller-1 address 10.255.0.212
-  syscon-2-active(config)# system mgmt-ip config ipv4 controller-2 address 10.255.0.213
-  syscon-2-active(config)# system mgmt-ip config ipv4 floating address 10.255.0.214
+  syscon-2-active(config)# system mgmt-ip config ipv4 controller-1 address 10.10.10.212
+  syscon-2-active(config)# system mgmt-ip config ipv4 controller-2 address 10.10.10.213
+  syscon-2-active(config)# system mgmt-ip config ipv4 floating address 10.10.10.214
   syscon-2-active(config)# system mgmt-ip config ipv4 prefix-length 24
-  syscon-2-active(config)# system mgmt-ip config ipv4 gateway 10.255.0.1
+  syscon-2-active(config)# system mgmt-ip config ipv4 gateway 10.10.10.1
 
 To make these changes active, you must commit the changes. No configuration changes are executed until the commit command is issued. 
 
@@ -158,17 +217,170 @@ To make these changes active, you must commit the changes. No configuration chan
 
   syscon-2-active(config)# commit
 
-Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to monitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in standby state. After logging into the floating IP address, you should see a screen like the one below, and you can verify your management interface settings.
+Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to monitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in standby state. After logging into the floating IP address, you should see a page like the one below. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image2.png
   :align: center
   :scale: 70%
 
+IP Address Assignment & Routing via WebUI
+-----------------------------------------
+
+You may alter the configuration of the system controllers out-of-band interfaces via the **Network Settings > Management Interfaces** page in the WebUI. Here you can enable or disable DHCP, configure IPv4/IPv6 static and floating IP addresses, gateway and prefix as well as link aggregation parameters.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image2.png
+  :align: center
+  :scale: 70%
+
+IP Address Assignment & Routing via API
+-----------------------------------------
+
+You may alter the configuration of the system controllers out-of-band interfaces via the API. To view the current out-of-band interface IP settings enter the following API call:
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
+
+The API response will be similar to the output below:
+
+.. code-block:: json
+
+  {
+      "f5-mgmt-ip:mgmt-ip": {
+          "config": {
+              "dhcp-enabled": false,
+              "ipv4": {
+                  "controller-1": {
+                      "address": "172.22.50.7"
+                  },
+                  "controller-2": {
+                      "address": "172.22.50.8"
+                  },
+                  "floating": {
+                      "address": "172.22.50.9"
+                  },
+                  "prefix-length": 26,
+                  "gateway": "172.22.50.62"
+              },
+              "ipv6": {
+                  "controller-1": {
+                      "address": "::"
+                  },
+                  "controller-2": {
+                      "address": "::"
+                  },
+                  "floating": {
+                      "address": "::"
+                  },
+                  "prefix-length": 0,
+                  "gateway": "::"
+              },
+              "mgmt-vlan": "untagged"
+          },
+          "state": {
+              "fixed-addresses": {
+                  "fixed-address": [
+                      {
+                          "controller": 1,
+                          "ipv4-address": "172.22.50.7",
+                          "ipv4-prefix-length": 26,
+                          "ipv4-gateway": "172.22.50.62",
+                          "ipv6-address": "::",
+                          "ipv6-prefix-length": 0,
+                          "ipv6-gateway": "::",
+                          "mac-address": "00:94:a1:8e:d0:7d"
+                      },
+                      {
+                          "controller": 2,
+                          "ipv4-address": "172.22.50.8",
+                          "ipv4-prefix-length": 26,
+                          "ipv4-gateway": "172.22.50.62",
+                          "ipv6-address": "::",
+                          "ipv6-prefix-length": 0,
+                          "ipv6-gateway": "::",
+                          "mac-address": "00:94:a1:8e:d0:7e"
+                      }
+                  ]
+              },
+              "floating": {
+                  "ipv4-address": "172.22.50.9",
+                  "ipv6-address": "::",
+                  "mac-address": "00:94:a1:8e:d0:7c"
+              },
+              "mgmt-vlan": "untagged"
+          }
+      }
+  }
+
+To configure the out-of-band interface IP settings enter the following API call:
+
+.. Note:: Changing the IP address will disrupt connectivity to the out-of-band ports.
+
+
+.. code-block:: bash
+
+  PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
+
+In the body of the API call enter the following:
+
+.. code-block:: json
+
+  {
+      "f5-mgmt-ip:mgmt-ip": {
+          "config": {
+              "dhcp-enabled": false,
+              "ipv4": {
+                  "controller-1": {
+                      "address": "172.22.50.7"
+                  },
+                  "controller-2": {
+                      "address": "172.22.50.8"
+                  },
+                  "floating": {
+                      "address": "172.22.50.9"
+                  },
+                  "prefix-length": 26,
+                  "gateway": "172.22.50.62"
+              },
+              "ipv6": {
+                  "controller-1": {
+                      "address": "::"
+                  },
+                  "controller-2": {
+                      "address": "::"
+                  },
+                  "floating": {
+                      "address": "::"
+                  },
+                  "prefix-length": 0,
+                  "gateway": "::"
+              },
+              "mgmt-vlan": "untagged"
+          }
+      }
+  }
+
+
+-----------------------
+Interface Configuration
+-----------------------
+
+The out-of-band Ethernet interfaces on each system controller can be configured to run independently, or they may be put into a common Link Aggregation Group to provide added redundancy. To alter any configuration, you must enter config mode:
+
+
+.. code-block:: bash
+
+  syscon-2-active# config
+  Entering configuration mode terminal
+  syscon-2-active(config)#
+
 -------------------------------------------------------
 Interface Aggregation for System Controllers (Optional)
 -------------------------------------------------------
 
-As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to either static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
+As seen in previous diagrams, each system controller has its own independent out-of-band 10Gb ethernet connection. These can run independently of each other and should be connected to the same layer2 VLAN so that the floating IP address can move from primary to standby in the event of a failure. You may optionally configure these two interfaces into a single Link Aggregation Group (LAG) for added resiliency, which is recommended. This would allow direct access to the floating IP address as well as static IP address on the system controllers in the event one link should fail. Below is a depiction of each system controllers out-of-band management interface bonded together in a single LAG:
+
+.. Note:: Although the diagram below depicts the CX410 chassis, the CX1610 chassis operates in the exact same manner.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image3.png
   :align: center
@@ -176,40 +388,469 @@ As seen in previous diagrams, each system controller has its own independent out
 
 To enable this feature, you would need to enable link aggregation on the system controllers via the CLI, webUI or API, and then make changes to your upstream layer2 switching infrastructure to ensure the two ports are put into the same LAG. To configure the management ports of both system controllers to run in a LAG, configure as follows:
 
-On the active controller, create a management LACP interface:
+
+Interface Aggregation for System Controllers via CLI
+-------------------------------------------------------
+
+Beware that changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
+
+Create a management aggregate interface called **mgmt-aggr** and set the **config name** for the same value. Set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**. Be sure to commit any changes.
+
 
 .. code-block:: bash
 
-  lacp interfaces interface mgmt-aggr
-  config name mgmt-aggr
-  !
- 
-Next, create a management aggregate interface and set the **config type** to **ieee8023adLag**, and set the **lag-type** to **LACP**.
+  velos-1-gsa-1-active(config)# interfaces interface mgmt-aggr                                                                         
+  Value for 'config type' [a12MppSwitch,aal2,aal5,actelisMetaLOOP,...]: ieee8023adLag                                                              
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# config name mgmt-aggr                                                                                                                                                                                                 
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# aggregation config lag-type LACP
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# commit
+  Commit complete.                                                              
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# exit                                                                                           
+  velos-1-gsa-1-active(config)#                                                                                                                    
+
+
+On the active controller, create a **mgmt-aggr** LACP interface. Be sure to commit any changes.
 
 .. code-block:: bash
 
-  interfaces interface mgmt-aggr
-  config name mgmt-aggr
-  config type ieee8023adLag
-  aggregation config lag-type LACP
-  !
+  velos-1-gsa-1-active(config)# lacp interfaces interface mgmt-aggr                                                                                
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# config name mgmt-aggr                                                                          
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)# commit                                                                                         
+  Commit complete.                                                                                                                                 
+  velos-1-gsa-1-active(config-interface-mgmt-aggr)#
 
-Finally, add the aggregate that you created by name to each of the management interfaces on the two controllers: 
+
+Finally, add the aggregate that you created by name to each of the management interfaces on the two controllers. Be sure to commit any changes.
 
 .. code-block:: bash
 
-  !
-  interfaces interface 1/mgmt0
-  config name 1/mgmt0
-  config type ethernetCsmacd
-  ethernet config aggregate-id mgmt-aggr
-  !
+  velos-1-gsa-1-active(config)# interfaces interface 1/mgmt0                                                                                       
+  velos-1-gsa-1-active(config-interface-1/mgmt0)# ethernet config aggregate-id mgmt-aggr                                                           
+  velos-1-gsa-1-active(config-interface-1/mgmt0)# exit                                                                                             
+  velos-1-gsa-1-active(config)# interfaces interface 2/mgmt0                                                                                                                                                   
+  velos-1-gsa-1-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr 
+  velos-1-gsa-1-active(config-interface-2/mgmt0)# commit
+  Commit complete.                                                          
+  velos-1-gsa-1-active(config)#  
+
+
+Interface Aggregation for System Controllers via WebUI
+-------------------------------------------------------
+
+Beware that changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
+
+Go to the **Network Settings -> Management Interfaces** page in the WebUI to change the configuration to use link aggregation.
+
+.. image:: images/initial_setup_of_velos_system_controllers/webui-controllers.png
+  :align: center
+  :scale: 50%
+
+
+
+Interface Aggregation for System Controllers via API
+-------------------------------------------------------
+
+Beware that changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
+
+You can view and configure the management interfaces on the two system controllers and aggregate them into a single Link Aggregation Group. First you must create an interface
+called **mgmt-aggr**.
+
+.. code-block:: bash
+
+  PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=mgmt-aggr"
+
+In the body of the API call enter the following, you'll be creating an interface called **mgmt-aggr**, and setting an aggregate ID of the same name. Once you enter the following API call you will likely be disconnected from the controllers, so you'll need to configure the upstream switch for link aggregation with LACP.
+
+.. code-block:: json
+
+  {
+      "openconfig-interfaces:interface": [
+          {
+              "name": "mgmt-aggr",
+              "config": {
+                  "name": "mgmt-aggr",
+                  "type": "iana-if-type:ieee8023adLag",
+                  "description": "mgmt-aggr",
+                  "enabled": true
+              },
+              "openconfig-if-aggregate:aggregation": {
+                  "config": {
+                      "openconfig-if-aggregate:lag-type": "LACP"
+                  }
+              }
+          }
+      ]
+  }
+
+Next, you will put each of the interfaces in the **mgmt-aggr** LAG. Below is the example for putting **1/mgmt0** into the mgmt-aggr LAG.
+
+.. code-block:: bash
+
+  PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=1/mgmt0"
+
+The body of the API call should be configured as follows:
+
+.. code-block:: json 
+
+  {
+    "openconfig-interfaces:interface": [
+        {
+            "name": "1/mgmt0",
+            "config": {
+                "name": "1/mgmt0",
+                "type": "iana-if-type:ethernetCsmacd",
+                "description": "1/mgmt0",
+                "enabled": true
+            },
+            "openconfig-if-ethernet:ethernet": {
+                "config": {
+                    "openconfig-if-aggregate:aggregate-id": "mgmt-aggr"
+                }
+            }
+        }
+    ]
+    } 
+
+Below is the example for putting **2/mgmt0** into the mgmt-aggr LAG.
+
+.. code-block:: bash
+
+  PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=2/mgmt0"
+
+The body of the API call should be configured as follows:
+
+.. code-block:: json 
+
+  {
+      "openconfig-interfaces:interface": [
+          {
+              "name": "2/mgmt0",
+              "config": {
+                  "name": "2/mgmt0",
+                  "type": "iana-if-type:ethernetCsmacd",
+                  "description": "2/mgmt0",
+                  "enabled": true
+              },
+              "openconfig-if-ethernet:ethernet": {
+                  "config": {
+                      "openconfig-if-aggregate:aggregate-id": "mgmt-aggr"
+                  }
+              }
+          }
+      ]
+  }
+
+Finally, you must configure the LACP interface.
+
+.. code-block:: bash
+
+  PUT https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-lacp:lacp/interfaces/"interface=mgmt-aggr"
+
+The body of the API call should be configured as follows:
+
+.. code-block:: json 
+
+  {
+      "openconfig-lacp:interface": [
+          {
+              "name": "mgmt-aggr",
+              "config": {
+                  "name": "mgmt-aggr",
+                  "interval": "SLOW",
+                  "lacp-mode": "ACTIVE"
+              }
+          }
+      ]
+  }
+
+
+To view the management interface on controller-1 run the following API call to see the interface labeled **1/mgmt0**. If you want to see the management interface on controller-2 change **1/mgmt0** in the API call below to **2/mgmt0**.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-interfaces:interfaces/"interface=1/mgmt0"
+
+You should see a response similar to the output below.
+
+.. code-block:: JSON
+
+  {
+      "openconfig-interfaces:interface": [
+          {
+              "name": "1/mgmt0",
+              "config": {
+                  "name": "1/mgmt0",
+                  "type": "iana-if-type:ethernetCsmacd",
+                  "description": "1/mgmt0-test",
+                  "enabled": true
+              },
+              "state": {
+                  "name": "1/mgmt0",
+                  "type": "iana-if-type:ethernetCsmacd",
+                  "loopback-mode": false,
+                  "enabled": true,
+                  "ifindex": 15,
+                  "admin-status": "UP",
+                  "oper-status": "UP",
+                  "last-change": "1156401594590367",
+                  "counters": {
+                      "in-octets": "7082002218",
+                      "in-pkts": "10635460",
+                      "in-unicast-pkts": "9231057",
+                      "in-broadcast-pkts": "1251751",
+                      "in-multicast-pkts": "152652",
+                      "in-discards": "101",
+                      "in-errors": "0",
+                      "in-unknown-protos": "0",
+                      "in-fcs-errors": "0",
+                      "out-octets": "773465019",
+                      "out-pkts": "8965502",
+                      "out-unicast-pkts": "7400450",
+                      "out-broadcast-pkts": "1488831",
+                      "out-multicast-pkts": "76221",
+                      "out-discards": "0",
+                      "out-errors": "0"
+                  }
+              },
+              "hold-time": {
+                  "config": {
+                      "up": 0,
+                      "down": 0
+                  },
+                  "state": {
+                      "up": 0,
+                      "down": 0
+                  }
+              },
+              "openconfig-if-ethernet:ethernet": {
+                  "config": {
+                      "openconfig-if-aggregate:aggregate-id": "mgmt-aggr"
+                  },
+                  "state": {
+                      "mac-address": "00:94:a1:8e:d0:7d",
+                      "auto-negotiate": true,
+                      "duplex-mode": "FULL",
+                      "port-speed": "openconfig-if-ethernet:SPEED_1GB",
+                      "enable-flow-control": false,
+                      "hw-mac-address": "00:94:a1:8e:d0:7d",
+                      "counters": {
+                          "in-mac-pause-frames": "0",
+                          "in-oversize-frames": "0",
+                          "in-jabber-frames": "0",
+                          "in-fragment-frames": "0",
+                          "in-8021q-frames": "0",
+                          "in-crc-errors": "0",
+                          "out-mac-pause-frames": "0",
+                          "out-8021q-frames": "0"
+                      }
+                  }
+              }
+          }
+      ]
+  }
+
+To view the aggregate interface, issue the following API call to the aggregate names used previously **mgmt-aggr**. You'll see that both **1/mgmt0** and **2/mgmt0** are members of the aggregate interface.
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-lacp:lacp/interfaces/"interface=mgmt-aggr"
+
+In the response you will see output similar to the example below.
+
+.. code-block:: json
+
+    {
+      "openconfig-lacp:interface": [
+          {
+              "name": "mgmt-aggr",
+              "config": {
+                  "name": "mgmt-aggr",
+                  "interval": "SLOW",
+                  "lacp-mode": "ACTIVE"
+              },
+              "state": {
+                  "name": "mgmt-aggr",
+                  "interval": "SLOW",
+                  "lacp-mode": "ACTIVE",
+                  "system-id-mac": "00:94:a1:8e:d0:00",
+                  "system-priority": 53248
+              },
+              "members": {
+                  "member": [
+                      {
+                          "interface": "1/mgmt0",
+                          "state": {
+                              "interface": "1/mgmt0",
+                              "activity": "ACTIVE",
+                              "timeout": "LONG",
+                              "synchronization": "IN_SYNC",
+                              "aggregatable": true,
+                              "collecting": true,
+                              "distributing": true,
+                              "system-id": "00:94:a1:8e:d0:00",
+                              "oper-key": 34,
+                              "partner-id": "98:5d:82:ba:c4:7b",
+                              "partner-key": 50,
+                              "port-num": 4608,
+                              "partner-port-num": 8,
+                              "counters": {
+                                  "lacp-in-pkts": "76908",
+                                  "lacp-out-pkts": "76813",
+                                  "lacp-rx-errors": "0"
+                              }
+                          }
+                      },
+                      {
+                          "interface": "2/mgmt0",
+                          "state": {
+                              "interface": "2/mgmt0",
+                              "activity": "ACTIVE",
+                              "timeout": "LONG",
+                              "synchronization": "IN_SYNC",
+                              "aggregatable": true,
+                              "collecting": true,
+                              "distributing": true,
+                              "system-id": "00:94:a1:8e:d0:00",
+                              "oper-key": 34,
+                              "partner-id": "98:5d:82:ba:c4:7b",
+                              "partner-key": 50,
+                              "port-num": 8704,
+                              "partner-port-num": 7,
+                              "counters": {
+                                  "lacp-in-pkts": "76909",
+                                  "lacp-out-pkts": "76814",
+                                  "lacp-rx-errors": "0"
+                              }
+                          }
+                      }
+                  ]
+              }
+          }
+      ]
+  }
+
+-------------
+Primary Key
+-------------
+
+The VELOS system uses a primary key to encrypt highly sensitive passwords/passphrases in the configuration database, such as:
+
+•	Tenant unit keys used for TMOS Secure Vault
+•	The F5OS API Service Gateway TLS key
+•	Stored iHealth credentials
+•	Stored AAA server credentials
+
+The primary key is randomly generated by F5OS during initial installation. You should set the primary key to a known value prior to performing a configuration backup. If you restore a configuration backup on a different VELOS device, e.g. during an RMA replacement, you must first set the primary key passphrase and salt on the destination device to the same value as the source device. If this is not done correctly, the F5OS configuration restoration may appear to succeed but produce failures later when the system attempts to decrypt and use the secured parameters.
+
+You should periodically change the primary key for additional security. If doing so, please note that a configuration backup is tied to the primary key at the time it was generated. If you change the primary key, you cannot restore older configuration backups without first setting the primary key to the previous value, if it is known. More details are provided in the solution article below.
+
+**IMPORTANT: Be sure to make note and save the salt and passphrase in a safe location, as these will be needed to restore the configuration on a replacement system.** 
+
+
+Setting the Primary Key via CLI
+-------------------------------
+
+Below is an example of configuring the passphrase and salt for the primary-key.
+
+.. code-block:: bash
+
+    syscon-1-active(config)# system aaa primary-key set passphrase               
+    Value for 'passphrase' (<string, min: 6 chars, max: 255 chars>): **************
+    Value for 'confirm-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
+    Value for 'salt' (<string, min: 6 chars, max: 255 chars>): **************
+    Value for 'confirm-salt' (<string, min: 6 chars, max: 255 chars>): **************
+    response Info: Key migration is initiated. Use 'show system aaa primary-key state status' to get status
+
+    syscon-1-active(config)#
+
+You can view the status of the primary-key being set with the **show system aaa primary-key state status** CLI command.
+
+.. code-block:: bash
+
+    syscon-1-active# show system aaa primary-key state status
+    system aaa primary-key state status "IN_PROGRESS        Initiated: Tue Apr  9 19:46:14 2024"
+    
+    syscon-1-active# show system aaa primary-key state status
+    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
+    syscon-1-active# 
+
+Note that the hash key can be used to check and compare the status of the primary-key on both the source and the replacement devices if restoring to a different device. To view the current primary-key hash, issue the following CLI command.
+
+.. code-block:: bash
+
+    syscon-1-active# show system aaa primary-key state
+    system aaa primary-key state hash xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
+    syscon-1-active#
+
+
+Setting the Primary Key via API
+-------------------------------
+
+Below is an example of viewing and configuring the passphrase and salt for the primary-key via the API:
+
+
+To view the key, use the following API call:
+
+.. code-block:: bash
+
+  GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/f5-primary-key:primary-key
+
+
+The response will look similar to the output below.
+
+.. code-block:: json
+
+  {
+      "f5-primary-key:primary-key": {
+          "state": {
+              "hash": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==",
+              "status": "NONE"
+          }
+      }
+  }
+ 
+Below is the API call to set the primary-key:
+
+.. code-block:: bash
+
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/f5-primary-key:primary-key/f5-primary-key:set
+
+In the body of the API call provide the passphrase and salt. Be sure to save the passphrase and sale in a secure location so that a configuration can be restored if something needs to be replaced. 
+
+.. code-block:: json
+
+  {
+  "f5-primary-key:passphrase": "Pa$$w0rd!",
+  "f5-primary-key:confirm-passphrase": " Pa$$w0rd!",",
+  "f5-primary-key:salt": " Pa$$w0rd!",",
+  "f5-primary-key:confirm-salt": " Pa$$w0rd!","
+  }
+ 
+After setting the passphrase and salt for the primary-key, you'll see a response similar to the one below.
+
+.. code-block:: json
+
+  {
+      "f5-primary-key:output": {
+          "response": "Info: Key migration is initiated. Use 'show system aaa primary-key state status' to get status\n"
+      }
+  }
  
  
-  interfaces interface 2/mgmt0
-  config name 2/mgmt0
-  config type ethernetCsmacd
-  ethernet config aggregate-id mgmt-aggr
+You can then run the API GET command again to see status:
+
+.. code-block:: json
+
+  {
+      "f5-primary-key:primary-key": {
+          "state": {
+              "hash": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==",
+              "status": "COMPLETE        Initiated: Thu May 30 19:22:13 2024"
+          }
+      }
+  }
+
 
 ---------------
 System Settings
@@ -217,7 +858,7 @@ System Settings
 
 Once the IP addresses have been defined, system settings such as DNS servers, NTP, and external logging should be defined. This can be done from the CLI, webUI, or API.
 
-Configure System Settings From the CLI
+Configure System Settings (DNS, NTP, Logging) From the CLI
 ---------------------------------------
 
 In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can be set as seen in the example below.
@@ -226,16 +867,16 @@ In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can 
 
   syscon-2-active# config
   Entering configuration mode terminal
-  syscon-2-active(config)# system dns servers server 192.168.19.1 config address 192.168.10.1
+  syscon-2-active(config)# system dns servers server 192.168.19.1
   syscon-2-active(config-server-192.168.19.1)# exit
   syscon-2-active(config)# system ntp config enabled 
-  syscon-2-active(config)# system ntp servers server time.f5net.com config address time.f5net.com
+  syscon-2-active(config)# system ntp servers server time.f5net.com config 
   syscon-2-active(config-server-time.f5net.com)# exit
-  syscon-2-active(config)# system logging remote-servers remote-server 10.255.0.142 selectors selector LOCAL0 WARNING
-  syscon-2-active(config-remote-server-10.255.0.142)# exit
+  syscon-2-active(config)# system logging remote-servers remote-server 10.10.10.142 selectors selector LOCAL0 WARNING
+  syscon-2-active(config-remote-server-10.10.10.142)# exit
   syscon-2-active(config)# commit
 
-Configure System Settings From the WebUI
+Configure System Settings (DNS, NTP, Logging) From the WebUI
 ----------------------------------------
 
 You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
@@ -244,7 +885,7 @@ You can configure the DNS and Time settings from the webUI if preferred. DNS is 
   :align: center
   :scale: 70%
 
-Configuring Network Time Protocol is highly recommended, so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local timezone for this chassis location.
+Configuring Network Time Protocol is highly recommended, so that the VELOS systems clock is synchronized and accurate. In addition to configuring NTP time sources, you can set the local time zone for this chassis location.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image5.png
   :align: center
@@ -264,8 +905,8 @@ You can also configure logging subsystem levels individually. The remote logging
   :scale: 70%
 
 
-Configure System Settings From the API
----------------------------------------
+Configure System Settings (DNS, NTP, Logging) From the API
+----------------------------------------------------------
 
 If you would prefer to automate the setup of the VELOS chassis, there are F5OS-C API calls for all the examples above. F5OS supports token-based authentication for the F5OS API’s. You may send API calls to either port 8888 or port 443. The URI path will change slightly depending on which TCP port you choose to use. For API calls sent to port 443, the initial path will be /api, while API calls to port 888 will start with /restconf. F5OS also listens on port 80 and will redirect to TCP port 443.
 
@@ -282,7 +923,7 @@ Example of API call using port 443. Replace /restconf with /api.
 
   https://{{velos_chassis1_system_controller_ip}}/api/data/openconfig-system:system/aaa
 
-You can send a standard API call with user/password-based authentication (basic auth), and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth. The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes. If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password-based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth** and enter the username and password to log into your system controller.
+You can send a standard API call with user/password-based authentication (basic auth) and then store the token for subsequent API calls. The X-Auth-Token has a lifetime of fifteen minutes and can be renewed a maximum of five times before you need to authenticate again using basic auth. The renewal period begins at the ten-minute point, where the API will start sending a new X-Auth-Token in the response for the next five minutes. If your API calls fail to start using the new token by the 15-minute point, API calls will start returning 401 Not Authorized. All the API examples in this guide were generated using the Postman utility. Below is an example of using password-based authentication to the system controller floating IP address. Be sure to go to the **Auth** tab and set the *Type** to **Basic Auth** and enter the username and password to log into your system controller.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6a.png
   :align: center
@@ -320,12 +961,16 @@ You must also add some required headers to any API calls sent to F5OS. It is imp
   :align: center
   :scale: 70%
 
+Configure System Settings DNS From the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To set the DNS configuration for the system controllers, use the following API call with the headers and auth settings from above. Don't forget to acquire the auth token first, otherwise the API call will fail.
 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+In the body of the API call add the desired DNS configuration.
 
 .. code-block:: json
 
@@ -366,12 +1011,17 @@ To set the DNS configuration for the system controllers, use the following API c
       }
   }
 
+Configure System Settings NTP, Time Zone From the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To set System Time settings, use the following API call as an example:
 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+
+In the body of the API call add the desired NTP & Time zone configuration.
 
 .. code-block:: json
 
@@ -389,9 +1039,9 @@ To set System Time settings, use the following API call as an example:
               "servers": {
                   "server": [
                       {
-                          "address": "time.f5net.com",
+                          "address": "pool.ntp.org",
                           "config": {
-                              "address": "time.f5net.com"
+                              "address": "pool.ntp.org"
                           }
                       }
                   ]
@@ -400,11 +1050,17 @@ To set System Time settings, use the following API call as an example:
       }
   }
 
+Configure System Settings SYSLOG From the API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 To set a Remote Logging destination, use the following API call:
 
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+
+In the body of the API call add the desired SYSLOG configuration.
 
 .. code-block:: json
 
@@ -414,9 +1070,9 @@ To set a Remote Logging destination, use the following API call:
               "remote-servers": {
                   "remote-server": [
                       {
-                          "host": "10.255.0.142",
+                          "host": "10.10.10.1",
                           "config": {
-                              "host": "10.255.0.142",
+                              "host": "10.10.10.1",
                               "remote-port": "514"
                           },
                           "selectors": {
@@ -442,7 +1098,7 @@ To set a Remote Logging destination, use the following API call:
 Licensing the VELOS Chassis
 ---------------------------
 
-Licensing for the VELOS system is handled at the chassis level. This is like how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression, or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP, and instead runs tenancy.
+Licensing for the VELOS system is handled at the chassis level. This is like how VIPRION licensing is implemented, where the system is licensed once, and all subsystems inherit their licensing from the chassis. With VELOS, licensing is applied at the system controller level, and all chassis partitions and tenants will inherit their licenses from the base system. There is no need to procure add-on licenses for MAX SSL/Compression, or for tenancy/vCMP. This is different than VIPRION, where there was an extra charge for virtualization/vCMP, and in some cases for MAX SSL/Compression. For VELOS, these are included in the base license at no extra cost. VELOS does not run vCMP and instead runs tenancy.
 
 Licenses can be applied via the F5OS-C CLI, webUI, or API. A base registration key and optional add-on keys are needed, and it follows the same manual or automatic licensing capabilities of other BIG-IP systems.
 
@@ -474,7 +1130,7 @@ To license the VELOS chassis manually, you’ll need to get the dossier first:
 .. code-block:: bash
 
   syscon-2-active(config)# system licensing get-dossier
-  b9a9936886bada077d93843a281ce4c34bf78db0d6c32c40adea3a5329db15edd413fe7d7f8143fd128ebe2d97642b4ed9192b530788fe3965593e3b42131c66220401b16843476159414ceeba8af5fb67a39fe2a2f408b9…
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx…
 
 You can then access F5’s licensing server (license.f5.com) via another host that has internet access, and paste in the dossier when prompted:
 
@@ -535,7 +1191,7 @@ The CLI command **show system licensing** will display the chassis level licensi
   syscon-2-active# show system licensing 
   system licensing license 
                           Licensed version    1.2.0
-                          Registration Key    V0453-12345-12345-12345-1234567
+                          Registration Key    XXXXX-12345-12345-12345-1234567
                           Licensed date       2020/12/08
                           License start       2020/12/07
                           License end         2021/01/08
@@ -544,7 +1200,7 @@ The CLI command **show system licensing** will display the chassis level licensi
                           Appliance SN        chs600148s
                           
                           Active Modules
-                            Local Traffic Manager, CX410 (E428722-4444383)
+                            Local Traffic Manager, CX410 (XXXXXXX-XXXXXXX)
                             Best Bundle, CX410
                             APM-Lite
                             Carrier Grade NAT (AFM ONLY)
@@ -600,7 +1256,7 @@ Then send the Base Reg Key in the body of the get-dossier API call below:
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing/f5-system-licensing-install:get-dossier
 
-Within the body of API call, enter your registation-key. Note, in the example below the actual Registration Key has been obfuscated with XXXX's.
+Within the body of API call, enter your registration-key. Note, in the example below the actual Registration Key has been obfuscated with XXXX's.
 
 
 .. code-block:: json
@@ -616,7 +1272,7 @@ If the API call is successful, then the output will give you a system-dossier as
 
     {
         "f5-system-licensing-install:output": {
-            "system-dossier": "42bd1c9c5c1e9081522beea5ceab5c3e7726f9b5a90dd9d5a8d73d9dba80094317c6aeab2b75219226d9a2f8b335651d395ade0384debe1086ee0f46d0d7043c90b03f08a7fcdc28db75984892f1e28f394d07d569b45a1868ceeb264a272243e4c842c41fbd043fd4bcx19c6f1e3a274589d4f06253c49d31f1ed48731ddda10a5a68eb78d8473c06c38c3ea2cb6db0ae2902c5a9323dccf5e00212a9f541a58cd85fe191b12daa4a6975cee14fe33242cb8183fea43xa21c2a8c1944f14583895eb920306b4f9e0fd7834561026b0c669f736081e9da80bf536874d9a3737bacff59e6240381ddc2b821c380c81d963c95beedc6a940a4db97a527922383096c54d8028f3f3f6dccfe213fdad4a1316b772317cae0d45911469972bd3f761636f3f397467cf8a2e7ae1d22e1ea30d6b21d47ff4d8ab112ebc5d7eaab3819f0ed18b0830bc4250069a80de428ef28a9c4dba725a3623887019b7c31dc210997104140a58b8f172e8c4d0c4ea819b6743df711d0b65eb2c235e79313b1e9ff2dcd1768770e7f23dc626d2e44d0a394916a8b8debaf73971b91cbf3d96f7be6e1afcf18b42f84fd1b2ba7fe021e95417bbe2cf1bdb42077b8aefb350d865ae7db13073781212c8534d204a0e4023023de8b5380463b67b935fce2e4474f8f607130ee01c961cf978ccdb6211d9bc6f8axx4aab784f50c7e71a5bc1297f3453c9d0feb62e809315b7421f598275a2e8435aee8b2658f6a355706259820fde8702cb8940bf324494c4511d62964be657cc570a0947731e8ef025d6d7ea4038d91fe0084f11dda9a4713ae056bb21733958f4963a6051259a78d3336b368c345cc24da99a9ebf10e5f5b7c376484d60fd8d80ed2f6fbc9ef3bdf7b737af9780e7f4f72ea6a79b32a24da84fae44fdc0fd30761b3dd62d6660x462d90c843f1916eb2c01fd5efd25f05c196e6a6eb0ba93db3e549ee4fb2f79b08ed1edaae9aaf01d83fe87b473852b97fa89573ff85247e1c5be23a599b3f8c65d1d7f6d2c4f56d13217bb2ba07d383d038b29ab407e4cf40986a83d0b18933d53078e80b7cd7550"
+            "system-dossier": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         }
     }
 
@@ -876,15 +1532,16 @@ In the body of the API call enter the edited license in the proper area. Below i
     Registration Key :                 XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX
     Licensed version :                 1.6.1
     Platform ID :                      F101
-    Appliance SN :                     chs600032s
+    Appliance SN :                     chs123456s
     #
     #       Outbound License Dossier Validation
     #
-    Dossier :                          01ac66f1c5a13fad15f3a0eca6428220df12b8e94506a852dae2c13fbbb67556e48f1x73b849d7cd3962e270e73y23218e85871670e84e9485e774357250f8f7299a176f
+    Dossier :                          
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     #
     #       Outbound License Authorization Signature
     #
-    Authorization :                    185b003ad1b2b9c9e4365ef7315e17cee59c96d958354ba4931bd5c934600acbdf2ecc0f7093db5ded3a5e800038051960d9ab95a45a171d1c0d9f9c0480e2a2e43939c79cecb216bd6bc592b630b9a8787e3847d2bb731915258ef96c921bc6b1e7bd08c0e86bc6476e5ax3bb942e9964d61de662b3e370994335c84193cc03b7adb7f4ef9d1df7d5eb74f53bb1d801604e3d0d4eab875585c88ba708e5832bf5b666aaad894a2218c627666ce6a97f12cf7c9de65c72b6187756008fd8c23cf6475e4c1bd082423ce90f4f0b83455d3c5b1d3ac76b5d5932c9cf506f059d3802a2ba954d4d2ma86d16db40ceeccc59106051fe7d69ab8df5es713914e81f91
+    Authorization :                    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     #
     #-----------------------------------------
     # Copyright 1996-2023, F5 Networks, Inc.
@@ -946,6 +1603,8 @@ To get the current licensing status via API use the following API call. Issue a 
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-licensing:licensing
 
+The output will be similar to the below example.
+
 .. code-block:: json
 
   {
@@ -954,11 +1613,11 @@ To get the current licensing status via API use the following API call. Issue a 
               "registration-key": {
                   "base": "XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX"
               },
-              "dossier": "01ac66f1c5a13fad15f3a0eca6528220df04f42baa4c48f1c35682c6691dde0e306406407cec3f6b9c3cfa93751421360bfcf7085585d79b4feb7170a314637e8f99f22b09fcd4a4c54b27def300a8f9c83420b9cc0a6bd097a8f7e958fc2b8c4e93d685f6b70bc415e7999b869eba07d5976183ee31e612b8e94506a852dae2c13fbbb67556e48f1475b849d7xd396be270e73123258e85871670e81e9485e774a57250f8f7299a876f17106158c62efb579aad689ebfc629b31e2175c4485b59a4bed33bd3e2dd31e7fb83",
-              "license": "#\nAuth vers :                   5b\n#\n#\n#       BIG-IP System License Key File\n#       DO NOT EDIT THIS FILE!!\n#\n#       Install this file as \"/config/bigip.license\".\n#\n#       Contact information in file /CONTACTS\n#\n#\n#       Warning: Changing the system time while this system is running\n#                with a time-limited license may make the system unusable.\n#\nUsage :                       F5 Internal Product Development\n#\n#\n#  Only the specific use referenced above is allowed. Any other uses are prohibited.\n#\nVendor :                      F5 Networks, Inc.\n#\n#       Module List \n#\nactive module :               Local Traffic Manager, r10900|XXXXXX-XXXXXX|Rate Shaping|Anti-Virus Checks|Base Endpoint Security Checks|Firewall Checks|Machine Certificate Checks|Network Access|Protected Workspace|Secure Virtual Keyboard|APM, Web Application|App Tunnel|Remote Desktop|APM, Limited|Max SSL, r10900|Max Compression, r10900\noptional module :             Access Policy Manager, Base, r109XX\noptional module :             Access Policy Manager, Max, r109XX\noptional module :             Advanced Firewall Manager, r10XXX\noptional module :             Advanced Protocols\noptional module :             Advanced Web Application Firewall, r10XXX\noptional module :             App Mode (TMSH Only, No Root/Bash)\noptional module :             Basic Policy Enforcement Manager, i10XXX\noptional module :             BIG-IP, Multicast Routing\noptional module :             BIG-IP, Privileged User Access, 100 Endpoints\noptional module :             BIG-IP, Privileged User Access, 1000 Endpoints\noptional module :             BIG-IP, Privileged User Access, 250 Endpoints\noptional module :             BIG-IP, Privileged User Access, 50 Endpoints\noptional module :             BIG-IP, Privileged User Access, 500 Endpoints\noptional module :             Carrier-Grade NAT, r10XXX\noptional module :             DataSafe, r10XXX\noptional module :             DDOS, r10XXX\noptional module :             DNS 1K, rSeries\noptional module :             DNS Max, rSeries\noptional module :             Dynamic Policy Provisioning, r10XXX\noptional module :             External Interface and Network HSM\noptional module :             FIPS 140-2\noptional module :             FIX Low Latency\noptional module :             Intrusion Prevention System, r10XXX\noptional module :             IP Intelligence, 1Yr\noptional module :             IP Intelligence, 3Yr\noptional module :             IPS, 1Yr\noptional module :             IPS, 3Yr\noptional module :             Link Controller\noptional module :             LTM to Best Upgrade, r109XX\noptional module :             LTM to Better Upgrade, r109XX\noptional module :             Policy Enforcement Manager, r10XXX\noptional module :             Routing Bundle\noptional module :             SM2_SM3_SM4\noptional module :             SSL Orchestrator, r10XXX\noptional module :             Subscriber Discovery, r10XXX\noptional module :             Threat Campaigns, 1Yr\noptional module :             Threat Campaigns, 3Yr\noptional module :             Traffic Classification, r10XXX\noptional module :             URL Filtering, 1Yr\noptional module :             URL Filtering, 1Yr, Max\noptional module :             URL Filtering, 3Yr\noptional module :             URL Filtering, 3Yr, Max\noptional module :             VPN Users\n#\n#       Accumulated Tokens for Module\n#       Max SSL, r10900  perf_SSL_Mbps 1  key XXXXXX-XXXXXX\n#\nperf_SSL_Mbps :               1\n#\n#       Accumulated Tokens for Module\n#       APM, Limited  apm_urlf_limited_sessions 10  key XXXXXX-XXXXXX\n#\n#       Accumulated Tokens for Module\n#       APM, Limited  apml_sessions 10  key XXXXXX-XXXXXX\n#\napm_urlf_limited_sessions :   10\napml_sessions :               10\n#\n#       License Tokens for Module Local Traffic Manager, r10900 key XXXXXX-XXXXXX\n#\nthrottle_level :              900\nperf_vcmp_max_guests :        UNLIMITED\nperf_PVA_dram_limit :         enabled\nperf_CPU_cores :              UNLIMITED\nnw_vlan_groups :              enabled\nmod_ltm :                     enabled\nmod_lbl :                     enabled\nmod_ilx :                     enabled\nltm_network_virtualization :  enabled\nfpga_performance :            enabled\n#\n#       License Tokens for Module Max SSL, r10900 key XXXXXX-XXXXXX\n#\nperf_SSL_total_TPS :          UNLIMITED\nperf_SSL_per_core :           enabled\nperf_SSL_cmp :                enabled\n#\n#       License Tokens for Module Max Compression, r10900 key XXXXXX-XXXXXX\n#\nperf_http_compression_Mbps :  UNLIMITED\nperf_http_compression_hw :    enabled\n#\n#       License Tokens for Module APM, Limited key XXXXXX-XXXXXX\n#\nmod_apml :                    enabled\n#\n#       License Tokens for Module Rate Shaping key XXXXXX-XXXXXX\n#\nltm_bandw_rate_tosque :       enabled\nltm_bandw_rate_fairque :      enabled\nltm_bandw_rate_classl7 :      enabled\nltm_bandw_rate_classl4 :      enabled\nltm_bandw_rate_classes :      enabled\n#\n#       License Tokens for Module APM, Web Application key XXXXXX-XXXXXX\n#\napm_web_applications :        enabled\n#\n#       License Tokens for Module Remote Desktop key XXXXXX-XXXXXX\n#\napm_remote_desktop :          enabled\n#\n#       License Tokens for Module Network Access key XXXXXX-XXXXXX\n#\napm_na :                      enabled\n#\n#       License Tokens for Module Secure Virtual Keyboard key XXXXXX-XXXXXX\n#\napm_ep_svk :                  enabled\n#\n#       License Tokens for Module Protected Workspace key XXXXXX-XXXXXX\n#\napm_ep_pws :                  enabled\n#\n#       License Tokens for Module Machine Certificate Checks key XXXXXX-XXXXXX\n#\napm_ep_machinecert :          enabled\n#\n#       License Tokens for Module Firewall Checks key XXXXXX-XXXXXX\n#\napm_ep_fwcheck :              enabled\n#\n#       License Tokens for Module Anti-Virus Checks key XXXXXX-XXXXXX\n#\napm_ep_avcheck :              enabled\n#\n#       License Tokens for Module Base Endpoint Security Checks key XXXXXX-XXXXXX\n#\napm_ep :                      enabled\n#\n#       License Tokens for Module App Tunnel key XXXXXX-XXXXXX\n#\napm_app_tunnel :              enabled\n#\n# Debug Msg - Is sol18346625 affected; Usage, \"2021-09-28 00.00.00\", started after requirement date \"2016-04-15 00.00.00\"\n#\n# LC disabled in accordance with https://support.f5.com/kb/en-us/solutions/public/k/18/sol18346625.html\n#\ngtm_lc :                      disabled\n#\n#       Licensing Information \n#\nLicensed date :               20211129\nLicense start :               20210927\nLicense end :                 20220121\nService check date :          20211222\n#\n#       Platform Information \n#\nRegistration Key :            B1249-45920-70635-24344-7350724\nLicensed version :            1.0.0\nPlatform ID :                 C128\nAppliance SN :                f5-xpdn-ngmu\n#\n#       Outbound License Dossier Validation\n#\nDossier :                     01ac66f1c5a13fad15f3a0eca6528220df12b8e94506a852dae2c13fbbb67556e48f1473b849d7cd396be270e73123218e85871670e84e9485e774a57250f8f7299a876f\n#\n#       Outbound License Authorization Signature\n#\nAuthorization :               9f41c2f3f96ed6fc9c8112934fab434ba63bce96f73cd24d61b49fa7c9dc8e5d662e27f837ba734c6c8a3c52577b8b9e1a63aefc46aed07441eff37a52575d7341d701597b2ef59d27230cf1b3d41524978f522f23386bc2ab7c1b34756d9be36d433f34d0339227e8ec5f37af432614141f3c749df1e26d3d069ad9a043c2ebedd4bc6xf81ff155ade7b172714075786a7916f32b06830787c3da3ee1281e1965042df766ac31c5690b802257685b87d1ff980a83a5ac9e14cc7e5b73045b4a7c34fea60e4a8dd3b7c460cca83d3805006afc4a82071b3cc502e3dc7c2c40958046bfc835eb0386017352b90175b1cb37a4e3e1bc51467d08cd360a957998a4\n#\n#-----------------------------------------\n# Copyright 1996-2021, F5 Networks, Inc.\n# All rights reserved. \n#-----------------------------------------\n"
+              "dossier": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "license": "#\nAuth vers :                   5b\n#\n#\n#       BIG-IP System License Key File\n#       DO NOT EDIT THIS FILE!!\n#\n#       Install this file as \"/config/bigip.license\".\n#\n#       Contact information in file /CONTACTS\n#\n#\n#       Warning: Changing the system time while this system is running\n#                with a time-limited license may make the system unusable.\n#\nUsage :                       F5 Internal Product Development\n#\n#\n#  Only the specific use referenced above is allowed. Any other uses are prohibited.\n#\nVendor :                      F5 Networks, Inc.\n#\n#       Module List \n#\nactive module :               Local Traffic Manager, r10900|XXXXXX-XXXXXX|Rate Shaping|Anti-Virus Checks|Base Endpoint Security Checks|Firewall Checks|Machine Certificate Checks|Network Access|Protected Workspace|Secure Virtual Keyboard|APM, Web Application|App Tunnel|Remote Desktop|APM, Limited|Max SSL, r10900|Max Compression, r10900\noptional module :             Access Policy Manager, Base, r109XX\noptional module :             Access Policy Manager, Max, r109XX\noptional module :             Advanced Firewall Manager, r10XXX\noptional module :             Advanced Protocols\noptional module :             Advanced Web Application Firewall, r10XXX\noptional module :             App Mode (TMSH Only, No Root/Bash)\noptional module :             Basic Policy Enforcement Manager, i10XXX\noptional module :             BIG-IP, Multicast Routing\noptional module :             BIG-IP, Privileged User Access, 100 Endpoints\noptional module :             BIG-IP, Privileged User Access, 1000 Endpoints\noptional module :             BIG-IP, Privileged User Access, 250 Endpoints\noptional module :             BIG-IP, Privileged User Access, 50 Endpoints\noptional module :             BIG-IP, Privileged User Access, 500 Endpoints\noptional module :             Carrier-Grade NAT, r10XXX\noptional module :             DataSafe, r10XXX\noptional module :             DDOS, r10XXX\noptional module :             DNS 1K, rSeries\noptional module :             DNS Max, rSeries\noptional module :             Dynamic Policy Provisioning, r10XXX\noptional module :             External Interface and Network HSM\noptional module :             FIPS 140-2\noptional module :             FIX Low Latency\noptional module :             Intrusion Prevention System, r10XXX\noptional module :             IP Intelligence, 1Yr\noptional module :             IP Intelligence, 3Yr\noptional module :             IPS, 1Yr\noptional module :             IPS, 3Yr\noptional module :             Link Controller\noptional module :             LTM to Best Upgrade, r109XX\noptional module :             LTM to Better Upgrade, r109XX\noptional module :             Policy Enforcement Manager, r10XXX\noptional module :             Routing Bundle\noptional module :             SM2_SM3_SM4\noptional module :             SSL Orchestrator, r10XXX\noptional module :             Subscriber Discovery, r10XXX\noptional module :             Threat Campaigns, 1Yr\noptional module :             Threat Campaigns, 3Yr\noptional module :             Traffic Classification, r10XXX\noptional module :             URL Filtering, 1Yr\noptional module :             URL Filtering, 1Yr, Max\noptional module :             URL Filtering, 3Yr\noptional module :             URL Filtering, 3Yr, Max\noptional module :             VPN Users\n#\n#       Accumulated Tokens for Module\n#       Max SSL, r10900  perf_SSL_Mbps 1  key XXXXXX-XXXXXX\n#\nperf_SSL_Mbps :               1\n#\n#       Accumulated Tokens for Module\n#       APM, Limited  apm_urlf_limited_sessions 10  key XXXXXX-XXXXXX\n#\n#       Accumulated Tokens for Module\n#       APM, Limited  apml_sessions 10  key XXXXXX-XXXXXX\n#\napm_urlf_limited_sessions :   10\napml_sessions :               10\n#\n#       License Tokens for Module Local Traffic Manager, r10900 key XXXXXX-XXXXXX\n#\nthrottle_level :              900\nperf_vcmp_max_guests :        UNLIMITED\nperf_PVA_dram_limit :         enabled\nperf_CPU_cores :              UNLIMITED\nnw_vlan_groups :              enabled\nmod_ltm :                     enabled\nmod_lbl :                     enabled\nmod_ilx :                     enabled\nltm_network_virtualization :  enabled\nfpga_performance :            enabled\n#\n#       License Tokens for Module Max SSL, r10900 key XXXXXX-XXXXXX\n#\nperf_SSL_total_TPS :          UNLIMITED\nperf_SSL_per_core :           enabled\nperf_SSL_cmp :                enabled\n#\n#       License Tokens for Module Max Compression, r10900 key XXXXXX-XXXXXX\n#\nperf_http_compression_Mbps :  UNLIMITED\nperf_http_compression_hw :    enabled\n#\n#       License Tokens for Module APM, Limited key XXXXXX-XXXXXX\n#\nmod_apml :                    enabled\n#\n#       License Tokens for Module Rate Shaping key XXXXXX-XXXXXX\n#\nltm_bandw_rate_tosque :       enabled\nltm_bandw_rate_fairque :      enabled\nltm_bandw_rate_classl7 :      enabled\nltm_bandw_rate_classl4 :      enabled\nltm_bandw_rate_classes :      enabled\n#\n#       License Tokens for Module APM, Web Application key XXXXXX-XXXXXX\n#\napm_web_applications :        enabled\n#\n#       License Tokens for Module Remote Desktop key XXXXXX-XXXXXX\n#\napm_remote_desktop :          enabled\n#\n#       License Tokens for Module Network Access key XXXXXX-XXXXXX\n#\napm_na :                      enabled\n#\n#       License Tokens for Module Secure Virtual Keyboard key XXXXXX-XXXXXX\n#\napm_ep_svk :                  enabled\n#\n#       License Tokens for Module Protected Workspace key XXXXXX-XXXXXX\n#\napm_ep_pws :                  enabled\n#\n#       License Tokens for Module Machine Certificate Checks key XXXXXX-XXXXXX\n#\napm_ep_machinecert :          enabled\n#\n#       License Tokens for Module Firewall Checks key XXXXXX-XXXXXX\n#\napm_ep_fwcheck :              enabled\n#\n#       License Tokens for Module Anti-Virus Checks key XXXXXX-XXXXXX\n#\napm_ep_avcheck :              enabled\n#\n#       License Tokens for Module Base Endpoint Security Checks key XXXXXX-XXXXXX\n#\napm_ep :                      enabled\n#\n#       License Tokens for Module App Tunnel key XXXXXX-XXXXXX\n#\napm_app_tunnel :              enabled\n#\n# Debug Msg - Is sol18346625 affected; Usage, \"2021-09-28 00.00.00\", started after requirement date \"2016-04-15 00.00.00\"\n#\n# LC disabled in accordance with https://support.f5.com/kb/en-us/solutions/public/k/18/sol18346625.html\n#\ngtm_lc :                      disabled\n#\n#       Licensing Information \n#\nLicensed date :               20211129\nLicense start :               20210927\nLicense end :                 20220121\nService check date :          20211222\n#\n#       Platform Information \n#\nRegistration Key :            B1249-45920-70635-24344-7350724\nLicensed version :            1.0.0\nPlatform ID :                 C128\nAppliance SN :                f5-xpdn-ngmu\n#\n#       Outbound License Dossier Validation\n#\nDossier :                     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n#\n#       Outbound License Authorization Signature\n#\nAuthorization :               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n#\n#-----------------------------------------\n# Copyright 1996-2021, F5 Networks, Inc.\n# All rights reserved. \n#-----------------------------------------\n"
           },
           "state": {
-              "license": "\nLicensed version    1.0.0\nRegistration Key    B1249-45920-70635-24344-7350724\nLicensed date       2021/11/29\nLicense start       2021/09/27\nLicense end         2022/01/21\nService check date  2021/12/22\nPlatform ID         C128\nAppliance SN        f5-xpdn-ngmu\n\nActive Modules\n Local Traffic Manager, r10900 (XXXXXX-XXXXXX)\n  Rate Shaping\n  Anti-Virus Checks\n  Base Endpoint Security Checks\n  Firewall Checks\n  Machine Certificate Checks\n  Network Access\n  Protected Workspace\n  Secure Virtual Keyboard\n  APM, Web Application\n  App Tunnel\n  Remote Desktop\n  APM, Limited\n  Max SSL, r10900\n  Max Compression, r10900\n"
+              "license": "\nLicensed version    1.0.0\nRegistration Key    xxxxx-xxxxx-xxxxx-xxxxx-xxxxx\nLicensed date       2021/11/29\nLicense start       2021/09/27\nLicense end         2022/01/21\nService check date  2021/12/22\nPlatform ID         C128\nAppliance SN        f5-xxxx-xxxx\n\nActive Modules\n Local Traffic Manager, r10900 (XXXXXX-XXXXXX)\n  Rate Shaping\n  Anti-Virus Checks\n  Base Endpoint Security Checks\n  Firewall Checks\n  Machine Certificate Checks\n  Network Access\n  Protected Workspace\n  Secure Virtual Keyboard\n  APM, Web Application\n  App Tunnel\n  Remote Desktop\n  APM, Limited\n  Max SSL, r10900\n  Max Compression, r10900\n"
           }
       }
   }
@@ -969,7 +1628,7 @@ To get the current licensing status via API use the following API call. Issue a 
 Chassis Partition Creation
 --------------------------
 
-Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade or be allowed to span across multiple blades. Conceptually this is like how vCMP guests are defined on VIPRION, but the underlying technology in F5OS is different. 
+Once the base level networking, licensing, and system settings are defined, the next step is to create the chassis partitions that will be used. The system ships with all 8 slots defined within the **default** chassis partition. If there is no need for more than one chassis partition, you can just utilize the default partition, and any blades installed will automatically cluster together. Multiple tenants can be defined within the chassis partition, and they can be restricted to specific vCPUs as well as restricted to a single blade or be allowed to span across multiple blades. Conceptually this is like how vCMP guests are defined on VIPRION, but the underlying technology in F5OS is different. 
 
 If you decide to utilize the default partition you will need to assign an out-of-band management IP address, prefix, and default route so that it can be managed. You must also define what release of F5OS-C software the chassis partition should run. It is recommended you check downloads.f5.com for the latest F5OS-C software, as the version that shipped on the system may not be the latest. Note, this is different than the software that the tenants will run. Once the management IP address is assigned, you would then connect directly to that chassis partition to manage its networking, users and authentication, and tenants.
 
@@ -1043,12 +1702,12 @@ Below is an example of the CLI prompting for a new password. You'll then be disc
 
 .. code-block:: bash
 
-  FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.255.0.148
-  The authenticity of host '10.255.0.148 (10.255.0.148)' can't be established.
-  RSA key fingerprint is SHA256:BhkFg220oTVsXfwU0aDM69Tp3KXfn8TOk/ysnCSb61g.
+  prompt$ ssh -l admin 10.10.10.148
+  The authenticity of host '10.10.10.148 (10.10.10.148)' can't be established.
+  RSA key fingerprint is SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxx.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  Warning: Permanently added '10.255.0.148' (RSA) to the list of known hosts.
-  admin@10.255.0.148's password: 
+  Warning: Permanently added '10.10.10.148' (RSA) to the list of known hosts.
+  admin@10.10.10.148's password: 
   You are required to change your password immediately (root enforced)
   WARNING: Your password has expired.
   You must change your password now and login again!
@@ -1058,7 +1717,7 @@ Below is an example of the CLI prompting for a new password. You'll then be disc
   New password: 
   Retype new password: 
   passwd: all authentication tokens updated successfully.
-  Connection to 10.255.0.148 closed.
+  Connection to 10.10.10.148 closed.
 
 Creating a Chassis Partition via the CLI
 ----------------------------------------
@@ -1113,13 +1772,13 @@ In this case we will mimic the flow in the webUI section where there are 3 blade
   syscon-2-active(config-slot-3)# exit
   syscon-2-active(config)# commit
 
-Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway. Be sure to commit the change. Next, you'll set the version for the partition to run, and then enable it and commit. Note there are still no slots assigned to the chassis partition.
+Now these slots are available to be assigned to a new partition. Enter config mode and add the partition by defining a name, adding a management IP address, prefix, and gateway. Be sure to commit the change. Next, you'll set the version for the partition to run and then enable it and commit. Note there are still no slots assigned to the chassis partition.
 
 .. code-block:: bash
 
   syscon-2-active# config
   Entering configuration mode terminal
-  syscon-2-active(config)# partitions partition Production config mgmt-ip ipv4 address 10.255.0.148 prefix-length 24 gateway 10.255.0.1 
+  syscon-2-active(config)# partitions partition Production config mgmt-ip ipv4 address 10.19.10.148 prefix-length 24 gateway 10.10.10.1 
   syscon-2-active(config-partition-Production)# commit
   Commit complete.
   syscon-2-active(config-partition-Production)# set-version iso-version 1.4.0-3915 proceed                                                                   
@@ -1143,7 +1802,7 @@ Next create a chassis partition for slot3 called **Development**.
 
 .. code-block:: bash
 
-  syscon-2-active(config)# partitions partition Development config mgmt-ip ipv4 address 10.255.0.141 prefix-length 24 gateway 10.255.0.1
+  syscon-2-active(config)# partitions partition Development config mgmt-ip ipv4 address 10.10.10.141 prefix-length 24 gateway 10.10.10.1
   syscon-2-active(config-partition-Development)# commit                  
   Commit complete.
   syscon-2-active(config-partition-Development)# set-version iso-version 1.4.0-3915
@@ -1167,16 +1826,16 @@ You can use the command **show running-config partitions** to see how each parti
   partitions partition Development
   config enabled
   config iso-version 1.4.0-3915
-  config mgmt-ip ipv4 address 10.255.0.141
+  config mgmt-ip ipv4 address 10.10.10.141
   config mgmt-ip ipv4 prefix-length 24
-  config mgmt-ip ipv4 gateway 10.255.0.1
+  config mgmt-ip ipv4 gateway 10.10.10.1
   !
   partitions partition Production
   config enabled
   config iso-version 1.4.0-3915
-  config mgmt-ip ipv4 address 10.255.0.148
+  config mgmt-ip ipv4 address 10.10.10.148
   config mgmt-ip ipv4 prefix-length 24
-  config mgmt-ip ipv4 gateway 10.255.0.1
+  config mgmt-ip ipv4 gateway 10.10.10.1
   !
   partitions partition default
   config disabled
@@ -1217,12 +1876,12 @@ Once the partitions are started and operational, you can log into each one and c
 
 .. code-block:: bash
 
-  FLD-ML-00054045:~ jmccarron$ ssh -l admin 10.255.0.148
-  The authenticity of host '10.255.0.148 (10.255.0.148)' can't be established.
-  RSA key fingerprint is SHA256:BhkFg220oTVsXfwU0aDM69Tp3KXfn8TOk/ysnCSb61g.
+  prompt$ ssh -l admin 10.10.10.148
+  The authenticity of host '10.10.10.148 (10.10.10.148)' can't be established.
+  RSA key fingerprint is SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxx.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  Warning: Permanently added '10.255.0.148' (RSA) to the list of known hosts.
-  admin@10.255.0.148's password: 
+  Warning: Permanently added '10.10.10.148' (RSA) to the list of known hosts.
+  admin@10.10.10.148's password: 
   You are required to change your password immediately (root enforced)
   WARNING: Your password has expired.
   You must change your password now and login again!
@@ -1232,7 +1891,7 @@ Once the partitions are started and operational, you can log into each one and c
   New password: 
   Retype new password: 
   passwd: all authentication tokens updated successfully.
-  Connection to 10.255.0.148 closed.
+  Connection to 10.10.10.148 closed.
 
 Creating a Chassis Partition via the API
 ----------------------------------------
@@ -1242,6 +1901,8 @@ Before creating any new chassis partitions you should ensure you have the proper
 .. code-block:: bash
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-image:image/partition/config
+
+The output will be similar to the example below.
 
 .. code-block:: json
 
@@ -1438,18 +2099,20 @@ Before creating any new chassis partitions you should ensure you have the proper
       }
   }
 
-Next import the desired image into the system controller floating IP address using the path **images/staging**. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options avialable in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
+Next import the desired image into the system controller floating IP address using the path **images/staging**. You will need to import from a remote HTTPS, SFTP, or SCP server if using the API. There are other options available in the GUI where images can be imported or uploaded from a client machine. There is an insecure option if you don’t want to use certificate-based authentication to the remote HTTPS server. 
 
 .. code-block:: bash
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
     {
         "input": [
             {
-                "remote-host": "10.255.0.142",
+                "remote-host": "10.10.10.142",
                 "remote-file": "/upload/{{Partition_ISO_Image_Full}}",
                 "local-file": "images/staging/",
                 "insecure": "",
@@ -1482,7 +2145,7 @@ You will see a response similar like the output below showing status:
 
   {
       "f5-utils-file-transfer:output": {
-          "result": "\nS.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            \n1    |Import file|HTTPS   |/var/import/staging/F5OS-C-1.1.0-2391.PARTITION.CANDIDATE.iso|10.255.0.142        |F5OS-C-1.1.0-2391.PARTITION.CANDIDATE.iso                   |Peer certificate cannot be authenticated with given CA certificates\n"
+          "result": "\nS.No.|Operation  |Protocol|Local File Path                                             |Remote Host         |Remote File Path                                            |Status            \n1    |Import file|HTTPS   |/var/import/staging/F5OS-C-1.1.0-2391.PARTITION.CANDIDATE.iso|10.10.10.142        |F5OS-C-1.1.0-2391.PARTITION.CANDIDATE.iso                   |Peer certificate cannot be authenticated with given CA certificates\n"
       }
   }
 
@@ -1494,6 +2157,8 @@ The system ships with all slots configured in the default chassis partition. Bef
 .. code-block:: bash
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-slot:slots
+
+The output will be similar to the example below.
 
 .. code-block:: json
 
@@ -1550,6 +2215,8 @@ Next remove the default partition from the slots you’d like to assign to any n
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -1581,6 +2248,8 @@ Next, a chassis partition called **Production** will be created. It will be assi
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -1607,6 +2276,8 @@ Next, slots 1 & 2 will be assigned to the chassis partition called **Production*
 .. code-block:: bash
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -1635,6 +2306,8 @@ Finally, the chassis partition **Production** containing slots 1 & 2 will be ena
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/config/enabled
 
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -1646,6 +2319,8 @@ Next, a chassis partition called **Development** will be created. It will be ass
 .. code-block:: bash
 
   POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -1674,6 +2349,8 @@ Next, slot 3 will be assigned to the chassis partition called Development:
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -1694,6 +2371,7 @@ Finally, the chassis partition **Development** containing slot 3 will be enabled
 
   PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Development/config/enabled
 
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -1707,6 +2385,8 @@ The chassis partitions will have a default username/password of admin/admin. Whe
 .. code-block:: bash
 
   POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
+
+Enter the following in the body of the API request.
 
 .. code-block:: json
 
@@ -1726,6 +2406,8 @@ Repeat the same process for the chassis partition Development:
 
   POST https://{{Chassis1_Devlopment_IP}}:8888/restconf/operations/openconfig-system:system/aaa/authentication/users/user=admin/config/change-password
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
     {
@@ -1744,6 +2426,8 @@ Once the chassis partitions have been created you can query their status using t
 
   GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions
 
+Enter the following in the body of the API request.
+
 .. code-block:: json
 
   {
@@ -1756,9 +2440,9 @@ Once the chassis partitions have been created you can query their status using t
                       "iso-version": "1.4.0-3915",
                       "mgmt-ip": {
                           "ipv4": {
-                              "address": "10.255.0.141",
+                              "address": "10.10.10.141",
                               "prefix-length": 24,
-                              "gateway": "10.255.0.1"
+                              "gateway": "10.10.10.1"
                           }
                       }
                   },
@@ -1798,9 +2482,9 @@ Once the chassis partitions have been created you can query their status using t
                       "iso-version": "1.4.0-3915",
                       "mgmt-ip": {
                           "ipv4": {
-                              "address": "10.255.0.148",
+                              "address": "10.10.10.148",
                               "prefix-length": 24,
-                              "gateway": "10.255.0.1"
+                              "gateway": "10.10.10.1"
                           }
                       }
                   },
@@ -1969,7 +2653,7 @@ System Settings -> Controller Management
 
 System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a Kubernetes control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
 
-An administrator can failover from one system controller to the other, and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
+An administrator can failover from one system controller to the other and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
 
 **NOTE: The initial v1.1.x F5OS-C versions did not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades, and updating the standby chassis first is recommended if possible. Rolling upgrade support for the system controllers was added to the 1.2.x release of F5OS-C. Once the system controllers are starting from a 1.2.x release, rolling upgrades are supported.** 
 
@@ -2069,7 +2753,7 @@ Once the QKView is generated, you can click the checkbox next to it, and then se
   :align: center
   :scale: 70% 
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a username and password.
+If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode and then use the **system diagnostics ihealth config** command to configure a username and password.
 
 .. code-block:: bash
 
@@ -2164,7 +2848,7 @@ You may define Server Groups which are collections of remote auth servers that t
 User Management -> Users
 ------------------------
 
-Local Users may be defined, passwords set or changed, and then assigned to specific roles (Admin or Operator). An account may also be locked, and that may be changed here.
+Local Users may be defined, passwords set or changed and then assigned to specific roles (Admin or Operator). An account may also be locked, and that may be changed here.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image49.png
   :align: center

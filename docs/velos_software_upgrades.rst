@@ -5,9 +5,9 @@ Software Upgrades
 F5OS-C System Controller Upgrades
 =================================
 
-The system controllers are fully redundant, however during software upgrades there can be outages of the entire chassis with the initial 1.1.x releases of F5OS. v1.2.x versions of F5OS-C introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
+The system controllers are fully redundant and F5OS-C v1.2.x versions of F5OS-C introduced a rolling upgrade capability for the system controller upgrade process, which minimizes disruption to the chassis. The chassis must be already running a version of F5OS 1.2.x or later to take advantage of this capability. Upgrades from 1.1.x versions to a 1.2.x version will not see rolling upgrade functionality.
 
-This means that both system controllers will be updated at the same time thus causing an outage for all services within that chassis when running v1.1.x F5OS versions. For this reason, it is recommended you upgrade the system controllers during outage window and failover all services to the other chassis that is paired with the one you’re upgrading. For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an active state, and the remaining controller will be upgraded.
+For 1.2.x and later upgrades of F5OS-C on the system controllers, a rolling upgrade occurs where the standby controller is upgraded first, and when completed it will go to an active state, and the remaining controller will be upgraded.
 
 When upgrading the system controllers, you will have a choice of upgrading either a bundled release, meaning **OS** and **Services** are **bundled** together in an ISO image, or **unbundled** where you can upgrade service and/or OS independently. F5 recommends using the bundled/ISO option for upgrades currently. In the future, unbundled options may be utilized for some upgrades.
 
@@ -52,6 +52,36 @@ Alternatively, you may also upload images to the controller through the **System
 
 After the upload completes, it will take some time for it to be replicated to the standby system controller. At that point it should show up in the CLI and webUI. If you don’t see it immediately, be patient and wait a few minutes for it to show up, as it will not appear until the internal replication is completed.
 
+You can monitor the status of an image upload in the WebUI as seen below.
+
+.. image:: images/velos_software_upgrades/upgrade-status.png
+  :align: center
+  :scale: 70%
+
+After completing the upload the image will go to the **Verifying** stage on the active controller.
+
+.. image:: images/velos_software_upgrades/verifying.png
+  :align: center
+  :scale: 70%
+
+After verification it will go to the **Ready** stage on the active controller. It will then begin extracting the ISO into the OS and service images. It will also begin replicating the image to the standby controller.
+
+.. image:: images/velos_software_upgrades/ready.png
+  :align: center
+  :scale: 70%
+
+
+.. image:: images/velos_software_upgrades/verifying-standby.png
+  :align: center
+  :scale: 70%
+
+
+Once the image shows ready on both controllers you are then ready to upgrade the controllers.
+
+.. image:: images/velos_software_upgrades/verifying-standby.png
+  :align: center
+  :scale: 70%
+
 Uploading Controller and Partition Images via the CLI
 -----------------------------------------------------
 
@@ -68,7 +98,7 @@ The **file import** utility in the CLI relies on either a remote HTTPS, SCP, or 
     1    |Import file|HTTPS   |images/staging/F5OS-C-1.2.1-10781.CONTROLLER.iso            |10.255.0.142        |/upload/F5OS-C-1.2.1-10781.CONTROLLER.iso                   |In Progress (5.0%)|Thu Sep 16 17:11:51 2021
     2    |Import file|HTTPS   |images/import/iso/F5OS-C-1.2.1-10781.CONTROLLER.iso         |10.255.0.142        |uploads/F5OS-C-1.2.1-10781.CONTROLLER.iso                   |File Not Found, HTTP Error 404|Thu Sep 16 16:18:27 2021
 
-You can alternatively copy the controller and partition images into the floating IP address of the system controllers. You would use the **root** account and the target directory should be **/var/import/staging/**.
+You can alternatively copy the controller and partition images into the floating IP address of the system controllers. You would use the **root** account, and the target directory should be **/var/import/staging/**.
 
 .. code-block:: bash
 
@@ -313,12 +343,35 @@ In the **Headers** section ensure you add the **file-upload-id** header, with th
 Upgrading the System Controllers via webUI
 ------------------------------------------
 
-Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support traffic disruption should be minimal during the upgrade process of the system controllers.
+Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this new functionality. With rolling upgrade support, traffic disruption should be minimal during the upgrade process of the system controllers as the tenants will still be running.
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
   :scale: 70%
 
+You'll be able to monitor the upgrade status by going to the **System Settings -> Controller Management** page. The upgrade will start with the backup controller, and it will move to **In Progress** status while the active controller will show **Pending** status.
+
+.. image:: images/velos_software_upgrades/pending.png
+  :align: center
+  :scale: 70%
+
+You may or may not see the status change to **In-Progress-Firmware** if a firmware upgrade is required. Not all upgrades require a firmware upgrade.
+
+.. image:: images/velos_software_upgrades/in-progress-firmware.png
+  :align: center
+  :scale: 70%
+
+When the standby controller is finished upgrading it will initiate a failover and become active. Your session to the WebUI will be disconnected, and you'll need to re-connect. The other controller will now start its upgrade process and will show **In Progress** while the other controller will now show **Success**.
+
+.. image:: images/velos_software_upgrades/success.png
+  :align: center
+  :scale: 70%
+
+Again, you may or may not see a firmware upgrade, but when complete both controllers should show **Success**.
+
+.. image:: images/velos_software_upgrades/success2.png
+  :align: center
+  :scale: 50%
 
 Upgrading the System Controllers via CLI
 ----------------------------------------
@@ -327,165 +380,198 @@ In the system controller CLI you can use the **show image** command to see the c
 
 .. code-block:: bash
 
-    syscon-1-active# show image
-    VERSION OS                                   IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   1           ready               false  
-    1.2.0-10357  1           ready   2021-08-21  false  
-    1.2.1-10692  1           ready   2021-08-30  false  
-    1.2.1-10781  1           ready   2021-09-01  true   
+    velos-1-gsa-1-active# show image 
+    VERSION OS                                             IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  
+    --------------------------------------------------------------------
+    1.8.0-17531  1           ready   2024-10-01  830.34MB  false  -     
+    1.8.0-18408  1           ready   2024-10-18  830.38MB  false  -     
+    1.8.0-19782  1           ready   2024-11-22  830.34MB  true   LTS   
 
-    VERSION                                             
-    SERVICE                                      IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.0-6101   1           ready   2021-05-09  false  
-    1.1.2-6101   1           ready   2021-05-09  false  
-    1.2.0-10357  1           ready   2021-08-21  false  
-    1.2.1-10692  1           ready   2021-08-30  false  
-    1.2.1-10781  1           ready   2021-09-01  true   
+    VERSION                                                           
+    SERVICE                                              IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.6.0-18695  1           ready   2023-10-08  3.36GB  false  LTS   
+    1.8.0-17531  1           ready   2024-10-01  3.63GB  false  -     
+    1.8.0-18408  1           ready   2024-10-18  3.69GB  false  -     
+    1.8.0-19782  1           ready   2024-11-22  3.69GB  true   LTS   
 
-    VERSION ISO                                  IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   1           ready   2021-05-09  false  
-    1.2.0-10357  1           ready   2021-08-21  false  
-    1.2.1-10692  1           ready   2021-08-30  false  
-    1.2.1-10781  1           ready   2021-09-01  false  
+    VERSION ISO                                          IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.8.0-17531  1           ready   2024-10-01  5.05GB  false  -     
+    1.8.0-18408  1           ready   2024-10-18  5.11GB  false  -     
+    1.8.0-19782  1           ready   2024-11-22  5.11GB  false  LTS   
 
-    VERSION OS                                   IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   2           ready   2021-05-09  false  
-    1.2.0-10357  2           ready   2021-08-21  false  
-    1.2.1-10692  2           ready   2021-08-30  false  
-    1.2.1-10781  2           ready   2021-09-01  true   
+    VERSION OS                                             IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  
+    --------------------------------------------------------------------
+    1.8.0-17531  2           ready   2024-10-01  830.34MB  false  -     
+    1.8.0-18408  2           ready   2024-10-18  830.38MB  false  -     
+    1.8.0-19782  2           ready   2024-11-22  830.34MB  true   LTS   
 
-    VERSION                                             
-    SERVICE                                      IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.0-6101   2           ready   2021-05-09  false  
-    1.1.2-6101   2           ready   2021-05-09  false  
-    1.2.0-10357  2           ready   2021-08-21  false  
-    1.2.1-10692  2           ready   2021-08-30  false  
-    1.2.1-10781  2           ready   2021-09-01  true   
+    VERSION                                                           
+    SERVICE                                              IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.6.0-18695  2           ready   2023-10-08  3.36GB  false  LTS   
+    1.8.0-17531  2           ready   2024-10-01  3.63GB  false  -     
+    1.8.0-18408  2           ready   2024-10-18  3.69GB  false  -     
+    1.8.0-19782  2           ready   2024-11-22  3.69GB  true   LTS   
 
-    VERSION ISO                                  IN     
-    CONTROLLER   CONTROLLER  STATUS  DATE        USE    
-    ----------------------------------------------------
-    1.1.2-6101   2           ready   2021-05-09  false  
-    1.2.0-10357  2           ready   2021-08-21  false  
-    1.2.1-10692  2           ready   2021-08-30  false  
-    1.2.1-10781  2           ready   2021-09-01  false  
+    VERSION ISO                                          IN           
+    CONTROLLER   CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  
+    ------------------------------------------------------------------
+    1.8.0-17531  2           ready   2024-10-01  5.05GB  false  -     
+    1.8.0-18408  2           ready   2024-10-18  5.11GB  false  -     
+    1.8.0-19782  2           ready   2024-11-22  5.11GB  false  LTS   
 
-    VERSION OS                                   IN               
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME  ID  
-    --------------------------------------------------------------
-    1.2.0-10357  1           ready   2021-08-21  false            
-    1.2.1-10692  1           ready   2021-08-30  false            
+    VERSION OS                                             IN                     
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  NAME  ID  
+    ------------------------------------------------------------------------------
+    1.6.0-12952  1           ready   2023-05-31  788.75MB  false  -               
+    1.8.0-17531  1           ready   2024-10-01  832.77MB  false  -               
+    1.8.0-18408  1           ready   2024-10-18  832.80MB  false  -               
+    1.8.0-19782  1           ready   2024-11-22  832.83MB  false  LTS             
 
-    VERSION                                                          
-    SERVICE                                      IN                  
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME     ID  
-    -----------------------------------------------------------------
-    1.2.0-10357  1           ready   2021-08-21  false               
-    1.2.1-10692  1           ready   2021-08-30  true   default  1   
+    VERSION                                                                        
+    SERVICE                                              IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  1           ready   2023-05-31  1.76GB  true   -     default  1   
+    1.8.0-17531  1           ready   2024-10-01  1.61GB  false  -                  
+    1.8.0-18408  1           ready   2024-10-18  1.67GB  false  -                  
+    1.8.0-19782  1           ready   2024-11-22  1.67GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    VERSION ISO                                  IN                         
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
-    ------------------------------------------------------------------------
-    1.2.0-10357  1           ready   2021-08-21  false                      
-    1.2.1-10692  1           ready   2021-08-30  true   Production    2   
-                                                        default         1   
-                                                        smallpartition  3   
+    VERSION ISO                                          IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  1           ready   2023-05-31  3.14GB  true   -     default  1   
+    1.8.0-17531  1           ready   2024-10-01  3.04GB  false  -                  
+    1.8.0-18408  1           ready   2024-10-18  3.10GB  false  -                  
+    1.8.0-19782  1           ready   2024-11-22  3.10GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    VERSION OS                                   IN               
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME  ID  
-    --------------------------------------------------------------
-    1.2.0-10357  2           ready   2021-08-21  false            
-    1.2.1-10692  2           ready   2021-08-30  false            
+    VERSION OS                                             IN                     
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE      USE    TYPE  NAME  ID  
+    ------------------------------------------------------------------------------
+    1.6.0-12952  2           ready   2023-05-31  788.75MB  false  -               
+    1.8.0-17531  2           ready   2024-10-01  832.77MB  false  -               
+    1.8.0-18408  2           ready   2024-10-18  832.80MB  false  -               
+    1.8.0-19782  2           ready   2024-11-22  832.83MB  false  LTS             
 
-    VERSION                                                          
-    SERVICE                                      IN                  
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME     ID  
-    -----------------------------------------------------------------
-    1.2.0-10357  2           ready   2021-08-21  false               
-    1.2.1-10692  2           ready   2021-08-30  true   default  1   
+    VERSION                                                                        
+    SERVICE                                              IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  2           ready   2023-05-31  1.76GB  true   -     default  1   
+    1.8.0-17531  2           ready   2024-10-01  1.61GB  false  -                  
+    1.8.0-18408  2           ready   2024-10-18  1.67GB  false  -                  
+    1.8.0-19782  2           ready   2024-11-22  1.67GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    VERSION ISO                                  IN                         
-    PARTITION    CONTROLLER  STATUS  DATE        USE    NAME            ID  
-    ------------------------------------------------------------------------
-    1.2.0-10357  2           ready   2021-08-21  false                      
-    1.2.1-10692  2           ready   2021-08-30  true   Production    2   
-                                                        default         1   
-                                                        smallpartition  3   
+    VERSION ISO                                          IN                        
+    PARTITION    CONTROLLER  STATUS  DATE        SIZE    USE    TYPE  NAME     ID  
+    -------------------------------------------------------------------------------
+    1.6.0-12952  2           ready   2023-05-31  3.14GB  true   -     default  1   
+    1.8.0-17531  2           ready   2024-10-01  3.04GB  false  -                  
+    1.8.0-18408  2           ready   2024-10-18  3.10GB  false  -                  
+    1.8.0-19782  2           ready   2024-11-22  3.10GB  true   LTS   blue     3   
+                                                                    green    2   
+                                                                    red      4   
 
-    syscon-1-active# 
+    velos-1-gsa-1-active#
 
 The command **show running-config image** will show the current configuration for software images. You can enter config mode and change the configuration using the **system image set-version** command and then commit to initiate an upgrade.
 
 .. code-block:: bash
 
-    syscon-1-active# show running-config image 
-    image controller config os os 1.1.2-6101
+    velos-1-gsa-1-active# show running-config image 
+    image controller config os os 1.8.0-17531
     !
-    image controller config os os 1.2.0-10357
+    image controller config os os 1.8.0-18408
     !
-    image controller config os os 1.2.1-10692
+    image controller config os os 1.8.0-19782
     !
-    image controller config os os 1.2.1-10781
+    image controller config services service 1.6.0-18695
     !
-    image controller config services service 1.1.0-6101
+    image controller config services service 1.8.0-17531
     !
-    image controller config services service 1.1.2-6101
+    image controller config services service 1.8.0-18408
     !
-    image controller config services service 1.2.0-10357
+    image controller config services service 1.8.0-19782
     !
-    image controller config services service 1.2.1-10692
+    image controller config iso iso 1.8.0-17531
+    service 1.8.0-17531
+    os      1.8.0-17531
     !
-    image controller config services service 1.2.1-10781
+    image controller config iso iso 1.8.0-18408
+    service 1.8.0-18408
+    os      1.8.0-18408
     !
-    image controller config iso iso 1.1.2-6101
-    service 1.1.2-6101
-    os      1.1.2-6101
+    image controller config iso iso 1.8.0-19782
+    service 1.8.0-19782
+    os      1.8.0-19782
     !
-    image controller config iso iso 1.2.0-10357
-    service 1.2.0-10357
-    os      1.2.0-10357
+    image partition config os os 1.6.0-12952
     !
-    image controller config iso iso 1.2.1-10692
-    service 1.2.1-10692
-    os      1.2.1-10692
+    image partition config os os 1.8.0-17531
     !
-    image controller config iso iso 1.2.1-10781
-    service 1.2.1-10781
-    os      1.2.1-10781
+    image partition config os os 1.8.0-18408
     !
-    image partition config os os 1.2.0-10357
+    image partition config os os 1.8.0-19782
     !
-    image partition config os os 1.2.1-10692
+    image partition config services service 1.6.0-12952
     !
-    image partition config services service 1.2.0-10357
+    image partition config services service 1.8.0-17531
     !
-    image partition config services service 1.2.1-10692
+    image partition config services service 1.8.0-18408
     !
-    image partition config iso iso 1.2.0-10357
-    service 1.2.0-10357
-    os      1.2.0-10357
+    image partition config services service 1.8.0-19782
     !
-    image partition config iso iso 1.2.1-10692
-    service 1.2.1-10692
-    os      1.2.1-10692
+    image partition config iso iso 1.6.0-12952
+    service 1.6.0-12952
+    os      1.6.0-12952
     !
-    syscon-1-active# 
+    image partition config iso iso 1.8.0-17531
+    service 1.8.0-17531
+    os      1.8.0-17531
+    !
+    image partition config iso iso 1.8.0-18408
+    service 1.8.0-18408
+    os      1.8.0-18408
+    !
+    image partition config iso iso 1.8.0-19782
+    service 1.8.0-19782
+    os      1.8.0-19782
+    !
+    velos-1-gsa-1-active#
+
+Before upgrading you need to run the **system image check-version** command on the ISO you want to upgrade to. This will ensure the image is valid and that the system is able to upgrade to that version. It will also provide an estimate of the upgrade time, along with the number of failovers required to complete the upgrade.
 
 .. code-block:: bash
 
-    syscon-1-active(config)# system image set-version iso-version 1.2.1-10781 
-    response Controller iso version has been set
-    syscon-1-active(config)# 
+    velos-1-gsa-1-active(config)# system image check-version iso-version 1.8.1-24468 
+    response Compatibility verification succeeded.
+    Estimated time: 66 minutes
+    Failover(s): 2
+    velos-1-gsa-1-active(config)#
+
+If the check-version succeeds, you may then run the **system image set-version** command to initiate the upgrade.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system image set-version iso-version 1.8.1-24468 proceed 
+    Value for 'proceed' [no,yes]: yes
+    response Controller ISO version has been set.
+    Estimated time: 66 minutes
+    Failover(s): 2
+    velos-1-gsa-1-active(config)#
 
 
 An upgrade of the system controllers should automatically start after the above command is entered. You can follow the upgrade progress by issuing the command **show system image**:
@@ -511,6 +597,8 @@ To upgrade the system controllers via the API you must first run the check versi
 
  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image/f5-system-controller-image:check-version
 
+In the body of the API call enter the following:
+
 .. code-block:: json
 
     {
@@ -533,13 +621,15 @@ This is the Set Version API call that will initiate the upgrade:
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image/f5-system-controller-image:set-version
 
+In the body of the API call enter the following:
+
 .. code-block:: json
 
     {
         "f5-system-controller-image:iso-version": "{{Controller_ISO_Image_Full}}"
     }
 
-If the upgrade is successful, you will get notification like the message below:
+If the upgrade initiation is successful, you will get notification like the message below:
 
 .. code-block:: json
 
@@ -549,7 +639,38 @@ If the upgrade is successful, you will get notification like the message below:
         }
     }
 
+You can then monitor the upgrade process with the following API call.
 
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image
+
+In the output, you will see the **install-status** of each controller.
+
+.. code-block:: json
+
+    {
+        "f5-system-controller-image:image": {
+            "state": {
+                "controllers": {
+                    "controller": [
+                        {
+                            "number": 1,
+                            "os-version": "1.8.1-24468",
+                            "service-version": "1.8.1-24468",
+                            "install-status": "success"
+                        },
+                        {
+                            "number": 2,
+                            "os-version": "1.8.1-24468",
+                            "service-version": "1.8.1-24468",
+                            "install-status": "success"
+                        }
+                    ]
+                }
+            }
+        }
+    }
 
 Chassis Partition Upgrades
 ==========================
@@ -668,8 +789,82 @@ In the system controller CLI you can use the **show image** command to see the c
 
     syscon-1-active# 
 
-The command **show running-config image** will show the current configuration for software images. You can enter **config** mode and change the configuration using the **system image set-version** command and then **commit** to initiate an upgrade.
+The command **show running-config image** will show the current configuration for software images. Before upgrading a chassis partition you must first run the **check-version** utility to ensure the system can be upgraded to the new releases, and it will also provide an estimate of how long the upgrade will take.
 
+You can enter **config** mode and check the version using the **partitions partition {{partition-name}} check-version iso-version {{iso-version}}** command. As seen below, an upgrade on the green partition to version 1.8.1-24468 will take 26 minutes, and there will be 2 reboots for each blade (due to an added firmware upgrade). Not all releases will require a firmware upgrade.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# partitions partition green check-version iso-version 1.8.1-24468 
+    result Partition upgrade compatibility check succeeded.
+    Estimated time: 26 minutes
+    Reboot(s): 2 for each blade
+
+    velos-1-gsa-2-active(config)# 
+
+Once the check version has been done, you can then run the **set-version** which will initiate the upgrade.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# partitions partition green set-version iso-version 1.8.1-24468 
+    Partition database compatibility check succeeded.
+    Changing running partition software version will interrupt tenant operation and data plane traffic.
+    Estimated time: 26 minutes
+    Reboot(s): 2 for each blade
+    Proceed? [yes/no]: yes
+    result Version update successful.
+    velos-1-gsa-2-active(config)#
+
+You can then monitor the partition install status using the **show partitions install** command. Note, how the green partition shows **in-progress**.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show partitions install 
+                                        INSTALL      INSTALL                               
+                BLADE OS     SERVICE      BLADE OS     SERVICE      INSTALL      INSTALLING  
+    NAME     ID  VERSION      VERSION      VERSION      VERSION      STATUS       CONTROLLER  
+    ------------------------------------------------------------------------------------------
+    none     -   -            -            -            -            -            -           
+    default  1   1.6.0-12952  1.6.0-12952  1.6.0-12952  1.6.0-12952  success      -           
+    green    2   1.8.0-19782  1.8.0-19782  1.8.1-24468  1.8.1-24468  in-progress  1           
+    blue     3   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success      -           
+    red      4   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success      -           
+
+    velos-1-gsa-2-active#
+
+It will then go through various states as the upgrade progresses.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show partitions install
+                                        INSTALL      INSTALL                                  
+                BLADE OS     SERVICE      BLADE OS     SERVICE                      INSTALLING  
+    NAME     ID  VERSION      VERSION      VERSION      VERSION      INSTALL STATUS  CONTROLLER  
+    ---------------------------------------------------------------------------------------------
+    none     -   -            -            -            -            -               -           
+    default  1   1.6.0-12952  1.6.0-12952  1.6.0-12952  1.6.0-12952  success         -           
+    green    2   1.8.0-19782  1.8.0-19782  1.8.1-24468  1.8.1-24468  switching-role  1           
+    blue     3   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success         -           
+    red      4   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success         -           
+
+    velos-1-gsa-2-active#  
+
+When completed, the install status will show **success**.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show partitions install
+                                        INSTALL      INSTALL                           
+                BLADE OS     SERVICE      BLADE OS     SERVICE      INSTALL  INSTALLING  
+    NAME     ID  VERSION      VERSION      VERSION      VERSION      STATUS   CONTROLLER  
+    --------------------------------------------------------------------------------------
+    none     -   -            -            -            -            -        -           
+    default  1   1.6.0-12952  1.6.0-12952  1.6.0-12952  1.6.0-12952  success  -           
+    green    2   1.8.1-24468  1.8.1-24468  1.8.1-24468  1.8.1-24468  success  -           
+    blue     3   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success  -           
+    red      4   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success  -           
+
+    velos-1-gsa-2-active#    
 
 Upgrading a Chassis Partition via the API
 -----------------------------------------
@@ -678,31 +873,33 @@ To upgrade a chassis partition via the API you must first run the check version 
 
 .. code-block:: bash
 
- POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/check-version
+ POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition={{velos_chassis_partition2_name}}/check-version
+
+In the body of the API call, enter the ISO image version you want to upgrade to.
 
 .. code-block:: json
 
     {
-        "input": {
-            "iso-version": "{{Partition_ISO_Image}}"
-        }
+        "f5-system-partition:iso-version": "{{velos_partition_iso_image}}"
     }
 
-If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call. Note, that it will provide an estimate of the time for the upgrade to complete, as well as list the number of reboots required.
 
 .. code-block:: json
 
     {
         "f5-system-partition:output": {
-            "result": "Partition upgrade compatibility check succeeded."
+            "result": "Partition upgrade compatibility check succeeded.\nEstimated time: 26 minutes\nReboot(s): 2 for each blade\n"
         }
     }
 
-This is the Set Version API call that will initiate the upgrade:
+Once the check version is successful, you may then initiate the upgrade using the set-version option. This is the set-version API call that will initiate the upgrade:
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/set-version
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition={{velos_chassis_partition2_name}}/set-version
+
+In the body of the API request, enter the ISO version you want to upgrade to.
 
 .. code-block:: json
 
@@ -712,16 +909,129 @@ This is the Set Version API call that will initiate the upgrade:
         }
     }
 
-If the upgrade is successful, you will get notification like the message below:
+If the set-version is successful, you will see a notification like the message below letting you know how long the upgrade will take:
 
 .. code-block:: json
 
     {
         "f5-system-partition:output": {
-            "result": "Version update successful."
+            "result": "Version update successful.\nEstimated time: 26 minutes\nReboot(s): 2 for each blade\n"
         }
     }
 
+To monitor the partition upgrade status, issue the following API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition={{velos_chassis_partition2_name}}
+
+In the body of the API call you can monitor the **install-status**.
+
+.. code-block:: json
+
+    {
+        "f5-system-partition:partition": [
+            {
+                "name": "blue",
+                "config": {
+                    "enabled": true,
+                    "iso-version": "1.8.0-19782",
+                    "configuration-volume": 15,
+                    "images-volume": 15,
+                    "shared-volume": 10,
+                    "pxe-server": "internal",
+                    "mgmt-ip": {
+                        "ipv4": {
+                            "address": "172.22.50.14",
+                            "prefix-length": 26,
+                            "gateway": "172.22.50.62"
+                        },
+                        "ipv6": {
+                            "address": "::",
+                            "prefix-length": 0,
+                            "gateway": "::"
+                        }
+                    }
+                },
+                "state": {
+                    "id": 3,
+                    "os-version": "1.8.0-19782",
+                    "service-version": "1.8.0-19782",
+                    "install-os-version": "1.8.1-24468",
+                    "install-service-version": "1.8.1-24468",
+                    "install-status": "switching-role",
+                    "installing-controller": 1,
+                    "ipv4": {
+                        "address": "172.22.50.14",
+                        "prefix-length": 26,
+                        "gateway": "172.22.50.62"
+                    },
+                    "ipv6": {
+                        "address": "::",
+                        "prefix-length": 0,
+                        "gateway": "::"
+                    },
+                    "controllers": {
+                        "controller": [
+                            {
+                                "controller": 1,
+                                "partition-id": 3,
+                                "partition-status": "running-active",
+                                "running-service-version": "1.8.1-24468",
+                                "status-seconds": "6",
+                                "status-age": "6s",
+                                "volumes": {
+                                    "volume": [
+                                        {
+                                            "volume-name": "config",
+                                            "total-size": "15G",
+                                            "available-size": "15G"
+                                        },
+                                        {
+                                            "volume-name": "images",
+                                            "total-size": "15G",
+                                            "available-size": "11G"
+                                        },
+                                        {
+                                            "volume-name": "shared",
+                                            "total-size": "10G",
+                                            "available-size": "10G"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "controller": 2,
+                                "partition-id": 3,
+                                "partition-status": "starting",
+                                "status-seconds": "0",
+                                "status-age": "0s",
+                                "volumes": {
+                                    "volume": [
+                                        {
+                                            "volume-name": "config",
+                                            "total-size": "15G",
+                                            "available-size": "15G"
+                                        },
+                                        {
+                                            "volume-name": "images",
+                                            "total-size": "15G",
+                                            "available-size": "11G"
+                                        },
+                                        {
+                                            "volume-name": "shared",
+                                            "total-size": "10G",
+                                            "available-size": "10G"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }
 
 
 Tenant Images and Upgrades
@@ -794,13 +1104,18 @@ You can view the current tenant images and their status in the chassis partition
 
 .. code-block:: bash
 
-    Production-1# show images
-                                                                            IN                 
-    NAME                                                                       USE    STATUS      
-    ----------------------------------------------------------------------------------------------
-    BIGIP-14.1.3-0.0.7.ALL-VELOS.qcow2.zip.bundle                              false  replicated  
-    BIGIP-14.1.4-0.0.619.ALL-VELOS.qcow2.zip.bundle                            true   replicated  
-    BIGIP-bigip14.1.x-tmos-bugfix-14.1.3.1-0.0.586.ALL-VELOS.qcow2.zip.bundle  false  replicated
+    green-partition-chassis1-gsa-1# show images
+                                                    IN                                     
+    NAME                                             USE    TYPE                STATUS      
+    ----------------------------------------------------------------------------------------
+    BIG-IP-Next-20.3.0-2.716.2+0.0.50                false  helm-image          replicated  
+    BIG-IP-Next-20.3.0-2.716.2+0.0.50.tar.bundle     false  helm-bundle         replicated  
+    BIG-IP-Next-20.3.0-2.716.2+0.0.50.yaml           false  helm-specification  replicated  
+    BIGIP-15.1.10.5-0.0.10.T4-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
+    BIGIP-15.1.10.6-0.0.6.ALL-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
+    BIGIP-17.1.1.4-0.0.9.ALL-F5OS.qcow2.zip.bundle   true   vm-image            replicated  
+
+    green-partition-chassis1-gsa-1# 
 
 
 
@@ -812,6 +1127,8 @@ To copy a tenant image into the chassis partition over the API, use the followin
 .. code-block:: bash
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+
+In the body of the API request, enter the information as seen below.
 
 .. code-block:: json
 

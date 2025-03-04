@@ -4,7 +4,7 @@ VELOS F5OS SNMP Monitoring and Alerting
 
 SNMP support for F5OS will vary by release. In the initial F5OS-C 1.1.x versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**. F5OS-C 1.5.x added additional SNMP MIB and trap coverage and F5OS-C 1.6.0 added SNMPv3 support. The **F5-PLATFORM-STATS-MIB** and **F5-OS-SYSTEM-MIB** were not supported on the system controllers until F5OS-C 1.6.0.
 
-As of F5OS-C 1.6.0 the list of SNMP MIBs available are as follows:
+As of F5OS-C 1.8.0 the list of SNMP MIBs available are as follows:
 
 **VELOS System Controller MIBs**
 
@@ -19,7 +19,7 @@ F5OS Controller MIBs:
 NetSNMP MIBs System Controller:
 
 - EtherLike-MIB
-- HOST-RESOURCES-MIB (Included for dependency reasons, not supported)
+- HOST-RESOURCES-MIB
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
@@ -41,19 +41,20 @@ NetSNMP MIBs System Controller:
 
 F5OS Chassis Partition MIBs:
 
-- F5-ALERT-DEF-MIB
-- F5-COMMON-SMI-MIB
-- F5-OS-LLDP-MIB
-- F5-OS-PLATFORM-SMI-MIB
-- F5-OS-SYSTEM-MIB
-- F5-PARTITION-ALERT-NOTIF-MIB
 - F5-PLATFORM-STATS-MIB
+- F5-PARTITION-ALERT-NOTIF-MIB
+- F5-OS-TENANT-MIB
+- F5-OS-SYSTEM-MIB
+- F5-OS-PLATFORM-SMI-MIB
+- F5-OS-LLDP-MIB
+- F5-COMMON-SMI-MIB
+- F5-ALERT-DEF-MIB
 
 
 NetSNMP MIBs Chassis Partition:
 
 - EtherLike-MIB
-- HOST-RESOURCES-MIB (Included for dependency reasons, not supported)
+- HOST-RESOURCES-MIB
 - IANAifType-MIB
 - IF-MIB
 - IPV6-TC
@@ -1382,8 +1383,8 @@ Polling SNMP Endpoints
 Once SNMP is properly setup and allow-lists are enabled (in both the system controllers and chassis partitions), you can poll SNMP objects from remote endpoints. If you have an SNMP manager, it is recommended you download the appropriate MIBs from the VELOS chassis and compile them into you SNMP manager. Alternatively, you can use SNMP command line utilities from a remote client to validate the SNMP endpoints. You can then poll/query either the chassis partition or the system controller via SNMP to get stats from the system using the following SNMP OID's:
 
 
-SNMP System
------------
+System
+------
 
 You can view system parameters such as SysDescr, sysObjectID, sysUptime, sysContact, sysName, sysLocation, sysServices, sysORLastChange, sysORTable, sysDateAndTime by SNMP walking the following OID.
 
@@ -1405,8 +1406,8 @@ Example output:
     prompt%
 
 
-SNMP ifTable & ifXTable
------------------------
+ifTable & ifXTable
+------------------
 
 You can poll the following SNMP OIDs to get detailed Interface stats for each physical port on the BX110 blades, and for Link Aggregation Groups that have been configured. Note, that you will only see interfaces and LAGs that are configured within the chassis partition you are monitoring. You will not have visibility into other chassis partition interfaces or LAGs unless you poll those chassis partitions directly. Below are the table views of the ifTable and ifXTable, you can poll individual interfaces if needed.
 
@@ -1871,24 +1872,107 @@ Below is an example of an SNMP response from the system controllers.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
     SNMP table: F5-PLATFORM-STATS-MIB::diskUtilizationStatsTable
 
-    diskPercentageUsed  diskTotalIops diskReadIops diskReadMerged     diskReadBytes diskReadLatencyMs   diskWriteIops diskWriteMerged       diskWriteBytes diskWriteLatencyMs
-                    ? 225124465 IOPs  754014 IOPs         616139  9625482752 bytes         146668 ms 1141617894 IOPs      1017149001 10947930554880 bytes        32045027 ms
-                    ? 230817683 IOPs  772963 IOPs         722503 10391336960 bytes         132484 ms 1171208497 IOPs       929037671 10557217084416 bytes        31396802 ms
-    prompt%
+    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged     diskReadBytes diskReadLatencyMs diskWriteIops diskWriteMerged    diskWriteBytes diskWriteLatencyMs
+        12 percentage        0 IOPs     204 IOPs              0     8749056 bytes            185 ms        0 IOPs               0           0 bytes               0 ms
+        12 percentage        0 IOPs  666228 IOPs        1115473 10110011392 bytes         272411 ms  2118902 IOPs         2351220 28983360512 bytes         5512882 ms
+        17 percentage        0 IOPs     201 IOPs              0     8355840 bytes            182 ms        0 IOPs               0           0 bytes               0 ms
+        17 percentage        0 IOPs  547803 IOPs         858905  8188963328 bytes          80584 ms  1404623 IOPs         1786639 22982436864 bytes         2349522 ms
+    prompt %
 
 Below is an example of an SNMP response from a chassis partition.
 
 .. code-block:: bash
 
-    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:diskUtilizationStatsTable
     SNMP table: F5-PLATFORM-STATS-MIB::diskUtilizationStatsTable
 
-    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged    diskReadBytes diskReadLatencyMs  diskWriteIops diskWriteMerged      diskWriteBytes diskWriteLatencyMs
-                    ? 61438858 IOPs  385138 IOPs             39 5277251584 bytes         133577 ms 715914107 IOPs       488863893 7439268038144 bytes        49397122 ms
-                    ? 43878413 IOPs  106619 IOPs             57 2466797568 bytes          56394 ms 467008954 IOPs       400818555 4270643787264 bytes        12735703 ms
+    diskPercentageUsed diskTotalIops diskReadIops diskReadMerged    diskReadBytes diskReadLatencyMs diskWriteIops diskWriteMerged   diskWriteBytes diskWriteLatencyMs
+        3 percentage        0 IOPs  119946 IOPs              0 4526585856 bytes          86491 ms   189810 IOPs          187943 6725282304 bytes         3824236 ms
+        3 percentage        0 IOPs  127245 IOPs              0 4551145472 bytes          87063 ms   193734 IOPs          193829 6859720192 bytes         6429589 ms
+    prompt%
+
+Host Resources Storage Table
+----------------------------
+
+The table below shows the current file system utilization on an VELOS chassis.
+
+**hrStorageTable OID: 1.3.6.1.2.1.25.2.3**
+
+The table below is from a VELOS System Controller:
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 hrStorageTable
+    SNMP table: HOST-RESOURCES-MIB::hrStorageTable
+
+    hrStorageIndex                            hrStorageType                         hrStorageDescr hrStorageAllocationUnits hrStorageSize hrStorageUsed hrStorageAllocationFailures
+            65537 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-1 /dev               4096 Bytes       4085896             0                           ?
+            65538 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-1 /dev/shm               4096 Bytes       4100923             0                           ?
+            65539 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-1 /run               4096 Bytes       4100923          5725                           ?
+            65540 HOST-RESOURCES-TYPES::hrStorageFixedDisk            controller-1 /sys/fs/cgroup               4096 Bytes       4100923             0                           ?
+            65541 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-1 /sysroot               4096 Bytes     118410536      14566508                           ?
+            65542 HOST-RESOURCES-TYPES::hrStorageFixedDisk                     controller-1 /boot               4096 Bytes        121909         36321                           ?
+            65543 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 controller-1 /boot/efi               4096 Bytes        127930          3218                           ?
+            65544 HOST-RESOURCES-TYPES::hrStorageFixedDisk       controller-1 /var/export/chassis               4096 Bytes      90050865      21728365                           ?
+            65545 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition1               4096 Bytes       2618880          8274                           ?
+            65546 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition1/IMAGES               4096 Bytes       3929600          8260                           ?
+            65547 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition1/shared               4096 Bytes       2618880          8260                           ?
+            65548 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition2               4096 Bytes       2618880         37687                           ?
+            65549 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509948                           ?
+            65550 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
+            65551 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition3               4096 Bytes       2618880         38662                           ?
+            65552 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition3/IMAGES               4096 Bytes       3929600       1067005                           ?
+            65553 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition3/shared               4096 Bytes       2618880          8303                           ?
+            131073 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-2 /dev               4096 Bytes       4085896             0                           ?
+            131074 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-2 /dev/shm               4096 Bytes       4100923             0                           ?
+            131075 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      controller-2 /run               4096 Bytes       4100923          5815                           ?
+            131076 HOST-RESOURCES-TYPES::hrStorageFixedDisk            controller-2 /sys/fs/cgroup               4096 Bytes       4100923             0                           ?
+            131077 HOST-RESOURCES-TYPES::hrStorageFixedDisk                  controller-2 /sysroot               4096 Bytes      86403125      15398397                           ?
+            131078 HOST-RESOURCES-TYPES::hrStorageFixedDisk                     controller-2 /boot               4096 Bytes        121909         36316                           ?
+            131079 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 controller-2 /boot/efi               4096 Bytes        127930          3218                           ?
+            131080 HOST-RESOURCES-TYPES::hrStorageFixedDisk       controller-2 /var/export/chassis               4096 Bytes      66054144      17751119                           ?
+            131081 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition1               4096 Bytes       2618880          8248                           ?
+            131082 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition1/IMAGES               4096 Bytes       3929600          8260                           ?
+            131083 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition1/shared               4096 Bytes       2618880          8260                           ?
+            131084 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition2               4096 Bytes       2618880         37808                           ?
+            131085 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509956                           ?
+            131086 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
+            131087 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition3               4096 Bytes       2618880         37752                           ?
+            131088 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition3/IMAGES               4096 Bytes       3929600       1067013                           ?
+            131089 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition3/shared               4096 Bytes       2618880          8303                           ?
+    prompt% 
+
+It can also be run against a VELOS chassis partition:
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 hrStorageTable
+    SNMP table: HOST-RESOURCES-MIB::hrStorageTable
+
+    hrStorageIndex                            hrStorageType                         hrStorageDescr hrStorageAllocationUnits hrStorageSize hrStorageUsed hrStorageAllocationFailures
+            65537 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-1 /dev               4096 Bytes      16432028             0                           ?
+            65538 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-1 /dev/shm               4096 Bytes      16447028             0                           ?
+            65539 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-1 /run               4096 Bytes      16447028         14531                           ?
+            65540 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 blade-1 /sys/fs/cgroup               4096 Bytes      16447028             0                           ?
+            65541 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-1 /sysroot               4096 Bytes     239039335       7523014                           ?
+            65542 HOST-RESOURCES-TYPES::hrStorageFixedDisk                          blade-1 /boot               4096 Bytes        121909         36037                           ?
+            65543 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      blade-1 /boot/efi               4096 Bytes        127930          5256                           ?
+            131073 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-2 /dev               4096 Bytes      16432028             0                           ?
+            131074 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-2 /dev/shm               4096 Bytes      16447028             0                           ?
+            131075 HOST-RESOURCES-TYPES::hrStorageFixedDisk                           blade-2 /run               4096 Bytes      16447028         14865                           ?
+            131076 HOST-RESOURCES-TYPES::hrStorageFixedDisk                 blade-2 /sys/fs/cgroup               4096 Bytes      16447028             0                           ?
+            131077 HOST-RESOURCES-TYPES::hrStorageFixedDisk                       blade-2 /sysroot               4096 Bytes     239039335      11878572                           ?
+            131078 HOST-RESOURCES-TYPES::hrStorageFixedDisk                          blade-2 /boot               4096 Bytes        121909         36041                           ?
+            131079 HOST-RESOURCES-TYPES::hrStorageFixedDisk                      blade-2 /boot/efi               4096 Bytes        127930          5256                           ?
+            6619137 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-1 /var/F5/partition2               4096 Bytes       2618880         37294                           ?
+            6619138 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509948                           ?
+            6619139 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-1 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
+            6684673 HOST-RESOURCES-TYPES::hrStorageFixedDisk        controller-2 /var/F5/partition2               4096 Bytes       2618880         37821                           ?
+            6684674 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/IMAGES               4096 Bytes       3929600       1509956                           ?
+            6684675 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
     prompt%
 
 Componenent Info Table
@@ -1904,37 +1988,72 @@ Below is the component info table from the system controller layer.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:componentInfoTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:componentInfoTable
+
     SNMP table: F5-PLATFORM-STATS-MIB::componentInfoTable
 
-        serialNo                    model
-    sub0811g002h                        ?
-    19331BPJ0075                        ?
-    19332BPJ0129                        ?
-    bld422435s                VELOS BX110
-    bld424551s                VELOS BX110
-    bld422573s                VELOS BX110
-    chs600032s                VELOS CX410
-    sub0772g006w                        ?
-    bld422584s                VELOS SX410
-    bld424548s                VELOS SX410
-    sub0759g003u                        ?
-    sub0759g003z                        ?
+        serialNo                     model baudRate
+    sub0811g000m                         ?        ?
+    19010BPJ0038                         ?        ?
+    19010BPJ0020                         ?        ?
+    bld424257s                       BX110        ?
+    bld424258s                       BX110        ?
+    bld422437s                       BX110        ?
+    chs600148s                       CX410        ?
+    Sub0772g001b                         ?        ?
+    bld424389s                       SX410      19200
+    bld424501s                       SX410      19200
+    sub0759g0014                         ?        ?
+    sub0759g000z                         ?        ?
     prompt% 
+
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable and each component and its coresponding serial number will be displayed.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:componentInfoTable
+    F5-PLATFORM-STATS-MIB::serialNo."lcd" = STRING: sub0811g000m
+    F5-PLATFORM-STATS-MIB::serialNo."psu-1" = STRING: 19010BPJ0038
+    F5-PLATFORM-STATS-MIB::serialNo."psu-2" = STRING: 19010BPJ0020
+    F5-PLATFORM-STATS-MIB::serialNo."blade-1" = STRING: bld424257s
+    F5-PLATFORM-STATS-MIB::serialNo."blade-2" = STRING: bld424258s
+    F5-PLATFORM-STATS-MIB::serialNo."blade-3" = STRING: bld422437s
+    F5-PLATFORM-STATS-MIB::serialNo."chassis" = STRING: chs600148s
+    F5-PLATFORM-STATS-MIB::serialNo."fantray-1" = STRING: Sub0772g001b
+    F5-PLATFORM-STATS-MIB::serialNo."controller-1" = STRING: bld424389s
+    F5-PLATFORM-STATS-MIB::serialNo."controller-2" = STRING: bld424501s
+    F5-PLATFORM-STATS-MIB::serialNo."psu-controller-1" = STRING: sub0759g0014
+    F5-PLATFORM-STATS-MIB::serialNo."psu-controller-2" = STRING: sub0759g000z
+    F5-PLATFORM-STATS-MIB::model."blade-1" = STRING: BX110
+    F5-PLATFORM-STATS-MIB::model."blade-2" = STRING: BX110
+    F5-PLATFORM-STATS-MIB::model."blade-3" = STRING: BX110
+    F5-PLATFORM-STATS-MIB::model."chassis" = STRING: CX410
+    F5-PLATFORM-STATS-MIB::baudRate."controller-1" = INTEGER: 19200
+    F5-PLATFORM-STATS-MIB::baudRate."controller-2" = INTEGER: 19200
+    prompt%
+
 
 Below is the component info table from the chassis partition layer.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 F5-PLATFORM-STATS-MIB:componentInfoTable
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:componentInfoTable
+
     SNMP table: F5-PLATFORM-STATS-MIB::componentInfoTable
 
-    serialNo model
-    bld422435s     ?
-    bld424551s     ?
-    prompt%
+    serialNo    model baudRate
+    bld424257s  BX110        ?
+    bld424258s  BX110        ?
+    prompt% 
 
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable within the chassis partition and each blade and its coresponding serial number will be displayed.
 
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:componentInfoTable
+    F5-PLATFORM-STATS-MIB::serialNo."blade-1" = STRING: bld424257s
+    F5-PLATFORM-STATS-MIB::serialNo."blade-2" = STRING: bld424258s
+    prompt% 
 
 Power Supply Unit Stats Table
 ----------------------------
@@ -1979,8 +2098,22 @@ Below is an example of an SNMP response from the system controllers.
     19.3 centigrade 19.2 centigrade 18.5 centigrade 22.3 centigrade
     prompt%
 
+You can also walk the F5-PLATFORM-STATS-MIB:temperatureStatsTable and each component and its corresponding temperature reading will be displayed.
 
-Below is an example of an SNMP response from a chassis partition.
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:temperatureStatsTable 
+    F5-PLATFORM-STATS-MIB::tempCurrent."controller-1" = INTEGER: 18.1 centigrade
+    F5-PLATFORM-STATS-MIB::tempCurrent."controller-2" = INTEGER: 16.6 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."controller-1" = INTEGER: 16.4 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."controller-2" = INTEGER: 15.1 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."controller-1" = INTEGER: 15.7 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."controller-2" = INTEGER: 14.3 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."controller-1" = INTEGER: 18.8 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."controller-2" = INTEGER: 18.0 centigrade
+    prompt%
+
+Below is an example of an SNMP response from a chassis partition and each blade and its corresponding temperature reading will be displayed.
 
 .. code-block:: bash
 
@@ -1992,18 +2125,31 @@ Below is an example of an SNMP response from a chassis partition.
     27.0 centigrade 26.0 centigrade 25.0 centigrade 29.0 centigrade
     prompt% 
 
+You can also walk the F5-PLATFORM-STATS-MIB:temperatureStatsTable within a chassis partition and each blade within the partition and its corresponding temperature reading will be displayed.
 
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:temperatureStatsTable
+    F5-PLATFORM-STATS-MIB::tempCurrent."blade-1" = INTEGER: 21.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempCurrent."blade-2" = INTEGER: 19.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."blade-1" = INTEGER: 19.9 centigrade
+    F5-PLATFORM-STATS-MIB::tempAverage."blade-2" = INTEGER: 18.6 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."blade-1" = INTEGER: 19.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempMinimum."blade-2" = INTEGER: 18.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."blade-1" = INTEGER: 23.0 centigrade
+    F5-PLATFORM-STATS-MIB::tempMaximum."blade-2" = INTEGER: 21.0 centigrade
+    prompt%
 
 Memory Stats Table
 ------------------
 
-This MIB displays the memory utilization for the system controllers. It is not currently supported on the chassis partitions. 
+This MIB displays the memory utilization for the system controllers as well as the chassis partitions. Below is the table view for the system ccontrollers:
 
 **F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1**
 
 .. code-block:: bash
 
-    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    prompt%  snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:memoryStatsTable 
     SNMP table: F5-PLATFORM-STATS-MIB::memoryStatsTable
 
         memAvailable         memFree memPercentageUsed  memPlatformTotal   memPlatformUsed
@@ -2011,11 +2157,58 @@ This MIB displays the memory utilization for the system controllers. It is not c
     23474733056 bytes 468787200 bytes     30 percentage 33594761216 bytes 13459021824 bytes
     prompt% 
 
+You can also walk the F5-PLATFORM-STATS-MIB:memoryStatsTable within a system controller and each controller and its corresponding memory readings will be displayed.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    F5-PLATFORM-STATS-MIB::memAvailable."controller-1" = Counter64: 25858002944 bytes
+    F5-PLATFORM-STATS-MIB::memAvailable."controller-2" = Counter64: 25343537152 bytes
+    F5-PLATFORM-STATS-MIB::memFree."controller-1" = Counter64: 696377344 bytes
+    F5-PLATFORM-STATS-MIB::memFree."controller-2" = Counter64: 288727040 bytes
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."controller-1" = INTEGER: 23 percentage
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."controller-2" = INTEGER: 24 percentage
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."controller-1" = Counter64: 33594761216 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."controller-2" = Counter64: 33594761216 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."controller-1" = Counter64: 9703399424 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."controller-2" = Counter64: 10094477312 bytes
+    prompt%   
+
+Below is a table view of the memory consumption for all the blades within a chassis partition. In the example below there are two blades.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:memoryStatsTable 
+    SNMP table: F5-PLATFORM-STATS-MIB::memoryStatsTable
+
+        memAvailable           memFree memPercentageUsed  memPlatformTotal  memPlatformUsed
+    19053563904 bytes 15529746432 bytes     85 percentage 26843971584 bytes 7043231744 bytes
+    18955780096 bytes 15364800512 bytes     85 percentage 26843971584 bytes 7147962368 bytes
+    prompt%
+
+
+You can also walk the F5-PLATFORM-STATS-MIB:memoryStatsTable within a chassis partition and each blade within the partition and its corresponding memory readings will be displayed.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:memoryStatsTable      
+    F5-PLATFORM-STATS-MIB::memAvailable."blade-1" = Counter64: 19054059520 bytes
+    F5-PLATFORM-STATS-MIB::memAvailable."blade-2" = Counter64: 18947096576 bytes
+    F5-PLATFORM-STATS-MIB::memFree."blade-1" = Counter64: 15540944896 bytes
+    F5-PLATFORM-STATS-MIB::memFree."blade-2" = Counter64: 15365103616 bytes
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."blade-1" = INTEGER: 85 percentage
+    F5-PLATFORM-STATS-MIB::memPercentageUsed."blade-2" = INTEGER: 85 percentage
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."blade-1" = Counter64: 26843971584 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformTotal."blade-2" = Counter64: 26843971584 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."blade-1" = Counter64: 7042252800 bytes
+    F5-PLATFORM-STATS-MIB::memPlatformUsed."blade-2" = Counter64: 7156518912 bytes
+    prompt% 
+
 
 FPGA Stats Table
 ----------------
 
-The FPGA Stats table shows the current FPGA versions. There are two different FPGAs on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer.
+The FPGA Stats table shows the current FPGA versions. There are two different FPGAs on each BX110 line card: the ATSE (Application Traffic Service Engine) and the VQF (VELOS Queuing FPGA). This MIB is only supported on the chassis partition layer. Below is the table view.
 
 **F5-PLATFORM-STATS-MIB:fpgaTable OID: .1.3.6.1.4.1.12276.1.2.1.5.1**
 
@@ -2031,6 +2224,22 @@ The FPGA Stats table shows the current FPGA versions. There are two different FP
         atse_0      7.10.2
     prompt%
 
+You can also walk the MIB to get more information.
+
+.. code-block:: bash
+
+    prompt% snmpwalk  -v 2c -c public -m ALL 10.255.2.24 F5-PLATFORM-STATS-MIB:fpgaTable 
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-1"."vqf_0" = STRING: vqf_0
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-1"."atse_0" = STRING: atse_0
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-2"."vqf_0" = STRING: vqf_0
+    F5-PLATFORM-STATS-MIB::fpgaIndex."blade-2"."atse_0" = STRING: atse_0
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-1"."vqf_0" = STRING: 8.10.0
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-1"."atse_0" = STRING: 7.10.6
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-2"."vqf_0" = STRING: 8.10.0
+    F5-PLATFORM-STATS-MIB::fpgaVersion."blade-2"."atse_0" = STRING: 7.10.6
+    prompt%
+
+
 Firmware Table
 ----------------
 
@@ -2042,31 +2251,22 @@ Below is an example of an SNMP response from the system controllers.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:fwTable  
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:fwTable  
     SNMP table: F5-PLATFORM-STATS-MIB::fwTable
 
                                 fwName     fwVersion configurable fwUpdateStatus
-                    fw-version-lop-app             ?        false           none
-                fw-version-fpga-vqf0             ?        false           none
-                fw-version-fpga-atse0             ?        false           none
-                    fw-version-lop-app             ?        false           none
-                fw-version-fpga-vqf0             ?        false           none
-                fw-version-fpga-atse0             ?        false           none
-                    fw-version-lop-app             ?        false           none
-                fw-version-fpga-vqf0             ?        false           none
-                fw-version-fpga-atse0             ?        false           none
                         fw-version-bios    2.02.170.1        false           none
                         fw-version-cpld      01.03.0A        false           none
                         fw-version-sirr        1.1.52        false           none
-                    fw-version-drive      EDA7602Q        false           none
+                    fw-version-drive      VCV10301        false           none
                     fw-version-bios-me     4.0.4.705        false           none
                     fw-version-lcd-app 2.02.141.00.1        false           none
-                    fw-version-lop-app 2.01.1228.0.1        false           none
+                    fw-version-lop-app 2.01.1276.0.1        false           none
             fw-version-lcd-bootloader 2.01.109.00.1        false           none
             fw-version-lop-bootloader 1.02.1019.0.1        false           none
-            fw-version-vfc-app-fanCtrl1  2.00.960.0.1        false           none
-            fw-version-vpc-app-psuCtrl1  2.00.827.0.1        false           none
-            fw-version-vpc-app-psuCtrl2  2.00.827.0.1        false           none
+            fw-version-vfc-app-fanCtrl1 2.00.1008.0.1        false           none
+            fw-version-vpc-app-psuCtrl1  2.00.875.0.1        false           none
+            fw-version-vpc-app-psuCtrl2  2.00.875.0.1        false           none
     fw-version-vfc-bootloader-fanCtrl1  1.02.798.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl1  1.02.669.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl2  1.02.669.0.1        false           none
@@ -2076,16 +2276,16 @@ Below is an example of an SNMP response from the system controllers.
                     fw-version-drive      EDA7602Q        false           none
                     fw-version-bios-me     4.0.4.705        false           none
                     fw-version-lcd-app 2.02.141.00.1        false           none
-                    fw-version-lop-app 2.01.1228.0.1        false           none
+                    fw-version-lop-app 2.01.1282.0.1        false              ?
             fw-version-lcd-bootloader 2.01.109.00.1        false           none
             fw-version-lop-bootloader 1.02.1019.0.1        false           none
-            fw-version-vfc-app-fanCtrl1  2.00.960.0.1        false           none
-            fw-version-vpc-app-psuCtrl1  2.00.827.0.1        false           none
-            fw-version-vpc-app-psuCtrl2  2.00.827.0.1        false           none
+            fw-version-vfc-app-fanCtrl1 2.00.1008.0.1        false           none
+            fw-version-vpc-app-psuCtrl1  2.00.875.0.1        false           none
+            fw-version-vpc-app-psuCtrl2  2.00.875.0.1        false           none
     fw-version-vfc-bootloader-fanCtrl1  1.02.798.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl1  1.02.669.0.1        false           none
     fw-version-vpc-bootloader-psuCtrl2  1.02.669.0.1        false           none
-    prompt%
+    prompt% 
 
 Below is an example of an SNMP response from the chassis partition.
 
@@ -2095,170 +2295,670 @@ Below is an example of an SNMP response from the chassis partition.
     SNMP table: F5-PLATFORM-STATS-MIB::fwTable
 
                         fwName                         fwVersion configurable fwUpdateStatus
-                        QAT0 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT1 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT2 Lewisburg C62X Crypto/Compression        false              ?
-            fw-version-bios                        3.00.222.1        false           none
-            fw-version-cpld                          04.03.02        false           none
-            fw-version-sirr                            1.1.58        false           none
+                          QAT0 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT1 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT2 Lewisburg C62X Crypto/Compression        false              ?
+               fw-version-bios                        3.00.222.1        false           none
+               fw-version-cpld                          04.03.02        false           none
+               fw-version-sirr                            1.1.58        false           none
             fw-version-bios-me                         4.0.4.736        false           none
             fw-version-lop-app                     2.00.1053.0.1        false              ?
-    fw-version-drives-nvme0n1                                 ?        false           none
-    fw-version-lop-bootloader                      1.02.868.0.1        false           none
-                        QAT0 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT1 Lewisburg C62X Crypto/Compression        false              ?
-                        QAT2 Lewisburg C62X Crypto/Compression        false              ?
-            fw-version-bios                        3.00.222.1        false           none
-            fw-version-cpld                          04.03.02        false           none
-            fw-version-sirr                            1.1.58        false           none
+     fw-version-drives-nvme0n1                                 ?        false           none
+     fw-version-lop-bootloader                      1.02.868.0.1        false           none
+                          QAT0 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT1 Lewisburg C62X Crypto/Compression        false              ?
+                          QAT2 Lewisburg C62X Crypto/Compression        false              ?
+               fw-version-bios                        3.00.222.1        false           none
+               fw-version-cpld                          04.03.02        false           none
+               fw-version-sirr                            1.1.58        false           none
             fw-version-bios-me                         4.0.4.736        false           none
             fw-version-lop-app                     2.00.1053.0.1        false              ?
-    fw-version-drives-nvme0n1                                 ?        false           none
-    fw-version-lop-bootloader                      1.02.868.0.1        false           none
+     fw-version-drives-nvme0n1                                 ?        false           none
+     fw-version-lop-bootloader                      1.02.868.0.1        false           none
+    prompt%
+
+Fantray Stats Table
+----------------------
+
+Query the following SNMP OID to get detailed fan speeds.
+
+**F5-PLATFORM-STATS-MIB:fantrayStatsTable  OID: .1.3.6.1.4.1.12276.1.2.1.7.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.23 F5-PLATFORM-STATS-MIB:fantrayStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::fantrayStatsTable
+
+    fan-1-speed fan-2-speed fan-3-speed fan-4-speed fan-5-speed fan-6-speed fan-7-speed fan-8-speed fan-9-speed fan-10-speed fan-11-speed fan-12-speed fantray-temperature inlet-fan-1-speed inlet-fan-2-speed inlet-fan-3-speed exhaust-fan-1-speed exhaust-fan-2-speed exhaust-fan-3-speed
+            ?           ?           ?           ?           ?           ?           ?           ?           ?            ?            ?            ?            18.0 °C          6570 RPM          6560 RPM          6516 RPM            6534 RPM            6538 RPM            6538 RPM
+    prompt% 
+
+Licensing Info
+--------------
+
+Query the following SNMP OID to get detailed licensing information.
+
+**F5-OS-SYSTEM-MIB:licenseActiveModuleTable  OID: 1.3.6.1.4.1.12276.1.3.3.9**
+
+The licenseActiveModuleTable will display all actively licensed modules.
+
+.. code-block:: bash
+
+    prompt% snmptable -v2c -c public -m ALL 10.255.2.23 F5-OS-SYSTEM-MIB:licenseActiveModuleTable
+    SNMP table: F5-OS-SYSTEM-MIB::licenseActiveModuleTable
+
+                                                                                                                                                                                                                                                                    activeModule
+    Best Bundle, CX410|Y307926-5850731|Max Compression, CX410|Rate Shaping|Max SSL, CX410|DNS, Max QPS, CX410|Advanced Web Application Firewall, CX410|Access Policy Manager, Base, CX410|Advanced Firewall Manager, CX410|Carrier Grade NAT (AFM ONLY)|Advanced Routing, CX410
+    prompt% 
+
+You can also snmpwalk from the OID 1.3.6.1.4.1.12276.1.3 to get more licensing details:
+
+.. code-block:: bash
+
+    prompt% snmpwalk -ObenU -v2c -c public 10.255.2.23 1.3.6.1.4.1.12276.1.3
+    .1.3.6.1.4.1.12276.1.3.3.1.0 = STRING: "1.6.2"
+    .1.3.6.1.4.1.12276.1.3.3.2.0 = STRING: "S7446-04251-28413-73770-4543519"
+    .1.3.6.1.4.1.12276.1.3.3.3.0 = STRING: "2024/08/21"
+    .1.3.6.1.4.1.12276.1.3.3.4.0 = STRING: "2024/04/08"
+    .1.3.6.1.4.1.12276.1.3.3.5.0 = STRING: "2024/09/20"
+    .1.3.6.1.4.1.12276.1.3.3.6.0 = STRING: "2024/08/21"
+    .1.3.6.1.4.1.12276.1.3.3.7.0 = STRING: "F101"
+    .1.3.6.1.4.1.12276.1.3.3.8.0 = STRING: "chs600148s"
+    .1.3.6.1.4.1.12276.1.3.3.9.1.2.1 = STRING: "Best Bundle, CX410|Y307926-5850731|Max Compression, CX410|Rate Shaping|Max SSL, CX410|DNS, Max QPS, CX410|Advanced Web Application Firewall, CX410|Access Policy Manager, Base, CX410|Advanced Firewall Manager, CX410|Carrier Grade NAT (AFM ONLY)|Advanced Routing, CX410"
+    prompt% 
+
+
+
+
+LLDP Configuration Table
+-----------------------------
+
+Query the following SNMP OID to get detailed LLDP configuration table. LLDP is only supported on the VELOS chassis partition interfaces, and not on the system controller management ports.
+
+**F5-OS-LLDP-MIB:lldpIfConfigTable  OID: 1.3.6.1.4.1.12276.1.4.1.1.3.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-LLDP-MIB:lldpIfConfigTable 
+    SNMP table: F5-OS-LLDP-MIB::lldpIfConfigTable
+
+    lldpIfName lldpIfEnabled lldpIfTlvAdvertisement lldpIfTlvmap
+        1/1.0          true                   txrx       130943
+        1/2.0          true                   txrx       130943
+        2/1.0          true                   txrx       130943
+        2/2.0          true                   txrx       130943
     prompt%
 
 
+LLDP Neighbors Table
+-----------------------------
+
+Query the following SNMP OID to get detailed LLDP neighbors table.
+
+**F5-OS-LLDP-MIB:lldpNeighborsTable  OID: 1.3.6.1.4.1.12276.1.4.1.1.4.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-LLDP-MIB:lldpNeighborsTable
+    SNMP table: F5-OS-LLDP-MIB::lldpNeighborsTable
+
+    lldpLocalInterface lldpNeighborPortId lldpNeighborChassisId                           lldpNeighborPortDesc           lldpNeighborSysName                                                            lldpNeighborSysDesc lldpNeighborSysCap lldpNeighborMgmtAddr lldpNeighborPvid lldpNeighborPpvid lldpNeighborVlanName lldpNeighborVlanTag lldpNeighborProtocolIdentity lldpNeighborAutoNego lldpNeighborPmd lldpNeighborMau lldpNeighborAggStatus lldpNeighborAggPortid lldpNeighborMfs lldpNeighborF5ProductModel
+                1/2.0       Ethernet30/1     98:5d:82:1d:2c:a9 \"Port Channel to VELOS#2 Chassis Partition1\" BOSPDTSTB0401.pdbos.f5net.com Arista Networks EOS version 4.26.5M running on an Arista Networks DCS-7170-32C            1310724            10.39.0.3                1                 0                    ?                   0                            0                    0               0               0                     3                    75            9236                          ?
+                2/1.0       Ethernet29/1     98:5d:82:1d:2c:a9 \"Port Channel to VELOS#2 Chassis Partition1\" BOSPDTSTB0401.pdbos.f5net.com Arista Networks EOS version 4.26.5M running on an Arista Networks DCS-7170-32C            1310724            10.39.0.3                1                 0                    ?                   0                            0                    0               0               0                     3                    75            9236                          ?
+    prompt% 
+
+Tenant State Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.1.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantStateTable
+
+            tenantName tenantType                                     tenantImage                   tenantDeploymentFile tenantMgmtIP tenantPrefixLength tenantDagIPv6PrefixLength tenantGateway tenantCryptos tenantVcpuCoresPerNode tenantMemory tenantStorageSize tenantRunningState tenantMacDataSize tenantApplianceMode                                                                        tenantUnitKeyHash tenantFloatingAddress tenantHAState tenantNameSpace tenantPrimarySlot tenantQatVFCount tenantImageVersion tenantStatus tenantTargetDeploymentFile tenantTargetImage tenantUpgradeStatus    tenantBaseMac tenantMgmtMac
+            mtb-test1      bigip BIGIP-17.1.1.2-0.0.10.ALL-F5OS.qcow2.zip.bundle                                      ?     10.1.1.2                 24                       128      10.1.1.1       enabled                     22     90000 MB            700 GB         configured                16            disabled Cc48+QSpnn/7NlSasw9+iLFhqako4baE/IaNMb0gemVHEDNoxXwdx85n9qz4o61UgVH2X5qp/p1GvyeOIZEzvw==                     ?             ?               ?                 ?               33                  ?   Configured                          ?                 ?                   ? 0:94:a1:8e:58:1c             ?
+    tenant1-f5demo-net  bigipnext               BIG-IP-Next-20.2.1-2.430.2+0.0.37 BIG-IP-Next-20.2.1-2.430.2+0.0.37.yaml  10.255.2.15                 24                       128  10.255.2.252       enabled                      4     14848 MB             25 GB           deployed                 1            disabled iIld1ZOJRAQ0J68/2h8tsWDyl/vL6BJtuPcoEMrBAsg7Lm52bEL3lyXPBMgfh2UwvRzgUx1qeC9hz+Pz2BwbHA==                     ?    standalone               ?                 ?                8                  ?      Running                          ?                 ?          notstarted  0:94:a1:8e:58:9             ?
+    tenant2-f5demo-net  bigipnext               BIG-IP-Next-20.2.1-2.430.2+0.0.48 BIG-IP-Next-20.2.1-2.430.2+0.0.48.yaml  10.255.2.14                 24                       128  10.255.2.252       enabled                      4     14848 MB             25 GB           deployed                 1            disabled uIc2yU238abhyqSDm1N0T7sltuN9YFbQumYzYgXFnk/YXaX8cGoMrMVbvAJgqNK7fzKogP/XvpZtNAZwZFbNfw==                     ?    standalone               ?                 ?                8                  ?      Running                          ?                 ?          notstarted  0:94:a1:8e:58:c             ?
+    prompt%
+
+Tenant Virtual Wires Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantVirtualWiresTable  OID: 1.3.6.1.4.1.12276.1.5.1.2.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantVirtualWiresTable
+
+Tenant VLANs Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantVlansTable  OID: 1.3.6.1.4.1.12276.1.5.1.3.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantVlansTable
+    SNMP table: F5-OS-TENANT-MIB::tenantVlansTable
+
+    tenantVlan
+            500
+        3010
+        3011
+        3010
+        3011
+    prompt%
+
+Tenant Nodes Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantNodesTable  OID: 1.3.6.1.4.1.12276.1.5.1.4.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantNodesTable
+    SNMP table: F5-OS-TENANT-MIB::tenantNodesTable
+
+    tenantNode
+            1
+            2
+            1
+            2
+    prompt%
+
+Tenant CPU Allocation Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantCPUAllocationsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.5.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantCPUAllocationsStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantCPUAllocationsStateTable
+
+    tenantCPU
+            11
+            17
+            35
+            41
+            7
+            9
+            31
+            33
+    prompt%
+
+Tenant Feature Flags Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantFeatureFlagsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.6.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantFeatureFlagsStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantFeatureFlagsStateTable
+
+    tenantClusteringAsServiceFlag tenantStatsStreamCapableFlag
+                          true                         true
+                             ?                         true
+    prompt%
+
+
+Tenant Instances Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantInstancesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.7.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantInstancesStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantInstancesStateTable
+
+                                        tenantPodName tenantInstanceId tenantInstanceSlot tenantInstancePhase tenantInstanceCreationTime tenantInstanceReadyTime                                                                                                       tenantInstanceStatus tenantInstanceMgmtMac
+                            tenant1-f5demo-net-f5-avcl                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:45Z                                                                                                    Started tenant instance                     ?
+                            tenant1-f5demo-net-f5-dssm                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:38Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-data-store                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:56Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-appsvcs                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:33Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-cmsg-mq                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:18Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-csm-icb                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:13:08Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-fsm-tmm                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:25Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-csm-bird                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:07Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-fcdn-sync                1                  ?             Running       2024-08-21T23:11:26Z    2024-08-21T23:11:39Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-csm-qkview                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:49Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-eesv-vault                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:15Z                                                                                                    Started tenant instance                     ?
+                        tenant1-f5demo-net-f5-onboarding                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:27Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-access-apmd                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-toda-server                1                  ?             Running       2024-08-21T23:11:06Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-toda-logpull                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:26Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-toda-observer                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:41Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-csm-api-engine                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:13:12Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-eesv-licensing                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:12Z                                                                                                    Started tenant instance                     ?
+                    tenant1-f5demo-net-f5-platform-agent                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:14:01Z                                                                                                    Started tenant instance                     ?
+                tenant1-f5demo-net-f5-access-renderer                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:21Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-toda-otel-collector                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:34Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-asec-ip-intelligence                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:10:59Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-asec-policy-compiler                1                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:08Z                                                                                                    Started tenant instance                     ?
+            tenant1-f5demo-net-f5-access-session-manager                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:18Z                                                                                                    Started tenant instance                     ?
+    tenant1-f5demo-net-f5-asec-clientside-js-obfuscator                1                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:30Z                                                                                                    Started tenant instance                     ?
+                                    tenant2-f5demo-net-1                1                  ?             Pending                          ?                       ? 0/5 nodes are available: 2 node(s) didn't match node selector, 3 node(s) were not ready, 3 node(s) were out of disk space.                     ?
+                            tenant2-f5demo-net-f5-avcl                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:42Z                                                                                                    Started tenant instance                     ?
+                            tenant2-f5demo-net-f5-dssm                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:25Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-data-store                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:15Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-appsvcs                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:43Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-cmsg-mq                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:07Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-csm-icb                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:13:04Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-fsm-tmm                2                  ?             Running       2024-08-21T23:10:54Z    2024-08-21T23:12:22Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-csm-bird                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:09Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-fcdn-sync                2                  ?             Running       2024-08-21T23:10:56Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-csm-qkview                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:04Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-eesv-vault                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:12:22Z                                                                                                    Started tenant instance                     ?
+                        tenant2-f5demo-net-f5-onboarding                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:27Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-access-apmd                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:01Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-toda-server                2                  ?             Running       2024-08-21T23:11:38Z    2024-08-21T23:11:44Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-toda-logpull                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:29Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-toda-observer                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:33Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-csm-api-engine                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:13:10Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-eesv-licensing                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:01Z                                                                                                    Started tenant instance                     ?
+                    tenant2-f5demo-net-f5-platform-agent                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:14:46Z                                                                                                    Started tenant instance                     ?
+                tenant2-f5demo-net-f5-access-renderer                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:02Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-toda-otel-collector                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:24Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-asec-ip-intelligence                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:27Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-asec-policy-compiler                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:13Z                                                                                                    Started tenant instance                     ?
+            tenant2-f5demo-net-f5-access-session-manager                2                  ?             Running       2024-08-21T23:10:53Z    2024-08-21T23:11:03Z                                                                                                    Started tenant instance                     ?
+    tenant2-f5demo-net-f5-asec-clientside-js-obfuscator                2                  ?             Running       2024-08-21T23:10:52Z    2024-08-21T23:11:17Z                                                                                                    Started tenant instance                     ?
+    prompt%
+
+Tenant MAC Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantMacBlockStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.8.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantMacBlockStateTable
+    SNMP table: F5-OS-TENANT-MIB::tenantMacBlockStateTable
+
+            tenantMAC
+    00:94:a1:8e:58:1c
+    00:94:a1:8e:58:1d
+    00:94:a1:8e:58:1e
+    00:94:a1:8e:58:1f
+    00:94:a1:8e:58:20
+    00:94:a1:8e:58:21
+    00:94:a1:8e:58:22
+    00:94:a1:8e:58:23
+    00:94:a1:8e:58:24
+    00:94:a1:8e:58:25
+    00:94:a1:8e:58:26
+    00:94:a1:8e:58:27
+    00:94:a1:8e:58:28
+    00:94:a1:8e:58:29
+    00:94:a1:8e:58:2a
+    00:94:a1:8e:58:2b
+    00:94:a1:8e:58:09
+    00:94:a1:8e:58:0c
+    prompt% 
+
+
+Tenant Sub Modules Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantSubModulesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.9.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModulesStateTable
+
+Tenant Sub Modules VLAN Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantSubModuleVlansStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.10.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModuleVlansStateTable
+
+Tenant Sub Modules Hugepage Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantSubModuleHugepagesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.11.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModuleHugepagesStateTable
+
+Tenant Upgrade Events Table
+-----------------------------
+
+Query the following SNMP OID to get detailed tenant status.
+
+**F5-OS-TENANT-MIB:tenantUpgradeEventsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.12.1**
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantUpgradeEventsStateTable
+
+
+
+
+Tenant
 
 
 SNMP Trap Support in F5OS
 ========================
 
-You can enable SNMP traps for F5OS-C in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.6.x.
+You can enable SNMP traps for F5OS-C in both the system controllers and within each chassis partition. The **F5-CTRLR-ALERT-NOTIF-MIB** & the **F5-PARTITION-ALERT-NOTIF-MIB** provide details of supported system controller and chassis partition SNMP traps. Below is the current full list of traps supported as of F5OS-C 1.8.x.
 
 **NOTE: the file will contain alerts for both F5OS-A (rSeries appliances) and F5OS-C (VELOS chassis). You only need to rely on one file if you are using both platforms. Some traps may be specific to one platform or the other.** 
 
-For the system controllers, the following SNMP Traps are supported as of F5OS 1.6.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
+For the system controllers, the following SNMP Traps are supported as of F5OS 1.8.x as defined in the **F5-CTRLR-ALERT-NOTIF-MIB.txt**.
 
 SNMP Trap events that note a fault should also trigger an alert that can be viewed in the show alerts in the CLI, webUI, and API. Once a clear SNMP Trap is sent, it should clear the event from the **show events** output.
 
-+--------------------------------------+----------------------------------+
-| **Alert**                            | **OID**                          |                            
-+======================================+==================================+
-| coldStart                            | .1.3.6.1.6.3.1.1.5.1             |
-+--------------------------------------+----------------------------------+
-| lcd-fault                            | .1.3.6.1.4.1.12276.1.1.1.65792   |
-+--------------------------------------+----------------------------------+
-| psu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65793   |
-+--------------------------------------+----------------------------------+
-| module-present                       | .1.3.6.1.4.1.12276.1.1.1.65794   |
-+--------------------------------------+----------------------------------+
-| module-communication-error           | .1.3.6.1.4.1.12276.1.1.1.65795   |
-+--------------------------------------+----------------------------------+
-| psu-redundancy-fault                 | .1.3.6.1.4.1.12276.1.1.1.65796   |
-+--------------------------------------+----------------------------------+
-| psu-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65797   |
-+--------------------------------------+----------------------------------+
-| fan-controller-fault                 | .1.3.6.1.4.1.12276.1.1.1.65798   |
-+--------------------------------------+----------------------------------+
-| arbitration-state                    | .1.3.6.1.4.1.12276.1.1.1.66048   |
-+--------------------------------------+----------------------------------+
-| switch-status                        | .1.3.6.1.4.1.12276.1.1.1.66049   |
-+--------------------------------------+----------------------------------+
-| link-state                           | .1.3.6.1.4.1.12276.1.1.1.66050   |
-+--------------------------------------+----------------------------------+
-| hardware-device-fault                | .1.3.6.1.4.1.12276.1.1.1.65536   |
-+--------------------------------------+----------------------------------+
-| firmware-fault                       | .1.3.6.1.4.1.12276.1.1.1.65537   |
-+--------------------------------------+----------------------------------+
-| unknown-alarm                        | .1.3.6.1.4.1.12276.1.1.1.65538   |
-+--------------------------------------+----------------------------------+
-| memory-fault                         | .1.3.6.1.4.1.12276.1.1.1.65539   |
-+--------------------------------------+----------------------------------+
-| drive-fault                          | .1.3.6.1.4.1.12276.1.1.1.65540   |
-+--------------------------------------+----------------------------------+
-| cpu-fault                            | .1.3.6.1.4.1.12276.1.1.1.65541   |
-+--------------------------------------+----------------------------------+
-| pcie-fault                           | .1.3.6.1.4.1.12276.1.1.1.65542   |
-+--------------------------------------+----------------------------------+
-| aom-fault                            | .1.3.6.1.4.1.12276.1.1.1.65543   |
-+--------------------------------------+----------------------------------+
-| drive-capacity-fault                 | .1.3.6.1.4.1.12276.1.1.1.65544   |
-+--------------------------------------+----------------------------------+
-| power-fault                          | .1.3.6.1.4.1.12276.1.1.1.65545   |
-+--------------------------------------+----------------------------------+
-| thermal-fault                        | .1.3.6.1.4.1.12276.1.1.1.65546   |
-+--------------------------------------+----------------------------------+
-| drive-thermal-throttle               | .1.3.6.1.4.1.12276.1.1.1.65547   |
-+--------------------------------------+----------------------------------+
-| blade-thermal-fault                  | .1.3.6.1.4.1.12276.1.1.1.65548   |
-+--------------------------------------+----------------------------------+
-| blade-hardware-fault                 | .1.3.6.1.4.1.12276.1.1.1.65549   |
-+--------------------------------------+----------------------------------+
-| firmware-update-status               | .1.3.6.1.4.1.12276.1.1.1.65550   |
-+--------------------------------------+----------------------------------+
-| drive-utilization                    | .1.3.6.1.4.1.12276.1.1.1.65551   |
-+--------------------------------------+----------------------------------+
-| service-health                       | .1.3.6.1.4.1.12276.1.1.1.65552   |
-+--------------------------------------+----------------------------------+
-| partition1-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65553   |
-+--------------------------------------+----------------------------------+
-| partition2-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65554   |
-+--------------------------------------+----------------------------------+
-| partition3-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65555   |
-+--------------------------------------+----------------------------------+
-| partition4-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65556   |
-+--------------------------------------+----------------------------------+
-| partition5-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65557   |
-+--------------------------------------+----------------------------------+
-| partition6-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65558   |
-+--------------------------------------+----------------------------------+
-| partition7-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65559   |
-+--------------------------------------+----------------------------------+
-| partition8-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65560   |
-+--------------------------------------+----------------------------------+
-| partition1-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65561   |
-+--------------------------------------+----------------------------------+
-| partition2-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65562   |
-+--------------------------------------+----------------------------------+
-| partition3-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65563   |
-+--------------------------------------+----------------------------------+
-| partition4-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65564   |
-+--------------------------------------+----------------------------------+
-| partition5-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65565   |
-+--------------------------------------+----------------------------------+
-| partition6-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65566   |
-+--------------------------------------+----------------------------------+
-| partition7-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65567   |
-+--------------------------------------+----------------------------------+
-| partition8-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65568   |
-+--------------------------------------+----------------------------------+
-| partition1-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65569   |
-+--------------------------------------+----------------------------------+
-| partition2-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65570   |
-+--------------------------------------+----------------------------------+
-| partition3-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65571   |
-+--------------------------------------+----------------------------------+
-| partition4-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65572   |
-+--------------------------------------+----------------------------------+
-| partition5-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65573   |
-+--------------------------------------+----------------------------------+
-| partition6-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65574   |
-+--------------------------------------+----------------------------------+
-| partition7-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65575   |
-+--------------------------------------+----------------------------------+
-| partition8-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65576   |
-+--------------------------------------+----------------------------------+
-| sensor-fault                         | .1.3.6.1.4.1.12276.1.1.1.65577   |
-+--------------------------------------+----------------------------------+
-| datapath-fault                       | .1.3.6.1.4.1.12276.1.1.1.65578   |
-+--------------------------------------+----------------------------------+
-| boot-time-integrity-status           | .1.3.6.1.4.1.12276.1.1.1.65579   |
-+--------------------------------------+----------------------------------+
-| fipsError                            | .1.3.6.1.4.1.12276.1.1.1.196608  |
-+--------------------------------------+----------------------------------+
-| core-dump                            | .1.3.6.1.4.1.12276.1.1.1.327680  |
-+--------------------------------------+----------------------------------+
-| nebsEnabled                          | .1.3.6.1.4.1.12276.1.1.1.131072  |
-+--------------------------------------+----------------------------------+
-| nebsDisabled                         | .1.3.6.1.4.1.12276.1.1.1.131073  |
-+--------------------------------------+----------------------------------+
-| systemControllerNebsMismatch         | .1.3.6.1.4.1.12276.1.1.1.131929  |
-+--------------------------------------+----------------------------------+
-| bladeNebsMismatch                    | .1.3.6.1.4.1.12276.1.1.1.131329  |
-+--------------------------------------+----------------------------------+
++---------------------------------------+----------------------------------+
+| **Alert**                             | **OID**                          |                            
++=======================================+==================================+
+| hardware-device-fault                 | .1.3.6.1.4.1.12276.1.1.1.65536   |
++---------------------------------------+----------------------------------+
+| firmware-fault                        | .1.3.6.1.4.1.12276.1.1.1.65537   |
++---------------------------------------+----------------------------------+
+| unknown-alarm                         | .1.3.6.1.4.1.12276.1.1.1.65538   |
++---------------------------------------+----------------------------------+
+| memory-fault                          | .1.3.6.1.4.1.12276.1.1.1.65539   |
++---------------------------------------+----------------------------------+
+| drive-fault                           | .1.3.6.1.4.1.12276.1.1.1.65540   |
++---------------------------------------+----------------------------------+
+| cpu-fault                             | .1.3.6.1.4.1.12276.1.1.1.65541   |
++---------------------------------------+----------------------------------+
+| pcie-fault                            | .1.3.6.1.4.1.12276.1.1.1.65542   |
++---------------------------------------+----------------------------------+
+| aom-fault                             | .1.3.6.1.4.1.12276.1.1.1.65543   |
++---------------------------------------+----------------------------------+
+| drive-capacity-fault                  | .1.3.6.1.4.1.12276.1.1.1.65544   |
++---------------------------------------+----------------------------------+
+| power-fault                           | .1.3.6.1.4.1.12276.1.1.1.65545   |
++---------------------------------------+----------------------------------+
+| thermal-fault                         | .1.3.6.1.4.1.12276.1.1.1.65546   |
++---------------------------------------+----------------------------------+
+| drive-thermal-throttle                | .1.3.6.1.4.1.12276.1.1.1.65547   |
++---------------------------------------+----------------------------------+
+| blade-thermal-fault                   | .1.3.6.1.4.1.12276.1.1.1.65548   |
++---------------------------------------+----------------------------------+
+| blade-hardware-fault                  | .1.3.6.1.4.1.12276.1.1.1.65549   |
++---------------------------------------+----------------------------------+
+| firmware-update-status                | .1.3.6.1.4.1.12276.1.1.1.65550   |
++---------------------------------------+----------------------------------+
+| drive-utilization                     | .1.3.6.1.4.1.12276.1.1.1.65551   |
++---------------------------------------+----------------------------------+
+| partition1-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65553   |
++---------------------------------------+----------------------------------+
+| partition2-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65554   |
++---------------------------------------+----------------------------------+
+| partition3-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65555   |
++---------------------------------------+----------------------------------+
+| partition4-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65556   |
++---------------------------------------+----------------------------------+
+| partition5-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65557   |
++---------------------------------------+----------------------------------+
+| partition6-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65558   |
++---------------------------------------+----------------------------------+
+| partition7-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65559   |
++---------------------------------------+----------------------------------+
+| partition8-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65560   |
++---------------------------------------+----------------------------------+
+| partition9-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65580   |
++---------------------------------------+----------------------------------+
+| partition10-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65581   |
++---------------------------------------+----------------------------------+
+| partition11-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65582   |
++---------------------------------------+----------------------------------+
+| partition12-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65583   |
++---------------------------------------+----------------------------------+
+| partition13-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65584   |
++---------------------------------------+----------------------------------+
+| partition14-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65585   |
++---------------------------------------+----------------------------------+
+| partition15-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65586   |
++---------------------------------------+----------------------------------+
+| partition16-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65587   |
++---------------------------------------+----------------------------------+
+| partition17-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65588   |
++---------------------------------------+----------------------------------+
+| partition18-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65589   |
++---------------------------------------+----------------------------------+
+| partition19-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65590   |
++---------------------------------------+----------------------------------+
+| partition20-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65591   |
++---------------------------------------+----------------------------------+
+| partition21-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65592   |
++---------------------------------------+----------------------------------+
+| partition22-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65593   |
++---------------------------------------+----------------------------------+
+| partition23-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65594   |
++---------------------------------------+----------------------------------+
+| partition24-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65595   |
++---------------------------------------+----------------------------------+
+| partition25-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65596   |
++---------------------------------------+----------------------------------+
+| partition26-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65597   |
++---------------------------------------+----------------------------------+
+| partition27-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65598   |
++---------------------------------------+----------------------------------+
+| partition28-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65599   |
++---------------------------------------+----------------------------------+
+| partition29-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65600   |
++---------------------------------------+----------------------------------+
+| partition30-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65601   |
++---------------------------------------+----------------------------------+
+| partition31-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65602   |
++---------------------------------------+----------------------------------+
+| partition32-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65603   |
++---------------------------------------+----------------------------------+
+| partition1-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65561   |
++---------------------------------------+----------------------------------+
+| partition2-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65562   |
++---------------------------------------+----------------------------------+
+| partition3-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65563   |
++---------------------------------------+----------------------------------+
+| partition4-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65564   |
++---------------------------------------+----------------------------------+
+| partition5-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65565   |
++---------------------------------------+----------------------------------+
+| partition6-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65566   |
++---------------------------------------+----------------------------------+
+| partition7-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65567   |
++---------------------------------------+----------------------------------+
+| partition8-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65568   |
++---------------------------------------+----------------------------------+
+| partition9-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65604   |
++---------------------------------------+----------------------------------+
+| partition10-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65605   |
++---------------------------------------+----------------------------------+
+| partition11-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65606   |
++---------------------------------------+----------------------------------+
+| partition12-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65607   |
++---------------------------------------+----------------------------------+
+| partition13-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65608   |
++---------------------------------------+----------------------------------+
+| partition14-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65609   |
++---------------------------------------+----------------------------------+
+| partition15-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65610   |
++---------------------------------------+----------------------------------+
+| partition16-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65611   |
++---------------------------------------+----------------------------------+
+| partition17-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65612   |
++---------------------------------------+----------------------------------+
+| partition18-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65613   |
++---------------------------------------+----------------------------------+
+| partition19-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65614   |
++---------------------------------------+----------------------------------+
+| partition20-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65615   |
++---------------------------------------+----------------------------------+
+| partition21-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65616   |
++---------------------------------------+----------------------------------+
+| partition22-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65617   |
++---------------------------------------+----------------------------------+
+| partition23-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65618   |
++---------------------------------------+----------------------------------+
+| partition24-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65619   |
++---------------------------------------+----------------------------------+
+| partition25-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65620   |
++---------------------------------------+----------------------------------+
+| partition26-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65621   |
++---------------------------------------+----------------------------------+
+| partition27-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65622   |
++---------------------------------------+----------------------------------+
+| partition28-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65623   |
++---------------------------------------+----------------------------------+
+| partition29-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65624   |
++---------------------------------------+----------------------------------+
+| partition30-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65625   |
++---------------------------------------+----------------------------------+
+| partition31-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65626   |
++---------------------------------------+----------------------------------+
+| partition32-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65627   |
++---------------------------------------+----------------------------------+
+| partition1-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65569   |
++---------------------------------------+----------------------------------+
+| partition2-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65570   |
++---------------------------------------+----------------------------------+
+| partition3-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65571   |
++---------------------------------------+----------------------------------+
+| partition4-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65572   |
++---------------------------------------+----------------------------------+
+| partition5-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65573   |
++---------------------------------------+----------------------------------+
+| partition6-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65574   |
++---------------------------------------+----------------------------------+
+| partition7-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65575   |
++---------------------------------------+----------------------------------+
+| partition8-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65576   |
++---------------------------------------+----------------------------------+
+| partition9-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65628   |
++---------------------------------------+----------------------------------+
+| partition10-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65629   |
++---------------------------------------+----------------------------------+
+| partition11-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65630   |
++---------------------------------------+----------------------------------+
+| partition12-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65631   |
++---------------------------------------+----------------------------------+
+| partition13-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65632   |
++---------------------------------------+----------------------------------+
+| partition14-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65633   |
++---------------------------------------+----------------------------------+
+| partition15-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65634   |
++---------------------------------------+----------------------------------+
+| partition16-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65635   |
++---------------------------------------+----------------------------------+
+| partition17-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65636   |
++---------------------------------------+----------------------------------+
+| partition18-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65637   |
++---------------------------------------+----------------------------------+
+| partition19-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65638   |
++---------------------------------------+----------------------------------+
+| partition20-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65639   |
++---------------------------------------+----------------------------------+
+| partition21-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65640   |
++---------------------------------------+----------------------------------+
+| partition22-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65641   |
++---------------------------------------+----------------------------------+
+| partition23-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65642   |
++---------------------------------------+----------------------------------+
+| partition24-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65643   |
++---------------------------------------+----------------------------------+
+| partition25-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65644   |
++---------------------------------------+----------------------------------+
+| partition26-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65645   |
++---------------------------------------+----------------------------------+
+| partition27-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65646   |
++---------------------------------------+----------------------------------+
+| partition28-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65647   |
++---------------------------------------+----------------------------------+
+| partition29-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65648   |
++---------------------------------------+----------------------------------+
+| partition30-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65649   |
++---------------------------------------+----------------------------------+
+| partition31-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65650   |
++---------------------------------------+----------------------------------+
+| partition32-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65651   |
++---------------------------------------+----------------------------------+
+| sensor-fault                          | .1.3.6.1.4.1.12276.1.1.1.65577   |
++---------------------------------------+----------------------------------+
+| datapath-fault                        | .1.3.6.1.4.1.12276.1.1.1.65578   |
++---------------------------------------+----------------------------------+
+| boot-time-integrity-status            | .1.3.6.1.4.1.12276.1.1.1.65579   |
++---------------------------------------+----------------------------------+
+| lcd-fault                             | .1.3.6.1.4.1.12276.1.1.1.65792   |
++---------------------------------------+----------------------------------+
+| psu-fault                             | .1.3.6.1.4.1.12276.1.1.1.65793   |
++---------------------------------------+----------------------------------+
+| module-present                        | .1.3.6.1.4.1.12276.1.1.1.65794   |
++---------------------------------------+----------------------------------+
+| module-communication-error            | .1.3.6.1.4.1.12276.1.1.1.65795   |
++---------------------------------------+----------------------------------+
+| psu-redundancy-fault                  | .1.3.6.1.4.1.12276.1.1.1.65796   |
++---------------------------------------+----------------------------------+
+| psu-controller-fault                  | .1.3.6.1.4.1.12276.1.1.1.65797   |
++---------------------------------------+----------------------------------+
+| fan-controller-fault                  | .1.3.6.1.4.1.12276.1.1.1.65798   |
++---------------------------------------+----------------------------------+
+| arbitration-state                     | .1.3.6.1.4.1.12276.1.1.1.66048   |
++---------------------------------------+----------------------------------+
+| switch-status                         | .1.3.6.1.4.1.12276.1.1.1.66049   |
++---------------------------------------+----------------------------------+
+| link-state                            | .1.3.6.1.4.1.12276.1.1.1.66050   |
++---------------------------------------+----------------------------------+
+| nebsEnabled                           | .1.3.6.1.4.1.12276.1.1.1.131072  |
++---------------------------------------+----------------------------------+
+| nebsDisabled                          | .1.3.6.1.4.1.12276.1.1.1.131073  |
++---------------------------------------+----------------------------------+
+| systemControllerNebsMismatch          | .1.3.6.1.4.1.12276.1.1.1.131929  |
++---------------------------------------+----------------------------------+
+| bladeNebsMismatch                     | .1.3.6.1.4.1.12276.1.1.1.131329  |
++---------------------------------------+----------------------------------+
+| fipsError                             | .1.3.6.1.4.1.12276.1.1.1.196608  |
++---------------------------------------+----------------------------------+
+| core-dump                             | .1.3.6.1.4.1.12276.1.1.1.327680  |
++---------------------------------------+----------------------------------+
+| reboot                                | .1.3.6.1.4.1.12276.1.1.1.327681  |
++---------------------------------------+----------------------------------+
+| incompatible-image                    | .1.3.6.1.4.1.12276.1.1.1.327682  |
++---------------------------------------+----------------------------------+
+| login-failed                          | .1.3.6.1.4.1.12276.1.1.1.327683  |
++---------------------------------------+----------------------------------+
+| openshiftCertsExpWithinNinetyDays     | .1.3.6.1.4.1.12276.1.1.1.458752  |
++---------------------------------------+----------------------------------+
+| openshiftCertificatesExpiring         | .1.3.6.1.4.1.12276.1.1.1.458753  |
++---------------------------------------+----------------------------------+
+| openshiftUpgradeNeeded                | .1.3.6.1.4.1.12276.1.1.1.459008  |
++---------------------------------------+----------------------------------+
+| coldStart                             | .1.3.6.1.6.3.1.1.5.1             |
++---------------------------------------+----------------------------------+
 
 
-For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
+For the chassis partitions the following SNMP Traps are supported as of F5OS 1.8.x as defined in the **F5-PARTITION-ALERT-NOTIF-MIB.txt**:
 
 +---------------------------------------+-----------------------------------+
 | **Alert**                             | **OID**                           |                            
@@ -2299,55 +2999,197 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 +---------------------------------------+-----------------------------------+
 | drive-utilization                     |  .1.3.6.1.4.1.12276.1.1.1.65551   |
 +---------------------------------------+-----------------------------------+
-| service-health                        |  .1.3.6.1.4.1.12276.1.1.1.65552   |
+| partition1-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65553    |
 +---------------------------------------+-----------------------------------+
-| partition1-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65553   |
+| partition2-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65554    |
 +---------------------------------------+-----------------------------------+
-| partition2-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65554   |
+| partition3-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65555    |
 +---------------------------------------+-----------------------------------+
-| partition3-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65555   |
+| partition4-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65556    |
 +---------------------------------------+-----------------------------------+
-| partition4-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65556   |
+| partition5-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65557    |
 +---------------------------------------+-----------------------------------+
-| partition5-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65557   |
+| partition6-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65558    |
 +---------------------------------------+-----------------------------------+
-| partition6-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65558   |
+| partition7-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65559    |
 +---------------------------------------+-----------------------------------+
-| partition7-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65559   |
+| partition8-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65560    |
 +---------------------------------------+-----------------------------------+
-| partition8-image-volume-utilization   |  .1.3.6.1.4.1.12276.1.1.1.65560   |
+| partition9-image-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65580    |
 +---------------------------------------+-----------------------------------+
-| partition1-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65561   |
+| partition10-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65581    |
 +---------------------------------------+-----------------------------------+
-| partition2-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65562   |
+| partition11-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65582    |
 +---------------------------------------+-----------------------------------+
-| partition3-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65563   |
+| partition12-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65583    |
 +---------------------------------------+-----------------------------------+
-| partition4-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65564   |
+| partition13-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65584    |
 +---------------------------------------+-----------------------------------+
-| partition5-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65565   |
+| partition14-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65585    |
 +---------------------------------------+-----------------------------------+
-| partition6-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65566   |
+| partition15-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65586    |
 +---------------------------------------+-----------------------------------+
-| partition7-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65567   |
+| partition16-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65587    |
 +---------------------------------------+-----------------------------------+
-| partition8-shared-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65568   |
+| partition17-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65588    |
 +---------------------------------------+-----------------------------------+
-| partition1-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65569   |
+| partition18-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65589    |
 +---------------------------------------+-----------------------------------+
-| partition2-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65570   |
+| partition19-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65590    |
 +---------------------------------------+-----------------------------------+
-| partition3-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65571   |
+| partition20-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65591    |
 +---------------------------------------+-----------------------------------+
-| partition4-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65572   |
+| partition21-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65592    |
 +---------------------------------------+-----------------------------------+
-| partition5-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65573   |
+| partition22-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65593    |
 +---------------------------------------+-----------------------------------+
-| partition6-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65574   |
+| partition23-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65594    |
 +---------------------------------------+-----------------------------------+
-| partition7-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65575   |
+| partition24-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65595    |
 +---------------------------------------+-----------------------------------+
-| partition8-config-volume-utilization  |  .1.3.6.1.4.1.12276.1.1.1.65576   |
+| partition25-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65596    |
++---------------------------------------+-----------------------------------+
+| partition26-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65597    |
++---------------------------------------+-----------------------------------+
+| partition27-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65598    |
++---------------------------------------+-----------------------------------+
+| partition28-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65599    |
++---------------------------------------+-----------------------------------+
+| partition29-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65600    |
++---------------------------------------+-----------------------------------+
+| partition30-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65601    |
++---------------------------------------+-----------------------------------+
+| partition31-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65602    |
++---------------------------------------+-----------------------------------+
+| partition32-image-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65603    |
++---------------------------------------+-----------------------------------+
+| partition1-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65561    |
++---------------------------------------+-----------------------------------+
+| partition2-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65562    |
++---------------------------------------+-----------------------------------+
+| partition3-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65563    |
++---------------------------------------+-----------------------------------+
+| partition4-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65564    |
++---------------------------------------+-----------------------------------+
+| partition5-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65565    |
++---------------------------------------+-----------------------------------+
+| partition6-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65566    |
++---------------------------------------+-----------------------------------+
+| partition7-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65567    |
++---------------------------------------+-----------------------------------+
+| partition8-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65568    |
++---------------------------------------+-----------------------------------+
+| partition9-shared-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65604    |
++---------------------------------------+-----------------------------------+
+| partition10-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65605    |
++---------------------------------------+-----------------------------------+
+| partition11-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65606    |
++---------------------------------------+-----------------------------------+
+| partition12-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65607    |
++---------------------------------------+-----------------------------------+
+| partition13-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65608    |
++---------------------------------------+-----------------------------------+
+| partition14-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65609    |
++---------------------------------------+-----------------------------------+
+| partition15-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65610    |
++---------------------------------------+-----------------------------------+
+| partition16-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65611    |
++---------------------------------------+-----------------------------------+
+| partition17-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65612    |
++---------------------------------------+-----------------------------------+
+| partition18-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65613    |
++---------------------------------------+-----------------------------------+
+| partition19-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65614    |
++---------------------------------------+-----------------------------------+
+| partition20-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65615    |
++---------------------------------------+-----------------------------------+
+| partition21-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65616    |
++---------------------------------------+-----------------------------------+
+| partition22-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65617    |
++---------------------------------------+-----------------------------------+
+| partition23-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65618    |
++---------------------------------------+-----------------------------------+
+| partition24-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65619    |
++---------------------------------------+-----------------------------------+
+| partition25-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65620    |
++---------------------------------------+-----------------------------------+
+| partition26-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65621    |
++---------------------------------------+-----------------------------------+
+| partition27-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65622    |
++---------------------------------------+-----------------------------------+
+| partition28-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65623    |
++---------------------------------------+-----------------------------------+
+| partition29-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65624    |
++---------------------------------------+-----------------------------------+
+| partition30-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65625    |
++---------------------------------------+-----------------------------------+
+| partition31-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65626    |
++---------------------------------------+-----------------------------------+
+| partition32-shared-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65627    |
++---------------------------------------+-----------------------------------+
+| partition1-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65569    |
++---------------------------------------+-----------------------------------+
+| partition2-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65570    |
++---------------------------------------+-----------------------------------+
+| partition3-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65571    |
++---------------------------------------+-----------------------------------+
+| partition4-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65572    |
++---------------------------------------+-----------------------------------+
+| partition5-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65573    |
++---------------------------------------+-----------------------------------+
+| partition6-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65574    |
++---------------------------------------+-----------------------------------+
+| partition7-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65575    |
++---------------------------------------+-----------------------------------+
+| partition8-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65576    |
++---------------------------------------+-----------------------------------+
+| partition9-config-volume-utilization  | .1.3.6.1.4.1.12276.1.1.1.65628    |
++---------------------------------------+-----------------------------------+
+| partition10-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65629    |
++---------------------------------------+-----------------------------------+
+| partition11-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65630    |
++---------------------------------------+-----------------------------------+
+| partition12-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65631    |
++---------------------------------------+-----------------------------------+
+| partition13-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65632    |
++---------------------------------------+-----------------------------------+
+| partition14-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65633    |
++---------------------------------------+-----------------------------------+
+| partition15-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65634    |
++---------------------------------------+-----------------------------------+
+| partition16-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65635    |
++---------------------------------------+-----------------------------------+
+| partition17-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65636    |
++---------------------------------------+-----------------------------------+
+| partition18-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65637    |
++---------------------------------------+-----------------------------------+
+| partition19-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65638    |
++---------------------------------------+-----------------------------------+
+| partition20-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65639    |
++---------------------------------------+-----------------------------------+
+| partition21-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65640    |
++---------------------------------------+-----------------------------------+
+| partition22-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65641    |
++---------------------------------------+-----------------------------------+
+| partition23-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65642    |
++---------------------------------------+-----------------------------------+
+| partition24-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65643    |
++---------------------------------------+-----------------------------------+
+| partition25-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65644    |
++---------------------------------------+-----------------------------------+
+| partition26-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65645    |
++---------------------------------------+-----------------------------------+
+| partition27-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65646    |
++---------------------------------------+-----------------------------------+
+| partition28-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65647    |
++---------------------------------------+-----------------------------------+
+| partition29-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65648    |
++---------------------------------------+-----------------------------------+
+| partition30-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65649    |
++---------------------------------------+-----------------------------------+
+| partition31-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65650    |
++---------------------------------------+-----------------------------------+
+| partition32-config-volume-utilization | .1.3.6.1.4.1.12276.1.1.1.65651    |
 +---------------------------------------+-----------------------------------+
 | sensor-fault                          |  .1.3.6.1.4.1.12276.1.1.1.65577   |
 +---------------------------------------+-----------------------------------+
@@ -2357,50 +3199,47 @@ For the chassis partitions the following SNMP Traps are supported as of F5OS 1.5
 +---------------------------------------+-----------------------------------+
 | fipsError                             |  .1.3.6.1.4.1.12276.1.1.1.196608  |
 +---------------------------------------+-----------------------------------+
-| core-dump                             |  .1.3.6.1.4.1.12276.1.1.1.327680  |
+| core-dump                             | .1.3.6.1.4.1.12276.1.1.1.327680   |
++---------------------------------------+-----------------------------------+
+| reboot                                | .1.3.6.1.4.1.12276.1.1.1.327681   |
++---------------------------------------+-----------------------------------+
+| incompatible-image                    | .1.3.6.1.4.1.12276.1.1.1.327682   |
++---------------------------------------+-----------------------------------+
+| login-failed                          | .1.3.6.1.4.1.12276.1.1.1.327683   |
 +---------------------------------------+-----------------------------------+
 | backplane                             |  .1.3.6.1.4.1.12276.1.1.1.262144  |
 +---------------------------------------+-----------------------------------+
-| txPwrHiAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262400  |
+| txPwr                                 |  .1.3.6.1.4.1.12276.1.1.1.262400  |
 +---------------------------------------+-----------------------------------+
-| txPwrHiWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262401  |
+| rxPwr                                 |  .1.3.6.1.4.1.12276.1.1.1.262401  |
 +---------------------------------------+-----------------------------------+
-| txPwrLoAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262402  |
+| txBias                                |  .1.3.6.1.4.1.12276.1.1.1.262402  |
 +---------------------------------------+-----------------------------------+
-| txPwrLoWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262403  |
+| ddmTemp                               |  .1.3.6.1.4.1.12276.1.1.1.262403  |
 +---------------------------------------+-----------------------------------+
-| rxPwrHiAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262404  |
+| ddmVcc                                |  .1.3.6.1.4.1.12276.1.1.1.262404  |
 +---------------------------------------+-----------------------------------+
-| rxPwrHiWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262405  |
+| initialization                        |  .1.3.6.1.4.1.12276.1.1.1.262656  |
 +---------------------------------------+-----------------------------------+
-| rxPwrLoAlarm                          |  .1.3.6.1.4.1.12276.1.1.1.262406  |
+| ePVA                                  |  .1.3.6.1.4.1.12276.1.1.1.262912  |
 +---------------------------------------+-----------------------------------+
-| rxPwrLoWarn                           |  .1.3.6.1.4.1.12276.1.1.1.262407  |
+| be2Training                           |  .1.3.6.1.4.1.12276.1.1.1.262913  |
 +---------------------------------------+-----------------------------------+
-| txBiasHiAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262408  |
+| up                                    |  .1.3.6.1.4.1.12276.1.1.1.263168  |
 +---------------------------------------+-----------------------------------+
-| txBiasHiWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262409  |
+| down                                  |  .1.3.6.1.4.1.12276.1.1.1.263169  |
 +---------------------------------------+-----------------------------------+
-| txBiasLoAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262410  |
+| speed                                 |  .1.3.6.1.4.1.12276.1.1.1.263170  |
 +---------------------------------------+-----------------------------------+
-| txBiasLoWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262411  |
+| disabled                              |  .1.3.6.1.4.1.12276.1.1.1.263171  |
 +---------------------------------------+-----------------------------------+
-| ddmTempHiAlarm                        |  .1.3.6.1.4.1.12276.1.1.1.262412  |
+| lacp-mac-failure                      |  .1.3.6.1.4.1.12276.1.1.1.590081  |
 +---------------------------------------+-----------------------------------+
-| ddmTempHiWarn                         |  .1.3.6.1.4.1.12276.1.1.1.262413  |
+| mac-exhaustion                        |  .1.3.6.1.4.1.12276.1.1.1.590082  |
 +---------------------------------------+-----------------------------------+
-| ddmTempLoAlarm                        |  .1.3.6.1.4.1.12276.1.1.1.262414  |
+| inaccessibleMemory                    |  .1.3.6.1.4.1.12276.1.1.1.458752  |
 +---------------------------------------+-----------------------------------+
-| ddmTempLoWarn                         |  .1.3.6.1.4.1.12276.1.1.1.262415  |
-+---------------------------------------+-----------------------------------+
-| ddmVccHiAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262416  |
-+---------------------------------------+-----------------------------------+
-| ddmVccHiWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262417  |
-+---------------------------------------+-----------------------------------+
-| ddmVccLoAlarm                         |  .1.3.6.1.4.1.12276.1.1.1.262418  |
-+---------------------------------------+-----------------------------------+
-| ddmVccLoWarn                          |  .1.3.6.1.4.1.12276.1.1.1.262419  |
-+---------------------------------------+-----------------------------------+
+
 
 
 Enabling SNMP Traps
@@ -2698,11 +3537,14 @@ Generic SNMP Traps
 **coldStart         	1.3.6.1.6.3.1.1.5.1**  
 
 
-A coldStart trap signifies that the SNMP entity,supporting a notification originator application, is reinitializing itself and that its configuration may have been altered.
+A coldStart trap signifies that the SNMP entity,supporting a notification originator application, is reinitializing itself and that its configuration may have been altered. This trap can come from both the system controllers and the chassis partitions.
 
 .. code-block:: bash
 
     <INFO> 15-Mar-2024::12:34:38.428 partition2 confd[102]: snmp snmpv2-trap reqid=1834217795 10.255.0.139:162 (TimeTicks sysUpTime=717)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+
+    <INFO> 23-Jul-2024::12:37:14.929 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934136 10.255.80.251:162 (TimeTicks sysUpTime=2751)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+
 
 
 **link down         	1.3.6.1.6.3.1.1.5.3**  
@@ -2713,6 +3555,19 @@ A linkDown trap signifies that the SNMP entity, acting in an agent role, has det
 
     <INFO> 15-Mar-2024::13:44:56.045 partition2 confd[112]: snmp snmpv2-trap reqid=1524445192 10.255.0.139:162 (TimeTicks sysUpTime=296420)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
 
+
+    
+
+**down         .1.3.6.1.4.1.12276.1.1.1.263169**
+
+In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel with the generic linkup/down traps. The enterprise up/down traps adds a human readable interface name as seen below.
+
+.. code-block:: bash
+
+    <INFO> 30-Apr-2024::15:14:38.582 partition2 confd[123]: snmp snmpv2-trap reqid=677841658 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
+
+    <INFO> 30-Apr-2024::15:14:38.577 partition2 confd[123]: snmp snmpv2-trap reqid=677841657 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-30 19:14:38.516399590 UTC)(OCTET STRING alertDescription=Interface down)
+
 **link up         	1.3.6.1.6.3.1.1.5.4**  
 
 A linkUp trap signifies that the SNMP entity, acting in an agent role, has detected that the ifOperStatus object for one of its communication links left the down state and transitioned into some other state (but not into the notPresent state). This other state is indicated by the included value of ifOperStatus.
@@ -2722,13 +3577,43 @@ A linkUp trap signifies that the SNMP entity, acting in an agent role, has detec
 
     <INFO> 15-Mar-2024::13:44:53.737 partition2 confd[112]: snmp snmpv2-trap reqid=1524445191 10.255.0.139:162 (TimeTicks sysUpTime=296189)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
 
+**up         .1.3.6.1.4.1.12276.1.1.1.263168**
+
+
+In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel with the generic linkup/down traps. The enterprise up/down traps adds a human readable interface name as seen below.
+
+
+.. code-block:: bash
+
+    <INFO> 30-Apr-2024::15:14:51.956 partition2 confd[123]: snmp snmpv2-trap reqid=677841662 10.255.80.251:162 (TimeTicks sysUpTime=51041)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1) 
+    <INFO> 30-Apr-2024::15:14:51.995 partition2 confd[123]: snmp snmpv2-trap reqid=677841663 10.255.80.251:162 (TimeTicks sysUpTime=51045)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-30 19:14:51.909205675 UTC)(OCTET STRING alertDescription=Interface up)
+    test1-1# 
+
+
+
+
 F5OS Specific Traps
 ------------------
 
 Device Fault Traps
 ^^^^^^^^^^^^^^^^^^^
 
-**hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**   
+**hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**
+
++------------------+-----------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                     |
++==================+=======================================================================+
+| ASSERT           | Hardware device fault detected                                        |
++------------------+-----------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >> :  << hardware sensor or machine error >> |
+|                  |                                                                       |
+|                  | Example:                                                              | 
+|                  |                                                                       |
+|                  | Asserted: CPU machine check error                                     |
+|                  |                                                                       |
++------------------+-----------------------------------------------------------------------+
+| CLEAR            | Hardware device fault detected                                        |
++------------------+-----------------------------------------------------------------------+
 
 This set of taps may indicate a fault with various hardware components on the VELOS chassis like CPUs or fans. Examine the trap for specific details of what subsystem has failed to determine the proper troubleshooting steps to pursue. 
 
@@ -2761,6 +3646,12 @@ This set of taps may indicate a fault with various hardware components on the VE
 
 **firmware-fault                 .1.3.6.1.4.1.12276.1.1.1.65537**
 
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | <<ARM Exception data available | Heap running low | Task stack usage warning | Watchdog timer warning >> |
++------------------+----------------------------------------------------------------------------------------------------------+
+
 This set of taps may indicate a fault or temporary warning with the firmware upgrade process. Monitor the firmware upgrade process via SNMP traps, or via the CLI, API, or webUI alerts. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
 
@@ -2786,6 +3677,14 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **unknown-alarm                  .1.3.6.1.4.1.12276.1.1.1.65538**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+Unregistered alarm detected.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include unknown-alarm
@@ -2801,11 +3700,76 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **memory-fault                   .1.3.6.1.4.1.12276.1.1.1.65539**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+
 .. code-block:: bash
 
     file show log/confd/snmp.log | include memory-fault
 
 **drive-fault                    .1.3.6.1.4.1.12276.1.1.1.65540**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Fault in drive detected                                                            |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | Event can either of these below issues:                                            |
+|                  |                                                                                    |
+|                  |  Drive Available Spare is below threshold                                          |
+|                  |                                                                                    |
+|                  |  Drive Volatile Memory Backup System has failed                                    |
+|                  |                                                                                    |
+|                  |  Drive Endurance consumed has exceeded threshold                                   |
+|                  |                                                                                    |
+|                  |  Drive has encountered Media Errors                                                |
+|                  |                                                                                    |
+|                  |  Allowable program fail count is below 50 percent                                  |
+|                  |                                                                                    |
+|                  |  Allowable program fail count is below 80 percent                                  |
+|                  |                                                                                    |
+|                  |  Allowable erase fail count is below 50 percent                                    |
+|                  |                                                                                    |
+|                  |  Allowable erase fail count is below 80 percent                                    |
+|                  |                                                                                    |
+|                  |  Drive Reliability is degraded due to excessive media or internal errors           |
+|                  |                                                                                    |
+|                  |  More number of CRC errors encountered                                             |
+|                  |                                                                                    |
+|                  |  Less than 50 Percentage of erase cycles remaining                                 |
+|                  |                                                                                    |
+|                  |  Less than 80 Percentage of erase cycles remaining                                 |
+|                  |                                                                                    |
+|                  |  Drive Media is not in read-only mode                                              |
+|                  |                                                                                    |
+|                  | Clear descriptions:                                                                |
+|                  |                                                                                    |
+|                  |  Event can either of these below issues:                                           |
+|                  |                                                                                    |
+|                  |  Drive Available Spare is as expected                                              |
+|                  |                                                                                    |
+|                  |  Drive Volatile Memory Backup System is healthy                                    |
+|                  |                                                                                    |
+|                  |  Drive Endurance consumed is normal                                                |
+|                  |                                                                                    |
+|                  |  Drive has no Internal or Media Errors / Drive has no Media Errors                 |
+|                  |                                                                                    |
+|                  |  Allowable program fail count is above 80 percent                                  |
+|                  |                                                                                    |
+|                  |  Allowable erase fail count is above 80 percent                                    |
+|                  |                                                                                    |
+|                  |  Number of CRC errors are in allowed range                                         |
+|                  |                                                                                    |
+|                  |  More than 80 Percentage of erase cycles remaining                                 |
+|                  |                                                                                    |
+|                  |  Drive Media is placed in read-only mode                                           |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Fault in drive detected                                                            |
++------------------+------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -2813,11 +3777,23 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **cpu-fault                      .1.3.6.1.4.1.12276.1.1.1.65541**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include cpu-fault  
 
 **pcie-fault                     .1.3.6.1.4.1.12276.1.1.1.65542**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -2825,12 +3801,95 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
 
 **aom-fault                      .1.3.6.1.4.1.12276.1.1.1.65543**
 
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Fault detected in the AOM                                                          |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >>: <<sensor name>>                                       |
+|                  |                                                                                    |
+|                  | Sensor names include:                                                              |
+|                  |                                                                                    |
+|                  | I2C-1 PEL EEPROM Ack Fault                                                         |
+|                  |                                                                                    |
+|                  | I2C-1 CPLD EEPROM Ack Fault                                                        |
+|                  |                                                                                    |
+|                  | I2C-1 Platform EEPROM Ack Fault                                                    |
+|                  |                                                                                    |
+|                  | I2C-3 TMP421 Outlet Ack Fault                                                      |
+|                  |                                                                                    |
+|                  | I2C-3 MAX31730 VQF Ack Fault                                                       |
+|                  |                                                                                    |
+|                  | I2C-3 TMP423 Ack Fault                                                             |
+|                  |                                                                                    |
+|                  | I2C-3 MAX31730 ATSE1 Ack Fault                                                     |
+|                  |                                                                                    |
+|                  | I2C-3 MAX31730 ATSE2 Ack Fault                                                     |
+|                  |                                                                                    |
+|                  | I2C-3 LM25066 Hotswap Controller Ack Fault                                         |
+|                  |                                                                                    |
+|                  | I2C-4 TMP468 ATSE Ack Fault                                                        |
+|                  |                                                                                    |
+|                  | I2C-4 TMP421 Inlet Ack Fault                                                       |
+|                  |                                                                                    |
+|                  | I2C-1 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | I2C-2 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | I2C-3 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | I2C-4 Stuck Bus Fault                                                              |
+|                  |                                                                                    |
+|                  | LOP FIT Forced Bad Health                                                          |
+|                  |                                                                                    |
+|                  | Blade-LOP NC-SI / RMII Failure                                                     |
+|                  |                                                                                    |
+|                  | Power-On Self Test (POST) failure                                                  |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Fault detected in the AOM                                                          |
++------------------+------------------------------------------------------------------------------------+
+
+The example logs below are from a VELOS system controller.
+
 .. code-block:: bash
 
-    syscon-1-active# file show log/confd/snmp.log | include aom-fault
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include aom-fault
+    <INFO> 3-Jan-2024::14:05:47.699 controller-2 confd[571]: snmp snmpv2-trap reqid=638913575 10.255.0.139:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 3-Jan-2024::14:05:47.700 controller-2 confd[571]: snmp snmpv2-trap reqid=638913575 10.255.0.144:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 3-Jan-2024::14:05:47.702 controller-2 confd[571]: snmp snmpv2-trap reqid=638913576 10.255.0.144:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 3-Jan-2024::14:05:47.703 controller-2 confd[571]: snmp snmpv2-trap reqid=638913576 10.255.0.143:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    <INFO> 16-Feb-2024::01:17:44.032 controller-2 confd[583]: snmp snmpv2-trap reqid=338839460 10.255.80.251:162 (TimeTicks sysUpTime=62379)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-02-16 06:15:59.868305865 UTC)(OCTET STRING alertDescription=LOP is receiving health reports from all installed VFC cards)
+    <INFO> 5-Mar-2024::15:16:16.696 controller-2 confd[581]: snmp snmpv2-trap reqid=220801582 10.255.80.251:162 (TimeTicks sysUpTime=21586)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.605975998 UTC)(OCTET STRING alertDescription=Fault detected in the AOM)
+    <INFO> 5-Mar-2024::15:16:16.732 controller-2 confd[581]: snmp snmpv2-trap reqid=220801583 10.255.80.251:162 (TimeTicks sysUpTime=21590)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.606020613 UTC)(OCTET STRING alertDescription=LOP is not receiving health reports from all installed VPC cards)
+    <INFO> 5-Mar-2024::15:16:16.784 controller-2 confd[581]: snmp snmpv2-trap reqid=220801584 10.255.80.251:162 (TimeTicks sysUpTime=21595)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.643891161 UTC)(OCTET STRING alertDescription=Fault detected in the AOM)
+    <INFO> 5-Mar-2024::15:16:16.834 controller-2 confd[581]: snmp snmpv2-trap reqid=220801585 10.255.80.251:162 (TimeTicks sysUpTime=21600)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.643912339 UTC)(OCTET STRING alertDescription=LOP is not receiving health reports from all installed VPC cards)
+    <INFO> 5-Mar-2024::15:23:15.878 controller-2 confd[581]: snmp snmpv2-trap reqid=220801597 10.255.80.251:162 (TimeTicks sysUpTime=63505)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:21:35.736268196 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    velos-1-gsa-2-active#
 
 **drive-capacity-fault           .1.3.6.1.4.1.12276.1.1.1.65544**
 
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Running out of drive capacity                                                      |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << value >> percent of drive capacity left                                         |
+|                  |                                                                                    |
+|                  | Drive capacity is available                                                        |
+|                  |                                                                                    |
+|                  | Example:                                                                           |
+|                  |                                                                                    |
+|                  | Ten percent of drive capacity left                                                 |
+|                  |                                                                                    |
+|                  | Three percent of drive capacity left                                               |
+|                  |                                                                                    |
+|                  | Fifteen percent of drive capacity left                                             |
+|                  |                                                                                    |
+|                  | Drive capacity is available                                                        |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Running out of drive capacity                                                      |
++------------------+------------------------------------------------------------------------------------+
 
 The output below is from an rSeries appliance: 
 
@@ -2843,6 +3902,22 @@ The output below is from an rSeries appliance:
     <INFO> 12-Apr-2023::11:54:35.217 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130734 10.255.8.22:6011 (TimeTicks sysUpTime=89545)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162734807 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=54%)
 
 **power-fault                    .1.3.6.1.4.1.12276.1.1.1.65545**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Power fault detected in hardware                                                   |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >>: <<sensor name>>                                       |
+|                  |                                                                                    |
+|                  | Example:                                                                           |
+|                  |                                                                                    |
+|                  | Asserted: +5.0V_STBY power fault                                                   |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Power fault detected in hardware                                                   |
++------------------+------------------------------------------------------------------------------------+
+
+Power fault detected in hardware.
 
 .. code-block:: bash
 
@@ -2866,6 +3941,20 @@ The output below is from an rSeries appliance:
 
 
 **thermal-fault                  .1.3.6.1.4.1.12276.1.1.1.65546**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Thermal fault detected in hardware                                                 |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Thermal sensor >> at <<temperature>>                                            |
+|                  |                                                                                    |
+|                  | Example: VQF at +38.1 degC                                                         |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Thermal fault detected in hardware                                                 |
++------------------+------------------------------------------------------------------------------------+
+
+Thermal fault detected in hardware.
 
 .. code-block:: bash
 
@@ -2892,11 +3981,49 @@ The output below is from an rSeries appliance:
 
 **drive-thermal-throttle         .1.3.6.1.4.1.12276.1.1.1.65547**
 
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Drive has entered a thermal throttle condition                                     |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | Drive's thermal throttling is more than <<value>> percent                          |
+|                  |                                                                                    |
+|                  | Drive has entered a thermal throttle condition                                     |
+|                  |                                                                                    |
+|                  | Examples:                                                                          |
+|                  |                                                                                    |
+|                  | Drive's thermal throttling is more than 15 percent                                 |
+|                  |                                                                                    |
+|                  | Drive's thermal throttling is more than 80 percent                                 | 
+|                  |                                                                                    |
+|                  | Drive has entered a thermal throttle condition                                     |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Drive has entered a thermal throttle condition                                     |
++------------------+------------------------------------------------------------------------------------+
+
+Drive has entered a thermal throttle condition.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include drive-thermal-throttle | more
 
 **blade-thermal-fault            .1.3.6.1.4.1.12276.1.1.1.65548**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Thermal fault detected in blade                                                    |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | Drive Temperature has exceeded threshold                                           |
+|                  |                                                                                    |
+|                  | Drive Sensor Temperature is outside operating range                                |
+|                  |                                                                                    |
+|                  | Drive Temperature is as expected                                                   |
+|                  |                                                                                    |
+|                  | Drive Sensor Temperature is within normal range                                    |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Thermal fault detected in blade                                                    |
++------------------+------------------------------------------------------------------------------------+
 
 This SNMP Trap is for the VELOS system, and it monitors various temperature sensors on each VELOS blade. The sensors monitor CPU, FGPA, and memory temperatures and will warn if the temperature goes beyond recommended guidelines. If a thermal fault occurs, you can verify if it has cleared due to a temporary condition. You can also check the system fans to ensure they are operating properly in the VELOS system via the command **show components component fantray-1**. You can also check the environment in which the VELOS system is running to ensure the data center is not operating at too high temperature.
 
@@ -2922,9 +4049,110 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 
 .. code-block:: bash
 
-    r10900-1# file show log/confd/snmp.log | include blade-thermal-fault
+    syscon-2-active# file show log/confd/snmp.log | include blade-thermal-fault
 
 **blade-hardware-fault           .1.3.6.1.4.1.12276.1.1.1.65549**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | Hardware fault detected in blade                                                   |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >> : << ras error>>                                       |
+|                  |                                                                                    |
+|                  | Ras errors list is:                                                                |
+|                  |                                                                                    |
+|                  | RAS AER correctable advisory non-fatal error                                       |
+|                  |                                                                                    |
+|                  | RAS AER correctable BAD DLLP error                                                 |
+|                  |                                                                                    |
+|                  | RAS AER correctable BAD TLP error                                                  |
+|                  |                                                                                    |
+|                  | RAS AER correctable Receiver error                                                 |
+|                  |                                                                                    |
+|                  | RAS AER correctable RELAY_NUM rollover error                                       |
+|                  |                                                                                    |
+|                  | RAS AER correctable replay timer timeout error                                     |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable completer abort error                                        |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable completion timeout error                                     |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable data link protocol error                                     |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable ECRC error                                                   |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable flow control protocol error                                  |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable malformed TLP error                                          |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable Poisoned TLP Error                                           |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable receiver overflow error                                      |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable unexpected completion error                                  |
+|                  |                                                                                    |
+|                  | RAS AER uncorrectable unsupported request error                                    |
+|                  |                                                                                    |
+|                  | RAS AER unknown error                                                              |
+|                  |                                                                                    |
+|                  | RAS Extlog invalid address error                                                   |
+|                  |                                                                                    |
+|                  | RAS Extlog master abort error                                                      |
+|                  |                                                                                    |
+|                  | RAS Extlog memory sparing error                                                    |
+|                  |                                                                                    |
+|                  | RAS Extlog mirror broken error                                                     |
+|                  |                                                                                    |
+|                  | RAS Extlog multi-bit ECC error                                                     |
+|                  |                                                                                    |
+|                  | RAS Extlog multi-symbol chipkill ECC error                                         |
+|                  |                                                                                    |
+|                  | RAS Extlog no error                                                                |
+|                  |                                                                                    |
+|                  | RAS Extlog Parity error                                                            |
+|                  |                                                                                    |
+|                  | RAS Extlog physical memory map-out error                                           |
+|                  |                                                                                    |
+|                  | RAS Extlog scrub corrected error                                                   |
+|                  |                                                                                    |
+|                  | RAS Extlog scrub uncorrected error                                                 |
+|                  |                                                                                    |
+|                  | RAS Extlog single-bit ECC error                                                    |
+|                  |                                                                                    |
+|                  | RAS Extlog single-symbol chipkill ECC error                                        |
+|                  |                                                                                    |
+|                  | RAS Extlog target abort error                                                      |
+|                  |                                                                                    |
+|                  | RAS Extlog Unknown error                                                           |
+|                  |                                                                                    |
+|                  | RAS Extlog unknown type error                                                      |
+|                  |                                                                                    |
+|                  | RAS Extlog watchdog timeout error                                                  |
+|                  |                                                                                    |
+|                  | RAS MCE processor temperature throttling disabled error                            |
+|                  |                                                                                    |
+|                  | RAS MCE address/command error                                                      |
+|                  |                                                                                    |
+|                  | RAS MCE generic undefined request error                                            |
+|                  |                                                                                    |
+|                  | RAS MCE memory read error                                                          |
+|                  |                                                                                    |
+|                  | RAS MCE memory scrubbing error                                                     |
+|                  |                                                                                    |
+|                  | RAS MCE memory write error                                                         |
+|                  |                                                                                    |
+|                  | RAS MCE unknown error                                                              |
+|                  |                                                                                    |
+|                  | RAS memory controller fatal event                                                  |
+|                  |                                                                                    |
+|                  | RAS memory controller uncorrected event                                            |
+|                  |                                                                                    |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | Hardware fault detected in blade                                                   |
++------------------+------------------------------------------------------------------------------------+
+
+Traps will be generated for blade-hardware-faults. A Reliability, Availability, and Servieability (RAS) monitoring system monitors blade hardware utilizing Advanced Error Reporting (AER) for PCIe devices.
 
 .. code-block:: bash
 
@@ -2941,6 +4169,18 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 
 
 **sensor-fault                   .1.3.6.1.4.1.12276.1.1.1.65577**
+
++------------------+-------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                 |
++==================+===================================================================+
+| ASSERT           | Sensor fault detected in hardware                                 |
++------------------+-------------------------------------------------------------------+
+| EVENT            | << Asserted | Deasserted >> : sensor fault: <<sensor name>>       |
++------------------+-------------------------------------------------------------------+
+| CLEAR            | Sensor fault detected in hardware                                 |
++------------------+-------------------------------------------------------------------+
+
+Traps will be generated for sensor faults or communication failures. In the example below, an Inlet Sensor fault was detetected (Asserted) and then cleared (Deasserted).
 
 .. code-block:: bash
 
@@ -2963,24 +4203,95 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
     <INFO> 9-Nov-2023::19:26:08.991 controller-1 confd[604]: snmp snmpv2-trap reqid=1548244114 10.255.0.143:162 (TimeTicks sysUpTime=271139401)(OBJECT IDENTIFIER snmpTrapOID=sensor-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-11-10 00:26:08.911332002 UTC)(OCTET STRING alertDescription=Deasserted: sensor fault: Inlet)
 
 
-**module-present                 .1.3.6.1.4.1.12276.1.1.1.66304**
+**module-present                 .1.3.6.1.4.1.12276.1.1.1.65794**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| EVENT            | <<module>> <<present|removed>>                            |
+|                  |                                                           |
+|                  | Example: blade1 removed                                   |
++------------------+-----------------------------------------------------------+
+
+Traps will be generated for componenents being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is presenet or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
 
 .. code-block:: bash
 
-    syscon-1-active# file show log/confd/snmp.log | include module-present | more
-    <INFO> 3-Oct-2022::09:34:24.770 controller-1 confd[437]: snmp snmpv2-trap reqid=64689696 10.255.0.143:162 (TimeTicks sysUpTime=2530)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:10.611355273 UTC)(OCTET STRING alertDescription=Blade6 removed)
-    <INFO> 3-Oct-2022::09:34:25.243 controller-1 confd[437]: snmp snmpv2-trap reqid=64689701 10.255.0.143:162 (TimeTicks sysUpTime=2577)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.560724295 UTC)(OCTET STRING alertDescription=Blade4 removed)
-    <INFO> 3-Oct-2022::09:34:25.293 controller-1 confd[437]: snmp snmpv2-trap reqid=64689702 10.255.0.143:162 (TimeTicks sysUpTime=2582)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.588691078 UTC)(OCTET STRING alertDescription=Blade5 removed)
-    <INFO> 3-Oct-2022::09:34:25.343 controller-1 confd[437]: snmp snmpv2-trap reqid=64689703 10.255.0.143:162 (TimeTicks sysUpTime=2587)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.631707464 UTC)(OCTET STRING alertDescription=Vpc1 present)
-    <INFO> 3-Oct-2022::09:34:25.394 controller-1 confd[437]: snmp snmpv2-trap reqid=64689704 10.255.0.143:162 (TimeTicks sysUpTime=2592)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.646922534 UTC)(OCTET STRING alertDescription=Vpc2 present)
-    <INFO> 3-Oct-2022::09:34:28.751 controller-1 confd[437]: snmp snmpv2-trap reqid=64689715 10.255.0.143:162 (TimeTicks sysUpTime=2928)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.510124761 UTC)(OCTET STRING alertDescription=Blade1 present)
-    <INFO> 3-Oct-2022::09:34:28.801 controller-1 confd[437]: snmp snmpv2-trap reqid=64689716 10.255.0.143:162 (TimeTicks sysUpTime=2933)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.528553059 UTC)(OCTET STRING alertDescription=Blade2 present)
-    <INFO> 3-Oct-2022::09:34:28.848 controller-1 confd[437]: snmp snmpv2-trap reqid=64689717 10.255.0.143:162 (TimeTicks sysUpTime=2938)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.559881492 UTC)(OCTET STRING alertDescription=Blade3 present)
-    <INFO> 3-Oct-2022::09:34:29.523 controller-1 confd[437]: snmp snmpv2-trap reqid=64689725 10.255.0.143:162 (TimeTicks sysUpTime=3005)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.706122781 UTC)(OCTET STRING alertDescription=Vfc1 present)
-    <INFO> 3-Oct-2022::09:34:30.385 controller-1 confd[437]: snmp snmpv2-trap reqid=64689734 10.255.0.143:162 (TimeTicks sysUpTime=3091)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.768040978 UTC)(OCTET STRING alertDescription=Blade7 removed)
+    velos-chassis2-1-active# file show log/confd/snmp.log | include module | include trap
+    <INFO> 21-Aug-2024::22:38:55.801 controller-1 confd[656]: snmp snmpv2-trap reqid=174749112 10.255.80.251:162 (TimeTicks sysUpTime=29410)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.027630330 UTC)(OCTET STRING alertDescription=Blade1 present)
+    <INFO> 21-Aug-2024::22:38:55.848 controller-1 confd[656]: snmp snmpv2-trap reqid=174749113 10.255.80.251:162 (TimeTicks sysUpTime=29415)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.042131211 UTC)(OCTET STRING alertDescription=Blade2 present)
+    <INFO> 21-Aug-2024::22:38:55.899 controller-1 confd[656]: snmp snmpv2-trap reqid=174749114 10.255.80.251:162 (TimeTicks sysUpTime=29420)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.056767261 UTC)(OCTET STRING alertDescription=Blade3 present)
+    <INFO> 21-Aug-2024::22:38:56.362 controller-1 confd[656]: snmp snmpv2-trap reqid=174749120 10.255.80.251:162 (TimeTicks sysUpTime=29466)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.120668658 UTC)(OCTET STRING alertDescription=Vfc1 present)
+    <INFO> 21-Aug-2024::22:38:57.232 controller-1 confd[656]: snmp snmpv2-trap reqid=174749129 10.255.80.251:162 (TimeTicks sysUpTime=29553)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:15.184293249 UTC)(OCTET STRING alertDescription=Blade7 removed)
+    <INFO> 21-Aug-2024::22:38:57.282 controller-1 confd[656]: snmp snmpv2-trap reqid=174749130 10.255.80.251:162 (TimeTicks sysUpTime=29558)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:15.235227870 UTC)(OCTET STRING alertDescription=Blade8 removed)
+    <INFO> 21-Aug-2024::22:38:57.333 controller-1 confd[656]: snmp snmpv2-trap reqid=174749131 10.255.80.251:162 (TimeTicks sysUpTime=29563)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:15.264607555 UTC)(OCTET STRING alertDescription=Lcd present)
+    <INFO> 21-Aug-2024::22:38:57.384 controller-1 confd[656]: snmp snmpv2-trap reqid=174749132 10.255.80.251:162 (TimeTicks sysUpTime=29568)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:15.278798938 UTC)(OCTET STRING alertDescription=PeerCc present)
+    <INFO> 21-Aug-2024::22:39:02.079 controller-1 confd[656]: snmp snmpv2-trap reqid=174749159 10.255.80.251:162 (TimeTicks sysUpTime=30038)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:25.181560551 UTC)(OCTET STRING alertDescription=Blade6 removed)
+    <INFO> 21-Aug-2024::22:39:02.466 controller-1 confd[656]: snmp snmpv2-trap reqid=174749163 10.255.80.251:162 (TimeTicks sysUpTime=30077)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:25.211925968 UTC)(OCTET STRING alertDescription=Blade4 removed)
+    <INFO> 21-Aug-2024::22:39:02.528 controller-1 confd[656]: snmp snmpv2-trap reqid=174749164 10.255.80.251:162 (TimeTicks sysUpTime=30083)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:25.223983065 UTC)(OCTET STRING alertDescription=Blade5 removed)
+    <INFO> 21-Aug-2024::22:39:02.556 controller-1 confd[656]: snmp snmpv2-trap reqid=174749165 10.255.80.251:162 (TimeTicks sysUpTime=30086)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:25.241758596 UTC)(OCTET STRING alertDescription=Vpc1 present)
+    <INFO> 21-Aug-2024::22:39:02.603 controller-1 confd[656]: snmp snmpv2-trap reqid=174749166 10.255.80.251:162 (TimeTicks sysUpTime=30090)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:25.253807231 UTC)(OCTET STRING alertDescription=Vpc2 present)
+    <INFO> 21-Aug-2024::22:50:45.106 controller-1 confd[656]: snmp snmpv2-trap reqid=174749294 10.255.80.251:162 (TimeTicks sysUpTime=100340)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:13.433492411 UTC)(OCTET STRING alertDescription=Vfc1 present)
+    <INFO> 21-Aug-2024::22:50:45.900 controller-1 confd[656]: snmp snmpv2-trap reqid=174749303 10.255.80.251:162 (TimeTicks sysUpTime=100420)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:13.476539115 UTC)(OCTET STRING alertDescription=Blade7 removed)
+    <INFO> 21-Aug-2024::22:50:45.951 controller-1 confd[656]: snmp snmpv2-trap reqid=174749304 10.255.80.251:162 (TimeTicks sysUpTime=100425)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:13.488380932 UTC)(OCTET STRING alertDescription=Blade8 removed)
+    <INFO> 21-Aug-2024::22:50:46.001 controller-1 confd[656]: snmp snmpv2-trap reqid=174749305 10.255.80.251:162 (TimeTicks sysUpTime=100430)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:13.518108913 UTC)(OCTET STRING alertDescription=Lcd present)
+    <INFO> 21-Aug-2024::22:50:46.052 controller-1 confd[656]: snmp snmpv2-trap reqid=174749306 10.255.80.251:162 (TimeTicks sysUpTime=100435)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:14.178706661 UTC)(OCTET STRING alertDescription=PeerCc present)
+    <INFO> 21-Aug-2024::22:50:50.777 controller-1 confd[656]: snmp snmpv2-trap reqid=174749335 10.255.80.251:162 (TimeTicks sysUpTime=100908)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:22.927142786 UTC)(OCTET STRING alertDescription=Blade6 removed)
+    <INFO> 21-Aug-2024::22:50:51.192 controller-1 confd[656]: snmp snmpv2-trap reqid=174749339 10.255.80.251:162 (TimeTicks sysUpTime=100949)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:22.961800500 UTC)(OCTET STRING alertDescription=Blade4 removed)
+    <INFO> 21-Aug-2024::22:50:51.203 controller-1 confd[656]: snmp snmpv2-trap reqid=174749340 10.255.80.251:162 (TimeTicks sysUpTime=100950)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:22.974497119 UTC)(OCTET STRING alertDescription=Blade5 removed)
+    <INFO> 21-Aug-2024::22:50:51.271 controller-1 confd[656]: snmp snmpv2-trap reqid=174749341 10.255.80.251:162 (TimeTicks sysUpTime=100957)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:22.989681624 UTC)(OCTET STRING alertDescription=Vpc1 present)
+    <INFO> 21-Aug-2024::22:50:51.364 controller-1 confd[656]: snmp snmpv2-trap reqid=174749342 10.255.80.251:162 (TimeTicks sysUpTime=100966)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.001344462 UTC)(OCTET STRING alertDescription=Vpc2 present)
+    <INFO> 21-Aug-2024::22:50:51.614 controller-1 confd[656]: snmp snmpv2-trap reqid=174749346 10.255.80.251:162 (TimeTicks sysUpTime=100991)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.025348062 UTC)(OCTET STRING alertDescription=Blade1 present)
+    <INFO> 21-Aug-2024::22:50:51.680 controller-1 confd[656]: snmp snmpv2-trap reqid=174749347 10.255.80.251:162 (TimeTicks sysUpTime=100998)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.035809494 UTC)(OCTET STRING alertDescription=Blade2 present)
+    <INFO> 21-Aug-2024::22:50:51.725 controller-1 confd[656]: snmp snmpv2-trap reqid=174749348 10.255.80.251:162 (TimeTicks sysUpTime=101002)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.048965786 UTC)(OCTET STRING alertDescription=Blade3 present)
 
 
-**psu-fault                      .1.3.6.1.4.1.12276.1.1.1.66305**
+**psu-fault                      .1.3.6.1.4.1.12276.1.1.1.65793**
+
++------------------+------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                  |
++==================+====================================================================================+
+| ASSERT           | PSU fault detected                                                                 |
++------------------+------------------------------------------------------------------------------------+
+| EVENT            | <<< Asserted| Deasserted >>: PSU <<psu number>> << sensor that caused the issue>>  |
+|                  |                                                                                    |
+|                  | Examples:                                                                          |
+|                  |                                                                                    |
+|                  | Asserted: PSU 1 input under-voltage warning                                        |
+|                  |                                                                                    |
+|                  | Deasserted: PSU 1 input under-voltage warning                                      |
+|                  |                                                                                    |
+|                  | Sensor could be:                                                                   |
+|                  |                                                                                    |
+|                  | input over-power warning                                                           |
+|                  |                                                                                    |
+|                  | input over-current warning                                                         |
+|                  |                                                                                    |
+|                  | input over-current fault                                                           |
+|                  |                                                                                    |
+|                  | unit off for low input voltage                                                     |
+|                  |                                                                                    |
+|                  | input under-voltage fault                                                          |
+|                  |                                                                                    |
+|                  | input under-voltage warning                                                        |
+|                  |                                                                                    |
+|                  | input over-voltage warning                                                         | 
+|                  |                                                                                    |
+|                  | input over-voltage fault                                                           |
+|                  |                                                                                    |
+|                  | PSU present                                                                        |
+|                  |                                                                                    |
+|                  | PSU input-ok                                                                       |
+|                  |                                                                                    |
+|                  | PSU output-ok                                                                      |
+|                  |                                                                                    |
+|                  | PSU unsupported                                                                    |
+|                  |                                                                                    |
+|                  | PSU mismatch                                                                       |
++------------------+------------------------------------------------------------------------------------+
+| CLEAR            | PSU fault detected                                                                 |
++------------------+------------------------------------------------------------------------------------+
+
 
 This set of SNMP traps will relate to the health of the power supplies in the VELOS chassis. You may see traps related to insertion or removal of power supplies, inputs, and voltage thresholds. It is best to determine if the trap was a temporary condition, and if not and an error state persists, then determine if the inputs of the power supplies have become disconnected or changed. If the problem only occurs on one power supply, then you can try swapping inputs/power supplies during a maintenance window to see if the issue follows the power supply or the input source. 
 
@@ -3000,7 +4311,18 @@ This set of SNMP traps will relate to the health of the power supplies in the VE
     <INFO> 3-Oct-2022::09:34:25.055 controller-1 confd[437]: snmp snmpv2-trap reqid=64689698 10.255.0.143:162 (TimeTicks sysUpTime=2558)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:17.487691756 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage fault)
 
 
-**lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.66306**
+**lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.65792**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Fault detected in LCD module                              |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<LCD is in fault state | LCD is in healthy state >>      |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Fault detected in LCD module                              |
++------------------+-----------------------------------------------------------+
+
 
 This set of SNMP traps will relate to the health of the LCD subsystem on the VELOS chassis. You may notice lcd-fault traps as the firmware on the LCD is updated as part of an upgrade as seen below. These should be temporary states and eventually the system will generate an **LCD Health is OK** trap. If the system continues to show an LCD fault, a support case should be opened to determine if there is a legitimate hardware issue.
 
@@ -3023,7 +4345,24 @@ The output below is from an rSeries unit:
     <INFO> 15-Feb-2023::15:59:14.685 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418324 10.255.0.144:161 (TimeTicks sysUpTime=22205)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-02-15 20:59:14.588063311 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 
 
-**module-communication-error     .1.3.6.1.4.1.12276.1.1.1.66307**
+**module-communication-error     .1.3.6.1.4.1.12276.1.1.1.65795**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Module communication error detected                       |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<module>> communication error detected                   |
+|                  |                                                           |
+|                  | <<module>> communication is OK                            |
+|                  |                                                           |
+|                  | Example:                                                  |
+|                  |                                                           |
+|                  | lcd communication error detected.                         |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Module communication error detected                       |
++------------------+-----------------------------------------------------------+
 
 Power Supply Module
 
@@ -3053,14 +4392,399 @@ The output below is from an rSeries unit:
     <INFO> 12-Apr-2023::11:51:45.255 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130730 10.255.8.22:6011 (TimeTicks sysUpTime=72549)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.156764576 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 
 
+**psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
 
- 
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | PSU redundancy fault detected                             |
++------------------+-----------------------------------------------------------+
+| EVENT            | Chassis doesnt have enough working power supplies         |
+|                  |                                                           |
+|                  | Chassis has enough working power supplies                 |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | PSU redundancy fault detected                             |
++------------------+-----------------------------------------------------------+
 
+PSU redundancy fault detected.
+
+.. code-block:: bash
+
+
+**psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Fault detected in PSU Controller health                   |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<Asserted | Deasserted>>: <<PSU controller sensor>>      |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Fault detected in PSU Controller health                   |
++------------------+-----------------------------------------------------------+
+
+Fault detected in PSU Controller health.
+
+.. code-block:: bash
+    
+
+**fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Fault detected in Fan Controller health                   |
++------------------+-----------------------------------------------------------+
+| EVENT            | <<Asserted | Deasserted>>: <<Fan controller sensor>>      |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Fault detected in Fan Controller health                   |
++------------------+-----------------------------------------------------------+
+
+Fault detected in Fan Controller health.
+
+.. code-block:: bash
+    
+
+**arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
+
++------------------+---------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                   |
++==================+=====================================================================+
+| EVENT            | <<Asserted| Deasserted>> local arbitration health state             |
++------------------+---------------------------------------------------------------------+
+| EVENT            | <<Asserted| Deasserted>> local arbitration request-active state     |
++------------------+---------------------------------------------------------------------+
+| EVENT            | <<Asserted| Deasserted>> local arbitration grant-active state       |
++------------------+---------------------------------------------------------------------+
+
+Change detected in System Controller Arbitration State.
+
+.. code-block:: bash
+    
+    <INFO> 23-Jul-2024::12:37:48.556 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934181 10.255.80.251:162 (TimeTicks sysUpTime=6115)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:37:48.486553104 UTC)(OCTET STRING alertDescription=Deasserted: peer arbitration health state)
+    <INFO> 23-Jul-2024::12:46:18.548 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934182 10.255.80.251:162 (TimeTicks sysUpTime=56476)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:18.541298567 UTC)(OCTET STRING alertDescription=Asserted: peer arbitration health state)
+    <INFO> 23-Jul-2024::12:47:06.505 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934183 10.255.80.251:162 (TimeTicks sysUpTime=61318)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:16.607590924 UTC)(OCTET STRING alertDescription=Deasserted: local arbitration health state)
+    <INFO> 23-Jul-2024::12:47:06.668 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934185 10.255.80.251:162 (TimeTicks sysUpTime=61335)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:25.798025854 UTC)(OCTET STRING alertDescription=Asserted: local arbitration health state)
+
+
+**switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Switch port status                                        |
++------------------+-----------------------------------------------------------+
+| EVENT            |                                                           |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Switch port status                                        |
++------------------+-----------------------------------------------------------+
+
+Switch port status.
+
+.. code-block:: bash
+    
+    <INFO> 23-Jul-2024::13:39:16.822 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934234 10.255.80.251:162 (TimeTicks sysUpTime=374941)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:16.722021333 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has FEC uncorrected errors, value=1)
+
+    <INFO> 23-Jul-2024::13:39:46.879 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934236 10.255.80.251:162 (TimeTicks sysUpTime=377947)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:46.771763998 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has no FEC uncorrected errors)
+
+**link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
+
++------------------+-----------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                         |
++==================+===========================================================+
+| ASSERT           | Management link state is down                             |
++------------------+-----------------------------------------------------------+
+| EVENT            | Front-panel management port link status is <<down | up >> |
+|                  |                                                           |
++------------------+-----------------------------------------------------------+
+| CLEAR            | Management link state is down                             |
++------------------+-----------------------------------------------------------+
+
+Traps for the front panel system controller management port link state. Each system controller has a single 10Gb Ethernet port. Traps will be generated when these ports change status. The Source of the trap will either be controller-1 or controller-2, and the body of the trap will indicate the status of the port (up or down). Traps will be sent with either an **assert** when an alarm occurs, a **clear** when the alarm is cleared, or an **event** which is providing an update to a raised alarm event.
+
+- assert(1) is reported in alertEffect when alarm is raised.
+- clear(0) is reported in alertEffect when alarm is cleared.
+- event(2) is updated in alertEffect when event notification is reported.
+
+As an example, the following set of traps are from a Link Down event on controller-1. The first trap has **alertEffect=1** indicating an assert. The second trap has **alertEffect=2** indicating an additional infromation about the assert. The 3rd trap is a clear event of the original alert indicated by the **alertEffect=0**. Fianlly addtional information is provided **alertEffect=2** in the 4th trap, indicating the link is back up.
+
+.. code-block:: bash
+    
+    <INFO> 23-Jul-2024::23:50:08.503 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934240 10.255.80.251:162 (TimeTicks sysUpTime=4040110)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:50:08.433629827 UTC)(OCTET STRING alertDescription=Management link state is down)
+    <INFO> 23-Jul-2024::23:50:08.516 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934241 10.255.80.251:162 (TimeTicks sysUpTime=4040111)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:50:08.433666735 UTC)(OCTET STRING alertDescription=Front-panel management port link status is down)
+    <INFO> 23-Jul-2024::23:51:08.493 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934242 10.255.80.251:162 (TimeTicks sysUpTime=4046108)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471133766 UTC)(OCTET STRING alertDescription=Management link state is down)
+    <INFO> 23-Jul-2024::23:51:08.547 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934243 10.255.80.251:162 (TimeTicks sysUpTime=4046114)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471162616 UTC)(OCTET STRING alertDescription=Front-panel management port link status is up)
+
+
+**datapath-fault         .1.3.6.1.4.1.12276.1.1.1.65578**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Hardware datapath fault.
+
+.. code-block:: bash
+    
+
+**boot-time-integrity-status         .1.3.6.1.4.1.12276.1.1.1.65579**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | Boot time integrity failure detected                                                                     |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Boot time integrity failure detected.
+
+.. code-block:: bash
+    
+    <INFO> 17-Jun-2024::17:06:12.992 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239385 10.255.80.251:162 (TimeTicks sysUpTime=2588)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.038536850 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check complete)
+    <INFO> 17-Jun-2024::17:06:13.121 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239386 10.255.80.251:162 (TimeTicks sysUpTime=2601)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.044855786 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check complete)
+    <INFO> 17-Jun-2024::17:06:13.237 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239387 10.255.80.251:162 (TimeTicks sysUpTime=2613)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.052817609 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check failure)
+    <INFO> 17-Jun-2024::17:06:13.383 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239388 10.255.80.251:162 (TimeTicks sysUpTime=2627)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.058460353 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check failure)
+    <INFO> 17-Jun-2024::17:06:13.559 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239389 10.255.80.251:162 (TimeTicks sysUpTime=2645)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.074260559 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check complete)
+    <INFO> 17-Jun-2024::17:06:13.711 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239390 10.255.80.251:162 (TimeTicks sysUpTime=2660)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.078563910 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check failure)
+
+**incompatible-image         .1.3.6.1.4.1.12276.1.1.1.327682**
+
++------------------+-------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                         |
++==================+===========================================================================================+
+| EVENT            | Unsupported platform <Platform Type>                                                      |
+|                  | import file <file path and name> removed incorrect file name                              |
+|                  | import file <file path and name> removed File name has special characters                 |
+|                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32. |
++------------------+-------------------------------------------------------------------------------------------+
+
+Trap notification when the platform incompatible image is imported.
+
+.. code-block:: bash
+    
+**login-failed     .1.3.6.1.4.1.12276.1.1.1.327683**
+
++------------------+-------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                         |
++==================+===========================================================================================+
+| EVENT            | F5OS login attempt failed for the user: <username>, rhost: <remote host IP>               |
++------------------+-------------------------------------------------------------------------------------------+
+
+An SNMP Trap will be generated for login failures to the F5OS interfaces. Below is an example of an authentication failure trap generated on a system controller.
+
+.. code-block:: bash
+
+    velos-chassis2-1-active# file tail -f log/confd/snmp.log 
+    <INFO> 22-Aug-2024::13:18:24.022 controller-1 confd[656]: snmp snmpv2-trap reqid=174749401 10.255.80.251:162 (TimeTicks sysUpTime=5306232)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:23.991872061 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+    <INFO> 22-Aug-2024::13:18:28.121 controller-1 confd[656]: snmp snmpv2-trap reqid=174749402 10.255.80.251:162 (TimeTicks sysUpTime=5306642)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:28.071075669 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+    <INFO> 22-Aug-2024::13:18:31.330 controller-1 confd[656]: snmp snmpv2-trap reqid=174749403 10.255.80.251:162 (TimeTicks sysUpTime=5306963)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:31.324417671 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+
+Below is an example of an authentication failure trap generated on a chassis partition.
+
+.. code-block:: bash
+
+    Production-2# file tail -f log/snmp.log 
+    <INFO> 22-Aug-2024::13:00:33.112 partition2 confd[123]: snmp snmpv2-trap reqid=1289508594 10.255.80.251:162 (TimeTicks sysUpTime=5028649)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=partition2(Production))(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:00:33.100340535 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
+
+**nebsEnabled         .1.3.6.1.4.1.12276.1.1.1.131072**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | Chassis is operating with NEBS temperature thresholds                                                    |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Chassis is operating with NEBS temperature thresholds.
+
+.. code-block:: bash
+    
+
+**nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | Chassis is operating with non-NEBS temperature thresholds                                                |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Chassis is operating with non-NEBS temperature thresholds.
+
+.. code-block:: bash
+    
+
+**systemControllerNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131328**
+
++------------------+----------------------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                                    |
++==================+======================================================================================================================+
+| ASSERT           | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          
++------------------+----------------------------------------------------------------------------------------------------------------------+
+| CLEAR            | Chassis operating with non-NEBS temperature thresholds non-NEBS system controller installed in a NEBS chassis        |                                                                                                          
++------------------+----------------------------------------------------------------------------------------------------------------------+
+
+Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
+
+.. code-block:: bash
+    
+
+**bladeNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131329**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| ASSERT           | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Blade operating with non-NEBS temperature thresholds non-NEBS blade installed in a NEBS chassis          |                                                                                                          
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed in a NEBS chassis).
+
+.. code-block:: bash
+    
+
+**openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.458752**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| ASSERT           | One or more openshift certificates expiring within 90 days.                                              |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | One or more openshift certificates expiring within 90 days.                                              |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+One or more openshift certificates expiring within 90 days.
+
+.. code-block:: bash
+    
+
+**openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.458753**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| ASSERT           | One or more openshift certificates has expired or is expiring.                                           |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | One or more openshift certificates has expired or is expiring.                                           |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+One or more openshift certificates has expired or is expiring.
+
+.. code-block:: bash
+    
+
+
+**openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.459008**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| ASSERT           | The openshift cluster requires a manual rebuild to use the latest containers.                            |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | The openshift cluster requires a manual rebuild to use the latest containers.                            |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+The openshift cluster requires a manual rebuild to use the latest containers.
+
+.. code-block:: bash
+    
+
+**initialization         .1.3.6.1.4.1.12276.1.1.1.262656**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Critical issue in fpga and datapath initialization process.
+
+.. code-block:: bash
+    
+
+
+**ePVA         .1.3.6.1.4.1.12276.1.1.1.262912**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Could not initialize ePVA.
+
+.. code-block:: bash
+    
+    
+
+**speed         .1.3.6.1.4.1.12276.1.1.1.263170**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Port speed change event.
+
+.. code-block:: bash
+    
+
+**lacp-mac-failure         .1.3.6.1.4.1.12276.1.1.1.590081**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Failed to publish LACP MAC address to the database.
+
+.. code-block:: bash
+    
+
+**mac-exhaustion         .1.3.6.1.4.1.12276.1.1.1.590082**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Partition MAC pool is exhausted.
+
+.. code-block:: bash
+    
+
+**inaccessibleMemory         .1.3.6.1.4.1.12276.1.1.1.458752**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+Notification indicating unusable hugepage memory.
+
+.. code-block:: bash
+    
 
 Firmware Update Status Traps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **firmware-update-status         .1.3.6.1.4.1.12276.1.1.1.65550**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            | Firmware update is <<running | completed >> for <<module>>                                               |
+|                  |                                                                                                          |
+|                  | Example: Firmware update is running for vqf 0                                                            |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
 
@@ -3099,6 +4823,19 @@ Drive Utilization Traps
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 **drive-utilization              .1.3.6.1.4.1.12276.1.1.1.65551**
+
++------------------+-------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                 |
++==================+===================================================================+
+| ASSERT           | Drive utilization growth rate is high                             |
++------------------+-------------------------------------------------------------------+
+| EVENT            | Drive usage growth rate exceeded 10%, growth={{.growthPercent}}   |
+|                  |                                                                   |
+|                  | Drive usage growth rate with in range, growth={{.growthPercent}}% |
+|                  |                                                                   |
++------------------+-------------------------------------------------------------------+
+| CLEAR            | Drive utilization growth rate is high                             |
++------------------+-------------------------------------------------------------------+
 
 The system will monitor the storage utilization of the VELOS disks and warn if the disk usage gets too high. There are 3 levels of events that can occur as seen below:
 
@@ -3148,7 +4885,14 @@ The output below is from an rSeries unit:
 FIPS Related Traps
 ^^^^^^^^^^^^^^^^^^^
 
+
 **fips-fault                     .1.3.6.1.4.1.12276.1.1.1.196308**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
 
 The output below is from an rSeries unit:
 
@@ -3162,6 +4906,16 @@ The output below is from an rSeries unit:
 
 **fipsError                      .1.3.6.1.4.1.12276.1.1.1.196608**
 
++------------------+-------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                 |
++==================+===================================================================+
+| ASSERT           | FIPS error identified in one or more services                     |
++------------------+-------------------------------------------------------------------+
+| CLEAR            | FIPS error identified in one or more services                     |
++------------------+-------------------------------------------------------------------+
+
+FIPS error identified in one or more services.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include fipsError    
@@ -3170,6 +4924,12 @@ System Event Traps
 ^^^^^^^^^^^^^^^^^^^
 
 **core-dump                      .1.3.6.1.4.1.12276.1.1.1.327680**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            | Core dumped on Controller-<1|2>. process=<service name> location=<core file location>    |
++------------------+------------------------------------------------------------------------------------------+
 
 This trap will indicate that the system has generated a core-dump file. A support case should be opened to diagnose the failure and a qkview should be taken and uploaded to iHealth to capture the diagnostic information for F5 support to analyze. Below is an example of an SNMP trap indicating that the orchestration manager has generated a core dump Files.
 
@@ -3186,20 +4946,38 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 
 **reboot                         .1.3.6.1.4.1.12276.1.1.1.327681**
 
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| EVENT            | reboot - controller-<1|2>.chassis.local F5OS-C controller version <Version>              |
++------------------+------------------------------------------------------------------------------------------+
+
 This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator. Below is an example of a reboot trap.
 
 .. code-block:: bash
 
-    syscon-1-active# file show log/confd/snmp.log | include reboot 
-    <INFO> 10-Jul-2023::13:41:23.284 appliance-1 confd[130]: snmp snmpv2-trap reqid=1977423794 10.255.0.144:161 (TimeTicks sysUpTime=2909)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-07-10 17:41:23.281740739 UTC)(OCTET STRING alertDescription=reboot - appliance-1.chassis.local F5OS-A R5R10 version 1.7.0-0528)
+    <INFO> 23-Jul-2024::12:47:06.710 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934186 10.255.80.251:162 (TimeTicks sysUpTime=61339)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:30.379710424 UTC)(OCTET STRING alertDescription=reboot - controller-2.chassis.local F5OS-C controller version 1.8.0-14453)
+
 
 **raid-event                     .1.3.6.1.4.1.12276.1.1.1.393216**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
     r10900-1# file show log/system/snmp.log | include raid-event
 
 **backplane                      .1.3.6.1.4.1.12276.1.1.1.262144**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
 .. code-block:: bash
 
@@ -3276,90 +5054,78 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
 
 
+
+**txPwr                   .1.3.6.1.4.1.12276.1.1.1.262400**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+The transmit power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+
 .. code-block:: bash
 
-    Production-2# file show log/snmp.log | include ddm   
-
-**txPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262400**
-
-The transmit power threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txPwrHiWarn                    .1.3.6.1.4.1.12276.1.1.1.262401**
-
-The transmit power threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262402**
-
-The transmit power threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txPwrLoWarn                    .1.3.6.1.4.1.12276.1.1.1.262403**
-
-The transmit power threshold for a specific transceiver has reached low txPwrLoWarn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**rxPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262404**
-
-The receive power threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**rxPwrHiWarn                    .1.3.6.1.4.1.12276.1.1.1.262405**
-
-The receive power threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**rxPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262406**
-
-The receive power threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**rxPwrLoWarn                    .1.3.6.1.4.1.12276.1.1.1.262407**
-
-The receive power threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txBiasHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262408**
-
-The transmit bias threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txBiasHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262409**
-
-The transmit bias threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txBiasLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262410**
-
-The transmit bias threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**txBiasLoWarn                   .1.3.6.1.4.1.12276.1.1.1.262411**
-
-The transmit bias threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**ddmTempHiAlarm                 .1.3.6.1.4.1.12276.1.1.1.262412**
-
-The ddm temperature threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver. 
-
-**ddmTempHiWarn                  .1.3.6.1.4.1.12276.1.1.1.262413**
-
-The ddm temperature threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver.
-
-**ddmTempLoAlarm                 .1.3.6.1.4.1.12276.1.1.1.262414**
-
-The ddm temperature threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver.
-
-**ddmTempLoWarn                  .1.3.6.1.4.1.12276.1.1.1.262415**
-
-The ddm temperature threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver.
+    chassis1-prod-partition-2# file show  log/snmp.log | include txPwr
+    <INFO> 23-Jul-2024::23:25:34.238 partition2 confd[122]: snmp snmpv2-trap reqid=1370215022 10.255.80.251:162 (TimeTicks sysUpTime=3571244)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218591376 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low alarm)
 
 
-**ddmVccHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262416**
+**rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
-The ddm vcc (Voltage) threshold for a specific transceiver has reached high alarm status. Run the show portgroups command to see what the current values are for that transceiver.
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
-**ddmVccHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262417**
+The receive power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
 
-The ddm vcc (Voltage) threshold for a specific transceiver has reached high warn status. Run the show portgroups command to see what the current values are for that transceiver.
+.. code-block:: bash
 
-**ddmVccLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262418**
+    chassis1-prod-partition-2# file show  log/snmp.log | include rxPwr
+    <INFO> 23-Jul-2024::23:25:34.302 partition2 confd[122]: snmp snmpv2-trap reqid=1370215023 10.255.80.251:162 (TimeTicks sysUpTime=3571250)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218508824 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
-The ddm vcc (Voltage) threshold for a specific transceiver has reached low alarm status. Run the show portgroups command to see what the current values are for that transceiver.
+**txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
-**ddmVccLoWarn                   .1.3.6.1.4.1.12276.1.1.1.262419**
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
 
-The ddm vcc (Voltage) threshold for a specific transceiver has reached low warn status. Run the show portgroups command to see what the current values are for that transceiver.
+The transmit bias threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+
+.. code-block:: bash
+
+    chassis1-prod-partition-2# file show  log/snmp.log | include txBias
+    <INFO> 23-Jul-2024::23:25:34.465 partition2 confd[122]: snmp snmpv2-trap reqid=1370215024 10.255.80.251:162 (TimeTicks sysUpTime=3571267)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218760526 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter bias low alarm)
+
+**ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+The ddm temperature threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
+
+.. code-block:: bash
+
+
+
+**ddmVcc                   .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+----------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                        |
++==================+==========================================================================================================+
+| EVENT            |                                                                                                          |
++------------------+----------------------------------------------------------------------------------------------------------+
+
+The ddm voltage threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
+
+.. code-block:: bash
 
 
 

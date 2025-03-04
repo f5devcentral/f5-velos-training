@@ -14,6 +14,10 @@ VELOS References
 
 `F5OS Provider Resources for Terraform <https://clouddocs.f5.com/products/orchestration/terraform/latest/F5OS/f5os-index.html#f5os-index>`_
 
+`F5 Professional Services F5OS Ansible Collection <https://f5devcentral.github.io/f5-ps-ansible/>`_
+
+`K000139994: F5OS operations guide for F5 VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000139994>`_
+
 `F5 VELOS and F5OS-C Hardware Platforms <https://techdocs.f5.com/en-us/hardware/platform-guide-velos-cx-series.html>`_
 
 `F5 VELOS Datasheet <https://www.f5.com/pdf/solution-guides/velos-f5-powerful-next-generation-chassis-system-datasheet.pdf>`_

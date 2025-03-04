@@ -6,9 +6,9 @@ Planning for VELOS Guide
    :maxdepth: 1
    :glob:
 
-   introduction.rst
+   introduction_new.rst
    velos_points_of_management.rst
-   velos_components.rst
+   velos_components_new.rst
    velos_networking.rst
    velos_high_availability.rst
    velos_multitenancy.rst
@@ -17,6 +17,7 @@ Planning for VELOS Guide
    initial_setup_of_velos_chassis_partitions.rst
    velos_deploying_a_tenant.rst
    velos_inside_the_tenant.rst
+   velos_deploying_a_bigip_next_tenant.rst
    velos_security.rst
    velos_f5os_backup_and_restore.rst
    velos_software_upgrades.rst
