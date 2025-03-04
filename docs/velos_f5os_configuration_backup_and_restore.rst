@@ -30,7 +30,7 @@ At the chassis partition level, the F5OS configuration contains data that includ
 
 Note: The tenant configuration contains tenant name, type, image, management IP address, gateway, VLANs, assigned vCPUs, memory, storage size, and so on. It does not include the BIG-IP configuration within the tenant. To create a backup copy of the BIG-IP configuration of the tenant, you must perform the backup in the tenant itself. For information, refer to:
 
-`K13132: Backing up and restoring BIG-IP configuration files with a UCS archive <https://support.f5.com/csp/article/K13132>_`
+`K13132: Backing up and restoring BIG-IP configuration files with a UCS archive <https://support.f5.com/csp/article/K13132>`_
 
 To perform a complete backup of the VELOS system, you must:
 
@@ -150,7 +150,7 @@ In the body of the API call, supply the name of the file that you want to save.
     }
 
 
-**Note: In the current F5OS releases the ConfD system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI. This may be added in a subsequent release.**
+**Note: In the current F5OS releases the ConfD system database can be backed up via CLI, webUI, or API but it cannot be restored using the F5OS webUI.**
 
 Copying System Controller Database Backup to an External Location
 =================================================================
@@ -474,7 +474,11 @@ You can highlight the file, and then click the **Export** button. You wil then b
   :align: center
   :scale: 100%
 
-If you select **Download**, then an option will appear to download through your browser to your local client machine.
+If you select **Download**, then an option will appear to download through your browser to your local client machine. You may also download configuration backup directly from the **System Settings -> Configuration Backup** page.
+
+.. image:: images/velos_f5os_configuration_backup_and_restore/download-config.png
+  :align: center
+  :scale: 100%
 
 
 Export Backup From the Chassis Partition CLI
@@ -693,8 +697,6 @@ If you are using Postman, instead of clicking **Send**, click on the arrow next 
   :scale: 100%
 
 
-
-test
 
 Backing up Tenants
 ==================
