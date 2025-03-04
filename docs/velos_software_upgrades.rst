@@ -353,6 +353,20 @@ Once the new images are loaded, you can perform the upgrade from the **System Se
   :align: center
   :scale: 70%
 
+.. image:: images/velos_software_upgrades/in-progress-firmware.png
+  :align: center
+  :scale: 70%
+
+Controller failover.
+
+.. image:: images/velos_software_upgrades/success.png
+  :align: center
+  :scale: 70%
+
+
+.. image:: images/velos_software_upgrades/success2.png
+  :align: center
+  :scale: 70%
 
 Upgrading the System Controllers via CLI
 ----------------------------------------
