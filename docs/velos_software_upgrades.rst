@@ -361,7 +361,7 @@ You may or may not see the status change to **In-Progress-Firmware** if a firmwa
   :align: center
   :scale: 70%
 
-When the standby controller is finished upgrading it will intiate a failover and become active. Your session to the WebUI will be disconnected, and you'll need to re-connect. The other controller will now start its upgrade process and will show **In Progress** while the other controller will now shouw **Success**.
+When the standby controller is finished upgrading it will intiate a failover and become active. Your session to the WebUI will be disconnected, and you'll need to re-connect. The other controller will now start its upgrade process and will show **In Progress** while the other controller will now show **Success**.
 
 .. image:: images/velos_software_upgrades/success.png
   :align: center
@@ -371,7 +371,7 @@ Again, you may or may not see a firmware upgrade, but when complete both control
 
 .. image:: images/velos_software_upgrades/success2.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 Upgrading the System Controllers via CLI
 ----------------------------------------
@@ -552,7 +552,7 @@ The command **show running-config image** will show the current configuration fo
     !
     velos-1-gsa-1-active#
 
-Before upgrading you need to run the **system image check-version** command on the ISO you want to upgrade to. This will ensure the image is valid and that the system is able to upgrade to that version. IT will also provide an estimate of the upgrade time, along with the number of failovers required to complete the upgrade.
+Before upgrading you need to run the **system image check-version** command on the ISO you want to upgrade to. This will ensure the image is valid and that the system is able to upgrade to that version. It will also provide an estimate of the upgrade time, along with the number of failovers required to complete the upgrade.
 
 .. code-block:: bash
 
@@ -597,6 +597,8 @@ To upgrade the system controllers via the API you must first run the check versi
 
  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image/f5-system-controller-image:check-version
 
+In the body of the API call enter the following:
+
 .. code-block:: json
 
     {
@@ -619,13 +621,15 @@ This is the Set Version API call that will initiate the upgrade:
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image/f5-system-controller-image:set-version
 
+In the body of the API call enter the following:
+
 .. code-block:: json
 
     {
         "f5-system-controller-image:iso-version": "{{Controller_ISO_Image_Full}}"
     }
 
-If the upgrade is successful, you will get notification like the message below:
+If the upgrade initiation is successful, you will get notification like the message below:
 
 .. code-block:: json
 
@@ -635,7 +639,38 @@ If the upgrade is successful, you will get notification like the message below:
         }
     }
 
+You can then monitor the upgrade process with the following API call.
 
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-controller-image:image
+
+In the output, you will see the **install-status** of each controller.
+
+.. code-block:: json
+
+    {
+        "f5-system-controller-image:image": {
+            "state": {
+                "controllers": {
+                    "controller": [
+                        {
+                            "number": 1,
+                            "os-version": "1.8.1-24468",
+                            "service-version": "1.8.1-24468",
+                            "install-status": "success"
+                        },
+                        {
+                            "number": 2,
+                            "os-version": "1.8.1-24468",
+                            "service-version": "1.8.1-24468",
+                            "install-status": "success"
+                        }
+                    ]
+                }
+            }
+        }
+    }
 
 Chassis Partition Upgrades
 ==========================
