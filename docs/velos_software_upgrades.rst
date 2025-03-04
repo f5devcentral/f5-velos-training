@@ -789,8 +789,82 @@ In the system controller CLI you can use the **show image** command to see the c
 
     syscon-1-active# 
 
-The command **show running-config image** will show the current configuration for software images. You can enter **config** mode and change the configuration using the **system image set-version** command and then **commit** to initiate an upgrade.
+The command **show running-config image** will show the current configuration for software images. Before upgrading a chassis partition you must first run the **check-version** utility to ensure the system can be upgraded to the new releases, and it will also provide an estimate of how long the upgrade will take.
 
+You can enter **config** mode and chek the version using the **partitions partition {{partition-name}} check-version iso-version 1.8.1-24468** command. As seen below, to upgrade the green partition to version 1.8.1-24468 will take 26 minutes, and there will be 2 reboots for each blade due to a firmware upgrade. Not all releases will require a firmware upgrade.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# partitions partition green check-version iso-version 1.8.1-24468 
+    result Partition upgrade compatibility check succeeded.
+    Estimated time: 26 minutes
+    Reboot(s): 2 for each blade
+
+    velos-1-gsa-2-active(config)# 
+
+Once the check version has been done you can then run the **set-version** which will initiate the upgrade.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# partitions partition green set-version iso-version 1.8.1-24468 
+    Partition database compatibility check succeeded.
+    Changing running partition software version will interrupt tenant operation and data plane traffic.
+    Estimated time: 26 minutes
+    Reboot(s): 2 for each blade
+    Proceed? [yes/no]: yes
+    result Version update successful.
+    velos-1-gsa-2-active(config)#
+
+You can then monitor the partition install status using the **show partitions install** command. Note, how the green partition shows **in-progress*.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show partitions install 
+                                        INSTALL      INSTALL                               
+                BLADE OS     SERVICE      BLADE OS     SERVICE      INSTALL      INSTALLING  
+    NAME     ID  VERSION      VERSION      VERSION      VERSION      STATUS       CONTROLLER  
+    ------------------------------------------------------------------------------------------
+    none     -   -            -            -            -            -            -           
+    default  1   1.6.0-12952  1.6.0-12952  1.6.0-12952  1.6.0-12952  success      -           
+    green    2   1.8.0-19782  1.8.0-19782  1.8.1-24468  1.8.1-24468  in-progress  1           
+    blue     3   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success      -           
+    red      4   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success      -           
+
+    velos-1-gsa-2-active#
+
+It will then go throuygh various statesm as the upgrade procedes.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show partitions install
+                                        INSTALL      INSTALL                                  
+                BLADE OS     SERVICE      BLADE OS     SERVICE                      INSTALLING  
+    NAME     ID  VERSION      VERSION      VERSION      VERSION      INSTALL STATUS  CONTROLLER  
+    ---------------------------------------------------------------------------------------------
+    none     -   -            -            -            -            -               -           
+    default  1   1.6.0-12952  1.6.0-12952  1.6.0-12952  1.6.0-12952  success         -           
+    green    2   1.8.0-19782  1.8.0-19782  1.8.1-24468  1.8.1-24468  switching-role  1           
+    blue     3   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success         -           
+    red      4   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success         -           
+
+    velos-1-gsa-2-active#  
+
+When completed the intall status will show **success**.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show partitions install
+                                        INSTALL      INSTALL                           
+                BLADE OS     SERVICE      BLADE OS     SERVICE      INSTALL  INSTALLING  
+    NAME     ID  VERSION      VERSION      VERSION      VERSION      STATUS   CONTROLLER  
+    --------------------------------------------------------------------------------------
+    none     -   -            -            -            -            -        -           
+    default  1   1.6.0-12952  1.6.0-12952  1.6.0-12952  1.6.0-12952  success  -           
+    green    2   1.8.1-24468  1.8.1-24468  1.8.1-24468  1.8.1-24468  success  -           
+    blue     3   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success  -           
+    red      4   1.8.0-19782  1.8.0-19782  1.8.0-19782  1.8.0-19782  success  -           
+
+    velos-1-gsa-2-active#    
 
 Upgrading a Chassis Partition via the API
 -----------------------------------------
@@ -799,31 +873,33 @@ To upgrade a chassis partition via the API you must first run the check version 
 
 .. code-block:: bash
 
- POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/check-version
+ POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition={{velos_chassis_partition2_name}}/check-version
+
+In the body of the API call, enter the ISO image version you want to upgrade to.
 
 .. code-block:: json
 
     {
-        "input": {
-            "iso-version": "{{Partition_ISO_Image}}"
-        }
+        "f5-system-partition:iso-version": "{{velos_partition_iso_image}}"
     }
 
-If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call:
+If the compatibility check passes then you will get a message like the one below, and it is safe to install the new image via the set-version API call. Note, it will estimate the time for the upgrade to complete, as well as list the number of reboots required.
 
 .. code-block:: json
 
     {
         "f5-system-partition:output": {
-            "result": "Partition upgrade compatibility check succeeded."
+            "result": "Partition upgrade compatibility check succeeded.\nEstimated time: 26 minutes\nReboot(s): 2 for each blade\n"
         }
     }
 
-This is the Set Version API call that will initiate the upgrade:
+Once the check version is successful, you may then initiate the upgrade using the set-version option. This is the Set Version API call that will initiate the upgrade:
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition=Production/set-version
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition={{velos_chassis_partition2_name}}/set-version
+
+In the body of the API request, enter the ISO version you want to upgrade to.
 
 .. code-block:: json
 
@@ -833,16 +909,129 @@ This is the Set Version API call that will initiate the upgrade:
         }
     }
 
-If the upgrade is successful, you will get notification like the message below:
+If the set-version is successful, you will see a notification like the message below letting you know how long the upgrade will take:
 
 .. code-block:: json
 
     {
         "f5-system-partition:output": {
-            "result": "Version update successful."
+            "result": "Version update successful.\nEstimated time: 26 minutes\nReboot(s): 2 for each blade\n"
         }
     }
 
+To monitor the partition upgrade status issue the follwoing API call:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-system-partition:partitions/partition={{velos_chassis_partition2_name}}
+
+In the body of the API call you can monitor the **install-status**.
+
+.. code-block:: json
+
+    {
+        "f5-system-partition:partition": [
+            {
+                "name": "blue",
+                "config": {
+                    "enabled": true,
+                    "iso-version": "1.8.0-19782",
+                    "configuration-volume": 15,
+                    "images-volume": 15,
+                    "shared-volume": 10,
+                    "pxe-server": "internal",
+                    "mgmt-ip": {
+                        "ipv4": {
+                            "address": "172.22.50.14",
+                            "prefix-length": 26,
+                            "gateway": "172.22.50.62"
+                        },
+                        "ipv6": {
+                            "address": "::",
+                            "prefix-length": 0,
+                            "gateway": "::"
+                        }
+                    }
+                },
+                "state": {
+                    "id": 3,
+                    "os-version": "1.8.0-19782",
+                    "service-version": "1.8.0-19782",
+                    "install-os-version": "1.8.1-24468",
+                    "install-service-version": "1.8.1-24468",
+                    "install-status": "switching-role",
+                    "installing-controller": 1,
+                    "ipv4": {
+                        "address": "172.22.50.14",
+                        "prefix-length": 26,
+                        "gateway": "172.22.50.62"
+                    },
+                    "ipv6": {
+                        "address": "::",
+                        "prefix-length": 0,
+                        "gateway": "::"
+                    },
+                    "controllers": {
+                        "controller": [
+                            {
+                                "controller": 1,
+                                "partition-id": 3,
+                                "partition-status": "running-active",
+                                "running-service-version": "1.8.1-24468",
+                                "status-seconds": "6",
+                                "status-age": "6s",
+                                "volumes": {
+                                    "volume": [
+                                        {
+                                            "volume-name": "config",
+                                            "total-size": "15G",
+                                            "available-size": "15G"
+                                        },
+                                        {
+                                            "volume-name": "images",
+                                            "total-size": "15G",
+                                            "available-size": "11G"
+                                        },
+                                        {
+                                            "volume-name": "shared",
+                                            "total-size": "10G",
+                                            "available-size": "10G"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "controller": 2,
+                                "partition-id": 3,
+                                "partition-status": "starting",
+                                "status-seconds": "0",
+                                "status-age": "0s",
+                                "volumes": {
+                                    "volume": [
+                                        {
+                                            "volume-name": "config",
+                                            "total-size": "15G",
+                                            "available-size": "15G"
+                                        },
+                                        {
+                                            "volume-name": "images",
+                                            "total-size": "15G",
+                                            "available-size": "11G"
+                                        },
+                                        {
+                                            "volume-name": "shared",
+                                            "total-size": "10G",
+                                            "available-size": "10G"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }
 
 
 Tenant Images and Upgrades
