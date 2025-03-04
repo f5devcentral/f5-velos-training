@@ -37,7 +37,7 @@ Each of the two system controllers has a static IP address assigned, and there i
 
 By default, all ports except for 161 (SNMP) are enabled for access, meaning ports 80, 443, 8888, 7001, and 22 are allowed access. Port 80 is only open to allow a redirect to port 443 in case someone tries to access the webUI over port 80. The webUI itself is not accessible over port 80. Port 161 is typically viewed as un-secure and is therefore not accessible until an allow list entry is created for the endpoint trying to access F5OS using SNMP queries. Ideally SNMPv3 should be utilized to provide additional layers of security on an otherwise un-secure protocol. VCONSOLE access also must be explicitly configured before access to the tenants is possible over port 7001. 
 
-To further lock down access you may add an Allow List entry including an IP address and optional prefix for each of the protocols listed above. As an example, if you wanted to restrict API and webUI access to a particular IP address and/or subnet, you can add an Allow List entry for the desired IP or subnet (using the prefix length), specify port 443 and all access from other IP endpoints will be prevented.
+To further lock down access you may add an Allow List entry including an IP address and optional prefix for each of the protocols listed above. As an example, if you wanted to restrict API and webUI access to a particular IP address and/or subnet, you could add an Allow List entry for the desired IP or subnet (using the prefix length), specify port 443 and all access from other IP endpoints will be prevented.
 
 The examples below can be applied at either the system controller layer logging in using the floating system controller IP address or pointing to it for API calls, or to any chassis partition using its management IP address when logging in or sending API calls. 
 
@@ -528,7 +528,7 @@ Previously, F5OS allowed an admin to import a TLS certificate and key in clear t
 Appliance Mode for F5OS
 =======================
 
-If you would like to prevent root / bash level access to the F5OS layer, you can enable **Appliance Mode**, which operates in a similar manner as TMOS appliance mode. Both the F5OS-C system controller and chassis partition layers have a setting where appliance mode can be enabled. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled. The admin account to the F5OS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower-level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
+If you would like to prevent root / bash level access to the F5OS layer, you can enable **Appliance Mode**, which operates in a similar manner as TMOS appliance mode. Both the F5OS-C system controller and chassis partition layers have a setting where appliance mode can be enabled. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled. The admin account to the F5OS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
 
 Enabling Appliance Mode via the CLI
 -----------------------------------
@@ -617,7 +617,7 @@ In the body of the API call add the following:
 Appliance Mode for BIG-IP Tenants
 =================================
 
-If you would like to prevent root / bash level access to the BIG-IP tenants, you can enable **Appliance Mode** in the tenant settings. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled for BIG-IP. The admin account to the TMOS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower-level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
+If you would like to prevent root / bash level access to the BIG-IP tenants, you can enable **Appliance Mode** in the tenant settings. Enabling Appliance mode will disable the root account, and access to the underlying bash shell is disabled for BIG-IP. The admin account to the TMOS CLI is still enabled. This is viewed as a more secure setting as many vulnerabilities can be avoided by not allowing access to the bash shell. In some heavily audited environments, this setting may be mandatory, but it may prevent lower level debugging from occurring directly in the bash shell. It can be disabled on a temporary basis to do advanced troubleshooting, and then re-enabled when finished.
 
 Enabling BIG-IP Tenant Appliance Mode via the CLI
 --------------------------------------------------
@@ -816,7 +816,7 @@ Resource Admin & Guest User Role
 
 An earlier F5OS release introduced the **Resource Admin** user role, which is similar to the Admin user role but it cannot create additional local user accounts, delete existing local users, change local user authorizations, or change the set of remotely authenticated users allowed to access the system. Below is an example creating a resource admin user via the CLI. When assigning a new user to role **resource-admin**, their access will be restricted as noted above.
 
-F5OS-C 1.8.0 also adds a new "Guest" role called **user**. The new **user** role available at the F5OS-C system level restricts access to the logs similar to BIG-IP Guest user. F5OS has implemented a new role called **user** which provides read-only access to view all the non-sensitive information on the system. The user role cannot modify any system configurations, however users can change account passwords.
+F5OS-C 1.8.0 also adds a new "Guest" role called **user**. The new **user** role available at the F5OS-C system level restricts access to the logs similar to BIG-IP Guest user. F5OS has implemented a new role called **user** which provides read-only access to view all the non-sensitive information on the system. The user role cannot modify any system configurations; however users can change account passwords.
 
 
 Resource Admin & Guest User Role via CLI
@@ -1351,11 +1351,11 @@ In the body of the API call add the username and role as seen below.
 Superuser Role
 ===============
 
-F5OS-C 1.8.0 adds a new role called **superuser**. The new **superuser** role available at the F5OS-C system level provides **sudo** privileges and bash access to the system (if enabled). This role is intended for environments where appliance mode (prevent bash level access) is disabled and it only applies to the system contoller level in VELOS. Some customers prefer to manage BIG-IP from the bash shell and leverage tmsh commands to pipe into various Unix utilities to parse output. A similar feature has been added to F5OS 1.8.0 where F5OS commmands can now be executed from the bash shell via the new f5sh utility. This new role provides a way for a user with "sudo" privileges to be able to be remotely authenticated into the F5OS bash shell, but also provides an audit trail of the users interactions with the new f5sh utility in bash shell. 
+F5OS-C 1.8.0 adds a new role called **superuser**. The new **superuser** role available at the F5OS-C system level provides **sudo** privileges and bash access to the system (if enabled). This role is intended for environments where appliance mode (prevent bash level access) is disabled, and it only applies to the system controller level in VELOS. Some customers prefer to manage BIG-IP from the bash shell and leverage tmsh commands to pipe into various Unix utilities to parse output. A similar feature has been added to F5OS 1.8.0 where F5OS commands can now be executed from the bash shell via the new f5sh utility. This new role provides a way for a user with "sudo" privileges to be able to be remotely authenticated into the F5OS bash shell but also provides an audit trail of the users interactions with the new f5sh utility in bash shell. 
 
 RBAC on F5OS has been implemented in a way where **Roles** provide slices of privileges that can be composed with each other. There are **Primary Roles** and **Secondary Roles** which can be combined together to give a particular user multiple privileges. 
 
-Users must be assigned to a single primary group/role, and can become members of further supplementary groups/roles by adding them to the users list for that group/role.
+Users must be assigned to a single primary group/role and can become members of further supplementary groups/roles by adding them to the users list for that group/role.
 The roles can be combined together to give a particular user multiple privileges. The **superuser** role is intended to be assigned as a supplementary role in addition to another role like **admin**, whether the role is primary or supplementary does not matter (order does not matter), if only the superuser role was applied it would restrict access to services like the webUI, granting the admin role as a supplemental role will provide normal webUI access.
 
 As an example, assigning a Primary Role of **admin** to a user and then adding that same user to the  **superuser** role will give the user access to the webUI via the admin privileges, and if the **system aaa authentication config superuser-bash-access true** command is set (to true) the default CLI login for this user will be the bash shell. The superuser role does not grant webUI access or Confd CLI access on its own. 
@@ -1365,7 +1365,7 @@ Superuser Role via CLI using Named Groups on LDAP/Active Directory
 -----------------------------------------------------------------
 
 
-To enable LDAP remote authentication see an example configuration below.
+To enable LDAP remote authentication, see an example configuration below.
 
 .. code-block:: bash
 
@@ -1414,7 +1414,7 @@ If the configuration were using LDAP Group ID's instead of named LDAP groups, th
     velos-1-gsa-1-active(config)# 
 
 
-You can view the current state of these parmeters via the following CLI show comands. 
+You can view the current state of these parameters via the following CLI show commands. 
 
 .. code-block:: bash
 
@@ -1473,20 +1473,20 @@ You can view the current state of these parmeters via the following CLI show com
 Superuser Role via WebUI using Named Groups on LDAP/Active Directory
 ---------------------------------------------------------------------
 
-Within the WebUI you can map the superuser role to a remote LDAP group. Go to the **Authentiction and Access -> Users & Roles** page and thgen select **Roles**. Then click on the **superuser** role to edit it.
+Within the WebUI you can map the superuser role to a remote LDAP group. Go to the **Authentication and Access -> Users & Roles** page and then select **Roles**. Then click on the **superuser** role to edit it.
 
 .. image:: images/velos_security/super-user.png
   :align: center
   :scale: 70%  
 
-Here you can map the supoeruser role either to a UNIX GID or an LDAP Remote Group, it does not support the configuration of both, so you must pick one method.
+Here you can map the superuser role either to a UNIX GID or an LDAP Remote Group, it does not support the configuration of both, so you must pick one method.
 
 
 .. image:: images/velos_security/super-user-config.png
   :align: center
   :scale: 70% 
 
-If you choose to use the LDAP Group mapping, then you must disable the unix attributes setting in the **Common LDAP Configration** section.
+If you choose to use the LDAP Group mapping, then you must disable the unix attributes setting in the **Common LDAP Configuration** section.
 
 
 .. image:: images/velos_security/unix-attributes.png
@@ -1530,7 +1530,7 @@ There is one case that is not covered by either of the above idle-timeout settin
 +----------------+----------------------+-------------------+
 
 
-For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if we set the token lifetime to two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
+For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if we set the token lifetime to two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire, and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
 
 Configuring SSH and CLI Timeouts & Deny Root SSH Settings via CLI
 ----------------------------------------------------------------
@@ -1625,7 +1625,7 @@ You'll see output similar to the example below.
         }
     }
 
-To configure the deny-root-ssh option enter the following PATCH API call.
+To configure the deny-root-ssh option, enter the following PATCH API call.
 
 .. code-block:: bash
 
@@ -1644,7 +1644,7 @@ In the body of the API call alter the enabled setting to true or false.
     }
 
 
-To view the current deny-root-ssh option over the API issue the following API call.
+To view the current deny-root-ssh option over the API, issue the following API call.
 
 .. code-block:: bash
 
@@ -1668,7 +1668,7 @@ Configuring SSH and CLI Timeouts & Deny Root SSH Settings via webUI
 
 
 
-The CLI timeout, and deny-root-ssh settings are both configurable in the webUI. SSH timeouts are not currently configurable via the webUI. The deny-root-ssh and CLI timeout options can be configured in the **System Settings -> System Security** page.
+The CLI timeout and deny-root-ssh settings are both configurable in the webUI. SSH timeouts are not currently configurable via the webUI. The deny-root-ssh and CLI timeout options can be configured in the **System Settings -> System Security** page.
 
 .. image:: images/velos_security/cli-timeout.png
   :align: center
@@ -2077,7 +2077,7 @@ Disabling basic authentication via the webUI is available via the **User Managem
 Confirming Basic Auth is Disallowed
 -----------------------------------
 
-With basic authentication enabled (default setting), you can make any API call using username/password (basic auth) authentication. Using the Postman utility this can be demonstrated on any configuration change by setting The Auth Type to **Basic Auth**, and configuring a username and password as seen below.
+With basic authentication enabled (default setting), you can make any API call using username/password (basic auth) authentication. Using the Postman utility this can be demonstrated on any configuration change by setting The Auth Type to **Basic Auth** and configuring a username and password as seen below.
 
 .. image:: images/velos_security/imagebasicauth.png
   :align: center
@@ -2354,7 +2354,7 @@ The F5OS platform layer supports both local and remote authentication. By defaul
 
 `Configuring Remote User Authentication and Authorization on TMOS <https://techdocs.f5.com/kb/en-us/products/big-ip_ltm/manuals/product/tmos-implementations-13-0-0/10.html>`_
 
-In earlier versions F5OS only supported static pre-defined roles which in turn map to specific group IDs. Users created and managed on external LDAP, Active Directory, RADIUS, or TACACS+ servers must have the same group IDs on the external authentication servers as they do within F5OS based systems to allow authentication and authorization to occur. Users created on external LDAP, Active Directory, RADIUS, or TACACS+ servers must be associated with one of these group IDs on the system. The supported F5OS static group IDs and the roles they map to are seen in the table below. Newer version of F5OS-C now support User defined roles.
+In earlier versions F5OS only supported static pre-defined roles which in turn map to specific group IDs. Users created and managed on external LDAP, Active Directory, RADIUS, or TACACS+ servers must have the same group IDs on the external authentication servers as they do within F5OS based systems to allow authentication and authorization to occur. Users created on external LDAP, Active Directory, RADIUS, or TACACS+ servers must be associated with one of these group IDs on the system. The supported F5OS static group IDs and the roles they map to are seen in the table below. Newer versions of F5OS-C now support User defined roles.
 
 +----------------+----------+
 | Role           | Group ID | 
@@ -2366,7 +2366,7 @@ In earlier versions F5OS only supported static pre-defined roles which in turn m
 | tenant-console | 9100     | 
 +----------------+----------+
 
-From a high level the **admin** role (group ID 9000) is a read/write role with full access to the system to make changes. The **operator** role (group ID 9001) is a read-only role and is prevented from making any configuration changes. The **root** role (group ID 0) gives full access to the bash shell, and in some environments this role will be disabled by enabling appliance mode. Note that the root role is not allowed access via remote authentication. The last role is **tenant-console** (group ID 9100) and this role is used to provide remote access directly to the tenant console as noted here:
+From a high level the **admin** role (group ID 9000) is a read/write role with full access to the system to make changes. The **operator** role (group ID 9001) is a read-only role and is prevented from making any configuration changes. The **root** role (group ID 0) gives full access to the bash shell, and in some environments this role will be disabled by enabling appliance mode. Note that the root role is not allowed access via remote authentication. The last role is **tenant-console** (group ID 9100), and this role is used to provide remote access directly to the tenant console as noted here:
 
 `Console Access to Tenant via Built-In Terminal Server <https://clouddocs.f5.com/training/community/VELOS-training/html/VELOS_diagnostics.html#console-access-via-built-in-terminal-server>`_
 
@@ -2579,7 +2579,7 @@ NTP Authentication can be enabled to provide a secure communication channel for 
 Enabling NTP Authentication via CLI
 -----------------------------------
 
-To enable NTP authentication use the **system ntp config enable-ntp-auth true** command in the CLI, and then commit the change.
+To enable NTP authentication use the **system ntp config enable-ntp-auth true** command in the CLI and then commit the change.
 
 .. code-block:: bash
 
@@ -2588,7 +2588,7 @@ To enable NTP authentication use the **system ntp config enable-ntp-auth true** 
     Commit complete.
     syscon-2-active(config)# 
 
-Next you'll need to add keys for NTP Authentication
+Next, you'll need to add keys for NTP Authentication
 
 .. code-block:: bash
 
@@ -2605,7 +2605,7 @@ The key ID, key type, and key value on this client system must match the server 
 Enabling NTP Authentication via webUI
 -------------------------------------
 
-To enable NTP authentication in the webUI use the **System Settings -> Time Settings** page. You'll need to enable NTP authentication then add the appropriate keys, and then associate those keys with an NTP server.
+To enable NTP authentication in the webUI use the **System Settings -> Time Settings** page. You'll need to enable NTP authentication then add the appropriate keys and then associate those keys with an NTP server.
 
 .. image:: images/velos_security/ntpauth1.png
   :align: center
@@ -2767,7 +2767,7 @@ F5OS-C 1.6.0 added the ability to display and configure the ciphers used for the
     state kexalgorithms [ diffie-hellman-group14-sha1 diffie-hellman-group14-sha256 diffie-hellman-group16-sha512 ecdh-sha2-nistp256 ecdh-sha2-nistp384 ecdh-sha2-nistp521 ]
     velos-1-gsa-1-active# 
 
-You can change the ciphers offered by F5OS to clients connecting to the httpd service by using the **system security services service httpd config ssl-ciphersuite** CLI command, and then choosing the ciphers you would like to enable. Be sure to commit any changes.
+You can change the ciphers offered by F5OS to clients connecting to the httpd service by using the **system security services service httpd config ssl-ciphersuite** CLI command and then choosing the ciphers you would like to enable. Be sure to commit any changes.
 
 .. code-block:: bash
 
@@ -2846,7 +2846,7 @@ You may configure which host-key-algorithms F5OS will use for the sshd service b
 Configuring Management Ciphers via webUI
 --------------------------------------
 
-You can configure which ciphers are used when connecting to the F5OS managment interface using SSH or HTTPS. Go to the **System Settings -> System Security** page to configure both httpd and sshd ciphers suites, sshd KEX algorithms, sshd MAC algorithms, and sshd host key algorithms.
+You can configure which ciphers are used when connecting to the F5OS management interface using SSH or HTTPS. Go to the **System Settings -> System Security** page to configure both httpd and sshd ciphers suites, sshd KEX algorithms, sshd MAC algorithms, and sshd host key algorithms.
 
 .. image:: images/velos_security/security-ciphers.png
   :align: center
@@ -2859,7 +2859,7 @@ You can configure which ciphers are used when connecting to the F5OS managment i
 Configuring Management Ciphers via API
 --------------------------------------
 
-You can configure which ciphers are used when connecting to the F5OS managment interface using SSH or HTTPS. Use the following API call to configure both httpd and sshd ciphers suites, sshd KEX algorithms, sshd MAC algorithms, and sshd host key algorithms.
+You can configure which ciphers are used when connecting to the F5OS management interface using SSH or HTTPS. Use the following API call to configure both httpd and sshd ciphers suites, sshd KEX algorithms, sshd MAC algorithms, and sshd host key algorithms.
 
 .. code-block:: bash
 
@@ -2923,7 +2923,7 @@ In the body of the API call enter your httpd and sshd ciphers suites, sshd KEX a
         }
     }
 
-You can then view the current configuration by issuing the folowing API call.
+You can then view the current configuration by issuing the following API call.
 
 .. code-block:: bash
 
@@ -3034,7 +3034,7 @@ Before you can log in to the webUI using client certificate authentication, you 
 Configuring Client Certificate Authentication via webUI
 -------------------------------------------------------
 
-Although you can enable client certificate authentication via the webUI, you must upload or create your certificate via the CLI or API first. Otherwise, you will end up being locked out of the webUI, until the full configraton is completed.
+Although you can enable client certificate authentication via the webUI, you must upload or create your certificate via the CLI or API first. Otherwise, you will end up being locked out of the webUI, until the full configuraton is completed.
 
 See the section above about configuration of the certificate before moving on. If you have loaded a certificate, then you can enable client certificate authentication via the webUI as seen below.
 
@@ -3114,7 +3114,7 @@ In the body of the API call add the username, password, and proxy server configu
     }
 
 
-To view the current proxy configuration via the API use the following call.
+To view the current proxy configuration via the API, use the following call.
 
 .. code-block:: bash
 
@@ -3166,7 +3166,7 @@ First, you must configure the remote syslog destination. As part of that configu
     Commit complete.
     syscon-1-active(config-remote-server-10.255.0.139)#
 
-Then, you can control the level of events that will be logged to the local audit.log file by configuring the **audit-service** **sw-component**. By default all audit events will be logged, but you can turn down the level of events
+Then, you can control the level of events that will be logged to the local audit.log file by configuring the **audit-service** **sw-component**. By default, all audit events will be logged, but you can turn down the level of events
 
 .. code-block:: bash
 
@@ -3680,7 +3680,7 @@ Within the bash shell if you are logged in as root, the path for the logging is 
 Viewing Logs from the webUI
 --------------------------
 
-In the current F5OS releases, you cannot view the F5OS audit.log file directly from the webUI, although you can download it from the webUI. To view the audit.log, you can use the CLI or API, or download the files and then view. To download log files from the webUI, go to the **System Settings -> File Utilities** page. Here there are various logs directories you can download files from. You have the option to **Export** files to a remote HTTPS server, or **Download** the files directly to your client machine through the browser.
+In the current F5OS releases, you cannot view the F5OS audit.log file directly from the webUI, although you can download it from the webUI. To view the audit.log, you can use the CLI or API or download the files and then view. To download log files from the webUI, go to the **System Settings -> File Utilities** page. Here there are various logs directories you can download files from. You have the option to **Export** files to a remote HTTPS server or **Download** the files directly to your client machine through the browser.
 
 .. image:: images/velos_security/image10.png
   :align: center
@@ -3919,7 +3919,7 @@ The path below is the main audit.log.
     }
     velos-1-gsa-1-active# 
 
-The path below is for lower level audit log events like account lockouts.
+The path below is for lower-level audit log events like account lockouts.
 
 .. code-block:: bash
 
