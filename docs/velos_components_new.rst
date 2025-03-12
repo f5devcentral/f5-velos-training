@@ -82,6 +82,9 @@ A DC power version of the CX410 chassis is also available and runs the same syst
 .. image:: images/velos_components/image8.png
   :align: center
 
+For detailed power consumption and configuration please reference the `Platform Guide: VELOS CX Series <https://techdocs.f5.com/en-us/hardware/platform-guide-velos-cx-series.html>`_ 
+
+
 CX1610 Power Supplies and Controllers
 ------------------------------------
 
@@ -116,6 +119,9 @@ A DC power version of the CX1610 chassis is also available and runs the same sys
 
 .. image:: images/velos_components/image5-dc.png
   :align: center
+
+For detailed power consumption and configuration please reference the `Platform Guide: VELOS CX Series <https://techdocs.f5.com/en-us/hardware/platform-guide-velos-cx-series.html>`_ 
+
 
 Fan Trays & Cooling
 ===================
