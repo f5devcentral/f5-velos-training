@@ -2425,16 +2425,6 @@ Query the following SNMP OID to get detailed tenant status.
     tenant2-f5demo-net  bigipnext               BIG-IP-Next-20.2.1-2.430.2+0.0.48 BIG-IP-Next-20.2.1-2.430.2+0.0.48.yaml  10.255.2.14                 24                       128  10.255.2.252       enabled                      4     14848 MB             25 GB           deployed                 1            disabled uIc2yU238abhyqSDm1N0T7sltuN9YFbQumYzYgXFnk/YXaX8cGoMrMVbvAJgqNK7fzKogP/XvpZtNAZwZFbNfw==                     ?    standalone               ?                 ?                8                  ?      Running                          ?                 ?          notstarted  0:94:a1:8e:58:c             ?
     prompt%
 
-Tenant Virtual Wires Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantVirtualWiresTable  OID: 1.3.6.1.4.1.12276.1.5.1.2.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantVirtualWiresTable
 
 Tenant VLANs Table
 -----------------------------
@@ -2456,24 +2446,6 @@ Query the following SNMP OID to get detailed tenant status.
         3011
     prompt%
 
-Tenant Nodes Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantNodesTable  OID: 1.3.6.1.4.1.12276.1.5.1.4.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantNodesTable
-    SNMP table: F5-OS-TENANT-MIB::tenantNodesTable
-
-    tenantNode
-            1
-            2
-            1
-            2
-    prompt%
 
 Tenant CPU Allocation Table
 -----------------------------
@@ -2498,22 +2470,6 @@ Query the following SNMP OID to get detailed tenant status.
             33
     prompt%
 
-Tenant Feature Flags Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantFeatureFlagsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.6.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantFeatureFlagsStateTable
-    SNMP table: F5-OS-TENANT-MIB::tenantFeatureFlagsStateTable
-
-    tenantClusteringAsServiceFlag tenantStatsStreamCapableFlag
-                          true                         true
-                             ?                         true
-    prompt%
 
 
 Tenant Instances Table
@@ -2615,55 +2571,6 @@ Query the following SNMP OID to get detailed tenant status.
     00:94:a1:8e:58:0c
     prompt% 
 
-
-Tenant Sub Modules Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantSubModulesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.9.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModulesStateTable
-
-Tenant Sub Modules VLAN Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantSubModuleVlansStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.10.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModuleVlansStateTable
-
-Tenant Sub Modules Hugepage Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantSubModuleHugepagesStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.11.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantSubModuleHugepagesStateTable
-
-Tenant Upgrade Events Table
------------------------------
-
-Query the following SNMP OID to get detailed tenant status.
-
-**F5-OS-TENANT-MIB:tenantUpgradeEventsStateTable  OID: 1.3.6.1.4.1.12276.1.5.1.12.1**
-
-.. code-block:: bash
-
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.24 F5-OS-TENANT-MIB:tenantUpgradeEventsStateTable
-
-
-
-
-Tenant
 
 
 SNMP Trap Support in F5OS
@@ -4411,6 +4318,14 @@ PSU redundancy fault detected.
 
 .. code-block:: bash
 
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include psu-redundancy     
+    <INFO> 28-Mar-2024::18:34:28.018 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793870 10.255.80.251:162 (TimeTicks sysUpTime=7285919)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-03-28 22:34:27.973785605 UTC)(OCTET STRING alertDescription=PSU redundancy fault detected)
+    <INFO> 28-Mar-2024::18:34:28.076 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793871 10.255.80.251:162 (TimeTicks sysUpTime=7285925)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-28 22:34:27.973818601 UTC)(OCTET STRING alertDescription=Chassis doesnt have enough working power supplies)
+    <INFO> 28-Mar-2024::18:34:42.190 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793874 10.255.80.251:162 (TimeTicks sysUpTime=7287337)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-28 22:34:33.921191594 UTC)(OCTET STRING alertDescription=PSU redundancy fault detected)
+    <INFO> 28-Mar-2024::18:34:42.208 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793875 10.255.80.251:162 (TimeTicks sysUpTime=7287338)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-28 22:34:33.921257269 UTC)(OCTET STRING alertDescription=PSU Redundancy Failure: value=<nil>)
+    <INFO> 28-Mar-2024::18:34:43.911 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793882 10.255.80.251:162 (TimeTicks sysUpTime=7287509)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-03-28 22:34:35.334525543 UTC)(OCTET STRING alertDescription=PSU redundancy fault detected)
+    <INFO> 28-Mar-2024::18:34:43.986 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793883 10.255.80.251:162 (TimeTicks sysUpTime=7287516)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-28 22:34:35.334552678 UTC)(OCTET STRING alertDescription=PSU Redundancy Failure: value=true)
+
 
 **psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
 
@@ -4429,6 +4344,24 @@ Fault detected in PSU Controller health.
 
 .. code-block:: bash
     
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include psu-controller
+    <INFO> 23-Aug-2023::21:44:19.915 controller-2 confd[601]: snmp snmpv2-trap reqid=512560603 10.255.0.139:162 (TimeTicks sysUpTime=3729)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-24 01:44:02.977233231 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 23-Aug-2023::21:44:19.916 controller-2 confd[601]: snmp snmpv2-trap reqid=512560603 10.255.0.144:162 (TimeTicks sysUpTime=3729)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-08-24 01:44:02.977233231 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 1-Sep-2023::22:16:29.147 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960258 10.255.0.139:162 (TimeTicks sysUpTime=4636)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:16:13.545192309 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 1-Sep-2023::22:16:29.148 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960258 10.255.0.144:162 (TimeTicks sysUpTime=4636)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:16:13.545192309 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 1-Sep-2023::22:17:41.359 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960410 10.255.0.139:162 (TimeTicks sysUpTime=11857)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.207837575 UTC)(OCTET STRING alertDescription=Firmware update is running for psuCtrl1 vpc app)
+    <INFO> 1-Sep-2023::22:17:41.362 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960410 10.255.0.144:162 (TimeTicks sysUpTime=11857)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.207837575 UTC)(OCTET STRING alertDescription=Firmware update is running for psuCtrl1 vpc app)
+    <INFO> 1-Sep-2023::22:18:37.193 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960460 10.255.0.139:162 (TimeTicks sysUpTime=17441)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:18:37.179600423 UTC)(OCTET STRING alertDescription=Firmware update completed for psuCtrl1 vpc app)
+    <INFO> 1-Sep-2023::22:18:37.195 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960460 10.255.0.144:162 (TimeTicks sysUpTime=17441)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:18:37.179600423 UTC)(OCTET STRING alertDescription=Firmware update completed for psuCtrl1 vpc app)
+    <INFO> 1-Sep-2023::22:18:37.240 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960462 10.255.0.139:162 (TimeTicks sysUpTime=17445)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:18:37.193733447 UTC)(OCTET STRING alertDescription=Firmware update is running for psuCtrl2 vpc app)
+    <INFO> 1-Sep-2023::22:18:37.241 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960462 10.255.0.144:162 (TimeTicks sysUpTime=17445)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:18:37.193733447 UTC)(OCTET STRING alertDescription=Firmware update is running for psuCtrl2 vpc app)
+    <INFO> 1-Sep-2023::22:19:31.189 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960496 10.255.0.139:162 (TimeTicks sysUpTime=22840)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:19:31.182774440 UTC)(OCTET STRING alertDescription=Firmware update completed for psuCtrl2 vpc app)
+    <INFO> 1-Sep-2023::22:19:31.189 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960496 10.255.0.144:162 (TimeTicks sysUpTime=22840)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=psu-controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:19:31.182774440 UTC)(OCTET STRING alertDescription=Firmware update completed for psuCtrl2 vpc app)
+    <INFO> 3-Jan-2024::13:53:59.674 controller-2 confd[571]: snmp snmpv2-trap reqid=638913363 10.255.0.139:162 (TimeTicks sysUpTime=11780)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 18:53:39.134384549 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 3-Jan-2024::13:53:59.675 controller-2 confd[571]: snmp snmpv2-trap reqid=638913363 10.255.0.144:162 (TimeTicks sysUpTime=11780)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 18:53:39.134384549 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 3-Jan-2024::13:53:59.677 controller-2 confd[571]: snmp snmpv2-trap reqid=638913364 10.255.0.144:162 (TimeTicks sysUpTime=11780)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 18:53:39.134384549 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 3-Jan-2024::13:53:59.678 controller-2 confd[571]: snmp snmpv2-trap reqid=638913364 10.255.0.143:162 (TimeTicks sysUpTime=11780)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 18:53:39.134384549 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+
 
 **fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
 
@@ -4447,6 +4380,27 @@ Fault detected in Fan Controller health.
 
 .. code-block:: bash
     
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include fan-controller
+    <INFO> 1-Sep-2023::22:16:45.184 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960342 10.255.0.139:162 (TimeTicks sysUpTime=6240)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:16:45.177361163 UTC)(OCTET STRING alertDescription=Firmware update is running for fanCtrl1 vfc app)
+    <INFO> 1-Sep-2023::22:16:45.197 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960342 10.255.0.144:162 (TimeTicks sysUpTime=6240)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:16:45.177361163 UTC)(OCTET STRING alertDescription=Firmware update is running for fanCtrl1 vfc app)
+    <INFO> 1-Sep-2023::22:17:39.196 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960396 10.255.0.139:162 (TimeTicks sysUpTime=11641)(OBJECT IDENTIFIER snmpTrapOID=firmware-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.181260981 UTC)(OCTET STRING alertDescription=Deasserted: ARM exception available)
+    <INFO> 1-Sep-2023::22:17:39.197 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960396 10.255.0.144:162 (TimeTicks sysUpTime=11641)(OBJECT IDENTIFIER snmpTrapOID=firmware-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.181260981 UTC)(OCTET STRING alertDescription=Deasserted: ARM exception available)
+    <INFO> 1-Sep-2023::22:17:39.238 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960398 10.255.0.139:162 (TimeTicks sysUpTime=11645)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.194192414 UTC)(OCTET STRING alertDescription=Asserted: inlet hot swap controller power-good)
+    <INFO> 1-Sep-2023::22:17:39.239 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960398 10.255.0.144:162 (TimeTicks sysUpTime=11645)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.194192414 UTC)(OCTET STRING alertDescription=Asserted: inlet hot swap controller power-good)
+    <INFO> 1-Sep-2023::22:17:39.350 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960400 10.255.0.139:162 (TimeTicks sysUpTime=11656)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.220085026 UTC)(OCTET STRING alertDescription=Deasserted: inlet hot swap controller fault)
+    <INFO> 1-Sep-2023::22:17:39.352 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960400 10.255.0.144:162 (TimeTicks sysUpTime=11656)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.220085026 UTC)(OCTET STRING alertDescription=Deasserted: inlet hot swap controller fault)
+    <INFO> 1-Sep-2023::22:17:39.391 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960402 10.255.0.139:162 (TimeTicks sysUpTime=11660)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.224447842 UTC)(OCTET STRING alertDescription=Asserted: exhaust hot swap controller power-good)
+    <INFO> 1-Sep-2023::22:17:39.392 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960402 10.255.0.144:162 (TimeTicks sysUpTime=11660)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.224447842 UTC)(OCTET STRING alertDescription=Asserted: exhaust hot swap controller power-good)
+    <INFO> 1-Sep-2023::22:17:39.493 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960404 10.255.0.139:162 (TimeTicks sysUpTime=11671)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.228607074 UTC)(OCTET STRING alertDescription=Deasserted: exhaust hot swap controller fault)
+    <INFO> 1-Sep-2023::22:17:39.495 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960404 10.255.0.144:162 (TimeTicks sysUpTime=11671)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:39.228607074 UTC)(OCTET STRING alertDescription=Deasserted: exhaust hot swap controller fault)
+    <INFO> 1-Sep-2023::22:17:41.190 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960406 10.255.0.139:162 (TimeTicks sysUpTime=11840)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.184081838 UTC)(OCTET STRING alertDescription=Firmware update completed for fanCtrl1 vfc app)
+    <INFO> 1-Sep-2023::22:17:41.191 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960406 10.255.0.144:162 (TimeTicks sysUpTime=11840)(OBJECT IDENTIFIER snmpTrapOID=firmware-update-status)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.184081838 UTC)(OCTET STRING alertDescription=Firmware update completed for fanCtrl1 vfc app)
+    <INFO> 1-Sep-2023::22:17:41.292 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960408 10.255.0.139:162 (TimeTicks sysUpTime=11851)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.196778865 UTC)(OCTET STRING alertDescription=Exhaust Fan 3 at 9199 RPM)
+    <INFO> 1-Sep-2023::22:17:41.293 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960408 10.255.0.144:162 (TimeTicks sysUpTime=11851)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.196778865 UTC)(OCTET STRING alertDescription=Exhaust Fan 3 at 9199 RPM)
+    <INFO> 1-Sep-2023::22:17:41.553 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960412 10.255.0.139:162 (TimeTicks sysUpTime=11877)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.264910284 UTC)(OCTET STRING alertDescription=Exhaust Fan 2 at 9273 RPM)
+    <INFO> 1-Sep-2023::22:17:41.553 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960412 10.255.0.144:162 (TimeTicks sysUpTime=11877)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.264910284 UTC)(OCTET STRING alertDescription=Exhaust Fan 2 at 9273 RPM)
+    <INFO> 1-Sep-2023::22:17:41.617 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960414 10.255.0.139:162 (TimeTicks sysUpTime=11883)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.285759139 UTC)(OCTET STRING alertDescription=Exhaust Fan 1 at 9279 RPM)
+    <INFO> 1-Sep-2023::22:17:41.621 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960414 10.255.0.144:162 (TimeTicks sysUpTime=11883)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.285759139 UTC)(OCTET STRING alertDescription=Exhaust Fan 1 at 9279 RPM)
 
 **arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
 
@@ -4692,6 +4646,11 @@ The openshift cluster requires a manual rebuild to use the latest containers.
 
 .. code-block:: bash
     
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include openshift
+    <INFO> 5-Mar-2024::15:20:13.849 controller-2 confd[581]: snmp snmpv2-trap reqid=220801593 10.255.80.251:162 (TimeTicks sysUpTime=45302)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-03-05 20:20:13.834972950 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
+    <INFO> 2-Apr-2024::21:49:23.796 controller-2 confd[579]: snmp snmpv2-trap reqid=968477049 10.255.80.251:162 (TimeTicks sysUpTime=1607910)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-03 01:49:23.765813382 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
+    velos-1-gsa-2-active# 
+
 
 **initialization         .1.3.6.1.4.1.12276.1.1.1.262656**
 
