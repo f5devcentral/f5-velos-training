@@ -232,6 +232,8 @@ The overall chassis status can be queried via the following API command:
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-platform:components/component=chassis
 
+The body of the response will look similar to the output below.
+
 .. code-block:: json
 
     {
@@ -265,6 +267,8 @@ The chassis LCD panel status can be queried via the following API command:
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-platform:components/component=lcd
 
+The body of the response will look similar to the output below.
+
 .. code-block:: json
 
     {
@@ -292,6 +296,8 @@ The chassis fantray status can be queried via the following API command:
 .. code-block:: bash
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-platform:components/component=fantray-1
+
+The body of the response will look similar to the output below.
 
 .. code-block:: json
 
@@ -322,6 +328,8 @@ There are two power supply controllers in the CX410 chassis. They can each be qu
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-platform:components/component=psu-controller-1
 
+The body of the response will look similar to the output below.
+
 .. code-block:: json
 
     {
@@ -351,6 +359,8 @@ The CX410 chassis can have up to 4 individual power supplies installed. Each can
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-platform:components/component=psu-1
 
+The body of the response will look similar to the output below.
+
 .. code-block:: json
 
     {
@@ -377,6 +387,8 @@ There can be up to 8 blades installed in the CX410 chassis. Each one can be quer
 .. code-block:: bash
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-platform:components/component=blade-1
+
+The body of the response will look similar to the output below.
 
 .. code-block:: json
 
@@ -767,6 +779,8 @@ Recent system level alerts can be accessed via the API.
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-system:system/f5-event-log:events
 
+The body of the response will look similar to the output below.
+
 .. code-block:: json
 
 
@@ -970,6 +984,8 @@ The following API command will show all system controller Ethernet interfaces an
 .. code-block:: bash
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-interfaces:interfaces
+
+The body of the response will look similar to the output below.
 
 .. code-block:: json
 
@@ -4250,6 +4266,8 @@ The following API call will list the status of all backplane LACP interfaces, as
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-lacp:lacp
 
+The body of the response will look similar to the output below.
+
 .. code-block:: json
 
     {
@@ -4328,6 +4346,8 @@ API Monitoring of Chassis Cluster Status from the System Controller
 .. code-block:: bash
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/f5-chassis-cluster:cluster
+
+The body of the response will look similar to the output below.
 
 .. code-block:: json
 
@@ -4588,6 +4608,8 @@ API Monitoring of Chassis Partitions from the System Controller
 .. code-block:: bash
 
     GET https://{{System-Controller-IP}}:8888/restconf/data/f5-system-slot:slots
+
+The body of the response will look similar to the output below.
 
 .. code-block:: json
 

@@ -300,7 +300,7 @@ The management interface will now use the self-signed certificate you just creat
 
 .. image:: images/velos_security/imagecert.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 
 To create a Certificate Signing Request (CSR) via the CLI use the **system aaa tls create-csr** command.
@@ -397,41 +397,41 @@ The screen below shows the options when creating a self-signed certificate.
 
 .. image:: images/velos_security/imagecert3.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 If you choose the **Store TLS** option of **False** then the certificate details will be displayed, and you will be given the option to copy them to the clipboard. If you want to store them on the system, then set the **Store TLS** option to **True**.
 
 .. image:: images/velos_security/imagecert4.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 You can then use the **Show** options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
 
 .. image:: images/velos_security/imagecert5.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 .. image:: images/velos_security/imagecert6.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 You can also create a Certificate Signing Request (CSR) for the self-signed certificate for use when submitting the certificate to the Certificate Authority (CA).
 
 .. image:: images/velos_security/imagecsr1.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 After clicking **Save** the CSR will appear, and you will be able to **Copy to Clipboard** so you can submit the signing request.
 
 .. image:: images/velos_security/imagecsr2.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 When you install an SSL certificate on the system, you also install a certificate authority (CA) bundle, which is a file that contains root and intermediate certificates. The combination of these two files completes the SSL chain of trust.
 
 .. image:: images/velos_security/imageca1.png
   :align: center
-  :scale: 70%
+  :scale: 100%
 
 Managing Device Certificates, Keys, CSRs, and CAs via API
 -------------------------------------
@@ -568,7 +568,7 @@ Appliance mode can be enabled or disabled via the webUI under the **System Setti
 
 .. image:: images/velos_security/image4.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 
 Enabling Appliance Mode via the API
@@ -926,25 +926,25 @@ The webUI also supports the assignment of the **resource-admin** role to any use
 
 .. image:: images/velos_security/imageres-admin.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 When logging in as the resource-admin user, any attempt to configure the restricted items above will result in an **Access Denied** error like the one below.
 
 .. image:: images/velos_security/imageaccessdenied.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 The webUI also supports the assignment of the **user** role to any user.
 
 .. image:: images/velos_security/guest-user.png
   :align: center
-  :scale: 70%  
+  :scale: 50%  
 
 When a user logs in with the **user** role assigned, they can view configuration, but the webUI will prevent any changes from being made by blocking save functions.
 
 .. image:: images/velos_security/guest-user-restricted.png
   :align: center
-  :scale: 70%  
+  :scale: 50%  
 
 
 Resource-Admin & Guest User Role via API
@@ -3081,7 +3081,7 @@ To add a proxy server for iHealth uploads via the webUI, go to the **Diagnostics
 
 .. image:: images/velos_security/imageproxy1.png
   :align: center
-  :scale: 70%  
+  :scale: 90%  
 
 To add a proxy server for license activation via the webUI, go to the **System Settings -> Licensing** page. 
 
@@ -4027,10 +4027,10 @@ Inside the audit directory you can then select the audit.log and then either **D
 
 .. image:: images/velos_security/imageaudit2.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 You can also select the **log/system** path to download the system audit.log.
 
 .. image:: images/velos_security/imageaudit3.png
   :align: center
-  :scale: 70%
+  :scale: 90%
