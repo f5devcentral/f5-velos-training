@@ -319,6 +319,10 @@ You can click on any interface to view its settings or edit them. You can curren
   :align: center
   :scale: 70% 
 
+.. NOTE:: F5 rSeries systems and F5 VELOS systems only support Forward Error Correction (FEC) CL108 or compatible on 25G interfaces. Peer network devices must be configured with this FEC mode (also known as RS_IEEE_FEC or RS_FEC_IEEE). For more information see the article below.
+
+`K000138830: Troubleshooting port groups and interfaces on F5 rSeries and F5 VELOS systems <https://my.f5.com/manage/s/article/K000138830>`_
+
 Configuring Interfaces from the CLI
 -----------------------------------
 
@@ -382,6 +386,10 @@ To make any changes you will need to enter **config** mode and then enter the **
   Production-1(config)# interfaces interface 1/1.0
   Production-1(config-interface-1/1.0)# ethernet switched-vlan config trunk-vlans 500
   Production-1(config-interface-1/1.0)# commit
+
+.. NOTE:: F5 rSeries systems and F5 VELOS systems only support Forward Error Correction (FEC) CL108 or compatible on 25G interfaces. Peer network devices must be configured with this FEC mode (also known as RS_IEEE_FEC or RS_FEC_IEEE). For more information see the article below.
+
+`K000138830: Troubleshooting port groups and interfaces on F5 rSeries and F5 VELOS systems <https://my.f5.com/manage/s/article/K000138830>`_
 
 Configuring Interfaces from the API
 -----------------------------------
@@ -568,6 +576,10 @@ Enter the following into the body of the API request.
           ]
       }
   }
+
+.. NOTE:: F5 rSeries systems and F5 VELOS systems only support Forward Error Correction (FEC) CL108 or compatible on 25G interfaces. Peer network devices must be configured with this FEC mode (also known as RS_IEEE_FEC or RS_FEC_IEEE). For more information see the article below.
+
+`K000138830: Troubleshooting port groups and interfaces on F5 rSeries and F5 VELOS systems <https://my.f5.com/manage/s/article/K000138830>`_
 
 --------------------------
 Network Settings -> VLANs
@@ -870,6 +882,11 @@ Network Settings -> LAGs
 ------------------------
 
 All in-band networking including LAGs are configured in the VELOS chassis partition layer. The admin will configure interfaces and/or LAGs, and they will assign VLANs to those physical interfaces. Tenants will then inherit the VLANs that are assigned to them when they are created. It is recommended to spread LAG members across blades for added redundancy. 
+
+
+.. NOTE:: F5 rSeries systems and F5 VELOS systems only support Forward Error Correction (FEC) CL108 or compatible on 25G interfaces. Peer network devices must be configured with this FEC mode (also known as RS_IEEE_FEC or RS_FEC_IEEE). For more information see the article below.
+
+`K000138830: Troubleshooting port groups and interfaces on F5 rSeries and F5 VELOS systems <https://my.f5.com/manage/s/article/K000138830>`_
 
 Configuring LAGs from the webUI
 -----------------------------

@@ -170,6 +170,10 @@ Below is an example of BX520 port numbering when all interfaces are unbundled in
   :align: center
   :scale: 50%
 
+.. NOTE:: F5 rSeries systems and F5 VELOS systems only support Forward Error Correction (FEC) CL108 or compatible on 25G interfaces. Peer network devices must be configured with this FEC mode (also known as RS_IEEE_FEC or RS_FEC_IEEE). For more information see the article below.
+
+`K000138830: Troubleshooting port groups and interfaces on F5 rSeries and F5 VELOS systems <https://my.f5.com/manage/s/article/K000138830>`_
+
 
 Supported Optics
 ================
@@ -317,3 +321,7 @@ Link Aggregation Groups
 VELOS allows for bonding of interfaces into Link Aggregation Groups or LAGs. LAGs can span across blades, as long as blades are in the same chassis partition. Links within a LAG must be the same type and speed. LAGs may be configured for **static** or **lacp** mode. The maximum number of members within a single LAG is 32.
 
 An admin can configure the **LACP Type** to **LACP** or **Static**, the **LACP Mode** to be **Active** or **Passive**, and the **LACP Interval** to **Slow** or **Fast**.  
+
+.. NOTE:: F5 rSeries systems and F5 VELOS systems only support Forward Error Correction (FEC) CL108 or compatible on 25G interfaces. Peer network devices must be configured with this FEC mode (also known as RS_IEEE_FEC or RS_FEC_IEEE). For more information see the article below.
+
+`K000138830: Troubleshooting port groups and interfaces on F5 rSeries and F5 VELOS systems <https://my.f5.com/manage/s/article/K000138830>`_
