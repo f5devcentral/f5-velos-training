@@ -567,7 +567,7 @@ To copy a tenant image into the chassis partition over the API, use the followin
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 In the body of the API request enter the following:
 
