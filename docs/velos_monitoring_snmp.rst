@@ -230,7 +230,7 @@ You can then check on the status of the export via the following API call:
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restocnf/data/f5-utils-file-transfer:file/transfer-status
 
 The output will show the status of the file export.
 

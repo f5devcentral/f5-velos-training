@@ -2103,7 +2103,7 @@ Next import the desired image into the system controller floating IP address usi
 
 .. code-block:: bash
 
-  POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+  POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 Enter the following in the body of the API request.
 

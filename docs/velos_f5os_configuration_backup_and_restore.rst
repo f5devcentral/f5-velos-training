@@ -566,7 +566,7 @@ Each chassis partition in the system needs to be backed up independently. Below 
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/export
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restocnf/data/f5-utils-file-transfer:file/export
 
 In the body of the API call enter the remote server crednetials and connectivity information.
 
@@ -586,7 +586,7 @@ To check on the status of the file export you can use the following API call to 
 
 .. code-block:: bash
 
-  POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+  POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/transfer-status
 
 In the body of the POST, use the following json payload to denote the path and file name to be exported.
 
@@ -1057,7 +1057,7 @@ You may query the transfer status of the file via the following API command:
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_system_controller_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/transfer-status
 
 In the body of the API call, enter the file name you want to query.
 
@@ -1586,7 +1586,7 @@ You can check on the file transfer status by issubg the following API call:
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/transfer-status
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/transfer-status
 
 A status like the one below will show a status of completed if successful:
 
@@ -1825,7 +1825,7 @@ You will need to load the image that the tenant was running when it was archived
 
 .. code-block:: bash
 
-    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/api/data/f5-utils-file-transfer:file/import
+    POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
 Enter the remote server information.
 
