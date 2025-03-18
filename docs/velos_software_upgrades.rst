@@ -343,6 +343,8 @@ Upgrading the System Controllers via webUI
 
 Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. 
 
+.. Note:: For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this functionality. With rolling upgrade support, traffic disruption should be minimal during the upgrade process of the system controllers as the tenants will still be running.
+
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
   :scale: 70%
@@ -351,23 +353,19 @@ Starting with F5OS-C 1.8.0 and later versions, a check will be run to determine 
 
 .. image:: images/velos_software_upgrades/controller-warning.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 Then a compatability check will run to estimate the time for the upgrade.
 
 .. image:: images/velos_software_upgrades/compatability-check.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 The results will tell you how long the controller upgrade will take and how many reboots will be initiated during the system controller upgrade process.
 
 .. image:: images/velos_software_upgrades/compatability-verification.png
   :align: center
-  :scale: 70%
-
-
-.. Note:: For F5OS versions 1.1.x there is no rolling upgrade support and both controllers will reboot immediately taking the entire chassis offline. For F5OSv1.2 rolling upgrade support has been added, but you must be on a v1.2.x release or later to take advantage of this functionality. With rolling upgrade support, traffic disruption should be minimal during the upgrade process of the system controllers as the tenants will still be running.
-
+  :scale: 90%
 
 
 You'll be able to monitor the upgrade status by going to the **System Settings -> Controller Management** page. The upgrade will start with the backup controller, and it will move to **In Progress** status while the active controller will show **Pending** status.
