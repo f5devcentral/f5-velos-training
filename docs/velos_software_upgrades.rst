@@ -341,13 +341,13 @@ In the **Headers** section ensure you add the **file-upload-id** header, with th
 Upgrading the System Controllers via webUI
 ------------------------------------------
 
-Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. Starting with F5OS-C 1.8.0 and later versions a check will be run to determine the length and number of reboots the upgrade will need. You'll First see a warning like the one below.
+Once the new images are loaded, you can perform the upgrade from the **System Settings > Controller Management** screen. Currently it is recommended you use the **Bundled** option to upgrade using the ISO. In the future, there may be cases where **Unbundled** (separate OS or Service upgrades) are recommended. Once you click **Save** the upgrade process will begin. 
 
 .. image:: images/velos_software_upgrades/image7.png
   :align: center
   :scale: 70%
 
-Starting with F5OS-C 1.8.0 and later versions a check will be run to determine the length and number of reboots the upgrade will need. You'll First see a warning like the one below. First, you will see a warning warning you of the expected behavior.
+Starting with F5OS-C 1.8.0 and later versions, a check will be run to determine the length of time and number of reboots the upgrade will need. You'll first see a warning like the one below letting you know of the expected behavior.
 
 .. image:: images/velos_software_upgrades/controller-warning.png
   :align: center
@@ -355,7 +355,7 @@ Starting with F5OS-C 1.8.0 and later versions a check will be run to determine t
 
 Then a compatability check will run to estimate the time for the upgrade.
 
-.. image:: images/velos_software_upgrades/combatability-check.png
+.. image:: images/velos_software_upgrades/compatability-check.png
   :align: center
   :scale: 70%
 
