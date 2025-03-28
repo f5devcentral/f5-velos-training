@@ -298,7 +298,9 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 | F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
 +---------------------+--------------------------------------------------------------------------------------------+
 
-Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to support 4 x 100Gb connectivity. The QSFP-DD optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
+Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
+
+The table below displays the breakout cables for the following BIDI optics: **F5-UPG-VEL-QDD-DR4+**.
 
 +----------------------+--------------------------------------------------------------------------------------------+
 | F5-UPG-VEL-QDD-4X-3M | VELOS Field Upgrade: QSFP-DD Breakout Cable 400G to 4x100G, MPO-12 to 4LC (3 Meter)        |
@@ -306,8 +308,15 @@ Below are the breakout cables for the BX520 QSFP-DD (400Gb) ports to support 4 x
 | F5-UPG-VEL-QDD-4X10M | VELOS Field Upgrade: QSFP-DD Breakout Cable 400G to 4x100G, MPO-12 to 4LC (10 Meter)       |
 +----------------------+--------------------------------------------------------------------------------------------+
 
+Below are the breakout cables for the BX520 QSFP-DD (400Gb) BIDI ports to support 4 x 100Gb connectivity. The QSFP-DD BIDI optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters) and both SKU's are 2-pack.
 
+The table below displays the breakout cables for the following BIDI optics: **F5-UPG-VEL-QDDBDSR42** and **F5-UPG-VELQSFP28SR12**.
 
++----------------------+--------------------------------------------------------------------------------------------+
+| F5-UPG-VELSR4XSR3M   | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (3 Meter 2Pack)   |
++----------------------+--------------------------------------------------------------------------------------------+
+| F5-UPG-VELSR4XSR10M  | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for SR4 ONLY MPO to 4LC (10 Meter 2Pack)  |
++----------------------+--------------------------------------------------------------------------------------------+
 
 VLANs
 =====
