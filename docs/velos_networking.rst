@@ -239,6 +239,9 @@ The optics below are only supported on the BX520 blade. 400Gb optics are not sup
 | 400GBASE-BDSR42 (QSFPDD)  | OPT-       | TRANSCEIVER, QSFPDD (400G-SR4.2 BiDi, 150M OM5, MPO-12, MMF)                     |
 +---------------------------+------------+----------------------------------------------------------------------------------+
 
+
+**VELOS Supported Optics SKUs**
+
 Below are the **current** VELOS optic SKUs:
 
 .. Note:: Some older SKU's may operate in VELOS, but are no longer available to purchase. They are listed in the following document.
