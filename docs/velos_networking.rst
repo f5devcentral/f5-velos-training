@@ -279,6 +279,7 @@ Below are the **current** VELOS optic SKUs:
 | F5-UPG-VELQSFP28SR12 | VELOS Field Upgrade: QSFP28 Transceiver (100G-SR1.2  BiDi, 150M OM5, LC, MMF)                |                                                                                                                                                                       |
 +----------------------+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+**100/40G Breakout Cable Options**
 
 The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX110 blade for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
 
@@ -297,6 +298,8 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 +---------------------+--------------------------------------------------------------------------------------------+
 | F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
 +---------------------+--------------------------------------------------------------------------------------------+
+
+**400G Breakout Cable Options**
 
 Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
 
