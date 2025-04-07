@@ -227,17 +227,17 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 **BX520 400Gb QSFP-DD options:**
 
-The optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade.
+The 400Gb optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade. Note, that not all optics are cpabale of supporting breakout to 4 x 100Gb. See more details in the **400G Breakout Cable Options** section. 
 
-+---------------------------+------------+----------------------------------------------------------------------------------+
-| 400GBASE-FR4 (QSFPDD)     | OPT-       | TRANSCEIVER, QSFPDD, (400G-FR4 1310NM, 2KM, LC, SMF, DDM Support)                |
-+---------------------------+------------+----------------------------------------------------------------------------------+
-| 400GBASE-DR4 (QSFPDD)     | OPT-       | TRANSCEIVER, QSFPDD, (400G-DR4+ 1310NM, 2KM, MPO-12, SMF, DDM Support)           |
-+---------------------------+------------+----------------------------------------------------------------------------------+
-| 400GBASE-LR4 (QSFPDD)     | OPT-       | TRANSCEIVER, QSFPDD, (400G-LR4 13xxNM, 10KM, LC, SMF, DDM Support)               |
-+---------------------------+------------+----------------------------------------------------------------------------------+
-| 400GBASE-BDSR42 (QSFPDD)  | OPT-       | TRANSCEIVER, QSFPDD (400G-SR4.2 BiDi, 150M OM5, MPO-12, MMF)                     |
-+---------------------------+------------+----------------------------------------------------------------------------------+
++---------------------------+-------------+----------------------------------------------------------------------------------+
+| 400GBASE-FR4 (QSFPDD)     | OPT-0063-01 | TRANSCEIVER, QSFPDD, (400G-FR4 1310NM, 2KM, LC, SMF, DDM Support)                |
++---------------------------+-------------+----------------------------------------------------------------------------------+
+| 400GBASE-DR4 (QSFPDD)     | OPT-0046-01 | TRANSCEIVER, QSFPDD, (400G-DR4+ 1310NM, 2KM, MPO-12, SMF, DDM Support)           |
++---------------------------+-------------+----------------------------------------------------------------------------------+
+| 400GBASE-LR4 (QSFPDD)     | OPT-0058-01 | TRANSCEIVER, QSFPDD, (400G-LR4 13xxNM, 10KM, LC, SMF, DDM Support)               |
++---------------------------+-------------+----------------------------------------------------------------------------------+
+| 400GBASE-BDSR42 (QSFPDD)  | OPT-0059-01 | TRANSCEIVER, QSFPDD (400G-SR4.2 BiDi, 150M OM5, MPO-12, MMF)                     |
++---------------------------+-------------+----------------------------------------------------------------------------------+
 
 
 **VELOS Supported Optics SKUs**
@@ -304,7 +304,7 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 
 **400G Breakout Cable Options**
 
-Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
+IMPORTANT: Not all QSFP=-DD optics support breakout to 4 x 100Gb. Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
 
 The table below displays the breakout cables for the following DR4+ optics: **F5-UPG-VEL-QDD-DR4+**.
 
