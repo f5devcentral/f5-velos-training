@@ -259,7 +259,7 @@ Each BX520 blade has 512GB of memory. The F5OS layer takes about 34GB of RAM lea
 
 **min-memory = (3.5 * 1024 * vcpu-cores-per-node) + 512**
 
-Each BX520 blade has 48 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. The minimum vCPU size per tenant is 4 vCPU's. Below is a diagram depicting the CPU/vCPUs on a single BX520 blade.
+Each BX520 blade has 112 vCPUs, however 16 of those vCPUs are dedicated to the F5OS platform layer and the data mover (CPU to FPGA interconnect). This leaves 96 vCPUs left over for use by tenants. You can dedicate all 96 vCPUs to one large tenant, or you can allocate smaller numbers of VCPUs per tenant so that you can deploy many tenants. The minimum vCPU size per tenant is 4 vCPU's. Below is a diagram depicting the CPU/vCPUs on a single BX520 blade.
 
 .. image:: images/velos_performance_and_sizing/bx520-tenants.png
   :align: center
