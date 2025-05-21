@@ -124,7 +124,8 @@ Below is an example of the chassis partition webUI Port Groups screen with BX110
    :align: center
    :scale: 70%
 
-For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (targeted to be generally available  F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the current release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is targeted to be generally available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port; however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is targeted to be generally available in the F5OS-C 1.8.1 release. 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (G4 x 100Gb generally available in F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the intial release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port; however it supports 400Gb optics today (FR-4), and the option of 4 x 100Gb with the proper optic and breakout cables is generally available in the F5OS-C 1.8.1 release. Note, only certain combinations are supported currently. 4 x 100Gb requires both ports to be configured in this mode. You cannot mix 4 x 100Gb on one port with 100Gb or 400Gb on the other port. 
+
 
 .. image:: images/velos_networking/image11a.png
   :width: 45%
@@ -227,7 +228,7 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 **BX520 400Gb QSFP-DD options:**
 
-The 400Gb optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade. Note, that not all optics are cpabale of supporting breakout to 4 x 100Gb. See more details in the **400G Breakout Cable Options** section. 
+The 400Gb optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade. Note, that not all optics are capable of supporting breakout to 4 x 100Gb. See more details in the **400G Breakout Cable Options** section. 
 
 +---------------------------+-------------+----------------------------------------------------------------------------------+
 | 400GBASE-FR4 (QSFPDD)     | OPT-0063-01 | TRANSCEIVER, QSFPDD, (400G-FR4 1310NM, 2KM, LC, SMF, DDM Support)                |
@@ -304,7 +305,7 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 
 **400G Breakout Cable Options**
 
-IMPORTANT: Not all QSFP=-DD optics support breakout to 4 x 100Gb. Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
+IMPORTANT: Not all QSFP-DD optics support breakout to 4 x 100Gb. Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
 
 The table below displays the breakout cables for the following DR4+ optics: **F5-UPG-VEL-QDD-DR4+**.
 
