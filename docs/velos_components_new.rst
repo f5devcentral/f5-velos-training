@@ -7,7 +7,7 @@ CX410 Chassis
 
 The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can be populated by the BX110 or BX520 (requires F5OS-C 1.8.1) line cards, as well as 2 larger slots that are populated by the SX410 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm. 
 
-.. Note:: You cannot mix BX110 and BX520 blades in the same CX410 chassis currently.  
+.. Note:: You cannot mix BX110 and BX520 blades in the same CX410 chassis until the F5OS-C 1.8.1 release. When mixing blade types in the same CX410 chassis they must be put into their own unique chassis partitions. You cannot mix different blade types within the same chassis partition.  
 
 .. image:: images/velos_components/image1.png
   :align: center
@@ -310,7 +310,7 @@ BX520 Blade
 
 The BX520 blade is a next generation data plane/line card. It has 2 high speed (QSFP-DD) ports. The first port can be configured for either 100Gb or 4 x 100Gb (with the appropriate break out cable). The second port can be configured for either 4 x 100Gb (with the appropriate break out cable) or 400Gb. There are no direct console or out-of-band connections to the blade, as those functions are now proxied by the system controllers. 
 
-.. Note:: 100Gb breakout cable support is targeted to be generally available in F5OS-C 1.8.1.
+.. Note:: 100Gb breakout cable support is generally available in F5OS-C 1.8.1. Only certain combinations are supported. 4 x 100Gb requires both ports to be configured in this mode. You cannot mix 4 x 100Gb on one port with 100Gb or 400Gb on the other port. 
 
 .. image:: images/velos_components/image17a.png
   :align: center

@@ -16,6 +16,8 @@ VELOS tenants can also be onboarded in BIG-IQ using Declarative Onboarding (DO).
 
     POST https://{{BigIQ_Mgmt}}/mgmt/shared/declarative-onboarding
 
+Below is the body of the API call.
+
 .. code-block:: json
 
     {

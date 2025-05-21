@@ -301,7 +301,7 @@ Below is an example of BX520 port numbering when all interfaces are unbundled in
 
 .. image:: images/velos_networking/bx520-interfaces-unbundled.png
   :align: center
-  :scale: 70%
+  :scale: 50%
 
 
 Configuring Interfaces from the webUI
