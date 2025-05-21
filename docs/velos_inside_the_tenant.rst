@@ -28,7 +28,9 @@ You can delete the VLANs inside the tenant and then recreate them with a new nam
 Interface Behavior
 ==================
 
-The number of interfaces within a tenant will be based upon the number of vCPUs assigned to the tenant and the number of slots the tenant is running on. The screenshot below shows the interfaces inside the tenant lining up with the number of physical cores per slot. In the first example there are 6 vCPUs on a single slot tenant, this will equate to 3 physical CPUs. Likewise for a dual slot tenant with 10 vCPUs per slot. You’ll see 5 physical CPUs per slot.
+An F5OS tenant on a VELOS system has no visibility into the physical interfaces at the F5OS layer. Instead, the tenant will see virtual interfaces and the number of interfaces within a tenant will be based upon the number of vCPUs assigned to the tenant. An F5OS tenant will have one virtual interface per TMM since there is one TMM per physical core. This interface is not an Ethernet interface it is an internal virtual NIC interface that is capable of high speeds. The screenshot below shows the interfaces inside the tenant lining up with the number of physical CPU cores per tenant. 
+
+The number of interfaces within a tenant will be based upon the number of vCPUs assigned to the tenant and the number of slots the tenant is running on. The screenshot below shows the interfaces inside the tenant lining up with the number of physical cores per slot. Since TMOS runs HT-Split, there is one TMM per physical core as TMM’s run on the even numbered hyperthreads. In the first example there are 6 vCPUs on a single slot tenant, this will equate to 3 physical CPUs. Likewise for a dual slot tenant with 10 vCPUs per slot. You’ll see 5 physical CPUs per slot.
 
 .. image:: images/velos_inside_the_tenant/image3.png
   :align: center
