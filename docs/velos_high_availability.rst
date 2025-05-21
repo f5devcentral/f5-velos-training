@@ -191,7 +191,7 @@ Each VELOS BX110 blade has two physical ports, that currently support the follow
 VELOS BX520 Blade 
 -----------------
 
-Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0 - 100Gb, port 2.0 - 400Gb. F5OS-C 1.8.1 will add support for 4 x 100Gb options for both ports. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
+Each VELOS BX520 blade has two physical ports, that currently support the following options for connectivity: port 1.0 - 100Gb, port 2.0 - 400Gb. F5OS-C 1.8.1 will add support for 4 x 100Gb options for both ports. Note, only certain combinations are supported currently. 4 x 100Gb requires both ports to be configured in this mode. You cannot mix 4 x 100Gb on one port with 100Gb or 400Gb on the other port. The number of blades installed may dictate which approach makes the most sense, as the number of ports available, and the performance required, may dictate some topology decisions.
 
 .. image:: images/velos_high_availability/image12-bx520.png
   :align: center
@@ -251,7 +251,7 @@ Consider the same number of blades, but instead of terminating the LAG on blade1
 
 Adding two highspeed (100Gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (especially for the 100Gb case) because each BX110 blade is rated for a maximum of 95Gb, so adding an additional port is not going to increase performance. If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
 
-For the BX520 blade only a single 400Gb port is supported on each blade. In an environment that is purely 400Gb Ethernet, you'd require at least 4 BX520 blades in order to have enough ports for full redundancy if you want to dedicate links for HA connectivity. You'd have 2 x 400Gb in a LAG for in-band connectivity and then another 2 x 400Gb LAG for HA connectivity. A better option would be to utilize the additional 100Gb or 4 x 100Gb ports on the BX520 blades for HA connectivity between chassis or to run the HA VLANs over the in-band LAGs to reduce the number of blades/ports required if the environment didn't require the performance of 4 blades.  
+For the BX520 blade only a single 400Gb port is supported on each blade. In an environment that is purely 400Gb Ethernet, you'd require at least 4 BX520 blades in order to have enough ports for full redundancy if you want to dedicate links for HA connectivity. You'd have 2 x 400Gb in a LAG for in-band connectivity and then another 2 x 400Gb LAG for HA connectivity. A better option would be to utilize the additional 100Gb ports on the BX520 blades for HA connectivity between chassis or to run the HA VLANs over the in-band LAGs to reduce the number of blades/ports required if the environment didn't require the performance of 4 blades.  
 
 Mirroring Considerations
 ------------------------
