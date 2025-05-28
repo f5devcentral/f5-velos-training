@@ -316,6 +316,10 @@ Tenant lifecycle can be fully managed via the CLI using the **tenants** command 
 
 When you are inside the tenant mode you can enter each configuration item one line at a time using tab completion and question mark for help. 
 
+For more information on the Mac Data / MAC Address Block Size see the following Solution Article:
+
+`<K000133655: MAC address assignment in VELOS and rSeries systems https://my.f5.com/manage/s/article/K000133655>`_
+
 .. code-block:: bash
 
     green-partition-chassis1-gsa-1(config-tenant-tenant2)# config ?
@@ -529,6 +533,10 @@ The tenant deployment options are almost identical to deploying a vCMP guest, wi
   :align: center
   :scale: 70% 
 
+For more information on the Mac Data / MAC Address Block Size see the following Solution Article:
+
+`<K000133655: MAC address assignment in VELOS and rSeries systems https://my.f5.com/manage/s/article/K000133655>`_
+
 
 Validating Tenant Status via webUI
 ===================================
@@ -677,7 +685,9 @@ Tenant creation via the API is as simple as defining the parameters below and se
 
   POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants
 
-In the body of the API call enter the tenant details.
+In the body of the API call enter the tenant details. For more information on the Mac Data / MAC Address Block Size see the following Solution Article:
+
+`<K000133655: MAC address assignment in VELOS and rSeries systems https://my.f5.com/manage/s/article/K000133655>`_
 
 .. code-block:: json
 
