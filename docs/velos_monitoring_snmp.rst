@@ -3408,6 +3408,152 @@ The output should appear similar to the example below.
 SNMP Trap Details
 =================
 
+Inside of F5OS there are different categories of diagnostic information that the system captures: **System Alerts** and **System Events**. Both System Alerts and System Events can trigger SNMP traps. This section will provide background on the differences between the two types, and make recommendations of how to monitor and interpret the different types of SNMP traps. Before getting into the SNMP Trap implementation, it is important to understand how F5OS categorizes the different types of messages. 
+
+**System Alerts**
+
+A system alert is typically associated with some sort of fault in the system and it will have two states: An **alarm** condition indicating that some threshold has been crossed or some failure has occurred, and then a corresponding **clear** condition that indicates the fault has cleared or the threshold condition has gone back to an acceptable level. System alerts are high-level categories like: psu-fault, drive-fault, thermal-fault etc... These type of messages are what traditional SNMP systems monitor in order to alert someone when there is a failure condition or a threshold that has been crossed requiring attention. 
+
+If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active# show system alarms 
+    % No entries found.
+    velos-1-gsa-1-active#
+
+If the system has active alarms, then the details will be displayed in the **show system alarms** output. If the fault is cleared, then the alarm will be removed from the output. 
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# show system al
+    ID      RESOURCE       SEVERITY  TEXT                                     TIME CREATED                       
+    -------------------------------------------------------------------------------------------------------------
+    262401  Portgroup 1/2  ERROR     Lanes: 1,2,3,4 Receiver power low alarm  2024-10-23 16:28:50.189063792 UTC  
+    262400  Portgroup 1/2  ERROR     Lanes: 4 Transmitter power low alarm     2025-05-08 04:06:40.650917268 UTC  
+
+    green-partition-chassis1-gsa-1#
+
+
+When translated into SNMP traps the states for these types of messages are:
+
+- assert(1) or **alertEffect=1** is reported in alertEffect when alarm is raised. 
+- clear(0) or **alertEffect=0** reported in alertEffect when alarm is cleared. 
+
+
+**System Events**
+
+A system event is an informational message which doesn't have an alarm or clear condition by itself, but it may provide deeper information on what caused an alarm or clear condition. A System Event is a lower-level message that could include information about firmware upgrade status, presence of a PSU, or DDM diagnostic level on an optic in addition to many more low-level details. Many times, a system event will provide more detailed lower-level information that corresponds to an alarm or clear condition. As an example a PSU-Fault alarm, may have corresponding events messages that provide more details as to whay the PSU is in a fault alarm condition.
+
+Often times, many of these messages or traps are just providing state of a component in a binary fashion. i.e. it's either a one (ASSERTED) or zero (DEASSERTED) state based on the AOM subsystem tracking status. This should not be viewed as a positive or a negative status, it is merely communicating state of a component. As an example, in the system events a **Deasserted: PSU mismatch** message, means all the PSU's **are not** mismatched because the value is zero or Deasserted. The wording may not be intuitive, and F5 is looking into making improvements to make the wording clearer. The example below shows the **show system events** for the message described above.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active# show system events | include "PSU mismatch"  
+    65793 psu-controller psu-fault EVENT NA "Deasserted: PSU mismatch" "2024-04-30 15:19:26.028713740 UTC"                                
+    65793 psu-controller psu-fault EVENT NA "Deasserted: PSU mismatch" "2024-04-30 15:19:26.893333655 UTC"                                
+    65793 psu-controller psu-fault EVENT NA "Deasserted: PSU mismatch" "2024-04-30 17:43:08.916458449 UTC"                                
+    65793 psu-controller psu-fault EVENT NA "Deasserted: PSU mismatch" "2024-05-20 21:58:08.175219517 UTC"  
+
+This in turn can generate an SNMP trap which is informational in nature (alertEffect=2), so this should not be viewed as an alert/clear message. It is simply indicating status of the **PSU mismatch** state.
+
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active# file show log/confd/snmp.log | include "PSU mismatch"
+    <INFO> 28-Mar-2024::20:17:06.928 controller-1 confd[581]: snmp snmpv2-trap reqid=2101318453 10.255.80.251:162 (TimeTicks sysUpTime=1936)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-29 00:16:43.640366022 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 2-Apr-2024::17:21:53.073 controller-1 confd[580]: snmp snmpv2-trap reqid=840149219 10.255.80.251:162 (TimeTicks sysUpTime=2833)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-02 21:21:40.108727022 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 10-Apr-2024::19:05:14.639 controller-1 confd[580]: snmp snmpv2-trap reqid=176686036 10.255.80.251:162 (TimeTicks sysUpTime=2976)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-10 23:05:02.739107859 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 30-Apr-2024::13:30:59.211 controller-1 confd[580]: snmp snmpv2-trap reqid=176686201 10.255.80.251:162 (TimeTicks sysUpTime=170797433)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-30 17:30:54.208428216 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 20-May-2024::17:58:15.638 controller-1 confd[648]: snmp snmpv2-trap reqid=1353604378 10.255.80.251:162 (TimeTicks sysUpTime=5158)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-05-20 21:58:08.175219517 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+    <INFO> 17-Jun-2024::17:06:06.546 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239319 10.255.80.251:162 (TimeTicks sysUpTime=1944)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:38.531210489 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
+
+
+Normally, an SNMP trap will be sent only when a critical status is encountered or cleared, or some threshold is being crossed. F5OS however, also sends informational traps that are merely EVENTS. The AOM subsystem tracks state of many components within the system, and if that state changes an EVENT or trap may be triggered. The AOM subsystem will also generate a burst of messages when the AOM subsystem is first powered on or cycled, this is normal as it is re-discovering the state of all those components. This has been viewed as the SNMP traps being too chatty or verbose and F5 is looking into reducing the amount of chatter under these conditions in the future. For now, many of those EVENT messages or **alertEffect=2** can be safely ignored, but they may provide value as they provide additional information alongside an **alertEffect=0** or an or **alertEffect=1** SNMP trap. 
+
+There may be cases where an alertEffect=2 message might signal something needs more attention. Some examples would be **firmware-update-status** that would let you know that the system is unavailable while a firmware upgrade occurs. Another example would be a **core-dump** SNMP trap that is logged as an **alertEffect=2**.
+
+The **show systems events** output will also display past and current **ASSERT** and **CLEAR** System Alerts.
+
+Below are some examples of PSU related events.
+
+.. code-block:: bash
+
+
+    velos-1-gsa-1-active# show system events | include psu       
+    65793 psu-controller psu-fault EVENT NA "Deasserted: PSU mismatch" "2024-04-30 15:19:26.028713740 UTC"                                
+    65793 psu-2 psu-fault EVENT NA "Asserted: PSU 2 present" "2024-04-30 15:19:26.056348286 UTC"                                          
+    65793 psu-1 psu-fault EVENT NA "Asserted: PSU 1 output OK" "2024-04-30 15:19:26.071918557 UTC"                                        
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 unsupported" "2024-04-30 15:19:26.076279506 UTC"                                    
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 unsupported" "2024-04-30 15:19:26.080142575 UTC"                                    
+    65793 psu-1 psu-fault EVENT NA "Asserted: PSU 1 present" "2024-04-30 15:19:26.083856137 UTC"                                          
+    65793 psu-1 psu-fault EVENT NA "Asserted: PSU 1 input OK" "2024-04-30 15:19:26.093175956 UTC"                                         
+    65793 psu-2 psu-fault EVENT NA "Asserted: PSU 2 input OK" "2024-04-30 15:19:26.106850591 UTC"                                         
+    65793 psu-2 psu-fault EVENT NA "Asserted: PSU 2 output OK" "2024-04-30 15:19:26.113609231 UTC"                                        
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input over-power warning" "2024-04-30 15:19:26.197263340 UTC"                       
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input over-current warning" "2024-04-30 15:19:26.201169039 UTC"                     
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input over-current fault" "2024-04-30 15:19:26.212187884 UTC"                       
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input under-voltage warning" "2024-04-30 15:19:26.481643026 UTC"                    
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input over-voltage warning" "2024-04-30 15:19:26.485461784 UTC"                     
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input over-voltage fault" "2024-04-30 15:19:26.489775769 UTC"                       
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input over-voltage warning" "2024-04-30 15:19:26.577055588 UTC"                     
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input over-voltage fault" "2024-04-30 15:19:26.587836632 UTC"                       
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 unit off for low input voltage" "2024-04-30 15:19:26.647397469 UTC"                 
+    65793 psu-1 psu-fault EVENT NA "Deasserted: PSU 1 input under-voltage fault" "2024-04-30 15:19:26.651325207 UTC"                      
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input under-voltage fault" "2024-04-30 15:19:26.706370667 UTC"                      
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input under-voltage warning" "2024-04-30 15:19:26.711376971 UTC"                    
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input over-power warning" "2024-04-30 15:19:26.819090469 UTC"                       
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input over-current warning" "2024-04-30 15:19:26.824732486 UTC"                     
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 input over-current fault" "2024-04-30 15:19:26.828112127 UTC"                       
+    65793 psu-2 psu-fault EVENT NA "Deasserted: PSU 2 unit off for low input voltage" "2024-04-30 15:19:26.831863024 UTC"                 
+    65793 psu-controller psu-fault EVENT NA "Deasserted: PSU mismatch" "2024-04-30 15:19:26.893333655 UTC"                                
+    65793 psu-3 psu-fault EVENT NA "Deasserted: PSU 3 present" "2024-04-30 15:19:39.612375502 UTC"                                        
+    65793 psu-3 psu-fault EVENT NA "Deasserted: PSU 3 input OK" "2024-04-30 15:19:39.755926497 UTC"          
+
+Below are some examples of Portgroup related events.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# show system events | include Portgroup 
+    262400 Portgroup 1/2 txPwr ASSERT ERROR "Lanes: 1,2 Transmitter power low alarm" "2025-05-07 19:33:10.710684315 UTC"          
+    262400 Portgroup 1/2 txPwr CLEAR ERROR "Lanes: 1 Transmitter power low alarm" "2025-05-07 19:33:10.710591445 UTC"             
+    262402 Portgroup 1/2 txBias CLEAR WARNING "Lanes: 2,4 Transmitter bias low warning" "2025-05-07 19:33:10.710929431 UTC"       
+    262400 Portgroup 1/2 txPwr ASSERT WARNING "Lanes: 1,2 Transmitter power low warning" "2025-05-07 19:33:10.710789690 UTC"      
+    262402 Portgroup 1/2 txBias ASSERT WARNING "Lanes: 1,2,3 Transmitter bias low warning" "2025-05-07 19:33:10.710967174 UTC"    
+    262400 Portgroup 1/2 txPwr CLEAR ERROR "Lanes: 1,2 Transmitter power low alarm" "2025-05-07 19:33:40.611353982 UTC"           
+    262402 Portgroup 1/2 txBias CLEAR ERROR "Lanes: 1,2,3 Transmitter bias low alarm" "2025-05-07 19:33:40.611632937 UTC"         
+    262400 Portgroup 1/2 txPwr ASSERT ERROR "Lanes: 1,2,3 Transmitter power low alarm" "2025-05-07 19:33:40.611447663 UTC"        
+    262400 Portgroup 1/2 txPwr CLEAR WARNING "Lanes: 1,2 Transmitter power low warning" "2025-05-07 19:33:40.611515900 UTC"       
+    262402 Portgroup 1/2 txBias ASSERT WARNING "Lanes: 1 Transmitter bias low warning" "2025-05-07 19:33:40.611808934 UTC"        
+    262400 Portgroup 1/2 txPwr ASSERT WARNING "Lanes: 1,2,3,4 Transmitter power low warning" "2025-05-07 19:33:40.611570843 UTC"  
+    262402 Portgroup 1/2 txBias CLEAR WARNING "Lanes: 1,2,3 Transmitter bias low warning" "2025-05-07 19:33:40.611764249 UTC"     
+    262400 Portgroup 1/2 txPwr CLEAR WARNING "Lanes: 1,2,3,4 Transmitter power low warning" "2025-05-07 19:34:10.510473902 UTC"   
+    262400 Portgroup 1/2 txPwr ASSERT ERROR "Lanes: 2,3,4 Transmitter power low alarm" "2025-05-07 19:34:10.510412825 UTC"      
+
+Below are some examples of thermal related events. 
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active# show system events | include thermal
+    65536 controller-2 hardware-device-fault EVENT NA "Deasserted: CPU thermal trip fault" "2024-04-30 15:18:40.610355760 UTC"            
+    65546 controller-2 thermal-fault EVENT NA "outlet at +19.0 degC" "2024-04-30 15:18:41.785425324 UTC"                                  
+    65546 controller-2 thermal-fault EVENT NA "inlet at +14.4 degC" "2024-04-30 15:18:42.592238946 UTC"                                   
+    65546 controller-2 thermal-fault EVENT NA "CPU TCTL-Delta at -50.0 degC" "2024-04-30 15:22:07.282105305 UTC"                          
+    65546 controller-2 thermal-fault EVENT NA "CPU TCTL-Delta at -51.0 degC" "2024-04-30 17:42:19.355801822 UTC"                          
+    65546 controller-2 thermal-fault EVENT NA "outlet at +19.0 degC" "2024-04-30 17:42:27.862723549 UTC"                                  
+    65546 controller-2 thermal-fault EVENT NA "inlet at +15.1 degC" "2024-04-30 17:42:27.882762223 UTC"                                   
+    65546 controller-1 thermal-fault EVENT NA "CPU TCTL-Delta at -47.0 degC" "2024-04-30 17:51:52.100386376 UTC"                          
+    65536 controller-1 hardware-device-fault EVENT NA "Deasserted: CPU thermal trip fault" "2024-04-30 17:53:14.163699028 UTC"            
+    65546 controller-1 thermal-fault EVENT NA "outlet at +23.0 degC" "2024-04-30 17:53:15.809332607 UTC"                                  
+    65546 controller-1 thermal-fault EVENT NA "inlet at +18.6 degC" "2024-04-30 17:53:15.814244361 UTC"                                   
+    65546 controller-1 thermal-fault EVENT NA "CPU TCTL-Delta at -51.0 degC" "2024-04-30 17:56:46.156276838 UTC"                          
+    65546 blade-1 thermal-fault EVENT NA "BWE at +36.1 degC" "2024-04-30 19:09:53.842344960 UTC"                                          
+    65546 blade-1 thermal-fault EVENT NA "ATSE2 at +44.1 degC" "2024-04-30 19:09:53.852971342 UTC"                                        
+    65546 blade-1 thermal-fault EVENT NA "ATSE1 at +42.7 degC" "2024-04-30 19:09:53.860891424 UTC"                                        
+    65546 blade-1 thermal-fault EVENT NA "VQF2 at +42.8 degC" "2024-04-30 19:09:55.835400067 UTC"                                         
+    65546 blade-1 thermal-fault EVENT NA "VQF1 at +41.0 degC" "2024-04-30 19:09:55.856271252 UTC"        
+
+
 This section provides examples of SNMP traps and their associated log messages, and what troubleshooting steps are recommended. Traps will be sent with either an **assert** when an alarm occurs, a **clear** when the alarm is cleared, or an **event** which is providing an update to a raised alarm event.
 
 - assert(1) is reported in alertEffect when alarm is raised.
