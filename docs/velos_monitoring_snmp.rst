@@ -3564,10 +3564,22 @@ As an example, the following set of traps are from an PSU failure and recovery o
 
 .. code-block:: bash
 
-    velos-chassis2-gsa-2-active# file show log/confd/snmp.log | include 15-Aug-2024  
+    velos-chassis2-gsa-2-active# file show log/confd/snmp.log | include 15-Aug-2024 
+
+    A psu-fault is raised for psu-2 - Assert (alertEffect=1):
+
     <INFO> 15-Aug-2024::19:49:41.552 controller-2 confd[597]: snmp snmpv2-trap reqid=697641379 10.255.80.251:162 (TimeTicks sysUpTime=509315104)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-08-15 19:49:41.441052062 UTC)(OCTET STRING alertDescription=PSU fault detected)
+
+    A psu-fault status message EVENT for psu-2 providing additional information - EVENT (alertEffect=2):
+
     <INFO> 15-Aug-2024::19:49:41.563 controller-2 confd[597]: snmp snmpv2-trap reqid=697641380 10.255.80.251:162 (TimeTicks sysUpTime=509315105)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-15 19:49:41.441093048 UTC)(OCTET STRING alertDescription=Deasserted: PSU 2 input OK)
+
+    A psu-fault status message EVENT for psu-2 providing additional information - EVENT (alertEffect=2):
+
     <INFO> 15-Aug-2024::19:49:41.570 controller-2 confd[597]: snmp snmpv2-trap reqid=697641381 10.255.80.251:162 (TimeTicks sysUpTime=509315106)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-15 19:49:41.458076452 UTC)(OCTET STRING alertDescription=Deasserted: PSU 2 output OK)
+
+    A psu-fault is cleared for psu-2 - Deasssert (alertEffect=0):
+
     <INFO> 15-Aug-2024::19:49:41.624 controller-2 confd[597]: snmp snmpv2-trap reqid=697641382 10.255.80.251:162 (TimeTicks sysUpTime=509315111)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-15 19:49:41.468190665 UTC)(OCTET STRING alertDescription=PSU fault detected)
     
 
@@ -3579,7 +3591,7 @@ Generic SNMP Traps
 **coldStart         	1.3.6.1.6.3.1.1.5.1**  
 
 
-A coldStart trap signifies that the SNMP entity,supporting a notification originator application, is reinitializing itself and that its configuration may have been altered. This trap can come from both the system controllers and the chassis partitions.
+A coldStart trap signifies that the SNMP entity, supporting a notification originator application, is reinitializing itself and that its configuration may have been altered. This trap can come from both the system controllers and the chassis partitions.
 
 .. code-block:: bash
 
@@ -3657,7 +3669,11 @@ Device Fault Traps
 | CLEAR            | Hardware device fault detected                                        |
 +------------------+-----------------------------------------------------------------------+
 
-This set of taps may indicate a fault with various hardware components on the VELOS chassis like CPUs or fans. Examine the trap for specific details of what subsystem has failed to determine the proper troubleshooting steps to pursue. 
+This set of taps may indicate a fault with various hardware components on the VELOS chassis like CPUs or fans. The hardware-device-fault label of this trap can be somewhat misleading because not all the traps generated under this section are actual faults. Many of the traps are informational in nature, and do not indicate an actionable fault. 
+
+The AOM subsystem tracks state of many components within the system, and if that state changes an EVENT or trap may be triggered. The AOM subsystem will also generate a burst of messages when the AOM subsystem is first powered on or cycled, this is normal as it is re-discovering the state of all those components. This has been viewed as the SNMP traps being too chatty or verbose and F5 is looking into reducing the amount of chatter under these conditions in the future. For now, those EVENT messages or **alertEffect=2** can be safely ignored, but they may provide value as they provide additional information alongside an **alertEffect=0** (clear) or an or **alertEffect=1** (alarm) SNMP trap. 
+
+As an example, many of the messages are noted by **(INTEGER alertEffect=2)** and are informational only and do not require any action. In the example below, some of the informational messages are deasserting a fault status, meaning there is no problem. 
 
 .. code-block:: bash
 
@@ -3683,6 +3699,152 @@ This set of taps may indicate a fault with various hardware components on the VE
     <INFO> 3-Oct-2022::09:34:35.380 controller-1 confd[437]: snmp snmpv2-trap reqid=64689791 10.255.0.143:162 (TimeTicks sysUpTime=3591)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:09.055593697 UTC)(OCTET STRING alertDescription=Deasserted: TPM Provisioning failed)
     <INFO> 3-Oct-2022::09:34:35.831 controller-1 confd[437]: snmp snmpv2-trap reqid=64689795 10.255.0.143:162 (TimeTicks sysUpTime=3636)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:09.075155728 UTC)(OCTET STRING alertDescription=Deasserted: CPU thermal trip fault)
     <INFO> 3-Oct-2022::09:34:36.107 controller-1 confd[437]: snmp snmpv2-trap reqid=64689798 10.255.0.143:162 (TimeTicks sysUpTime=3663)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:09.137071629 UTC)(OCTET STRING alertDescription=Deasserted: CPU hot fault)
+
+If there are multiple concurrent hardware issues, multiple events will be raised but the **Hardware device fault detected** alarm **alertEffect=1** will not be raised for each individual fault. If **Hardware device fault detected** alarm **alertEffect=1** has already been raised but not cleared, a second alarm will not be raised when a second hardware-device-fault event triggers. The system will only clear **hardware-device-fault** alarm when all concurrent issues are resolved.
+
+Below a **hardware-device-fault** SNMP trap alarm has been raised for two separate issues:
+
+1. CPU machine check error 
+2. CPU internal error
+
+Both of these alarms have the same severity **Emergency** noted by **alertSeverity=0** in the hardware-device-fault alarm being raised. The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) or Clear (**alertEffect=0**) messages. Event messages (**alertEffect=2**) will always show Info severity (**alertSeverity=8**) as they are only used for informative purposes. 
+
++-----------+--------------------+-----------------------------------+
+| Severity  | Severity Level     | Details                           |
++===========+====================+===================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                |
++-----------+--------------------+-----------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately  |
++-----------+--------------------+-----------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions               |
++-----------+--------------------+-----------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                  |
++-----------+--------------------+-----------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                |
++-----------+--------------------+-----------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition  | 
++-----------+--------------------+-----------------------------------+
+| INFO      | alertSeverity = 6  | Informational                     |
++-----------+--------------------+-----------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages              |
++-----------+--------------------+-----------------------------------+
+
+In this case, instead of raising the **hardware-device-fault** SNMP trap twice (once for each event), it is raised only one time becuase of two separate concurrent sub events. Take note of the **alertSeverity=0** in the SNMP alarm indicating an **Emergency** status.
+
+.. code-block:: bash
+
+    Hardware device fault detected alarm raised (alertEffect=1).
+
+    <INFO> 19-Jun-2025::11:45:00.564 controller-1 confd[154]: snmp snmpv2-trap reqid=520254528 10.10.10.10:5000 (TimeTicks sysUpTime=90453)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=0)(OCTET STRING alertTimeStamp=2025-06-19 11:45:00.559587620 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
+    
+    Informational message (alertEffect=2) indicating which subsystem has failed. In this case **CPU internal error** has **Asserted**.
+
+    <INFO> 19-Jun-2025::11:45:00.618 controller-1 confd[154]: snmp snmpv2-trap reqid=520254529 10.10.10.10:5000 (TimeTicks sysUpTime=90459)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:45:00.559594958 UTC)(OCTET STRING alertDescription=Asserted: CPU internal error)
+    
+    A second informational message (alertEffect=2) indicating which subsystem has failed. In this case **CPU machine check error** has **Asserted**.
+
+    <INFO> 19-Jun-2025::11:45:26.772 controller-1 confd[154]: snmp snmpv2-trap reqid=520254530 10.10.10.10:5000 (TimeTicks sysUpTime=93074)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:45:26.769129229 UTC)(OCTET STRING alertDescription=Asserted: CPU machine check error)
+
+The hardware-device-fault alarm will only be cleared when both the issues are resolved. Below is an example of the clear traps in this case.
+
+.. Note:: The messages may arrive out of order as seen below.
+
+.. code-block:: bash
+
+    Informational message (alertEffect=2) indicating which subsystem has cleared. In this case **CPU machine check error** has **Deasserted**.
+
+    <INFO> 19-Jun-2025::11:45:48.772 controller-1 confd[154]: snmp snmpv2-trap reqid=520254531 10.10.10.10:5000 (TimeTicks sysUpTime=95274)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:45:48.769968015 UTC)(OCTET STRING alertDescription=Deasserted: CPU machine check error)
+    
+    Hardware device fault detected alarm cleared (alertEffect=0).
+
+    <INFO> 19-Jun-2025::11:46:00.743 controller-1 confd[154]: snmp snmpv2-trap reqid=520254532 10.10.10.10:5000 (TimeTicks sysUpTime=96471)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:46:00.729324443 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
+    
+    Informational message (alertEffect=2) indicating which subsystem has cleared. In this case **CPU internal error** has **Deasserted**.
+
+    <INFO> 19-Jun-2025::11:46:00.786 controller-1 confd[154]: snmp snmpv2-trap reqid=520254533 10.10.10.10:5000 (TimeTicks sysUpTime=96475)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:46:00.729332433 UTC)(OCTET STRING alertDescription=Deasserted: CPU internal error)
+
+When multiple concurrent issues within the hardware-device-fault category raise an alarm, the diag-agent will compare the severities of the alarms and it will only raise an alarm for the one with the highest severity (Lowest number alertEffect).
+ 
+In the example below, a hardware-device-fault is triggered by two issues:
+
+1. CPU fatal error, which has a critical severity (alertSeverity=2) and 
+2. CPU non-fatal error which has an error severity (alertSeverity=3).
+
+Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **alertEffect=1** will be raised with severity **alertSeverity=2**. There will be follow on event traps **alertEffect=2** providing the detials of both errors.
+
+.. code-block:: bash
+
+    Hardware device fault detected alarm raised (alertEffect=1).
+
+    <INFO> 19-Jun-2025::11:36:50.778 controller-1 confd[154]: snmp snmpv2-trap reqid=520254516 10.10.10.10:5000 (TimeTicks sysUpTime=41475)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2025-06-19 11:36:50.770679705 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
+    
+    Informational message (alertEffect=2) indicating which subsystem has failed. In this case **CPU fatal error** has **Asserted**.
+
+    <INFO> 19-Jun-2025::11:36:50.829 controller-1 confd[154]: snmp snmpv2-trap reqid=520254517 10.10.10.10:5000 (TimeTicks sysUpTime=41480)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:36:50.770686399 UTC)(OCTET STRING alertDescription=Asserted: CPU fatal error)
+
+    Informational message (alertEffect=2) indicating which subsystem has failed. In this case **CPU non-fatal error** has **Asserted**.
+
+    <INFO> 19-Jun-2025::11:37:12.290 controller-1 confd[154]: snmp snmpv2-trap reqid=520254518 10.10.10.10:5000 (TimeTicks sysUpTime=43626)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:37:12.284934061 UTC)(OCTET STRING alertDescription=Asserted: CPU non-fatal error)
+
+If the **CPU fatal error** is resolved but the system still has a **non-fatal error** still active it will clear the fatal alarm, and then raise a new non-fatal alarm. In this case, the system sends an SNMP clear trap **alertEffect=0** and then issues a new SNMP fault trap **alertEffect=1** with **Error** severity (**alertSeverity=3**). The system will also issue an informational event **alertEffect=2** deasserting the event for **CPU fatal error**.
+
+.. code-block:: bash
+
+    Hardware device fault detected alarm cleared (alertEffect=0) with (alertSeverity=8).
+
+    <INFO> 19-Jun-2025::11:37:39.830 controller-1 confd[154]: snmp snmpv2-trap reqid=520254519 10.10.10.10:5000 (TimeTicks sysUpTime=46380)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:37:39.824875172 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
+
+    Hardware device fault detected alarm raised (alertEffect=1) with (alertSeverity=3).
+
+    <INFO> 19-Jun-2025::11:37:39.886 controller-1 confd[154]: snmp snmpv2-trap reqid=520254520 10.10.10.10:5000 (TimeTicks sysUpTime=46385)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-06-19 11:37:39.824883495 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
+
+    Informational message (alertEffect=2) indicating which subsystem has cleared. In this case **CPU fatal error** has **Deasserted**.
+
+    <INFO> 19-Jun-2025::11:37:39.936 controller-1 confd[154]: snmp snmpv2-trap reqid=520254521 10.10.10.10:5000 (TimeTicks sysUpTime=46390)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:37:39.824900797 UTC)(OCTET STRING alertDescription=Deasserted: CPU fatal error)
+
+When the remaining **non-fatal error** gets cleared, the system will clear the **hardware-device-fault** noted by **alertEffect=0**. An additional informational **Deasserted: CPU non-fatal error** message will be sent.
+
+.. code-block:: bash
+
+    hardware-device-fault is cleared (alertEffect-0) when all issues are resolved.
+
+    <INFO> 19-Jun-2025::11:38:22.493 controller-1 confd[154]: snmp snmpv2-trap reqid=520254522 10.10.10.10:5000 (TimeTicks sysUpTime=50646)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:38:22.484721760 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
+
+    Addtional informational message (alertEffect=2) provides addtional details. In this case **CPU non-fatal error** has **Deasserted**.
+
+    <INFO> 19-Jun-2025::11:38:22.545 controller-1 confd[154]: snmp snmpv2-trap reqid=520254523 10.10.10.10:5000 (TimeTicks sysUpTime=50651)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:38:22.484728451 UTC)(OCTET STRING alertDescription=Deasserted: CPU non-fatal error)
+
+
+Other messages are binary messages indicating the state of some hardware component, the AOM system may provide status of some hardware components on power up or re-cycle. The **Deasserted: CPU HW correctable error** is indicating that there is **not** an issue with the CPU HW correctable error. This is un-intuitive because this is issued as a hardware-device-fault trap.
+
+Often, many of these messages or traps are just providing state of a component in a binary fashion. i.e. it's either a one (ASSERTED) or zero (DEASSERTED) state based on the AOM subsystem tracking status. This should not be viewed as a positive or a negative status, it is merely communicating state of a component. As an example, in the system events a **Deasserted: CPU HW correctable error** message, means that there **are not** CPU HW correctable errors because the value is zero or Deasserted. The wording may not be not intuitive, and F5 is looking into making improvements to make the wording clearer. The example below shows the **show system events** for the message described above.
+
+.. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
+    <INFO> 11-Jul-2022::06:29:16.529 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440640 10.255.0.145:161 (TimeTicks sysUpTime=8225)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.245012010 UTC)(OCTET STRING alertDescription=Deasserted: CPU HW correctable error)
+
+Below is another example of informational events noted by **alertEffect=2**.
+
+.. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
+    <INFO> 11-Jul-2022::06:29:16.529 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440640 10.255.0.145:161 (TimeTicks sysUpTime=8225)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.245012010 UTC)(OCTET STRING alertDescription=Deasserted: CPU HW correctable error)
+    <INFO> 11-Jul-2022::06:29:16.529 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440640 10.255.0.144:161 (TimeTicks sysUpTime=8225)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.245012010 UTC)(OCTET STRING alertDescription=Deasserted: CPU HW correctable error)
+    <INFO> 11-Jul-2022::06:29:17.332 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440650 10.255.0.145:161 (TimeTicks sysUpTime=8305)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-7)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.768784161 UTC)(OCTET STRING alertDescription=fan 7 at 27051 RPM)
+    <INFO> 11-Jul-2022::06:29:17.333 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440650 10.255.0.144:161 (TimeTicks sysUpTime=8305)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-7)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.768784161 UTC)(OCTET STRING alertDescription=fan 7 at 27051 RPM)
+    <INFO> 11-Jul-2022::06:29:17.433 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440651 10.255.0.145:161 (TimeTicks sysUpTime=8315)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-8)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.770124231 UTC)(OCTET STRING alertDescription=fan 8 at 26857 RPM)
+    <INFO> 11-Jul-2022::06:29:17.433 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440651 10.255.0.144:161 (TimeTicks sysUpTime=8315)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-8)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.770124231 UTC)(OCTET STRING alertDescription=fan 8 at 26857 RPM)
+    <INFO> 11-Jul-2022::06:29:18.237 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440659 10.255.0.145:161 (TimeTicks sysUpTime=8395)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-6)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.781064597 UTC)(OCTET STRING alertDescription=fan 6 at 27075 RPM)
+    <INFO> 11-Jul-2022::06:29:18.237 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440659 10.255.0.144:161 (TimeTicks sysUpTime=8395)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-6)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.781064597 UTC)(OCTET STRING alertDescription=fan 6 at 27075 RPM)
+    <INFO> 11-Jul-2022::06:29:19.041 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440667 10.255.0.145:161 (TimeTicks sysUpTime=8476)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.791114234 UTC)(OCTET STRING alertDescription=Deasserted: CPU thermal trip fault)
+    <INFO> 11-Jul-2022::06:29:19.041 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440667 10.255.0.144:161 (TimeTicks sysUpTime=8476)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:15.791114234 UTC)(OCTET STRING alertDescription=Deasserted: CPU thermal trip fault)
+    <INFO> 11-Jul-2022::06:29:19.643 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440675 10.255.0.145:161 (TimeTicks sysUpTime=8536)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-5)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.022807820 UTC)(OCTET STRING alertDescription=fan 5 at 26905 RPM)
+    <INFO> 11-Jul-2022::06:29:19.643 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440675 10.255.0.144:161 (TimeTicks sysUpTime=8536)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-5)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.022807820 UTC)(OCTET STRING alertDescription=fan 5 at 26905 RPM)
+    <INFO> 11-Jul-2022::06:29:20.446 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440683 10.255.0.145:161 (TimeTicks sysUpTime=8616)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.201227249 UTC)(OCTET STRING alertDescription=Deasserted: CPU hot fault)
+    <INFO> 11-Jul-2022::06:29:20.446 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440683 10.255.0.144:161 (TimeTicks sysUpTime=8616)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.201227249 UTC)(OCTET STRING alertDescription=Deasserted: CPU hot fault)
+    <INFO> 11-Jul-2022::06:29:20.546 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440684 10.255.0.145:161 (TimeTicks sysUpTime=8626)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-4)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.202497586 UTC)(OCTET STRING alertDescription=fan 4 at 26954 RPM)
+    <INFO> 11-Jul-2022::06:29:20.546 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440684 10.255.0.144:161 (TimeTicks sysUpTime=8626)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-4)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.202497586 UTC)(OCTET STRING alertDescription=fan 4 at 26954 RPM)
 
 
 
