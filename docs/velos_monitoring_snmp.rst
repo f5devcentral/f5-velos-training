@@ -3414,7 +3414,7 @@ Inside of F5OS there are different categories of diagnostic information that the
 
 A system alert is typically associated with some sort of fault in the system and it will have two states: An **alarm** condition indicating that some threshold has been crossed or some failure has occurred, and then a corresponding **clear** condition that indicates the fault has cleared or the threshold condition has gone back to an acceptable level. System alerts are high-level categories like: psu-fault, drive-fault, thermal-fault etc... These type of messages are what traditional SNMP systems monitor in order to alert someone when there is a failure condition or a threshold that has been crossed requiring attention. 
 
-If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**.
+If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**. Both the system controller and partition layer in VELOS maintain system alarms and system events, and certain types of messages are only visibile in one or the other. As an example, the **show system alarms** output below is from a system controller. 
 
 .. code-block:: bash
 
@@ -3422,7 +3422,7 @@ If a system is healthy and there are no active alarms, then the output of **show
     % No entries found.
     velos-1-gsa-1-active#
 
-If the system has active alarms, then the details will be displayed in the **show system alarms** output. If the fault is cleared, then the alarm will be removed from the output. 
+If the system has active alarms, then the details will be displayed in the **show system alarms** output. If the fault is cleared, then the alarm will be removed from the output. The **show system alarms** output below is from a chassis partition.
 
 .. code-block:: bash
 
@@ -3443,7 +3443,7 @@ When translated into SNMP traps the states for these types of messages are:
 
 **System Events**
 
-A system event is an informational message which doesn't have an alarm or clear condition by itself, but it may provide deeper information on what caused an alarm or clear condition. A System Event is a lower-level message that could include information about firmware upgrade status, presence of a PSU, or DDM diagnostic level on an optic in addition to many more low-level details. Many times, a system event will provide more detailed lower-level information that corresponds to an alarm or clear condition. As an example a PSU-Fault alarm, may have corresponding events messages that provide more details as to whay the PSU is in a fault alarm condition.
+A system event is an informational message which doesn't have an alarm or clear condition by itself, but it may provide deeper information on what caused an alarm or clear condition. A System Event is a lower-level message that could include information about firmware upgrade status, presence of a PSU, or DDM diagnostic level on an optic in addition to many more low-level details. Many times, a system event will provide more detailed lower-level information that corresponds to an alarm or clear condition. As an example a PSU-Fault alarm, may have corresponding events messages that provide more details as to why the PSU is in a fault alarm condition.
 
 Often times, many of these messages or traps are just providing state of a component in a binary fashion. i.e. it's either a one (ASSERTED) or zero (DEASSERTED) state based on the AOM subsystem tracking status. This should not be viewed as a positive or a negative status, it is merely communicating state of a component. As an example, in the system events a **Deasserted: PSU mismatch** message, means all the PSU's **are not** mismatched because the value is zero or Deasserted. The wording may not be intuitive, and F5 is looking into making improvements to make the wording clearer. The example below shows the **show system events** for the message described above.
 
@@ -3475,7 +3475,7 @@ There may be cases where an alertEffect=2 message might signal something needs m
 
 The **show systems events** output will also display past and current **ASSERT** and **CLEAR** System Alerts.
 
-Below are some examples of PSU related events.
+Below are some examples of PSU related events from the system controller layer.
 
 .. code-block:: bash
 
@@ -3510,7 +3510,7 @@ Below are some examples of PSU related events.
     65793 psu-3 psu-fault EVENT NA "Deasserted: PSU 3 present" "2024-04-30 15:19:39.612375502 UTC"                                        
     65793 psu-3 psu-fault EVENT NA "Deasserted: PSU 3 input OK" "2024-04-30 15:19:39.755926497 UTC"          
 
-Below are some examples of Portgroup related events.
+Below are some examples of Portgroup related events from the chassis partition layer.
 
 .. code-block:: bash
 
@@ -3530,7 +3530,7 @@ Below are some examples of Portgroup related events.
     262400 Portgroup 1/2 txPwr CLEAR WARNING "Lanes: 1,2,3,4 Transmitter power low warning" "2025-05-07 19:34:10.510473902 UTC"   
     262400 Portgroup 1/2 txPwr ASSERT ERROR "Lanes: 2,3,4 Transmitter power low alarm" "2025-05-07 19:34:10.510412825 UTC"      
 
-Below are some examples of thermal related events. 
+Below are some examples of thermal related events from the system controller layer. 
 
 .. code-block:: bash
 
