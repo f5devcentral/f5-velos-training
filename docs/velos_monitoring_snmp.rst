@@ -3863,6 +3863,8 @@ This set of taps may indicate a fault or temporary warning with the firmware upg
   :align: center
   :scale: 100%
 
+In the example below, note the messages are all informational **alertEffect=2** and do not signify a fault.
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include firmware-fault       
@@ -4054,20 +4056,50 @@ Unregistered alarm detected.
 | CLEAR            | Fault detected in the AOM                                                          |
 +------------------+------------------------------------------------------------------------------------+
 
-The example logs below are from a VELOS system controller.
+The example logs below are from a VELOS system controller and show informational messages along with an alert being raised and then cleared.
 
 .. code-block:: bash
 
     velos-1-gsa-2-active# file show log/confd/snmp.log | include aom-fault
+
+    Informational message noted by alertEffect=2
+
     <INFO> 3-Jan-2024::14:05:47.699 controller-2 confd[571]: snmp snmpv2-trap reqid=638913575 10.255.0.139:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 3-Jan-2024::14:05:47.700 controller-2 confd[571]: snmp snmpv2-trap reqid=638913575 10.255.0.144:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 3-Jan-2024::14:05:47.702 controller-2 confd[571]: snmp snmpv2-trap reqid=638913576 10.255.0.144:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 3-Jan-2024::14:05:47.703 controller-2 confd[571]: snmp snmpv2-trap reqid=638913576 10.255.0.143:162 (TimeTicks sysUpTime=82582)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 19:04:57.008547624 UTC)(OCTET STRING alertDescription=Attribute health reset)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 16-Feb-2024::01:17:44.032 controller-2 confd[583]: snmp snmpv2-trap reqid=338839460 10.255.80.251:162 (TimeTicks sysUpTime=62379)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-02-16 06:15:59.868305865 UTC)(OCTET STRING alertDescription=LOP is receiving health reports from all installed VFC cards)
+
+    AOM Fault detected alarm noted by alertEffect=1
+
     <INFO> 5-Mar-2024::15:16:16.696 controller-2 confd[581]: snmp snmpv2-trap reqid=220801582 10.255.80.251:162 (TimeTicks sysUpTime=21586)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.605975998 UTC)(OCTET STRING alertDescription=Fault detected in the AOM)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 5-Mar-2024::15:16:16.732 controller-2 confd[581]: snmp snmpv2-trap reqid=220801583 10.255.80.251:162 (TimeTicks sysUpTime=21590)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.606020613 UTC)(OCTET STRING alertDescription=LOP is not receiving health reports from all installed VPC cards)
+
+    AOM Fault alarm noted cleared noted by alertEffect=0
+
     <INFO> 5-Mar-2024::15:16:16.784 controller-2 confd[581]: snmp snmpv2-trap reqid=220801584 10.255.80.251:162 (TimeTicks sysUpTime=21595)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.643891161 UTC)(OCTET STRING alertDescription=Fault detected in the AOM)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 5-Mar-2024::15:16:16.834 controller-2 confd[581]: snmp snmpv2-trap reqid=220801585 10.255.80.251:162 (TimeTicks sysUpTime=21600)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:16:16.643912339 UTC)(OCTET STRING alertDescription=LOP is not receiving health reports from all installed VPC cards)
+
+    Informational message noted by alertEffect=2
+
     <INFO> 5-Mar-2024::15:23:15.878 controller-2 confd[581]: snmp snmpv2-trap reqid=220801597 10.255.80.251:162 (TimeTicks sysUpTime=63505)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:21:35.736268196 UTC)(OCTET STRING alertDescription=Attribute health reset)
     velos-1-gsa-2-active#
 
@@ -4078,31 +4110,51 @@ The example logs below are from a VELOS system controller.
 +==================+====================================================================================+
 | ASSERT           | Running out of drive capacity                                                      |
 +------------------+------------------------------------------------------------------------------------+
-| EVENT            | << value >> percent of drive capacity left                                         |
+| EVENT            | Drive usage exceeded 97%, used={{.usedPercent}}%                                   |
 |                  |                                                                                    |
-|                  | Drive capacity is available                                                        |
+|                  | Drive usage with in range, used={{.usedPercent}}%                                  |
 |                  |                                                                                    |
 |                  | Example:                                                                           |
 |                  |                                                                                    |
-|                  | Ten percent of drive capacity left                                                 |
+|                  | Drive usage exceeded 97%, used=99%                                                 |
 |                  |                                                                                    |
-|                  | Three percent of drive capacity left                                               |
+|                  | Drive usage exceeded 90%, used=91%                                                 |
 |                  |                                                                                    |
-|                  | Fifteen percent of drive capacity left                                             |
+|                  | Drive usage exceeded 85%, used=86%                                                 |
 |                  |                                                                                    |
-|                  | Drive capacity is available                                                        |
+|                  | Drive usage with in range, used=80%                                                |
 +------------------+------------------------------------------------------------------------------------+
 | CLEAR            | Running out of drive capacity                                                      |
 +------------------+------------------------------------------------------------------------------------+
 
-The output below is from an rSeries appliance: 
+
+The system will monitor the storage utilization of the rSeries disks and warn if the disk capacity gets too high. This is measured hourly. There are 3 levels of events that can occur as seen below:
+
+- drive-capacity:critical-limit - Drive Usage exceeded 97%
+- drive-capacity:failure-limit  - Drive Usage exceeded 90%
+- drive-capacity:warning-limit  - Drive Usage exceeded 85%
+
+The **show system events** CLI command will provide more details of the drive events that have occurred. Below is an example of a VELOS system controller reaching a drive capacity threshold and then clearing the threshold.
+
 
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include drive-capacity-fault
+
+    ALARM (alertEffect=1) being raised for drive-capacity-fault.
+
     <INFO> 12-Apr-2023::11:54:10.563 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130731 10.255.8.22:6011 (TimeTicks sysUpTime=87079)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558711877 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+
+    Informational EVENT (alertEffect=2) providing addtional details for drive-capacity-fault.
+
     <INFO> 12-Apr-2023::11:54:10.613 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130732 10.255.8.22:6011 (TimeTicks sysUpTime=87084)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558725204 UTC)(OCTET STRING alertDescription=Drive usage exceeded 97%, used=100%)
+
+    ALARM (alertEffect=0) being cleared for drive-capacity-fault.
+
     <INFO> 12-Apr-2023::11:54:35.167 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130733 10.255.8.22:6011 (TimeTicks sysUpTime=89540)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162718848 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+
+    The follow-on trap is an (alertEffect=2) providing deeper details indicating the drive-capacity is now in range:
+
     <INFO> 12-Apr-2023::11:54:35.217 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130734 10.255.8.22:6011 (TimeTicks sysUpTime=89545)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162734807 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=54%)
 
 **power-fault                    .1.3.6.1.4.1.12276.1.1.1.65545**
@@ -4121,7 +4173,7 @@ The output below is from an rSeries appliance:
 | CLEAR            | Power fault detected in hardware                                                   |
 +------------------+------------------------------------------------------------------------------------+
 
-Power fault detected in hardware.
+In the example below, note that all of the messages are all informational **alertEffect=2** and do not signify a fault. They are providing status for the state of various sensors, and they are either providing a **Deasserted** state for a negative status, or providing an **Asserted** state for a positive status, meaning there is no alarm associated with these events.
 
 .. code-block:: bash
 
@@ -4158,7 +4210,7 @@ Power fault detected in hardware.
 | CLEAR            | Thermal fault detected in hardware                                                 |
 +------------------+------------------------------------------------------------------------------------+
 
-Thermal fault detected in hardware.
+In the example below, note the messages are all informational **alertEffect=2** and do not signify a fault. They are providing status for the state of various sensors, and some are providing a **Deasserted** status for a fault alarm, meaning there is no alarm associated with these events.
 
 .. code-block:: bash
 
