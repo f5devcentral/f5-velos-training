@@ -2897,7 +2897,7 @@ The built-in terminal server will switch the connection to the appropriate tenan
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$ ssh tenant2@10.255.0.148 -p 7001
+    prompt$ ssh tenant2@10.255.0.148 -p 7001
     tenant1@10.255.0.148's password: 
     Successfully connected to tenant2-1 console. The escape sequence is ^]
 
