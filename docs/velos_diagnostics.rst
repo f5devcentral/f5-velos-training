@@ -2850,7 +2850,7 @@ Once a tenant is created from the chassis partition CLI enter the command **show
     tenant-console  9100  -   
 
 
-For tenant2 to have console access you must first set a password for that user using the command **system aaa authentication users user <tenant-name> config set-password password**. When prompted enter the desired password for this tenant’s console access. Next set the tenant's **expiry-date** to **-1** (no expiration date) and then **commit** to enable the changes.
+For tenant2 to have console access you must first set a password for that user using the command **system aaa authentication users user <tenant-name> config set-password password**. When prompted enter the desired password for this tenant’s console access. Next, set the tenant's **expiry-date** to **-1** (no expiration date) and then **commit** to enable the changes.
 
 .. code-block:: bash
 

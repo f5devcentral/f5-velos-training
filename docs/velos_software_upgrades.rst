@@ -1065,7 +1065,7 @@ Tenant software images are loaded directly into each chassis partition. If you h
 
 `K86001294: F5OS hardware/software support matrix <https://my.f5.com/manage/s/article/K86001294>`_
 
-Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the chassis partition. Under **Tenant Management** there is a page for uploading tenant software images. There are BIG-IP TMOS images specifically for F5OS, as well as BIG-IP Next images for F5OS. Only supported VELOS TMOS releases should be loaded into this system. Do not attempt to load older or even newer images unless there are officially supported on VELOS. 
+Before deploying any tenant, you must ensure you have a proper tenant software release loaded into the chassis partition. Under **Tenant Management** there is a page for uploading tenant software images. There are BIG-IP TMOS images specifically for F5OS and only supported VELOS TMOS releases should be loaded into this system. Do not attempt to load older or even newer images unless there are officially supported on VELOS. 
 
 There is an option to **Import** new releases which will open a pop-up window that will ask for remote host, path and optional authentication parameters. Using this method requires a remote HTTPS server with the image loaded. You may also use the **Upload** option in the webUI, which allows for the tenant image file to be uploaded from your local client machine via the browser interface. The **Tenant Images** page will also indicate if an image is in use by a tenant, and if it is replicated to other blades in the chassis partition.
 
@@ -1126,10 +1126,7 @@ You can view the current tenant images and their status in the chassis partition
     green-partition-chassis1-gsa-1# show images
                                                     IN                                     
     NAME                                             USE    TYPE                STATUS      
-    ----------------------------------------------------------------------------------------
-    BIG-IP-Next-20.3.0-2.716.2+0.0.50                false  helm-image          replicated  
-    BIG-IP-Next-20.3.0-2.716.2+0.0.50.tar.bundle     false  helm-bundle         replicated  
-    BIG-IP-Next-20.3.0-2.716.2+0.0.50.yaml           false  helm-specification  replicated  
+    ---------------------------------------------------------------------------------------- 
     BIGIP-15.1.10.5-0.0.10.T4-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
     BIGIP-15.1.10.6-0.0.6.ALL-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
     BIGIP-17.1.1.4-0.0.9.ALL-F5OS.qcow2.zip.bundle   true   vm-image            replicated  

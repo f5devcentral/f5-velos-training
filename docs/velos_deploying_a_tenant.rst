@@ -251,27 +251,6 @@ Below is an example of the **show file transfer-operations** command.
   file transfer-operations transfer-operation "" "" "" "" ""
   status    "    HTTP Error 302"
   timestamp "Wed Apr 26 15:53:38 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.13.0-2.13.6.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.13.0/test-candidate/2.13.6/velos/BIG-IP-Next-0.13.0-2.13.6.tar.bundle "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Fri Apr 14 03:08:44 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.29.0.tar.bundle sea.artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/test-candidate/2.29.0/velos/BIG-IP-Next-0.14.0-2.29.0.tar.bundle "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Tue May 16 02:56:59 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/release-candidate/2.45.3+0.0.12/velos/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tar.bundle "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Thu Jun  8 13:42:22 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tgz.512.sig artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/release-candidate/2.45.3+0.0.12/ve-upgrade/BIG-IP-Next-0.14.0-2.45.3+0.0.12.tgz.512.sig "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Thu Jun  8 13:38:55 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.14.0-2.45.3+0.0.24.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.14.0/release-candidate/2.45.3+0.0.24/velos/BIG-IP-Next-0.14.0-2.45.3+0.0.24.tar.bundle "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Wed Jun 21 19:33:45 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.15.0-2.94.0+0.0.1.tar.bundle sea.artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.15.0/test-candidate/2.94.0+0.0.1/velos/BIG-IP-Next-0.15.0-2.94.0+0.0.1.tar.bundle "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Fri Jul 14 16:56:37 2023"
-  file transfer-operations transfer-operation images/BIG-IP-Next-0.15.0-2.94.0+0.0.3.tar.bundle artifactory.f5net.com artifactory/f5-mbip-generic/releases/0.15.0/test-candidate/2.94.0+0.0.3/velos/BIG-IP-Next-0.15.0-2.94.0+0.0.3.tar.bundle "Import file" "HTTPS   "
-  status    "         Completed"
-  timestamp "Wed Jul 19 19:48:46 2023"
   file transfer-operations transfer-operation images/BIGIP-15.1.6.1-0.0.10.ALL-F5OS.qcow2.zip.bundle spkapexsrvc01.olympus.f5net.com v15.1.6.1/daily/build10.0/VM/BIGIP-15.1.6.1-0.0.10.ALL-F5OS.qcow2.zip.bundle "Import file" "HTTPS   "
   status    "         Completed"
   timestamp "Wed May  3 14:07:22 2023"
@@ -288,10 +267,7 @@ You can view the current tenant images and their status in the F5OS CLI by using
     green-partition-chassis1-gsa-1# show images 
                                                     IN                                     
     NAME                                             USE    TYPE                STATUS      
-    ----------------------------------------------------------------------------------------
-    BIG-IP-Next-20.3.0-2.716.2+0.0.50                false  helm-image          replicated  
-    BIG-IP-Next-20.3.0-2.716.2+0.0.50.tar.bundle     false  helm-bundle         replicated  
-    BIG-IP-Next-20.3.0-2.716.2+0.0.50.yaml           false  helm-specification  replicated  
+    ----------------------------------------------------------------------------------------  
     BIGIP-15.1.10.6-0.0.6.ALL-F5OS.qcow2.zip.bundle  false  vm-image            replicated  
     BIGIP-17.1.1.4-0.0.9.ALL-F5OS.qcow2.zip.bundle   true   vm-image            replicated  
 
@@ -1049,7 +1025,7 @@ Click **OK**. This will move the tenant from **deployed** to **provisioned** sta
   :align: center
   :scale: 70% 
 
-Next click on the hyperlink for tenant1. This will bring you into the configuration page for that tenant.  Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848** and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
+Next, click on the hyperlink for tenant1. This will bring you into the configuration page for that tenant.  Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848** and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
 
 .. image:: images/velos_deploying_a_tenant/image15.png
   :align: center
@@ -1132,7 +1108,7 @@ And for the JSON body of the API call change the **running-state** to **provisio
       "running-state": "provisioned"
   }
 
-Next issue the GET command above to obtain the tenant status and note that its running state has changed to **provisioned**:
+Next, issue the GET command above to obtain the tenant status and note that its running state has changed to **provisioned**:
 
 .. code-block:: json
 
@@ -1189,7 +1165,7 @@ One consideration when expanding a tenant across more than one blade is that you
   :align: center
   :scale: 70% 
 
-Next a tenant that currently exists on a single blade will be expanded to span two blades using the webUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 6 vCPUs and 22016 MB of memory on slot1.
+Next, a tenant that currently exists on a single blade will be expanded to span two blades using the webUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 6 vCPUs and 22016 MB of memory on slot1.
 
 .. image:: images/velos_deploying_a_tenant/image18.png
   :align: center
@@ -1201,7 +1177,7 @@ Select the checkbox next to tenant2 and then click the Provision button to move 
   :align: center
   :scale: 70% 
 
-Next click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted, confirm, and then watch the tenant start up.
+Next, click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted, confirm, and then watch the tenant start up.
 
 .. image:: images/velos_deploying_a_tenant/image20.png
   :align: center
@@ -1276,7 +1252,7 @@ Enter config mode and change the tenant running-state to provisioned so that cha
   Production-1(config-tenant-tenant2)# commit
   Commit complete.
 
-Next alter the nodes configuration to [ 1 2 ] so that the tenant will deploy onto both blades, and set the running-state back to deployed so that the tenant will start back up.
+Next, alter the nodes configuration to [ 1 2 ] so that the tenant will deploy onto both blades, and set the running-state back to deployed so that the tenant will start back up.
 
 .. code-block:: bash
 
