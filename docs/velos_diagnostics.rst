@@ -2611,7 +2611,7 @@ You can see this in the following example output:
 02:28:55.385343 IP 10.10.11.12 > 10.10.11.13: ICMP echo request, id 19463, seq 4, length 64 did:0F sid:04 sep:F svc:08 ld:1 rd:0
 More detail on configuration and filtering of tcpdump is provide here:
 
-`K12313135: Overview of the tcpdump utility on the VELOS system <https://support.f5.com/csp/article/K12313135>`1_20230328070500
+`K12313135: Overview of the tcpdump utility on the VELOS system <https://support.f5.com/csp/article/K12313135>`_
 
 
 
@@ -2850,7 +2850,7 @@ Once a tenant is created from the chassis partition CLI enter the command **show
     tenant-console  9100  -   
 
 
-For tenant2 to have console access you must first set a password for that user using the command **system aaa authentication users user <tenant-name> config set-password password**. When prompted enter the desired password for this tenant’s console access. Next set the tenant's **expiry-date** to **-1** (no expiration date) and then **commit** to enable the changes.
+For tenant2 to have console access you must first set a password for that user using the command **system aaa authentication users user <tenant-name> config set-password password**. When prompted enter the desired password for this tenant’s console access. Next, set the tenant's **expiry-date** to **-1** (no expiration date) and then **commit** to enable the changes.
 
 .. code-block:: bash
 
@@ -2897,7 +2897,7 @@ The built-in terminal server will switch the connection to the appropriate tenan
 
 .. code-block:: bash
 
-    FLD-ML-00054045:~ jmccarron$ ssh tenant2@10.255.0.148 -p 7001
+    prompt$ ssh tenant2@10.255.0.148 -p 7001
     tenant1@10.255.0.148's password: 
     Successfully connected to tenant2-1 console. The escape sequence is ^]
 

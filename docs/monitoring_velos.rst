@@ -434,7 +434,7 @@ Or:
 
 The output of the API call above will be broken out into the following detail:
 
-The beginning of the output highlights any equipment failures or mismatches and whether the chassis is NEBS enabled. Next is the current status of the platform memory for this system controller showing available, used, and used-precent. Next are the thermal readings for temperature showing **current**, **average**, **minimum**, & **maximum** readings.
+The beginning of the output highlights any equipment failures or mismatches and whether the chassis is NEBS enabled. Next is the current status of the platform memory for this system controller showing available, used, and used-precent. Next, are the thermal readings for temperature showing **current**, **average**, **minimum**, & **maximum** readings.
 
 .. code-block:: json
 
@@ -469,7 +469,7 @@ The beginning of the output highlights any equipment failures or mismatches and 
                 },
 
 
-Next in the output is properties which tracks the various software and BIOS versions:
+Next, in the output is properties which tracks the various software and BIOS versions:
 
 .. code-block:: json
 
@@ -853,7 +853,7 @@ To see if the Openshift cluster is up and running use the **show cluster** comma
     20     2021-02-06 18:22:19.060573 -  Openshift cluster is ready.                              
 
 
-In the webUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the next and perform controller software upgrades. 
+In the webUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the other and perform controller software upgrades. 
 
 .. image:: images/monitoring_velos/image3.png
   :align: center
