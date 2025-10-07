@@ -190,7 +190,8 @@ More details on each optic can be found in the F5 Platforms Accessories guide & 
 
 `K6097: Specifications of the Fiber Gigabit Ethernet SFP, XFP, SFP+, QSFP+, and QSFP28 module ports on BIG-IP system platforms <https://my.f5.com/manage/s/article/K6097>`_
 
-**BX110 40Gb QSFP+ options:**
+BX110 40Gb QSFP+ Options
+------------------------
 
 
 +------------------------+------------+------------------------------------------------------------------------------+
@@ -201,7 +202,8 @@ More details on each optic can be found in the F5 Platforms Accessories guide & 
 | 40G-PSM4 (QSFP+)       | OPT-0045   | TRANSCEIVER, QSFP+, 40GIG-PSM4, 1310NM, 10KM, MPO, SMF, DDM, F5 BRANDED      |
 +------------------------+------------+------------------------------------------------------------------------------+
 
-**BX110 Dual Rate 40Gb/100Gb BiDi QSFP28 (Backward compatible with QSFP+):**
+BX110 Dual Rate 40Gb/100Gb BiDi QSFP28 (Backward compatible with QSFP+)
+-----------------------------------------------------------------------
 
 The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in QSFP28 slot. 
 
@@ -211,7 +213,8 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 | Dual Rate 40G/100G BIDI (QSFP28 backward compatible with QSFP+)  | OPT-0060   | VELOS Field Upgrade Transceiver QSFP28/QSFP+, dual rate 40G/100G SR BIDI, 100M, LC, MMF |
 +------------------------------------------------------------------+------------+-----------------------------------------------------------------------------------------+
 
-**BX110 100Gb QSFP28 options:**
+BX110 100Gb QSFP28 Options
+--------------------------
 
 +------------------------+-------------+----------------------------------------------------------------------------------+
 | 100GBASE-SR4 (QSFP28)  | OPT-0031-01 | TRANSCEIVER, QSFP28, 100G-SR4, 850NM, MMF, MPO, DDM, BRANDED                     |
@@ -234,7 +237,8 @@ The transceiver below can be used in QSFP28 or QSFP+ slots,  or as 40G QSFP+ in 
 
 **Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G LR4 VELOS is OPT-0052 (as shown above)**.
 
-**BX520 100Gb QSFP28 options:**
+BX520 100Gb QSFP28 Options
+--------------------------
 
 The 100Gb optics below are supported on the BX520 blade. Not the 100Gb port on the BX520 does not support breakout to lower speeds (4 x 25Gb) and also does not support the 40Gb option on the 40/100Gb SR BIDI optic.
 
@@ -255,7 +259,8 @@ The 100Gb optics below are supported on the BX520 blade. Not the 100Gb port on t
 +------------------+---------------+-----------------------------------------------------------------------------------+
 
 
-**BX520 400Gb QSFP-DD options:**
+BX520 400Gb QSFP-DD Options
+---------------------------
 
 The 400Gb optics below are only supported on the BX520 blade. 400Gb optics are not supported on the BX110 blade. Note, that not all optics are capable of supporting breakout to 4 x 100Gb. See more details in the **400G Breakout Cable Options** section. 
 
@@ -269,7 +274,8 @@ The 400Gb optics below are only supported on the BX520 blade. 400Gb optics are n
 | 400GBASE-FR4 (QSFPDD)     | OPT-0063-01 | TRANSCEIVER, QSFPDD, (400G-FR4 1310NM, 2KM, LC, SMF, DDM Support)                |
 +---------------------------+-------------+----------------------------------------------------------------------------------+
 
-**VELOS Supported Optics SKUs**
+VELOS Supported Optics SKUs
+---------------------------
 
 Below are the **current** VELOS optic SKUs:
 
@@ -314,7 +320,8 @@ Below are the **current** VELOS optic SKUs:
 
 
 
-**100/40G Breakout Cable Options**
+100/40G Breakout Cable Options
+------------------------------
 
 The QSFP+ and QSFP28 optics when configured for unbundled mode, will break out into either 4 x 25Gb (with a 100Gb QSFP28 optic) or 4 x 10Gb (with a 40Gb QSFP+ optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX110 blade for either 4 x 25Gb, or 4 x 10GB depending on the optic installed. Note, they come in different lengths (1 meter, 3 meters, or 10 meters) and each of the SKUs is a 2 Pack.
 
@@ -334,7 +341,8 @@ Breakout for 40G PSM4 or 100G PSM4 transceivers *ONLY* (Note these are not 2 pac
 | F5-UPG-VELPSM4XLR3M | VELOS Field Upgrade: QSFP28-QSFP+ Breakout Cable for PSM4 ONLY. MPO/APC to 4LC (3 Meter)   |
 +---------------------+--------------------------------------------------------------------------------------------+
 
-**400G Breakout Cable Options**
+400G Breakout Cable Options
+---------------------------
 
 IMPORTANT: Not all QSFP-DD optics support breakout to 4 x 100Gb. Below are the breakout cables for the BX520 QSFP-DD (400Gb) DR4+ ports to support 4 x 100Gb connectivity. The QSFP-DD DR4+ optics when configured for unbundled mode will break out into or 4 x 100Gb (with a 400Gb QSFP-DD optic). You will need to utilize a breakout cable to allow the single physical port to break out into 4 lower speed ports. The following breakout cable SKUs can be ordered and utilized on the BX520 blade for 4 x 100Gb connectivity. Note, they come in different lengths (3 meters, or 10 meters).
 
