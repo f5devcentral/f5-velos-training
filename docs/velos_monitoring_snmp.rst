@@ -5275,13 +5275,17 @@ And both traps are at **alertEffect=2** indicating an informational event.
     <INFO> 21-Oct-2025::09:16:22.749 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076254 172.22.50.57:162 (TimeTicks sysUpTime=5079)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:19.618370930 UTC)(OCTET STRING alertDescription=reboot - controller-2.chassis.local F5OS-C controller version 1.8.2-28324)
     <INFO> 21-Oct-2025::09:25:59.804 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076308 172.22.50.57:162 (TimeTicks sysUpTime=62784)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:10.153230505 UTC)(OCTET STRING alertDescription=reboot - controller-1.chassis.local F5OS-C controller version 1.8.2-28324)
 
-Below is an example of a reboot trap from a chassis partition during a software upgrade. Just like the system controller reboot trap this is a transient event and not a stateful event, therefore there are no clear traps for this event. You will see traps for individual blade reboots inside each partition.
+Below is an example of a reboot trap from a chassis partition. Just like the system controller reboot trap this is a transient event and not a stateful event, therefore there are no clear traps for this event. You will see traps for each individual blade reboot inside each partition. In the example below, there are two blades within the partition that rebooted:
+
+- alertDescription=reboot - blade-1.chassis.local
+- alertDescription=reboot - blade-2.chassis.local
+
 
 .. code-block:: bash
 
-    green-partition-chassis1-gsa-1# file show log/snmp.log | include reboot
-    <INFO> 21-Oct-2025::09:46:58.986 partition2 confd[131]: snmp snmpv2-trap reqid=437034138 172.22.50.57:162 (TimeTicks sysUpTime=49061)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:46:58.966902814 UTC)(OCTET STRING alertDescription=reboot - blade-1.chassis.local F5OS-C blade version 1.8.2-28324)
-    green-partition-chassis1-gsa-1# 
+    test100GbEoptics-2# file show log/snmp.log | include reboot
+    <INFO> 21-Oct-2025::10:43:05.787 partition2 confd[117]: snmp snmpv2-trap reqid=474020405 172.22.50.57:162 (TimeTicks sysUpTime=10486)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 17:43:05.756123920 UTC)(OCTET STRING alertDescription=reboot - blade-1.chassis.local F5OS-C blade version 1.8.1-26555)
+    <INFO> 21-Oct-2025::10:43:21.195 partition2 confd[117]: snmp snmpv2-trap reqid=474020414 172.22.50.57:162 (TimeTicks sysUpTime=12027)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 17:43:21.184334350 UTC)(OCTET STRING alertDescription=reboot - blade-2.chassis.local F5OS-C blade version 1.8.1-26555)
 
 
 **raid-event                     .1.3.6.1.4.1.12276.1.1.1.393216**
