@@ -5257,7 +5257,7 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 +==================+==========================================================================================+
 | EVENT            | reboot - controller-<1|2>.chassis.local F5OS-C controller version <Version>              |
 +------------------+------------------------------------------------------------------------------------------+
-| EVENT            | reboot - blade-<#>.chassis.local F5OS-C blade version <Version>.                         |
+| EVENT            | reboot - blade-<#>.chassis.local F5OS-C blade version <Version>                          |
 +------------------+------------------------------------------------------------------------------------------+
 
 This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator or a reboot as part of a software upgrade, or other reasons. These traps can occur at both the controller or chassis partition level. Below is an example of a reboot trap. A reboot trap is a one-time event, indicating that a software reload has taken place, there is no clear event for this type of trap as it is not a stateful indicator like link up/down traps. As such, the reboot trap will always be indicated by **alertEffect=2** indicating an informational event so that an administrator is aware the system has rebooted.  
