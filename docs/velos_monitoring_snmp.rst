@@ -5258,11 +5258,28 @@ This trap will indicate that the system has generated a core-dump file. A suppor
 | EVENT            | reboot - controller-<1|2>.chassis.local F5OS-C controller version <Version>              |
 +------------------+------------------------------------------------------------------------------------------+
 
-This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator. Below is an example of a reboot trap.
+This trap will indicate that the system has rebooted. It's possible this was a planned reboot initiated by the administrator or a reboot as part of a software upgrade, or other reasons. These traps can occur at both the controller or chassis partition level. Below is an example of a reboot trap. A reboot trap is a one-time event, indicating that a software reload has taken place, there is no clear event for this type of trap as it is not a stateful indicator like link up/down traps. As such, the reboot trap will always be indicated by **alertEffect=2** indicating an informational event so that an administrator is aware the system has rebooted.  
+
+In the example below, a software upgrade has taken place on the system controllers. During the upgrade, both controllers are rebooted after upgrade to the new version of software. You'll notice the following:
+
+- alertDescription=reboot - controller-2.chassis.local
+- alertDescription=reboot - controller-1.chassis.local
+
+And both traps are at **alertEffect=2** indicating an informational event.
 
 .. code-block:: bash
 
-    <INFO> 23-Jul-2024::12:47:06.710 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934186 10.255.80.251:162 (TimeTicks sysUpTime=61339)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:30.379710424 UTC)(OCTET STRING alertDescription=reboot - controller-2.chassis.local F5OS-C controller version 1.8.0-14453)
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include reboot
+    <INFO> 21-Oct-2025::09:16:22.749 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076254 172.22.50.57:162 (TimeTicks sysUpTime=5079)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:19.618370930 UTC)(OCTET STRING alertDescription=reboot - controller-2.chassis.local F5OS-C controller version 1.8.2-28324)
+    <INFO> 21-Oct-2025::09:25:59.804 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076308 172.22.50.57:162 (TimeTicks sysUpTime=62784)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:10.153230505 UTC)(OCTET STRING alertDescription=reboot - controller-1.chassis.local F5OS-C controller version 1.8.2-28324)
+
+Below is an example of a reboot trap from a chassis partition during a software upgrade. Just like the system controller reboot trap this is a transient event and not a stateful event, therefore there are no clear traps for this event. 
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# file show log/snmp.log | include reboot
+    <INFO> 21-Oct-2025::09:46:58.986 partition2 confd[131]: snmp snmpv2-trap reqid=437034138 172.22.50.57:162 (TimeTicks sysUpTime=49061)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:46:58.966902814 UTC)(OCTET STRING alertDescription=reboot - blade-1.chassis.local F5OS-C blade version 1.8.2-28324)
+    green-partition-chassis1-gsa-1# 
 
 
 **raid-event                     .1.3.6.1.4.1.12276.1.1.1.393216**
