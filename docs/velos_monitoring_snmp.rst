@@ -5283,7 +5283,7 @@ Below is an example of a reboot trap from a chassis partition. Just like the sys
 
 .. code-block:: bash
 
-    test100GbEoptics-2# file show log/snmp.log | include reboot
+    velos-partition-1# file show log/snmp.log | include reboot
     <INFO> 21-Oct-2025::10:43:05.787 partition2 confd[117]: snmp snmpv2-trap reqid=474020405 172.22.50.57:162 (TimeTicks sysUpTime=10486)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 17:43:05.756123920 UTC)(OCTET STRING alertDescription=reboot - blade-1.chassis.local F5OS-C blade version 1.8.1-26555)
     <INFO> 21-Oct-2025::10:43:21.195 partition2 confd[117]: snmp snmpv2-trap reqid=474020414 172.22.50.57:162 (TimeTicks sysUpTime=12027)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 17:43:21.184334350 UTC)(OCTET STRING alertDescription=reboot - blade-2.chassis.local F5OS-C blade version 1.8.1-26555)
 
