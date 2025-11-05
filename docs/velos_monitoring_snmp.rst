@@ -2064,6 +2064,43 @@ This MIB is supported on the VELOS system controller layer.
 
 **F5-PLATFORM-STATS-MIB:psuStatsTable OID: .1.3.6.1.4.1.12276.1.2.1.9.1**
 
+As noted in the **F5-PLATFORM-STATS-MIB**, Temperature values are displayed as an **Interger32** and the **DISPLAY-HINT** is set for **d-1** meaning one decimal point place as noted in https://www.rfc-editor.org/rfc/rfc2579#page-21
+
+If present, the second part starts with a hyphen and is followed by a decimal number, which defines the implied decimal point when rendering the value.
+
+.. code-block:: bash
+
+   For example:
+
+        Hundredths ::= TEXTUAL-CONVENTION
+            DISPLAY-HINT "d-2"
+            ...
+            SYNTAX     INTEGER (0..10000)
+
+   suggests that a Hundredths value of 1234 be rendered as "12.34"
+
+In the F5 MIB, the value is set as **d-1** meaning a value of **350** should be rendered as **35.0** for Temperature values.
+
+.. code-block:: bash
+
+    TemperatureType ::= TEXTUAL-CONVENTION
+        DISPLAY-HINT "d-1"
+        STATUS      current
+        DESCRIPTION "display temperature stats in integer value"
+        SYNTAX      Integer32
+
+For **PSUStatsType** the **DISPLAY-HINT** is set for **d-3** meaning 3 decimal places meaning a value of **42625** should be rendered as **42.625** for current, voltage and power stats values.
+
+.. code-block:: bash
+
+    PSUStatsType ::= TEXTUAL-CONVENTION
+        DISPLAY-HINT "d-3"
+        STATUS      current
+        DESCRIPTION "display type for PSU stats like current, voltage and power stats in decimals value"
+        SYNTAX      Integer32
+
+Below is an example of the **psuStatsTable** for a VELOS CX410 System with two power supplies installed.
+
 .. code-block:: bash
 
     prompt% snmptable -v 2c  -c public -m ALL 10.255.2.3 F5-PLATFORM-STATS-MIB:psuStatsTable
@@ -2085,6 +2122,31 @@ The table below shows the temperature stats for the current chassis partition or
 This MIB is supported on both the VELOS system controller and chassis partition layers.
 
 **F5-PLATFORM-STATS-MIB:temperatureStatsTable OID: .1.3.6.1.4.1.12276.1.2.1.3.1**
+
+As noted in the **F5-PLATFORM-STATS-MIB**, Temperature values are displayed as an **Interger32** and the **DISPLAY-HINT** is set for **d-1** meaning one decimal point place as noted in https://www.rfc-editor.org/rfc/rfc2579#page-21
+
+If present, the second part starts with a hyphen and is followed by a decimal number, which defines the implied decimal point when rendering the value.
+
+.. code-block:: bash
+
+   For example:
+
+        Hundredths ::= TEXTUAL-CONVENTION
+            DISPLAY-HINT "d-2"
+            ...
+            SYNTAX     INTEGER (0..10000)
+
+   suggests that a Hundredths value of 1234 be rendered as "12.34"
+
+In the F5 MIB, the value is set as **d-1** meaning a value of **350** should be rendered as **35.0** for Temperature values.
+
+.. code-block:: bash
+
+    TemperatureType ::= TEXTUAL-CONVENTION
+        DISPLAY-HINT "d-1"
+        STATUS      current
+        DESCRIPTION "display temperature stats in integer value"
+        SYNTAX      Integer32
 
 Below is an example of an SNMP response from the system controllers.
 
@@ -2853,11 +2915,11 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +---------------------------------------+----------------------------------+
 | login-failed                          | .1.3.6.1.4.1.12276.1.1.1.327683  |
 +---------------------------------------+----------------------------------+
-| openshiftCertsExpWithinNinetyDays     | .1.3.6.1.4.1.12276.1.1.1.458752  |
+| openshiftCertsExpWithinNinetyDays     | .1.3.6.1.4.1.12276.1.1.1.524288  |
 +---------------------------------------+----------------------------------+
-| openshiftCertificatesExpiring         | .1.3.6.1.4.1.12276.1.1.1.458753  |
+| openshiftCertificatesExpiring         | .1.3.6.1.4.1.12276.1.1.1.524289  |
 +---------------------------------------+----------------------------------+
-| openshiftUpgradeNeeded                | .1.3.6.1.4.1.12276.1.1.1.459008  |
+| openshiftUpgradeNeeded                | .1.3.6.1.4.1.12276.1.1.1.524544  |
 +---------------------------------------+----------------------------------+
 | coldStart                             | .1.3.6.1.6.3.1.1.5.1             |
 +---------------------------------------+----------------------------------+
@@ -4948,7 +5010,7 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 .. code-block:: bash
     
 
-**openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.458752**
+**openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.524288**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
@@ -4963,7 +5025,7 @@ One or more openshift certificates expiring within 90 days.
 .. code-block:: bash
     
 
-**openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.458753**
+**openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.524289**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
@@ -4979,7 +5041,7 @@ One or more openshift certificates has expired or is expiring.
     
 
 
-**openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.459008**
+**openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.524544**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
