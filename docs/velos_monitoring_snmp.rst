@@ -2915,11 +2915,11 @@ SNMP Trap events that note a fault should also trigger an alert that can be view
 +---------------------------------------+----------------------------------+
 | login-failed                          | .1.3.6.1.4.1.12276.1.1.1.327683  |
 +---------------------------------------+----------------------------------+
-| openshiftCertsExpWithinNinetyDays     | .1.3.6.1.4.1.12276.1.1.1.458752  |
+| openshiftCertsExpWithinNinetyDays     | .1.3.6.1.4.1.12276.1.1.1.524288  |
 +---------------------------------------+----------------------------------+
-| openshiftCertificatesExpiring         | .1.3.6.1.4.1.12276.1.1.1.458753  |
+| openshiftCertificatesExpiring         | .1.3.6.1.4.1.12276.1.1.1.524289  |
 +---------------------------------------+----------------------------------+
-| openshiftUpgradeNeeded                | .1.3.6.1.4.1.12276.1.1.1.459008  |
+| openshiftUpgradeNeeded                | .1.3.6.1.4.1.12276.1.1.1.524544  |
 +---------------------------------------+----------------------------------+
 | coldStart                             | .1.3.6.1.6.3.1.1.5.1             |
 +---------------------------------------+----------------------------------+
@@ -5010,7 +5010,7 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 .. code-block:: bash
     
 
-**openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.458752**
+**openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.524288**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
@@ -5025,7 +5025,7 @@ One or more openshift certificates expiring within 90 days.
 .. code-block:: bash
     
 
-**openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.458753**
+**openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.524289**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
@@ -5041,7 +5041,7 @@ One or more openshift certificates has expired or is expiring.
     
 
 
-**openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.459008**
+**openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.524544**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
