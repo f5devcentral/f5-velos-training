@@ -4921,12 +4921,22 @@ Boot time integrity failure detected.
 | AlertEffect      | Possible Description in SNMP Trap                                                         |
 +==================+===========================================================================================+
 | EVENT            | Unsupported platform <Platform Type>                                                      |
+|                  |                                                                                           |
 |                  | import file <file path and name> removed incorrect file name                              |
+|                  |                                                                                           |
 |                  | import file <file path and name> removed File name has special characters                 |
-|                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32. |
+|                  |                                                                                           |
+|                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32  |
 +------------------+-------------------------------------------------------------------------------------------+
 
-Trap notification when the platform incompatible image is imported.
+Trap notification when the platform incompatible image is imported. Below is an example of an rSeries F5OS image being loaded into a VELOS system inadvertantly.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log | include trap
+    <INFO> 10-Nov-2025::11:18:39.705 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076391 172.22.50.57:162 (TimeTicks sysUpTime=173898774)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:39.646064032 UTC)(OCTET STRING alertDescription= Un supported platform R5R10)
+    <INFO> 10-Nov-2025::11:18:40.904 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076392 172.22.50.57:162 (TimeTicks sysUpTime=173898893)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:40.771256251 UTC)(OCTET STRING alertDescription= Unexpected error processing [Errno 2] No such file or directory: '/var/export/chassis/import/iso/F5OS-2.0.0-10579.R5R10.CANDIDATE.iso')
+
 
 .. code-block:: bash
     
