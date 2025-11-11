@@ -5747,13 +5747,19 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
 | ASSERT           | Lanes: <Lane #'s> Transmitter power low warning                                                          |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter power low alarm                                                            |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter power high warning                                                         |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 | CLEAR            | Lanes: <Lane #'s> Transmitter power low warning                                                          |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter power low alarm                                                            |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter power high warning                                                         |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
@@ -5778,13 +5784,19 @@ The transmit power threshold for a specific transceiver has triggered a warning 
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
 | ASSERT           | Lanes: <Lane #'s> Receiver power low warning                                                             |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Receiver power low alarm                                                               |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Receiver power high warning                                                            |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Receiver power high alarm                                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 | CLEAR            | Lanes: <Lane #'s> Receiver power low warning                                                             |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Receiver power low alarm                                                               |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Receiver power high warning                                                            |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Receiver power high alarm                                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
@@ -5804,13 +5816,19 @@ The receive power threshold for a specific transceiver has reached a threshold i
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
 | ASSERT           | Lanes: <Lane #'s> Transmitter Bias low warning                                                           |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter Bias low alarm                                                             |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter Bias high warning                                                          |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter Bias high alarm                                                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 | CLEAR            | Lanes: <Lane #'s> Transmitter Bias low warning                                                           |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter Bias low alarm                                                             |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter Bias high warning                                                          |
+|                  |                                                                                                          |
 |                  | Lanes: <Lane #'s> Transmitter Bias high alarm                                                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
