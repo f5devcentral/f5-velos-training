@@ -5746,7 +5746,15 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> Transmitter power low warning                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power low alarm                                                            |
+|                  | Lanes: <Lane #'s> Transmitter power high warning                                                         |
+|                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> Transmitter power low warning                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power low alarm                                                            |
+|                  | Lanes: <Lane #'s> Transmitter power high warning                                                         |
+|                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The transmit power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
@@ -5754,38 +5762,72 @@ The transmit power threshold for a specific transceiver has triggered a warning 
 .. code-block:: bash
 
     chassis1-prod-partition-2# file show  log/snmp.log | include txPwr
-    <INFO> 23-Jul-2024::23:25:34.238 partition2 confd[122]: snmp snmpv2-trap reqid=1370215022 10.255.80.251:162 (TimeTicks sysUpTime=3571244)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218591376 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low alarm)
-
+    <INFO> 7-May-2025::21:05:40.426 partition2 confd[114]: snmp snmpv2-trap reqid=972265644 172.22.50.57:162 (TimeTicks sysUpTime=183491802)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352446096 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:05:40.484 partition2 confd[114]: snmp snmpv2-trap reqid=972265645 172.22.50.57:162 (TimeTicks sysUpTime=183491808)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352255391 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:05:40.652 partition2 confd[114]: snmp snmpv2-trap reqid=972265647 172.22.50.57:162 (TimeTicks sysUpTime=183491825)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352345605 UTC)(OCTET STRING alertDescription=Lanes: 2,3,4 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:06:10.401 partition2 confd[114]: snmp snmpv2-trap reqid=972265650 172.22.50.57:162 (TimeTicks sysUpTime=183494800)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352091005 UTC)(OCTET STRING alertDescription=Lanes: 2,3,4 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:06:10.464 partition2 confd[114]: snmp snmpv2-trap reqid=972265651 172.22.50.57:162 (TimeTicks sysUpTime=183494806)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352192401 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:06:10.711 partition2 confd[114]: snmp snmpv2-trap reqid=972265654 172.22.50.57:162 (TimeTicks sysUpTime=183494831)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352250928 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:06:10.848 partition2 confd[114]: snmp snmpv2-trap reqid=972265656 172.22.50.57:162 (TimeTicks sysUpTime=183494844)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352291664 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:06:40.677 partition2 confd[114]: snmp snmpv2-trap reqid=972265657 172.22.50.57:162 (TimeTicks sysUpTime=183497827)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650975934 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:06:40.801 partition2 confd[114]: snmp snmpv2-trap reqid=972265658 172.22.50.57:162 (TimeTicks sysUpTime=183497840)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650917268 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter power low alarm)
 
 **rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> Receiver power low warning                                                             |
+|                  | Lanes: <Lane #'s> Receiver power low alarm                                                               |
+|                  | Lanes: <Lane #'s> Receiver power high warning                                                            |
+|                  | Lanes: <Lane #'s> Receiver power high alarm                                                              |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> Receiver power low warning                                                             |
+|                  | Lanes: <Lane #'s> Receiver power low alarm                                                               |
+|                  | Lanes: <Lane #'s> Receiver power high warning                                                            |
+|                  | Lanes: <Lane #'s> Receiver power high alarm                                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The receive power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+The receive power threshold for a specific transceiver has reached a threshold indicating either rxPwr high alarm status, rxPwr high warn status, rxPwr low alarm status, or rxPwr low warn status. Run the show portgroups command to see what the current values are for that transceiver. Below is an example of a rxPwr trap for Lanes: 1,2,3,4 Receiver power low warning on portgroup 3/1. The first trap is an alertEffect=1 indicating a low alarm alert, and the second trap is an alertEffect=0 indicating a low alarm clear condition. Then there are similar raise and clear events for the Receiver Power low warning trap.
 
 .. code-block:: bash
 
-    chassis1-prod-partition-2# file show  log/snmp.log | include rxPwr
-    <INFO> 23-Jul-2024::23:25:34.302 partition2 confd[122]: snmp snmpv2-trap reqid=1370215023 10.255.80.251:162 (TimeTicks sysUpTime=3571250)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218508824 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
+    red-partition-chassis1-1#  file show log/snmp.log | include rxP
+    <INFO> 27-Jun-2025::18:14:34.049 partition4 confd[114]: snmp snmpv2-trap reqid=1674228061 172.22.50.57:162 (TimeTicks sysUpTime=623101258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-06-28 01:14:34.026501680 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
+    <INFO> 27-Jun-2025::18:22:34.052 partition4 confd[114]: snmp snmpv2-trap reqid=1674228064 172.22.50.57:162 (TimeTicks sysUpTime=623149258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-28 01:22:34.026783343 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
+    <INFO> 18-Jul-2025::14:50:04.051 partition4 confd[114]: snmp snmpv2-trap reqid=1674228067 172.22.50.57:162 (TimeTicks sysUpTime=803314258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-07-18 21:50:04.027229987 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
+    <INFO> 18-Jul-2025::14:59:04.046 partition4 confd[114]: snmp snmpv2-trap reqid=1674228070 172.22.50.57:162 (TimeTicks sysUpTime=803368257)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-07-18 21:59:04.027161464 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
 **txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> Transmitter Bias low warning                                                           |
+|                  | Lanes: <Lane #'s> Transmitter Bias low alarm                                                             |
+|                  | Lanes: <Lane #'s> Transmitter Bias high warning                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias high alarm                                                            |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> Transmitter Bias low warning                                                           |
+|                  | Lanes: <Lane #'s> Transmitter Bias low alarm                                                             |
+|                  | Lanes: <Lane #'s> Transmitter Bias high warning                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias high alarm                                                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The transmit bias threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+The transmit bias threshold for a specific transceiver has reached a threshold indicating either txBias high alarm status, txBias high warn status, txBias low alarm status, or txBias low warn status. Run the show portgroups command to see what the current values are for that transceiver.
+
+Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on portgroup 1/2 clearing (alertEffect=0), then an txBia low alarm being rasied (alertEffect=1) for lane 4. The next two traps show the raising of a txBias low warning (alertEffect=1) trap, and then an (alertEffect=0) indicating a low warning clear condition.
 
 .. code-block:: bash
 
     chassis1-prod-partition-2# file show  log/snmp.log | include txBias
-    <INFO> 23-Jul-2024::23:25:34.465 partition2 confd[122]: snmp snmpv2-trap reqid=1370215024 10.255.80.251:162 (TimeTicks sysUpTime=3571267)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218760526 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter bias low alarm)
+
+    <INFO> 7-May-2025::21:05:40.769 partition2 confd[114]: snmp snmpv2-trap reqid=972265649 172.22.50.57:162 (TimeTicks sysUpTime=183491836)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352497077 UTC)(OCTET STRING alertDescription=Lanes: 3 Transmitter bias low alarm)
+    <INFO> 7-May-2025::21:06:10.587 partition2 confd[114]: snmp snmpv2-trap reqid=972265652 172.22.50.57:162 (TimeTicks sysUpTime=183494818)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352383313 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low alarm)
+
+    <INFO> 7-May-2025::21:06:10.787 partition2 confd[114]: snmp snmpv2-trap reqid=972265655 172.22.50.57:162 (TimeTicks sysUpTime=183494838)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352469714 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
+    <INFO> 7-May-2025::21:06:40.914 partition2 confd[114]: snmp snmpv2-trap reqid=972265659 172.22.50.57:162 (TimeTicks sysUpTime=183497851)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.651155713 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
+   
 
 **ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
 
