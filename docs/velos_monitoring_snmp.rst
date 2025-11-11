@@ -5337,6 +5337,10 @@ Below is an example of an **partition-image-volume-utilization** SNMP trap being
 
 **partition<xx>-shared-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
+From the VELOS controller, there are a varietry of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **shared** volume where shared data, including tcpdump, QKView, and core files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+
+Although these traps are labled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
 +=========================================+==================================+
@@ -5405,7 +5409,47 @@ Below is an example of an **partition-image-volume-utilization** SNMP trap being
 | partition32-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65627   |
 +-----------------------------------------+----------------------------------+
 
++------------------+-------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                           |
++==================+=============================================================+
+| ASSERT           | partition-<#> shared volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+| EVENT            | partition<#> Shared Volume usage exceeded 85%, used=<xx>%   |
+|                  |                                                             |
+|                  | partition<#> Shared Volume usage with in range, used=<xx>%  |
++------------------+-------------------------------------------------------------+
+| CLEAR            | partition-<#> shared volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+
+The **Shared Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Shared Volume Size, you can specify the desired storage volume for shared data, including tcpdump, QKView, and core files, in increments of 1 GB. The default value is 10 GB, with a minimum of 5 GB and a maximum of 20 GB. SNMP traps will be sent based on the current utilization of the shared volume. 
+
+Below is an example of an **partition-shared-volume-utilization** SNMP trap being generated from the system controller layer when the chassis partitions shared volume reaches 85% utilization, and then the corresponding clear trap when usage returns to an acceptable level.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log 
+
+    Shared Volume Utilization Alert raised - (alertEffect=1)
+
+    <INFO> 11-Nov-2025::09:42:55.241 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076403 172.22.50.57:162 (TimeTicks sysUpTime=181964328)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-11-11 17:42:55.220616545 UTC)(OCTET STRING alertDescription=Partition-2 shared volume utilization growth rate is high)
+
+    Shared Volume Utilization details informational (alertEffect=2), exceeded 97%
+
+    <INFO> 11-Nov-2025::09:42:55.288 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076404 172.22.50.57:162 (TimeTicks sysUpTime=181964333)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:42:55.220657533 UTC)(OCTET STRING alertDescription=Shared Volume usage exceeded 97%, used=100%)
+
+    Shared Volume Utilization Alert cleared - (alertEffect=0) 
+
+    <INFO> 11-Nov-2025::09:44:25.248 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076405 172.22.50.57:162 (TimeTicks sysUpTime=181973329)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:44:25.220868834 UTC)(OCTET STRING alertDescription=Partition-2 shared volume utilization growth rate is high)
+
+    Shared Volume Utilization details informational (alertEffect=2), within range
+
+    <INFO> 11-Nov-2025::09:44:25.287 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076406 172.22.50.57:162 (TimeTicks sysUpTime=181973333)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:44:25.220918013 UTC)(OCTET STRING alertDescription=Shared Volume usage with in range, used=22%)
+
 **partition<xx>-config-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
+From the VELOS controller, there are a varietry of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **config** volume where configuration files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+
+Although these traps are labled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
@@ -5474,6 +5518,44 @@ Below is an example of an **partition-image-volume-utilization** SNMP trap being
 +-----------------------------------------+----------------------------------+
 | partition32-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65651   |
 +-----------------------------------------+----------------------------------+
+
++------------------+-------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                           |
++==================+=============================================================+
+| ASSERT           | partition-<#> config volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+| EVENT            | partition<#> config Volume usage exceeded <xx>%, used=<xx>% |
+|                  |                                                             |
+|                  | partition<#> config Volume usage with in range, used=<xx>%  |
++------------------+-------------------------------------------------------------+
+| CLEAR            | partition-<#> config volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+
+The **Config Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Configuration Volume Size, you can specify the desired configuration volume in increments of 1 GB. The default value is 10 GB, with a minimum of 5 GB and a maximum of 15 GB. SNMP traps will be sent based on the current utilization of the shared volume. 
+
+Below is an example of an **partition-config-volume-utilization** SNMP trap being generated from the system controller layer when the chassis partitions config volume reaches 85% utilization, and then the corresponding clear trap when usage returns to an acceptable level.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log 
+
+    Config Volume Utilization Alert raised - (alertEffect=1)
+
+    <INFO> 11-Nov-2025::10:22:09.653 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076407 172.22.50.57:162 (TimeTicks sysUpTime=182199769)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-11-11 18:22:09.633696546 UTC)(OCTET STRING alertDescription=Partition-2 config volume utilization growth rate is high)
+
+    Config Volume Utilization details informational (alertEffect=2), exceeded 90%
+
+    <INFO> 11-Nov-2025::10:22:09.706 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076408 172.22.50.57:162 (TimeTicks sysUpTime=182199774)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 18:22:09.635473959 UTC)(OCTET STRING alertDescription=partition2 config Volume usage exceeded 90%, used=92%)
+
+    Config Volume Utilization Alert cleared - (alertEffect=0) 
+
+    <INFO> 11-Nov-2025::10:23:09.633 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076409 172.22.50.57:162 (TimeTicks sysUpTime=182205767)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 18:23:09.615835444 UTC)(OCTET STRING alertDescription=Partition-2 config volume utilization growth rate is high)
+
+    Config Volume Utilization details informational (alertEffect=2), within range
+
+    <INFO> 11-Nov-2025::10:23:09.683 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076410 172.22.50.57:162 (TimeTicks sysUpTime=182205772)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 18:23:09.615895226 UTC)(OCTET STRING alertDescription=partition2 config Volume usage with in range, used=10%)
+
+
 
 
 FIPS Related Traps
