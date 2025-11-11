@@ -5303,7 +5303,7 @@ Although these traps are labled as partition volume utilization they will be sou
 +==================+=============================================================+
 | ASSERT           | partition-<#> image volume utilization growth rate is high  |
 +------------------+-------------------------------------------------------------+
-| EVENT            | partition<#> Image Volume usage exceeded 85%, used=<xx>%    |
+| EVENT            | partition<#> Image Volume usage exceeded <xx>%, used=<xx>%  |
 |                  |                                                             |
 |                  | partition<#> Image Volume usage with in range, used=<xx>%   |
 +------------------+-------------------------------------------------------------+
@@ -5414,7 +5414,7 @@ Although these traps are labled as partition volume utilization they will be sou
 +==================+=============================================================+
 | ASSERT           | partition-<#> shared volume utilization growth rate is high |
 +------------------+-------------------------------------------------------------+
-| EVENT            | partition<#> Shared Volume usage exceeded 85%, used=<xx>%   |
+| EVENT            | partition<#> Shared Volume usage exceeded <xx>%, used=<xx>% |
 |                  |                                                             |
 |                  | partition<#> Shared Volume usage with in range, used=<xx>%  |
 +------------------+-------------------------------------------------------------+
