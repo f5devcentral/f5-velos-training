@@ -5213,40 +5213,8 @@ Drive Utilization Traps
 | CLEAR            | Drive utilization growth rate is high                             |
 +------------------+-------------------------------------------------------------------+
 
-The system will monitor the storage utilization of the VELOS disks and warn if the disk usage gets too high. There are 3 levels of events that can occur as seen below:
+You can view the snmp.log file to see the SNMP traps that have been issued for **drive-utilization**.
 
-- drive-capacity:critical-limit - Drive Usage exceeded 97%
-- drive-capacity:failure-limit  - Drive Usage exceeded 90%
-- drive-capacity:warning-limit  - Drive Usage exceeded 85%
-
-You can use the **show system alarms** CLI command to see if the drive is in an overutilized state. 
-
-.. code-block:: bash
-
-    appliance-1# show system alarms
-    ID RESOURCE SEVERITY TEXT TIME CREATED
-    --------------------------------------------------------------------------------------------------
-    65545 appliance EMERGENCY Power fault detected in hardware 2023-03-24 12:37:13.713715583 UTC
-    65544 appliance CRITICAL Running out of drive capacity 2023-03-27 15:41:37.847817761 UTC
-    65545 appliance EMERGENCY Power fault detected in hardware 2023-03-24 12:37:13.713715583 UTC
-
-The **show system events** CLI command will provide more details of the drive events that have occurred.
-
-.. code-block:: bash
-
-    appliance-1# show system events | more
-    system events event
-    log "65544 appliance drive-capacity-fault ASSERT CRITICAL \"Running out of drive capacity\" \"2023-03-27 15:41:37.847817761 UTC\""
-    system events event
-    log "65544 appliance drive-capacity-fault EVENT NA \"Drive usage exceeded 97%, used=100%\" \"2023-03-27 15:41:37.847831437 UTC\""
-    system events event
-    log "65544 appliance drive-capacity-fault CLEAR CRITICAL \"Running out of drive capacity\" \"2023-03-27 15:42:32.655591036 UTC\""
-    system events event
-    log "65544 appliance drive-capacity-fault EVENT NA \"Drive usage with in range, used=54%\" \"2023-03-27 15:42:32.655608659 UTC\""
-
-You can also view the snmp.log file to see the SNMP traps that have been issued for **drive-utilization**.
-
-The output below is from an rSeries unit:
 
 .. code-block:: bash
 
@@ -5256,6 +5224,255 @@ The output below is from an rSeries unit:
     <INFO> 12-Apr-2023::12:00:52.838 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130745 10.255.8.22:6011 (TimeTicks sysUpTime=127307)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834736965 UTC)(OCTET STRING alertDescription=Drive utilization growth rate is high)
     <INFO> 12-Apr-2023::12:00:52.888 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130746 10.255.8.22:6011 (TimeTicks sysUpTime=127312)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834754109 UTC)(OCTET STRING alertDescription=Drive usage growth rate with in range, growth=-10268%)
 
+**partition<xx>-image-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
+From the VELOS controller, there are a varietry of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **images** volume where F5OS tenant images are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+
+Although these traps are labled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+
++-----------------------------------------+----------------------------------+
+| SNMP Trap                               | SNMP OID                         |
++=========================================+==================================+
+| partition1-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65553   |
++-----------------------------------------+----------------------------------+
+| partition2-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65554   |
++-----------------------------------------+----------------------------------+
+| partition3-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65555   |
++-----------------------------------------+----------------------------------+
+| partition4-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65556   |
++-----------------------------------------+----------------------------------+
+| partition5-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65557   |
++-----------------------------------------+----------------------------------+
+| partition6-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65558   |
++-----------------------------------------+----------------------------------+
+| partition7-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65559   |
++-----------------------------------------+----------------------------------+
+| partition8-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65560   |
++-----------------------------------------+----------------------------------+
+| partition9-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65580   |
++-----------------------------------------+----------------------------------+
+| partition10-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65581   |
++-----------------------------------------+----------------------------------+
+| partition11-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65582   |
++-----------------------------------------+----------------------------------+
+| partition12-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65583   |
++-----------------------------------------+----------------------------------+
+| partition13-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65584   |
++-----------------------------------------+----------------------------------+
+| partition14-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65585   |
++-----------------------------------------+----------------------------------+
+| partition15-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65586   |
++-----------------------------------------+----------------------------------+
+| partition16-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65587   |
++-----------------------------------------+----------------------------------+
+| partition17-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65588   |
++-----------------------------------------+----------------------------------+
+| partition18-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65589   |
++-----------------------------------------+----------------------------------+
+| partition19-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65590   |
++-----------------------------------------+----------------------------------+
+| partition20-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65591   |
++-----------------------------------------+----------------------------------+
+| partition21-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65592   |
++-----------------------------------------+----------------------------------+
+| partition22-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65593   |
++-----------------------------------------+----------------------------------+
+| partition23-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65594   |
++-----------------------------------------+----------------------------------+
+| partition24-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65595   |
++-----------------------------------------+----------------------------------+
+| partition25-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65596   |
++-----------------------------------------+----------------------------------+
+| partition26-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65597   |
++-----------------------------------------+----------------------------------+
+| partition27-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65598   |
++-----------------------------------------+----------------------------------+
+| partition28-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65599   |
++-----------------------------------------+----------------------------------+
+| partition29-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65600   |
++-----------------------------------------+----------------------------------+
+| partition30-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65601   |
++-----------------------------------------+----------------------------------+
+| partition31-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65602   |
++-----------------------------------------+----------------------------------+
+| partition32-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65603   |
++-----------------------------------------+----------------------------------+
+
++------------------+-------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                           |
++==================+=============================================================+
+| ASSERT           | partition-<#> image volume utilization growth rate is high  |
++------------------+-------------------------------------------------------------+
+| EVENT            | partition<#> Image Volume usage exceeded 85%, used=<xx>%    |
+|                  | partition<#> Image Volume usage with in range, used=<xx>%   |
++------------------+-------------------------------------------------------------+
+| CLEAR            | partition-<#> image volume utilization growth rate is high  |
++------------------+-------------------------------------------------------------+
+
+The **Image Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Image Volume Size, you specify the desired storage volume for all tenant images in increments of 1 GB. The default value is 15 GB, with a minimum of 5 GB and a maximum of 50 GB. SNMP traps will be sent based on the current utilization of the Images volume. 
+
+Below is an example of an **partition-image-volume-utilization** SNMP trap being generated from the system controller layer when the chassis partitions image volume reaches 85% utilization, and then the corresponding clear trap when usage returns to an acceptable level.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log 
+
+    Image Volume Utilization Alert raised - (alertEffect=1) 
+
+    <INFO> 11-Nov-2025::08:44:25.241 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076395 172.22.50.57:162 (TimeTicks sysUpTime=181613328)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-11-11 16:44:25.221842802 UTC)(OCTET STRING alertDescription=Partition-2 image volume utilization growth rate is high)
+
+    Image Volume Utilization details informational (alertEffect=2), exceeded 85%
+
+    <INFO> 11-Nov-2025::08:44:25.291 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076396 172.22.50.57:162 (TimeTicks sysUpTime=181613333)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:44:25.221885959 UTC)(OCTET STRING alertDescription=partition2 Image Volume usage exceeded 85%, used=86%)
+
+    Image Volume Utilization Alert cleared - (alertEffect=0) 
+
+    <INFO> 11-Nov-2025::08:55:39.628 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076399 172.22.50.57:162 (TimeTicks sysUpTime=181680767)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:55:39.610474859 UTC)(OCTET STRING alertDescription=Partition-2 image volume utilization growth rate is high)
+
+    Image Volume Utilization details informational (alertEffect=2), within range
+
+    <INFO> 11-Nov-2025::08:55:39.676 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076400 172.22.50.57:162 (TimeTicks sysUpTime=181680771)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:55:39.610522109 UTC)(OCTET STRING alertDescription=partition2 Image Volume usage with in range, used=75%)
+
+
+**partition<xx>-shared-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
++-----------------------------------------+----------------------------------+
+| SNMP Trap                               | SNMP OID                         |
++=========================================+==================================+
+| partition1-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65561   |
++-----------------------------------------+----------------------------------+
+| partition2-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65562   |
++-----------------------------------------+----------------------------------+
+| partition3-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65563   |
++-----------------------------------------+----------------------------------+
+| partition4-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65564   |
++-----------------------------------------+----------------------------------+
+| partition5-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65565   |
++-----------------------------------------+----------------------------------+
+| partition6-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65566   |
++-----------------------------------------+----------------------------------+
+| partition7-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65567   |
++-----------------------------------------+----------------------------------+
+| partition8-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65568   |
++-----------------------------------------+----------------------------------+
+| partition9-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65604   |
++-----------------------------------------+----------------------------------+
+| partition10-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65605   |
++-----------------------------------------+----------------------------------+
+| partition11-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65606   |
++-----------------------------------------+----------------------------------+
+| partition12-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65607   |
++-----------------------------------------+----------------------------------+
+| partition13-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65608   |
++-----------------------------------------+----------------------------------+
+| partition14-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65609   |
++-----------------------------------------+----------------------------------+
+| partition15-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65610   |
++-----------------------------------------+----------------------------------+
+| partition16-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65611   |
++-----------------------------------------+----------------------------------+
+| partition17-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65612   |
++-----------------------------------------+----------------------------------+
+| partition18-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65613   |
++-----------------------------------------+----------------------------------+
+| partition19-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65614   |
++-----------------------------------------+----------------------------------+
+| partition20-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65615   |
++-----------------------------------------+----------------------------------+
+| partition21-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65616   |
++-----------------------------------------+----------------------------------+
+| partition22-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65617   |
++-----------------------------------------+----------------------------------+
+| partition23-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65618   |
++-----------------------------------------+----------------------------------+
+| partition24-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65619   |
++-----------------------------------------+----------------------------------+
+| partition25-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65620   |
++-----------------------------------------+----------------------------------+
+| partition26-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65621   |
++-----------------------------------------+----------------------------------+
+| partition27-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65622   |
++-----------------------------------------+----------------------------------+
+| partition28-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65623   |
++-----------------------------------------+----------------------------------+
+| partition29-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65624   |
++-----------------------------------------+----------------------------------+
+| partition30-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65625   |
++-----------------------------------------+----------------------------------+
+| partition31-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65626   |
++-----------------------------------------+----------------------------------+
+| partition32-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65627   |
++-----------------------------------------+----------------------------------+
+
+**partition<xx>-config-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
++-----------------------------------------+----------------------------------+
+| SNMP Trap                               | SNMP OID                         |
++=========================================+==================================+
+| partition1-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65569   |
++-----------------------------------------+----------------------------------+
+| partition2-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65570   |
++-----------------------------------------+----------------------------------+
+| partition3-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65571   |
++-----------------------------------------+----------------------------------+
+| partition4-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65572   |
++-----------------------------------------+----------------------------------+
+| partition5-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65573   |
++-----------------------------------------+----------------------------------+
+| partition6-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65574   |
++-----------------------------------------+----------------------------------+
+| partition7-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65575   |
++-----------------------------------------+----------------------------------+
+| partition8-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65576   |
++-----------------------------------------+----------------------------------+
+| partition9-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65628   |
++-----------------------------------------+----------------------------------+
+| partition10-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65629   |
++-----------------------------------------+----------------------------------+
+| partition11-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65630   |
++-----------------------------------------+----------------------------------+
+| partition12-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65631   |
++-----------------------------------------+----------------------------------+
+| partition13-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65632   |
++-----------------------------------------+----------------------------------+
+| partition14-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65633   |
++-----------------------------------------+----------------------------------+
+| partition15-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65634   |
++-----------------------------------------+----------------------------------+
+| partition16-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65635   |
++-----------------------------------------+----------------------------------+
+| partition17-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65636   |
++-----------------------------------------+----------------------------------+
+| partition18-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65637   |
++-----------------------------------------+----------------------------------+
+| partition19-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65638   |
++-----------------------------------------+----------------------------------+
+| partition20-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65639   |
++-----------------------------------------+----------------------------------+
+| partition21-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65640   |
++-----------------------------------------+----------------------------------+
+| partition22-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65641   |
++-----------------------------------------+----------------------------------+
+| partition23-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65642   |
++-----------------------------------------+----------------------------------+
+| partition24-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65643   |
++-----------------------------------------+----------------------------------+
+| partition25-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65644   |
++-----------------------------------------+----------------------------------+
+| partition26-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65645   |
++-----------------------------------------+----------------------------------+
+| partition27-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65646   |
++-----------------------------------------+----------------------------------+
+| partition28-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65647   |
++-----------------------------------------+----------------------------------+
+| partition29-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65648   |
++-----------------------------------------+----------------------------------+
+| partition30-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65649   |
++-----------------------------------------+----------------------------------+
+| partition31-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65650   |
++-----------------------------------------+----------------------------------+
+| partition32-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65651   |
++-----------------------------------------+----------------------------------+
 
 
 FIPS Related Traps
