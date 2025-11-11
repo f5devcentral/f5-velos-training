@@ -5852,7 +5852,21 @@ Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on p
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> DDM Temperature low warning                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature low alarm                                                              |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high warning                                                           |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high alarm                                                             |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> DDM Temperature low warning                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature low alarm                                                              |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high warning                                                           |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high alarm                                                             |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The ddm temperature threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
@@ -5866,7 +5880,21 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> DDM Voltage low warning                                                                |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage low alarm                                                                  |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high warning                                                               |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high alarm                                                                 |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> DDM Voltage low warning                                                                |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage low alarm                                                                  |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high warning                                                               |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high alarm                                                                 |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The ddm voltage threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
