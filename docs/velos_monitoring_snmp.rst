@@ -5304,6 +5304,7 @@ Although these traps are labled as partition volume utilization they will be sou
 | ASSERT           | partition-<#> image volume utilization growth rate is high  |
 +------------------+-------------------------------------------------------------+
 | EVENT            | partition<#> Image Volume usage exceeded 85%, used=<xx>%    |
+|                  |                                                             |
 |                  | partition<#> Image Volume usage with in range, used=<xx>%   |
 +------------------+-------------------------------------------------------------+
 | CLEAR            | partition-<#> image volume utilization growth rate is high  |
