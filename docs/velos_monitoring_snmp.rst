@@ -3767,27 +3767,30 @@ Below a **hardware-device-fault** SNMP trap alarm has been raised for two separa
 1. CPU machine check error 
 2. CPU internal error
 
-Both of these alarms have the same severity **Emergency** noted by **alertSeverity=0** in the hardware-device-fault alarm being raised. The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) or Clear (**alertEffect=0**) messages. Event messages (**alertEffect=2**) will always show Info severity (**alertSeverity=8**) as they are only used for informative purposes. 
+Both of these alarms have the same severity **Emergency** noted by **alertSeverity=0** in the hardware-device-fault alarm being raised. The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
 
-+-----------+--------------------+-----------------------------------+
-| Severity  | Severity Level     | Details                           |
-+===========+====================+===================================+
-| EMERGENCY | alertSeverity = 0  | System is unusable                |
-+-----------+--------------------+-----------------------------------+
-| ALERT     | alertSeverity = 1  | Action must be taken immediately  |
-+-----------+--------------------+-----------------------------------+
-| CRITICAL  | alertSeverity = 2  | Critical conditions               |
-+-----------+--------------------+-----------------------------------+
-| ERROR     | alertSeverity = 3  | Error conditions                  |
-+-----------+--------------------+-----------------------------------+
-| WARNING   | alertSeverity = 4  | Warning conditions                |
-+-----------+--------------------+-----------------------------------+
-| NOTICE    | alertSeverity = 5  | Normal but significant condition  | 
-+-----------+--------------------+-----------------------------------+
-| INFO      | alertSeverity = 6  | Informational                     |
-+-----------+--------------------+-----------------------------------+
-| DEBUG     | alertSeverity = 7  | Debug-level messages              |
-+-----------+--------------------+-----------------------------------+
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
 
 In this case, instead of raising the **hardware-device-fault** SNMP trap twice (once for each event), it is raised only one time becuase of two separate concurrent sub events. Take note of the **alertSeverity=0** in the SNMP alarm indicating an **Emergency** status.
 
@@ -4816,11 +4819,11 @@ Fault detected in Fan Controller health.
 +------------------+---------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                   |
 +==================+=====================================================================+
-| EVENT            | <<Asserted| Deasserted>> local arbitration health state             |
+| EVENT            | <<Asserted | Deasserted>> local arbitration health state            |
 +------------------+---------------------------------------------------------------------+
-| EVENT            | <<Asserted| Deasserted>> local arbitration request-active state     |
+| EVENT            | <<Asserted | Deasserted>> local arbitration request-active state    |
 +------------------+---------------------------------------------------------------------+
-| EVENT            | <<Asserted| Deasserted>> local arbitration grant-active state       |
+| EVENT            | <<Asserted | Deasserted>> local arbitration grant-active state      |
 +------------------+---------------------------------------------------------------------+
 
 Change detected in System Controller Arbitration State.
