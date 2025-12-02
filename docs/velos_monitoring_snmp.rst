@@ -5160,6 +5160,9 @@ Firmware Update Status Traps
 | EVENT            | Firmware update is <<running | completed >> for <<module>>                                               |
 |                  |                                                                                                          |
 |                  | Example: Firmware update is running for vqf 0                                                            |
+|                  | Example: Firmware update completed for vqf 0                                                             |
+|                  | Example: Firmware update is running for atse 0                                                           |
+|                  | Example: Firmware update completed for atse 0                                                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
@@ -5298,6 +5301,8 @@ Although these traps are labled as partition volume utilization they will be sou
 | partition32-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65603   |
 +-----------------------------------------+----------------------------------+
 
+Below are the syntax for the various image-volume-utilization SNMP traps.
+
 +------------------+-------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                           |
 +==================+=============================================================+
@@ -5309,6 +5314,45 @@ Although these traps are labled as partition volume utilization they will be sou
 +------------------+-------------------------------------------------------------+
 | CLEAR            | partition-<#> image volume utilization growth rate is high  |
 +------------------+-------------------------------------------------------------+
+
+The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+Below are the thresholds for the image-volume-utilization SNMP traps. Note, that that a value of 85% or over will generate one of the three threshold traps with a warning **alertSeverity=4** level. When the volume utilization drops back below 85% a clear trap will be sent with the alertSeverity=8 (NA) level.
+
++----------------------------------+-----------+--------------+
+| Usage Percentage Criteria        | Severity  | Condition    |
++==================================+===========+==============+
+| Less than or equal to 85%        | N/A       | Deassert     |
++----------------------------------+-----------+--------------+
+| Greater than 85%, Less than 90%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 90%, Less than 97%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 97%                 | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+
 
 The **Image Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Image Volume Size, you specify the desired storage volume for all tenant images in increments of 1 GB. The default value is 15 GB, with a minimum of 5 GB and a maximum of 50 GB. SNMP traps will be sent based on the current utilization of the Images volume. 
 
@@ -5409,6 +5453,8 @@ Although these traps are labled as partition volume utilization they will be sou
 | partition32-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65627   |
 +-----------------------------------------+----------------------------------+
 
+Below are the syntax for the various shared-volume-utilization SNMP traps.
+
 +------------------+-------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                           |
 +==================+=============================================================+
@@ -5420,6 +5466,45 @@ Although these traps are labled as partition volume utilization they will be sou
 +------------------+-------------------------------------------------------------+
 | CLEAR            | partition-<#> shared volume utilization growth rate is high |
 +------------------+-------------------------------------------------------------+
+
+The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+Below are the thresholds for the shared-volume-utilization SNMP traps. Note, that that a value of 85% or over will generate one of the three threshold traps with a warning **alertSeverity=4** level. When the volume utilization drops back below 85% a clear trap will be sent with the alertSeverity=8 (NA) level.
+
++----------------------------------+-----------+--------------+
+| Usage Percentage Criteria        | Severity  | Condition    |
++==================================+===========+==============+
+| Less than or equal to 85%        | N/A       | Deassert     |
++----------------------------------+-----------+--------------+
+| Greater than 85%, Less than 90%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 90%, Less than 97%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 97%                 | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+
 
 The **Shared Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Shared Volume Size, you can specify the desired storage volume for shared data, including tcpdump, QKView, and core files, in increments of 1 GB. The default value is 10 GB, with a minimum of 5 GB and a maximum of 20 GB. SNMP traps will be sent based on the current utilization of the shared volume. 
 
@@ -5519,6 +5604,8 @@ Although these traps are labled as partition volume utilization they will be sou
 | partition32-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65651   |
 +-----------------------------------------+----------------------------------+
 
+Below are the syntax for the various config-volume-utilization SNMP traps.
+
 +------------------+-------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                           |
 +==================+=============================================================+
@@ -5530,6 +5617,44 @@ Although these traps are labled as partition volume utilization they will be sou
 +------------------+-------------------------------------------------------------+
 | CLEAR            | partition-<#> config volume utilization growth rate is high |
 +------------------+-------------------------------------------------------------+
+
+The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+Below are the thresholds for the config-volume-utilization SNMP traps. Note, that that a value of 85% or over will generate one of the three threshold traps with a warning **alertSeverity=4** level. When the volume utilization drops back below 85% a clear trap will be sent with the alertSeverity=8 (NA) level.
+
++----------------------------------+-----------+--------------+
+| Usage Percentage Criteria        | Severity  | Condition    |
++==================================+===========+==============+
+| Less than or equal to 85%        | N/A       | Deassert     |
++----------------------------------+-----------+--------------+
+| Greater than 85%, Less than 90%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 90%, Less than 97%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 97%                 | Warning   | Assert       |
++----------------------------------+-----------+--------------+
 
 The **Config Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Configuration Volume Size, you can specify the desired configuration volume in increments of 1 GB. The default value is 10 GB, with a minimum of 5 GB and a maximum of 15 GB. SNMP traps will be sent based on the current utilization of the shared volume. 
 
@@ -5567,7 +5692,9 @@ FIPS Related Traps
 +------------------+------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                        |
 +==================+==========================================================================================+
-| EVENT            |                                                                                          |
+| ASSERT           | Fault detected in FIPS module                                                            |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Fault detected in FIPS module                                                            |
 +------------------+------------------------------------------------------------------------------------------+
 
 The output below is from an rSeries unit:
