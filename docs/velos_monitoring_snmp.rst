@@ -1975,7 +1975,7 @@ It can also be run against a VELOS chassis partition:
             6684675 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
     prompt%
 
-Componenent Info Table
+Component Info Table
 ----------------------------
 
 The table below shows the current VELOS component information for the chassis level or partition level.
@@ -2007,7 +2007,7 @@ Below is the component info table from the system controller layer.
     sub0759g000z                         ?        ?
     prompt% 
 
-You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable and each component and its coresponding serial number will be displayed.
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable and each component and its corresponding serial number will be displayed.
 
 .. code-block:: bash
 
@@ -2046,7 +2046,7 @@ Below is the component info table from the chassis partition layer.
     bld424258s  BX110        ?
     prompt% 
 
-You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable within the chassis partition and each blade and its coresponding serial number will be displayed.
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable within the chassis partition and each blade and its corresponding serial number will be displayed.
 
 .. code-block:: bash
 
@@ -2205,7 +2205,7 @@ You can also walk the F5-PLATFORM-STATS-MIB:temperatureStatsTable within a chass
 Memory Stats Table
 ------------------
 
-This MIB displays the memory utilization for the system controllers as well as the chassis partitions. Below is the table view for the system ccontrollers:
+This MIB displays the memory utilization for the system controllers as well as the chassis partitions. Below is the table view for the system controllers:
 
 **F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1**
 
@@ -3474,7 +3474,7 @@ Inside of F5OS there are different categories of diagnostic information that the
 
 A system alert is typically associated with some sort of fault in the system and it will have two states: An **alarm** condition indicating that some threshold has been crossed or some failure has occurred, and then a corresponding **clear** condition that indicates the fault has cleared or the threshold condition has gone back to an acceptable level. System alerts are high-level categories like: psu-fault, drive-fault, thermal-fault etc... These type of messages are what traditional SNMP systems monitor in order to alert someone when there is a failure condition or a threshold that has been crossed requiring attention. 
 
-If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**. Both the system controller and partition layer in VELOS maintain system alarms and system events, and certain types of messages are only visibile in one or the other. As an example, the **show system alarms** output below is from a system controller. 
+If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**. Both the system controller and partition layer in VELOS maintain system alarms and system events, and certain types of messages are only visible in one or the other. As an example, the **show system alarms** output below is from a system controller. 
 
 .. code-block:: bash
 
@@ -3792,7 +3792,7 @@ Both of these alarms have the same severity **Emergency** noted by **alertSeveri
 | N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
 +-----------+--------------------+--------------------------------------+
 
-In this case, instead of raising the **hardware-device-fault** SNMP trap twice (once for each event), it is raised only one time becuase of two separate concurrent sub events. Take note of the **alertSeverity=0** in the SNMP alarm indicating an **Emergency** status.
+In this case, instead of raising the **hardware-device-fault** SNMP trap twice (once for each event), it is raised only one time because of two separate concurrent sub events. Take note of the **alertSeverity=0** in the SNMP alarm indicating an **Emergency** status.
 
 .. code-block:: bash
 
@@ -3833,7 +3833,7 @@ In the example below, a hardware-device-fault is triggered by two issues:
 1. CPU fatal error, which has a critical severity (alertSeverity=2) and 
 2. CPU non-fatal error which has an error severity (alertSeverity=3).
 
-Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **alertEffect=1** will be raised with severity **alertSeverity=2**. There will be follow on event traps **alertEffect=2** providing the detials of both errors.
+Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **alertEffect=1** will be raised with severity **alertSeverity=2**. There will be follow on event traps **alertEffect=2** providing the details of both errors.
 
 .. code-block:: bash
 
@@ -3873,7 +3873,7 @@ When the remaining **non-fatal error** gets cleared, the system will clear the *
 
     <INFO> 19-Jun-2025::11:38:22.493 controller-1 confd[154]: snmp snmpv2-trap reqid=520254522 10.10.10.10:5000 (TimeTicks sysUpTime=50646)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:38:22.484721760 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
 
-    Addtional informational message (alertEffect=2) provides addtional details. In this case **CPU non-fatal error** has **Deasserted**.
+    Additional informational message (alertEffect=2) provides additional details. In this case **CPU non-fatal error** has **Deasserted**.
 
     <INFO> 19-Jun-2025::11:38:22.545 controller-1 confd[154]: snmp snmpv2-trap reqid=520254523 10.10.10.10:5000 (TimeTicks sysUpTime=50651)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:38:22.484728451 UTC)(OCTET STRING alertDescription=Deasserted: CPU non-fatal error)
 
@@ -4208,7 +4208,7 @@ The **show system events** CLI command will provide more details of the drive ev
 
     <INFO> 12-Apr-2023::11:54:10.563 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130731 10.255.8.22:6011 (TimeTicks sysUpTime=87079)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558711877 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
 
-    Informational EVENT (alertEffect=2) providing addtional details for drive-capacity-fault.
+    Informational EVENT (alertEffect=2) providing additional details for drive-capacity-fault.
 
     <INFO> 12-Apr-2023::11:54:10.613 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130732 10.255.8.22:6011 (TimeTicks sysUpTime=87084)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558725204 UTC)(OCTET STRING alertDescription=Drive usage exceeded 97%, used=100%)
 
@@ -4471,7 +4471,7 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 | CLEAR            | Hardware fault detected in blade                                                   |
 +------------------+------------------------------------------------------------------------------------+
 
-Traps will be generated for blade-hardware-faults. A Reliability, Availability, and Servieability (RAS) monitoring system monitors blade hardware utilizing Advanced Error Reporting (AER) for PCIe devices.
+Traps will be generated for blade-hardware-faults. A Reliability, Availability, and Serviceability (RAS) monitoring system monitors blade hardware utilizing Advanced Error Reporting (AER) for PCIe devices.
 
 .. code-block:: bash
 
@@ -4499,7 +4499,7 @@ Traps will be generated for blade-hardware-faults. A Reliability, Availability, 
 | CLEAR            | Sensor fault detected in hardware                                 |
 +------------------+-------------------------------------------------------------------+
 
-Traps will be generated for sensor faults or communication failures. In the example below, an Inlet Sensor fault was detetected (Asserted) and then cleared (Deasserted).
+Traps will be generated for sensor faults or communication failures. In the example below, an Inlet Sensor fault was detected (Asserted) and then cleared (Deasserted).
 
 .. code-block:: bash
 
@@ -4527,12 +4527,12 @@ Traps will be generated for sensor faults or communication failures. In the exam
 +------------------+-----------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                         |
 +==================+===========================================================+
-| EVENT            | <<module>> <<present|removed>>                            |
+| EVENT            | <<module>> <<present | removed>>                          |
 |                  |                                                           |
 |                  | Example: blade1 removed                                   |
 +------------------+-----------------------------------------------------------+
 
-Traps will be generated for componenents being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is presenet or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
+Traps will be generated for components being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is present or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
 
 .. code-block:: bash
 
@@ -4718,7 +4718,7 @@ The output below is from an rSeries unit:
 +==================+===========================================================+
 | ASSERT           | PSU redundancy fault detected                             |
 +------------------+-----------------------------------------------------------+
-| EVENT            | Chassis doesnt have enough working power supplies         |
+| EVENT            | Chassis doesn't have enough working power supplies        |
 |                  |                                                           |
 |                  | Chassis has enough working power supplies                 |
 |                  |                                                           |
@@ -4876,7 +4876,7 @@ Traps for the front panel system controller management port link state. Each sys
 - clear(0) is reported in alertEffect when alarm is cleared.
 - event(2) is updated in alertEffect when event notification is reported.
 
-As an example, the following set of traps are from a Link Down event on controller-1. The first trap has **alertEffect=1** indicating an assert. The second trap has **alertEffect=2** indicating an additional infromation about the assert. The 3rd trap is a clear event of the original alert indicated by the **alertEffect=0**. Fianlly addtional information is provided **alertEffect=2** in the 4th trap, indicating the link is back up.
+As an example, the following set of traps are from a Link Down event on controller-1. The first trap has **alertEffect=1** indicating an assert. The second trap has **alertEffect=2** indicating an additional information about the assert. The 3rd trap is a clear event of the original alert indicated by the **alertEffect=0**. Finally, additional information is provided **alertEffect=2** in the 4th trap, indicating the link is back up.
 
 .. code-block:: bash
     
@@ -4932,7 +4932,7 @@ Boot time integrity failure detected.
 |                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32  |
 +------------------+-------------------------------------------------------------------------------------------+
 
-Trap notification when the platform incompatible image is imported. Below is an example of an rSeries F5OS image being loaded into a VELOS system inadvertantly.
+Trap notification when the platform incompatible image is imported. Below is an example of an rSeries F5OS image being loaded into a VELOS system inadvertently.
 
 .. code-block:: bash
 
@@ -5232,9 +5232,9 @@ You can view the snmp.log file to see the SNMP traps that have been issued for *
 
 **partition<xx>-image-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
-From the VELOS controller, there are a varietry of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **images** volume where F5OS tenant images are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **images** volume where F5OS tenant images are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
 
-Although these traps are labled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
@@ -5384,9 +5384,9 @@ Below is an example of an **partition-image-volume-utilization** SNMP trap being
 
 **partition<xx>-shared-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
-From the VELOS controller, there are a varietry of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **shared** volume where shared data, including tcpdump, QKView, and core files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **shared** volume where shared data, including tcpdump, QKView, and core files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
 
-Although these traps are labled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
@@ -5535,9 +5535,9 @@ Below is an example of an **partition-shared-volume-utilization** SNMP trap bein
 
 **partition<xx>-config-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
-From the VELOS controller, there are a varietry of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **config** volume where configuration files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **config** volume where configuration files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
 
-Although these traps are labled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
@@ -5964,7 +5964,7 @@ The receive power threshold for a specific transceiver has reached a threshold i
 
 The transmit bias threshold for a specific transceiver has reached a threshold indicating either txBias high alarm status, txBias high warn status, txBias low alarm status, or txBias low warn status. Run the show portgroups command to see what the current values are for that transceiver.
 
-Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on portgroup 1/2 clearing (alertEffect=0), then an txBia low alarm being rasied (alertEffect=1) for lane 4. The next two traps show the raising of a txBias low warning (alertEffect=1) trap, and then an (alertEffect=0) indicating a low warning clear condition.
+Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on portgroup 1/2 clearing (alertEffect=0), then an txBia low alarm being raised (alertEffect=1) for lane 4. The next two traps show the raising of a txBias low warning (alertEffect=1) trap, and then an (alertEffect=0) indicating a low warning clear condition.
 
 .. code-block:: bash
 
