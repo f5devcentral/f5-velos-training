@@ -43,7 +43,7 @@ The physical architecture of VELOS differs from the VIPRION platform in several 
 
 The CX1610 VELOS chassis supports 32 slots in a 16RU footprint vs. only 8 slots in the VIPRION C4800 chassis. 
 
-.. note:: The CX1610 chassis and BX520 blade are generally available with F5OS-C 1.8.1
+.. note:: The CX1610 chassis and BX520 blade are generally available with F5OS-C 1.8.1 and later.
 
 .. image:: images/velos_introduction/imagecx1610.png
   :align: center
@@ -60,7 +60,7 @@ For the CX410 chassis, the system controllers are responsible for providing non-
 
 Each BX520 blade occupies 2 slots within the chassis and leverages 2 x 100Gb backplane interfaces within each slot for a total of 400Gb backplane connectivity. The picture below shows the backplane interconnections of a fully populated 8 slot CX410 chassis with 4 BX520 blades installed. 
 
-.. note:: The CX1610 chassis and BX520 blade are targeted to be generally available with F5OS-C 1.8.1
+.. note:: The CX1610 chassis and BX520 blade are generally available with F5OS-C 1.8.1 and later.
 
 .. image:: images/velos_introduction/bx520cx410.png
   :align: center
