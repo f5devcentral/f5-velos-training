@@ -438,7 +438,7 @@ Backing Up Chassis Partition Databases via API
 ------------------------------------------------
 
 
-You’ll need to do this for each chassis partition in the system. To backup the chassis partition databases via API use the following API command:
+You’ll need to do this for each chassis partition in the system. To backup the chassis partition databases via API, use the following API command:
 
 .. code-block:: bash
 
@@ -468,7 +468,7 @@ You can copy the backup file out of the chassis partition using the **Systems Se
   :align: center
   :scale: 100%
 
-You can highlight the file, and then click the **Export** button. You wil then be prompted to enter the details for a remote HTTPS server so that the file can be copied out of the chassis partition:
+You can highlight the file, and then click the **Export** button. You will then be prompted to enter the details for a remote HTTPS server so that the file can be copied out of the chassis partition:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image7.png
   :align: center
@@ -568,7 +568,7 @@ Each chassis partition in the system needs to be backed up independently. Below 
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restocnf/data/f5-utils-file-transfer:file/export
 
-In the body of the API call enter the remote server crednetials and connectivity information.
+In the body of the API call enter the remote server credentials and connectivity information.
 
 .. code-block:: json
 
@@ -678,13 +678,13 @@ To download a specific config file, use the following API call.
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
 
-For the **Headers** secion of the Postman request be sure to add the following headers:
+For the **Headers** section of the Postman request be sure to add the following headers:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/config-headers.png
   :align: center
   :scale: 100%
 
-In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the configuration file named **jim-july** file that resides in the **configs/** directory.
+In the body of the API call select **form-data** and then enter the key/value pairs as seen below. The example provided will download the configuration file named **jim-july** file that resides in the **configs/** directory.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/configfile.png
   :align: center
@@ -799,7 +799,7 @@ For the final step, reset the system controllers ConfD database. This will essen
     syscon-2-active(config)# system database config reset-default-config true
     syscon-2-active(config)# commit
 
-Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
 
 .. code-block:: bash
 
@@ -896,7 +896,7 @@ In the body of the API call, ensure the **f5-database:reset-default-config** is 
     "f5-database:reset-default-config": "true"
     }
 
-Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode, and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
 
 .. code-block:: bash
 
@@ -938,7 +938,7 @@ You will need to login to the system controller console port since all the netwo
     admin connected from 127.0.0.1 using console on syscon-1-standby
     syscon-1-standby# 
 
-Logout of the system and login as root using the new password you just created for the admin account, you’ll be prompted to change the password again. There is a bug in the current F5OS version where the config directory is getting deleted on wiping out of the database, and it is not restored. Until that issue is resolved the recommended workaround is to create a new backup of the system controller configuration and that will create the required config directory. Note you will not restore from this backup, instead you will restore from the one taken earlier before the reset. 
+Logout of the system and login as root using the new password you just created for the admin account. You’ll be prompted to change the password again. There is a bug in the current F5OS version where the config directory is getting deleted on wiping out of the database, and it is not restored. Until that issue is resolved the recommended workaround is to create a new backup of the system controller configuration and that will create the required config directory. Note you will not restore from this backup, instead you will restore from the one taken earlier before the reset. 
 
 .. code-block:: bash
 
@@ -994,7 +994,7 @@ To transfer files into the system controller you’ll have to manually configure
 Importing System Controller Backups
 ===================================
 
-Once the system is configured and out-of-band connectivity is restored, you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controller's configuration as outlined earlier.
+Once the system is configured and out-of-band connectivity is restored, you can now copy the ConfD database archives back into the system controllers. If you are in the bash shell, you can simply SCP the file into the **/var/confd/configs** directory. If it doesn’t exist, you can create it by creating a dummy backup of the system controller's configuration as outlined earlier.
 
 
 Next, SCP the file from a remote server:
@@ -1067,7 +1067,7 @@ In the body of the API call, enter the file name you want to query.
         "f5-utils-file-transfer:file-name": "configs/SYSTEM-CONTROLLER-DB-BACKUP{{currentdate}}"
     }
 
-If you want to list the contents of the config directory via API use the following API command:
+If you want to list the contents of the config directory via API, use the following API command:
 
 .. code-block:: bash
 
@@ -1568,7 +1568,7 @@ Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SC
 
     POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
-In the body of the API call, enter the remote server credentials and connectivty information.
+In the body of the API call, enter the remote server credentials and connectivity information.
 
 .. code-block:: json
 
@@ -1582,7 +1582,7 @@ In the body of the API call, enter the remote server credentials and connectivty
         "f5-utils-file-transfer:local-file": "configs/development-DB-BACKUP2021-09-10"
     }
 
-You can check on the file transfer status by issubg the following API call:
+You can check on the file transfer status by issuing the following API call:
 
 .. code-block:: bash
 
@@ -1604,7 +1604,7 @@ Repeat similar steps for remaining chassis partitions:
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-utils-file-transfer:file/import
 
-In the body of the API call, enter the remote server credentials and connectivty information.
+In the body of the API call, enter the remote server credentials and connectivity information.
 
 .. code-block:: json
 
@@ -1793,7 +1793,7 @@ The following API commands will restore the database backups on the two chassis 
 
     POST https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
-Enter the backupfile to be restored in the body of the API call.
+Enter the backup file to be restored in the body of the API call.
 
 .. code-block:: json
 
@@ -1807,7 +1807,7 @@ Repeat the same process for other partitions on the system.
 
     POST https://{{velos_chassis1_chassis_partition2_ip}}:8888/restconf/data/openconfig-system:system/f5-database:database/f5-database:config-restore
 
-Enter the backupfile to be restored in the body of the API call.
+Enter the backup file to be restored in the body of the API call.
 
 .. code-block:: json
 

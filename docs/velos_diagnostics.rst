@@ -57,7 +57,7 @@ In both the system controller and the chassis partition a qkview can be generate
   :align: center
   :scale: 70%
 
-To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **Diagnostics -> iHealth Configuration** page. Note, that the iHelath service recently went through authentication enhancements, and some older version of F5OS-C may not authenticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
+To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **Diagnostics -> iHealth Configuration** page. Note, that the iHealth service recently went through authentication enhancements, and some older version of F5OS-C may not authenticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
 
 You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services using the **Diagnostics -> iHealth Configuration** page. You may also optionally configure a **Proxy Server** for iHealth access if your system requires external traffic to be inspected by a proxy server.
 
@@ -82,7 +82,7 @@ You'll see the status of the upload as it progresses:
 Qkview Creation and Upload via CLI
 ----------------------------------
 
-You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services via the CLI. Enter **config** mode, and then use the **system diagnostics ihealth config** command to configure a **clientid** and **clientsecret**.
+You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services via the CLI. Enter **config** mode and then use the **system diagnostics ihealth config** command to configure a **clientid** and **clientsecret**.
 
 
 .. code-block:: bash
@@ -210,7 +210,7 @@ The output of the command will show the percentage complete of the qkview.
         }
     }
 
-Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal, and then store them on your VELOS system to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the API.
+Before uploading your qkview file to iHealth you must ensure you have setup the proper credentials on your VELOS system. the iHealth service has recently changed its authentication methods. You must now get your client ID and client secret from the myf5.com portal and then store them on your VELOS system to do direct uploads of qkview files to iHealth. Below is an example setting up the client ID and client secret via the API.
 
 .. code-block:: bash
 
@@ -224,7 +224,7 @@ In the body of the API call, add your client ID:
     "f5-system-diagnostics-ihealth:clientid": "XXXXXXXXXXXXXXXXXXXXXXX"
     }
 
-To confirm the client ID has been set, send the folowing API call:
+To confirm the client ID has been set, send the following API call:
 
 .. code-block:: bash
 
@@ -253,7 +253,7 @@ In the body of the API call, enter the client secret as seen below:
         "f5-system-diagnostics-ihealth:clientsecret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     }
 
-To view the current client secret enter the following API call.
+To view the current client secret, enter the following API call.
 
 .. code-block:: bash
 
@@ -389,7 +389,7 @@ For the **Headers** section of the Postman request be sure to add the following 
   :align: center
   :scale: 100%
 
-If you are using Postman, in the body of the API call select **Body**, then selct **form-data**. Then enter the **file-name**, **path**, and **token** as seen below.
+If you are using Postman, in the body of the API call select **Body**, then select **form-data**. Then enter the **file-name**, **path**, and **token** as seen below.
 
 .. image:: images/velos_diagnostics/downloadqkviewapi.png
   :align: center
@@ -873,7 +873,7 @@ There are also other file options to tail the log file using **file tail -f** fo
     2021-02-23T16:57:51.752978+00:00 controller-1 partition-software-manager[9]: priority="Err" version=1.0 msgid=0x1101000000000052 msg="unknown class_tag:" field_tag=1537040122.
     2021-02-23T16:57:56+00:00 controller-2 partition-software-manager[8]: priority="Err" version=1.0 msgid=0x1101000000000052 msg="unknown class_tag:" field_tag=1537040122.
 
-Below output is showing an example of tailing the last 20 lines of the vleos.log file.
+Below output is showing an example of tailing the last 20 lines of the velos.log file.
 
 .. code-block:: bash
 
@@ -938,7 +938,7 @@ If you want to download the main **velos.log**, select the directory **/log/cont
 Downloading Logs from the API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can download various logs from the F5OS layer using the F5OS API. To list the current log files in the **log/system/** directory use the following API call.
+You can download various logs from the F5OS layer using the F5OS API. To list the current log files in the **log/system/** directory, use the following API call.
 
 .. code-block:: bash
 
@@ -1311,14 +1311,14 @@ To download a specific log file, use the following API call.
 
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
-In the body of the API call select **form-data**, and then enter the key/value pairs as seen below. The example provided will download the **velos.log** file that resides in the **log/controller* directory.
+In the body of the API call select **form-data** and then enter the key/value pairs as seen below. The example provided will download the **velos.log** file that resides in the **log/controller** directory.
 
 .. image:: images/velos_diagnostics/veloslogapi.png
   :align: center
   :scale: 70%
 
 
-For the **Headers** secion of the Postman request be sure to add the following headers:
+For the **Headers** section of the Postman request be sure to add the following headers:
 
 .. image:: images/velos_diagnostics/headers-velos-log.png
   :align: center
@@ -1524,7 +1524,7 @@ Logging Subsystems / Software Component Levels
 
 
 
-Currently in both the system controller and chassis partition webUIs logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level, which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
+Currently in both the system controller and chassis partition webUI's logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level, which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
 
 .. image:: images/velos_diagnostics/image4.png
   :align: center
@@ -1550,7 +1550,7 @@ If you would like to change any of the logging levels via the CLI you must be in
 
 
 
-Below is an example of setting the sw-subsystem **authd** to **DEBUG**, and then setting it back to **INFORMATIONAL**.
+Below is an example of setting the sw-subsystem **authd** to **DEBUG** and then setting it back to **INFORMATIONAL**.
 
 .. code-block:: bash
 
