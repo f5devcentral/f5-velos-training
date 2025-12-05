@@ -4533,6 +4533,7 @@ Traps will be generated for sensor faults or communication failures. In the exam
 +------------------+-----------------------------------------------------------+
 
 Traps will be generated for components being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is present or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
+This trap only provides informational/event messages **alertEffect=2** as they are indicating the presence or removal of a module or part. It does not indicate a failure. Failures are tracked with **module-communication-error** traps.
 
 .. code-block:: bash
 
@@ -4683,6 +4684,12 @@ The output below is from an rSeries unit:
 | CLEAR            | Module communication error detected                       |
 +------------------+-----------------------------------------------------------+
 
+SNMP traps will be generated for components being present or removed using the **module-present** traps. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is present or removed, or if the PeerCc (Peer Chassis Controller) is present or removed. These type of traps only provide informational/event messages **alertEffect=2** as they are indicating the presence or removal of a module or part. It does not indicate a failure. 
+
+Failures are tracked with **module-communication-error** traps as seen in some fo the examples below.
+
+
+
 Power Supply Module
 
 The output below is from an rSeries unit:
@@ -4698,17 +4705,15 @@ The output below is from an rSeries unit:
 
 LCD Module
 
-The output below is from an rSeries unit:
-
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include module-communication-error
-    <INFO> 12-Apr-2023::11:51:32.363 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130725 10.255.8.22:6011 (TimeTicks sysUpTime=71259)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.359013061 UTC)(OCTET STRING alertDescription=Module communication error detected)
-    <INFO> 12-Apr-2023::11:51:32.413 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130726 10.255.8.22:6011 (TimeTicks sysUpTime=71264)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.359032524 UTC)(OCTET STRING alertDescription=LCD module communication error detected)
-    <INFO> 12-Apr-2023::11:51:32.463 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130727 10.255.8.22:6011 (TimeTicks sysUpTime=71269)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.361661313 UTC)(OCTET STRING alertDescription=LCD Health is Not OK)
-    <INFO> 12-Apr-2023::11:51:45.155 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130728 10.255.8.22:6011 (TimeTicks sysUpTime=72538)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.150848562 UTC)(OCTET STRING alertDescription=Module communication error detected)
-    <INFO> 12-Apr-2023::11:51:45.205 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130729 10.255.8.22:6011 (TimeTicks sysUpTime=72543)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.150869755 UTC)(OCTET STRING alertDescription=LCD module communication is OK)
-    <INFO> 12-Apr-2023::11:51:45.255 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130730 10.255.8.22:6011 (TimeTicks sysUpTime=72549)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.156764576 UTC)(OCTET STRING alertDescription=LCD Health is OK)
+    Controller1# file show log/confd/snmp.log | include module-communication-error
+    <INFO> 20-Nov-2025::17:39:42.416 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050505 10.144.131.74:5001 (TimeTicks sysUpTime=1087200)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-11-20 17:39:42.318069896 UTC)(OCTET STRING alertDescription=Module communication error detected)
+    <INFO> 20-Nov-2025::17:39:42.485 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050506 10.144.131.74:5001 (TimeTicks sysUpTime=1087207)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:39:42.318089307 UTC)(OCTET STRING alertDescription=Communication error detected between system controller and module)
+    <INFO> 20-Nov-2025::17:39:42.544 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050507 10.144.131.74:5001 (TimeTicks sysUpTime=1087213)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:39:42.324027997 UTC)(OCTET STRING alertDescription=Module communication error: value=true)
+    <INFO> 20-Nov-2025::17:40:00.379 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050508 10.144.131.74:5001 (TimeTicks sysUpTime=1088996)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.330888633 UTC)(OCTET STRING alertDescription=Module communication error detected)
+    <INFO> 20-Nov-2025::17:40:00.438 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050509 10.144.131.74:5001 (TimeTicks sysUpTime=1089002)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.330916609 UTC)(OCTET STRING alertDescription=No communication error detected between system controller and module)
+    <INFO> 20-Nov-2025::17:40:00.547 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050510 10.144.131.74:5001 (TimeTicks sysUpTime=1089013)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.337705127 UTC)(OCTET STRING alertDescription=Module communication error: value=false)
 
 
 **psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
@@ -4827,6 +4832,9 @@ Fault detected in Fan Controller health.
 +------------------+---------------------------------------------------------------------+
 
 Change detected in System Controller Arbitration State.
+
+
+The SNMP trap "Deasserted: peer arbitration health state" is an informational alert indicating a transient change in the system controller arbitration state. This message is sent when a previously asserted arbitration condition is cleared.
 
 .. code-block:: bash
     
@@ -4998,6 +5006,8 @@ Below is an example of an authentication failure trap generated on a chassis par
 Chassis is operating with NEBS temperature thresholds.
 
 .. code-block:: bash
+
+    <INFO> 2-Dec-2025::10:03:20.430 controller-1 confd[751]: snmp snmpv2-trap reqid=544300360 10.144.131.74:5002 (TimeTicks sysUpTime=105646)(OBJECT IDENTIFIER snmpTrapOID=nebsEnabled)(OCTET STRING alertSource=chassis)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-02 10:03:06.146448165 UTC)(OCTET STRING alertDescription=Chassis is operating with NEBS temperature thresholds)
     
 
 **nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
@@ -5103,6 +5113,11 @@ The Openshift cluster requires a manual rebuild to use the latest containers.
 See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them and rebuild the Openshift cluster. 
 
 `K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
+
+If a cluster rebuild is required follow the steps in the following solution article:
+
+`K000139870: Troubleshoot the Openshift cluster installation in F5OS-C <https://my.f5.com/manage/s/article/K000139870>`_
+
 
 .. code-block:: bash
     
