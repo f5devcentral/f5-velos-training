@@ -4838,24 +4838,46 @@ Change detected in System Controller Arbitration State.
 
 **switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
 
-+------------------+-----------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                         |
-+==================+===========================================================+
-| ASSERT           | Switch port status                                        |
-+------------------+-----------------------------------------------------------+
-| EVENT            |                                                           |
-|                  |                                                           |
-+------------------+-----------------------------------------------------------+
-| CLEAR            | Switch port status                                        |
-+------------------+-----------------------------------------------------------+
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                                       |
++==================+=========================================================================================================================+
+| ASSERT           | Switch port status                                                                                                      |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| EVENT            | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has FCS errors, value={{fcsErrors}}             |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has FCS corrected errors, value={{fcsErrors}}.  |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has FCS uncorrected errors, value={{fcsErrors}} |
+|                  |                                                                                                                         |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| CLEAR            | Switch port status                                                                                                      |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| EVENT            | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has no FEC errors                               |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has no FEC corrected errors                     |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has no FEC uncorrected errors                   |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
 
-Switch port status.
+Below is an example of a switch-status trap indicating FCS errors on one of the system controllers internal highGig ports:
 
 .. code-block:: bash
-    
-    <INFO> 23-Jul-2024::13:39:16.822 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934234 10.255.80.251:162 (TimeTicks sysUpTime=374941)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:16.722021333 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has FEC uncorrected errors, value=1)
 
-    <INFO> 23-Jul-2024::13:39:46.879 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934236 10.255.80.251:162 (TimeTicks sysUpTime=377947)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:46.771763998 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has no FEC uncorrected errors)
+    <INFO> 18-Oct-2025::06:57:41.748 controller-2 confd[677]: snmp snmpv2-trap reqid=270450359 172.22.50.57:162 (TimeTicks sysUpTime=1131472631)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-10-18 13:57:40.588463363 UTC)(OCTET STRING alertDescription=Switch port status)
+    
+    <INFO> 18-Oct-2025::06:57:41.851 controller-2 confd[677]: snmp snmpv2-trap reqid=270450360 172.22.50.57:162 (TimeTicks sysUpTime=1131472641)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-18 13:57:40.588491692 UTC)(OCTET STRING alertDescription=control plane switch port hg0 (cc2/hg0) has FCS errors, value=500)
+
+Below is an example of a switch-status trap indicating no FCS errors on one of the system controllers internal highGig ports:
+
+.. code-block:: bash
+
+    <INFO> 21-Oct-2025::09:16:18.529 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076251 172.22.50.57:162 (TimeTicks sysUpTime=4657)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:09.136120859 UTC)(OCTET STRING alertDescription=Attribute health reset)
+   
+    <INFO> 21-Oct-2025::09:16:18.967 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076252 172.22.50.57:162 (TimeTicks sysUpTime=4701)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:09.455190150 UTC)(OCTET STRING alertDescription=Switch port status)
+     
+    <INFO> 21-Oct-2025::09:25:39.628 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076301 172.22.50.57:162 (TimeTicks sysUpTime=60767)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:39.609386032 UTC)(OCTET STRING alertDescription=control plane switch port hg1 (cc1/hg1) has no FEC uncorrected errors)
+    
+    <INFO> 21-Oct-2025::09:25:39.760 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076302 172.22.50.57:162 (TimeTicks sysUpTime=60780)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:39.743934189 UTC)(OCTET STRING alertDescription=control plane switch port hg0 (cc1/hg0) has no FEC uncorrected errors)
 
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
@@ -5023,6 +5045,8 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 
 **openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.524288**
 
+One or more Openshift certificates expiring within 90 days.
+
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
@@ -5031,12 +5055,24 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 | CLEAR            | One or more openshift certificates expiring within 90 days.                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-One or more openshift certificates expiring within 90 days.
+See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them. 
+
+`K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
 
 .. code-block:: bash
+
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include openshiftCertsExpWithinNinetyDays
+
+    <INFO> 4-Dec-2025::15:33:30.323 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076417 172.22.50.57:162 (TimeTicks sysUpTime=382787836)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertsExpWithinNinetyDays)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-12-04 23:33:30.306856786 UTC)(OCTET STRING alertDescription=One or more openshift certificates expiring within 90 days)
+
+    <INFO> 4-Dec-2025::15:35:44.704 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076418 172.22.50.57:162 (TimeTicks sysUpTime=382801274)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertsExpWithinNinetyDays)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-04 23:35:44.686936372 UTC)(OCTET STRING alertDescription=One or more openshift certificates expiring within 90 days)
     
 
 **openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.524289**
+
+See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them. 
+
+`K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
@@ -5046,7 +5082,7 @@ One or more openshift certificates expiring within 90 days.
 | CLEAR            | One or more openshift certificates has expired or is expiring.                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-One or more openshift certificates has expired or is expiring.
+One or more Openshift certificates has expired or is expiring.
 
 .. code-block:: bash
     
@@ -5062,12 +5098,17 @@ One or more openshift certificates has expired or is expiring.
 | CLEAR            | The openshift cluster requires a manual rebuild to use the latest containers.                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The openshift cluster requires a manual rebuild to use the latest containers.
+The Openshift cluster requires a manual rebuild to use the latest containers.
+
+See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them and rebuild the Openshift cluster. 
+
+`K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
 
 .. code-block:: bash
     
     velos-1-gsa-2-active# file show log/confd/snmp.log | include openshift
     <INFO> 5-Mar-2024::15:20:13.849 controller-2 confd[581]: snmp snmpv2-trap reqid=220801593 10.255.80.251:162 (TimeTicks sysUpTime=45302)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-03-05 20:20:13.834972950 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
+    
     <INFO> 2-Apr-2024::21:49:23.796 controller-2 confd[579]: snmp snmpv2-trap reqid=968477049 10.255.80.251:162 (TimeTicks sysUpTime=1607910)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-03 01:49:23.765813382 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
     velos-1-gsa-2-active# 
 
@@ -5080,7 +5121,7 @@ The openshift cluster requires a manual rebuild to use the latest containers.
 | EVENT            |                                                                                                          |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-Critical issue in fpga and datapath initialization process.
+Critical issue in FPGA and datapath initialization process.
 
 .. code-block:: bash
     
