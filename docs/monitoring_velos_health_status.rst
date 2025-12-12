@@ -1,5 +1,5 @@
 =====================================
-Montoring VELOS Health & Alert Status
+Monitoring VELOS Health & Alert Status
 =====================================
 
 VELOS has many components and subsystems which can be monitored via CLI, webUI, API, and SNMP. It may be difficult to sift through all the end points to determine which are the key ones that can quicky provide health of the chassis. This section will provide guidance on how to quickly get health and alert status of the VELOS system, while other sections will focus on getting deeper detail.
@@ -67,7 +67,7 @@ To see past events use the command **show system events**.
 Checking Active Alerts via webUI
 ------------------------------
 
-In the system controller webUI you can go to the **System Events > Alarms & Events** page to see if there are any known alerts for the system. The alerting page is focused on **Active** alerts, and not issues that have cleared. If for example the temperature rises beyond an acceptable threshold, then a temperature alert will be raised. It will be seen in this page. If the temperature reading then falls back into a safe range then the alert will be removed. Each of these alerts will also generate a corresponding SNMP Trap. Please see the VELOS F5OS SNMP Monitoring and Alerting section.
+In the system controller webUI you can go to the **System Events > Alarms & Events** page to see if there are any known alerts for the system. The alerting page is focused on **Active** alerts and not issues that have cleared. If for example the temperature rises beyond an acceptable threshold, then a temperature alert will be raised. It will be seen in this page. If the temperature reading then falls back into a safe range then the alert will be removed. Each of these alerts will also generate a corresponding SNMP Trap. Please see the VELOS F5OS SNMP Monitoring and Alerting section.
 
 `VELOS F5OS SNMP Monitoring and Alerting <https://clouddocs.f5networks.net/training/community/velos-training/html/velos_monitoring_snmp.html>`_
 
@@ -399,7 +399,7 @@ VELOS also has a very robust **system health** utility where all the various har
 Checking System Health via CLI
 ------------------------------
 
-Below is the full output from a chassis with 3 blades installed. There is a lot of info in the output when unfiltered, but everything is broken into sections, within each section you'll get a high-level status of that subsection with the **state name** and **state health**. You can then see all the sub-componenets that bubble up into the higher-level health status for that section. As an example, you don't need to know what thresholds will trigger an event, the system health will monitor that for you. If any component is out of tolerance, it will change status so that is not OK, and then it bubbles that status up to the higher level status.
+Below is the full output from a chassis with 3 blades installed. There is a lot of info in the output when unfiltered, but everything is broken into sections, within each section you'll get a high-level status of that subsection with the **state name** and **state health**. You can then see all the sub-components that bubble up into the higher-level health status for that section. As an example, you don't need to know what thresholds will trigger an event, the system health will monitor that for you. If any component is out of tolerance, it will change status so that is not OK, and then it bubbles that status up to the higher-level status.
 
 After the full output below some CLI examples of how to filter all this information down into a high-level status will be provided.
 

@@ -64,7 +64,7 @@ After completing the upload the image will go to the **Verifying** stage on the 
   :align: center
   :scale: 90%
 
-You'll then see the status change on both the active and stanby controllers.
+You'll then see the status change on both the active and standby controllers.
 
 .. image:: images/velos_software_upgrades/verify-verify.png
   :align: center
@@ -355,15 +355,15 @@ Starting with F5OS-C 1.8.0 and later versions, a check will be run to determine 
   :align: center
   :scale: 90%
 
-Then a compatability check will run to estimate the time for the upgrade.
+Then a compatibility check will run to estimate the time for the upgrade.
 
-.. image:: images/velos_software_upgrades/compatability-check.png
+.. image:: images/velos_software_upgrades/compatibility-check.png
   :align: center
   :scale: 90%
 
 The results will tell you how long the controller upgrade will take and how many reboots will be initiated during the system controller upgrade process.
 
-.. image:: images/velos_software_upgrades/compatability-verification.png
+.. image:: images/velos_software_upgrades/compatibility-verification.png
   :align: center
   :scale: 90%
 

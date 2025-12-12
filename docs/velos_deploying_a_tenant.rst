@@ -56,7 +56,7 @@ This means the disk consumption on the rSeries disk is much smaller than what ap
   :align: center
   :scale: 70% 
 
-However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs and on the filesystem of the appliance it is consuming only 6.4GB on the disk. You can confirm this by logging into the bash shell of F5OS as root. Then listing the contents of the directory **/var/F5/system/cbip-disks**, here you will see directories for each tenant. Enter the command **ls -lsh <tenant-directory-name>** and the output will show the size the tenant thinks it has (76GB) and the actual size used on disk (in this case 6.4GB).
+However, the 76GB image is allocated in a sparse manner meaning the tenant is only utilizing what it needs and on the filesystem of the appliance it is consuming only 6.4GB on the disk. You can confirm this by logging into the bash shell of F5OS as root. Then listing the contents of the directory **/var/F5/system/cbip-disks**, here you will see directories for each tenant. Enter the command **ls -lsh <tenant-directory-name>** and the output will show the size the tenant thinks it has (76GB), and the actual size used on disk (in this case 6.4GB).
 
 .. image:: images/velos_deploying_a_tenant/image7.png
   :align: center
@@ -222,7 +222,7 @@ You may also import the tenant image file from the F5OS CLI. Use the **file impo
 
 .. code-block:: bash
 
-    Production1# file import remote-host 10..10.10.142 remote-file /upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username corpuser insecure
+    Production1# file import remote-host 10.10.10.142 remote-file /upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username corpuser insecure
     Value for 'password' (<string>): ********
     result File transfer is initiated.(images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle)
 
@@ -230,7 +230,7 @@ If a remote HTTPS server is not available, you may also import the file from the
 
 .. code-block:: bash
 
-    Production1# file import remote-host 10..10.10.142 remote-file /var/www/server/1/upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username root insecure protocol scp
+    Production1# file import remote-host 10.10.10.142 remote-file /var/www/server/1/upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username root insecure protocol scp
     Value for 'password' (<string>): ********
     result File transfer is initiated.(images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle)
 
@@ -239,7 +239,7 @@ The command **show file transfer-operations** will provide details of the transf
 
 .. code-block:: bash
 
-    Production1# file import remote-host 10..10.10.142 remote-file /var/www/server/1/upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username root insecure protocol scp
+    Production1# file import remote-host 10.10.10.142 remote-file /var/www/server/1/upload/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle local-file images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle username root insecure protocol scp
     Value for 'password' (<string>): ********
     result File transfer is initiated.(images/tenant/BIGIP-15.1.4-0.0.47.ALL-VELOS.qcow2.zip.bundle)
 
@@ -277,7 +277,7 @@ You can view the current tenant images and their status in the F5OS CLI by using
 Creating a Tenant via CLI
 =========================
 
-Tenant lifecycle can be fully managed via the CLI using the **tenants** command in **config** mode on the chassis partition. Using command tab completion and question marks will help display all the tenant options. Enter **config** mode and enter the command **tenants tenant <tenant-name>** where **<tenant-name>** is the name of the tenant you would like to create. This will put you into a mode for that tenant and you will be prompted for some basic information to create the tenant via a CLI wizard. After answering basic information you may configure additional tenant parameters by entering **config ?** within the tenant mode, and that will provide all the additional configuration options:
+Tenant lifecycle can be fully managed via the CLI using the **tenants** command in **config** mode on the chassis partition. Using command tab completion and question marks will help display all the tenant options. Enter **config** mode and enter the command **tenants tenant <tenant-name>** where **<tenant-name>** is the name of the tenant you would like to create. This will put you into a mode for that tenant and you will be prompted for some basic information to create the tenant via a CLI wizard. After answering basic information, you may configure additional tenant parameters by entering **config ?** within the tenant mode, and that will provide all the additional configuration options:
 
 .. code-block:: bash
 
@@ -560,7 +560,7 @@ In the body of the API request enter the following:
     {
         "input": [
             {
-                "remote-host": "10..10.10.142",
+                "remote-host": "10.10.10.142",
                 "remote-file": "upload/{{Tenant_Image}}",
                 "local-file": "images/{{Tenant_Image}}",
                 "insecure": "",
@@ -722,9 +722,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.149",
+                      "mgmt-ip": "10.10.10.149",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "vlans": [
                           501,
                           3010,
@@ -750,9 +750,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.149",
+                      "mgmt-ip": "10.10.149",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "mac-ndi-set": [
                           {
                               "ndi": "default",
@@ -791,9 +791,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.205",
+                      "mgmt-ip": "10.10.205",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "vlans": [
                           502,
                           3010,
@@ -819,9 +819,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.205",
+                      "mgmt-ip": "10.10.205",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "mac-ndi-set": [
                           {
                               "ndi": "default",
@@ -941,9 +941,9 @@ Expanding a tenant on the same blade via the CLI follows the same workflows as t
   config type         BIG-IP
   config image        BIGIP-14.1.4-0.0.654.ALL-VELOS.qcow2.zip.bundle
   config nodes        [ 1 ]
-  config mgmt-ip      10..10.10.207
+  config mgmt-ip      10.10.207
   config prefix-length 24
-  config gateway      10..10.10.1
+  config gateway      10.10.10.1
   config vlans        [ 444 500 555 ]
   config cryptos      enabled
   config vcpu-cores-per-node 2
@@ -960,9 +960,9 @@ You can also view the tenant running status by issuing the CLI command **show te
   Production-1# show tenants 
   tenants tenant tenant1
   state type          BIG-IP
-  state mgmt-ip       10..10.10.207
+  state mgmt-ip       10.10.207
   state prefix-length 24
-  state gateway       10..10.10.1
+  state gateway       10.10.10.1
   state vlans         [ 444 500 555 ]
   state cryptos       enabled
   state vcpu-cores-per-node 2
@@ -1057,9 +1057,9 @@ The API output:
           "nodes": [
               1
           ],
-          "mgmt-ip": "10..10.10.207",
+          "mgmt-ip": "10.10.207",
           "prefix-length": 24,
-          "gateway": "10..10.10.1",
+          "gateway": "10.10.10.1",
           "vlans": [
               444,
               500,
@@ -1200,9 +1200,9 @@ The same workflow can be done in the CLI. A tenant that currently exists on a si
   Production-1# show tenants tenant tenant2
   tenants tenant tenant2
   state type          BIG-IP
-  state mgmt-ip       10..10.10.208
+  state mgmt-ip       10.10.208
   state prefix-length 24
-  state gateway       10..10.10.1
+  state gateway       10.10.10.1
   state vlans         [ 444 500 555 ]
   state cryptos       enabled
   state vcpu-cores-per-node 6
@@ -1231,9 +1231,9 @@ The same workflow can be done in the CLI. A tenant that currently exists on a si
   config type         BIG-IP
   config image        BIGIP-14.1.4-0.0.654.ALL-VELOS.qcow2.zip.bundle
   config nodes        [ 1 ]
-  config mgmt-ip      10..10.10.208
+  config mgmt-ip      10.10.208
   config prefix-length 24
-  config gateway      10..10.10.1
+  config gateway      10.10.10.1
   config vlans        [ 444 500 555 ]
   config cryptos      enabled
   config vcpu-cores-per-node 6
@@ -1268,9 +1268,9 @@ You can verify the tenant status using the **show tenants** command. Note that N
   Production-1# show tenants tenant tenant2
   tenants tenant tenant2
   state type          BIG-IP
-  state mgmt-ip       10..10.10.208
+  state mgmt-ip       10.10.208
   state prefix-length 24
-  state gateway       10..10.10.1
+  state gateway       10.10.10.1
   state vlans         [ 444 500 555 ]
   state cryptos       enabled
   state vcpu-cores-per-node 6
@@ -1302,7 +1302,7 @@ If the tenant is already deployed, then you must first change the tenant to a pr
 
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/running-state
 
-In the body of the API call set the **runnning-state** to provisioned.
+In the body of the API call set the **running-state** to provisioned.
 
 .. code-block:: json
 
@@ -1317,7 +1317,7 @@ Once the tenant is in the provisioned state you can issue another API call to mo
   PATCH https://{{velos_chassis1_chassis_partition1_ip}}:8888//restconf/data/f5-tenants:tenants/tenant={{New_Tenant2_Name}}/config/vcpu-cores-per-node
 
 
-In the body of the API call set the changes you would like to make and then set the **runnning-state** to deployed.
+In the body of the API call set the changes you would like to make and then set the **running-state** to deployed.
 
 .. code-block:: json
 
@@ -1349,9 +1349,9 @@ The response should be similar to the output below, which will show the tenant's
           "nodes": [
               1
           ],
-          "mgmt-ip": "10..10.10.208",
+          "mgmt-ip": "10.10.208",
           "prefix-length": 24,
-          "gateway": "10..10.10.1",
+          "gateway": "10.10.10.1",
           "vlans": [
               444,
               500,
@@ -1389,9 +1389,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.149",
+                      "mgmt-ip": "10.10.149",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "vlans": [
                           501,
                           3010,
@@ -1417,9 +1417,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.149",
+                      "mgmt-ip": "10.10.149",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "mac-ndi-set": [
                           {
                               "ndi": "default",
@@ -1458,9 +1458,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.205",
+                      "mgmt-ip": "10.10.205",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "vlans": [
                           502,
                           3010,
@@ -1486,9 +1486,9 @@ Below is an example output from a VELOS system:
                       "nodes": [
                           1
                       ],
-                      "mgmt-ip": "10..10.10.205",
+                      "mgmt-ip": "10.10.205",
                       "prefix-length": 24,
-                      "gateway": "10..10.10.1",
+                      "gateway": "10.10.10.1",
                       "mac-ndi-set": [
                           {
                               "ndi": "default",

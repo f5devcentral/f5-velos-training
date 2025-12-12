@@ -1975,7 +1975,7 @@ It can also be run against a VELOS chassis partition:
             6684675 HOST-RESOURCES-TYPES::hrStorageFixedDisk controller-2 /var/F5/partition2/shared               4096 Bytes       2618880          8303                           ?
     prompt%
 
-Componenent Info Table
+Component Info Table
 ----------------------------
 
 The table below shows the current VELOS component information for the chassis level or partition level.
@@ -2007,7 +2007,7 @@ Below is the component info table from the system controller layer.
     sub0759g000z                         ?        ?
     prompt% 
 
-You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable and each component and its coresponding serial number will be displayed.
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable and each component and its corresponding serial number will be displayed.
 
 .. code-block:: bash
 
@@ -2046,7 +2046,7 @@ Below is the component info table from the chassis partition layer.
     bld424258s  BX110        ?
     prompt% 
 
-You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable within the chassis partition and each blade and its coresponding serial number will be displayed.
+You can also walk the F5-PLATFORM-STATS-MIB:componentInfoTable within the chassis partition and each blade and its corresponding serial number will be displayed.
 
 .. code-block:: bash
 
@@ -2205,7 +2205,7 @@ You can also walk the F5-PLATFORM-STATS-MIB:temperatureStatsTable within a chass
 Memory Stats Table
 ------------------
 
-This MIB displays the memory utilization for the system controllers as well as the chassis partitions. Below is the table view for the system ccontrollers:
+This MIB displays the memory utilization for the system controllers as well as the chassis partitions. Below is the table view for the system controllers:
 
 **F5-PLATFORM-STATS-MIB:memoryStatsTable OID:.1.3.6.1.4.1.12276.1.2.1.4.1**
 
@@ -3474,7 +3474,7 @@ Inside of F5OS there are different categories of diagnostic information that the
 
 A system alert is typically associated with some sort of fault in the system and it will have two states: An **alarm** condition indicating that some threshold has been crossed or some failure has occurred, and then a corresponding **clear** condition that indicates the fault has cleared or the threshold condition has gone back to an acceptable level. System alerts are high-level categories like: psu-fault, drive-fault, thermal-fault etc... These type of messages are what traditional SNMP systems monitor in order to alert someone when there is a failure condition or a threshold that has been crossed requiring attention. 
 
-If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**. Both the system controller and partition layer in VELOS maintain system alarms and system events, and certain types of messages are only visibile in one or the other. As an example, the **show system alarms** output below is from a system controller. 
+If a system is healthy and there are no active alarms, then the output of **show system alarms** will report **No entries found**. Both the system controller and partition layer in VELOS maintain system alarms and system events, and certain types of messages are only visible in one or the other. As an example, the **show system alarms** output below is from a system controller. 
 
 .. code-block:: bash
 
@@ -3767,29 +3767,32 @@ Below a **hardware-device-fault** SNMP trap alarm has been raised for two separa
 1. CPU machine check error 
 2. CPU internal error
 
-Both of these alarms have the same severity **Emergency** noted by **alertSeverity=0** in the hardware-device-fault alarm being raised. The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) or Clear (**alertEffect=0**) messages. Event messages (**alertEffect=2**) will always show Info severity (**alertSeverity=8**) as they are only used for informative purposes. 
+Both of these alarms have the same severity **Emergency** noted by **alertSeverity=0** in the hardware-device-fault alarm being raised. The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
 
-+-----------+--------------------+-----------------------------------+
-| Severity  | Severity Level     | Details                           |
-+===========+====================+===================================+
-| EMERGENCY | alertSeverity = 0  | System is unusable                |
-+-----------+--------------------+-----------------------------------+
-| ALERT     | alertSeverity = 1  | Action must be taken immediately  |
-+-----------+--------------------+-----------------------------------+
-| CRITICAL  | alertSeverity = 2  | Critical conditions               |
-+-----------+--------------------+-----------------------------------+
-| ERROR     | alertSeverity = 3  | Error conditions                  |
-+-----------+--------------------+-----------------------------------+
-| WARNING   | alertSeverity = 4  | Warning conditions                |
-+-----------+--------------------+-----------------------------------+
-| NOTICE    | alertSeverity = 5  | Normal but significant condition  | 
-+-----------+--------------------+-----------------------------------+
-| INFO      | alertSeverity = 6  | Informational                     |
-+-----------+--------------------+-----------------------------------+
-| DEBUG     | alertSeverity = 7  | Debug-level messages              |
-+-----------+--------------------+-----------------------------------+
 
-In this case, instead of raising the **hardware-device-fault** SNMP trap twice (once for each event), it is raised only one time becuase of two separate concurrent sub events. Take note of the **alertSeverity=0** in the SNMP alarm indicating an **Emergency** status.
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+In this case, instead of raising the **hardware-device-fault** SNMP trap twice (once for each event), it is raised only one time because of two separate concurrent sub events. Take note of the **alertSeverity=0** in the SNMP alarm indicating an **Emergency** status.
 
 .. code-block:: bash
 
@@ -3830,7 +3833,7 @@ In the example below, a hardware-device-fault is triggered by two issues:
 1. CPU fatal error, which has a critical severity (alertSeverity=2) and 
 2. CPU non-fatal error which has an error severity (alertSeverity=3).
 
-Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **alertEffect=1** will be raised with severity **alertSeverity=2**. There will be follow on event traps **alertEffect=2** providing the detials of both errors.
+Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **alertEffect=1** will be raised with severity **alertSeverity=2**. There will be follow on event traps **alertEffect=2** providing the details of both errors.
 
 .. code-block:: bash
 
@@ -3870,7 +3873,7 @@ When the remaining **non-fatal error** gets cleared, the system will clear the *
 
     <INFO> 19-Jun-2025::11:38:22.493 controller-1 confd[154]: snmp snmpv2-trap reqid=520254522 10.10.10.10:5000 (TimeTicks sysUpTime=50646)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:38:22.484721760 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
 
-    Addtional informational message (alertEffect=2) provides addtional details. In this case **CPU non-fatal error** has **Deasserted**.
+    Additional informational message (alertEffect=2) provides additional details. In this case **CPU non-fatal error** has **Deasserted**.
 
     <INFO> 19-Jun-2025::11:38:22.545 controller-1 confd[154]: snmp snmpv2-trap reqid=520254523 10.10.10.10:5000 (TimeTicks sysUpTime=50651)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-19 11:38:22.484728451 UTC)(OCTET STRING alertDescription=Deasserted: CPU non-fatal error)
 
@@ -4205,7 +4208,7 @@ The **show system events** CLI command will provide more details of the drive ev
 
     <INFO> 12-Apr-2023::11:54:10.563 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130731 10.255.8.22:6011 (TimeTicks sysUpTime=87079)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558711877 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
 
-    Informational EVENT (alertEffect=2) providing addtional details for drive-capacity-fault.
+    Informational EVENT (alertEffect=2) providing additional details for drive-capacity-fault.
 
     <INFO> 12-Apr-2023::11:54:10.613 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130732 10.255.8.22:6011 (TimeTicks sysUpTime=87084)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558725204 UTC)(OCTET STRING alertDescription=Drive usage exceeded 97%, used=100%)
 
@@ -4468,7 +4471,7 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 | CLEAR            | Hardware fault detected in blade                                                   |
 +------------------+------------------------------------------------------------------------------------+
 
-Traps will be generated for blade-hardware-faults. A Reliability, Availability, and Servieability (RAS) monitoring system monitors blade hardware utilizing Advanced Error Reporting (AER) for PCIe devices.
+Traps will be generated for blade-hardware-faults. A Reliability, Availability, and Serviceability (RAS) monitoring system monitors blade hardware utilizing Advanced Error Reporting (AER) for PCIe devices.
 
 .. code-block:: bash
 
@@ -4496,7 +4499,7 @@ Traps will be generated for blade-hardware-faults. A Reliability, Availability, 
 | CLEAR            | Sensor fault detected in hardware                                 |
 +------------------+-------------------------------------------------------------------+
 
-Traps will be generated for sensor faults or communication failures. In the example below, an Inlet Sensor fault was detetected (Asserted) and then cleared (Deasserted).
+Traps will be generated for sensor faults or communication failures. In the example below, an Inlet Sensor fault was detected (Asserted) and then cleared (Deasserted).
 
 .. code-block:: bash
 
@@ -4524,12 +4527,13 @@ Traps will be generated for sensor faults or communication failures. In the exam
 +------------------+-----------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                         |
 +==================+===========================================================+
-| EVENT            | <<module>> <<present|removed>>                            |
+| EVENT            | <<module>> <<present | removed>>                          |
 |                  |                                                           |
 |                  | Example: blade1 removed                                   |
 +------------------+-----------------------------------------------------------+
 
-Traps will be generated for componenents being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is presenet or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
+Traps will be generated for components being present or removed. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is present or removed, or if the PeerCc (Peer Chassis Controller) is present or removed.
+This trap only provides informational/event messages **alertEffect=2** as they are indicating the presence or removal of a module or part. It does not indicate a failure. Failures are tracked with **module-communication-error** traps.
 
 .. code-block:: bash
 
@@ -4680,6 +4684,12 @@ The output below is from an rSeries unit:
 | CLEAR            | Module communication error detected                       |
 +------------------+-----------------------------------------------------------+
 
+SNMP traps will be generated for components being present or removed using the **module-present** traps. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is present or removed, or if the PeerCc (Peer Chassis Controller) is present or removed. These type of traps only provide informational/event messages **alertEffect=2** as they are indicating the presence or removal of a module or part. It does not indicate a failure. 
+
+Failures are tracked with **module-communication-error** traps as seen in some fo the examples below.
+
+
+
 Power Supply Module
 
 The output below is from an rSeries unit:
@@ -4695,17 +4705,15 @@ The output below is from an rSeries unit:
 
 LCD Module
 
-The output below is from an rSeries unit:
-
 .. code-block:: bash
 
-    r10900-1# file show log/system/snmp.log | include module-communication-error
-    <INFO> 12-Apr-2023::11:51:32.363 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130725 10.255.8.22:6011 (TimeTicks sysUpTime=71259)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.359013061 UTC)(OCTET STRING alertDescription=Module communication error detected)
-    <INFO> 12-Apr-2023::11:51:32.413 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130726 10.255.8.22:6011 (TimeTicks sysUpTime=71264)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.359032524 UTC)(OCTET STRING alertDescription=LCD module communication error detected)
-    <INFO> 12-Apr-2023::11:51:32.463 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130727 10.255.8.22:6011 (TimeTicks sysUpTime=71269)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:32.361661313 UTC)(OCTET STRING alertDescription=LCD Health is Not OK)
-    <INFO> 12-Apr-2023::11:51:45.155 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130728 10.255.8.22:6011 (TimeTicks sysUpTime=72538)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.150848562 UTC)(OCTET STRING alertDescription=Module communication error detected)
-    <INFO> 12-Apr-2023::11:51:45.205 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130729 10.255.8.22:6011 (TimeTicks sysUpTime=72543)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.150869755 UTC)(OCTET STRING alertDescription=LCD module communication is OK)
-    <INFO> 12-Apr-2023::11:51:45.255 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130730 10.255.8.22:6011 (TimeTicks sysUpTime=72549)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:51:45.156764576 UTC)(OCTET STRING alertDescription=LCD Health is OK)
+    Controller1# file show log/confd/snmp.log | include module-communication-error
+    <INFO> 20-Nov-2025::17:39:42.416 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050505 10.144.131.74:5001 (TimeTicks sysUpTime=1087200)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-11-20 17:39:42.318069896 UTC)(OCTET STRING alertDescription=Module communication error detected)
+    <INFO> 20-Nov-2025::17:39:42.485 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050506 10.144.131.74:5001 (TimeTicks sysUpTime=1087207)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:39:42.318089307 UTC)(OCTET STRING alertDescription=Communication error detected between system controller and module)
+    <INFO> 20-Nov-2025::17:39:42.544 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050507 10.144.131.74:5001 (TimeTicks sysUpTime=1087213)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:39:42.324027997 UTC)(OCTET STRING alertDescription=Module communication error: value=true)
+    <INFO> 20-Nov-2025::17:40:00.379 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050508 10.144.131.74:5001 (TimeTicks sysUpTime=1088996)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.330888633 UTC)(OCTET STRING alertDescription=Module communication error detected)
+    <INFO> 20-Nov-2025::17:40:00.438 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050509 10.144.131.74:5001 (TimeTicks sysUpTime=1089002)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.330916609 UTC)(OCTET STRING alertDescription=No communication error detected between system controller and module)
+    <INFO> 20-Nov-2025::17:40:00.547 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050510 10.144.131.74:5001 (TimeTicks sysUpTime=1089013)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.337705127 UTC)(OCTET STRING alertDescription=Module communication error: value=false)
 
 
 **psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
@@ -4715,7 +4723,7 @@ The output below is from an rSeries unit:
 +==================+===========================================================+
 | ASSERT           | PSU redundancy fault detected                             |
 +------------------+-----------------------------------------------------------+
-| EVENT            | Chassis doesnt have enough working power supplies         |
+| EVENT            | Chassis doesn't have enough working power supplies        |
 |                  |                                                           |
 |                  | Chassis has enough working power supplies                 |
 |                  |                                                           |
@@ -4816,14 +4824,17 @@ Fault detected in Fan Controller health.
 +------------------+---------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                   |
 +==================+=====================================================================+
-| EVENT            | <<Asserted| Deasserted>> local arbitration health state             |
+| EVENT            | <<Asserted | Deasserted>> local arbitration health state            |
 +------------------+---------------------------------------------------------------------+
-| EVENT            | <<Asserted| Deasserted>> local arbitration request-active state     |
+| EVENT            | <<Asserted | Deasserted>> local arbitration request-active state    |
 +------------------+---------------------------------------------------------------------+
-| EVENT            | <<Asserted| Deasserted>> local arbitration grant-active state       |
+| EVENT            | <<Asserted | Deasserted>> local arbitration grant-active state      |
 +------------------+---------------------------------------------------------------------+
 
 Change detected in System Controller Arbitration State.
+
+
+The SNMP trap "Deasserted: peer arbitration health state" is an informational alert indicating a transient change in the system controller arbitration state. This message is sent when a previously asserted arbitration condition is cleared.
 
 .. code-block:: bash
     
@@ -4835,24 +4846,46 @@ Change detected in System Controller Arbitration State.
 
 **switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
 
-+------------------+-----------------------------------------------------------+
-| AlertEffect      | Possible Description in SNMP Trap                         |
-+==================+===========================================================+
-| ASSERT           | Switch port status                                        |
-+------------------+-----------------------------------------------------------+
-| EVENT            |                                                           |
-|                  |                                                           |
-+------------------+-----------------------------------------------------------+
-| CLEAR            | Switch port status                                        |
-+------------------+-----------------------------------------------------------+
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                                                       |
++==================+=========================================================================================================================+
+| ASSERT           | Switch port status                                                                                                      |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| EVENT            | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has FCS errors, value={{fcsErrors}}             |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has FCS corrected errors, value={{fcsErrors}}.  |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has FCS uncorrected errors, value={{fcsErrors}} |
+|                  |                                                                                                                         |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| CLEAR            | Switch port status                                                                                                      |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
+| EVENT            | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has no FEC errors                               |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has no FEC corrected errors                     |
+|                  |                                                                                                                         |
+|                  | {{control|data}} plane switch port {{port}} ({{peerName}}/{{peerPort}}) has no FEC uncorrected errors                   |
++------------------+-------------------------------------------------------------------------------------------------------------------------+
 
-Switch port status.
+Below is an example of a switch-status trap indicating FCS errors on one of the system controllers internal highGig ports:
 
 .. code-block:: bash
-    
-    <INFO> 23-Jul-2024::13:39:16.822 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934234 10.255.80.251:162 (TimeTicks sysUpTime=374941)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:16.722021333 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has FEC uncorrected errors, value=1)
 
-    <INFO> 23-Jul-2024::13:39:46.879 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934236 10.255.80.251:162 (TimeTicks sysUpTime=377947)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 17:39:46.771763998 UTC)(OCTET STRING alertDescription=data plane switch port hg14 (blade2/bp0) has no FEC uncorrected errors)
+    <INFO> 18-Oct-2025::06:57:41.748 controller-2 confd[677]: snmp snmpv2-trap reqid=270450359 172.22.50.57:162 (TimeTicks sysUpTime=1131472631)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-10-18 13:57:40.588463363 UTC)(OCTET STRING alertDescription=Switch port status)
+    
+    <INFO> 18-Oct-2025::06:57:41.851 controller-2 confd[677]: snmp snmpv2-trap reqid=270450360 172.22.50.57:162 (TimeTicks sysUpTime=1131472641)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-18 13:57:40.588491692 UTC)(OCTET STRING alertDescription=control plane switch port hg0 (cc2/hg0) has FCS errors, value=500)
+
+Below is an example of a switch-status trap indicating no FCS errors on one of the system controllers internal highGig ports:
+
+.. code-block:: bash
+
+    <INFO> 21-Oct-2025::09:16:18.529 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076251 172.22.50.57:162 (TimeTicks sysUpTime=4657)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:09.136120859 UTC)(OCTET STRING alertDescription=Attribute health reset)
+   
+    <INFO> 21-Oct-2025::09:16:18.967 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076252 172.22.50.57:162 (TimeTicks sysUpTime=4701)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:09.455190150 UTC)(OCTET STRING alertDescription=Switch port status)
+     
+    <INFO> 21-Oct-2025::09:25:39.628 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076301 172.22.50.57:162 (TimeTicks sysUpTime=60767)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:39.609386032 UTC)(OCTET STRING alertDescription=control plane switch port hg1 (cc1/hg1) has no FEC uncorrected errors)
+    
+    <INFO> 21-Oct-2025::09:25:39.760 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076302 172.22.50.57:162 (TimeTicks sysUpTime=60780)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:39.743934189 UTC)(OCTET STRING alertDescription=control plane switch port hg0 (cc1/hg0) has no FEC uncorrected errors)
 
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
@@ -4873,7 +4906,7 @@ Traps for the front panel system controller management port link state. Each sys
 - clear(0) is reported in alertEffect when alarm is cleared.
 - event(2) is updated in alertEffect when event notification is reported.
 
-As an example, the following set of traps are from a Link Down event on controller-1. The first trap has **alertEffect=1** indicating an assert. The second trap has **alertEffect=2** indicating an additional infromation about the assert. The 3rd trap is a clear event of the original alert indicated by the **alertEffect=0**. Fianlly addtional information is provided **alertEffect=2** in the 4th trap, indicating the link is back up.
+As an example, the following set of traps are from a Link Down event on controller-1. The first trap has **alertEffect=1** indicating an assert. The second trap has **alertEffect=2** indicating an additional information about the assert. The 3rd trap is a clear event of the original alert indicated by the **alertEffect=0**. Finally, additional information is provided **alertEffect=2** in the 4th trap, indicating the link is back up.
 
 .. code-block:: bash
     
@@ -4921,14 +4954,22 @@ Boot time integrity failure detected.
 | AlertEffect      | Possible Description in SNMP Trap                                                         |
 +==================+===========================================================================================+
 | EVENT            | Unsupported platform <Platform Type>                                                      |
+|                  |                                                                                           |
 |                  | import file <file path and name> removed incorrect file name                              |
+|                  |                                                                                           |
 |                  | import file <file path and name> removed File name has special characters                 |
-|                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32. |
+|                  |                                                                                           |
+|                  | Unexpected error processing Command '<command details>' returned non-zero exit status 32  |
 +------------------+-------------------------------------------------------------------------------------------+
 
-Trap notification when the platform incompatible image is imported.
+Trap notification when the platform incompatible image is imported. Below is an example of an rSeries F5OS image being loaded into a VELOS system inadvertently.
 
 .. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log | include trap
+    <INFO> 10-Nov-2025::11:18:39.705 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076391 172.22.50.57:162 (TimeTicks sysUpTime=173898774)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:39.646064032 UTC)(OCTET STRING alertDescription= Un supported platform R5R10)
+    <INFO> 10-Nov-2025::11:18:40.904 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076392 172.22.50.57:162 (TimeTicks sysUpTime=173898893)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:40.771256251 UTC)(OCTET STRING alertDescription= Unexpected error processing [Errno 2] No such file or directory: '/var/export/chassis/import/iso/F5OS-2.0.0-10579.R5R10.CANDIDATE.iso')
+
     
 **login-failed     .1.3.6.1.4.1.12276.1.1.1.327683**
 
@@ -4965,6 +5006,8 @@ Below is an example of an authentication failure trap generated on a chassis par
 Chassis is operating with NEBS temperature thresholds.
 
 .. code-block:: bash
+
+    <INFO> 2-Dec-2025::10:03:20.430 controller-1 confd[751]: snmp snmpv2-trap reqid=544300360 10.144.131.74:5002 (TimeTicks sysUpTime=105646)(OBJECT IDENTIFIER snmpTrapOID=nebsEnabled)(OCTET STRING alertSource=chassis)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-02 10:03:06.146448165 UTC)(OCTET STRING alertDescription=Chassis is operating with NEBS temperature thresholds)
     
 
 **nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
@@ -5012,6 +5055,8 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 
 **openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.524288**
 
+One or more Openshift certificates expiring within 90 days.
+
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
@@ -5020,12 +5065,24 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 | CLEAR            | One or more openshift certificates expiring within 90 days.                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-One or more openshift certificates expiring within 90 days.
+See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them. 
+
+`K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
 
 .. code-block:: bash
+
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include openshiftCertsExpWithinNinetyDays
+
+    <INFO> 4-Dec-2025::15:33:30.323 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076417 172.22.50.57:162 (TimeTicks sysUpTime=382787836)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertsExpWithinNinetyDays)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-12-04 23:33:30.306856786 UTC)(OCTET STRING alertDescription=One or more openshift certificates expiring within 90 days)
+
+    <INFO> 4-Dec-2025::15:35:44.704 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076418 172.22.50.57:162 (TimeTicks sysUpTime=382801274)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertsExpWithinNinetyDays)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-04 23:35:44.686936372 UTC)(OCTET STRING alertDescription=One or more openshift certificates expiring within 90 days)
     
 
 **openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.524289**
+
+See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them. 
+
+`K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
@@ -5035,7 +5092,7 @@ One or more openshift certificates expiring within 90 days.
 | CLEAR            | One or more openshift certificates has expired or is expiring.                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-One or more openshift certificates has expired or is expiring.
+One or more Openshift certificates has expired or is expiring.
 
 .. code-block:: bash
     
@@ -5051,12 +5108,22 @@ One or more openshift certificates has expired or is expiring.
 | CLEAR            | The openshift cluster requires a manual rebuild to use the latest containers.                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The openshift cluster requires a manual rebuild to use the latest containers.
+The Openshift cluster requires a manual rebuild to use the latest containers.
+
+See the following solution article about expired certificates and how to report which certificates are expired, and how to renew them and rebuild the Openshift cluster. 
+
+`K64001020: Certificates on VELOS blades expire after one year and cause blades and tenants to go offline <https://my.f5.com/manage/s/article/K64001020>`_
+
+If a cluster rebuild is required follow the steps in the following solution article:
+
+`K000139870: Troubleshoot the Openshift cluster installation in F5OS-C <https://my.f5.com/manage/s/article/K000139870>`_
+
 
 .. code-block:: bash
     
     velos-1-gsa-2-active# file show log/confd/snmp.log | include openshift
     <INFO> 5-Mar-2024::15:20:13.849 controller-2 confd[581]: snmp snmpv2-trap reqid=220801593 10.255.80.251:162 (TimeTicks sysUpTime=45302)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-03-05 20:20:13.834972950 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
+    
     <INFO> 2-Apr-2024::21:49:23.796 controller-2 confd[579]: snmp snmpv2-trap reqid=968477049 10.255.80.251:162 (TimeTicks sysUpTime=1607910)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-03 01:49:23.765813382 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
     velos-1-gsa-2-active# 
 
@@ -5069,7 +5136,7 @@ The openshift cluster requires a manual rebuild to use the latest containers.
 | EVENT            |                                                                                                          |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-Critical issue in fpga and datapath initialization process.
+Critical issue in FPGA and datapath initialization process.
 
 .. code-block:: bash
     
@@ -5152,6 +5219,9 @@ Firmware Update Status Traps
 | EVENT            | Firmware update is <<running | completed >> for <<module>>                                               |
 |                  |                                                                                                          |
 |                  | Example: Firmware update is running for vqf 0                                                            |
+|                  | Example: Firmware update completed for vqf 0                                                             |
+|                  | Example: Firmware update is running for atse 0                                                           |
+|                  | Example: Firmware update completed for atse 0                                                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 These traps provide indication of the beginning (Firmware update is running) and end (Firmware upgrade has completed) of firmware upgrades for different parts of the system. These may occur as part of a software update to F5OS. Not every upgrade requires firmware to be updated. You may see different components having their firmware upgraded such as (lcd, bios, cpld, lop app, sirr, atse, asw, nso, nvme0, nvme1). It is important not to interrupt the firmware upgrade process. If you see a firmware update alert raised for a specific component, you should not make any changes to the system until each component returns a Firmware update completed message. In newer versions of F5OS, the webUI will display a banner at the top of the page while firmware updates run and will disappear when they complete. The banner will have a link to the **Alarms and Events** page which will show the current status of the firmware updates as seen below.
@@ -5205,40 +5275,8 @@ Drive Utilization Traps
 | CLEAR            | Drive utilization growth rate is high                             |
 +------------------+-------------------------------------------------------------------+
 
-The system will monitor the storage utilization of the VELOS disks and warn if the disk usage gets too high. There are 3 levels of events that can occur as seen below:
+You can view the snmp.log file to see the SNMP traps that have been issued for **drive-utilization**.
 
-- drive-capacity:critical-limit - Drive Usage exceeded 97%
-- drive-capacity:failure-limit  - Drive Usage exceeded 90%
-- drive-capacity:warning-limit  - Drive Usage exceeded 85%
-
-You can use the **show system alarms** CLI command to see if the drive is in an overutilized state. 
-
-.. code-block:: bash
-
-    appliance-1# show system alarms
-    ID RESOURCE SEVERITY TEXT TIME CREATED
-    --------------------------------------------------------------------------------------------------
-    65545 appliance EMERGENCY Power fault detected in hardware 2023-03-24 12:37:13.713715583 UTC
-    65544 appliance CRITICAL Running out of drive capacity 2023-03-27 15:41:37.847817761 UTC
-    65545 appliance EMERGENCY Power fault detected in hardware 2023-03-24 12:37:13.713715583 UTC
-
-The **show system events** CLI command will provide more details of the drive events that have occurred.
-
-.. code-block:: bash
-
-    appliance-1# show system events | more
-    system events event
-    log "65544 appliance drive-capacity-fault ASSERT CRITICAL \"Running out of drive capacity\" \"2023-03-27 15:41:37.847817761 UTC\""
-    system events event
-    log "65544 appliance drive-capacity-fault EVENT NA \"Drive usage exceeded 97%, used=100%\" \"2023-03-27 15:41:37.847831437 UTC\""
-    system events event
-    log "65544 appliance drive-capacity-fault CLEAR CRITICAL \"Running out of drive capacity\" \"2023-03-27 15:42:32.655591036 UTC\""
-    system events event
-    log "65544 appliance drive-capacity-fault EVENT NA \"Drive usage with in range, used=54%\" \"2023-03-27 15:42:32.655608659 UTC\""
-
-You can also view the snmp.log file to see the SNMP traps that have been issued for **drive-utilization**.
-
-The output below is from an rSeries unit:
 
 .. code-block:: bash
 
@@ -5247,6 +5285,460 @@ The output below is from an rSeries unit:
     <INFO> 12-Apr-2023::12:00:00.092 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130743 10.255.8.22:6011 (TimeTicks sysUpTime=122032)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:00.037560232 UTC)(OCTET STRING alertDescription=Drive usage growth rate exceeded 10%, growth=13%)
     <INFO> 12-Apr-2023::12:00:52.838 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130745 10.255.8.22:6011 (TimeTicks sysUpTime=127307)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834736965 UTC)(OCTET STRING alertDescription=Drive utilization growth rate is high)
     <INFO> 12-Apr-2023::12:00:52.888 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130746 10.255.8.22:6011 (TimeTicks sysUpTime=127312)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834754109 UTC)(OCTET STRING alertDescription=Drive usage growth rate with in range, growth=-10268%)
+
+**partition<xx>-image-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
+From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **images** volume where F5OS tenant images are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+
+Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+
++-----------------------------------------+----------------------------------+
+| SNMP Trap                               | SNMP OID                         |
++=========================================+==================================+
+| partition1-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65553   |
++-----------------------------------------+----------------------------------+
+| partition2-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65554   |
++-----------------------------------------+----------------------------------+
+| partition3-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65555   |
++-----------------------------------------+----------------------------------+
+| partition4-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65556   |
++-----------------------------------------+----------------------------------+
+| partition5-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65557   |
++-----------------------------------------+----------------------------------+
+| partition6-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65558   |
++-----------------------------------------+----------------------------------+
+| partition7-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65559   |
++-----------------------------------------+----------------------------------+
+| partition8-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65560   |
++-----------------------------------------+----------------------------------+
+| partition9-image-volume-utilization     | .1.3.6.1.4.1.12276.1.1.1.65580   |
++-----------------------------------------+----------------------------------+
+| partition10-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65581   |
++-----------------------------------------+----------------------------------+
+| partition11-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65582   |
++-----------------------------------------+----------------------------------+
+| partition12-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65583   |
++-----------------------------------------+----------------------------------+
+| partition13-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65584   |
++-----------------------------------------+----------------------------------+
+| partition14-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65585   |
++-----------------------------------------+----------------------------------+
+| partition15-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65586   |
++-----------------------------------------+----------------------------------+
+| partition16-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65587   |
++-----------------------------------------+----------------------------------+
+| partition17-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65588   |
++-----------------------------------------+----------------------------------+
+| partition18-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65589   |
++-----------------------------------------+----------------------------------+
+| partition19-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65590   |
++-----------------------------------------+----------------------------------+
+| partition20-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65591   |
++-----------------------------------------+----------------------------------+
+| partition21-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65592   |
++-----------------------------------------+----------------------------------+
+| partition22-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65593   |
++-----------------------------------------+----------------------------------+
+| partition23-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65594   |
++-----------------------------------------+----------------------------------+
+| partition24-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65595   |
++-----------------------------------------+----------------------------------+
+| partition25-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65596   |
++-----------------------------------------+----------------------------------+
+| partition26-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65597   |
++-----------------------------------------+----------------------------------+
+| partition27-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65598   |
++-----------------------------------------+----------------------------------+
+| partition28-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65599   |
++-----------------------------------------+----------------------------------+
+| partition29-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65600   |
++-----------------------------------------+----------------------------------+
+| partition30-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65601   |
++-----------------------------------------+----------------------------------+
+| partition31-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65602   |
++-----------------------------------------+----------------------------------+
+| partition32-image-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65603   |
++-----------------------------------------+----------------------------------+
+
+Below are the syntax for the various image-volume-utilization SNMP traps.
+
++------------------+-------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                           |
++==================+=============================================================+
+| ASSERT           | partition-<#> image volume utilization growth rate is high  |
++------------------+-------------------------------------------------------------+
+| EVENT            | partition<#> Image Volume usage exceeded <xx>%, used=<xx>%  |
+|                  |                                                             |
+|                  | partition<#> Image Volume usage with in range, used=<xx>%   |
++------------------+-------------------------------------------------------------+
+| CLEAR            | partition-<#> image volume utilization growth rate is high  |
++------------------+-------------------------------------------------------------+
+
+The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+Below are the thresholds for the image-volume-utilization SNMP traps. Note, that that a value of 85% or over will generate one of the three threshold traps with a warning **alertSeverity=4** level. When the volume utilization drops back below 85% a clear trap will be sent with the alertSeverity=8 (NA) level.
+
++----------------------------------+-----------+--------------+
+| Usage Percentage Criteria        | Severity  | Condition    |
++==================================+===========+==============+
+| Less than or equal to 85%        | N/A       | Deassert     |
++----------------------------------+-----------+--------------+
+| Greater than 85%, Less than 90%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 90%, Less than 97%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 97%                 | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+
+
+The **Image Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Image Volume Size, you specify the desired storage volume for all tenant images in increments of 1 GB. The default value is 15 GB, with a minimum of 5 GB and a maximum of 50 GB. SNMP traps will be sent based on the current utilization of the Images volume. 
+
+Below is an example of an **partition-image-volume-utilization** SNMP trap being generated from the system controller layer when the chassis partitions image volume reaches 85% utilization, and then the corresponding clear trap when usage returns to an acceptable level.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log 
+
+    Image Volume Utilization Alert raised - (alertEffect=1) 
+
+    <INFO> 11-Nov-2025::08:44:25.241 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076395 172.22.50.57:162 (TimeTicks sysUpTime=181613328)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-11-11 16:44:25.221842802 UTC)(OCTET STRING alertDescription=Partition-2 image volume utilization growth rate is high)
+
+    Image Volume Utilization details informational (alertEffect=2), exceeded 85%
+
+    <INFO> 11-Nov-2025::08:44:25.291 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076396 172.22.50.57:162 (TimeTicks sysUpTime=181613333)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:44:25.221885959 UTC)(OCTET STRING alertDescription=partition2 Image Volume usage exceeded 85%, used=86%)
+
+    Image Volume Utilization Alert cleared - (alertEffect=0) 
+
+    <INFO> 11-Nov-2025::08:55:39.628 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076399 172.22.50.57:162 (TimeTicks sysUpTime=181680767)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:55:39.610474859 UTC)(OCTET STRING alertDescription=Partition-2 image volume utilization growth rate is high)
+
+    Image Volume Utilization details informational (alertEffect=2), within range
+
+    <INFO> 11-Nov-2025::08:55:39.676 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076400 172.22.50.57:162 (TimeTicks sysUpTime=181680771)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:55:39.610522109 UTC)(OCTET STRING alertDescription=partition2 Image Volume usage with in range, used=75%)
+
+
+**partition<xx>-shared-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
+From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **shared** volume where shared data, including tcpdump, QKView, and core files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+
+Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+
++-----------------------------------------+----------------------------------+
+| SNMP Trap                               | SNMP OID                         |
++=========================================+==================================+
+| partition1-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65561   |
++-----------------------------------------+----------------------------------+
+| partition2-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65562   |
++-----------------------------------------+----------------------------------+
+| partition3-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65563   |
++-----------------------------------------+----------------------------------+
+| partition4-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65564   |
++-----------------------------------------+----------------------------------+
+| partition5-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65565   |
++-----------------------------------------+----------------------------------+
+| partition6-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65566   |
++-----------------------------------------+----------------------------------+
+| partition7-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65567   |
++-----------------------------------------+----------------------------------+
+| partition8-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65568   |
++-----------------------------------------+----------------------------------+
+| partition9-shared-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65604   |
++-----------------------------------------+----------------------------------+
+| partition10-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65605   |
++-----------------------------------------+----------------------------------+
+| partition11-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65606   |
++-----------------------------------------+----------------------------------+
+| partition12-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65607   |
++-----------------------------------------+----------------------------------+
+| partition13-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65608   |
++-----------------------------------------+----------------------------------+
+| partition14-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65609   |
++-----------------------------------------+----------------------------------+
+| partition15-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65610   |
++-----------------------------------------+----------------------------------+
+| partition16-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65611   |
++-----------------------------------------+----------------------------------+
+| partition17-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65612   |
++-----------------------------------------+----------------------------------+
+| partition18-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65613   |
++-----------------------------------------+----------------------------------+
+| partition19-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65614   |
++-----------------------------------------+----------------------------------+
+| partition20-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65615   |
++-----------------------------------------+----------------------------------+
+| partition21-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65616   |
++-----------------------------------------+----------------------------------+
+| partition22-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65617   |
++-----------------------------------------+----------------------------------+
+| partition23-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65618   |
++-----------------------------------------+----------------------------------+
+| partition24-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65619   |
++-----------------------------------------+----------------------------------+
+| partition25-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65620   |
++-----------------------------------------+----------------------------------+
+| partition26-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65621   |
++-----------------------------------------+----------------------------------+
+| partition27-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65622   |
++-----------------------------------------+----------------------------------+
+| partition28-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65623   |
++-----------------------------------------+----------------------------------+
+| partition29-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65624   |
++-----------------------------------------+----------------------------------+
+| partition30-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65625   |
++-----------------------------------------+----------------------------------+
+| partition31-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65626   |
++-----------------------------------------+----------------------------------+
+| partition32-shared-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65627   |
++-----------------------------------------+----------------------------------+
+
+Below are the syntax for the various shared-volume-utilization SNMP traps.
+
++------------------+-------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                           |
++==================+=============================================================+
+| ASSERT           | partition-<#> shared volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+| EVENT            | partition<#> Shared Volume usage exceeded <xx>%, used=<xx>% |
+|                  |                                                             |
+|                  | partition<#> Shared Volume usage with in range, used=<xx>%  |
++------------------+-------------------------------------------------------------+
+| CLEAR            | partition-<#> shared volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+
+The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+Below are the thresholds for the shared-volume-utilization SNMP traps. Note, that that a value of 85% or over will generate one of the three threshold traps with a warning **alertSeverity=4** level. When the volume utilization drops back below 85% a clear trap will be sent with the alertSeverity=8 (NA) level.
+
++----------------------------------+-----------+--------------+
+| Usage Percentage Criteria        | Severity  | Condition    |
++==================================+===========+==============+
+| Less than or equal to 85%        | N/A       | Deassert     |
++----------------------------------+-----------+--------------+
+| Greater than 85%, Less than 90%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 90%, Less than 97%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 97%                 | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+
+
+The **Shared Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Shared Volume Size, you can specify the desired storage volume for shared data, including tcpdump, QKView, and core files, in increments of 1 GB. The default value is 10 GB, with a minimum of 5 GB and a maximum of 20 GB. SNMP traps will be sent based on the current utilization of the shared volume. 
+
+Below is an example of an **partition-shared-volume-utilization** SNMP trap being generated from the system controller layer when the chassis partitions shared volume reaches 85% utilization, and then the corresponding clear trap when usage returns to an acceptable level.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log 
+
+    Shared Volume Utilization Alert raised - (alertEffect=1)
+
+    <INFO> 11-Nov-2025::09:42:55.241 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076403 172.22.50.57:162 (TimeTicks sysUpTime=181964328)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-11-11 17:42:55.220616545 UTC)(OCTET STRING alertDescription=Partition-2 shared volume utilization growth rate is high)
+
+    Shared Volume Utilization details informational (alertEffect=2), exceeded 97%
+
+    <INFO> 11-Nov-2025::09:42:55.288 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076404 172.22.50.57:162 (TimeTicks sysUpTime=181964333)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:42:55.220657533 UTC)(OCTET STRING alertDescription=Shared Volume usage exceeded 97%, used=100%)
+
+    Shared Volume Utilization Alert cleared - (alertEffect=0) 
+
+    <INFO> 11-Nov-2025::09:44:25.248 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076405 172.22.50.57:162 (TimeTicks sysUpTime=181973329)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:44:25.220868834 UTC)(OCTET STRING alertDescription=Partition-2 shared volume utilization growth rate is high)
+
+    Shared Volume Utilization details informational (alertEffect=2), within range
+
+    <INFO> 11-Nov-2025::09:44:25.287 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076406 172.22.50.57:162 (TimeTicks sysUpTime=181973333)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:44:25.220918013 UTC)(OCTET STRING alertDescription=Shared Volume usage with in range, used=22%)
+
+**partition<xx>-config-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
+
+From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **config** volume where configuration files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+
+Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+
++-----------------------------------------+----------------------------------+
+| SNMP Trap                               | SNMP OID                         |
++=========================================+==================================+
+| partition1-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65569   |
++-----------------------------------------+----------------------------------+
+| partition2-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65570   |
++-----------------------------------------+----------------------------------+
+| partition3-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65571   |
++-----------------------------------------+----------------------------------+
+| partition4-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65572   |
++-----------------------------------------+----------------------------------+
+| partition5-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65573   |
++-----------------------------------------+----------------------------------+
+| partition6-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65574   |
++-----------------------------------------+----------------------------------+
+| partition7-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65575   |
++-----------------------------------------+----------------------------------+
+| partition8-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65576   |
++-----------------------------------------+----------------------------------+
+| partition9-config-volume-utilization    | .1.3.6.1.4.1.12276.1.1.1.65628   |
++-----------------------------------------+----------------------------------+
+| partition10-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65629   |
++-----------------------------------------+----------------------------------+
+| partition11-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65630   |
++-----------------------------------------+----------------------------------+
+| partition12-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65631   |
++-----------------------------------------+----------------------------------+
+| partition13-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65632   |
++-----------------------------------------+----------------------------------+
+| partition14-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65633   |
++-----------------------------------------+----------------------------------+
+| partition15-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65634   |
++-----------------------------------------+----------------------------------+
+| partition16-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65635   |
++-----------------------------------------+----------------------------------+
+| partition17-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65636   |
++-----------------------------------------+----------------------------------+
+| partition18-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65637   |
++-----------------------------------------+----------------------------------+
+| partition19-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65638   |
++-----------------------------------------+----------------------------------+
+| partition20-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65639   |
++-----------------------------------------+----------------------------------+
+| partition21-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65640   |
++-----------------------------------------+----------------------------------+
+| partition22-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65641   |
++-----------------------------------------+----------------------------------+
+| partition23-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65642   |
++-----------------------------------------+----------------------------------+
+| partition24-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65643   |
++-----------------------------------------+----------------------------------+
+| partition25-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65644   |
++-----------------------------------------+----------------------------------+
+| partition26-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65645   |
++-----------------------------------------+----------------------------------+
+| partition27-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65646   |
++-----------------------------------------+----------------------------------+
+| partition28-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65647   |
++-----------------------------------------+----------------------------------+
+| partition29-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65648   |
++-----------------------------------------+----------------------------------+
+| partition30-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65649   |
++-----------------------------------------+----------------------------------+
+| partition31-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65650   |
++-----------------------------------------+----------------------------------+
+| partition32-config-volume-utilization   | .1.3.6.1.4.1.12276.1.1.1.65651   |
++-----------------------------------------+----------------------------------+
+
+Below are the syntax for the various config-volume-utilization SNMP traps.
+
++------------------+-------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                           |
++==================+=============================================================+
+| ASSERT           | partition-<#> config volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+| EVENT            | partition<#> config Volume usage exceeded <xx>%, used=<xx>% |
+|                  |                                                             |
+|                  | partition<#> config Volume usage with in range, used=<xx>%  |
++------------------+-------------------------------------------------------------+
+| CLEAR            | partition-<#> config volume utilization growth rate is high |
++------------------+-------------------------------------------------------------+
+
+The AlertSeverity levels below only apply to Alarm (**alertEffect=1**) ASSERT messages. Event messages (**alertEffect=2**), and CLEAR messages (**alertEffect=0**) will always show Not Applicable severity (**alertSeverity=8**). 
+
++-----------+--------------------+--------------------------------------+
+| Severity  | Severity Level     | Details                              |
++===========+====================+======================================+
+| EMERGENCY | alertSeverity = 0  | System is unusable                   |
++-----------+--------------------+--------------------------------------+
+| ALERT     | alertSeverity = 1  | Action must be taken immediately     |
++-----------+--------------------+--------------------------------------+
+| CRITICAL  | alertSeverity = 2  | Critical conditions                  |
++-----------+--------------------+--------------------------------------+
+| ERROR     | alertSeverity = 3  | Error conditions                     |
++-----------+--------------------+--------------------------------------+
+| WARNING   | alertSeverity = 4  | Warning conditions                   |
++-----------+--------------------+--------------------------------------+
+| NOTICE    | alertSeverity = 5  | Normal but significant condition     | 
++-----------+--------------------+--------------------------------------+
+| INFO      | alertSeverity = 6  | Informational                        |
++-----------+--------------------+--------------------------------------+
+| DEBUG     | alertSeverity = 7  | Debug-level messages                 |
++-----------+--------------------+--------------------------------------+
+| N/A       | alertSeverity = 8  | Event Messages (Not Applicable)      |
++-----------+--------------------+--------------------------------------+
+
+Below are the thresholds for the config-volume-utilization SNMP traps. Note, that that a value of 85% or over will generate one of the three threshold traps with a warning **alertSeverity=4** level. When the volume utilization drops back below 85% a clear trap will be sent with the alertSeverity=8 (NA) level.
+
++----------------------------------+-----------+--------------+
+| Usage Percentage Criteria        | Severity  | Condition    |
++==================================+===========+==============+
+| Less than or equal to 85%        | N/A       | Deassert     |
++----------------------------------+-----------+--------------+
+| Greater than 85%, Less than 90%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 90%, Less than 97%  | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+| Greater than 97%                 | Warning   | Assert       |
++----------------------------------+-----------+--------------+
+
+The **Config Volume Size** is configurable from the system controller layer inside the each of the individual chassis partitions configuration. For Configuration Volume Size, you can specify the desired configuration volume in increments of 1 GB. The default value is 10 GB, with a minimum of 5 GB and a maximum of 15 GB. SNMP traps will be sent based on the current utilization of the shared volume. 
+
+Below is an example of an **partition-config-volume-utilization** SNMP trap being generated from the system controller layer when the chassis partitions config volume reaches 85% utilization, and then the corresponding clear trap when usage returns to an acceptable level.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file tail -f log/confd/snmp.log 
+
+    Config Volume Utilization Alert raised - (alertEffect=1)
+
+    <INFO> 11-Nov-2025::10:22:09.653 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076407 172.22.50.57:162 (TimeTicks sysUpTime=182199769)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-11-11 18:22:09.633696546 UTC)(OCTET STRING alertDescription=Partition-2 config volume utilization growth rate is high)
+
+    Config Volume Utilization details informational (alertEffect=2), exceeded 90%
+
+    <INFO> 11-Nov-2025::10:22:09.706 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076408 172.22.50.57:162 (TimeTicks sysUpTime=182199774)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 18:22:09.635473959 UTC)(OCTET STRING alertDescription=partition2 config Volume usage exceeded 90%, used=92%)
+
+    Config Volume Utilization Alert cleared - (alertEffect=0) 
+
+    <INFO> 11-Nov-2025::10:23:09.633 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076409 172.22.50.57:162 (TimeTicks sysUpTime=182205767)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 18:23:09.615835444 UTC)(OCTET STRING alertDescription=Partition-2 config volume utilization growth rate is high)
+
+    Config Volume Utilization details informational (alertEffect=2), within range
+
+    <INFO> 11-Nov-2025::10:23:09.683 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076410 172.22.50.57:162 (TimeTicks sysUpTime=182205772)(OBJECT IDENTIFIER snmpTrapOID=partition2-config-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 18:23:09.615895226 UTC)(OCTET STRING alertDescription=partition2 config Volume usage with in range, used=10%)
+
 
 
 
@@ -5259,7 +5751,9 @@ FIPS Related Traps
 +------------------+------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                        |
 +==================+==========================================================================================+
-| EVENT            |                                                                                          |
+| ASSERT           | Fault detected in FIPS module                                                            |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Fault detected in FIPS module                                                            |
 +------------------+------------------------------------------------------------------------------------------+
 
 The output below is from an rSeries unit:
@@ -5438,7 +5932,21 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> Transmitter power low warning                                                          |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power low alarm                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power high warning                                                         |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> Transmitter power low warning                                                          |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power low alarm                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power high warning                                                         |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The transmit power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
@@ -5446,45 +5954,105 @@ The transmit power threshold for a specific transceiver has triggered a warning 
 .. code-block:: bash
 
     chassis1-prod-partition-2# file show  log/snmp.log | include txPwr
-    <INFO> 23-Jul-2024::23:25:34.238 partition2 confd[122]: snmp snmpv2-trap reqid=1370215022 10.255.80.251:162 (TimeTicks sysUpTime=3571244)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218591376 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low alarm)
-
+    <INFO> 7-May-2025::21:05:40.426 partition2 confd[114]: snmp snmpv2-trap reqid=972265644 172.22.50.57:162 (TimeTicks sysUpTime=183491802)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352446096 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:05:40.484 partition2 confd[114]: snmp snmpv2-trap reqid=972265645 172.22.50.57:162 (TimeTicks sysUpTime=183491808)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352255391 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:05:40.652 partition2 confd[114]: snmp snmpv2-trap reqid=972265647 172.22.50.57:162 (TimeTicks sysUpTime=183491825)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352345605 UTC)(OCTET STRING alertDescription=Lanes: 2,3,4 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:06:10.401 partition2 confd[114]: snmp snmpv2-trap reqid=972265650 172.22.50.57:162 (TimeTicks sysUpTime=183494800)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352091005 UTC)(OCTET STRING alertDescription=Lanes: 2,3,4 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:06:10.464 partition2 confd[114]: snmp snmpv2-trap reqid=972265651 172.22.50.57:162 (TimeTicks sysUpTime=183494806)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352192401 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low alarm)
+    <INFO> 7-May-2025::21:06:10.711 partition2 confd[114]: snmp snmpv2-trap reqid=972265654 172.22.50.57:162 (TimeTicks sysUpTime=183494831)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352250928 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:06:10.848 partition2 confd[114]: snmp snmpv2-trap reqid=972265656 172.22.50.57:162 (TimeTicks sysUpTime=183494844)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352291664 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:06:40.677 partition2 confd[114]: snmp snmpv2-trap reqid=972265657 172.22.50.57:162 (TimeTicks sysUpTime=183497827)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650975934 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low warning)
+    <INFO> 7-May-2025::21:06:40.801 partition2 confd[114]: snmp snmpv2-trap reqid=972265658 172.22.50.57:162 (TimeTicks sysUpTime=183497840)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650917268 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter power low alarm)
 
 **rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> Receiver power low warning                                                             |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Receiver power low alarm                                                               |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Receiver power high warning                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Receiver power high alarm                                                              |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> Receiver power low warning                                                             |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Receiver power low alarm                                                               |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Receiver power high warning                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Receiver power high alarm                                                              |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The receive power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+The receive power threshold for a specific transceiver has reached a threshold indicating either rxPwr high alarm status, rxPwr high warn status, rxPwr low alarm status, or rxPwr low warn status. Run the show portgroups command to see what the current values are for that transceiver. Below is an example of a rxPwr trap for Lanes: 1,2,3,4 Receiver power low warning on portgroup 3/1. The first trap is an alertEffect=1 indicating a low alarm alert, and the second trap is an alertEffect=0 indicating a low alarm clear condition. Then there are similar raise and clear events for the Receiver Power low warning trap.
 
 .. code-block:: bash
 
-    chassis1-prod-partition-2# file show  log/snmp.log | include rxPwr
-    <INFO> 23-Jul-2024::23:25:34.302 partition2 confd[122]: snmp snmpv2-trap reqid=1370215023 10.255.80.251:162 (TimeTicks sysUpTime=3571250)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218508824 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
+    red-partition-chassis1-1#  file show log/snmp.log | include rxP
+    <INFO> 27-Jun-2025::18:14:34.049 partition4 confd[114]: snmp snmpv2-trap reqid=1674228061 172.22.50.57:162 (TimeTicks sysUpTime=623101258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-06-28 01:14:34.026501680 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
+    <INFO> 27-Jun-2025::18:22:34.052 partition4 confd[114]: snmp snmpv2-trap reqid=1674228064 172.22.50.57:162 (TimeTicks sysUpTime=623149258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-28 01:22:34.026783343 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
+    <INFO> 18-Jul-2025::14:50:04.051 partition4 confd[114]: snmp snmpv2-trap reqid=1674228067 172.22.50.57:162 (TimeTicks sysUpTime=803314258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-07-18 21:50:04.027229987 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
+    <INFO> 18-Jul-2025::14:59:04.046 partition4 confd[114]: snmp snmpv2-trap reqid=1674228070 172.22.50.57:162 (TimeTicks sysUpTime=803368257)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-07-18 21:59:04.027161464 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
 **txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> Transmitter Bias low warning                                                           |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias low alarm                                                             |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias high warning                                                          |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias high alarm                                                            |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> Transmitter Bias low warning                                                           |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias low alarm                                                             |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias high warning                                                          |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> Transmitter Bias high alarm                                                            |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The transmit bias threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+The transmit bias threshold for a specific transceiver has reached a threshold indicating either txBias high alarm status, txBias high warn status, txBias low alarm status, or txBias low warn status. Run the show portgroups command to see what the current values are for that transceiver.
+
+Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on portgroup 1/2 clearing (alertEffect=0), then an txBia low alarm being raised (alertEffect=1) for lane 4. The next two traps show the raising of a txBias low warning (alertEffect=1) trap, and then an (alertEffect=0) indicating a low warning clear condition.
 
 .. code-block:: bash
 
     chassis1-prod-partition-2# file show  log/snmp.log | include txBias
-    <INFO> 23-Jul-2024::23:25:34.465 partition2 confd[122]: snmp snmpv2-trap reqid=1370215024 10.255.80.251:162 (TimeTicks sysUpTime=3571267)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 2/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2024-07-24 03:25:34.218760526 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter bias low alarm)
+
+    <INFO> 7-May-2025::21:05:40.769 partition2 confd[114]: snmp snmpv2-trap reqid=972265649 172.22.50.57:162 (TimeTicks sysUpTime=183491836)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352497077 UTC)(OCTET STRING alertDescription=Lanes: 3 Transmitter bias low alarm)
+    <INFO> 7-May-2025::21:06:10.587 partition2 confd[114]: snmp snmpv2-trap reqid=972265652 172.22.50.57:162 (TimeTicks sysUpTime=183494818)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352383313 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low alarm)
+
+    <INFO> 7-May-2025::21:06:10.787 partition2 confd[114]: snmp snmpv2-trap reqid=972265655 172.22.50.57:162 (TimeTicks sysUpTime=183494838)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352469714 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
+    <INFO> 7-May-2025::21:06:40.914 partition2 confd[114]: snmp snmpv2-trap reqid=972265659 172.22.50.57:162 (TimeTicks sysUpTime=183497851)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.651155713 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
+   
 
 **ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> DDM Temperature low warning                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature low alarm                                                              |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high warning                                                           |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high alarm                                                             |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> DDM Temperature low warning                                                            |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature low alarm                                                              |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high warning                                                           |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Temperature high alarm                                                             |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The ddm temperature threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
@@ -5498,7 +6066,21 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 +------------------+----------------------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                                        |
 +==================+==========================================================================================================+
-| EVENT            |                                                                                                          |
+| ASSERT           | Lanes: <Lane #'s> DDM Voltage low warning                                                                |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage low alarm                                                                  |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high warning                                                               |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high alarm                                                                 |
++------------------+----------------------------------------------------------------------------------------------------------+
+| CLEAR            | Lanes: <Lane #'s> DDM Voltage low warning                                                                |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage low alarm                                                                  |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high warning                                                               |
+|                  |                                                                                                          |
+|                  | Lanes: <Lane #'s> DDM Voltage high alarm                                                                 |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
 The ddm voltage threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.

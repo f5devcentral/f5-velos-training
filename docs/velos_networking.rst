@@ -117,14 +117,14 @@ In releases prior to F5OS-C 1.5.1 both ports on a BX110 blade must be configured
    :scale: 70%
 
 
-
+a
 Below is an example of the chassis partition webUI Port Groups screen with BX110 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
 
 .. image:: images/velos_networking/image11.png
    :align: center
    :scale: 70%
 
-For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (4 x 100Gb generally available in F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the intial release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port; however it supports 400Gb optics today, and the option of 4 x 100Gb with the proper optic and breakout cables is generally available in the F5OS-C 1.8.1 release. Note, only certain combinations are supported currently. 4 x 100Gb requires both ports to be configured in this mode. You cannot mix 4 x 100Gb on one port with 100Gb or 400Gb on the other port. 
+For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP-DD port, that supports either 100Gb optics or 4 x 100Gb (4 x 100Gb generally available in F5OS-C 1.8.1 release) connections with the proper optic and breakout cable. For the initial release, 100Gb connectivity (SR-4 & LR-4) is supported, 4 x 100Gb support is available in a the F5OS-C 1.8.1 release. The second port (2.0) is also a QSFP-DD port; however it supports 400Gb optics today, and the option of 4 x 100Gb with the proper optic and breakout cables is generally available in the F5OS-C 1.8.1 release. Note, only certain combinations are supported currently. 4 x 100Gb requires both ports to be configured in this mode. You cannot mix 4 x 100Gb on one port with 100Gb or 400Gb on the other port. 
 
 
 .. image:: images/velos_networking/image11a.png
@@ -235,7 +235,7 @@ BX110 100Gb QSFP28 Options
 +------------------------+-------------+----------------------------------------------------------------------------------+
 
 
-**Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS, but default optics for 100G LR4 VELOS is OPT-0052 (as shown above)**.
+**Note: OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with VELOS but the default optics for 100G LR4 VELOS is OPT-0052 (as shown above)**.
 
 BX520 100Gb QSFP28 Options
 --------------------------
