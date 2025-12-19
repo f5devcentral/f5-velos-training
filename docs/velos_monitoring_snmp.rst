@@ -5370,7 +5370,8 @@ One or more Openshift certificates has expired or is expiring.
 
 .. code-block:: bash
     
-
+openshiftUpgradeNeeded
+^^^^^^^^^^^^^^^^^^^^^^
 
 **openshiftUpgradeNeeded         .1.3.6.1.4.1.12276.1.1.1.524544**
 
@@ -5401,6 +5402,8 @@ If a cluster rebuild is required follow the steps in the following solution arti
     <INFO> 2-Apr-2024::21:49:23.796 controller-2 confd[579]: snmp snmpv2-trap reqid=968477049 10.255.80.251:162 (TimeTicks sysUpTime=1607910)(OBJECT IDENTIFIER snmpTrapOID=openshiftUpgradeNeeded)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-03 01:49:23.765813382 UTC)(OCTET STRING alertDescription=The openshift cluster requires a manual rebuild to use the latest containers.)
     velos-1-gsa-2-active# 
 
+initialization
+^^^^^^^^^^^^^^^
 
 **initialization         .1.3.6.1.4.1.12276.1.1.1.262656**
 
@@ -5414,7 +5417,8 @@ Critical issue in FPGA and datapath initialization process.
 
 .. code-block:: bash
     
-
+ePVA
+^^^^^^
 
 **ePVA         .1.3.6.1.4.1.12276.1.1.1.262912**
 
@@ -5427,7 +5431,11 @@ Critical issue in FPGA and datapath initialization process.
 Could not initialize ePVA.
 
 .. code-block:: bash
-    
+
+
+be2Training
+^^^^^^^^^^^
+
 **be2Training                 .1.3.6.1.4.1.12276.1.1.1.262913**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
@@ -5447,7 +5455,9 @@ Could not initialize ePVA.
    
     <INFO> 14-Aug-2025::13:20:43.803 partition1 confd[130]: snmp snmpv2-trap reqid=396983950 1.1.1.1:162 (TimeTicks sysUpTime=208354)(OBJECT IDENTIFIER snmpTrapOID=be2Training)(OCTET STRING alertSource=ATSE-0 Port 1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-09-30 15:40:43.624213146 UTC)(OCTET STRING alertDescription=Critical Bandwidth Engine link training failure)
    
-    
+speed
+^^^^^^
+
 
 **speed         .1.3.6.1.4.1.12276.1.1.1.263170**
 
@@ -5461,6 +5471,8 @@ Port speed change event.
 
 .. code-block:: bash
     
+lacp-mac-failure
+^^^^^^^^^^^^^^^^
 
 **lacp-mac-failure         .1.3.6.1.4.1.12276.1.1.1.590081**
 
@@ -5474,6 +5486,8 @@ Failed to publish LACP MAC address to the database.
 
 .. code-block:: bash
     
+mac-exhaustion
+^^^^^^^^^^^^^
 
 **mac-exhaustion         .1.3.6.1.4.1.12276.1.1.1.590082**
 
@@ -5487,6 +5501,8 @@ Partition MAC pool is exhausted.
 
 .. code-block:: bash
     
+inaccessibleMemory
+^^^^^^^^^^^^^^^^^^
 
 **inaccessibleMemory         .1.3.6.1.4.1.12276.1.1.1.458752**
 
@@ -5502,7 +5518,10 @@ Notification indicating unusable hugepage memory.
     
 
 Firmware Update Status Traps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
+
+firmware-update-status
+^^^^^^^^^^^^^^^^^^^^^^
 
 **firmware-update-status         .1.3.6.1.4.1.12276.1.1.1.65550**
 
@@ -5551,7 +5570,10 @@ The CLI command below shows how to filter the **snmp.log** file to only show fir
 
 
 Drive Utilization Traps
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
+
+drive-utilization
+^^^^^^^^^^^^^^^^^^
 
 **drive-utilization              .1.3.6.1.4.1.12276.1.1.1.65551**
 
@@ -5578,6 +5600,9 @@ You can view the snmp.log file to see the SNMP traps that have been issued for *
     <INFO> 12-Apr-2023::12:00:00.092 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130743 10.255.8.22:6011 (TimeTicks sysUpTime=122032)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:00.037560232 UTC)(OCTET STRING alertDescription=Drive usage growth rate exceeded 10%, growth=13%)
     <INFO> 12-Apr-2023::12:00:52.838 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130745 10.255.8.22:6011 (TimeTicks sysUpTime=127307)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834736965 UTC)(OCTET STRING alertDescription=Drive utilization growth rate is high)
     <INFO> 12-Apr-2023::12:00:52.888 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130746 10.255.8.22:6011 (TimeTicks sysUpTime=127312)(OBJECT IDENTIFIER snmpTrapOID=drive-utilization)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 12:00:52.834754109 UTC)(OCTET STRING alertDescription=Drive usage growth rate with in range, growth=-10268%)
+
+partition<xx>-image-volume-utilization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **partition<xx>-image-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
@@ -5730,6 +5755,8 @@ Below is an example of an **partition-image-volume-utilization** SNMP trap being
 
     <INFO> 11-Nov-2025::08:55:39.676 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076400 172.22.50.57:162 (TimeTicks sysUpTime=181680771)(OBJECT IDENTIFIER snmpTrapOID=partition2-image-volume-utilization)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 16:55:39.610522109 UTC)(OCTET STRING alertDescription=partition2 Image Volume usage with in range, used=75%)
 
+partition<xx>-shared-volume-utilization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **partition<xx>-shared-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
@@ -5881,6 +5908,9 @@ Below is an example of an **partition-shared-volume-utilization** SNMP trap bein
     Shared Volume Utilization details informational (alertEffect=2), within range
 
     <INFO> 11-Nov-2025::09:44:25.287 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076406 172.22.50.57:162 (TimeTicks sysUpTime=181973333)(OBJECT IDENTIFIER snmpTrapOID=partition2-shared-volume-utilization)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-11 17:44:25.220918013 UTC)(OCTET STRING alertDescription=Shared Volume usage with in range, used=22%)
+
+partition<xx>-config-volume-utilization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **partition<xx>-config-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
@@ -6036,8 +6066,10 @@ Below is an example of an **partition-config-volume-utilization** SNMP trap bein
 
 
 FIPS Related Traps
-^^^^^^^^^^^^^^^^^^^
+------------------
 
+fips-fault 
+^^^^^^^^^^^
 
 **fips-fault                     .1.3.6.1.4.1.12276.1.1.1.196308**
 
@@ -6059,6 +6091,9 @@ The output below is from an rSeries unit:
     <INFO> 14-Apr-2023::13:56:57.930 appliance-1 confd[115]: snmp snmpv2-trap reqid=1188695918 10.255.8.22:6011 (TimeTicks sysUpTime=545537)(OBJECT IDENTIFIER snmpTrapOID=fips-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2023-04-14 13:56:57.925072069 UTC)(OCTET STRING alertDescription=Fault detected in FIPS module)
     <INFO> 14-Apr-2023::13:57:27.924 appliance-1 confd[115]: snmp snmpv2-trap reqid=1188695919 10.255.8.22:6011 (TimeTicks sysUpTime=548537)(OBJECT IDENTIFIER snmpTrapOID=fips-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-14 13:57:27.919985256 UTC)(OCTET STRING alertDescription=Fault detected in FIPS module)
 
+fipsError 
+^^^^^^^^^^
+
 **fipsError                      .1.3.6.1.4.1.12276.1.1.1.196608**
 
 +------------------+-------------------------------------------------------------------+
@@ -6076,7 +6111,10 @@ FIPS error identified in one or more services.
     syscon-1-active# file show log/confd/snmp.log | include fipsError    
 
 System Event Traps
-^^^^^^^^^^^^^^^^^^^
+------------------
+
+core-dump 
+^^^^^^^^^
 
 **core-dump                      .1.3.6.1.4.1.12276.1.1.1.327680**
 
@@ -6098,6 +6136,8 @@ This trap will indicate that the system has generated a core-dump file. A suppor
     <INFO> 15-May-2023::13:13:01.846 controller-1 confd[602]: snmp snmpv2-trap reqid=1448346431 10.255.0.143:162 (TimeTicks sysUpTime=3605)(OBJECT IDENTIFIER snmpTrapOID=core-dump)(OCTET STRING alertSource=Controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-15 13:12:40.269591691 UTC)(OCTET STRING alertDescription=Core dumped on Controller-2. process=rsyslogd, location=/var/shared/core/container/core..rsyslogd.14019.1684156359.core.gz)
     syscon-1-active# 
 
+reboot 
+^^^^^^^
 
 **reboot                         .1.3.6.1.4.1.12276.1.1.1.327681**
 
@@ -6136,6 +6176,9 @@ Below is an example of a reboot trap from a chassis partition. Just like the sys
     <INFO> 21-Oct-2025::10:43:05.787 partition2 confd[117]: snmp snmpv2-trap reqid=474020405 172.22.50.57:162 (TimeTicks sysUpTime=10486)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 17:43:05.756123920 UTC)(OCTET STRING alertDescription=reboot - blade-1.chassis.local F5OS-C blade version 1.8.1-26555)
     <INFO> 21-Oct-2025::10:43:21.195 partition2 confd[117]: snmp snmpv2-trap reqid=474020414 172.22.50.57:162 (TimeTicks sysUpTime=12027)(OBJECT IDENTIFIER snmpTrapOID=reboot)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 17:43:21.184334350 UTC)(OCTET STRING alertDescription=reboot - blade-2.chassis.local F5OS-C blade version 1.8.1-26555)
 
+backplane
+^^^^^^^^^
+
 **backplane                      .1.3.6.1.4.1.12276.1.1.1.262144**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
@@ -6149,7 +6192,7 @@ Below is an example of a reboot trap from a chassis partition. Just like the sys
     syscon-1-active# file show log/confd/snmp.log | include backplane   
 
 Interface / Optic Related Traps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------
 
 The SNMP traps below will correspond to the Digital Diagnostics Monitoring (DDM) that the F5OS layer runs to check the status and health of the fiberoptic transceivers installed. The **show portgroups** CLI command in the VELOS chassis partition will display the current ddm thresholds for warning and alarm as well as current values.
 
@@ -6218,7 +6261,8 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr high-threshold alarm 3.4   <-- Will trigger SNMP Trap for High Alarm
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
 
-
+txPwr
+^^^^^
 
 **txPwr                   .1.3.6.1.4.1.12276.1.1.1.262400**
 
@@ -6257,6 +6301,9 @@ The transmit power threshold for a specific transceiver has triggered a warning 
     <INFO> 7-May-2025::21:06:40.677 partition2 confd[114]: snmp snmpv2-trap reqid=972265657 172.22.50.57:162 (TimeTicks sysUpTime=183497827)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650975934 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low warning)
     <INFO> 7-May-2025::21:06:40.801 partition2 confd[114]: snmp snmpv2-trap reqid=972265658 172.22.50.57:162 (TimeTicks sysUpTime=183497840)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650917268 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter power low alarm)
 
+rxPwr 
+^^^^^
+
 **rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
@@ -6288,6 +6335,9 @@ The receive power threshold for a specific transceiver has reached a threshold i
     <INFO> 27-Jun-2025::18:22:34.052 partition4 confd[114]: snmp snmpv2-trap reqid=1674228064 172.22.50.57:162 (TimeTicks sysUpTime=623149258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-28 01:22:34.026783343 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
     <INFO> 18-Jul-2025::14:50:04.051 partition4 confd[114]: snmp snmpv2-trap reqid=1674228067 172.22.50.57:162 (TimeTicks sysUpTime=803314258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-07-18 21:50:04.027229987 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
     <INFO> 18-Jul-2025::14:59:04.046 partition4 confd[114]: snmp snmpv2-trap reqid=1674228070 172.22.50.57:162 (TimeTicks sysUpTime=803368257)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-07-18 21:59:04.027161464 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
+
+txBias 
+^^^^^^
 
 **txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
@@ -6325,6 +6375,8 @@ Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on p
     <INFO> 7-May-2025::21:06:10.787 partition2 confd[114]: snmp snmpv2-trap reqid=972265655 172.22.50.57:162 (TimeTicks sysUpTime=183494838)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352469714 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
     <INFO> 7-May-2025::21:06:40.914 partition2 confd[114]: snmp snmpv2-trap reqid=972265659 172.22.50.57:162 (TimeTicks sysUpTime=183497851)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.651155713 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
    
+ddmTemp 
+^^^^^^^^
 
 **ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
 
@@ -6353,6 +6405,8 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 .. code-block:: bash
 
 
+ddmVcc
+^^^^^^^
 
 **ddmVcc                   .1.3.6.1.4.1.12276.1.1.1.262404**
 
