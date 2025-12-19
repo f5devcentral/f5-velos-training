@@ -4357,7 +4357,7 @@ Below are the SNMP traps generated for this event from the chassis partition. Yo
 
     <INFO> 19-Dec-2025::13:39:47.095 partition2 confd[117]: snmp snmpv2-trap reqid=1699583245 172.22.50.57:162 (TimeTicks sysUpTime=8519)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2025-12-19 21:39:46.005724699 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
     
-    Addtional EVENT (alertEffect=2) messages are provided with more detail Drive usage exceeded 6%, used=8%.
+    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 6%, used=8%.
 
     <INFO> 19-Dec-2025::13:39:47.139 partition2 confd[117]: snmp snmpv2-trap reqid=1699583246 172.22.50.57:162 (TimeTicks sysUpTime=8523)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:39:46.005742813 UTC)(OCTET STRING alertDescription=Drive usage exceeded 6%, used=8%)
      
@@ -4369,7 +4369,7 @@ Below are the SNMP traps generated for this event from the chassis partition. Yo
 
     <INFO> 19-Dec-2025::13:49:46.073 partition2 confd[117]: snmp snmpv2-trap reqid=1699583268 172.22.50.57:162 (TimeTicks sysUpTime=68417)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001471471 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
 
-    Addtional EVENT (alertEffect=2) messages are provided with more detail Drive usage exceeded 4%, used=6%.
+    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 4%, used=6%.
    
     <INFO> 19-Dec-2025::13:49:46.131 partition2 confd[117]: snmp snmpv2-trap reqid=1699583269 172.22.50.57:162 (TimeTicks sysUpTime=68423)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001498857 UTC)(OCTET STRING alertDescription=Drive usage exceeded 4%, used=6%)
 
@@ -4381,11 +4381,18 @@ Below are the SNMP traps generated for this event from the chassis partition. Yo
 
     <INFO> 19-Dec-2025::13:51:46.091 partition2 confd[117]: snmp snmpv2-trap reqid=1699583271 172.22.50.57:162 (TimeTicks sysUpTime=80419)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002333837 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
   
-    Addtional EVENT (alertEffect=2) messages are provided with more detail Drive usage exceeded 2%, used=4%.
+    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 2%, used=4%.
 
     <INFO> 19-Dec-2025::13:51:46.141 partition2 confd[117]: snmp snmpv2-trap reqid=1699583272 172.22.50.57:162 (TimeTicks sysUpTime=80424)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002366398 UTC)(OCTET STRING alertDescription=Drive usage exceeded 2%, used=4%)
     green-partition-chassis1-gsa-1# 
 
+    Finally, Drive Capacity Fault is CLEARED (alertEffect=0).
+
+    <INFO> 19-Dec-2025::13:59:46.015 partition2 confd[117]: snmp snmpv2-trap reqid=1699583273 172.22.50.57:162 (TimeTicks sysUpTime=128411)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:59:46.001875739 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+
+    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage with in range, used=2%.
+
+    <INFO> 19-Dec-2025::13:59:46.064 partition2 confd[117]: snmp snmpv2-trap reqid=1699583274 172.22.50.57:162 (TimeTicks sysUpTime=128416)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:59:46.001895845 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=2%)
 
 Below is an example of a VELOS system controller reaching a drive capacity threshold and then clearing the threshold.
 
@@ -4409,6 +4416,10 @@ Below is an example of a VELOS system controller reaching a drive capacity thres
     The follow-on trap is an (alertEffect=2) providing deeper details indicating the drive-capacity is now in range:
 
     <INFO> 12-Apr-2023::11:54:35.217 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130734 10.255.8.22:6011 (TimeTicks sysUpTime=89545)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162734807 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=54%)
+
+
+
+
 
 **power-fault                    .1.3.6.1.4.1.12276.1.1.1.65545**
 
