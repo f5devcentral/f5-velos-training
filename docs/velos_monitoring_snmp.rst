@@ -3660,6 +3660,8 @@ A coldStart trap signifies that the SNMP entity, supporting a notification origi
     <INFO> 31-Jan-2025::21:03:30.987 controller-1 confd[652]: snmp snmpv2-trap reqid=1385388326 172.22.50.57:162 (TimeTicks sysUpTime=173)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
     <INFO> 16-Apr-2025::15:23:12.064 controller-1 confd[657]: snmp snmpv2-trap reqid=183957403 172.22.50.57:162 (TimeTicks sysUpTime=348)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
 
+Below is an example of a **coldStart** SNMP trap from a chassis partition.
+
 .. code-block:: bash
 
     blue-partition-chassis1-gsa-1# file show log/snmp.log | include snmpTrapOID=coldStart
@@ -4222,14 +4224,170 @@ The example logs below are from a VELOS system controller and show informational
 | CLEAR            | Running out of drive capacity                                                      |
 +------------------+------------------------------------------------------------------------------------+
 
+This trap applies to both the system controller layer, and to each chassis partition.
 
-The system will monitor the storage utilization of the rSeries disks and warn if the disk capacity gets too high. This is measured hourly. There are 3 levels of events that can occur as seen below:
+Within the VELOS chassis partition layer, the system will monitor the storage utilization of **/sysroot** within the filesystem. There are default thresholds which can be changed if desired. By default, the system will issue **error**, **warning**, and **critical** SNMP traps when those thresholds are crossed. There is also a separate SNMP trap for the growth percentage. The default values can be displayed using the **show cluster disk-usage-threshold** command in the chassis partition CLI.
+
+.. code-block:: bash
+
+    blue-partition-chassis1-gsa-1(config)# cluster disk-usage-threshold config ?
+    Possible completions:
+    critical-limit      The percentage of disk usage allowed before critical alarm
+    error-limit         The percentage of disk usage allowed before error alarm
+    growth-rate-limit   The percentage of disk usage growth rate allowed
+    interval            The interval measured in minutes, at which disk usage is monitored
+    warning-limit       The percentage of disk usage allowed before warning alarm
+    blue-partition-chassis1-gsa-1(config)#
+
+You can view the current utilization by issuing the command **show cluster nodes node <blade-#> state disk-data**, where <blade-#> is the blade number i.e. **blade-2** of a blade within the current chassis partition. This will display the raw storage values.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-2# show cluster nodes node blade-1 state disk-data 
+    DISK DATA  DISK DATA     
+    NAME       VALUE         
+    -------------------------
+    available  608343089152  
+    capacity   716948684800  
+    used       72162967552   
+    images     25114472448   
+
+    green-partition-chassis1-gsa-2#
+
+To get a further breakdown showing the growth rate and percenatge used, enter the **show cluster nodes node <blade-#> state disk-usage** command. In the example below, you can see that the current utilization of **/sysroot** is 5%.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-2# show cluster nodes node blade-1 state disk-usage
+    state disk-usage used-percent 5
+    state disk-usage growth-rate 0
+    state disk-usage status in-range
+    green-partition-chassis1-gsa-2#
+
+If you would like to look deeper into the usage of the other parts of the filesystem, enter the command **show components** within the chassis partition. You’ll notice two main areas highlighted:
+
+- F5OS System - This is the **/sysroot** part of the filesystem used by F5OS.
+- BIG-IP Tenant - This is the space allocated to each individual tenant **tenant/<tenant-name>**. There should be one entry for each tenant deployed on the system.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-2# show components                  
+    components component blade-1
+    state serial-no      bld424551s
+    state part-no        "400-0086-02 REV 2"
+    state empty          false
+    state tpm-integrity-status Valid
+    state memory total    134733860864
+    state memory available 21873659904
+    state memory free     17131401216
+    state memory used-percent 83
+    state memory platform-total 26843779072
+    state memory platform-used 4743106560
+    state memory platform-used-percent 17
+    state temperature current 26.0
+    state temperature average 26.4
+    state temperature minimum 26.0
+    state temperature maximum 28.0
+                                                                            USED     
+    AREA              CATEGORY       TOTAL         FREE          USED         PERCENT  
+    -----------------------------------------------------------------------------------
+    platform/sysroot  F5OS System    716948684800  608342953984  72163102720  10       
+    tenant/tenant2    BIG-IP Tenant  88046829568   79151652864   8895176704   10       
+    tenant/test       BIG-IP Tenant  88046829568   79707602944   8339226624   9        
+    tenant/test123    BIG-IP Tenant  214748364800  206868324352  7880040448   3       
+
+The system will monitor the storage utilization of the VELOS disks and warn if the disk capacity gets too high. This is measured hourly. There are 3 levels of events that can occur as seen below:
 
 - drive-capacity:critical-limit - Drive Usage exceeded 97%
 - drive-capacity:failure-limit  - Drive Usage exceeded 90%
 - drive-capacity:warning-limit  - Drive Usage exceeded 85%
 
-The **show system events** CLI command will provide more details of the drive events that have occurred. Below is an example of a VELOS system controller reaching a drive capacity threshold and then clearing the threshold.
+
+In the example below, the default **disk-usage-threshold** paremeters have been lowered to artificially generate a trap condition.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-2(config)# cluster disk-usage-threshold config critical-limit 6
+    green-partition-chassis1-gsa-2(config)# cluster disk-usage-threshold config error-limit 4    
+    green-partition-chassis1-gsa-2(config)# cluster disk-usage-threshold config warning-limit 2
+    green-partition-chassis1-gsa-2(config)# cluster disk-usage-threshold config interval 1
+    green-partition-chassis1-gsa-2(config)# commit
+    Commit complete.
+    green-partition-chassis1-gsa-2(config)#
+
+The **show system events** CLI command in the chassis partition will provide more details of the drive events that have occurred. Below you can see a drive ASSERTING a CRITICAL status, then CLEARING that status, then ASSERTING an ERROR status, and then CLEARING that status, and finally ASSERTING a WARNING status, and then CLEARING that status.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# show system events | include drive
+    65544 blade-1 drive-capacity-fault EVENT NA "Attribute health reset" "2025-12-19 21:39:44.360013043 UTC"                   
+    65544 blade-1 drive-capacity-fault ASSERT CRITICAL "Running out of drive capacity" "2025-12-19 21:39:46.005724699 UTC"     
+    65544 blade-1 drive-capacity-fault EVENT NA "Drive usage exceeded 6%, used=8%" "2025-12-19 21:39:46.005742813 UTC"         
+    65544 blade-1 drive-capacity-fault CLEAR CRITICAL "Running out of drive capacity" "2025-12-19 21:49:46.001448998 UTC"      
+    65544 blade-1 drive-capacity-fault ASSERT ERROR "Running out of drive capacity" "2025-12-19 21:49:46.001471471 UTC"        
+    65544 blade-1 drive-capacity-fault EVENT NA "Drive usage exceeded 4%, used=6%" "2025-12-19 21:49:46.001498857 UTC"         
+    65544 blade-1 drive-capacity-fault CLEAR ERROR "Running out of drive capacity" "2025-12-19 21:51:46.002314086 UTC"         
+    65544 blade-1 drive-capacity-fault ASSERT WARNING "Running out of drive capacity" "2025-12-19 21:51:46.002333837 UTC"      
+    65544 blade-1 drive-capacity-fault EVENT NA "Drive usage exceeded 2%, used=4%" "2025-12-19 21:51:46.002366398 UTC"         
+    green-partition-chassis1-gsa-1# 
+
+You can then issue the command **show cluster nodes node <blade-#> state disk-usage** to see the current status, and levels. Below you can see that blade-1 is still in a warning-limit state with current used-precent at 4%.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# show cluster nodes node blade-1 state disk-usage
+    state disk-usage used-percent 4
+    state disk-usage growth-rate 1
+    state disk-usage status crossed-warning-limit
+    green-partition-chassis1-gsa-1#
+
+
+
+
+Below are the SNMP traps generated for this event from the chassis partition. You can see the drive-capacity go from CRITICAL to ERROR, and then to WARNING. 
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# file show log/snmp.log | include drive-capacity-fault   
+    
+
+    <INFO> 19-Dec-2025::13:39:46.163 partition2 confd[117]: snmp snmpv2-trap reqid=1699583241 172.22.50.57:162 (TimeTicks sysUpTime=8426)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:39:44.360013043 UTC)(OCTET STRING alertDescription=Attribute health reset)
+    
+    Drive Capacity Fault is ASSERTED (alertEffect=1), with CRITICAL (alertSeverity=2) status.
+
+    <INFO> 19-Dec-2025::13:39:47.095 partition2 confd[117]: snmp snmpv2-trap reqid=1699583245 172.22.50.57:162 (TimeTicks sysUpTime=8519)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2025-12-19 21:39:46.005724699 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+    
+    Addtional EVENT (alertEffect=2) messages are provided with more detail Drive usage exceeded 6%, used=8%.
+
+    <INFO> 19-Dec-2025::13:39:47.139 partition2 confd[117]: snmp snmpv2-trap reqid=1699583246 172.22.50.57:162 (TimeTicks sysUpTime=8523)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:39:46.005742813 UTC)(OCTET STRING alertDescription=Drive usage exceeded 6%, used=8%)
+     
+    Drive Capacity Fault is CLEARED (alertEffect=0).
+
+    <INFO> 19-Dec-2025::13:49:46.020 partition2 confd[117]: snmp snmpv2-trap reqid=1699583267 172.22.50.57:162 (TimeTicks sysUpTime=68411)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001448998 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+    
+    Drive Capacity Fault is ASSERTED (alertEffect=1), with ERROR (alertSeverity=3) status.
+
+    <INFO> 19-Dec-2025::13:49:46.073 partition2 confd[117]: snmp snmpv2-trap reqid=1699583268 172.22.50.57:162 (TimeTicks sysUpTime=68417)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001471471 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+
+    Addtional EVENT (alertEffect=2) messages are provided with more detail Drive usage exceeded 4%, used=6%.
+   
+    <INFO> 19-Dec-2025::13:49:46.131 partition2 confd[117]: snmp snmpv2-trap reqid=1699583269 172.22.50.57:162 (TimeTicks sysUpTime=68423)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001498857 UTC)(OCTET STRING alertDescription=Drive usage exceeded 4%, used=6%)
+
+    Drive Capacity Fault is CLEARED (alertEffect=0).
+
+    <INFO> 19-Dec-2025::13:51:46.027 partition2 confd[117]: snmp snmpv2-trap reqid=1699583270 172.22.50.57:162 (TimeTicks sysUpTime=80412)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002314086 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+
+    Drive Capacity Fault is ASSERTED (alertEffect=1), with WARNING (alertSeverity=4) status.   
+
+    <INFO> 19-Dec-2025::13:51:46.091 partition2 confd[117]: snmp snmpv2-trap reqid=1699583271 172.22.50.57:162 (TimeTicks sysUpTime=80419)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002333837 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
+  
+    Addtional EVENT (alertEffect=2) messages are provided with more detail Drive usage exceeded 2%, used=4%.
+
+    <INFO> 19-Dec-2025::13:51:46.141 partition2 confd[117]: snmp snmpv2-trap reqid=1699583272 172.22.50.57:162 (TimeTicks sysUpTime=80424)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002366398 UTC)(OCTET STRING alertDescription=Drive usage exceeded 2%, used=4%)
+    green-partition-chassis1-gsa-1# 
+
+
+Below is an example of a VELOS system controller reaching a drive capacity threshold and then clearing the threshold.
 
 
 .. code-block:: bash
@@ -5342,9 +5500,9 @@ You can view the snmp.log file to see the SNMP traps that have been issued for *
 
 **partition<xx>-image-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
-From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **images** volume where F5OS tenant images are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+From the VELOS system controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **images** volume where F5OS tenant images are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
 
-Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+Although these traps are labeled as partition volume utilization, they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
@@ -5494,9 +5652,9 @@ Below is an example of an **partition-image-volume-utilization** SNMP trap being
 
 **partition<xx>-shared-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
-From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **shared** volume where shared data, including tcpdump, QKView, and core files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+From the VELOS system controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **shared** volume where shared data, including tcpdump, QKView, and core files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
 
-Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+Although these traps are labeled as partition volume utilization, they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
@@ -5645,9 +5803,9 @@ Below is an example of an **partition-shared-volume-utilization** SNMP trap bein
 
 **partition<xx>-config-volume-utilization             .1.3.6.1.4.1.12276.1.1.1.65<xxx>**
 
-From the VELOS controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **config** volume where configuration files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
+From the VELOS system controller, there are a variety of traps focused on monitoring partition file system / volume utilization. Each partition number / ID has its own unique SNMP OID for the **config** volume where configuration files are stored. In the VELOS CX410 chassis it is possible to configure up to eight individual partitions if the chassis is fully loaded with eight BX110 blades and each blade is put into its own partition. In the CX1610 chassis it is possible to have a maximum of sixteen partitions if the chassis is fully loaded with sixteen BX520 blades and each blade is put into its own partition. Partition IDs 17-32 are currently unused and reserved for future use. 
 
-Although these traps are labeled as partition volume utilization they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
+Although these traps are labeled as partition volume utilization, they will be sourced from the system controller layer which is monitoring the partitions volume utilization. 
 
 +-----------------------------------------+----------------------------------+
 | SNMP Trap                               | SNMP OID                         |
