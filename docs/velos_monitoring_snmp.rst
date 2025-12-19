@@ -3646,7 +3646,10 @@ As an example, the following set of traps are from an PSU failure and recovery o
 
 
 Generic SNMP Traps
-------------------
+==================
+
+coldStart
+---------
 
 **coldStart         	1.3.6.1.6.3.1.1.5.1**  
 
@@ -3675,6 +3678,8 @@ Below is an example of a **coldStart** SNMP trap from a chassis partition.
     blue-partition-chassis1-gsa-1# 
 
 
+linkDown
+--------
 
 **link down         	1.3.6.1.6.3.1.1.5.3**  
 
@@ -3700,6 +3705,8 @@ For the system controllers, there is a separate **link-state .1.3.6.1.4.1.12276.
     
     <INFO> 7-Dec-2025::15:53:57.561 partition3 confd[117]: snmp snmpv2-trap reqid=1654460445 172.22.50.57:162 (TimeTicks sysUpTime=19100093)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
     
+down
+----
 
 **down         .1.3.6.1.4.1.12276.1.1.1.263169**
 
@@ -3711,6 +3718,9 @@ In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trig
     <INFO> 30-Apr-2024::15:14:38.582 partition2 confd[123]: snmp snmpv2-trap reqid=677841658 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
 
     <INFO> 30-Apr-2024::15:14:38.577 partition2 confd[123]: snmp snmpv2-trap reqid=677841657 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-30 19:14:38.516399590 UTC)(OCTET STRING alertDescription=Interface down)
+
+linkup
+------
 
 **link up         	1.3.6.1.6.3.1.1.5.4**  
 
@@ -3724,6 +3734,9 @@ For the system controllers, there is a separate **link-state .1.3.6.1.4.1.12276.
     blue-partition-chassis1-gsa-1# file show log/snmp.log | include "snmpTrapOID=up|linkUp"  
     <INFO> 7-Dec-2025::15:53:56.620 partition3 confd[117]: snmp snmpv2-trap reqid=1654460442 172.22.50.57:162 (TimeTicks sysUpTime=19099999)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-2/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-07 23:53:56.599421488 UTC)(OCTET STRING alertDescription=Interface up)
     <INFO> 7-Dec-2025::15:53:56.628 partition3 confd[117]: snmp snmpv2-trap reqid=1654460443 172.22.50.57:162 (TimeTicks sysUpTime=19100000)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
+
+up
+--
 
 **up         .1.3.6.1.4.1.12276.1.1.1.263168**
 
@@ -3741,10 +3754,13 @@ In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trig
 
 
 F5OS Specific Traps
-------------------
+===================
 
 Device Fault Traps
-^^^^^^^^^^^^^^^^^^^
+------------------
+
+hardware-device-fault
+^^^^^^^^^^^^^^^^^^^^^
 
 **hardware-device-fault          .1.3.6.1.4.1.12276.1.1.1.65536**
 
@@ -3943,7 +3959,8 @@ Below is another example of informational events noted by **alertEffect=2**.
     <INFO> 11-Jul-2022::06:29:20.546 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440684 10.255.0.145:161 (TimeTicks sysUpTime=8626)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-4)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.202497586 UTC)(OCTET STRING alertDescription=fan 4 at 26954 RPM)
     <INFO> 11-Jul-2022::06:29:20.546 controller-1 confd[127]: snmp snmpv2-trap reqid=1257440684 10.255.0.144:161 (TimeTicks sysUpTime=8626)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-4)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-07-11 06:29:16.202497586 UTC)(OCTET STRING alertDescription=fan 4 at 26954 RPM)
 
-
+firmware-fault
+^^^^^^^^^^^^^^^
 
 **firmware-fault                 .1.3.6.1.4.1.12276.1.1.1.65537**
 
@@ -3977,6 +3994,8 @@ In the example below, note the messages are all informational **alertEffect=2** 
     <INFO> 3-Oct-2022::09:34:31.496 controller-1 confd[437]: snmp snmpv2-trap reqid=64689747 10.255.0.143:162 (TimeTicks sysUpTime=3202)(OBJECT IDENTIFIER snmpTrapOID=firmware-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.989205994 UTC)(OCTET STRING alertDescription=Deasserted: Heap running low)
     <INFO> 3-Oct-2022::09:34:32.628 controller-1 confd[437]: snmp snmpv2-trap reqid=64689759 10.255.0.143:162 (TimeTicks sysUpTime=3315)(OBJECT IDENTIFIER snmpTrapOID=firmware-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:06.079544774 UTC)(OCTET STRING alertDescription=Deasserted: Watchdog timer warning)
 
+unknown-alarm
+^^^^^^^^^^^^^
 
 **unknown-alarm                  .1.3.6.1.4.1.12276.1.1.1.65538**
 
@@ -4001,6 +4020,9 @@ Unregistered alarm detected.
     <INFO> 3-May-2023::15:58:32.300 controller-1 confd[608]: snmp snmpv2-trap reqid=306728796 10.255.0.143:162 (TimeTicks sysUpTime=16872)(OBJECT IDENTIFIER snmpTrapOID=unknown-alarm)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-03 15:57:45.951590859 UTC)(OCTET STRING alertDescription=Deasserted: host reset)
     <INFO> 3-May-2023::15:58:32.305 controller-1 confd[608]: snmp snmpv2-trap reqid=306728801 10.255.0.143:162 (TimeTicks sysUpTime=16872)(OBJECT IDENTIFIER snmpTrapOID=unknown-alarm)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-05-03 15:57:47.762723656 UTC)(OCTET STRING alertDescription=Asserted: host power)
 
+memory-fault
+^^^^^^^^^^^^^
+
 **memory-fault                   .1.3.6.1.4.1.12276.1.1.1.65539**
 
 +------------------+------------------------------------------------------------------------------------------+
@@ -4013,6 +4035,9 @@ Unregistered alarm detected.
 .. code-block:: bash
 
     file show log/confd/snmp.log | include memory-fault
+
+drive-fault
+^^^^^^^^^^^
 
 **drive-fault                    .1.3.6.1.4.1.12276.1.1.1.65540**
 
@@ -4078,6 +4103,8 @@ Unregistered alarm detected.
 
     file show log/confd/snmp.log | include drive-fault
 
+cpu-fault 
+^^^^^^^^^^
 **cpu-fault                      .1.3.6.1.4.1.12276.1.1.1.65541**
 
 +------------------+------------------------------------------------------------------------------------------+
@@ -4090,6 +4117,9 @@ Unregistered alarm detected.
 
     syscon-1-active# file show log/confd/snmp.log | include cpu-fault  
 
+pcie-fault 
+^^^^^^^^^^^
+
 **pcie-fault                     .1.3.6.1.4.1.12276.1.1.1.65542**
 
 +------------------+------------------------------------------------------------------------------------------+
@@ -4101,6 +4131,9 @@ Unregistered alarm detected.
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include pcie-fault
+
+aom-fault 
+^^^^^^^^^^
 
 **aom-fault                      .1.3.6.1.4.1.12276.1.1.1.65543**
 
@@ -4200,6 +4233,9 @@ The example logs below are from a VELOS system controller and show informational
     <INFO> 5-Mar-2024::15:23:15.878 controller-2 confd[581]: snmp snmpv2-trap reqid=220801597 10.255.80.251:162 (TimeTicks sysUpTime=63505)(OBJECT IDENTIFIER snmpTrapOID=aom-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-05 20:21:35.736268196 UTC)(OCTET STRING alertDescription=Attribute health reset)
     velos-1-gsa-2-active#
 
+drive-capacity-fault
+^^^^^^^^^^^^^^^^^^^^
+
 **drive-capacity-fault           .1.3.6.1.4.1.12276.1.1.1.65544**
 
 +------------------+------------------------------------------------------------------------------------+
@@ -4224,7 +4260,7 @@ The example logs below are from a VELOS system controller and show informational
 | CLEAR            | Running out of drive capacity                                                      |
 +------------------+------------------------------------------------------------------------------------+
 
-This trap applies to both the system controller layer, and to each chassis partition.
+This trap applies only to the chassis partition layer.
 
 Within the VELOS chassis partition layer, the system will monitor the storage utilization of **/sysroot** within the filesystem. There are default thresholds which can be changed if desired. By default, the system will issue **error**, **warning**, and **critical** SNMP traps when those thresholds are crossed. There is also a separate SNMP trap for the growth percentage. The default values can be displayed using the **show cluster disk-usage-threshold** command in the chassis partition CLI.
 
@@ -4239,7 +4275,7 @@ Within the VELOS chassis partition layer, the system will monitor the storage ut
     warning-limit       The percentage of disk usage allowed before warning alarm
     blue-partition-chassis1-gsa-1(config)#
 
-You can view the current utilization by issuing the command **show cluster nodes node <blade-#> state disk-data**, where <blade-#> is the blade number i.e. **blade-2** of a blade within the current chassis partition. This will display the raw storage values.
+You can view the current utilization by issuing the command **show cluster nodes node <blade-#> state disk-data**, where <blade-#> is the blade number i.e. **blade-1** of a blade within the current chassis partition. This will display the raw storage values.
 
 .. code-block:: bash
 
@@ -4254,7 +4290,7 @@ You can view the current utilization by issuing the command **show cluster nodes
 
     green-partition-chassis1-gsa-2#
 
-To get a further breakdown showing the growth rate and percenatge used, enter the **show cluster nodes node <blade-#> state disk-usage** command. In the example below, you can see that the current utilization of **/sysroot** is 5%.
+To get a further breakdown showing the growth rate and percenatge used, enter the **show cluster nodes node <blade-#> state disk-usage** command. In the example below, you can see that the current utilization of **/sysroot** is 5% and the **disk-usage status** is **in-range**.
 
 .. code-block:: bash
 
@@ -4315,7 +4351,7 @@ In the example below, the default **disk-usage-threshold** paremeters have been 
     Commit complete.
     green-partition-chassis1-gsa-2(config)#
 
-The **show system events** CLI command in the chassis partition will provide more details of the drive events that have occurred. Below you can see a drive ASSERTING a CRITICAL status, then CLEARING that status, then ASSERTING an ERROR status, and then CLEARING that status, and finally ASSERTING a WARNING status, and then CLEARING that status.
+The **show system events** CLI command in the chassis partition will provide more details of the drive events that have occurred. Below you can see a drive ASSERTING a CRITICAL status, then CLEARING that status, then ASSERTING an ERROR status, and then CLEARING that status, and finally ASSERTING a WARNING status, and then CLEARING that status. Finally, an event noting the drive is back in a safe range is sent.
 
 .. code-block:: bash
 
@@ -4328,10 +4364,11 @@ The **show system events** CLI command in the chassis partition will provide mor
     65544 blade-1 drive-capacity-fault EVENT NA "Drive usage exceeded 4%, used=6%" "2025-12-19 21:49:46.001498857 UTC"         
     65544 blade-1 drive-capacity-fault CLEAR ERROR "Running out of drive capacity" "2025-12-19 21:51:46.002314086 UTC"         
     65544 blade-1 drive-capacity-fault ASSERT WARNING "Running out of drive capacity" "2025-12-19 21:51:46.002333837 UTC"      
-    65544 blade-1 drive-capacity-fault EVENT NA "Drive usage exceeded 2%, used=4%" "2025-12-19 21:51:46.002366398 UTC"         
+    65544 blade-1 drive-capacity-fault EVENT NA "Drive usage exceeded 2%, used=4%" "2025-12-19 21:51:46.002366398 UTC"   
+    65544 blade-1 drive-capacity-fault EVENT NA "Drive usage with in range, used=2%" "2025-12-19 21:59:46.001895845 UTC"       
     green-partition-chassis1-gsa-1# 
 
-You can then issue the command **show cluster nodes node <blade-#> state disk-usage** to see the current status, and levels. Below you can see that blade-1 is still in a warning-limit state with current used-precent at 4%.
+You can issue the command **show cluster nodes node <blade-#> state disk-usage** to see the current disk-usage status, and levels. Below you can see that blade-1 is still in a crossed-warning-limit state with current used-precent at 4%.
 
 .. code-block:: bash
 
@@ -4340,8 +4377,6 @@ You can then issue the command **show cluster nodes node <blade-#> state disk-us
     state disk-usage growth-rate 1
     state disk-usage status crossed-warning-limit
     green-partition-chassis1-gsa-1#
-
-
 
 
 Below are the SNMP traps generated for this event from the chassis partition. You can see the drive-capacity go from CRITICAL to ERROR, and then to WARNING. 
@@ -4357,7 +4392,7 @@ Below are the SNMP traps generated for this event from the chassis partition. Yo
 
     <INFO> 19-Dec-2025::13:39:47.095 partition2 confd[117]: snmp snmpv2-trap reqid=1699583245 172.22.50.57:162 (TimeTicks sysUpTime=8519)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2025-12-19 21:39:46.005724699 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
     
-    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 6%, used=8%.
+    Additional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 6%, used=8%.
 
     <INFO> 19-Dec-2025::13:39:47.139 partition2 confd[117]: snmp snmpv2-trap reqid=1699583246 172.22.50.57:162 (TimeTicks sysUpTime=8523)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:39:46.005742813 UTC)(OCTET STRING alertDescription=Drive usage exceeded 6%, used=8%)
      
@@ -4369,7 +4404,7 @@ Below are the SNMP traps generated for this event from the chassis partition. Yo
 
     <INFO> 19-Dec-2025::13:49:46.073 partition2 confd[117]: snmp snmpv2-trap reqid=1699583268 172.22.50.57:162 (TimeTicks sysUpTime=68417)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001471471 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
 
-    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 4%, used=6%.
+    Additional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 4%, used=6%.
    
     <INFO> 19-Dec-2025::13:49:46.131 partition2 confd[117]: snmp snmpv2-trap reqid=1699583269 172.22.50.57:162 (TimeTicks sysUpTime=68423)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:49:46.001498857 UTC)(OCTET STRING alertDescription=Drive usage exceeded 4%, used=6%)
 
@@ -4381,45 +4416,20 @@ Below are the SNMP traps generated for this event from the chassis partition. Yo
 
     <INFO> 19-Dec-2025::13:51:46.091 partition2 confd[117]: snmp snmpv2-trap reqid=1699583271 172.22.50.57:162 (TimeTicks sysUpTime=80419)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002333837 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
   
-    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 2%, used=4%.
+    Additional EVENT (alertEffect=2) messages are provided with more detail: Drive usage exceeded 2%, used=4%.
 
     <INFO> 19-Dec-2025::13:51:46.141 partition2 confd[117]: snmp snmpv2-trap reqid=1699583272 172.22.50.57:162 (TimeTicks sysUpTime=80424)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:51:46.002366398 UTC)(OCTET STRING alertDescription=Drive usage exceeded 2%, used=4%)
-    green-partition-chassis1-gsa-1# 
 
     Finally, Drive Capacity Fault is CLEARED (alertEffect=0).
 
     <INFO> 19-Dec-2025::13:59:46.015 partition2 confd[117]: snmp snmpv2-trap reqid=1699583273 172.22.50.57:162 (TimeTicks sysUpTime=128411)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:59:46.001875739 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
 
-    Addtional EVENT (alertEffect=2) messages are provided with more detail: Drive usage with in range, used=2%.
+    Additional EVENT (alertEffect=2) messages are provided with more detail: Drive usage with in range, used=2%.
 
     <INFO> 19-Dec-2025::13:59:46.064 partition2 confd[117]: snmp snmpv2-trap reqid=1699583274 172.22.50.57:162 (TimeTicks sysUpTime=128416)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 21:59:46.001895845 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=2%)
 
-Below is an example of a VELOS system controller reaching a drive capacity threshold and then clearing the threshold.
-
-
-.. code-block:: bash
-
-    syscon-1-active# file show log/confd/snmp.log | include drive-capacity-fault
-
-    ALARM (alertEffect=1) being raised for drive-capacity-fault.
-
-    <INFO> 12-Apr-2023::11:54:10.563 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130731 10.255.8.22:6011 (TimeTicks sysUpTime=87079)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558711877 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
-
-    Informational EVENT (alertEffect=2) providing additional details for drive-capacity-fault.
-
-    <INFO> 12-Apr-2023::11:54:10.613 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130732 10.255.8.22:6011 (TimeTicks sysUpTime=87084)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:10.558725204 UTC)(OCTET STRING alertDescription=Drive usage exceeded 97%, used=100%)
-
-    ALARM (alertEffect=0) being cleared for drive-capacity-fault.
-
-    <INFO> 12-Apr-2023::11:54:35.167 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130733 10.255.8.22:6011 (TimeTicks sysUpTime=89540)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162718848 UTC)(OCTET STRING alertDescription=Running out of drive capacity)
-
-    The follow-on trap is an (alertEffect=2) providing deeper details indicating the drive-capacity is now in range:
-
-    <INFO> 12-Apr-2023::11:54:35.217 appliance-1 confd[116]: snmp snmpv2-trap reqid=608130734 10.255.8.22:6011 (TimeTicks sysUpTime=89545)(OBJECT IDENTIFIER snmpTrapOID=drive-capacity-fault)(OCTET STRING alertSource=appliance)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-04-12 11:54:35.162734807 UTC)(OCTET STRING alertDescription=Drive usage with in range, used=54%)
-
-
-
-
+power-fault
+^^^^^^^^^^^
 
 **power-fault                    .1.3.6.1.4.1.12276.1.1.1.65545**
 
@@ -4458,7 +4468,8 @@ In the example below, note that all of the messages are all informational **aler
     <INFO> 3-Oct-2022::09:34:25.089 controller-1 confd[437]: snmp snmpv2-trap reqid=64689699 10.255.0.143:162 (TimeTicks sysUpTime=2562)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:33:13.513588350 UTC)(OCTET STRING alertDescription=Deasserted: +1.25V_BCM power fault)
     <INFO> 3-Oct-2022::09:34:28.549 controller-1 confd[437]: snmp snmpv2-trap reqid=64689712 10.255.0.143:162 (TimeTicks sysUpTime=2908)(OBJECT IDENTIFIER snmpTrapOID=power-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:05.402307735 UTC)(OCTET STRING alertDescription=Deasserted: +1.05V_DNV power fault)
 
-
+thermal-fault
+^^^^^^^^^^^^^
 
 **thermal-fault                  .1.3.6.1.4.1.12276.1.1.1.65546**
 
@@ -4499,6 +4510,9 @@ In the example below, note the messages are all informational **alertEffect=2** 
     <INFO> 3-Oct-2022::09:35:26.436 controller-1 confd[437]: snmp snmpv2-trap reqid=64690291 10.255.0.143:162 (TimeTicks sysUpTime=8696)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:25.774487181 UTC)(OCTET STRING alertDescription=CPU TCTL-Delta at -44.0 degC)
     <INFO> 3-Oct-2022::09:35:26.943 controller-1 confd[437]: snmp snmpv2-trap reqid=64690299 10.255.0.143:162 (TimeTicks sysUpTime=8747)(OBJECT IDENTIFIER snmpTrapOID=thermal-fault)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:26.108861730 UTC)(OCTET STRING alertDescription=outlet at +26.0 degC)
 
+drive-thermal-throttle
+^^^^^^^^^^^^^^^^^^^^^^^
+
 **drive-thermal-throttle         .1.3.6.1.4.1.12276.1.1.1.65547**
 
 +------------------+------------------------------------------------------------------------------------+
@@ -4526,6 +4540,10 @@ Drive has entered a thermal throttle condition.
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include drive-thermal-throttle | more
+
+
+blade-thermal-fault
+^^^^^^^^^^^^^^^^^^^
 
 **blade-thermal-fault            .1.3.6.1.4.1.12276.1.1.1.65548**
 
@@ -4570,6 +4588,9 @@ This SNMP Trap is for the VELOS system, and it monitors various temperature sens
 .. code-block:: bash
 
     syscon-2-active# file show log/confd/snmp.log | include blade-thermal-fault
+
+blade-hardware-fault 
+^^^^^^^^^^^^^^^^^^^^
 
 **blade-hardware-fault           .1.3.6.1.4.1.12276.1.1.1.65549**
 
@@ -4687,6 +4708,8 @@ Traps will be generated for blade-hardware-faults. A Reliability, Availability, 
     <INFO> 18-Nov-2022::18:15:48.404 controller-1 confd[439]: snmp snmpv2-trap reqid=166056835 10.255.0.143:162 (TimeTicks sysUpTime=128990195)(OBJECT IDENTIFIER snmpTrapOID=blade-hardware-fault)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-11-18 18:15:48.336132387 UTC)(OCTET STRING alertDescription=No RAS AER 'Completion Timeout' uncorrectable errors detected)
     syscon-1-active# 
 
+sensor-fault
+^^^^^^^^^^^^
 
 **sensor-fault                   .1.3.6.1.4.1.12276.1.1.1.65577**
 
@@ -4721,6 +4744,9 @@ Traps will be generated for sensor faults or communication failures. In the exam
     <INFO> 9-Nov-2023::19:26:08.990 controller-1 confd[604]: snmp snmpv2-trap reqid=1548244113 10.255.0.144:162 (TimeTicks sysUpTime=271139401)(OBJECT IDENTIFIER snmpTrapOID=sensor-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-11-10 00:26:08.911332002 UTC)(OCTET STRING alertDescription=Deasserted: sensor fault: Inlet)
     <INFO> 9-Nov-2023::19:26:08.990 controller-1 confd[604]: snmp snmpv2-trap reqid=1548244114 10.255.0.144:162 (TimeTicks sysUpTime=271139401)(OBJECT IDENTIFIER snmpTrapOID=sensor-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-11-10 00:26:08.911332002 UTC)(OCTET STRING alertDescription=Deasserted: sensor fault: Inlet)
     <INFO> 9-Nov-2023::19:26:08.991 controller-1 confd[604]: snmp snmpv2-trap reqid=1548244114 10.255.0.143:162 (TimeTicks sysUpTime=271139401)(OBJECT IDENTIFIER snmpTrapOID=sensor-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-11-10 00:26:08.911332002 UTC)(OCTET STRING alertDescription=Deasserted: sensor fault: Inlet)
+
+module-present
+^^^^^^^^^^^^^^
 
 
 **module-present                 .1.3.6.1.4.1.12276.1.1.1.65794**
@@ -4766,6 +4792,8 @@ This trap only provides informational/event messages **alertEffect=2** as they a
     <INFO> 21-Aug-2024::22:50:51.680 controller-1 confd[656]: snmp snmpv2-trap reqid=174749347 10.255.80.251:162 (TimeTicks sysUpTime=100998)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.035809494 UTC)(OCTET STRING alertDescription=Blade2 present)
     <INFO> 21-Aug-2024::22:50:51.725 controller-1 confd[656]: snmp snmpv2-trap reqid=174749348 10.255.80.251:162 (TimeTicks sysUpTime=101002)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:51:23.048965786 UTC)(OCTET STRING alertDescription=Blade3 present)
 
+psu-fault 
+^^^^^^^^^^
 
 **psu-fault                      .1.3.6.1.4.1.12276.1.1.1.65793**
 
@@ -4831,6 +4859,9 @@ This set of SNMP traps will relate to the health of the power supplies in the VE
     <INFO> 3-Oct-2022::09:34:23.572 controller-1 confd[437]: snmp snmpv2-trap reqid=64689684 10.255.0.143:162 (TimeTicks sysUpTime=2410)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:16.190022658 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage warning)
     <INFO> 3-Oct-2022::09:34:25.055 controller-1 confd[437]: snmp snmpv2-trap reqid=64689698 10.255.0.143:162 (TimeTicks sysUpTime=2558)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2022-10-03 09:34:17.487691756 UTC)(OCTET STRING alertDescription=Deasserted: PSU 1 input over-voltage fault)
 
+lcd-fault
+^^^^^^^^^^
+
 
 **lcd-fault                      .1.3.6.1.4.1.12276.1.1.1.65792**
 
@@ -4865,6 +4896,8 @@ The output below is from an rSeries unit:
     <INFO> 15-Feb-2023::15:59:14.635 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418323 10.255.0.144:161 (TimeTicks sysUpTime=22200)(OBJECT IDENTIFIER snmpTrapOID=module-communication-error)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-02-15 20:59:14.579463512 UTC)(OCTET STRING alertDescription=LCD module communication is OK)
     <INFO> 15-Feb-2023::15:59:14.685 appliance-1 confd[126]: snmp snmpv2-trap reqid=1413418324 10.255.0.144:161 (TimeTicks sysUpTime=22205)(OBJECT IDENTIFIER snmpTrapOID=lcd-fault)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-02-15 20:59:14.588063311 UTC)(OCTET STRING alertDescription=LCD Health is OK)
 
+module-communication-error
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **module-communication-error     .1.3.6.1.4.1.12276.1.1.1.65795**
 
@@ -4916,6 +4949,8 @@ LCD Module
     <INFO> 20-Nov-2025::17:40:00.438 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050509 10.144.131.74:5001 (TimeTicks sysUpTime=1089002)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.330916609 UTC)(OCTET STRING alertDescription=No communication error detected between system controller and module)
     <INFO> 20-Nov-2025::17:40:00.547 controller-1 confd[766]: snmp snmpv2-trap reqid=1822050510 10.144.131.74:5001 (TimeTicks sysUpTime=1089013)(OBJECT IDENTIFIER snmpTrapOID=module-communication-status)(OCTET STRING alertSource=lcd)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 17:40:00.337705127 UTC)(OCTET STRING alertDescription=Module communication error: value=false)
 
+psu-redundancy-fault 
+^^^^^^^^^^^^^^^^^^^^
 
 **psu-redundancy-fault         .1.3.6.1.4.1.12276.1.1.1.65796**
 
@@ -4944,6 +4979,8 @@ PSU redundancy fault detected.
     <INFO> 28-Mar-2024::18:34:43.911 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793882 10.255.80.251:162 (TimeTicks sysUpTime=7287509)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-03-28 22:34:35.334525543 UTC)(OCTET STRING alertDescription=PSU redundancy fault detected)
     <INFO> 28-Mar-2024::18:34:43.986 controller-2 confd[580]: snmp snmpv2-trap reqid=2022793883 10.255.80.251:162 (TimeTicks sysUpTime=7287516)(OBJECT IDENTIFIER snmpTrapOID=psu-redundancy-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-03-28 22:34:35.334552678 UTC)(OCTET STRING alertDescription=PSU Redundancy Failure: value=true)
 
+psu-controller-fault
+^^^^^^^^^^^^^^^^^^^^
 
 **psu-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65797**
 
@@ -4980,6 +5017,8 @@ Fault detected in PSU Controller health.
     <INFO> 3-Jan-2024::13:53:59.677 controller-2 confd[571]: snmp snmpv2-trap reqid=638913364 10.255.0.144:162 (TimeTicks sysUpTime=11780)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 18:53:39.134384549 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
     <INFO> 3-Jan-2024::13:53:59.678 controller-2 confd[571]: snmp snmpv2-trap reqid=638913364 10.255.0.143:162 (TimeTicks sysUpTime=11780)(OBJECT IDENTIFIER snmpTrapOID=psu-fault)(OCTET STRING alertSource=psu-controller)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-01-03 18:53:39.134384549 UTC)(OCTET STRING alertDescription=Deasserted: PSU mismatch)
 
+fan-controller-fault
+^^^^^^^^^^^^^^^^^^^^
 
 **fan-controller-fault         .1.3.6.1.4.1.12276.1.1.1.65798**
 
@@ -5020,6 +5059,9 @@ Fault detected in Fan Controller health.
     <INFO> 1-Sep-2023::22:17:41.617 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960414 10.255.0.139:162 (TimeTicks sysUpTime=11883)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.285759139 UTC)(OCTET STRING alertDescription=Exhaust Fan 1 at 9279 RPM)
     <INFO> 1-Sep-2023::22:17:41.621 controller-2 confd[603]: snmp snmpv2-trap reqid=1008960414 10.255.0.144:162 (TimeTicks sysUpTime=11883)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=fan-controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2023-09-02 02:17:41.285759139 UTC)(OCTET STRING alertDescription=Exhaust Fan 1 at 9279 RPM)
 
+arbitration-state
+^^^^^^^^^^^^^^^^^
+
 **arbitration-state         .1.3.6.1.4.1.12276.1.1.1.66048**
 
 +------------------+---------------------------------------------------------------------+
@@ -5044,6 +5086,8 @@ The SNMP trap "Deasserted: peer arbitration health state" is an informational al
     <INFO> 23-Jul-2024::12:47:06.505 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934183 10.255.80.251:162 (TimeTicks sysUpTime=61318)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:16.607590924 UTC)(OCTET STRING alertDescription=Deasserted: local arbitration health state)
     <INFO> 23-Jul-2024::12:47:06.668 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934185 10.255.80.251:162 (TimeTicks sysUpTime=61335)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:25.798025854 UTC)(OCTET STRING alertDescription=Asserted: local arbitration health state)
 
+switch-status
+^^^^^^^^^^^^^
 
 **switch-status         .1.3.6.1.4.1.12276.1.1.1.66049** 
 
@@ -5088,6 +5132,9 @@ Below is an example of a switch-status trap indicating no FCS errors on one of t
     
     <INFO> 21-Oct-2025::09:25:39.760 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076302 172.22.50.57:162 (TimeTicks sysUpTime=60780)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:25:39.743934189 UTC)(OCTET STRING alertDescription=control plane switch port hg0 (cc1/hg0) has no FEC uncorrected errors)
 
+link-state 
+^^^^^^^^^^
+
 **link-state         .1.3.6.1.4.1.12276.1.1.1.66050**
 
 +------------------+-----------------------------------------------------------+
@@ -5119,6 +5166,8 @@ As an example, the following set of traps are from a Link Down event on controll
     <INFO> 19-Dec-2025::09:44:10.595 controller-2 confd[677]: snmp snmpv2-trap reqid=270450368 172.22.50.57:162 (TimeTicks sysUpTime=1668511515)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 17:44:10.501787427 UTC)(OCTET STRING alertDescription=Front-panel management port link status is up)
     velos-chassis2-gsa-2-active# 
 
+datapath-fault 
+^^^^^^^^^^^^^^
 
 **datapath-fault         .1.3.6.1.4.1.12276.1.1.1.65578**
 
@@ -5132,6 +5181,8 @@ Hardware datapath fault.
 
 .. code-block:: bash
     
+boot-time-integrity-status 
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **boot-time-integrity-status         .1.3.6.1.4.1.12276.1.1.1.65579**
 
@@ -5151,6 +5202,9 @@ Boot time integrity failure detected.
     <INFO> 17-Jun-2024::17:06:13.383 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239388 10.255.80.251:162 (TimeTicks sysUpTime=2627)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.058460353 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check failure)
     <INFO> 17-Jun-2024::17:06:13.559 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239389 10.255.80.251:162 (TimeTicks sysUpTime=2645)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.074260559 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check complete)
     <INFO> 17-Jun-2024::17:06:13.711 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239390 10.255.80.251:162 (TimeTicks sysUpTime=2660)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.078563910 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check failure)
+
+incompatible-image
+^^^^^^^^^^^^^^^^^^
 
 **incompatible-image         .1.3.6.1.4.1.12276.1.1.1.327682**
 
@@ -5174,7 +5228,9 @@ Trap notification when the platform incompatible image is imported. Below is an 
     <INFO> 10-Nov-2025::11:18:39.705 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076391 172.22.50.57:162 (TimeTicks sysUpTime=173898774)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:39.646064032 UTC)(OCTET STRING alertDescription= Un supported platform R5R10)
     <INFO> 10-Nov-2025::11:18:40.904 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076392 172.22.50.57:162 (TimeTicks sysUpTime=173898893)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:40.771256251 UTC)(OCTET STRING alertDescription= Unexpected error processing [Errno 2] No such file or directory: '/var/export/chassis/import/iso/F5OS-2.0.0-10579.R5R10.CANDIDATE.iso')
 
-    
+login-failed 
+^^^^^^^^^^^^
+
 **login-failed     .1.3.6.1.4.1.12276.1.1.1.327683**
 
 +------------------+-------------------------------------------------------------------------------------------+
@@ -5199,6 +5255,9 @@ Below is an example of an authentication failure trap generated on a chassis par
     Production-2# file tail -f log/snmp.log 
     <INFO> 22-Aug-2024::13:00:33.112 partition2 confd[123]: snmp snmpv2-trap reqid=1289508594 10.255.80.251:162 (TimeTicks sysUpTime=5028649)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=partition2(Production))(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:00:33.100340535 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
 
+nebsEnabled
+^^^^^^^^^^^
+
 **nebsEnabled         .1.3.6.1.4.1.12276.1.1.1.131072**
 
 +------------------+----------------------------------------------------------------------------------------------------------+
@@ -5213,6 +5272,9 @@ Chassis is operating with NEBS temperature thresholds.
 
     <INFO> 2-Dec-2025::10:03:20.430 controller-1 confd[751]: snmp snmpv2-trap reqid=544300360 172.22.50.57:5002 (TimeTicks sysUpTime=105646)(OBJECT IDENTIFIER snmpTrapOID=nebsEnabled)(OCTET STRING alertSource=chassis)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-02 10:03:06.146448165 UTC)(OCTET STRING alertDescription=Chassis is operating with NEBS temperature thresholds)
     
+    
+nebsDisabled 
+^^^^^^^^^^^^
 
 **nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
 
@@ -5226,6 +5288,8 @@ Chassis is operating with non-NEBS temperature thresholds.
 
 .. code-block:: bash
     
+systemControllerNebsMismatch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **systemControllerNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131328**
 
@@ -5241,6 +5305,8 @@ Chassis operating with non-NEBS temperature thresholds (non-NEBS system controll
 
 .. code-block:: bash
     
+bladeNebsMismatch 
+^^^^^^^^^^^^^^^^^
 
 **bladeNebsMismatch         .1.3.6.1.4.1.12276.1.1.1.131329**
 
@@ -5256,6 +5322,8 @@ Blade operating with non-NEBS temperature thresholds (non-NEBS blade installed i
 
 .. code-block:: bash
     
+openshiftCertsExpWithinNinetyDays 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **openshiftCertsExpWithinNinetyDays         .1.3.6.1.4.1.12276.1.1.1.524288**
 
@@ -5281,6 +5349,8 @@ See the following solution article about expired certificates and how to report 
 
     <INFO> 4-Dec-2025::15:35:44.704 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076418 172.22.50.57:162 (TimeTicks sysUpTime=382801274)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertsExpWithinNinetyDays)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-04 23:35:44.686936372 UTC)(OCTET STRING alertDescription=One or more openshift certificates expiring within 90 days)
     
+openshiftCertificatesExpiring
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **openshiftCertificatesExpiring         .1.3.6.1.4.1.12276.1.1.1.524289**
 
