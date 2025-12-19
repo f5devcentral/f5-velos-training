@@ -3846,6 +3846,8 @@ In this case, instead of raising the **hardware-device-fault** SNMP trap twice (
 
 .. code-block:: bash
 
+    syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
+    
     Hardware device fault detected alarm raised (alertEffect=1).
 
     <INFO> 19-Jun-2025::11:45:00.564 controller-1 confd[154]: snmp snmpv2-trap reqid=520254528 10.10.10.10:5000 (TimeTicks sysUpTime=90453)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=0)(OCTET STRING alertTimeStamp=2025-06-19 11:45:00.559587620 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
@@ -3863,6 +3865,8 @@ The hardware-device-fault alarm will only be cleared when both the issues are re
 .. Note:: The messages may arrive out of order as seen below.
 
 .. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
 
     Informational message (alertEffect=2) indicating which subsystem has cleared. In this case **CPU machine check error** has **Deasserted**.
 
@@ -3887,6 +3891,8 @@ Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **
 
 .. code-block:: bash
 
+    syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
+
     Hardware device fault detected alarm raised (alertEffect=1).
 
     <INFO> 19-Jun-2025::11:36:50.778 controller-1 confd[154]: snmp snmpv2-trap reqid=520254516 10.10.10.10:5000 (TimeTicks sysUpTime=41475)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2025-06-19 11:36:50.770679705 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
@@ -3902,6 +3908,8 @@ Since the CPU fatal error has the lowest number alertSeverity, the alarm trap **
 If the **CPU fatal error** is resolved but the system still has a **non-fatal error** still active it will clear the fatal alarm, and then raise a new non-fatal alarm. In this case, the system sends an SNMP clear trap **alertEffect=0** and then issues a new SNMP fault trap **alertEffect=1** with **Error** severity (**alertSeverity=3**). The system will also issue an informational event **alertEffect=2** deasserting the event for **CPU fatal error**.
 
 .. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
 
     Hardware device fault detected alarm cleared (alertEffect=0) with (alertSeverity=8).
 
@@ -4764,7 +4772,7 @@ This trap only provides informational/event messages **alertEffect=2** as they a
 
 .. code-block:: bash
 
-    velos-chassis2-1-active# file show log/confd/snmp.log | include module | include trap
+    velos-chassis2-1-active# file show log/confd/snmp.log | include module | include module-present
     <INFO> 21-Aug-2024::22:38:55.801 controller-1 confd[656]: snmp snmpv2-trap reqid=174749112 10.255.80.251:162 (TimeTicks sysUpTime=29410)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.027630330 UTC)(OCTET STRING alertDescription=Blade1 present)
     <INFO> 21-Aug-2024::22:38:55.848 controller-1 confd[656]: snmp snmpv2-trap reqid=174749113 10.255.80.251:162 (TimeTicks sysUpTime=29415)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.042131211 UTC)(OCTET STRING alertDescription=Blade2 present)
     <INFO> 21-Aug-2024::22:38:55.899 controller-1 confd[656]: snmp snmpv2-trap reqid=174749114 10.255.80.251:162 (TimeTicks sysUpTime=29420)(OBJECT IDENTIFIER snmpTrapOID=module-present)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-21 22:35:14.056767261 UTC)(OCTET STRING alertDescription=Blade3 present)
@@ -5080,7 +5088,8 @@ Change detected in System Controller Arbitration State.
 The SNMP trap "Deasserted: peer arbitration health state" is an informational alert indicating a transient change in the system controller arbitration state. This message is sent when a previously asserted arbitration condition is cleared.
 
 .. code-block:: bash
-    
+
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include arbitration-state  
     <INFO> 23-Jul-2024::12:37:48.556 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934181 10.255.80.251:162 (TimeTicks sysUpTime=6115)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:37:48.486553104 UTC)(OCTET STRING alertDescription=Deasserted: peer arbitration health state)
     <INFO> 23-Jul-2024::12:46:18.548 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934182 10.255.80.251:162 (TimeTicks sysUpTime=56476)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:18.541298567 UTC)(OCTET STRING alertDescription=Asserted: peer arbitration health state)
     <INFO> 23-Jul-2024::12:47:06.505 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934183 10.255.80.251:162 (TimeTicks sysUpTime=61318)(OBJECT IDENTIFIER snmpTrapOID=arbitration-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-23 16:46:16.607590924 UTC)(OCTET STRING alertDescription=Deasserted: local arbitration health state)
@@ -5116,6 +5125,7 @@ Below is an example of a switch-status trap indicating FCS errors on one of the 
 
 .. code-block:: bash
 
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include switch-status
     <INFO> 18-Oct-2025::06:57:41.748 controller-2 confd[677]: snmp snmpv2-trap reqid=270450359 172.22.50.57:162 (TimeTicks sysUpTime=1131472631)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-10-18 13:57:40.588463363 UTC)(OCTET STRING alertDescription=Switch port status)
     
     <INFO> 18-Oct-2025::06:57:41.851 controller-2 confd[677]: snmp snmpv2-trap reqid=270450360 172.22.50.57:162 (TimeTicks sysUpTime=1131472641)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-18 13:57:40.588491692 UTC)(OCTET STRING alertDescription=control plane switch port hg0 (cc2/hg0) has FCS errors, value=500)
@@ -5124,6 +5134,7 @@ Below is an example of a switch-status trap indicating no FCS errors on one of t
 
 .. code-block:: bash
 
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include switch-status
     <INFO> 21-Oct-2025::09:16:18.529 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076251 172.22.50.57:162 (TimeTicks sysUpTime=4657)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:09.136120859 UTC)(OCTET STRING alertDescription=Attribute health reset)
    
     <INFO> 21-Oct-2025::09:16:18.967 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076252 172.22.50.57:162 (TimeTicks sysUpTime=4701)(OBJECT IDENTIFIER snmpTrapOID=switch-status)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-10-21 16:15:09.455190150 UTC)(OCTET STRING alertDescription=Switch port status)
@@ -5180,6 +5191,8 @@ datapath-fault
 Hardware datapath fault.
 
 .. code-block:: bash
+
+        velos-1-gsa-2-active# file show log/confd/snmp.log | include datpathFault
     
 boot-time-integrity-status 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5196,6 +5209,7 @@ Boot time integrity failure detected.
 
 .. code-block:: bash
     
+     velos-1-gsa-2-active# file show log/confd/snmp.log | include boot-time-integrity-status
     <INFO> 17-Jun-2024::17:06:12.992 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239385 10.255.80.251:162 (TimeTicks sysUpTime=2588)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.038536850 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check complete)
     <INFO> 17-Jun-2024::17:06:13.121 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239386 10.255.80.251:162 (TimeTicks sysUpTime=2601)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.044855786 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check complete)
     <INFO> 17-Jun-2024::17:06:13.237 controller-1 confd[651]: snmp snmpv2-trap reqid=1333239387 10.255.80.251:162 (TimeTicks sysUpTime=2613)(OBJECT IDENTIFIER snmpTrapOID=boot-time-integrity-status)(OCTET STRING alertSource=blade-3)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-06-17 21:05:40.052817609 UTC)(OCTET STRING alertDescription=Deasserted: OS boot time integrity check failure)
@@ -5224,7 +5238,7 @@ Trap notification when the platform incompatible image is imported. Below is an 
 
 .. code-block:: bash
 
-    velos-1-gsa-2-active# file tail -f log/confd/snmp.log | include trap
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include incompatible-image
     <INFO> 10-Nov-2025::11:18:39.705 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076391 172.22.50.57:162 (TimeTicks sysUpTime=173898774)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:39.646064032 UTC)(OCTET STRING alertDescription= Un supported platform R5R10)
     <INFO> 10-Nov-2025::11:18:40.904 controller-2 confd[674]: snmp snmpv2-trap reqid=2110076392 172.22.50.57:162 (TimeTicks sysUpTime=173898893)(OBJECT IDENTIFIER snmpTrapOID=incompatible-image)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-10 19:18:40.771256251 UTC)(OCTET STRING alertDescription= Unexpected error processing [Errno 2] No such file or directory: '/var/export/chassis/import/iso/F5OS-2.0.0-10579.R5R10.CANDIDATE.iso')
 
@@ -5243,7 +5257,7 @@ An SNMP Trap will be generated for login failures to the F5OS interfaces. Below 
 
 .. code-block:: bash
 
-    velos-chassis2-1-active# file tail -f log/confd/snmp.log 
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include login-failed
     <INFO> 22-Aug-2024::13:18:24.022 controller-1 confd[656]: snmp snmpv2-trap reqid=174749401 10.255.80.251:162 (TimeTicks sysUpTime=5306232)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:23.991872061 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
     <INFO> 22-Aug-2024::13:18:28.121 controller-1 confd[656]: snmp snmpv2-trap reqid=174749402 10.255.80.251:162 (TimeTicks sysUpTime=5306642)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:28.071075669 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
     <INFO> 22-Aug-2024::13:18:31.330 controller-1 confd[656]: snmp snmpv2-trap reqid=174749403 10.255.80.251:162 (TimeTicks sysUpTime=5306963)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:18:31.324417671 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
@@ -5252,7 +5266,7 @@ Below is an example of an authentication failure trap generated on a chassis par
 
 .. code-block:: bash
 
-    Production-2# file tail -f log/snmp.log 
+    Production-2# file show log/snmp.log | include login-failed
     <INFO> 22-Aug-2024::13:00:33.112 partition2 confd[123]: snmp snmpv2-trap reqid=1289508594 10.255.80.251:162 (TimeTicks sysUpTime=5028649)(OBJECT IDENTIFIER snmpTrapOID=login-failed)(OCTET STRING alertSource=partition2(Production))(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-08-22 13:00:33.100340535 UTC)(OCTET STRING alertDescription=F5OS login attempt failed for the user: admin, rhost: 172.18.104.121)
 
 nebsEnabled
@@ -5270,6 +5284,7 @@ Chassis is operating with NEBS temperature thresholds.
 
 .. code-block:: bash
 
+    velos-1-gsa-2-active# file show log/confd/snmp.log | include nebsEnabled
     <INFO> 2-Dec-2025::10:03:20.430 controller-1 confd[751]: snmp snmpv2-trap reqid=544300360 172.22.50.57:5002 (TimeTicks sysUpTime=105646)(OBJECT IDENTIFIER snmpTrapOID=nebsEnabled)(OCTET STRING alertSource=chassis)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-02 10:03:06.146448165 UTC)(OCTET STRING alertDescription=Chassis is operating with NEBS temperature thresholds)
     
     
@@ -5287,6 +5302,10 @@ nebsDisabled
 Chassis is operating with non-NEBS temperature thresholds.
 
 .. code-block:: bash
+
+            velos-1-gsa-2-active# file show log/confd/snmp.log | include nebsDisabled 
+
+
     
 systemControllerNebsMismatch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5304,6 +5323,8 @@ systemControllerNebsMismatch
 Chassis operating with non-NEBS temperature thresholds (non-NEBS system controller installed in a NEBS chassis).
 
 .. code-block:: bash
+
+        velos-1-gsa-2-active# file show log/confd/snmp.log | include systemControllerNebsMismatch 
     
 bladeNebsMismatch 
 ^^^^^^^^^^^^^^^^^
@@ -5369,6 +5390,10 @@ See the following solution article about expired certificates and how to report 
 One or more Openshift certificates has expired or is expiring.
 
 .. code-block:: bash
+
+        velos-1-gsa-2-active# file show log/confd/snmp.log | include openshiftCertificatesExpiring
+
+
     
 openshiftUpgradeNeeded
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -5416,6 +5441,8 @@ initialization
 Critical issue in FPGA and datapath initialization process.
 
 .. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | initialization
     
 ePVA
 ^^^^^^
@@ -5432,6 +5459,7 @@ Could not initialize ePVA.
 
 .. code-block:: bash
 
+    syscon-1-active# file show log/confd/snmp.log | include epva
 
 be2Training
 ^^^^^^^^^^^
@@ -5470,6 +5498,8 @@ speed
 Port speed change event.
 
 .. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | speed
     
 lacp-mac-failure
 ^^^^^^^^^^^^^^^^
@@ -5486,6 +5516,9 @@ Failed to publish LACP MAC address to the database.
 
 .. code-block:: bash
     
+        syscon-1-active# file show log/confd/snmp.log | include lacp-mac-failure
+
+
 mac-exhaustion
 ^^^^^^^^^^^^^
 
@@ -5500,6 +5533,9 @@ mac-exhaustion
 Partition MAC pool is exhausted.
 
 .. code-block:: bash
+
+    syscon-1-active# file show log/confd/snmp.log | include mac-exhaustion
+   
     
 inaccessibleMemory
 ^^^^^^^^^^^^^^^^^^
@@ -5515,7 +5551,8 @@ inaccessibleMemory
 Notification indicating unusable hugepage memory.
 
 .. code-block:: bash
-    
+
+        syscon-1-active# file show log/confd/snmp.log | include inaccessibleMemory  
 
 Firmware Update Status Traps
 ----------------------------
@@ -6290,7 +6327,7 @@ The transmit power threshold for a specific transceiver has triggered a warning 
 
 .. code-block:: bash
 
-    chassis1-prod-partition-2# file show  log/snmp.log | include txPwr
+    chassis1-prod-partition-2# file show  log/snmp.log | include snmpTrapOID=txPwr
     <INFO> 7-May-2025::21:05:40.426 partition2 confd[114]: snmp snmpv2-trap reqid=972265644 172.22.50.57:162 (TimeTicks sysUpTime=183491802)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352446096 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Transmitter power low warning)
     <INFO> 7-May-2025::21:05:40.484 partition2 confd[114]: snmp snmpv2-trap reqid=972265645 172.22.50.57:162 (TimeTicks sysUpTime=183491808)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352255391 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3 Transmitter power low alarm)
     <INFO> 7-May-2025::21:05:40.652 partition2 confd[114]: snmp snmpv2-trap reqid=972265647 172.22.50.57:162 (TimeTicks sysUpTime=183491825)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352345605 UTC)(OCTET STRING alertDescription=Lanes: 2,3,4 Transmitter power low alarm)
@@ -6330,7 +6367,7 @@ The receive power threshold for a specific transceiver has reached a threshold i
 
 .. code-block:: bash
 
-    red-partition-chassis1-1#  file show log/snmp.log | include rxP
+    red-partition-chassis1-1#  file show log/snmp.log | include snmpTrapOID=rxPwr
     <INFO> 27-Jun-2025::18:14:34.049 partition4 confd[114]: snmp snmpv2-trap reqid=1674228061 172.22.50.57:162 (TimeTicks sysUpTime=623101258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-06-28 01:14:34.026501680 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
     <INFO> 27-Jun-2025::18:22:34.052 partition4 confd[114]: snmp snmpv2-trap reqid=1674228064 172.22.50.57:162 (TimeTicks sysUpTime=623149258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-06-28 01:22:34.026783343 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low alarm)
     <INFO> 18-Jul-2025::14:50:04.051 partition4 confd[114]: snmp snmpv2-trap reqid=1674228067 172.22.50.57:162 (TimeTicks sysUpTime=803314258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-07-18 21:50:04.027229987 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
@@ -6367,7 +6404,7 @@ Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on p
 
 .. code-block:: bash
 
-    chassis1-prod-partition-2# file show  log/snmp.log | include txBias
+    chassis1-prod-partition-2# file show log/snmp.log | include snmpTrapOID=txBias
 
     <INFO> 7-May-2025::21:05:40.769 partition2 confd[114]: snmp snmpv2-trap reqid=972265649 172.22.50.57:162 (TimeTicks sysUpTime=183491836)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:05:40.352497077 UTC)(OCTET STRING alertDescription=Lanes: 3 Transmitter bias low alarm)
     <INFO> 7-May-2025::21:06:10.587 partition2 confd[114]: snmp snmpv2-trap reqid=972265652 172.22.50.57:162 (TimeTicks sysUpTime=183494818)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352383313 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low alarm)
@@ -6404,6 +6441,7 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 
 .. code-block:: bash
 
+    chassis1-prod-partition-2# file show log/snmp.log | include snmpTrapOID=ddmTemp
 
 ddmVcc
 ^^^^^^^
@@ -6433,6 +6471,8 @@ ddmVcc
 The ddm voltage threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver.
 
 .. code-block:: bash
+
+    chassis1-prod-partition-2# file show log/snmp.log | include snmpTrapOID=ddmVcc
 
 
 
