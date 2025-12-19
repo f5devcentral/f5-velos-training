@@ -3651,13 +3651,26 @@ Generic SNMP Traps
 **coldStart         	1.3.6.1.6.3.1.1.5.1**  
 
 
-A coldStart trap signifies that the SNMP entity, supporting a notification originator application, is reinitializing itself and that its configuration may have been altered. This trap can come from both the system controllers and the chassis partitions.
+A coldStart trap signifies that the SNMP entity, supporting a notification originator application, is reinitializing itself and that its configuration may have been altered. This trap can come from both the system controllers and the chassis partitions. Below are examples showing both the controller and partition ColdStart traps.
 
 .. code-block:: bash
 
-    <INFO> 15-Mar-2024::12:34:38.428 partition2 confd[102]: snmp snmpv2-trap reqid=1834217795 10.255.0.139:162 (TimeTicks sysUpTime=717)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    velos-1-gsa-1-active# file show log/confd/snmp.log | include snmpTrapOID=coldStart
+    <INFO> 18-Oct-2024::10:08:24.211 controller-1 confd[657]: snmp snmpv2-trap reqid=532583439 10.255.80.251:162 (TimeTicks sysUpTime=3601)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 31-Jan-2025::21:03:30.987 controller-1 confd[652]: snmp snmpv2-trap reqid=1385388326 172.22.50.57:162 (TimeTicks sysUpTime=173)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 16-Apr-2025::15:23:12.064 controller-1 confd[657]: snmp snmpv2-trap reqid=183957403 172.22.50.57:162 (TimeTicks sysUpTime=348)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
 
-    <INFO> 23-Jul-2024::12:37:14.929 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934136 10.255.80.251:162 (TimeTicks sysUpTime=2751)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+.. code-block:: bash
+
+    blue-partition-chassis1-gsa-1# file show log/snmp.log | include snmpTrapOID=coldStart
+    <INFO> 3-Dec-2024::05:54:45.135 partition3 confd[122]: snmp snmpv2-trap reqid=1257608247 172.22.50.57:162 (TimeTicks sysUpTime=2926)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 31-Jan-2025::21:04:40.863 partition3 confd[108]: snmp snmpv2-trap reqid=368749676 172.22.50.57:162 (TimeTicks sysUpTime=421)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 4-Mar-2025::12:27:35.812 partition3 confd[128]: snmp snmpv2-trap reqid=1506531388 172.22.50.57:162 (TimeTicks sysUpTime=2163)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 15-Apr-2025::14:35:10.634 partition3 confd[116]: snmp snmpv2-trap reqid=202399996 172.22.50.57:162 (TimeTicks sysUpTime=457)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 16-Apr-2025::15:24:07.415 partition3 confd[114]: snmp snmpv2-trap reqid=1905621502 172.22.50.57:162 (TimeTicks sysUpTime=315)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 21-Oct-2025::09:41:06.128 partition3 confd[130]: snmp snmpv2-trap reqid=2070077026 172.22.50.57:162 (TimeTicks sysUpTime=2463)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    <INFO> 5-Dec-2025::10:50:40.899 partition3 confd[117]: snmp snmpv2-trap reqid=1654460415 172.22.50.57:162 (TimeTicks sysUpTime=405)(OBJECT IDENTIFIER snmpTrapOID=coldStart)
+    blue-partition-chassis1-gsa-1# 
 
 
 
@@ -3665,19 +3678,34 @@ A coldStart trap signifies that the SNMP entity, supporting a notification origi
 
 A linkDown trap signifies that the SNMP entity, acting in an agent role, has detected that the ifOperStatus object for one of its communication links is about to enter the down state from some other state (but not from the notPresent state). This other state is indicated by the included value of ifOperStatus.
 
+For the system controllers, there is a separate **link-state .1.3.6.1.4.1.12276.1.1.1.66050** SNMP trap for the system controllers front panel management ports. Below is an example from a VELOS chassis partition showing **linkDown** traps in addtion to **down** traps which provide more detail. 
+
 .. code-block:: bash
 
-    <INFO> 15-Mar-2024::13:44:56.045 partition2 confd[112]: snmp snmpv2-trap reqid=1524445192 10.255.0.139:162 (TimeTicks sysUpTime=296420)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
 
+    blue-partition-chassis1-gsa-1# file show log/snmp.log | include "snmpTrapOID=down|linkDown"  
+    <INFO> 5-Dec-2025::10:48:30.913 partition3 confd[130]: snmp snmpv2-trap reqid=2070077113 172.22.50.57:162 (TimeTicks sysUpTime=389566953)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
 
+    <INFO> 5-Dec-2025::10:52:39.814 partition3 confd[117]: snmp snmpv2-trap reqid=1654460436 172.22.50.57:162 (TimeTicks sysUpTime=12319)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-2/1.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-05 18:52:39.783543209 UTC)(OCTET STRING alertDescription=Interface down)
+    
+    <INFO> 5-Dec-2025::10:52:39.819 partition3 confd[117]: snmp snmpv2-trap reqid=1654460437 172.22.50.57:162 (TimeTicks sysUpTime=12319)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554469)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
+    
+    <INFO> 5-Dec-2025::10:52:39.913 partition3 confd[117]: snmp snmpv2-trap reqid=1654460438 172.22.50.57:162 (TimeTicks sysUpTime=12328)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-2/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-05 18:52:39.889922325 UTC)(OCTET STRING alertDescription=Interface down)
+    
+    <INFO> 5-Dec-2025::10:52:39.918 partition3 confd[117]: snmp snmpv2-trap reqid=1654460439 172.22.50.57:162 (TimeTicks sysUpTime=12329)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
+   
+    <INFO> 7-Dec-2025::15:53:57.557 partition3 confd[117]: snmp snmpv2-trap reqid=1654460444 172.22.50.57:162 (TimeTicks sysUpTime=19100093)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-2/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-07 23:53:57.539434572 UTC)(OCTET STRING alertDescription=Interface down)
+    
+    <INFO> 7-Dec-2025::15:53:57.561 partition3 confd[117]: snmp snmpv2-trap reqid=1654460445 172.22.50.57:162 (TimeTicks sysUpTime=19100093)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
     
 
 **down         .1.3.6.1.4.1.12276.1.1.1.263169**
 
-In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel with the generic linkup/down traps. The enterprise up/down traps adds a human readable interface name as seen below.
+In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel with the generic linkup/down traps on the chassis partitions. The enterprise up/down traps adds a human readable interface name as seen below. 
 
 .. code-block:: bash
 
+    blue-partition-chassis1-gsa-1# file show log/snmp.log | include "snmpTrapOID=down|linkDown"  
     <INFO> 30-Apr-2024::15:14:38.582 partition2 confd[123]: snmp snmpv2-trap reqid=677841658 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=linkDown)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=2)
 
     <INFO> 30-Apr-2024::15:14:38.577 partition2 confd[123]: snmp snmpv2-trap reqid=677841657 10.255.80.251:162 (TimeTicks sysUpTime=49704)(OBJECT IDENTIFIER snmpTrapOID=down)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-04-30 19:14:38.516399590 UTC)(OCTET STRING alertDescription=Interface down)
@@ -3686,22 +3714,26 @@ In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trig
 
 A linkUp trap signifies that the SNMP entity, acting in an agent role, has detected that the ifOperStatus object for one of its communication links left the down state and transitioned into some other state (but not into the notPresent state). This other state is indicated by the included value of ifOperStatus.
 
+For the system controllers, there is a separate **link-state .1.3.6.1.4.1.12276.1.1.1.66050** SNMP trap for the system controllers front panel management ports. Below is an example from a VELOS chassis partition showing **linkUp** traps in addtion to **up** traps which provide more detail. 
+
 
 .. code-block:: bash
 
-    <INFO> 15-Mar-2024::13:44:53.737 partition2 confd[112]: snmp snmpv2-trap reqid=1524445191 10.255.0.139:162 (TimeTicks sysUpTime=296189)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554445)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
+    blue-partition-chassis1-gsa-1# file show log/snmp.log | include "snmpTrapOID=up|linkUp"  
+    <INFO> 7-Dec-2025::15:53:56.620 partition3 confd[117]: snmp snmpv2-trap reqid=1654460442 172.22.50.57:162 (TimeTicks sysUpTime=19099999)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-2/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-07 23:53:56.599421488 UTC)(OCTET STRING alertDescription=Interface up)
+    <INFO> 7-Dec-2025::15:53:56.628 partition3 confd[117]: snmp snmpv2-trap reqid=1654460443 172.22.50.57:162 (TimeTicks sysUpTime=19100000)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
 
 **up         .1.3.6.1.4.1.12276.1.1.1.263168**
 
 
-In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel with the generic linkup/down traps. The enterprise up/down traps adds a human readable interface name as seen below.
+In F5OS-C 1.8.0 an additional F5OS enterprise trap has been added that will trigger in parallel with the generic linkup/down traps on the chassis partitions. The enterprise up/down traps adds a human readable interface name as seen below.
 
 
 .. code-block:: bash
 
-    <INFO> 30-Apr-2024::15:14:51.956 partition2 confd[123]: snmp snmpv2-trap reqid=677841662 10.255.80.251:162 (TimeTicks sysUpTime=51041)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554450)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1) 
-    <INFO> 30-Apr-2024::15:14:51.995 partition2 confd[123]: snmp snmpv2-trap reqid=677841663 10.255.80.251:162 (TimeTicks sysUpTime=51045)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-1/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-04-30 19:14:51.909205675 UTC)(OCTET STRING alertDescription=Interface up)
-    test1-1# 
+    blue-partition-chassis1-gsa-1# file show log/snmp.log | include "snmpTrapOID=up|linkUp"  
+    <INFO> 7-Dec-2025::15:53:56.620 partition3 confd[117]: snmp snmpv2-trap reqid=1654460442 172.22.50.57:162 (TimeTicks sysUpTime=19099999)(OBJECT IDENTIFIER snmpTrapOID=up)(OCTET STRING alertSource=interface-2/2.0)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-07 23:53:56.599421488 UTC)(OCTET STRING alertDescription=Interface up)
+    <INFO> 7-Dec-2025::15:53:56.628 partition3 confd[117]: snmp snmpv2-trap reqid=1654460443 172.22.50.57:162 (TimeTicks sysUpTime=19100000)(OBJECT IDENTIFIER snmpTrapOID=linkUp)(INTEGER ifIndex.0.=33554474)(INTEGER ifAdminStatus.0.=1)(INTEGER ifOperStatus.0.=1)
 
 
 
@@ -4910,10 +4942,13 @@ As an example, the following set of traps are from a Link Down event on controll
 
 .. code-block:: bash
     
-    <INFO> 23-Jul-2024::23:50:08.503 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934240 10.255.80.251:162 (TimeTicks sysUpTime=4040110)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2024-07-24 03:50:08.433629827 UTC)(OCTET STRING alertDescription=Management link state is down)
-    <INFO> 23-Jul-2024::23:50:08.516 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934241 10.255.80.251:162 (TimeTicks sysUpTime=4040111)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:50:08.433666735 UTC)(OCTET STRING alertDescription=Front-panel management port link status is down)
-    <INFO> 23-Jul-2024::23:51:08.493 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934242 10.255.80.251:162 (TimeTicks sysUpTime=4046108)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471133766 UTC)(OCTET STRING alertDescription=Management link state is down)
-    <INFO> 23-Jul-2024::23:51:08.547 controller-1 confd[658]: snmp snmpv2-trap reqid=2109934243 10.255.80.251:162 (TimeTicks sysUpTime=4046114)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-2)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2024-07-24 03:51:08.471162616 UTC)(OCTET STRING alertDescription=Front-panel management port link status is up)
+    velos-chassis2-gsa-2-active# file show log/confd/snmp.log | include "snmpTrapOID=link"        
+    <INFO> 19-Dec-2025::09:43:10.520 controller-2 confd[677]: snmp snmpv2-trap reqid=270450365 172.22.50.57:162 (TimeTicks sysUpTime=1668505508)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-12-19 17:43:10.465810624 UTC)(OCTET STRING alertDescription=Management link state is down)
+    <INFO> 19-Dec-2025::09:43:10.562 controller-2 confd[677]: snmp snmpv2-trap reqid=270450366 172.22.50.57:162 (TimeTicks sysUpTime=1668505512)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 17:43:10.465838667 UTC)(OCTET STRING alertDescription=Front-panel management port link status is down)
+
+    <INFO> 19-Dec-2025::09:44:10.533 controller-2 confd[677]: snmp snmpv2-trap reqid=270450367 172.22.50.57:162 (TimeTicks sysUpTime=1668511509)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 17:44:10.501759897 UTC)(OCTET STRING alertDescription=Management link state is down)
+    <INFO> 19-Dec-2025::09:44:10.595 controller-2 confd[677]: snmp snmpv2-trap reqid=270450368 172.22.50.57:162 (TimeTicks sysUpTime=1668511515)(OBJECT IDENTIFIER snmpTrapOID=link-state)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-19 17:44:10.501787427 UTC)(OCTET STRING alertDescription=Front-panel management port link status is up)
+    velos-chassis2-gsa-2-active# 
 
 
 **datapath-fault         .1.3.6.1.4.1.12276.1.1.1.65578**
@@ -5007,7 +5042,7 @@ Chassis is operating with NEBS temperature thresholds.
 
 .. code-block:: bash
 
-    <INFO> 2-Dec-2025::10:03:20.430 controller-1 confd[751]: snmp snmpv2-trap reqid=544300360 10.144.131.74:5002 (TimeTicks sysUpTime=105646)(OBJECT IDENTIFIER snmpTrapOID=nebsEnabled)(OCTET STRING alertSource=chassis)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-02 10:03:06.146448165 UTC)(OCTET STRING alertDescription=Chassis is operating with NEBS temperature thresholds)
+    <INFO> 2-Dec-2025::10:03:20.430 controller-1 confd[751]: snmp snmpv2-trap reqid=544300360 172.22.50.57:5002 (TimeTicks sysUpTime=105646)(OBJECT IDENTIFIER snmpTrapOID=nebsEnabled)(OCTET STRING alertSource=chassis)(INTEGER alertEffect=2)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-02 10:03:06.146448165 UTC)(OCTET STRING alertDescription=Chassis is operating with NEBS temperature thresholds)
     
 
 **nebsDisabled         .1.3.6.1.4.1.12276.1.1.1.131073**
