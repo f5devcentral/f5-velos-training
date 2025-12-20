@@ -3847,7 +3847,7 @@ In this case, instead of raising the **hardware-device-fault** SNMP trap twice (
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include hardware-device-fault
-    
+
     Hardware device fault detected alarm raised (alertEffect=1).
 
     <INFO> 19-Jun-2025::11:45:00.564 controller-1 confd[154]: snmp snmpv2-trap reqid=520254528 10.10.10.10:5000 (TimeTicks sysUpTime=90453)(OBJECT IDENTIFIER snmpTrapOID=hardware-device-fault)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=0)(OCTET STRING alertTimeStamp=2025-06-19 11:45:00.559587620 UTC)(OCTET STRING alertDescription=Hardware device fault detected)
@@ -6298,8 +6298,55 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr high-threshold alarm 3.4   <-- Will trigger SNMP Trap for High Alarm
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
 
+Prior to F5OS 2.0 there was a single SNMP trap to signify HiAlarm, HiWarn, LoAlarm, and LoWarn state for each of the following txPwr, rxPwr, txBias, ddmTemp, and ddmVcc. This proved to be insufficent because two possible states could be true at the same time, especially for optics using multi-lane. There was no way to clear certain alarms when multiple conditions were met because of this. In F5OS 2.0 and later, more granular traps have been introduced for each of the following txPwr, rxPwr, txBias, ddmTemp, and ddmVcc to address this problem. The table below shows the new SNMP traps that are introdcued on the right, and the old deprecated traps on the left. You should reload the new 2.0 SNMP MIBs into yor SNMP manager or trap receiver to pick up these new changes. 
+
++----------------------------+-------------------------------------+
+| Traps Prior to version 2.0 | New Traps with Version 2.0 or later |
++============================+=====================================+
+| txPwr                      | txPwrHiAlarm                        |
+|                            |                                     |
+|                            | txPwrHiWarn                         |
+|                            |                                     |
+|                            | txPwrLoAlarm                        |
+|                            |                                     |
+|                            | txPwrLoWarn                         |
++----------------------------+-------------------------------------+
+| rxPwr                      | rxPwrHiAlarm                        |
+|                            |                                     |
+|                            | rxPwrHiWarn                         |
+|                            |                                     |
+|                            | rxPwrLoAlarm                        |
+|                            |                                     |
+|                            | rxPwrLoWarn                         |
++----------------------------+-------------------------------------+
+| txBias                     | txBiasHiAlarm                       |
+|                            |                                     |
+|                            | txBiasHiWarn                        |
+|                            |                                     |
+|                            | txBiasLoAlarm                       |
+|                            |                                     |
+|                            | txBiasLoWarn                        |
++----------------------------+-------------------------------------+
+| ddmTemp                    | ddmTempHiAlarm                      |
+|                            |                                     |
+|                            | ddmTempHiWarn                       |
+|                            |                                     |
+|                            | ddmTempLoAlarm                      |
+|                            |                                     |
+|                            | ddmTempLoWarn                       |
++----------------------------+-------------------------------------+
+| ddmVcc                     | ddmVccHiAlarm                       |
+|                            |                                     |
+|                            | ddmVccHiWarn                        |
+|                            |                                     |
+|                            | ddmVccLoAlarm                       |
+|                            |                                     |
+|                            | ddmVccLoWarn                        |
++----------------------------+-------------------------------------+
+
 txPwr
 ^^^^^
+This trap is for F5OS 1.8.x versions only.
 
 **txPwr                   .1.3.6.1.4.1.12276.1.1.1.262400**
 
@@ -6323,7 +6370,7 @@ txPwr
 |                  | Lanes: <Lane #'s> Transmitter power high alarm                                                           |
 +------------------+----------------------------------------------------------------------------------------------------------+
 
-The transmit power threshold for a specific transceiver has triggered a warning or alarm event. Run the show portgroups command to see what the current values are for that transceiver. 
+The transmit power threshold for a specific transceiver has reached a threshold indicating ether tx pwr high alarm status, tx pwr high warn status, tx pwr low alarm status, or tx pwr low warn status. Run the show portgroups command to see what the current values are for that transceiver.
 
 .. code-block:: bash
 
@@ -6338,8 +6385,100 @@ The transmit power threshold for a specific transceiver has triggered a warning 
     <INFO> 7-May-2025::21:06:40.677 partition2 confd[114]: snmp snmpv2-trap reqid=972265657 172.22.50.57:162 (TimeTicks sysUpTime=183497827)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650975934 UTC)(OCTET STRING alertDescription=Lanes: 1,4 Transmitter power low warning)
     <INFO> 7-May-2025::21:06:40.801 partition2 confd[114]: snmp snmpv2-trap reqid=972265658 172.22.50.57:162 (TimeTicks sysUpTime=183497840)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650917268 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter power low alarm)
 
+
+**txPwrHiAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262400**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           | Transmitter power high alarm                                                             |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Transmitter power high alarm                                                             |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txPwrHiAlarm
+   
+
+**txPwrHiWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txPwrHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262400**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           | Transmitter power high warning                                                           |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Transmitter power high warning                                                           |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txPwrHiWarn
+
+
+**txPwrLoAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262400**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           | Transmitter power low alarm                                                              |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Transmitter power low alarm                                                              |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txPwrLoAlarm
+
+   
+
+
+**txPwrLoWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txPwrLoWarn                   .1.3.6.1.4.1.12276.1.1.1.262400**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txPwrLoWarn
+
 rxPwr 
-^^^^^
+^^^
+
+This trap is for F5OS 1.8.x versions only.
 
 **rxPwr                   .1.3.6.1.4.1.12276.1.1.1.262401**
 
@@ -6373,8 +6512,101 @@ The receive power threshold for a specific transceiver has reached a threshold i
     <INFO> 18-Jul-2025::14:50:04.051 partition4 confd[114]: snmp snmpv2-trap reqid=1674228067 172.22.50.57:162 (TimeTicks sysUpTime=803314258)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-07-18 21:50:04.027229987 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
     <INFO> 18-Jul-2025::14:59:04.046 partition4 confd[114]: snmp snmpv2-trap reqid=1674228070 172.22.50.57:162 (TimeTicks sysUpTime=803368257)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-07-18 21:59:04.027161464 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
+
+**rxPwrHiAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**rxPwrHiAlarm                   .1.3.6.1.4.1.12276.1.1.1.262401**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include rxPwrHiAlarm
+
+**rxPwrHiWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**rxPwrHiWarn                   .1.3.6.1.4.1.12276.1.1.1.262401**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include rxPwrHiWarn
+
+**rxPwrLoAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**rxPwrLoAlarm                   .1.3.6.1.4.1.12276.1.1.1.262401**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           | Lanes: <#> Receiver power low alarm                                                      |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Receiver power low alarm                                                                 |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include rxPwrLoAlarm
+   
+    <INFO> 20-Nov-2025::15:23:12.366 r5900-1-gsa confd[171]: snmp snmpv2-trap reqid=746899779 172.22.50.57:162 (TimeTicks sysUpTime=7074)(OBJECT IDENTIFIER snmpTrapOID=rxPwrLoAlarm)(OCTET STRING alertSource=Portgroup 6)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-11-20 20:23:12.363139334 UTC)(OCTET STRING alertDescription=Lanes: 1 Receiver power low alarm)
+
+    <INFO> 20-Nov-2025::15:34:37.692 r5900-1-gsa confd[158]: snmp snmpv2-trap reqid=879500371 10.255.0.139:161 (TimeTicks sysUpTime=4347)(OBJECT IDENTIFIER snmpTrapOID=rxPwrLoAlarm)(OCTET STRING alertSource=Portgroup 6)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 20:34:37.658372899 UTC)(OCTET STRING alertDescription=Receiver power low alarm)
+
+
+**rxPwrLoWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**rxPwrLoWarn                   .1.3.6.1.4.1.12276.1.1.1.262401**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           | Lanes: <#> Receiver power low warning                                                    |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            | Receiver power low warning                                                               |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include rxPwrLoWarn
+    
+
 txBias 
 ^^^^^^
+
+This trap is for F5OS 1.8.x versions only.
 
 **txBias                   .1.3.6.1.4.1.12276.1.1.1.262402**
 
@@ -6411,9 +6643,96 @@ Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on p
 
     <INFO> 7-May-2025::21:06:10.787 partition2 confd[114]: snmp snmpv2-trap reqid=972265655 172.22.50.57:162 (TimeTicks sysUpTime=183494838)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=4)(OCTET STRING alertTimeStamp=2025-05-08 04:06:10.352469714 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
     <INFO> 7-May-2025::21:06:40.914 partition2 confd[114]: snmp snmpv2-trap reqid=972265659 172.22.50.57:162 (TimeTicks sysUpTime=183497851)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.651155713 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
-   
+
+
+**txBiasHiAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txBiasHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262402**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txBiasHiAlarm
+
+**txBiasHiWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txBiasHiWarn                  .1.3.6.1.4.1.12276.1.1.1.262402**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txBiasHiWarn
+
+**txBiasLoAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txBiasloAlarm                  .1.3.6.1.4.1.12276.1.1.1.262402**
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txBiasLoAlarm
+
+**txBiasLoWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**txBiasLoWarn                  .1.3.6.1.4.1.12276.1.1.1.262402**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include txBiasLoWarn
+
+
+
 ddmTemp 
 ^^^^^^^^
+This trap is for F5OS 1.8.x versions only.
 
 **ddmTemp                   .1.3.6.1.4.1.12276.1.1.1.262403**
 
@@ -6443,8 +6762,100 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 
     chassis1-prod-partition-2# file show log/snmp.log | include snmpTrapOID=ddmTemp
 
+
+
+**ddmTempHiAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmTempHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmTempHiAlarm
+
+**ddmtempHiWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmTempHiWarn                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmTempHiWarn
+
+**ddmTempLoAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmTempLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmTempLoAlarm
+
+**ddmTempLoWar**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmTempLoWarn                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmTempLoWarn
+
+
+
+
+
 ddmVcc
 ^^^^^^^
+
+This trap is for F5OS 1.8.x versions only.
 
 **ddmVcc                   .1.3.6.1.4.1.12276.1.1.1.262404**
 
@@ -6474,6 +6885,90 @@ The ddm voltage threshold for a specific transceiver has triggered a warning or 
 
     chassis1-prod-partition-2# file show log/snmp.log | include snmpTrapOID=ddmVcc
 
+
+**ddmVccHiAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmVccHiAlarm                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmVccHiAlarm
+
+**ddmVccHiWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmVccHiWarn                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmVccHiWarn
+
+**ddmVccLoAlarm**
+^^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmVccLoAlarm                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmVccLoAlarm
+
+**ddmVccLoWarn**
+^^^^^^^^^^^
+
+This trap is for F5OS versions 2.0 and later.
+
+**ddmVccLoWarn                  .1.3.6.1.4.1.12276.1.1.1.262404**
+
++------------------+------------------------------------------------------------------------------------------+
+| AlertEffect      | Possible Description in SNMP Trap                                                        |
++==================+==========================================================================================+
+| ASSERT           |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| EVENT            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+| CLEAR            |                                                                                          |
++------------------+------------------------------------------------------------------------------------------+
+
+.. code-block:: bash
+
+    r10900-2# file show log/system/snmp.log | include ddmVccLoWarn
 
 
 Troubleshooting SNMP
