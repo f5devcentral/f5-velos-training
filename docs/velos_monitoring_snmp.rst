@@ -5532,6 +5532,32 @@ mac-exhaustion
 
 Partition MAC pool is exhausted.
 
+Each VELOS and rSeries platform has a pool of available MAC addresses that can be assigned to interfaces, trunks, and Virtual Local Area Networks (VLANs).
+
+For more details on how MAC addresses are assigned within the VELOS chassis see the following solution articles.
+
+`K000133655: MAC address assignment in VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000133655>`_
+
+`K000135389: Configure the MAC Block Size for an existing BIG-IP tenant on the VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000135389>`_
+
+Within each chassis partition you can view the current mac-allocation status.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# show system mac-allocation 
+    system mac-allocation state free-single-macs 14
+    system mac-allocation state allocated-single-macs 2
+    system mac-allocation state free-large-blocks 0
+    system mac-allocation state allocated-large-blocks 0
+    system mac-allocation state free-medium-blocks 0
+    system mac-allocation state allocated-medium-blocks 0
+    system mac-allocation state free-small-blocks 0
+    system mac-allocation state allocated-small-blocks 0
+    system mac-allocation state total-free-mac-count 14
+    system mac-allocation state total-allocated-mac-count 2
+    system mac-allocation state total-mac-count 16
+    green-partition-chassis1-gsa-1#
+
 .. code-block:: bash
 
     syscon-1-active# file show log/confd/snmp.log | include mac-exhaustion
