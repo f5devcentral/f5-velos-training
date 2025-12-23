@@ -5391,9 +5391,10 @@ One or more Openshift certificates has expired or is expiring.
 
 .. code-block:: bash
 
-        velos-1-gsa-2-active# file show log/confd/snmp.log | include openshiftCertificatesExpiring
-
-
+    velos-1-gsa-1-active# file show log/confd/snmp.log | include openshiftCertificatesExpiring
+    <INFO> 5-Dec-2025::11:02:05.189 controller-1 confd[674]: snmp snmpv2-trap reqid=888117482 172.22.50.57:162 (TimeTicks sysUpTime=389799435)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertificatesExpiring)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=1)(INTEGER alertSeverity=2)(OCTET STRING alertTimeStamp=2025-12-05 19:02:05.175780747 UTC)(OCTET STRING alertDescription=One or more openshift certificates has expired or is expiring.)
+    <INFO> 22-Dec-2025::12:37:32.272 controller-1 confd[674]: snmp snmpv2-trap reqid=888117554 172.22.50.57:162 (TimeTicks sysUpTime=537252143)(OBJECT IDENTIFIER snmpTrapOID=openshiftCertificatesExpiring)(OCTET STRING alertSource=controller-1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-12-22 20:37:32.258455399 UTC)(OCTET STRING alertDescription=One or more openshift certificates has expired or is expiring.)
+    velos-1-gsa-1-active#
     
 openshiftUpgradeNeeded
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -5499,7 +5500,7 @@ Port speed change event.
 
 .. code-block:: bash
 
-    syscon-1-active# file show log/confd/snmp.log | speed
+    syscon-1-active# file show log/confd/snmp.log | include speed
     
 lacp-mac-failure
 ^^^^^^^^^^^^^^^^
@@ -5540,23 +5541,212 @@ For more details on how MAC addresses are assigned within the VELOS chassis see 
 
 `K000135389: Configure the MAC Block Size for an existing BIG-IP tenant on the VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000135389>`_
 
-Within each chassis partition you can view the current mac-allocation status.
+Within each system controller you can view the current mac-allocation status across all the chassis partitions.
 
 .. code-block:: bash
 
-    green-partition-chassis1-gsa-1# show system mac-allocation 
-    system mac-allocation state free-single-macs 14
-    system mac-allocation state allocated-single-macs 2
+    velos-1-gsa-1-active# show system mac-allocation
+    system mac-allocation state free-single-macs 96
+    system mac-allocation state allocated-single-macs 64
+    system mac-allocation state free-large-blocks 21
+    system mac-allocation state allocated-large-blocks 3
+    system mac-allocation state total-free-mac-count 768
+    system mac-allocation state total-allocated-mac-count 160
+    system mac-allocation state total-mac-count 928
+    velos-1-gsa-1-active# 
+
+
+The command **show system chassis-macs** will show which MAC addresses have been allocated, and wether or not they have been allocated as single MAC addresses, or blocks.
+.. code-block:: bash
+
+    velos-1-gsa-1-active# show system chassis-macs
+    system chassis-macs base 0094a18ed000
+                                                                                        ALLOCATED  
+    IDENTIFIER  UUID                                  OFFSET  MAC ADDRESS        INDEX  AS SINGLE  
+    -----------------------------------------------------------------------------------------------
+    1           -                                     8       00:94:a1:8e:d0:08  -      -          
+                                                    9       00:94:a1:8e:d0:09  -      -          
+                                                    10      00:94:a1:8e:d0:0a  -      -          
+                                                    11      00:94:a1:8e:d0:0b  -      -          
+                                                    12      00:94:a1:8e:d0:0c  -      -          
+                                                    13      00:94:a1:8e:d0:0d  -      -          
+                                                    14      00:94:a1:8e:d0:0e  -      -          
+                                                    15      00:94:a1:8e:d0:0f  -      -          
+                                                    16      00:94:a1:8e:d0:10  -      -          
+                                                    17      00:94:a1:8e:d0:11  -      -          
+                                                    18      00:94:a1:8e:d0:12  -      -          
+                                                    19      00:94:a1:8e:d0:13  -      -          
+                                                    20      00:94:a1:8e:d0:14  -      -          
+                                                    21      00:94:a1:8e:d0:15  -      -          
+                                                    22      00:94:a1:8e:d0:16  -      -          
+                                                    23      00:94:a1:8e:d0:17  -      -          
+    2           524945cd-303e-46fb-ba86-abf7f9557479  24      00:94:a1:8e:d0:18  -      -          
+                                                    25      00:94:a1:8e:d0:19  -      -          
+                                                    26      00:94:a1:8e:d0:1a  -      -          
+                                                    27      00:94:a1:8e:d0:1b  -      -          
+                                                    28      00:94:a1:8e:d0:1c  0      false      
+                                                    29      00:94:a1:8e:d0:1d  0      false      
+                                                    30      00:94:a1:8e:d0:1e  0      false      
+                                                    31      00:94:a1:8e:d0:1f  0      false      
+                                                    32      00:94:a1:8e:d0:20  0      false      
+                                                    33      00:94:a1:8e:d0:21  0      false      
+                                                    34      00:94:a1:8e:d0:22  0      false      
+                                                    35      00:94:a1:8e:d0:23  0      false      
+                                                    36      00:94:a1:8e:d0:24  0      false      
+                                                    37      00:94:a1:8e:d0:25  0      false      
+                                                    38      00:94:a1:8e:d0:26  0      false      
+                                                    39      00:94:a1:8e:d0:27  0      false      
+                                                    40      00:94:a1:8e:d0:28  0      false      
+                                                    41      00:94:a1:8e:d0:29  0      false      
+                                                    42      00:94:a1:8e:d0:2a  0      false      
+                                                    43      00:94:a1:8e:d0:2b  0      false      
+                                                    44      00:94:a1:8e:d0:2c  0      false      
+                                                    45      00:94:a1:8e:d0:2d  0      false      
+                                                    46      00:94:a1:8e:d0:2e  0      false      
+                                                    47      00:94:a1:8e:d0:2f  0      false      
+                                                    48      00:94:a1:8e:d0:30  0      false      
+                                                    49      00:94:a1:8e:d0:31  0      false      
+                                                    50      00:94:a1:8e:d0:32  0      false      
+                                                    51      00:94:a1:8e:d0:33  0      false      
+                                                    52      00:94:a1:8e:d0:34  0      false      
+                                                    53      00:94:a1:8e:d0:35  0      false      
+                                                    54      00:94:a1:8e:d0:36  0      false      
+                                                    55      00:94:a1:8e:d0:37  0      false      
+                                                    56      00:94:a1:8e:d0:38  0      false      
+                                                    57      00:94:a1:8e:d0:39  0      false      
+                                                    58      00:94:a1:8e:d0:3a  0      false      
+                                                    59      00:94:a1:8e:d0:3b  0      false      
+                                                    60      00:94:a1:8e:d0:3c  1      false      
+                                                    61      00:94:a1:8e:d0:3d  1      false      
+                                                    62      00:94:a1:8e:d0:3e  1      false      
+                                                    63      00:94:a1:8e:d0:3f  1      false      
+                                                    64      00:94:a1:8e:d0:40  1      false      
+                                                    65      00:94:a1:8e:d0:41  1      false      
+                                                    66      00:94:a1:8e:d0:42  1      false      
+                                                    67      00:94:a1:8e:d0:43  1      false      
+                                                    68      00:94:a1:8e:d0:44  1      false      
+                                                    69      00:94:a1:8e:d0:45  1      false      
+                                                    70      00:94:a1:8e:d0:46  1      false      
+                                                    71      00:94:a1:8e:d0:47  1      false      
+                                                    72      00:94:a1:8e:d0:48  1      false      
+                                                    73      00:94:a1:8e:d0:49  1      false      
+                                                    74      00:94:a1:8e:d0:4a  1      false      
+                                                    75      00:94:a1:8e:d0:4b  1      false      
+                                                    76      00:94:a1:8e:d0:4c  1      false      
+                                                    77      00:94:a1:8e:d0:4d  1      false      
+                                                    78      00:94:a1:8e:d0:4e  1      false      
+                                                    79      00:94:a1:8e:d0:4f  1      false      
+                                                    80      00:94:a1:8e:d0:50  1      false      
+                                                    81      00:94:a1:8e:d0:51  1      false      
+                                                    82      00:94:a1:8e:d0:52  1      false      
+                                                    83      00:94:a1:8e:d0:53  1      false      
+                                                    84      00:94:a1:8e:d0:54  1      false      
+                                                    85      00:94:a1:8e:d0:55  1      false      
+                                                    86      00:94:a1:8e:d0:56  1      false      
+                                                    87      00:94:a1:8e:d0:57  1      false      
+                                                    88      00:94:a1:8e:d0:58  1      false      
+                                                    89      00:94:a1:8e:d0:59  1      false      
+                                                    90      00:94:a1:8e:d0:5a  1      false      
+                                                    91      00:94:a1:8e:d0:5b  1      false      
+                                                    92      00:94:a1:8e:d0:5c  2      false      
+                                                    93      00:94:a1:8e:d0:5d  2      false      
+                                                    94      00:94:a1:8e:d0:5e  2      false      
+                                                    95      00:94:a1:8e:d0:5f  2      false      
+                                                    96      00:94:a1:8e:d0:60  2      false      
+                                                    97      00:94:a1:8e:d0:61  2      false      
+                                                    98      00:94:a1:8e:d0:62  2      false      
+                                                    99      00:94:a1:8e:d0:63  2      false      
+                                                    100     00:94:a1:8e:d0:64  2      false      
+                                                    101     00:94:a1:8e:d0:65  2      false      
+                                                    102     00:94:a1:8e:d0:66  2      false      
+                                                    103     00:94:a1:8e:d0:67  2      false      
+                                                    104     00:94:a1:8e:d0:68  2      false      
+                                                    105     00:94:a1:8e:d0:69  2      false      
+                                                    106     00:94:a1:8e:d0:6a  2      false      
+                                                    107     00:94:a1:8e:d0:6b  2      false      
+                                                    108     00:94:a1:8e:d0:6c  2      false      
+                                                    109     00:94:a1:8e:d0:6d  2      false      
+                                                    110     00:94:a1:8e:d0:6e  2      false      
+                                                    111     00:94:a1:8e:d0:6f  2      false      
+                                                    112     00:94:a1:8e:d0:70  2      false      
+                                                    113     00:94:a1:8e:d0:71  2      false      
+                                                    114     00:94:a1:8e:d0:72  2      false      
+                                                    115     00:94:a1:8e:d0:73  2      false      
+                                                    116     00:94:a1:8e:d0:74  2      false      
+                                                    117     00:94:a1:8e:d0:75  2      false      
+                                                    118     00:94:a1:8e:d0:76  2      false      
+                                                    119     00:94:a1:8e:d0:77  2      false      
+                                                    120     00:94:a1:8e:d0:78  2      false      
+                                                    121     00:94:a1:8e:d0:79  2      false      
+                                                    122     00:94:a1:8e:d0:7a  2      false      
+                                                    123     00:94:a1:8e:d0:7b  2      false      
+                                                    136     00:94:a1:8e:d0:88  -      -          
+                                                    137     00:94:a1:8e:d0:89  -      -          
+                                                    138     00:94:a1:8e:d0:8a  -      -          
+                                                    139     00:94:a1:8e:d0:8b  -      -          
+                                                    140     00:94:a1:8e:d0:8c  -      -          
+                                                    141     00:94:a1:8e:d0:8d  -      -          
+                                                    142     00:94:a1:8e:d0:8e  -      -          
+                                                    143     00:94:a1:8e:d0:8f  -      -          
+                                                    144     00:94:a1:8e:d0:90  -      -          
+                                                    145     00:94:a1:8e:d0:91  -      -          
+                                                    146     00:94:a1:8e:d0:92  -      -          
+                                                    147     00:94:a1:8e:d0:93  -      -          
+    3           5a79f1c2-c5ee-4415-9fdf-c732302966c8  148     00:94:a1:8e:d0:94  -      -          
+                                                    149     00:94:a1:8e:d0:95  -      -          
+                                                    150     00:94:a1:8e:d0:96  -      -          
+                                                    151     00:94:a1:8e:d0:97  -      -          
+                                                    152     00:94:a1:8e:d0:98  -      -          
+                                                    153     00:94:a1:8e:d0:99  -      -          
+                                                    154     00:94:a1:8e:d0:9a  -      -          
+                                                    155     00:94:a1:8e:d0:9b  -      -          
+                                                    264     00:94:a1:8e:d1:08  -      -          
+                                                    265     00:94:a1:8e:d1:09  -      -          
+                                                    266     00:94:a1:8e:d1:0a  -      -          
+                                                    267     00:94:a1:8e:d1:0b  -      -          
+                                                    268     00:94:a1:8e:d1:0c  -      -          
+                                                    269     00:94:a1:8e:d1:0d  -      -          
+                                                    270     00:94:a1:8e:d1:0e  -      -          
+                                                    271     00:94:a1:8e:d1:0f  -      -          
+    4           f149f3c4-77e3-4e9f-8c85-fea6278de303  272     00:94:a1:8e:d1:10  -      -          
+                                                    273     00:94:a1:8e:d1:11  -      -          
+                                                    274     00:94:a1:8e:d1:12  -      -          
+                                                    275     00:94:a1:8e:d1:13  -      -          
+                                                    276     00:94:a1:8e:d1:14  -      -          
+                                                    277     00:94:a1:8e:d1:15  -      -          
+                                                    278     00:94:a1:8e:d1:16  -      -          
+                                                    279     00:94:a1:8e:d1:17  -      -          
+                                                    280     00:94:a1:8e:d1:18  -      -          
+                                                    281     00:94:a1:8e:d1:19  -      -          
+                                                    282     00:94:a1:8e:d1:1a  -      -          
+                                                    283     00:94:a1:8e:d1:1b  -      -          
+                                                    392     00:94:a1:8e:d1:88  -      -          
+                                                    393     00:94:a1:8e:d1:89  -      -          
+                                                    394     00:94:a1:8e:d1:8a  -      -          
+                                                    395     00:94:a1:8e:d1:8b  -      -          
+
+    velos-1-gsa-1-active# 
+
+
+Within each chassis partition you can view the current mac-allocation status with the command **show system mac-allocation**.
+
+.. code-block:: bash
+
+    green-partition-chassis1-gsa-1# show system mac-allocation
+    system mac-allocation state free-single-macs 13
+    system mac-allocation state allocated-single-macs 3
     system mac-allocation state free-large-blocks 0
-    system mac-allocation state allocated-large-blocks 0
-    system mac-allocation state free-medium-blocks 0
-    system mac-allocation state allocated-medium-blocks 0
-    system mac-allocation state free-small-blocks 0
-    system mac-allocation state allocated-small-blocks 0
-    system mac-allocation state total-free-mac-count 14
-    system mac-allocation state total-allocated-mac-count 2
-    system mac-allocation state total-mac-count 16
-    green-partition-chassis1-gsa-1#
+    system mac-allocation state allocated-large-blocks 1
+    system mac-allocation state free-medium-blocks 1
+    system mac-allocation state allocated-medium-blocks 1
+    system mac-allocation state free-small-blocks 3
+    system mac-allocation state allocated-small-blocks 1
+    system mac-allocation state total-free-mac-count 53
+    system mac-allocation state total-allocated-mac-count 59
+    system mac-allocation state total-mac-count 112
+    green-partition-chassis1-gsa-1# 
+
+If the system controller, were to run out of MAC addresses to provide to the partitions, then an SNMP trap will be raised.
 
 .. code-block:: bash
 
@@ -6412,7 +6602,7 @@ The transmit power threshold for a specific transceiver has reached a threshold 
     <INFO> 7-May-2025::21:06:40.801 partition2 confd[114]: snmp snmpv2-trap reqid=972265658 172.22.50.57:162 (TimeTicks sysUpTime=183497840)(OBJECT IDENTIFIER snmpTrapOID=txPwr)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=1)(INTEGER alertSeverity=3)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.650917268 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter power low alarm)
 
 
-**txPwrHiAlarm**
+txPwrHiAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6434,7 +6624,7 @@ This trap is for F5OS versions 2.0 and later.
     r10900-2# file show log/system/snmp.log | include txPwrHiAlarm
    
 
-**txPwrHiWarn**
+txPwrHiWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6456,7 +6646,7 @@ This trap is for F5OS versions 2.0 and later.
     r10900-2# file show log/system/snmp.log | include txPwrHiWarn
 
 
-**txPwrLoAlarm**
+txPwrLoAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6480,7 +6670,7 @@ This trap is for F5OS versions 2.0 and later.
    
 
 
-**txPwrLoWarn**
+txPwrLoWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6539,7 +6729,7 @@ The receive power threshold for a specific transceiver has reached a threshold i
     <INFO> 18-Jul-2025::14:59:04.046 partition4 confd[114]: snmp snmpv2-trap reqid=1674228070 172.22.50.57:162 (TimeTicks sysUpTime=803368257)(OBJECT IDENTIFIER snmpTrapOID=rxPwr)(OCTET STRING alertSource=Portgroup 3/1)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-07-18 21:59:04.027161464 UTC)(OCTET STRING alertDescription=Lanes: 1,2,3,4 Receiver power low warning)
 
 
-**rxPwrHiAlarm**
+rxPwrHiAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6560,7 +6750,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include rxPwrHiAlarm
 
-**rxPwrHiWarn**
+rxPwrHiWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6581,7 +6771,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include rxPwrHiWarn
 
-**rxPwrLoAlarm**
+rxPwrLoAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6607,7 +6797,7 @@ This trap is for F5OS versions 2.0 and later.
     <INFO> 20-Nov-2025::15:34:37.692 r5900-1-gsa confd[158]: snmp snmpv2-trap reqid=879500371 10.255.0.139:161 (TimeTicks sysUpTime=4347)(OBJECT IDENTIFIER snmpTrapOID=rxPwrLoAlarm)(OCTET STRING alertSource=Portgroup 6)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-11-20 20:34:37.658372899 UTC)(OCTET STRING alertDescription=Receiver power low alarm)
 
 
-**rxPwrLoWarn**
+rxPwrLoWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6671,7 +6861,7 @@ Below is an example of a txBias trap for Lane: 3 Transmitter Bias low alarm on p
     <INFO> 7-May-2025::21:06:40.914 partition2 confd[114]: snmp snmpv2-trap reqid=972265659 172.22.50.57:162 (TimeTicks sysUpTime=183497851)(OBJECT IDENTIFIER snmpTrapOID=txBias)(OCTET STRING alertSource=Portgroup 1/2)(INTEGER alertEffect=0)(INTEGER alertSeverity=8)(OCTET STRING alertTimeStamp=2025-05-08 04:06:40.651155713 UTC)(OCTET STRING alertDescription=Lanes: 4 Transmitter bias low warning)
 
 
-**txBiasHiAlarm**
+txBiasHiAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6692,7 +6882,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include txBiasHiAlarm
 
-**txBiasHiWarn**
+txBiasHiWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6713,7 +6903,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include txBiasHiWarn
 
-**txBiasLoAlarm**
+txBiasLoAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6733,7 +6923,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include txBiasLoAlarm
 
-**txBiasLoWarn**
+txBiasLoWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6790,7 +6980,7 @@ The ddm temperature threshold for a specific transceiver has triggered a warning
 
 
 
-**ddmTempHiAlarm**
+ddmTempHiAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6811,7 +7001,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmTempHiAlarm
 
-**ddmtempHiWarn**
+ddmtempHiWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6832,7 +7022,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmTempHiWarn
 
-**ddmTempLoAlarm**
+ddmTempLoAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6853,7 +7043,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmTempLoAlarm
 
-**ddmTempLoWar**
+ddmTempLoWar
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6912,7 +7102,7 @@ The ddm voltage threshold for a specific transceiver has triggered a warning or 
     chassis1-prod-partition-2# file show log/snmp.log | include snmpTrapOID=ddmVcc
 
 
-**ddmVccHiAlarm**
+ddmVccHiAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6933,7 +7123,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmVccHiAlarm
 
-**ddmVccHiWarn**
+ddmVccHiWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6954,7 +7144,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmVccHiWarn
 
-**ddmVccLoAlarm**
+ddmVccLoAlarm
 ^^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
@@ -6975,7 +7165,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmVccLoAlarm
 
-**ddmVccLoWarn**
+ddmVccLoWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
