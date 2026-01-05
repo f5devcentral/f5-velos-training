@@ -1687,6 +1687,18 @@ Below is an example polling the F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable on 
     blade-2        0    19712(KB)         14 1908.929(MHz)           4           28 Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz
     prompt%
 
+Below is an example polling the F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable on the VELOS chassis partition. Note how each BX520 blade has 56 CPU cores across two different slots which are hyperthreaded, so there are 56 cpuThreadCnt per blade per slot for a total of 112 vCPUs.
+
+.. code-block:: bash
+
+    prompt% snmptable -v 2c  -c public -m ALL 10.144.140.117 F5-PLATFORM-STATS-MIB:cpuProcessorStatsTable
+    SNMP table: F5-PLATFORM-STATS-MIB::cpuProcessorStatsTable
+
+    index cpuIndex cpuCacheSize cpuCoreCnt       cpuFreq cpuStepping cpuThreadCnt                              cpuModelName
+    blade-3        0    43008(KB)         28 2599.877(MHz)           6           56 Intel(R) Xeon(R) Gold 6330N CPU @ 2.20GHz
+    blade-3        1    43008(KB)         28 2599.877(MHz)           6           56 Intel(R) Xeon(R) Gold 6330N CPU @ 2.20GHz
+    prompt%
+
 
 CPU Utilization Stats Table
 ---------------------------
