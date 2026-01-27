@@ -5569,6 +5569,7 @@ Within each system controller you can view the current mac-allocation status acr
 
 
 The command **show system chassis-macs** will show which MAC addresses have been allocated, and wether or not they have been allocated as single MAC addresses, or blocks.
+
 .. code-block:: bash
 
     velos-1-gsa-1-active# show system chassis-macs
@@ -6921,6 +6922,7 @@ txBiasLoAlarm
 This trap is for F5OS versions 2.0 and later.
 
 **txBiasloAlarm                  .1.3.6.1.4.1.12276.1.1.1.262402**
+
 +------------------+------------------------------------------------------------------------------------------+
 | AlertEffect      | Possible Description in SNMP Trap                                                        |
 +==================+==========================================================================================+
@@ -7055,7 +7057,7 @@ This trap is for F5OS versions 2.0 and later.
 
     r10900-2# file show log/system/snmp.log | include ddmTempLoAlarm
 
-ddmTempLoWar
+ddmTempLoWarn
 ^^^^^^^^^^^
 
 This trap is for F5OS versions 2.0 and later.
