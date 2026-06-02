@@ -16,7 +16,7 @@ The CX410 is a 4 Rack Unit (RU) chassis, that has eight ¼ width slots that can 
 CX1610 Chassis
 =============
 
-The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty-two ¼ width slots that can be populated by new BX520 line cards (BX110 blades are not supported in the CX1610), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
+The CX1610 is a 16 Rack Unit (RU) chassis, that has thirty-two ¼ width slots that can be populated with BX520 line cards (BX110 blades are not supported in the CX1610), as well as 2 larger slots that are populated by the SX1610 system controllers. The system controllers proxy console, and out-of-band Ethernet management for all the blades. There is an AC power version of the chassis, as well as a DC power version. The DC power version of VELOS is Network Equipment Building Systems (NEBS) compliant. NEBS standards are utilized all over the world for a host of commercial, utility, and defense applications. The standards are designed to ensure that the equipment continues to work at extremes of temperature, or after an extreme event, like an earthquake or a severe thunderstorm.  
 
 .. image:: images/velos_components/imagecx1610.png
   :align: center
@@ -200,9 +200,8 @@ SX410 System Controllers
 
 Each CX410 chassis ships with two SX410 system controllers already installed. They are not optional and are not ordered separately. The system controllers perform two main functions:
 
--	They provide the active backplane connectivity, and layer2 switching to all line cards (BX110 and BX520 cannot be mixed in the same chassis currently)
+-	They provide the active backplane connectivity, and layer2 switching to all line cards
 - They operate in an active/active manner from a layer2 switching perspective
-
 -	They host the Kubernetes control plane functions
 - They operate in an active/standby manner for these functions
 
