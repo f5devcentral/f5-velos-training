@@ -18,6 +18,11 @@ Creating a VELOS tenant is nearly identical to creating a vCMP guest on VIPRION,
   :align: center
   :scale: 50%
 
+.. image:: images/velos_multitenancy/image2a.png
+  :align: center
+  :scale: 50%
+
+
 For resource provisioning, you can use **Recommended** settings or **Advanced** settings. Recommended, will allocate the minimum amount of memory in proportion the number of vCPUs assigned to the tenant. Advanced mode will allow you to customize the memory allocation for this tenant and over-allocate if desired, without having to allocate additional vCPUs. This is something not possible in VIPRION, but now you can over-provision memory assigned to the tenant. The default memory allocations for Recommended mode are shown below.
 
 .. Note:: The BX110 blade has more CPUs than the table below outlines, but they are dedicated for F5OS and not available for tenant use.

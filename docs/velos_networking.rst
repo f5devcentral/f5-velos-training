@@ -17,7 +17,7 @@ Out-of-Band Management Network
 
 All out-of-band networking for VELOS is handled through the system controllers. Each system controller has its own static IP address, and there is also a floating IP address that will follow the active system controller. The system controller will also act as a bridge between the outside out-of-band network, and the out-of-band management VLAN inside the chassis. By default, there is one common network/VLAN for out-of-band networking inside the chassis. All chassis partitions, and tenants will connect to this VLAN, and their default gateway should be pointed to a router on the outside of the chassis. You can attempt to isolate partitions and tenants on the OOB network by using separate IP networks that are multi-netted, but this does not provide true network isolation that a VLAN would provide. 
 
-In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band management ports on VELOS. This new option allows for system controllers, chassis partitions and tenants to be assigned to specific VLANs. This will allow for greater separation on the management VLAN which in previous releases had to be a single shared VLAN. The external ports are configured with specific tagged or untagged VLANs and then those VLANs are presented to the system controllers, partitions, and tenants as untagged, meaning no special configuration is needed to convert to tagged management VLANs inside tenants. 
+In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band management ports on VELOS. This new option allows for system controllers, chassis partitions and tenants to be assigned to specific VLANs. This allows for greater separation on the management VLAN which in previous releases had to be a single shared VLAN. The external ports are configured with specific tagged or untagged VLANs and then those VLANs are presented to the system controllers, partitions, and tenants as untagged, meaning no special configuration is needed to convert to tagged management VLANs inside tenants. 
 
 .. image:: images/velos_networking/tagged-vlans.png
   :align: center
@@ -116,8 +116,6 @@ In releases prior to F5OS-C 1.5.1 both ports on a BX110 blade must be configured
    :align: center
    :scale: 70%
 
-
-a
 Below is an example of the chassis partition webUI Port Groups screen with BX110 blades. Note that any changes in configuration will require a reboot of the blade to load a new FPGA bitstream image.
 
 .. image:: images/velos_networking/image11.png
@@ -372,7 +370,7 @@ The table below displays the breakout cables for the following BIDI optics when 
 VLANs
 =====
 
-VELOS supports both 802.1Q tagged and untagged VLAN interfaces. In the current F5OS releases, double VLAN tagging (802.1Q-in-Q) is not supported. Any port within a chassis partition, even across blades can be added to a VLAN, and VLANs are specific to that chassis partition. VLAN IDs (which may or may not be the same logical VLAN) can be re-used across different chassis partitions, and tenants within a chassis partition can share the same VLANs. Any VLANs that are configured on different chassis partitions will not be able to communicate inside the chassis, they will need to be connected via an external switch to facilitate communication between them.
+VELOS supports both 802.1Q tagged and untagged VLAN interfaces. Double VLAN tagging (802.1Q-in-Q) for data plane ports has been added in the F5OS 2.0 release. Any port within a chassis partition, even across blades can be added to a VLAN, and VLANs are specific to that chassis partition. VLAN IDs (which may or may not be the same logical VLAN) can be re-used across different chassis partitions, and tenants within a chassis partition can share the same VLANs. Any VLANs that are configured on different chassis partitions will not be able to communicate inside the chassis, they will need to be connected via an external switch to facilitate communication between them.
 
 
 Link Aggregation Groups
