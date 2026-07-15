@@ -1673,7 +1673,7 @@ For this configuration, you will remove slots 1, 2, and 3 from the **default** c
   :align: center
   :scale: 70%
 
-You can then click on the slots in the graphic that you want to remove (slots 1, 2, and 3), and they will change from dark blue to light blue. Also note; the **Selected Slots** will remove these slots from the default partition as indicated by **4,5,6,7,8**. Click **Save** to complete removing slots 1-3 from the default partition.
+In the Edit screen, remove (slots 1, 2, and 3) from the Default chassis partition. Click **Save** to complete removing slots 1-3 from the default partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image14.png
   :align: center
@@ -1685,31 +1685,51 @@ The slots will turn white, indicating they are not currently assigned to any cha
   :align: center
   :scale: 70%
 
-Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally, select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C controller and partition images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
+Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. Select the **Create** option in the upper right. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. 
 
-.. image:: images/initial_setup_of_velos_system_controllers/image16.png
+
+.. image:: images/initial_setup_of_velos_system_controllers/image15a.png
   :align: center
   :scale: 80%
 
-Change the partition state to **Enabled**. You can monitor the chassis partition status; it will go from **Disabled**, to **Starting**, to **Running**. 
+Finally, select a **Partition Image** which defines the F5OS software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS controller and partition images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
 
-.. image:: images/initial_setup_of_velos_system_controllers/image18.png
+.. image:: images/initial_setup_of_velos_system_controllers/image15b.png
   :align: center
   :scale: 80%
 
-Next, repeat the process and create another chassis partition for slot3 naming it **Development**, and supply and IP address, prefix, and gateway along with a partition F5OS-C image to run
+You can monitor the chassis partition status; it will go from **Starting** to **Running**. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image15c.png
+  :align: center
+  :scale: 80%
+
+Next, repeat the process and create another chassis partition for slot3 naming it **Development**, and supply and IP address, prefix, and gateway along with a partition F5OS image to run. You should see a status similar to the one below.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image19.png
   :align: center
   :scale: 80%
 
-You’ll then see a summary of all 3 partitions, each with a unique **partition ID**, along with their **Operational State**.
+You’ll then see a summary of all 3 partitions, each with a unique **partition ID**, along with their **Operational State**. For F5OS 2.0 and later you can click on the **View** option next to any chassis partition to see more detailed status.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image20.png
   :align: center
   :scale: 100%
 
-If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to:
+Its possible the indisvidual blades may need to load updated software and possibly firmware. You'll be able to monitor the upgrade status in this screen.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image20a.png
+  :align: center
+  :scale: 100%
+
+Eventually, the **Node Status** should show **Complete**, and you'll see the **Install Status** show **Success*.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image20b.png
+  :align: center
+  :scale: 100%
+
+
+If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to. Hyperlinnks will also be displayed for the WebUI of each chassis partition's managment interface. You can click on any of the links to log directly into the chassis partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image21.png
   :align: center
