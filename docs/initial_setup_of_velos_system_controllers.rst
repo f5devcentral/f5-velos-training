@@ -453,17 +453,15 @@ Beware that changing from unaggregated to aggregated needs to be coordinated wit
 
 Go to the **System Settings -> Management Interfaces** page in the WebUI to change the configuration to use link aggregation. In the **Link Aggregation** section click the Edit button on the right hand side.
 
-
 .. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag.png
-  :align: centerip_mgmt_lag2
+  :align: center
   :scale: 70%
 
 Here you can edit the enable or disable the LAG configuration, add a LAG type, LACP mode, and Name of the interface.
 
-.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag.png
-  :align: centerip_mgmt_lag2
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag2.png
+  :align: center
   :scale: 70%
-
 
 
 
