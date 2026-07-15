@@ -71,14 +71,14 @@ VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/1
 
 .. code-block:: bash
 
-  syscon-2-active# show system network 
+  velos-1-gsa-1-active# show system network 
   system network state configured-network-range-type RFC6598
   system network state configured-network-range 100.64.0.0/12
   system network state configured-chassis-id 1
   system network state active-network-range-type RFC6598
   system network state active-network-range 100.64.0.0/12
   system network state active-chassis-id 1
-  syscon-2-active# 
+  velos-1-gsa-1-active# 
 
 This address range never leaves the inside of the chassis and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range and communicates with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
 
@@ -88,18 +88,18 @@ If there is the potential for conflict with external devices that fall within th
 
 .. code-block:: bash
 
-  syscon-2# config
-  syscon-2-active(config)# system network config network-range-type RFC <Hit Tab>
+  velos-1-gsa-1-active# config
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC <Hit Tab>
   Possible completions:
     RFC1918   VELOS system uses 10.[0-15]/12 as specified by RFC1918
     RFC6598   VELOS system uses 100.64/10 as specified by RFC6598
-  syscon-2-active(config)# system network config network-range-type RFC1918
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC1918
 
 If changing to one of the RFC1918 address spaces, you will need to choose from one of 16 prefix ranges as seen below. You should ensure that this will not overlap with current address space deployed within the environment:
 
 .. code-block:: bash
 
-  syscon-2-active(config)# system network config network-range-type RFC1918 prefix ?
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC1918 prefix ?
   Description: 
   The network prefix index is used to select the range of IP addresses
   used internally within the chassis.  The network prefix should be
@@ -125,8 +125,8 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
   15                         10.[240-255].0.0/12
   Possible completions:
     <unsignedByte, 0 .. 15>[0]
-  syscon-2-active(config)# system network config network-range-type RFC1918 prefix 15
-    syscon-2-active(config)# commit
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC1918 prefix 15
+  velos-1-gsa-1-active(config)# commit
   Commit complete.
 
 **Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
@@ -205,17 +205,25 @@ You likely setup the IP addressing via the setup wizard, but if you need to alte
 
 .. code-block:: bash
 
-  syscon-2-active(config)# system mgmt-ip config ipv4 controller-1 address 10.10.10.212
-  syscon-2-active(config)# system mgmt-ip config ipv4 controller-2 address 10.10.10.213
-  syscon-2-active(config)# system mgmt-ip config ipv4 floating address 10.10.10.214
-  syscon-2-active(config)# system mgmt-ip config ipv4 prefix-length 24
-  syscon-2-active(config)# system mgmt-ip config ipv4 gateway 10.10.10.1
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 controller-1 address 10.10.10.212
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 controller-2 address 10.10.10.213
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 floating address 10.10.10.214
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 prefix-length 24
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 gateway 10.10.10.1
 
 To make these changes active, you must commit the changes. No configuration changes are executed until the commit command is issued. 
 
 .. code-block:: bash
 
   syscon-2-active(config)# commit
+
+Prior to F5OS 2.0, only a single default gateway was configurable for the out-of-band management port from the F5OS layer. Multiple static routes can now be added starting with the F5OS 2.0 version. This is useful if you have services that F5OS relies on or needs to communicate with such as DNS, NTP, Syslog or SNMP services that are behind different routers.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system routes route dns config network 10.238.160.22/24 gateway 10.238.170.254
+    velos-1-gsa-1-active(config)# system routes route ntp config network 10.238.150.22/24 gateway 10.238.170.253
+    velos-1-gsa-1-active(config)# commit
 
 Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to monitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in standby state. After logging into the floating IP address, you should see a page like the one below. 
 
@@ -226,11 +234,15 @@ Now that the out-of-band addresses and routing are configured, you can attempt t
 IP Address Assignment & Routing via WebUI
 -----------------------------------------
 
-You may alter the configuration of the system controllers out-of-band interfaces via the **Network Settings > Management Interfaces** page in the WebUI. Here you can enable or disable DHCP, configure IPv4/IPv6 static and floating IP addresses, gateway and prefix as well as link aggregation parameters.
+You may alter the configuration of the system controllers out-of-band interfaces via the **System Settings > Management Interfaces** page in the WebUI. Here you can enable or disable DHCP, configure IPv4/IPv6 static and floating IP addresses, gateway and prefix as well as link aggregation parameters.
 
-.. image:: images/initial_setup_of_velos_system_controllers/image2.png
+You can also configure the two controllers management ports to be aggregated into a Link Aggregation Group (LAG), and optionally specify Management VLANs if you would like to use 802.1Q VLAN tagging for the management network. This would allow controllers, chassis partitions, and tenants to be put onto unique tagged VLANs. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt.png
   :align: center
   :scale: 70%
+
+If you would like to leverage 802.1Q VLAN tagging you must first setup **Management VLANs** which then can be referenced when editing the **Management IP Addresses**.
 
 IP Address Assignment & Routing via API
 -----------------------------------------
@@ -439,11 +451,21 @@ Interface Aggregation for System Controllers via WebUI
 
 Beware that changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
 
-Go to the **Network Settings -> Management Interfaces** page in the WebUI to change the configuration to use link aggregation.
+Go to the **System Settings -> Management Interfaces** page in the WebUI to change the configuration to use link aggregation. In the **Link Aggregation** section click the Edit button on the right hand side.
 
-.. image:: images/initial_setup_of_velos_system_controllers/webui-controllers.png
-  :align: center
-  :scale: 50%
+
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag.png
+  :align: centerip_mgmt_lag2
+  :scale: 70%
+
+Here you can edit the enable or disable the LAG configuration, add a LAG type, LACP mode, and Name of the interface.
+
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag.png
+  :align: centerip_mgmt_lag2
+  :scale: 70%
+
+
+
 
 
 
