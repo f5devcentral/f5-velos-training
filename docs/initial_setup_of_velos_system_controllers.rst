@@ -899,7 +899,7 @@ In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can 
 Configure System Settings (DNS, NTP, Logging) From the WebUI
 ----------------------------------------
 
-You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **System Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image4.png
   :align: center
@@ -911,7 +911,7 @@ Configuring Network Time Protocol is highly recommended, so that the VELOS syste
   :align: center
   :scale: 70%
 
-It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here, you can configure remote servers, the logging facility, and severity levels. 
+It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Monitoring > Log Settings** screen. Here, you can configure remote servers, the logging facility, and severity levels. 
 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6.png
@@ -1128,10 +1128,14 @@ Licensing via webUI
 Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If it is not possible to reach the licensing server, use the **Manual** method.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image7.png
-  :width: 45%
+  :align: center
+  :scale: 70%
+
+You can also add Proxy information if your environment requires a proxy to reach the Internet for Automatic licensing.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image8.png
-  :width: 45%
+  :align: center
+  :scale: 70%
 
 You can activate and display the current license in the webUI, CLI or API. 
 
