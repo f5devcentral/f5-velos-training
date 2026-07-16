@@ -2635,19 +2635,17 @@ System Controller Configuration Options
 Once the minimum parameters have been setup, you can go back and review or edit various settings for the system controllers. Below is a review of the current webUI options that are available with the system controller F5OS configuration. Other options are available within the F5OS chassis partition interfaces and are covered in a later section. 
 
 -----------------------------------------
-Network Settings -> Management Interfaces
+System Settings -> Management Interfaces
 -----------------------------------------
 
-Under **Network Settings**, you can view/edit both the floating and static IP addresses for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
-
-**NOTE: For the initial 1.1.x versions of F5OS-C only IPv4 IP addressing was available for the F5OS platform layer. IPv4/IPv6 dual stack support has since been added in the F5OS 1.2.x release. This limitation was only for the F5OS-C platform layer v1.1.x versions, BIG-IP tenants are capable of IPv4/v6 dual stack management, even with older F5OS software.** 
+Under **System Settings**, you can view/edit both the floating and static IP addresses for the system controllers. Starting in F5OS version 1.8.x you can also add VLAN tagging to the out of band mangement ports that will in turn map to controller IPs, chassis partitions IPs, and TMOS tenant IPs. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image22.png
   :align: center
   :scale: 70%
 
 -----------------------
-Network Settings -> DNS
+System Settings -> DNS
 -----------------------
 
 External **DNS Lookup Servers** and **Search Domains** can be configured. This will be required for things like automatic license activation, NTP server domain resolution, and iHealth integration and it is recommended to be configured. 
@@ -2660,7 +2658,7 @@ External **DNS Lookup Servers** and **Search Domains** can be configured. This w
 Software Management -> Partition Images
 ---------------------------------------
 
-Each chassis partition will require an F5OS-C software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS-C partition images are available on downloads.f5.com.
+Each chassis partition will require an F5OS software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS partition images are available on downloads.f5.com.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image24.png
   :align: center
@@ -2670,23 +2668,23 @@ Each chassis partition will require an F5OS-C software release to be specified w
 Software Management -> Controller Images
 ----------------------------------------
 
-System controllers also run a unique F5OS-C software version and have a separate ISO from the chassis partitions. Both system controllers will need to run the same SW version. You can upload or import new F5OS-C controller images via the **Software Management > Controller Images** webUI screen.
+System controllers also run a unique F5OS software version and have a separate ISO from the chassis partitions. Both system controllers will need to run the same SW version. You can upload or import new F5OS controller images via the **Software Management > Controller Images** webUI screen.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image25.png
   :align: center
   :scale: 70%
 
 ----------------------------------
-System Settings -> Alarms & Events
+System Monitoring -> Alarms & Events
 ----------------------------------
 
-Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including those that have cleared. Each event should have different assertions to both **Raise** and **Clear** alarms. 
+Alarms and Events can be viewed via the **System Monitoring > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including those that have cleared. Each event should have different assertions to both **Raise** and **Clear** alarms. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image26.png
   :align: center
   :scale: 70%
 
-You may also change timeframe to see historical events, and optionally refresh the screen via the controls on the right-hand side of the page:
+You may also change severity or timeframe to see historical events, and optionally refresh the screen via the controls on the right-hand side of the page:
 
 .. image:: images/initial_setup_of_velos_system_controllers/image27.png
   :align: center
@@ -2699,7 +2697,8 @@ System controller status, HA state, and software upgrades are managed via the **
 
 An administrator can failover from one system controller to the other and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
 
-**NOTE: The initial v1.1.x F5OS-C versions did not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades, and updating the standby chassis first is recommended if possible. Rolling upgrade support for the system controllers was added to the 1.2.x release of F5OS-C. Once the system controllers are starting from a 1.2.x release, rolling upgrades are supported.** 
+Any upgrade that is initiated will update rolling upgrade by default, meaning the standby is upgraded first, and then a reboot is initiated of the stnadby controller. Once the standby system controllers come active, a failover will be initiated moving services to the newly upgraded controller. At that point the upgrade process is initiated on the former active controller. 
+
 
 .. image:: images/initial_setup_of_velos_system_controllers/image28.png
   :align: center
