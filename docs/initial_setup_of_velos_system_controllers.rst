@@ -2705,30 +2705,36 @@ Any upgrade that is initiated will update rolling upgrade by default, meaning th
   :scale: 70% 
 
 -----------------------------------
-System Settings -> System Inventory
+System Monitoring -> System Inventory
 -----------------------------------
 
-The **System Settings > System Inventory** page provides status, part numbers and serial numbers for the different physical components including controllers, blades, fan trays, power supply controller units, power supplies, and LCD.
+The **System Monitoring > System Inventory** page provides status, part numbers and serial numbers for the different physical components including controllers, blades, fan trays, power supply controller units, power supplies, and LCD.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image29.png
   :align: center
   :scale: 70% 
 
 -------------------------------
-System Settings -> Log Settings
+System Monitoring -> Log Settings
 -------------------------------
 
-Under **System Settings > Log Settings** you may add remote log servers for the F5OS system controllers. You can also specify the **Software Component Log Levels** which may be useful when troubleshooting specific issues.
+Under **System Monitoring > Log Settings** you may add remote log servers for the F5OS system controllers, specify if the system hostname should be included in the remote logs, and setup certifcates, keys, and CAs for secure logging.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image30.png
   :align: center
   :scale: 70% 
 
+You can also specify the **Software Component Log Levels** which may be useful when troubleshooting specific issues.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image30a.png
+  :align: center
+  :scale: 70% 
+
 ---------------------------------
-System Settings -> File Utilities
+System Monitoring -> File Utilities
 ---------------------------------
 
-The **System Settings > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from the various log directories log can be exported, cores and qkviews can be exported from diags/shared and system controller and chassis partition software images can be imported into import/staging.
+The **System Monitoring > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from the various log directories log can be exported, cores and qkviews can be exported from diags/shared and system controller and chassis partition software images can be imported into import/staging.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image31.png
   :align: center
