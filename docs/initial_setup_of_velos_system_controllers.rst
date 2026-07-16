@@ -2760,27 +2760,40 @@ Under the **System Settings > Time Settings** page Network Time Protocol servers
 System Settings -> System Security
 -------------------------------------
 
-Access to specific services running on the system controller F5OS layer can be restricted to certain IP addresses and/or subnets via the **Systems Settings > Security** page. The **Allowed IP Addresses** section will allow the admin to restrict who can access the F5OS layer. Here an administrator can also but F5OS into appliance mode, which will disable bash/root access on the controllers. Other security related parameters such as httpd and sshd cipher suites as well as the CLI idle timeout can be set on this page.
+Access to specific services running on the system controller F5OS layer can be restricted to certain IP addresses and/or subnets via the **Systems Settings > Security** page. The **Allowed IP Addresses** section will allow the admin to restrict who can access the F5OS layer. Here an administrator can also set the securit complaince mode for Common Criteria. Shell and LCD Access allows Appliance mode to be enabled or disable at the controller level, as well as denying root access over SSH, and enabling superuser bash access. Finally, there is an option to configure the LCD mode. Login policies can be set and max sessions can be configured for both SSH and RESTCONF.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image34.png
   :align: center
   :scale: 70% 
 
+In the **Services** section, httpd ciphersuites, and protocol can be configured as well as sshd ciphers, KEX algorithms, MAC algorithms and Hosy Key Algorithms. You may also configure CLI and SSH idel timeout values. in ther **iHealth Configuration** section, you may add Credentials and Proxy Server informatio to allow the system controllers to communicate directly to the iHealth service (if desired).
+
+.. image:: images/initial_setup_of_velos_system_controllers/image34a.png
+  :align: center
+  :scale: 70% 
+
+
 -------------------------------------
-System Settings -> SNMP Configuration
+System Monitoring -> SNMP
 -------------------------------------
 
-SNMP **Communities**, **Users**, and **Targets** can be setup on the **System Settings -> SNMP Configuration** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
+SNMP **Properties**, **Communities**, **Users**, and **Targets** can be setup on the **System Monitoring -> SNMP** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/snmp.png
   :align: center
   :scale: 70% 
 
+In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/snmp2.png
+  :align: center
+  :scale: 70% 
+
 ---------------------------------
-Diagnostics -> System Reports
+System Monitoring -> System Reports
 ---------------------------------
 
-The **Diagnostics > System Reports** page allows an admin to generate QKViews and optionally upload them to iHealth. 
+The **System Monitoring > System Reports** page allows an admin to generate QKViews and optionally upload them to iHealth. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image35.png
   :align: center
@@ -2792,41 +2805,40 @@ To generate a QKView click on the button in the upper right-hand corner. It will
   :align: center
   :scale: 70% 
 
+You will be prompted for a File Name, Timeout Value, Max File Size, and Max Core Size. There is also an option to exclude cores.
+
 .. image:: images/initial_setup_of_velos_system_controllers/image37.png
   :align: center
   :scale: 70% 
 
-Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if entered them previously and be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
+Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image38.png
   :align: center
   :scale: 70% 
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode and then use the **system diagnostics ihealth config** command to configure a username and password.
+Your iHealth credentials will automatically fill in if entered them previously and can be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
 
-.. code-block:: bash
+.. image:: images/initial_setup_of_velos_system_controllers/image38a.png
+  :align: center
+  :scale: 70% 
 
-  syscon-1-active(config)# system diagnostics ihealth config ?
-  Possible completions:
-    authserver   Server for Authentication server of iHealth ex:- https://api.f5.com/auth/pub/sso/login/ihealth-api
-    password     password to login to iHealth
-    server       Server for iHealth ex:- https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_webUI=True
-    username     username to login to iHealth
-  syscon-1-active(config)# system diagnostics ihealth config 
+If you would like to permanently store iHealth credentials within the configuration you may do so via the **System Settings -> System Security -> iHealth Configuration**. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image38b.png
+  :align: center
+  :scale: 70% 
 
 ---------------------------------------
 System Settings -> Configuration Backup
 ---------------------------------------
 
-You may backup the confd configuration databases for the system controller via the webUI. The backups can then be copied off-box using the file utilities webUI option. Currently the webUI does not support the restoration of confd backups, this must be done via the CLI or API. 
+You may backup the confd configuration databases for the system controller via the **System Settings -> Configuration Backup** page. The backups can then be Downloaded or exported form the system. Currently the webUI does not support the restoration of confd backups, this must be done via the CLI or API. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image39.png
   :align: center
   :scale: 70% 
 
-.. image:: images/initial_setup_of_velos_system_controllers/image40.png
-  :align: center
-  :scale: 70% 
 
 ----------------------------
 System Settings -> Licensing
