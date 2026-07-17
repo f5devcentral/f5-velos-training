@@ -2797,7 +2797,7 @@ In addtion to syslog, and SNMP, F5OS supports Open Telemetry (Otel) to export an
 
 F5OS OpenTelemetry enables the efficient collection of streaming metrics and logs in a structured format from the F5OS product to display in your observability platform. The F5OS supports gRPC endpoints and each OpenTelemetry Line Protocol (OTLP) endpoint is provided with the ability to toggle instrument-based filtering. 
 
-https://opentelemetry.io/
+`OpenTelemetry Open Source Site <https://opentelemetry.io/>`_
 
 - Front-Panel interface counters
 - CPU/Memory/Disk utilization metrics
@@ -2811,7 +2811,7 @@ https://opentelemetry.io/
 
 More details on configuring OpenTelemetry on F5OS can be found here:
 
-OpenTelemetry Overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-system-monitoring.html#opentelemetry-overview
+`OpenTelemetry Overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-system-monitoring.html#opentelemetry-overview>`_
 
 
 .. image:: images/initial_setup_of_velos_system_controllers/otel.png
