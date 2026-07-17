@@ -2818,6 +2818,12 @@ More details on configuring OpenTelemetry on F5OS can be found here:
   :align: center
   :scale: 70% 
 
+Below is an exqmple of the OTel setup:
+
+.. image:: images/initial_setup_of_velos_system_controllers/otel2.png
+  :align: center
+  :scale: 70% 
+
 ---------------------------------------
 System Settings -> Configuration Backup
 ---------------------------------------
