@@ -18,7 +18,7 @@ The chassis partition **Dashboard** will provide a visual system summary of the 
   :align: center
   :scale: 70% 
 
-The **Tenant** tab will display all currently running tenants on the chassis partition you are connected to.
+The **Tenant Overview** tab will display all currently running tenants on the chassis partition you are connected to.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/tenant-dashboard.png
   :align: center
