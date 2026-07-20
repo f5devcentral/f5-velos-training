@@ -2,7 +2,7 @@
 Initial Setup Within the Chassis Partition
 ==========================================
 
-Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own F5OS-C CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address, and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band IP interfaces. At first login you will be prompted to change the default chassis partition password.
+Chassis partitions are completely separate management entities that are managed outside of the system controllers but are still considered part of the F5OS platform layer. If you have properly setup a chassis partition and assigned an out-of-band management IP address, you will be able to access it via its own F5OS CLI, webUI, and API. The chassis partitions only have a single out-of-band IP address, and the system is resilient in that the single IP address should be reachable as long as one blade in the partition is active. There is no way to access the chassis partition via in-band networks, as the chassis partition does not have an option for in-band IP interfaces. At first login you will be prompted to change the default chassis partition password.
 
 .. image:: images/initial_setup_of_velos_chassis_partitions/image1.png
   :align: center
