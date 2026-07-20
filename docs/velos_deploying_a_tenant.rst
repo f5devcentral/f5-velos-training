@@ -7,7 +7,12 @@ Deploying a Tenant
 Tenant Image Types
 ------------------
 
-Tenant images for F5OS are available on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether they allow in place upgrades. VELOS only supports specific TMOS releases: versions 14.1.4 and later, 15.1.4 and later, and 17.1.x and later are supported. There is no plan to support v16.0, 16.1, or 17.0 tenants. Tenant images for VELOS can be found on downloads.f5.com.
+Tenant images for F5OS are available on downloads.f5.com. VELOS allows different packaging options for tenant images. It will be up to administrators to choose the image that is best suited for their environment. The main differences between the image types will be how much space they can consume on disk, and whether they allow in place upgrades. VELOS only supports specific TMOS releases: versions 14.1.4 and later, 15.1.4 and later, and 17.1.x and later, and 21.x and later are supported. There is no support v16.0, 16.1, or 17.0 tenants. Tenant images for VELOS can be found on downloads.f5.com.
+
+Updated F5OS / TMOS tenant versions that are supported can be found here:
+
+`K86001294: F5OS hardware/software support matrix <https://my.f5.com/manage/s/article/K86001294>`_
+
 
 Select **BIG-IP** for Group, the **Product Line**, and the version of software you want to run as seen below.
 
@@ -27,6 +32,11 @@ There are 4 different types of tenant images to choose from (ALL, T1, T2, T4) as
   :align: center
   :scale: 70% 
 
+
+.. Note:: F5 changed the way that tenant images are signed in October 2025. You should ensure you download the proper image format based on the version of F5OS you are running. Going forward the **qcow2.zip.bundle** is being replaced in favor of the **tar.bundle** format. Please see the following solution article for more details.
+
+`K000157005: F5 signing certificate and key rotation, October 2025 <https://my.f5.com/manage/s/article/K000157005>`_
+
 The **T1-F5OS** image type should be used with extreme caution. It is the smallest of the image sizes, but it only has one slot/volume for TMOS software, meaning it does not support upgrades (not even for hotfixes). This type of image is geared toward more modern environments where pave and nuke strategies are preferred over in-place upgrades.   
 
 .. image:: images/velos_deploying_a_tenant/image4.png
@@ -35,9 +45,9 @@ The **T1-F5OS** image type should be used with extreme caution. It is the smalle
 
 The remaining images (T2, ALL, T4) all support in place upgrades; however, they may limit the amount of disk space that can be used by the tenant. If more disk space is needed by the tenant in the future, the tenant can be moved to provisioned state and the disk can be expanded. There is no ability to decrease the disk space, so starting smaller and increasing will ensure there is adequate disk space for many tenants. 
 
-The **T2-F5OS** image is intended for a tenant that will run LTM and / or DNS only; it is not suitable for tenants needing other modules provisioned (AVR may be an exception). This type of image is best suited in a high-density tenant environment where the number of tenants is going to be high per blade and using minimum CPU resources (1 or 2 vCPUs per tenant). You may want to limit the amount of disk space each tenant can use as a means of ensuring the file system on the blade does not become full. As an example, there is 1TB of disk per blade, and 22 tenants each using the 142GB T4 image would lead to an over provisioning situation. Because tenants are deployed in sparse mode which allows over provisioning, this may not be an issue initially but could become a problem later in the tenant’s lifespan as it writes more data to disk. To keep the tenants in check, you can deploy smaller T2 images, which can consume 45GB each. LTM/DNS deployments use much less disk than other BIG-IP modules, which do extensive local logging and utilize databases on disk.
+The **T2-F5OS** image is intended for a tenant that will run LTM and / or DNS only; it is not suitable for tenants needing other modules provisioned (AVR may be an exception). This type of image is best suited in a high-density tenant environment where the number of tenants is going to be high per blade and using minimum CPU resources (1 or 2 vCPUs per tenant). You may want to limit the amount of disk space each tenant can use as a means of ensuring the file system on the blade does not become full. As an example, there is 1TB of disk per blade and even less is available for tenant storage, and 22 tenants each using the 142GB T4 image would lead to an over provisioning situation. Because tenants are deployed in sparse mode which allows over provisioning, this may not be an issue initially but could become a problem later in the tenant’s lifespan as it writes more data to disk. To keep the tenants in check, you can deploy smaller T2 images, which can consume 45GB each. LTM/DNS deployments use much less disk than other BIG-IP modules, which do extensive local logging and utilize databases on disk.
 
-The **All-F5OS** image is suitable for any module configuration and supports a maximum of 76GB for the tenant. It is expected that the number of tenants per blade would be much less, as the module combinations that drive the need for more disk space typically require more CPU/memory, which will artificially reduce the tenant count per blade. Having a handful of 76GB or 156GB images per blade should not lead to an out of space condition. There are some environments where some tenants may need more disk space and the T4 image can provide for that. It may be best to default using the T4 image as that is essentially the default size for vCMP deployments today. 
+The **All-F5OS** image is suitable for any module configuration and supports a minimum of 77/86/88GB for the tenant (depending on the TMOS version). It is expected that the number of tenants per blade would be much less, as the module combinations that drive the need for more disk space typically require more CPU/memory, which will artificially reduce the tenant count per blade. Having a handful of 77GB or 156GB images per blade should not lead to an out of space condition. There are some environments where some tenants may need more disk space and the T4 image can provide for that. It may be best to default using the T4 image as that is essentially the default size for vCMP deployments today. 
 
 The **T4-VELOS** image also supports any module combination but has additional disk capacity. If you intend to have a lot of software images, databases for modules, run modules like SWG which utilize a lot of disk space, and local logging, then the added capacity is recommended. More detail on the image types can be found in the following solution article.
 
@@ -488,7 +498,7 @@ You can upload a tenant image via the webUI in two different places. The first i
 
 After the image is uploaded you need to wait until it shows **Replicated** status before deploying a tenant.
 
-Alternatively, you can upload from the **System Settings > File Utilities** page, and then select the **images** directory from the drop-down list.
+Alternatively, you can upload from the **System Monitoring > File Utilities** page, and then select the **images** directory from the drop-down list.
 
 .. image:: images/velos_deploying_a_tenant/image9a.png
   :align: center
@@ -509,9 +519,14 @@ The tenant deployment options are almost identical to deploying a vCMP guest, wi
   :align: center
   :scale: 70% 
 
+
+.. image:: images/velos_deploying_a_tenant/image11a.png
+  :align: center
+  :scale: 70% 
+
 For more information on the Mac Data / MAC Address Block Size see the following Solution Article:
 
-`<K000133655: MAC address assignment in VELOS and rSeries systems https://my.f5.com/manage/s/article/K000133655>`_
+`<K000133655: MAC address assignment in VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000133655>`_
 
 
 Validating Tenant Status via webUI
@@ -523,13 +538,14 @@ You can validate the current high-level status of a VELOS tenant in the webUI by
   :align: center
   :scale: 70% 
 
-You can get further detail and status of the tenant by clicking on the **Tenant Management** -> **Tenant Details** page. If a tenant encountered an issue during startup, it would show details here, and sometimes hovering over the status will provide even more details.
+You can get further detail and status of the tenant by clicking on the **Tenant Management** -> **Tenant Details** page. If a tenant encountered an issue during startup, it would show details here, and sometimes hovering over the status st the bottom of the page will provide even more details.
 
 
 .. image:: images/velos_deploying_a_tenant/tenantstatus2.png
   :align: center
   :scale: 70% 
 
+If you scroll down, you'll see **Tenant Disk Usage** and **Tenant Status**. The Tenant Status can be very useful when a tenant fails to start, as potential error messages will be seen here.
 
 .. image:: images/velos_deploying_a_tenant/tenantstatus3.png
   :align: center
@@ -1025,15 +1041,18 @@ Click **OK**. This will move the tenant from **deployed** to **provisioned** sta
   :align: center
   :scale: 70% 
 
-Next, click on the hyperlink for tenant1. This will bring you into the configuration page for that tenant.  Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848** and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
+Next, click on the hyperlink for the tenant. This will bring you into the configuration page for that tenant.  You'll need to click the **Edit** button in the upper right. 
+
+.. image:: images/velos_deploying_a_tenant/image14a.png
+  :align: center
+  :scale: 70% 
+
+Change the **vCPUs per slot** to **4**, and the **Memory per Slot** to **14848** and set the state back to **deployed**. When finished click Save and the tenant will start up again with the new configuration.
 
 .. image:: images/velos_deploying_a_tenant/image15.png
   :align: center
   :scale: 70% 
 
-.. image:: images/velos_deploying_a_tenant/image16.png
-  :align: center
-  :scale: 70% 
 
 
 Expanding a Tenant within the Same Blade via API
