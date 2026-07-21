@@ -566,11 +566,11 @@ To disable appliance mode.
 Enabling Appliance Mode via the webUI
 ------------------------------------- 
 
-Appliance mode can be enabled or disabled via the webUI under the **System Settings -> General** page in both the system controller webUI and the chassis partition webUI.
+Appliance mode can be enabled or disabled via the webUI under the **System Settings -> System Security** page in both the system controller webUI and the chassis partition webUI.
 
 .. image:: images/velos_security/image4.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 
 Enabling Appliance Mode via the API
@@ -1673,11 +1673,6 @@ Configuring SSH and CLI Timeouts & Deny Root SSH Settings via webUI
 The CLI and SSH timeouts and deny-root-ssh settings are all configurable in the webUI. The **deny-root-ssh** option can be configured in the **Shell Access** section of the **System Settings -> System Security** page.
 
 .. image:: images/velos_security/deny-root-ssh-webui.png
-  :align: center
-  :scale: 70%
-
-
-.. image:: images/rvelos_security/deny-root-ssh.png
   :align: center
   :scale: 70%
 
@@ -2866,9 +2861,11 @@ You can configure which ciphers are used when connecting to the F5OS management 
   :align: center
   :scale: 70%  
 
+For F5OS 2.0 you can now configure different TLS versions such as TLS1.2 or TLS1.3 for httpd access. There is more granular access to individual ciphers if needed. For sshd you can configure sshd ciphers, sshd KEX Algorithms, sshd MAC Algorithms and sshd Host Key Algorithms.
 
-
-
+.. image:: images/velos_security/security-ciphers2.png
+  :align: center
+  :scale: 70%  
 
 Configuring Management Ciphers via API
 --------------------------------------
@@ -3041,7 +3038,7 @@ Configuring Client Certificate Authentication via CLI
 
 Before you can log in to the webUI using client certificate authentication, you must have configured client certificate authentication from the CLI and imported the certificate to your browser. 
 
-`SSH public key authentication overview <https://techdocs.f5.com/en-us/velos-1-8-0/velos-systems-administration-configuration/title-auth-access.html#ssh-public-key-auth-overview>'_
+`SSH public key authentication overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-auth-access.html#ssh-public-key-authentication-overview>`_
 
 
 
@@ -3091,13 +3088,13 @@ In F5OS-C 1.8.0 the system licensing command has been extended to accept proxy c
 Proxy Server via webUI for Licensing and Qkview Uploads to iHealth
 ----------------------------------------------------------------
 
-To add a proxy server for iHealth uploads via the webUI, go to the **Diagnostics -> iHealth Configuration** page. 
+To add a proxy server for iHealth uploads via the webUI, go to the **System Settings -> System Security -> iHealth Configuration** page. 
 
 .. image:: images/velos_security/imageproxy1.png
   :align: center
   :scale: 90%  
 
-To add a proxy server for license activation via the webUI, go to the **System Settings -> Licensing** page. 
+To add a proxy server for license activation via the webUI, go to the **System Settings -> Licensing** page. When you attempt to activate or reactivate the license via the automatic method, you will be prompted for Proxy configuration.  
 
 .. image:: images/velos_security/proxy-licensing.png
   :align: center
@@ -4043,7 +4040,7 @@ Inside the audit directory you can then select the audit.log and then either **D
   :align: center
   :scale: 90%
 
-You can also select the **log/system** path to download the system audit.log.
+You can also select the **log/controller** path to download the system audit.log.
 
 .. image:: images/velos_security/imageaudit3.png
   :align: center
