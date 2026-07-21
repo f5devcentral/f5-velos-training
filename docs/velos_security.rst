@@ -570,7 +570,7 @@ Appliance mode can be enabled or disabled via the webUI under the **System Setti
 
 .. image:: images/velos_security/image4.png
   :align: center
-  :scale: 50%
+  :scale: 70%
 
 
 Enabling Appliance Mode via the API
@@ -1668,15 +1668,25 @@ The output should look similar to the example below.
 
 
 Configuring SSH and CLI Timeouts & Deny Root SSH Settings via webUI
--------------------------------------------------------------------
+------------------------------------------
 
+The CLI and SSH timeouts and deny-root-ssh settings are all configurable in the webUI. The **deny-root-ssh** option can be configured in the **Shell Access** section of the **System Settings -> System Security** page.
 
-
-The CLI timeout and deny-root-ssh settings are both configurable in the webUI. SSH timeouts are not currently configurable via the webUI. The deny-root-ssh and CLI timeout options can be configured in the **System Settings -> System Security** page.
-
-.. image:: images/velos_security/cli-timeout.png
+.. image:: images/velos_security/deny-root-ssh-webui.png
   :align: center
   :scale: 70%
+
+
+.. image:: images/rvelos_security/deny-root-ssh.png
+  :align: center
+  :scale: 70%
+
+The CLI and SSH timeouts are configurable under the **Services** section of the **System Settings -> System Security** page.
+
+.. image:: images/velos_security/cli-ssh-timeouts.png
+  :align: center
+  :scale: 70%
+
 
 
 Token Lifetime via CLI
