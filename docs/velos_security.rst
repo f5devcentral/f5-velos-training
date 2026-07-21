@@ -17,6 +17,7 @@ This allows customers to run a secure/locked-down out-of-band management network
 
 .. image:: images/velos_security/image1.png
   :align: center
+  :scale: 70%
 
 Out-of-Band Management Network
 ==============================
@@ -171,23 +172,18 @@ The output will show the previously configured allowed-ips.
 Adding Allow List Entries via webUI
 -----------------------------------
 
-You can configure the **Allow List** in the webUI starting with version F5OS-C 1.7.0 under the **System Settings** section. 
+You can configure the **Allow List** in the webUI under the **System Settings -> System Security** section. This can be configured on both the system controller and chassis partition layers. 
 
 .. image:: images/velos_security/image2.png
   :align: center
   :scale: 70%
 
-Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length of 24) to query the F5OS layer on port 161.
+Below is an example of allowing any SNMP endpoint at 172.22.50.57 (prefix length of 32) to query the F5OS layer on port 161.
 
 .. image:: images/velos_security/image3.png
   :align: center
   :scale: 70%
 
-In later versions, the allow list configuration is now under the **System Settings -> System Security** page.
-
-.. image:: images/velos_security/system-security-allow.png
-  :align: center
-  :scale: 70%
 
 Setting F5OS Primary Key
 ======================== 
@@ -399,13 +395,17 @@ The screen below shows the options when creating a self-signed certificate.
   :align: center
   :scale: 100%
 
+.. image:: images/velos_security/imagecert3a.png
+  :align: center
+  :scale: 100%
+
 If you choose the **Store TLS** option of **False** then the certificate details will be displayed, and you will be given the option to copy them to the clipboard. If you want to store them on the system, then set the **Store TLS** option to **True**.
 
 .. image:: images/velos_security/imagecert4.png
   :align: center
   :scale: 100%
 
-You can then use the **Show** options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
+You can then use the **Edit Certificate* options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
 
 .. image:: images/velos_security/imagecert5.png
   :align: center
@@ -432,6 +432,8 @@ When you install an SSL certificate on the system, you also install a certificat
 .. image:: images/velos_security/imageca1.png
   :align: center
   :scale: 100%
+
+You can also configure a Certificate Revocation List if desired.
 
 Managing Device Certificates, Keys, CSRs, and CAs via API
 -------------------------------------
