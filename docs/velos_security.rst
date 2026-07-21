@@ -29,6 +29,319 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 .. image:: images/velos_networking/tagged-vlans.png
   :align: center
 
+
+VLAN Tagging for the Management Port via CLI
+--------------------------------------------
+
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object using the **mgmt-vlans** CLI command on the system controller. In the example below, a tagged VLAN using the VLAN tag 500 is added. You must ensure you coordinate making VLAN tagging changes to the upstream switch, otherwise you may be locked out of the system. It is best to make these changes vai the console port, so that network changes do not disrupt management access
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# mgmt-vlans mgmt-vlan 500 config mgmt-vlan-tag 500 name mgmt-vlan-500
+    velos-1-gsa-2-active(config-mgmt-vlan-500)# commit
+    % No modifications to commit.
+    velos-1-gsa-2-active(config-mgmt-vlan-500)#
+
+You may add tagged or untagged VLANs, and also VLAN ranges:
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# mgmt-vlans mgmt-vlan ?
+    Possible completions:
+    <Configured mgmt vlan tag>  500  range  untagged
+    velos-1-gsa-2-active(config)#
+
+Once the mgmt-vlan object is created it can be added to the **mgmt-ip** configuration. This will make the system controllers accessible via a tagged VLAN ID 500.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# system mgmt-ip config mgmt-vlan 500
+    velos-1-gsa-2-active(config)# commit
+    Commit complete.
+    velos-1-gsa-2-active(config)# 
+
+You may view the mgmt-ip configuration using the **show running-config system mgmt-ip** command: or optionally the **show system mgmt-ip** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show running-config system mgmt-ip
+    system mgmt-ip config dhcp-enabled false
+    system mgmt-ip config ipv4 controller-1 address 172.22.50.7
+    system mgmt-ip config ipv4 controller-2 address 172.22.50.8
+    system mgmt-ip config ipv4 floating address 172.22.50.9
+    system mgmt-ip config ipv4 prefix-length 26
+    system mgmt-ip config ipv4 gateway 172.22.50.62
+    system mgmt-ip config ipv6 controller-1 address ::
+    system mgmt-ip config ipv6 controller-2 address ::
+    system mgmt-ip config ipv6 floating address ::
+    system mgmt-ip config ipv6 prefix-length 0
+    system mgmt-ip config ipv6 gateway ::
+    system mgmt-ip config mgmt-vlan 500
+    velos-1-gsa-2-active#
+
+or optionally the **show system mgmt-ip** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show system mgmt-ip 
+    system mgmt-ip state floating ipv4-address 172.22.50.9
+    system mgmt-ip state floating ipv6-address ::
+    system mgmt-ip state floating mac-address 00:94:a1:8e:d0:7c
+    system mgmt-ip state mgmt-vlan 500
+    system mgmt-ip state fixed-addresses fixed-address 1
+    ipv4-address       172.22.50.7
+    ipv4-prefix-length 26
+    ipv4-gateway       172.22.50.62
+    ipv6-address       ::
+    ipv6-prefix-length 0
+    ipv6-gateway       ::
+    mac-address        00:94:a1:8e:d0:7d
+    system mgmt-ip state fixed-addresses fixed-address 2
+    ipv4-address       172.22.50.8
+    ipv4-prefix-length 26
+    ipv4-gateway       172.22.50.62
+    ipv6-address       ::
+    ipv6-prefix-length 0
+    ipv6-gateway       ::
+    mac-address        00:94:a1:8e:d0:7e
+    velos-1-gsa-2-active#
+
+If you would like to view the **mgmt-vlan** object configuration use the **show mgmt-vlans** command:
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show mgmt-vlans 
+    MGMT      MGMT                     
+    VLAN TAG  VLAN TAG  NAME           
+    -----------------------------------
+    untagged  untagged  mgmt-untagged  
+    500       500       mgmt-vlan-500  
+
+    velos-1-gsa-2-active# 
+
+
+
+VLAN Tagging for the Management Port via WebUI
+--------------------------------------------
+
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object under the **System Settings > Management VLANs** page. Click the **Add** button in the upper right-hand corner to add a new mgmt-vlan.
+
+.. image:: images/velos_security/mgmt-vlans-webui.png
+  :align: center 
+  :scale: 50% 
+
+In the example below, a tagged VLAN using the VLAN tag 500 is added. 
+
+.. image:: images/velos_security/mgmt-vlans-webui2.png
+  :align: center
+  :scale: 50% 
+
+Once the mgmt-vlan object is created it can be added to the **System Settings > Management Interface** configuration. Click the **Edit** button in the upper right-hand corner. 
+
+.. image:: images/velos_security/mgmt-interface.png
+  :align: center
+  :scale: 50% 
+
+Under the **Management VLAN** section, select the VLAN that you configured in the previous step.
+
+.. image:: images/velos_security/mgmt-interface2.png
+  :align: center
+  :scale: 50% 
+
+VLAN Tagging for the Management Port via API
+--------------------------------------------
+
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object using the API. In the example below, a tagged VLAN using the VLAN tag 1112 is added. 
+
+.. code-block:: bash
+
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
+
+In the body of the API request add the details of the mgmt-vlan you would like to create:
+
+.. code-block:: json
+
+    {
+        "mgmt-vlan": [
+            {
+                "mgmt-vlan-tag": 1112,
+                "config": {
+                    "mgmt-vlan-tag": 1112,
+                    "name": "mgmt-vlan-1112"
+                }
+            }
+        ]
+    }
+
+
+To view the current mgmt-vlan configuration, enter the following API request:
+
+.. code-block:: bash
+
+ GET https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
+
+The output will display all the configured mgmt-vlan objects along with their VLAN tag information.
+
+.. code-block:: json
+
+    {
+        "f5-mgmt-vlan:mgmt-vlans": {
+            "mgmt-vlan": [
+                {
+                    "mgmt-vlan-tag": "untagged",
+                    "config": {
+                        "mgmt-vlan-tag": "untagged",
+                        "name": "mgmt-untagged"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": "untagged",
+                        "name": "mgmt-untagged"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 500,
+                    "config": {
+                        "mgmt-vlan-tag": 500,
+                        "name": "mgmt-vlan-500"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 500,
+                        "name": "mgmt-vlan-500"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 501,
+                    "config": {
+                        "mgmt-vlan-tag": 501,
+                        "name": "mgmt-vlan-501"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 501,
+                        "name": "mgmt-vlan-501"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 1010,
+                    "config": {
+                        "mgmt-vlan-tag": 1010,
+                        "name": "mgmt-vlan-1010"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 1010,
+                        "name": "mgmt-vlan-1010"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 1111,
+                    "config": {
+                        "mgmt-vlan-tag": 1111,
+                        "name": "mgmt-vlan-1111"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 1111,
+                        "name": "mgmt-vlan-1111"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 1112,
+                    "config": {
+                        "mgmt-vlan-tag": 1112,
+                        "name": "mgmt-vlan-1112"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 1112,
+                        "name": "mgmt-vlan-1112"
+                    }
+                }
+            ]
+        }
+    }
+
+Once the mgmt-vlan object is defined with the proper VLAN ID, you can then assign it to the system management IP configuration.
+
+.. code-block:: bash
+
+    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system
+
+In the body of the API request add the **mgmt-vlan** object:
+
+.. code-block:: json
+
+    {
+        "f5-mgmt-ip:mgmt-ip": {
+            "config": {
+                "dhcp-enabled": false,
+                "ipv4": {
+                    "system": {
+                        "address": "172.22.50.1"
+                    },
+                    "prefix-length": 26,
+                    "gateway": "172.22.50.62"
+                },
+                "ipv6": {
+                    "system": {
+                        "address": "::"
+                    },
+                    "prefix-length": 0,
+                    "gateway": "::"
+                },
+                "mgmt-vlan": 500
+            }
+        }
+    }
+
+
+To view the current system management IP configuration, enter the following API call.
+
+.. code-block:: bash
+
+    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
+
+In the response below, you'll notice the configured management IP address, gateway, and prefix along with the **mgmt-vlan** configuration.
+
+.. code-block:: json
+
+    {
+        "f5-mgmt-ip:mgmt-ip": {
+            "config": {
+                "dhcp-enabled": false,
+                "ipv4": {
+                    "system": {
+                        "address": "172.22.50.1"
+                    },
+                    "prefix-length": 26,
+                    "gateway": "172.22.50.62"
+                },
+                "ipv6": {
+                    "system": {
+                        "address": "::"
+                    },
+                    "prefix-length": 0,
+                    "gateway": "::"
+                },
+                "mgmt-vlan": 500
+            },
+            "state": {
+                "ipv4": {
+                    "system": {
+                        "address": "172.22.50.1"
+                    },
+                    "prefix-length": 26,
+                    "gateway": "172.22.50.62"
+                },
+                "mgmt-vlan": 500,
+                "ipv6": {
+                    "system": {
+                        "address": "::"
+                    },
+                    "prefix-length": 0,
+                    "gateway": "::"
+                }
+            }
+        }
+    }
+
+
 Allow List for F5OS Management
 ===============================
 
