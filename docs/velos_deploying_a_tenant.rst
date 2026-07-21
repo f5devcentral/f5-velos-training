@@ -80,7 +80,7 @@ The Dashboard in the chassis partition webUI has been enhanced in F5OS-A 1.8.0 t
   :align: center
   :scale: 70% 
 
-There is also more granularity showing **Storage Utilization**. In the below example, you can see that F5OS has utilized 6% of the 667.7GB of disk it has dedicated. This is the space shared by all BIG-IP Tenants virtual disks and F5OS. It is important to remember that TMOS based BIG-IP virtual disks utilize thin provisioning, so the TMOS tenant may think it has more storage but in reality, it is using much less capacity on the physical disk. You can see this by the **BIG-IP Tenant** utilizations. In the output below, there are two BIG-IP tenants (pub & test). Both have been allocated 82GB of disk, however the actual size on disk is much lower (~6-7GB each).
+There is also more granularity showing **Storage Utilization**. In the below example, you can see that F5OS has utilized 9% of the 667.7GB of disk it has dedicated. This is the space shared by all BIG-IP Tenants virtual disks and F5OS. It is important to remember that TMOS based BIG-IP virtual disks utilize thin provisioning, so the TMOS tenant may think it has more storage but in reality, it is using much less capacity on the physical disk. You can see this by the **BIG-IP Tenant** utilizations. In the output below, there are two BIG-IP tenants (tenant1 & tenant2). Both have been allocated 88GB of disk, however the actual size on disk is much lower (~9-10GB each).
 
 
 .. image:: images/velos_deploying_a_tenant/storage-utilization.png
@@ -1184,7 +1184,7 @@ One consideration when expanding a tenant across more than one blade is that you
   :align: center
   :scale: 70% 
 
-Next, a tenant that currently exists on a single blade will be expanded to span two blades using the webUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 6 vCPUs and 22016 MB of memory on slot1.
+Next, a tenant that currently exists on a single blade will be expanded to span two blades using the webUI. In the screenshot below **tenant2** is currently configured to only run on slot/blade1 due to the **Allowed Slots** being configured for 1. This tenant is using 4 vCPUs and 14848 MB of memory on slot1.
 
 .. image:: images/velos_deploying_a_tenant/image18.png
   :align: center
@@ -1196,15 +1196,27 @@ Select the checkbox next to tenant2 and then click the Provision button to move 
   :align: center
   :scale: 70% 
 
-Next, click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted, confirm, and then watch the tenant start up.
+Next, click on the hyperlink for **tenant2** to change the configuration of the tenant. Change the **Allowed Slots** so that both 1 and 2 are now checked. 
 
 .. image:: images/velos_deploying_a_tenant/image20.png
   :align: center
   :scale: 70% 
 
-Note the tenant is now configured for both Slots 1 & 2 for **Allowed Slots**.
+Change the state from **Provisioned** to **Deployed* and then click **Save**. When prompted, confirm, and then watch the tenant start up.
+
+.. image:: images/velos_deploying_a_tenant/image20a.png
+  :align: center
+  :scale: 70% 
+
+Click on the hyperlink for the tenant, and then expand the **Resource Allocation** section. Note the tenant is now configured for both Slots 1 & 2 for **Allowed Slots**.
 
 .. image:: images/velos_deploying_a_tenant/image21.png
+  :align: center
+  :scale: 70% 
+
+You can also click on the **Tenant Details** page, then select your tenant name, and scroll down to the bottom of the page. Here, you will see two instances of tenant2 (one running on each blade). Each blade is considered a **Node**.
+
+.. image:: images/velos_deploying_a_tenant/image21a.png
   :align: center
   :scale: 70% 
 
