@@ -155,7 +155,7 @@ To add 802.1Q VLAN tagging to the management port you must first create a **mgmt
 
 .. code-block:: bash
 
-    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
 
 In the body of the API request add the details of the mgmt-vlan you would like to create:
 
@@ -178,7 +178,7 @@ To view the current mgmt-vlan configuration, enter the following API request:
 
 .. code-block:: bash
 
- GET https://{{rseries_appliance1_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
+ GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
 
 The output will display all the configured mgmt-vlan objects along with their VLAN tag information.
 
@@ -210,39 +210,6 @@ The output will display all the configured mgmt-vlan objects along with their VL
                     }
                 },
                 {
-                    "mgmt-vlan-tag": 501,
-                    "config": {
-                        "mgmt-vlan-tag": 501,
-                        "name": "mgmt-vlan-501"
-                    },
-                    "state": {
-                        "mgmt-vlan-tag": 501,
-                        "name": "mgmt-vlan-501"
-                    }
-                },
-                {
-                    "mgmt-vlan-tag": 1010,
-                    "config": {
-                        "mgmt-vlan-tag": 1010,
-                        "name": "mgmt-vlan-1010"
-                    },
-                    "state": {
-                        "mgmt-vlan-tag": 1010,
-                        "name": "mgmt-vlan-1010"
-                    }
-                },
-                {
-                    "mgmt-vlan-tag": 1111,
-                    "config": {
-                        "mgmt-vlan-tag": 1111,
-                        "name": "mgmt-vlan-1111"
-                    },
-                    "state": {
-                        "mgmt-vlan-tag": 1111,
-                        "name": "mgmt-vlan-1111"
-                    }
-                },
-                {
                     "mgmt-vlan-tag": 1112,
                     "config": {
                         "mgmt-vlan-tag": 1112,
@@ -256,6 +223,7 @@ The output will display all the configured mgmt-vlan objects along with their VL
             ]
         }
     }
+
 
 Once the mgmt-vlan object is defined with the proper VLAN ID, you can then assign it to the system management IP configuration.
 
@@ -272,14 +240,26 @@ In the body of the API request add the **mgmt-vlan** object:
             "config": {
                 "dhcp-enabled": false,
                 "ipv4": {
-                    "system": {
-                        "address": "172.22.50.1"
+                    "controller-1": {
+                        "address": "172.22.50.7"
+                    },
+                    "controller-2": {
+                        "address": "172.22.50.8"
+                    },
+                    "floating": {
+                        "address": "172.22.50.9"
                     },
                     "prefix-length": 26,
                     "gateway": "172.22.50.62"
                 },
                 "ipv6": {
-                    "system": {
+                    "controller-1": {
+                        "address": "::"
+                    },
+                    "controller-2": {
+                        "address": "::"
+                    },
+                    "floating": {
                         "address": "::"
                     },
                     "prefix-length": 0,
