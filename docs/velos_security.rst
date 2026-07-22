@@ -2778,7 +2778,7 @@ For SSH sessions:
 - When logging in as root over SSH, the sshd-idle-timeout controls the timeout from bash ( 30 seconds)
 - When logging in as admin over SSH, the idle-timeout controls the timeout from F5OS Confd CLI (60 seconds)
 - When logging in as root to the console and then performing an su admin to access confd
-    - The higher of the two timeouts idle-timeout controls the timeout from F5OS Confd CLI (60 seconds)
+    - The idle-timeout controls the timeout from F5OS Confd CLI (60 seconds)
     - The sshd-idle-timeout will control how long before the bash session times out ( 30 seconds)
 
 The **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
@@ -3363,6 +3363,7 @@ With basic authentication enabled (default setting), you can make any API call u
 .. image:: images/velos_security/imagebasicauth.png
   :align: center
   :scale: 70%
+
 
 While basic auth is enabled, any API call using username/password will complete successfully. After disabling basic auth, any attempt to access an API endpoint other than the root URI using basic auth will fail with a message similar to the one below indicating **access denied**.
 
