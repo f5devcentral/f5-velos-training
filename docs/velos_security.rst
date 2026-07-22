@@ -229,7 +229,7 @@ Once the mgmt-vlan object is defined with the proper VLAN ID, you can then assig
 
 .. code-block:: bash
 
-    POST https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system
 
 In the body of the API request add the **mgmt-vlan** object:
 
@@ -275,7 +275,7 @@ To view the current system management IP configuration, enter the following API 
 
 .. code-block:: bash
 
-    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
 
 In the response below, you'll notice the configured management IP address, gateway, and prefix along with the **mgmt-vlan** configuration.
 
@@ -286,14 +286,26 @@ In the response below, you'll notice the configured management IP address, gatew
             "config": {
                 "dhcp-enabled": false,
                 "ipv4": {
-                    "system": {
-                        "address": "172.22.50.1"
+                    "controller-1": {
+                        "address": "172.22.50.7"
+                    },
+                    "controller-2": {
+                        "address": "172.22.50.8"
+                    },
+                    "floating": {
+                        "address": "172.22.50.9"
                     },
                     "prefix-length": 26,
                     "gateway": "172.22.50.62"
                 },
                 "ipv6": {
-                    "system": {
+                    "controller-1": {
+                        "address": "::"
+                    },
+                    "controller-2": {
+                        "address": "::"
+                    },
+                    "floating": {
                         "address": "::"
                     },
                     "prefix-length": 0,
@@ -302,24 +314,40 @@ In the response below, you'll notice the configured management IP address, gatew
                 "mgmt-vlan": 500
             },
             "state": {
-                "ipv4": {
-                    "system": {
-                        "address": "172.22.50.1"
-                    },
-                    "prefix-length": 26,
-                    "gateway": "172.22.50.62"
+                "fixed-addresses": {
+                    "fixed-address": [
+                        {
+                            "controller": 1,
+                            "ipv4-address": "172.22.50.7",
+                            "ipv4-prefix-length": 26,
+                            "ipv4-gateway": "172.22.50.62",
+                            "ipv6-address": "::",
+                            "ipv6-prefix-length": 0,
+                            "ipv6-gateway": "::",
+                            "mac-address": "00:94:a1:8e:d0:7d"
+                        },
+                        {
+                            "controller": 2,
+                            "ipv4-address": "172.22.50.8",
+                            "ipv4-prefix-length": 26,
+                            "ipv4-gateway": "172.22.50.62",
+                            "ipv6-address": "::",
+                            "ipv6-prefix-length": 0,
+                            "ipv6-gateway": "::",
+                            "mac-address": "00:94:a1:8e:d0:7e"
+                        }
+                    ]
                 },
-                "mgmt-vlan": 500,
-                "ipv6": {
-                    "system": {
-                        "address": "::"
-                    },
-                    "prefix-length": 0,
-                    "gateway": "::"
-                }
+                "floating": {
+                    "ipv4-address": "172.22.50.9",
+                    "ipv6-address": "::",
+                    "mac-address": "00:94:a1:8e:d0:7c"
+                },
+                "mgmt-vlan": 500
             }
         }
     }
+
 
 
 Allow List for F5OS Management
@@ -533,7 +561,7 @@ Certificates for Device Management
 
 F5OS supports TLS device certificates and keys to secure connections to the management interface. You can either create a self-signed certificate or load your own certificates and keys into the system. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. More details can be found in the link below.
 
-`VELOS Certificate Management Overview <https://techdocs.f5.com/en-us/velos-1-5-0/velos-systems-administration-configuration/title-system-settings.html#cert-mgmt-overview>`_
+`VELOS Certificate Management Overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-auth-access.html#transport-layer-security-tls-configuration-overview>`_
 
 
 Managing Device Certificates, Keys, CSRs, and CAs via CLI
