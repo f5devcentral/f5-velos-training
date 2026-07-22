@@ -2808,41 +2808,6 @@ The **deny-root-ssh** mode when enabled restricts root access over SSH. However,
 For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if the token lifetime is set fort two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
 
 
-Session Timeouts, Token Lifetime, and Deny Root over SSH
-=========================================================
-
-The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
-
-A new sshd-idle-timeout option has been added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence when connecting directly to the confd CLI as admin or another confd user. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn’t apply to console sessions.
- 
-For SSH sessions connecting using root or super-user access direct to the bash shell, then the idle-timeout does not apply, as that only applies to sessions to the confd CLI. If a root or super-user connects directly to the bash shell then only the ssh-idle-timeout applies. If that user then issues an su admin command to access the confd CLI or uses f5sh commands from the bash shell, then the idle-timeout setting will apply for the confd CLI session, the user will then be timed out of confd back to the bash shell, and then the ssh-idle-timeout setting would dictate how long before the bash sessions times out.
-
-There is one case that is not covered by either of the above idle-timeout settings until version F5OS-C 1.8.0. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session in previous releases. Only console connections to the F5OS CLI are covered via the idle-timeout setting. In F5OS-C 1.8.0 the new **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
-
-+-----------------------------------------------------------+
-|                Appliance-mode = Disabled                  |
-+================+======================+===================+
-| deny-root-ssh  | root console access  | root ssh access   |
-+----------------+----------------------+-------------------+
-| enabled        | Yes                  | No                |
-+----------------+----------------------+-------------------+
-| disabled       | Yes                  | Yes               |
-+----------------+----------------------+-------------------+
-
-
-+-----------------------------------------------------------+
-|                Appliance-mode = Enabled                   |
-+================+======================+===================+
-| deny-root-ssh  | root console access  | root ssh access   |
-+----------------+----------------------+-------------------+
-| enabled        | No                   | No                |
-+----------------+----------------------+-------------------+
-| disabled       | No                   | No                |
-+----------------+----------------------+-------------------+
-
-
-For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if we set the token lifetime to two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire, and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
-
 Configuring SSH and CLI Timeouts & Deny Root SSH Settings via CLI
 ----------------------------------------------------------------
 
