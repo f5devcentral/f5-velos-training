@@ -1820,7 +1820,877 @@ If you choose to use the LDAP Group mapping, then you must disable the unix attr
 Superuser Role via API using Named Groups on LDAP/Active Directory
 ------------------------------------------------------------------
 
-Coming Soon!
+
+Within the API you can map the superuser role to a remote LDAP group. Send the following API GET call to view the current authentication roles:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:roles
+
+In the output, you'll see all the configured users and roles on the system.
+
+.. code-block:: json
+
+    {
+        "f5-system-aaa:roles": {
+            "role": [
+                {
+                    "rolename": "admin",
+                    "config": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "description": "Unrestricted read/write access."
+                    },
+                    "state": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Unrestricted read/write access."
+                    }
+                },
+                {
+                    "rolename": "operator",
+                    "config": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "description": "Read-only access to system level data."
+                    },
+                    "state": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to system level data."
+                    }
+                },
+                {
+                    "rolename": "partition_1",
+                    "config": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "description": "Provides console access for partition-1."
+                    },
+                    "state": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-1."
+                    }
+                },
+                {
+                    "rolename": "partition_2",
+                    "config": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "description": "Provides console access for partition-2."
+                    },
+                    "state": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-2."
+                    }
+                },
+                {
+                    "rolename": "partition_3",
+                    "config": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "description": "Provides console access for partition-3."
+                    },
+                    "state": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-3."
+                    }
+                },
+                {
+                    "rolename": "partition_4",
+                    "config": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "description": "Provides console access for partition-4."
+                    },
+                    "state": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-4."
+                    }
+                },
+                {
+                    "rolename": "partition_5",
+                    "config": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "description": "Provides console access for partition-5."
+                    },
+                    "state": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-5."
+                    }
+                },
+                {
+                    "rolename": "partition_6",
+                    "config": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "description": "Provides console access for partition-6."
+                    },
+                    "state": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-6."
+                    }
+                },
+                {
+                    "rolename": "partition_7",
+                    "config": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "description": "Provides console access for partition-7."
+                    },
+                    "state": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-7."
+                    }
+                },
+                {
+                    "rolename": "partition_8",
+                    "config": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "description": "Provides console access for partition-8."
+                    },
+                    "state": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-8."
+                    }
+                },
+                {
+                    "rolename": "resource-admin",
+                    "config": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    },
+                    "state": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    }
+                },
+                {
+                    "rolename": "superuser",
+                    "config": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    },
+                    "state": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    }
+                },
+                {
+                    "rolename": "ts_admin",
+                    "config": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "description": "Provides admin access to the terminal server (TS)."
+                    },
+                    "state": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides admin access to the terminal server (TS)."
+                    }
+                },
+                {
+                    "rolename": "user",
+                    "config": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "description": "Read-only access to non-sensitive system level data."
+                    },
+                    "state": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to non-sensitive system level data."
+                    }
+                }
+            ]
+        }
+    }
+
+
+
+
+
+The API also supports the assignment of the superuser role to any user.
+
+To view the current user roles:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication
+
+The output will look similar to the response below. Note, the **superuser** role.
+
+.. code-block:: bash
+
+
+    {
+        "f5-system-aaa:roles": {
+            "role": [
+                {
+                    "rolename": "admin",
+                    "config": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "description": "Unrestricted read/write access."
+                    },
+                    "state": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Unrestricted read/write access."
+                    }
+                },
+                {
+                    "rolename": "operator",
+                    "config": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "description": "Read-only access to system level data."
+                    },
+                    "state": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to system level data."
+                    }
+                },
+                {
+                    "rolename": "partition_1",
+                    "config": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "description": "Provides console access for partition-1."
+                    },
+                    "state": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-1."
+                    }
+                },
+                {
+                    "rolename": "partition_2",
+                    "config": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "description": "Provides console access for partition-2."
+                    },
+                    "state": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-2."
+                    }
+                },
+                {
+                    "rolename": "partition_3",
+                    "config": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "description": "Provides console access for partition-3."
+                    },
+                    "state": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-3."
+                    }
+                },
+                {
+                    "rolename": "partition_4",
+                    "config": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "description": "Provides console access for partition-4."
+                    },
+                    "state": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-4."
+                    }
+                },
+                {
+                    "rolename": "partition_5",
+                    "config": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "description": "Provides console access for partition-5."
+                    },
+                    "state": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-5."
+                    }
+                },
+                {
+                    "rolename": "partition_6",
+                    "config": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "description": "Provides console access for partition-6."
+                    },
+                    "state": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-6."
+                    }
+                },
+                {
+                    "rolename": "partition_7",
+                    "config": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "description": "Provides console access for partition-7."
+                    },
+                    "state": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-7."
+                    }
+                },
+                {
+                    "rolename": "partition_8",
+                    "config": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "description": "Provides console access for partition-8."
+                    },
+                    "state": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-8."
+                    }
+                },
+                {
+                    "rolename": "resource-admin",
+                    "config": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    },
+                    "state": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    }
+                },
+                {
+                    "rolename": "superuser",
+                    "config": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    },
+                    "state": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    }
+                },
+                {
+                    "rolename": "ts_admin",
+                    "config": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "description": "Provides admin access to the terminal server (TS)."
+                    },
+                    "state": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides admin access to the terminal server (TS)."
+                    }
+                },
+                {
+                    "rolename": "user",
+                    "config": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "description": "Read-only access to non-sensitive system level data."
+                    },
+                    "state": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to non-sensitive system level data."
+                    }
+                }
+            ]
+        }
+    }
+
+
+To see the current user accounts on the system.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:users
+
+The response will detail all the configured user accounts on the system.
+
+.. code-block:: bash
+
+
+    {
+        "f5-system-aaa:users": {
+            "user": [
+                {
+                    "username": "admin",
+                    "config": {
+                        "username": "admin",
+                        "last-change": 19769,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "admin",
+                        "last-change": 19769,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 10
+                    }
+                },
+                {
+                    "username": "guest-user2",
+                    "config": {
+                        "username": "guest-user2",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "guest-user2",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "res-admin",
+                    "config": {
+                        "username": "res-admin",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "res-admin",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "res-admin-user",
+                    "config": {
+                        "username": "res-admin-user",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "res-admin-user",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "root",
+                    "config": {
+                        "username": "root",
+                        "last-change": 19825,
+                        "expiry-date": "-1",
+                        "role": "root",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "username": "root",
+                        "last-change": 19825,
+                        "expiry-date": "-1",
+                        "role": "root",
+                        "expiry-status": "enabled",
+                        "tally-count": 10
+                    }
+                },
+                {
+                    "username": "student1",
+                    "config": {
+                        "username": "student1",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student1",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student10",
+                    "config": {
+                        "username": "student10",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student10",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student11",
+                    "config": {
+                        "username": "student11",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student11",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student12",
+                    "config": {
+                        "username": "student12",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student12",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student2",
+                    "config": {
+                        "username": "student2",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student2",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student3",
+                    "config": {
+                        "username": "student3",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student3",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student4",
+                    "config": {
+                        "username": "student4",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student4",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student5",
+                    "config": {
+                        "username": "student5",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student5",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student6",
+                    "config": {
+                        "username": "student6",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student6",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student7",
+                    "config": {
+                        "username": "student7",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student7",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student8",
+                    "config": {
+                        "username": "student8",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student8",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student9",
+                    "config": {
+                        "username": "student9",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student9",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "testuser",
+                    "config": {
+                        "username": "testuser",
+                        "last-change": 19592,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "testuser",
+                        "last-change": 19592,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "user1",
+                    "config": {
+                        "username": "user1",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "user1",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                }
+            ]
+        }
+    }
+
+
+
+To create a new user and assign it to the **superuser** role, use the following API call.
+
+.. code-block:: bash
+    
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa
+
+
+In the body of the API call add the username and role as seen below.
+
+.. code-block:: bash
+
+    {
+        "openconfig-system:aaa": {
+            "authentication": {
+                "f5-system-aaa:users": {
+                    "user": [
+                        {
+                            "username": "super-user1",
+                            "config": {
+                                "role": "superuser"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
 
 Session Timeouts, Token Lifetime, and Deny Root over SSH
 =========================================================
