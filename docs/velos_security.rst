@@ -3502,18 +3502,34 @@ Setting Password Policies
 
 You may configure the local password policy to ensure secure passwords are utilized, re-use is minimized, and to limit the amount of failures/retries. Below are some of the settings that can be set.
 
-- **Minimum Password Length** - For Minimum Length, specify the minimum number of characters (6 to 255) required for a valid password.
-- **Password Required Characters** - For Required Characters, specify the minimum number of Numeric, Uppercase, Lowercase, and Special characters that are required in a valid password.
-- **New/Old Password Differential** - For New/Old Password Differential, specify the number of character changes in the new password that differentiate it from the old password. The default value is 8.
-- **Disallow Username** - For Disallow Username, set to True to check whether the name of the user in forward or reversed form is contained in the password. The default value is False.
 - **Apply Password Policy to Root Account** - For Apply Password Policy to Root Account, set to True to use the same password policy for the root account. The default value is True.
-- **Maximum Password Retries** - For Maximum Password Retries, specify the number of times that a user can try to create an acceptable password. The default value is 3.
-- **Maximum Login Attempts** - For Maximum Login Attempts, specify the number of times a user can attempt to log in before the account is temporarily suspended. The default value is 10; 0 means no limit.
-- **Lockout Duration** - For Lockout Duration, specify the duration, in seconds, an account is locked out. The default value is 60.
 - **Maximum Password Age** - For Max Password Age, specify the number of days after which the password will expire after being changed. 0 means never expires.
+- **Maximum Class Repeat** - Reject passwords with this many repeating upper/lowercase letters, digits or special characters such as '!@#$%' in the password.
+- **Maximum Letter Repeat** -
+- **Maximum Login Failures** - For Maximum Login Attempts, specify the number of times a user can attempt to log in before the account is temporarily suspended. The default value is 10; 0 means no limit.
+- **Minimum Days** - Number of days the user must wait before changing their password again.
+- **Minimum Length** - Minimum length of a new password.
+- **Reject Username** - Reject passwords that contain the username.
+- **Remember** - Number of previous user passwords that will be saved in the system.
+- **Required Differences** - Required number of differences between the old and new passwords.
+- **Required Lower Case** - Required number of lowercase characters in password.
+- **Required Numeric** - Required number of numeric digits in password.
+- **Required Special** - Required number of 'special' characters in password.
+- **Required Uppercase** - Required number of uppercase character in password.
+- **Maximum Password Retries** - For Maximum Password Retries, specify the number of times that a user can try to create an acceptable password. The default value is 3.
+- **Root lockout** - Enable lockout of root users.
+- **Root Unlock Time** - Time (seconds) before the root account is automatically unlocked.
+- **Unlock Time** - Time (seconds) before a locked account is automatically unlocked.
+- **Warn Age** - Number of days before the password expires to start warning the user.
 
-Setting Password Policies via CLI
----------------------------------
+In addition the password hashing algoithm is also configurable, as well as the number of rounrds the hashing algorithm will use:
+
+- **Password Hashing Algorithm** - sha512 or blowfish. A hash based on the Blowfish block cipher, modified to have an extra-expensive key schedule. 
+
+
+Setting Password Policies and Login Policies via CLI
+----------------------------------------------------
+
 
 Local Password Policies can be set in the CLI using the **system aaa password-policy config** command. Adding a question mark after the command will show all the configurable options. Be sure to commit after making any changes.
 
@@ -3523,12 +3539,15 @@ Local Password Policies can be set in the CLI using the **system aaa password-po
     Possible completions:
     apply-to-root          Apply password policy to administrators when setting passwords for other user accounts.
     max-age                Number of days after which the user will have to change the password.
-    max-class-repeat       Reject passwords with this many repeating upper/lowercase letters, digits or special characters such as '!@#$%' in the password.
+    max-class-repeat       Reject passwords with this many repeating upper/lowercase letters, digits or special characters such as '!@#$%' in the
+                            password.
     max-letter-repeat      Reject passwords with this many repeating lower-case letters in the password.
     max-login-failures     Number of unsuccessful login attempts allowed before lockout.
     max-sequence-repeat    Reject passwords with this many repeating upper/lowercase letters or digits in the password.
+    min-days               Number of days the user must wait before changing their password again.
     min-length             Minimum length of a new password.
     reject-username        Reject passwords that contain the username.
+    remember               Number of previous user passwords that will be saved in the system.
     required-differences   Required number of differences between the old and new passwords.
     required-lowercase     Required number of lowercase characters in password.
     required-numeric       Required number of numeric digits in password.
@@ -3538,9 +3557,37 @@ Local Password Policies can be set in the CLI using the **system aaa password-po
     root-lockout           Enable lockout of root users.
     root-unlock-time       Time (seconds) before the root account is automatically unlocked.
     unlock-time            Time (seconds) before a locked account is automatically unlocked.
+    warn-age               Number of days before the password expires to start warning the user.
     velos-1-gsa-1-active(config)#
 
-Setting Password Policies via webUI
+You can also configure the password hashing algorithm for the system. Any passwoerds stored within the system are encrypted with either sha512 or blowfish hashing algorithms. You can also configurwe the number of rounds for the hashin algorithms.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config ?
+    Possible completions:
+    algorithm   Password hashing algorithm name (e.g., sha512, blowfish)
+    rounds      Number of rounds for the hashing algorithm
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config algorithm ?
+    Possible completions:
+    blowfish   blowfish (min: 4, max: 15, default: 5)
+    sha512     sha512 (min: 1000, max: 999999999, default: 5000) - Note: Any algorithm change requires resetting existing passwords (applies to all
+                algorithms, not just this entry)
+    velos-1-gsa-1-active(config)#
+
+You can configure the login policy parmeters using the **system aaa login-policy config** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system aaa login-policy config ?
+    Possible completions:
+    admin-role-limit             Enable/disable session limits to apply to admin group users.
+    restconf-max-session-limit   Maximum number of concurrent GUI sessions.
+    ssh-max-session-limit        Maximum number of concurrent ssh sessions.
+    velos-1-gsa-1-active(config)# system aaa login-policy config 
+
+
+Setting Password Policies and Login Policies via webUI
 ---------------------------------
 
 Local Password Policies can be set in the **User Management -> Authentication Settings** page in the webUI.
@@ -3548,6 +3595,14 @@ Local Password Policies can be set in the **User Management -> Authentication Se
 .. image:: images/velos_security/passwordpolicy1.png
   :align: center
   :scale: 70%
+
+You can then configure the current login policy parameters: admin-role-limit, restconf-max-session-list, and ssh-max-session-limit.
+
+.. image:: images/velos_security/login-policy-webui.png
+  :align: center
+  :scale: 70%
+
+  
 
 Setting Password Policies via API
 ---------------------------------
@@ -3570,18 +3625,72 @@ The JSON output will reflect the current settings.
                 "required-uppercase": 0,
                 "required-lowercase": 0,
                 "required-special": 0,
-                "required-differences": 8,
+                "max-letter-repeat": 0,
+                "max-sequence-repeat": 0,
+                "max-class-repeat": 0,
+                "required-differences": 0,
                 "reject-username": false,
-                "apply-to-root": true,
+                "apply-to-root": false,
                 "retries": 3,
                 "max-login-failures": 10,
                 "unlock-time": 60,
                 "root-lockout": true,
                 "root-unlock-time": 60,
-                "max-age": 0
+                "max-age": 0,
+                "remember": 0,
+                "warn-age": 0,
+                "min-days": 0
+            },
+            "state": {
+                "min-length": 6,
+                "required-numeric": 0,
+                "required-uppercase": 0,
+                "required-lowercase": 0,
+                "required-special": 0,
+                "max-letter-repeat": 0,
+                "max-sequence-repeat": 0,
+                "max-class-repeat": 0,
+                "required-differences": 0,
+                "reject-username": false,
+                "apply-to-root": false,
+                "retries": 3,
+                "max-login-failures": 10,
+                "unlock-time": 60,
+                "root-lockout": true,
+                "root-unlock-time": 60,
+                "max-age": 0,
+                "remember": 0,
+                "warn-age": 0,
+                "min-days": 0
             }
         }
     }
+
+To view the current login policy settings, use the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/f5-openconfig-aaa-login-policy:login-policy
+
+You can then see the current login policy parameters: admin-role-limit, restconf-max-session-list, and ssh-max-session-limit.
+
+.. code-block:: json
+
+    {
+        "f5-openconfig-aaa-login-policy:login-policy": {
+            "config": {
+                "admin-role-limit": false,
+                "restconf-max-session-limit": 0,
+                "ssh-max-session-limit": 0
+            },
+            "state": {
+                "admin-role-limit": false,
+                "restconf-max-session-limit": 0,
+                "ssh-max-session-limit": 0
+            }
+        }
+    }
+    
 
 To change any of the password policy parameters, use the following API GET call.
 
