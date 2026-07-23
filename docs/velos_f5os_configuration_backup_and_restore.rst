@@ -60,35 +60,31 @@ You should periodically change the primary key for additional security. If doing
 
 .. code-block:: bash
 
-    syscon-1-active(config)# system aaa primary-key set passphrase               
+    velos-1-gsa-2-active(config)# system aaa primary-key set passphrase 
     Value for 'passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'salt' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-salt' (<string, min: 6 chars, max: 255 chars>): **************
     response Info: Key migration is initiated. Use 'show system aaa primary-key state status' to get status
 
-    syscon-1-active(config)#
+    velos-1-gsa-2-active(config)#
 
 You can view the status of the primary-key being set with the **show system aaa primary-key state status** CLI command.
 
 .. code-block:: bash
-
-    syscon-1-active# show system aaa primary-key state status
-    system aaa primary-key state status "IN_PROGRESS        Initiated: Tue Apr  9 19:46:14 2024"
     
-    syscon-1-active# show system aaa primary-key state status
-    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
-    syscon-1-active# 
+    velos-1-gsa-2-active# show system aaa primary-key state status
+    system aaa primary-key state status "COMPLETE        Initiated: Thu Jul 23 08:06:21 PDT 2026"
+    velos-1-gsa-2-active# 
 
 Note that the hash key can be used to check and compare the status of the primary-key on both the source and the replacement devices if restoring to a different device. To view the current primary-key hash, issue the following CLI command.
 
 .. code-block:: bash
 
-    syscon-1-active# show system aaa primary-key state
-    system aaa primary-key state hash aNSWX6Xl8+dFx94JMRbySD/d/AJ8RarqJ+fedD#57bDxRF0cTgGFcZvMY415eDeAJjZlXp1qGuKI7CDmxNrnhw==
-    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
-    syscon-1-active#
-
+    velos-1-gsa-2-active# show system aaa primary-key state
+    system aaa primary-key state hash iNSWX6Xl8+dFx94JMRbySD/d/AJ8RarqJ+feU3b9vXGDxRF0qTgGFcZvMY4UeDeAJjZlXp1qGuKI7CDmxNrnhw==
+    system aaa primary-key state status "COMPLETE        Initiated: Thu Jul 23 08:06:21 PDT 2026"
+    velos-1-gsa-2-active# 
 
 Backing Up the System Controller Database
 =========================================
@@ -96,40 +92,52 @@ Backing Up the System Controller Database
 Backing Up the System Controller Database via CLI
 -------------------------------------------------
 
-You can back up the system controller configuration database using the **system database config-backup** command when in **config** mode. The file will be saved in the path of **/configs** automatically. You can then list the contents of that directory to ensure the file is there using the **file list path** command.
+You can back up the system controller configuration database using the **system database config-backup** command when in **config** mode. The file will be saved in the path of **/configs** automatically. 
 
 .. code-block:: bash
 
-    syscon-1-active# config
-    Entering configuration mode terminal
-    syscon-1-active(config)# system database config-backup name GSA-Daily_GSA-VELOS-1_20230328070500
-    response Succeeded.
-    syscon-1-active(config)# exit 
+    velos-1-gsa-2-active(config)# system database config-backup name velos1-controller-backup-test-07-23-26
+    response Database config-backup successful. "configs/velos1-controller-backup-test-07-23-26" is saved.
+    velos-1-gsa-2-active(config)#
 
 
-    syscon-1-active# file list path configs/
+You can then list the contents of that directory to ensure the file is there using the **file list path** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file list path configs/
     entries {
         name GSA-Daily_GSA-VELOS-1_20230328070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230329070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
+    entries {
+        name velos1-controller-backup-test-07-23-26
+        date Thu Jul 23 15:08:59 UTC 2026
+        size 101KB
+    }
+    velos-1-gsa-2-active#
 
 
 Backing Up the System Controller Database via webUI
 ---------------------------------------------------
 
-Using the system controller webUI you can backup the ConfD configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
+Using the system controller webUI you can backup the ConfD configuration database using the **System Settings -> Configuration Backup** page. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image1.png
-   :width: 45%
+  :align: center
+  :scale: 70%
+
+Click the **Create** button and provide a name for the backup file.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image2.png
-   :width: 45%
+  :align: center
+  :scale: 70%
  
 
 Backing Up the System Controller Database via API
@@ -160,7 +168,7 @@ Once the database backup has been completed, you should copy the file to an exte
 Copying System Controller Database Backup to an External Location via webUI
 ---------------------------------------------------------------------------
 
-In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files from your local browser. 
+In the webUI use the **System Monitoring -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files from your local browser. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image3.png
   :align: center
@@ -170,7 +178,7 @@ In the webUI use the **System Settings -> File Utilities** page and from the dro
   :align: center
   :scale: 70%
 
-Additionally, you can **Download** individual files from within the **System Settings -> Configuration Backup** page starting with F5OS-C 1.8.0.
+Additionally, you can **Download** individual files from within the **System Monitoring -> Configuration Backup** page starting with F5OS-C 1.8.0.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/config-download.png
   :align: center
@@ -462,7 +470,7 @@ Copy the chassis partition backup files to a location outside of VELOS. The file
 Export Backup From the Chassis Partition webUI
 ----------------------------------------------
 
-You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, you should see a copy of the file created there:
+You can copy the backup file out of the chassis partition using the **Systems Monitoring > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, you should see a copy of the file created there:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image6.png
   :align: center
