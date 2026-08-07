@@ -191,32 +191,43 @@ To transfer a file using the CLI use the **file list** command to see the conten
 
 .. code-block:: bash
 
-    syscon-1-active# file list path configs/
+    velos-1-gsa-2-active# file list path configs/
     entries {
         name GSA-Daily_GSA-VELOS-1_20230328070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230329070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230330070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 71KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230331070500
-        date Fri Mar 31 14:05:06 UTC 2023
+        date Wed Jul 22 22:42:03 UTC 2026
         size 71KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230402070500
-        date Sun Apr  2 14:05:16 UTC 2023
+        date Wed Jul 22 22:42:03 UTC 2026
         size 71KB
     }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230403070500
+        date Wed Jul 22 22:42:03 UTC 2026
+        size 71KB
+    }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230404070500
+        date Wed Jul 22 22:42:03 UTC 2026
+        size 71KB
+    }
+
 
 
 
@@ -224,10 +235,11 @@ To transfer the file from the CLI you can use the **file export** command. The o
 
 .. code-block:: bash
 
-    syscon-1-active# file export local-file configs/GSA-Daily_GSA-VELOS-1_20230328070500 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure 
-    Value for 'password' (<string>): ********
+    velos-1-gsa-2-active# file export local-file configs/GSA-Daily_GSA-VELOS-1_20230328070500 remote-host 172.22.50.57 remote-file /upload/ipload.php username corpuser insecure 
+    Value for 'password' (<string>): **************
     result File transfer is initiated.(configs/GSA-Daily_GSA-VELOS-1_20230328070500)
-    syscon-1-active#
+    operation-id EXPORT-QXM52YMr
+    velos-1-gsa-2-active#
 
 To check on status of the export use the **file transfer-status** command:
 
@@ -394,42 +406,40 @@ Log directly into the chassis partition Production's management IP address and e
 
 .. code-block:: bash
 
-    syscon-2-active# config
+    production-2# config
     Entering configuration mode terminal
-    syscon-2-active(config)# system database config-backup name chassis-partition-production-02-15-2024
-    response Database backup successful. configs/chassis-partition-production-02-15-2024 is saved.
-    syscon-2-active(config)# exit
+    production-2(config)# system database config-backup name chassis-partition-production-08-06-2026
+    result Database backup successful. "configs/chassis-partition-production-08-06-2026" is saved.
+    production-2(config)# 
 
+.. code-block:: bash
 
-
-    syscon-2-active# file list path configs/chassis-partition-production-02-15-2024 
+    production-2(config)# file list path configs/chassis-partition-production-08-06-2026 
     entries {
-        name chassis-partition-production-02-15-2024
-        date Fri Feb 16 00:27:51 UTC 2024
-        size 64KB
+        name chassis-partition-production-08-06-2026
+        date Thu Aug  6 17:20:59 UTC 2026
+        size 51KB
     }
-    syscon-2-active# 
+    production-2(config)#
 
 
 Log directly into the chassis partition development's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
 
 .. code-block:: bash
 
-    syscon-2-active# config
-    Entering configuration mode terminal
-    syscon-2-active(config)# system database config-backup name chassis-partition-production-02-15-2024
-    response Database backup successful. configs/chassis-partition-production-02-15-2024 is saved.
-    syscon-2-active(config)# exit
+    Development2-1(config)# system database config-backup name chassis-partition-Development-8-6-2026
+    result Database backup successful. "configs/chassis-partition-Development-8-6-2026" is saved.
+    Development2-1(config)#
 
-    
-       
-    syscon-2-active# file list path configs/chassis-partition-production-02-15-2024 
+.. code-block:: bash
+
+    Development2-1(config)# file list path configs/chassis-partition-Development-8-6-2026 
     entries {
-        name chassis-partition-production-02-15-2024
-        date Fri Feb 16 00:27:51 UTC 2024
-        size 64KB
+        name chassis-partition-Development-8-6-2026
+        date Thu Aug  6 17:04:58 UTC 2026
+        size 36KB
     }
-    syscon-2-active# 
+    Development2-1(config)#
 
 
 Backing Up Chassis Partition Databases via webUI
@@ -754,66 +764,105 @@ For the Development chassis partition:
 
 .. code-block:: bash
 
-    Development-1# config
-    Development-1(config)# system database reset-to-default proceed  
+    Development2-2# config
+    Entering configuration mode terminal
+    Development2-2(config)# system database reset-to-default proceed 
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    Development-1(config)# 
-    System message at 2021-03-02 22:51:54...
-    Commit performed by admin via tcp using cli.
-    Development-1(config)# 
+    Development2-2(config)#
 
 
 For the Production chassis partition:
 
 .. code-block:: bash
 
-    Production-1# config 
+    production-2# config
     Entering configuration mode terminal
-    Production-1(config)# system database reset-to-default proceed 
+    production-2(config)# system database reset-to-default proceed 
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    Production-1(config)# 
-    System message at 2021-03-02 23:01:50...
-    Commit performed by admin via tcp using cli.
-    Production-1(config)# 
+    Production-2(config)#
 
 Once the partition configurations have been cleared, you’ll need to login to the system controller CLI via the floating IP address. You’ll need to put all slots back into the **none** partition and **commit** the changes. This will allow the partitions to be deleted in the next step.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# slots slot 1-3 partition none
-    syscon-2-active(config-slot-1-3)# commit 
+    velos-1-gsa-2-active# config
+    Entering configuration mode terminal
+    velos-1-gsa-2-active(config)# slots slot 1-3 partition none 
+    velos-1-gsa-2-active(config-slot-1-3)# commit
     Commit complete.
-    syscon-2-active(config-slot-1-3)#
+    velos-1-gsa-2-active(config-slot-1-3)#
 
 
 Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **Development**.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# no partitions partition Production 
-    syscon-2-active(config)# no partitions partition Development 
-    syscon-2-active(config)# commit 
+    velos-1-gsa-2-active(config)# no partitions partition Development2 
+    velos-1-gsa-2-active(config)# no partitions partition Production 
+    velos-1-gsa-2-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-2-active(config)#
 
 
-For the final step, reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default.
+For the final step, reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default. Your connection to the controller will then be terminated. You will need direct console access to both system controllers to reconfigure them.
 
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system database config reset-default-config true
-    syscon-2-active(config)# commit
+    velos-1-gsa-2-active(config)# system database config reset-default-config true
+    velos-1-gsa-2-active(config)# commit
+    Commit complete.
+    velos-1-gsa-2-active(config)# Connection to 172.22.50.9 closed.
 
-Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
+You'll then use the console connections to each controller to login in using the default username/password of **admin/admin**, and you'll then be prompted to change the password. In the case below is an example of logging into the standby controller and setting the new username/password. This will be replicated to the active controller, so you'll only need to do this once.
 
 .. code-block:: bash
 
-    syscon-1-active(config)# system reboot controllers controller standby
+    controller-1 login: login: 
+    Rocky Linux 8.10 (Green Obsidian)
+    Kernel 4.18.0-553.123.1.f5.1.1.14.el8_10.x86_64 on an x86_64
 
-    syscon-1-active(config)# system reboot controllers controller active
+    controller-1 login: admin
+    Password: 
+    You are required to change your password immediately (administrator enforced)
+    Current password: 
+    New password: 
+    Retype new password: 
+    Last failed login: Fri Aug  7 14:11:04 UTC 2026 on ttyS0
+    There was 1 failed login attempt since the last successful login.
+    Last login: Wed Jul 22 22:37:14 from 172.18.105.149
+    Welcome to the F5OS System Controller Management CLI
+    admin connected from 127.0.0.1 using console on syscon-1-standby
+    syscon-1-standby#
+
+Since you cannot make configuration changes on the standby controller, login into the active system controller via the console using the new username and password.
+
+.. code-block:: bash
+
+    controller-2 login: adminlogin: 
+    Rocky Linux 8.10 (Green Obsidian)
+    Kernel 4.18.0-553.123.1.f5.1.1.14.el8_10.x86_64 on an x86_64
+
+    controller-2 login: admin
+    Password: 
+    Last failed login: Fri Aug  7 14:10:48 UTC 2026 on ttyS0
+    There was 1 failed login attempt since the last successful login.
+    Last login: Fri Aug  7 14:08:07 from 172.18.3.102
+    Welcome to the F5OS System Controller Management CLI
+    admin connected from 127.0.0.1 using console on syscon-2-active
+    syscon-2-active# 
+
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode and then issue the **system reboot controllers controllers** command, this will reboot both the standby and active controllers simultaneously. You should then see both controllers going through their boot sequence via their respective console ports.
+
+.. code-block:: bash
+
+
+    syscon-2-active(config)# system reboot controllers 
+    Really want to reboot the system controller? Datapath and management connectivity to system would be disrupted. [no,yes] yes
+    result Reboot trigger successful on system controllers
+    syscon-2-active(config)#
 
 The system controllers should reboot, and their configurations will be completely wiped clean. You will need to login via the console / CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
 
