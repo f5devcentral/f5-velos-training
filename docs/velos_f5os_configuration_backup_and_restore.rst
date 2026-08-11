@@ -795,7 +795,7 @@ Once the partition configurations have been cleared, you’ll need to login to t
     velos-1-gsa-2-active(config-slot-1-3)#
 
 
-Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **Development**.
+Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **Development2**.
 
 .. code-block:: bash
 
@@ -1017,7 +1017,40 @@ Logout of the system and login as root using the new password you just created f
 
 To transfer files into the system controller you’ll have to manually configure the out-of-band networking first. In the case below the system controller out-of-band ethernet ports were aggregated into a LAG before the system was reset. This needs to be recreated, and then static and floating out-of-band IP addresses are assigned as well as a prefix length and gateway.
 
+First, configure the interface for the management interface LAG. It will be given a name of **mgmt-aggr**.
+
 .. code-block:: bash
+
+
+    syscon-2-active(config)# interfaces interface mgmt-aggr config name mgmt-aggr type ieee8023adLag description "LAG for MGMT ports"
+    syscon-2-active(config-interface-mgmt-aggr)#
+
+Next, configure the lacp interfaces and assign the mgmt-aggr to it and set the LACP mode ACTIVE.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# lacp interfaces interface mgmt-aggr config name mgmt-aggr lacp-mode ACTIVE 
+    syscon-2-active(config-interface-mgmt-aggr)# exit
+    syscon-2-active(config)#
+
+
+Then assign both VELOS controller mgmt interfaces to the mgmt-aggr LAG that was created.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# interfaces interface 1/mgmt0 
+    syscon-2-active(config-interface-1/mgmt0)# config name 1/mgmt0
+    syscon-2-active(config-interface-1/mgmt0)# config type ethernetCsmacd
+    syscon-2-active(config-interface-1/mgmt0)# ethernet config aggregate-id mgmt-aggr 
+    syscon-2-active(config-interface-1/mgmt0)# exit
+    syscon-2-active(config)# interfaces interface 2/mgmt0
+    syscon-2-active(config-interface-2/mgmt0)# config name 2/mgmt0
+    syscon-2-active(config-interface-2/mgmt0)# config type ethernetCsmacd 
+    syscon-2-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr
+    syscon-2-active(config-interface-2/mgmt0)# exit
+    syscon-2-active(config)# 
+
+
 
     syscon-1-active# config
     syscon-1-active(config)# interfaces interface mgmt-aggr
@@ -1039,11 +1072,11 @@ To transfer files into the system controller you’ll have to manually configure
     syscon-1-active(config-interface-2/mgmt0)# config type ethernetCsmacd 
     syscon-1-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr
     syscon-1-active(config-interface-2/mgmt0)# 
-    syscon-1-active(config)# system mgmt-ip config ipv4 controller-1 address 10.255.0.145
-    syscon-1-active(config)# system mgmt-ip config ipv4 controller-2 address 10.255.0.146
-    syscon-1-active(config)# system mgmt-ip config ipv4 floating address 10.255.0.147
-    syscon-1-active(config)# system mgmt-ip config ipv4 gateway 10.255.0.1
-    syscon-1-active(config)# system mgmt-ip config ipv4 prefix-length 24
+    syscon-1-active(config)# system mgmt-ip config ipv4 controller-1 address 172.22.50.7
+    syscon-1-active(config)# system mgmt-ip config ipv4 controller-2 address 172.22.50.8
+    syscon-1-active(config)# system mgmt-ip config ipv4 floating address 172.22.50.9
+    syscon-1-active(config)# system mgmt-ip config ipv4 gateway 172.22.50.62
+    syscon-1-active(config)# system mgmt-ip config ipv4 prefix-length 26
     syscon-1-active(config)# commit 
     Commit complete.
 
