@@ -304,7 +304,7 @@ When you are inside the tenant mode you can enter each configuration item one li
 
 For more information on the Mac Data / MAC Address Block Size see the following Solution Article:
 
-`<K000133655: MAC address assignment in VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000133655>`_
+`K000133655: MAC address assignment in VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000133655>`_
 
 .. code-block:: bash
 
@@ -679,7 +679,7 @@ Tenant creation via the API is as simple as defining the parameters below and se
 
 In the body of the API call enter the tenant details. For more information on the Mac Data / MAC Address Block Size see the following Solution Article:
 
-`<K000133655: MAC address assignment in VELOS and rSeries systems https://my.f5.com/manage/s/article/K000133655>`_
+`K000133655: MAC address assignment in VELOS and rSeries systems <https://my.f5.com/manage/s/article/K000133655>`_
 
 .. code-block:: json
 
