@@ -1295,6 +1295,14 @@ Restoring the System Controller from a Database Backup via webUI
 
 Currently there is no webUI support for restoration of the ConfD database, so you’ll need to use either the CLI or API to restore the system controller’s database. 
 
+
+Re-Installing the license
+=========================
+
+After the controller database has been fully restored, you'll need to re-apply the license to the system. See the following for details:
+
+`Licensing the VELOS Chassis <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#licensing-the-velos-chassis>`_
+
 Rebooting Blades 
 ================
 
@@ -1782,29 +1790,35 @@ To restore a configuration database backup within a chassis partition, use the *
 
 .. code-block:: bash
 
-    Production-1(config)# system database config-restore name Production-DB-BACKUP2021-09-10
+    Production-1(config)# system database config-restore name chassis-partition-prod-backup-08-07-2026 
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
-    result Database config-restore successful.
-    Production-1(config)# 
-    System message at 2021-09-15 03:25:53...
-    Commit performed by admin via tcp using cli.
-    Production-1(config)# 
+
+    Validation warnings encountered during config-restore.
+
+    VLAN, LAG, FDB, L2 protocols configuration is lost for the interfaces corresponding to the changed portgroups. Blade(s) 1 2 will reboot.
+
+    Proceed? [yes/no]: yes
+    result Database config-restore successful. "configs/chassis-partition-prod-backup-08-07-2026" is loaded.
+    production-1(config)#
 
 
-    Development-1(config)# system database config-restore name development-DB-BACKUP2021-09-10
+    Development2-1(config)# system database config-restore name chassis-partition-dev-backup-08-07-2026 
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
-    result Database config-restore successful.
-    Development-1(config)# 
-    System message at 2021-09-15 03:23:50...
-    Commit performed by admin via tcp using cli.
-    Development-1(config)# 
+
+    Validation warnings encountered during config-restore.
+
+    VLAN, LAG, FDB, L2 protocols configuration is lost for the interfaces corresponding to the changed portgroups. Blade(s) 3 will reboot.
+
+    Proceed? [yes/no]: yes
+    result Database config-restore successful. "configs/chassis-partition-dev-backup-08-07-2026" is loaded.
+    Development2-1(config)# 
 
 
-The tenant is properly restored and deployed; however, its status is pending waiting on image:
+The tenants are properly restored and deployed; however, its status is **Pending** waiting on image:
 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image14.png

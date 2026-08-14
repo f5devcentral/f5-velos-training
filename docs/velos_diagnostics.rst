@@ -51,15 +51,15 @@ Note: F5 Support requires a qkview file in all cases in which remote access to t
 Qkview Creation and Upload via webUI
 ----------------------------------
 
-In both the system controller and the chassis partition a qkview can be generated from the **Diagnostics > System Reports** page. Here, you can also optionally download the qkview file (added in F5OS-C 1.7.0) or upload them directly to iHealth provided your system is allowed to access the Internet. 
+In both the system controller and the chassis partition a qkview can be generated from the **System Monitoring > System Reports** page. Here, you can also optionally download the qkview file (added in F5OS-C 1.7.0) or upload them directly to iHealth provided your system is allowed to access the Internet. 
 
 .. image:: images/velos_diagnostics/image1.png
   :align: center
   :scale: 70%
 
-To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **Diagnostics -> iHealth Configuration** page. Note, that the iHealth service recently went through authentication enhancements, and some older version of F5OS-C may not authenticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
+To generate a qkview report, click the **Generate QKview** button in the upper right-hand corner. It will take some time for the qkview to be generated.  Once the qkview is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if you entered them previously using the **System Settings -> System Security** page. Note, that the iHealth service recently went through authentication enhancements, and some older version of F5OS-C may not authenticate properly to the iHealth service. You should upgrade to F5OS-C 1.6.x or later to get the new authentication support that is compatible with the iHealth service.
 
-You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services using the **Diagnostics -> iHealth Configuration** page. You may also optionally configure a **Proxy Server** for iHealth access if your system requires external traffic to be inspected by a proxy server.
+You can configure your iHealth **Client ID** and **Client Secret** to authenticate with the new iHealth authentication services using the **System Settings -> System Security** page under the **iHealth Configuration** page. You may also optionally configure a **Proxy Server** for iHealth access if your system requires external traffic to be inspected by a proxy server.
 
 .. image:: images/velos_diagnostics/image1a.png
   :align: center
@@ -920,7 +920,7 @@ The following command will tail the velos.log file on the chassis partition.
 Viewing Logs from the webUI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the current release you cannot view the F5OS logs directly from the webUI, although you can download them from the webUI. To view the logs, you can use the CLI or API, or download the files and then view, or use a remote syslog server. To download log files from the webUI, go to the **System Settings -> File Utilities** page. Here there are various logs directories you can download files from. You have the option to **Export** files to a remote HTTPS server or **Download** the files directly to your client machine through the browser.
+In the current release you cannot view the F5OS logs directly from the webUI, although you can download them from the webUI. To view the logs, you can use the CLI or API, or download the files and then view, or use a remote syslog server. To download log files from the webUI, go to the **System Monitoring -> File Utilities** page. Here there are various logs directories you can download files from. You have the option to **Export** files to a remote HTTPS server or **Download** the files directly to your client machine through the browser.
 
 .. image:: images/velos_diagnostics/file-utils.png
   :align: center
@@ -1524,7 +1524,7 @@ Logging Subsystems / Software Component Levels
 
 
 
-Currently in both the system controller and chassis partition webUI's logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed to have additional logging information sent to the local log.  The remote logging has its own **Severity** level, which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
+Currently in both the system controller and chassis partition webUI's logging levels can be configured for local logging, and remote logging servers can be added. The **Software Component Log Levels** can be changed under the **System Monitoring -> Log Settings** page, to have additional logging information sent to the local log.  The remote logging has its own **Severity** level, which will ultimately control the maximum level of all messages going to a remote log server regardless of the individual Component Log Levels. This will allow for more information to be logged locally for debug purposes, while keeping remote logging to a minimum. If you would like to have more verbosity going to the remote logging host, you can raise its severity to see additional messages.
 
 .. image:: images/velos_diagnostics/image4.png
   :align: center
