@@ -67,7 +67,14 @@ To see past events use the command **show system events**.
 Checking Active Alerts via webUI
 ------------------------------
 
-In the system controller webUI you can go to the **System Events > Alarms & Events** page to see if there are any known alerts for the system. The alerting page is focused on **Active** alerts and not issues that have cleared. If for example the temperature rises beyond an acceptable threshold, then a temperature alert will be raised. It will be seen in this page. If the temperature reading then falls back into a safe range then the alert will be removed. Each of these alerts will also generate a corresponding SNMP Trap. Please see the VELOS F5OS SNMP Monitoring and Alerting section.
+There is a dashboard for active system alarms within the system controller webUI.
+
+.. image:: images/monitoring_velos_health_status/dashboard.png
+  :align: center
+  :scale: 70%
+
+
+Also, you can go to the **System Monitoring > Alarms & Events** page to see if there are any known alerts for the system. The alerting page is focused on **Active** alerts and not issues that have cleared. If for example the temperature rises beyond an acceptable threshold, then a temperature alert will be raised. It will be seen in this page. If the temperature reading then falls back into a safe range then the alert will be removed. Each of these alerts will also generate a corresponding SNMP Trap. Please see the VELOS F5OS SNMP Monitoring and Alerting section for more details.
 
 `VELOS F5OS SNMP Monitoring and Alerting <https://clouddocs.f5networks.net/training/community/velos-training/html/velos_monitoring_snmp.html>`_
 
@@ -75,6 +82,7 @@ In the system controller webUI you can go to the **System Events > Alarms & Even
 .. image:: images/monitoring_velos_health_status/image1.png
   :align: center
   :scale: 70%
+
 
 ------------------------------
 Checking Active Alerts via API
