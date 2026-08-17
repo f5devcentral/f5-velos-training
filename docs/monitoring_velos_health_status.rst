@@ -13,7 +13,21 @@ The VELOS system has an alerting system where certain known issues will raise al
 Checking Active Alerts via CLI
 ------------------------------
 
-The **show system alarms** CLI command will display any active alarms on the VELOS system if any exist. If the system is healthy then no entries will be found:
+The **show system alarms** CLI command will display any active alarms on the VELOS system if any exist. 
+
+.. code-block:: bash
+
+    syscon-2-active# show system alarms 
+    ID      RESOURCE       SEVERITY  TEXT                                       TIME CREATED                       
+    ---------------------------------------------------------------------------------------------------------------
+    262406  Portgroup 3/2  ERROR     Lanes: 1,2,3,4 Receiver power low alarm    2026-08-14 14:29:42.940358175 UTC  
+    262407  Portgroup 3/2  WARNING   Lanes: 1,2,3,4 Receiver power low warning  2026-08-14 14:29:42.950673862 UTC  
+    262406  Portgroup 1/2  ERROR     Lanes: 1,2,3,4 Receiver power low alarm    2026-08-14 14:35:40.900888536 UTC  
+    262407  Portgroup 1/2  WARNING   Lanes: 1,2,3,4 Receiver power low warning  2026-08-14 14:35:40.911213773 UTC  
+
+    syscon-2-active# 
+
+If the system is healthy then no entries will be found:
 
 .. code-block:: bash
 
@@ -21,7 +35,7 @@ The **show system alarms** CLI command will display any active alarms on the VEL
     % No entries found.
     syscon-1-active# 
 
-To see past events use the command **show system events**.
+To see past events (not currently active) use the command **show system events**.
 
 .. code-block:: bash
 

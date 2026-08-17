@@ -40,7 +40,7 @@ Chassis Level and System Component Monitoring
 System Inventory / Components from the webUI
 ------------------------------------------
 
-In the system controller webUI there is a **System Inventory** page that shows all the physical components (system controllers, blades, power supplies, PSU controller, fan-tray, disk, and LCD) within the chassis and their high-level status, part number, and serial number:
+In the system controller webUI there is a **System Inventory** page under the **System Monitoring** section that shows all the physical components (system controllers, blades, power supplies, PSU controller, fan-tray, disk, and LCD) within the chassis and their high-level status, part number, and serial number:
 
 .. image:: images/monitoring_velos/image1.png
   :align: center
@@ -862,6 +862,12 @@ In the webUI a high-level status of the system controller HA state, and the abil
 The dashboard in the system controller webUI also provides high level status of each controller and its current role.
 
 .. image:: images/monitoring_velos/image4.png
+  :align: center
+  :scale: 70%
+
+The **Controller View** section of the dashboard provides storage, memory, and CPU utilization for each system controller.
+
+.. image:: images/monitoring_velos/image4a.png
   :align: center
   :scale: 70%
 
@@ -4664,7 +4670,7 @@ The body of the response will look similar to the output below.
 webUI Monitoring of Chassis Partitions from the System Controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Dashboard:
+Within the Dahsboard section of thw webUI is a **Partition Overview** which shows how blades are assgined to chassis partitions, their management IP addresses, and their operational state.
 
 .. image:: images/monitoring_velos/image9.png
   :align: center
