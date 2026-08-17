@@ -1657,7 +1657,7 @@ Repeat this process for each chassis partition in the system.
     }
     development-1# 
 
-Importing Archived Chassis Partition Configs form a Remote Server via API
+Importing Archived Chassis Partition Configs from a Remote Server via API
 -------------------------------------------------------------------------
 
 Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SCP server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
@@ -1717,7 +1717,7 @@ In the body of the API call, enter the remote server credentials and connectivit
     }
 
 
-Uploading Archived Chassis Partition Configs form a Client Machine via API
+Uploading Archived Chassis Partition Configs from a Client Machine via API
 -------------------------------------------------------------------------
 
 Post the following API call to the chassis partition IP address to upload the archived ConfD backup file from a client machine to the configs directory on the chassis partition.

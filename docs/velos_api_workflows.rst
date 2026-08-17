@@ -78,6 +78,8 @@ Tenant Deployments
 Securing / Hardening F5OS on VELOS
 ----------------------------------
 
+`VLAN Tagging for the MAnagement Port via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#vlan-tagging-for-the-management-port-via-api>`_
+
 `Adding Allow List Entries via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#adding-allow-list-entries-via-api>`_
 
 `Managing Device Certificates, Keys, CSRs, and CAs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#managing-device-certificates-keys-csrs-and-cas-via-api>`_
@@ -149,6 +151,8 @@ F5OS-C Backup and Restore
 `Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
 
 `Restoring the System Controller from a Database Backup via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-the-system-controller-from-a-database-backup-via-api>`_
+
+`Rebooting Blades from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html>`_
 
 `Importing Archived Chassis Partition Configs form a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-form-a-remote-server-via-api>`_
 
