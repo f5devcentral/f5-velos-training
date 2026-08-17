@@ -4,7 +4,9 @@ VELOS F5OS SNMP Monitoring and Alerting
 
 SNMP support for F5OS will vary by release. In the initial 1.1.x F5OS-C versions, SNMP support was limited to **IF-MIB** support for the chassis partitions and SNMP trap support. F5OS v1.2.x added additional SNMP support, including Link Up/Down Traps for chassis partitions, and support for **IF-MIB**, **EtherLike-MIB**, and the **PLATFORM-STATS-MIB**. F5OS-C 1.5.x added additional SNMP MIB and trap coverage and F5OS-C 1.6.0 added SNMPv3 support. The **F5-PLATFORM-STATS-MIB** and **F5-OS-SYSTEM-MIB** were not supported on the system controllers until F5OS-C 1.6.0.
 
-As of F5OS-C 1.8.0 the list of SNMP MIBs available are as follows:
+As of F5OS 2.0 the list of SNMP MIBs available are as follows:
+
+.. note:: This does not mean that the below NetSNMP MIBs are implemented completely, for some MIBs there are a subset of objects/OIDs that are implemented. See the link below for more detail on which MIB objects are supported.
 
 **VELOS System Controller MIBs**
 
@@ -81,7 +83,7 @@ SNMP MIBs can be downloaded directly from the F5OS layer starting in F5OS-C v1.5
 Downloading MIBs via webUI
 --------------------------
 
-From the webUI of the system controller, you can go to the **System Settings > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files. There are two separate MIB files: NetSNMP and F5OS MIBs for the controller. Download both MIB files and extract them to see the individual MIB files.
+From the webUI of the system controller, you can go to the **System Monitoring > File Utilities** page. Then, from the **Base Directory** drop down box select the **mibs** directory to download the MIB files. There are two separate MIB files: NetSNMP and F5OS MIBs for the controller. Download both MIB files and extract them to see the individual MIB files.
 
 .. image:: images/velos_monitoring_snmp/image1.png
   :align: center
@@ -1122,7 +1124,7 @@ You may display the SNMP user configuration by entering the command **show syste
 Enabling SNMP via webUI 
 -------------------------
 
-SNMP **Communities**, **Users**, and **Targets** can be setup on the **System Settings -> SNMP Configuration** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
+SNMP **Communities**, **Users**, and **Targets** can be setup on the **System Monitoring -> SNMP Configuration** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
 
 .. image:: images/velos_monitoring_snmp/snmp.png
   :align: center
