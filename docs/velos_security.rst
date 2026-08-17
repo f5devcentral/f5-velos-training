@@ -653,23 +653,23 @@ The **system aaa authentication password-hashing-algorithm config algorithm** co
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa authentication password-hashing-algorithm config algorithm ?
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config algorithm ?
     Possible completions:
     blowfish   blowfish (min: 4, max: 15, default: 5)
     sha512     sha512 (min: 1000, max: 999999999, default: 5000) - Note: Any algorithm change requires resetting existing passwords (applies to all algorithms, not just this entry)
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
     
     
 With blowfish you can select either **4**, **5**, or **15** rounds.   
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa authentication password-hashing-algorithm config algorithm blowfish rounds ?
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config algorithm blowfish rounds ?
     Possible completions:
     4    
     5    Note: Any rounds change requires resetting existing passwords (applies to all values, not just this entry)
     15   
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 Setting the Password Hashing Algorithm via webUI
 ----------------------------------------------
@@ -742,17 +742,17 @@ By default, F5OS uses a self-signed certificate and key for device management. I
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls true key-passphrase 
+    velos-1-gsa-1-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls true key-passphrase 
     Value for 'key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 
 The **store-tls** option when set to **true**, stores the private key and self-signed certificate in the system instead of returning the values only in the CLI output. If you would prefer to have the keys returned in the CLI output and not stored in the system, then set **store-tls false** as seen below.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls false key-passphrase
+    velos-1-gsa-1-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls false key-passphrase
     Value for 'key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     key-response 
@@ -781,7 +781,7 @@ The **store-tls** option when set to **true**, stores the private key and self-s
     PgIwMeuPVPB3kmata305fN7XGI+vu9bbKU2SUBXV55YRF5qGmyURLZJr8/tMkRlB
     Z5lL
     -----END CERTIFICATE-----
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 
 The management interface will now use the self-signed certificate you just created. You can verify by connecting to the F5OS management interface via a browser and then examining the certificate.
@@ -795,7 +795,7 @@ To create a Certificate Signing Request (CSR) via the CLI use the **system aaa t
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls create-csr name r10900-1.f5demo.net email jim@f5.com city Boston country US organization F5 region MA unit Sales version 1 
+    velos-1-gsa-1-active(config)# system aaa tls create-csr name r10900-1.f5demo.net email jim@f5.com city Boston country US organization F5 region MA unit Sales version 1 
     response 
     -----BEGIN CERTIFICATE REQUEST-----
     MIIBejCCAQECAQEwgYExHDAaBgNVBAMME3IxMDkwMC0xLmY1ZGVtby5uZXQxCzAJ
@@ -807,33 +807,33 @@ To create a Certificate Signing Request (CSR) via the CLI use the **system aaa t
     Rg3ncd7B2U/7Fcclilv/xgUqVS9eXdkTZSqXiCIz4Ff7pOWwpkqHRBx5iLICMF0C
     tpSmmQVOSRYU98q8JJ0HClZ+8eTan2fotaKvYyzYMrge5cl0w6J7dnFZwLdmYA==
     -----END CERTIFICATE REQUEST-----
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 
 To create a CA bundle via the CLI use the **system aaa tls ca-bundle** command.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls ca-bundles ca-bundle ?
+    velos-1-gsa-1-active(config)# system aaa tls ca-bundles ca-bundle ?
     Possible completions:
     <Reference to configured name of the CA Bundle.>
-    syscon-2-active(config)#  
+    velos-1-gsa-1-active(config)#  
 
 
 To create a Client Revocation List (CRL) via the CLI issue the following command.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls crls crl ?
+    velos-1-gsa-1-active(config)# system aaa tls crls crl ?
     Possible completions:
     <Reference to configured name of the CRL.>
-    syscon-2-active(config)# system aaa tls crls crl
+    velos-1-gsa-1-active(config)# system aaa tls crls crl
 
 You can display the current certificate, keys, and passphrases using the CLI command **show system aaa tls**.
 
 .. code-block:: bash
 
-    syscon-2-active# show system aaa tls
+    velos-1-gsa-1-active# show system aaa tls
     system aaa tls state certificate Certificate:
                                         Data:
                                             Version: 1 (0x0)
@@ -868,7 +868,7 @@ You can display the current certificate, keys, and passphrases using the CLI com
                                     
     system aaa tls state verify-client false
     system aaa tls state verify-client-depth 1
-    syscon-2-active# 
+    velos-1-gsa-1-active# 
 
 
 
@@ -1031,18 +1031,18 @@ Appliance mode can be enabled or disabled via the CLI using the command **system
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system appliance-mode config enabled 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system appliance-mode config enabled 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 To display the current status.
 
 .. code-block:: bash
 
-    syscon-2-active# show system appliance-mode 
+    velos-1-gsa-1-active# show system appliance-mode 
     system appliance-mode state enabled
-    syscon-2-active#
+    velos-1-gsa-1-active#
 
 If you then try to login as root, you will get a permission denied error. You can still login as admin to gain access to the F5OS CLI.
 
@@ -1050,10 +1050,10 @@ To disable appliance mode.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system appliance-mode config disabled 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system appliance-mode config disabled 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 Enabling Appliance Mode via the webUI
 ------------------------------------- 
