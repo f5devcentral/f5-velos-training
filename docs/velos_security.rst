@@ -506,6 +506,92 @@ Below is an example of allowing any SNMP endpoint at 172.22.50.57 (prefix length
   :scale: 70%
 
 
+Front Panel LCD Security
+========================
+
+The LCD panel on the front of the VELOS system can be used for initial configuration, checking health status, and viewing alarms. For environments that require Common Criteria security posture a new **Secure** mode for the LCD panel has been added in F5OS 2.0. It omits customer data and restricts access to allow only management and setup options. The functionality of the Status and Alarm LEDs is not affected by Secure Mode. 
+
+Front Panel LCD Security via CLI
+--------------------------------
+
+The LCD is put into "Secure Mode" via a configuration option in ConfD. In the example below you can see there are three modes for the lcd panel: **disabled**, **secure**, and **standard**. For Common Criteria environments set the config mode to **secure**.
+
+
+.. code-block:: bash
+
+    syscon-2-active(config)# components component lcd config mode ?
+    Possible completions:
+    [standard]
+    disabled   LCD screen does not allow access to any options. Nothing is shown except an image to indicate it's disabled.
+    secure     LCD screen only allows access to management and setup options. No customer data is shown.
+    standard   LCD screen allows access to all options.
+    syscon-2-active(config)# components component lcd config mode secure 
+    syscon-2-active(config-component-lcd)# commit
+    Commit complete.
+    syscon-2-active(config-component-lcd)# 
+
+Front Panel LCD Security via WebUI
+--------------------------------
+
+The LCD is put into "Secure Mode" via a configuration option in the WebUI. Navigate to the **System Settings** -> **System Security** page, and the edit the **Shell & LCD Access** section. 
+
+.. image:: images/velos_security/secure-lcd.png
+  :align: center
+  :scale: 70%
+
+Front Panel LCD Security via API
+--------------------------------
+
+The LCD is put into "Secure Mode" via a configuration option in the F5OS API. In the example below you can see there are three modes for the lcd panel: **disabled**, **secure**, and **standard**. For Common Criteria environments set the config mode to **secure**. To view the LCD status via API, use the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=lcd
+
+You'll see the **f5-platform-lcd:mode**.
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "lcd",
+                "config": {
+                    "name": "lcd",
+                    "f5-platform-lcd:mode": "secure"
+                },
+                "state": {
+                    "serial-no": "sub0811g002h",
+                    "part-no": "SUB-0811-02 REV B",
+                    "empty": false,
+                    "f5-platform-lcd:mode": "secure"
+                }
+            }
+        ]
+    }
+
+To set the mode via API, use the following API call:
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=lcd
+
+In the body of the API call, set the lcd mode to **secure**:
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "lcd",
+                "config": {
+                    "name": "lcd",
+                    "f5-platform-lcd:mode": "secure"
+                }
+            }
+        ]
+    }
+
 Setting F5OS Primary Key
 ======================== 
 

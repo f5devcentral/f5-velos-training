@@ -154,11 +154,9 @@ F5OS-C Backup and Restore
 
 `Rebooting Blades from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html>`_
 
-`Importing Archived Chassis Partition Configs form a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-form-a-remote-server-via-api>`_
+`Importing Archived Chassis Partition Configs from a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-from-a-remote-server-via-api>`_
 
-`Uploading Archived Chassis Partition Configs form a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-archived-chassis-partition-configs-form-a-client-machine-via-api>`_
-
-`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
+`Uploading Archived Chassis Partition Configs from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-archived-chassis-partition-configs-from-a-client-machine-via-api>`_
 
 `Restoring Chassis Partitions from Database Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-chassis-partitions-from-database-backups-via-api>`_
 
@@ -178,13 +176,6 @@ Diagnostics
 
 `TCPDUMP Download to Client via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#tcpdump-download-to-client-via-api>`_
 
-Health
-------
-
-`Checking Active Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-active-alerts-via-api>`_
-
-`Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
-
 
 Monitoring VELOS Health & Alert Status
 ---------------------------------------
@@ -192,8 +183,6 @@ Monitoring VELOS Health & Alert Status
 `Checking Active Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-active-alerts-via-api>`_
 
 `Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
-
-
 
 
 Monitoring
