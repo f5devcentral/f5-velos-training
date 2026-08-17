@@ -1396,16 +1396,16 @@ Example output:
 
 .. code-block:: bash
 
-    prompt% snmpwalk -ObenU -v2c -c public 10.255.2.3 .1.3.6.1.2.1.1     
-    .1.3.6.1.2.1.1.1.0 = STRING: F5 VELOS-CX410 : Linux 3.10.0-1160.71.1.F5.1.el7_8.x86_64 : System controller services version 1.8.0-8738
+    prompt % snmpwalk -ObenU -v2c -c public 172.22.50.9 .1.3.6.1.2.1.1
+    .1.3.6.1.2.1.1.1.0 = STRING: F5 VELOS-CX410 : Linux 4.18.0-553.123.1.f5.1.1.14.el8_10.x86_64 : System controller services version 2.0.0-25885
     .1.3.6.1.2.1.1.2.0 = OID: .1.3.6.1.4.1.12276.1.3.1.5
-    .1.3.6.1.2.1.1.3.0 = Timeticks: (25484697) 2 days, 22:47:26.97
-    .1.3.6.1.2.1.1.4.0 = STRING: jim@f5.com
-    .1.3.6.1.2.1.1.5.0 = STRING: velos-chassis1.f5demo.net
+    .1.3.6.1.2.1.1.3.0 = Timeticks: (87781334) 10 days, 3:50:13.34
+    .1.3.6.1.2.1.1.4.0 = STRING: jim2@f5.com
+    .1.3.6.1.2.1.1.5.0 = STRING: velos-1-gsa.floating.cpt.f5net.com
     .1.3.6.1.2.1.1.6.0 = STRING: Boston
     .1.3.6.1.2.1.1.7.0 = INTEGER: 72
     .1.3.6.1.2.1.1.8.0 = Timeticks: (0) 0:00:00.00
-    prompt%
+    prompt %
 
 
 ifTable & ifXTable
@@ -1495,15 +1495,16 @@ Below is an example of the ifXTable on the VELOS chassis partition.
 
 .. code-block:: bash
 
-    prompt% snmptable -v 2c  -c public -m ALL 10.255.2.4 ifXTable
+    prompt % snmptable -v 2c  -c public -m ALL 172.22.50.13 ifXTable 
     SNMP table: IF-MIB::ifXTable
 
-            ifName ifInMulticastPkts ifInBroadcastPkts ifOutMulticastPkts ifOutBroadcastPkts ifHCInOctets ifHCInUcastPkts ifHCInMulticastPkts ifHCInBroadcastPkts ifHCOutOctets ifHCOutUcastPkts ifHCOutMulticastPkts ifHCOutBroadcastPkts ifLinkUpDownTrapEnable ifHighSpeed ifPromiscuousMode ifConnectorPresent ifAlias ifCounterDiscontinuityTime
-            1/1.0                 ?                 ?                  ?                  ?       460216               0                3479                   0      11302515                0                77018                    0                      ?      100000                 ?                  ?       ?                          ?
-            2/1.0                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?      100000                 ?                  ?       ?                          ?
-            2/2.0                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?      100000                 ?                  ?       ?                          ?
-            Arista                 ?                 ?                  ?                  ?     72771870               0              559045                1834      45967104                0               359118                    0                      ?   552894464                 ?                  ?       ?                          ?
-    HA-Interconnect                 ?                 ?                  ?                  ?       460216               0                3479                   0      11302515                0                77018                    0                      ?           0                 ?                  ?       ?                          ?
+            ifName ifInMulticastPkts ifInBroadcastPkts ifOutMulticastPkts ifOutBroadcastPkts ifHCInOctets ifHCInUcastPkts ifHCInMulticastPkts ifHCInBroadcastPkts ifHCOutOctets ifHCOutUcastPkts ifHCOutMulticastPkts ifHCOutBroadcastPkts ifLinkUpDownTrapEnable ifHighSpeed ifPromiscuousMode ifConnectorPresent                ifAlias ifCounterDiscontinuityTime
+            1/1.0                 ?                 ?                  ?                  ?         2704               0                  15                   0        228667                0                 1433                    0                      ?       40000                 ?                  ?        Interface 1/1.0                          ?
+            1/2.0                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?       40000                 ?                  ?        Interface 1/2.0                          ?
+            2/1.0                 ?                 ?                  ?                  ?        47768               0                 262                   0        245073                0                 1541                    0                      ?       40000                 ?                  ?        Interface 2/1.0                          ?
+            2/2.0                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?       40000                 ?                  ?        Interface 2/2.0                          ?
+            Arista                 ?                 ?                  ?                  ?        50472               0                 277                   0        473740                0                 2974                    0                      ?       80000                 ?                  ? LAG to Upstream Arista                          ?
+    HA_Interconnect                 ?                 ?                  ?                  ?            0               0                   0                   0             0                0                    0                    0                      ?           0                 ?                  ?                                                 ?
     prompt %
 
 
