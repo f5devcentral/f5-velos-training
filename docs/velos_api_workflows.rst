@@ -82,6 +82,8 @@ Securing / Hardening F5OS on VELOS
 
 `Adding Allow List Entries via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#adding-allow-list-entries-via-api>`_
 
+`Front Panel LCD Security via API <https://clouddocs.f5networks.net/training/community/velos-training/html/velos_security.html#front-panel-lcd-security-via-api>`_
+
 `Managing Device Certificates, Keys, CSRs, and CAs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#managing-device-certificates-keys-csrs-and-cas-via-api>`_
 
 `Enabling Appliance Mode via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#enabling-appliance-mode-via-the-api>`_

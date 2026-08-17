@@ -641,6 +641,91 @@ Note that the hash key can be used to check and compare the status of the primar
     system aaa primary-key state status NONE
     syscon-2-active#
 
+Password Hashing Algorithm
+==========================
+
+Some environments require a different password hashing algorithm than the default sha512, and have requested support for Bcrypt/blowfish as the standard encryption for passwords stored on F5OS. this has been added as an option in F5OS 2.0. If enabled, the existing user passwords hashed by the old algorithm are unaffected. Only new passwords that come after the configuration change will be encrypted by theÂ  newly chosen algorithm. Existing users' access privileges into the system will not be affected and users will not see any difference in their authentication experience. The F5OS system administrators can enforce password changes when a need arises to apply the new algorithm for all users
+
+Setting the Password Hashing Algorithm via CLI
+----------------------------------------------
+
+The **system aaa authentication password-hashing-algorithm config algorithm** command will allow you to select **sha512** or **blowfish** hashing algorithms.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# system aaa authentication password-hashing-algorithm config algorithm ?
+    Possible completions:
+    blowfish   blowfish (min: 4, max: 15, default: 5)
+    sha512     sha512 (min: 1000, max: 999999999, default: 5000) - Note: Any algorithm change requires resetting existing passwords (applies to all algorithms, not just this entry)
+    syscon-2-active(config)#
+    
+    
+With blowfish you can select either **4**, **5**, or **15** rounds.   
+
+.. code-block:: bash
+
+    syscon-2-active(config)# system aaa authentication password-hashing-algorithm config algorithm blowfish rounds ?
+    Possible completions:
+    4    
+    5    Note: Any rounds change requires resetting existing passwords (applies to all values, not just this entry)
+    15   
+    syscon-2-active(config)#
+
+Setting the Password Hashing Algorithm via webUI
+----------------------------------------------
+
+Navigate to **Authentication & Access** -> **Authentication Settings** page, and the edit the **Password Configuration** section to change the password hashing algorithm.
+
+.. image:: images/velos_security/blowfish-webui.png
+  :align: center
+  :scale: 50%
+
+Setting the Password Hashing Algorithm via API
+----------------------------------------------
+
+You can set the password hashing algorithm via the API. You can set the **algorithm** to either **sha512** which is the default, or **blowfish** as well as specify the number of **rounds**.
+ 
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-openconfig-aaa-password-hashing:password-hashing-algorithm
+
+In the body of the API call, set the appropriate algorithm.
+
+.. code-block:: json
+
+    {
+        "f5-openconfig-aaa-password-hashing:password-hashing-algorithm": {
+            "config": {
+                "algorithm": "blowfish",
+                "rounds": 5
+            }
+        }
+    }
+
+You may then query the current configuration using the following API GET call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-openconfig-aaa-password-hashing:password-hashing-algorithm
+
+The output should look similar to the example below.
+
+.. code-block:: json
+
+    {
+        "f5-openconfig-aaa-password-hashing:password-hashing-algorithm": {
+            "config": {
+                "algorithm": "blowfish",
+                "rounds": 5
+            },
+            "state": {
+                "algorithm": "blowfish",
+                "rounds": 5
+            }
+        }
+    }
+
 
 Certificates for Device Management
 ==================================
@@ -3929,30 +4014,30 @@ Enter config mode and use the command **system config login-banner** to configur
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system config login-banner "This is a restricted resource. Unauthorized access is prohibited. Please disconnect now if you are not authorized." 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system config login-banner "This is a restricted resource. Unauthorized access is prohibited. Please disconnect now if you are not authorized." 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 Enter config mode and use the command **system config motd-banner** to configure the Message of the Day banner via the CLI. You must commit the change afterwards.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system config motd-banner "Welcome to the GSA VELOS Chassis1, do not make any changes to configuration without a ticket." 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system config motd-banner "Welcome to the GSA VELOS Chassis1, do not make any changes to configuration without a ticket." 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 To display both settings, use the **show system state** command.
 
 .. code-block:: bash
 
-    syscon-2-active# show system state 
+    velos-1-gsa-1-active# show system state 
     system state hostname velos-chassis1.f5demo.net
     system state login-banner This is a restricted resource. Unauthorized access is prohibited. Please disconnect now if you are not authorized.
     system state motd-banner Welcome to the GSA VELOS Chassis1, do not make any changes to configuration without a ticket.
     system state current-datetime "2023-03-29 22:24:29-04:00"
-    syscon-2-active# 
+    velos-1-gsa-1-active# 
 
 
 
@@ -4060,24 +4145,24 @@ To enable NTP authentication use the **system ntp config enable-ntp-auth true** 
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system ntp config enable-ntp-auth true 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system ntp config enable-ntp-auth true 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 Next, you'll need to add keys for NTP Authentication
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system ntp ntp-keys ntp-key 11 config key-id 11 key-type F5_NTP_AUTH_SHA1 key-value HEX:E27611234BB5E7CDFC8A8ACE55B567FC5CA7C890
+    velos-1-gsa-1-active(config)# system ntp ntp-keys ntp-key 11 config key-id 11 key-type F5_NTP_AUTH_SHA1 key-value HEX:E27611234BB5E7CDFC8A8ACE55B567FC5CA7C890
 
 The key ID, key type, and key value on this client system must match the server exactly. Lastly, you'll need to associate the key with an NTP server using the configured key-id above.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system ntp servers server 10.255.0.139
-    syscon-2-active(config-server-10.255.0.139)# config key-id 11
-    syscon-2-active(config-server-10.255.0.139)# 
+    velos-1-gsa-1-active(config)# system ntp servers server 10.255.0.139
+    velos-1-gsa-1-active(config-server-10.255.0.139)# config key-id 11
+    velos-1-gsa-1-active(config-server-10.255.0.139)# 
 
 Enabling NTP Authentication via webUI
 -------------------------------------
@@ -4319,6 +4404,18 @@ You may configure which host-key-algorithms F5OS will use for the sshd service b
     Possible completions:
     [  [ ssh-rsa ]
     velos-1-gsa-1-active(config)# system security services service sshd config host-key-algorithms
+
+
+F5OS 2.0 allows for configuration of ciphers by TLS version (TLS1.2 or TLS1.3) for the https daemon:
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system security services service httpd config security-protocols ?
+    Description: User specified security encryption protocol.
+    Possible completions:
+    TLSv1.2  TLSv1.3  [
+    velos-1-gsa-1-active(config)#
+
 
 Configuring Management Ciphers via webUI
 --------------------------------------
