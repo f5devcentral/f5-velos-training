@@ -233,7 +233,7 @@ BX110 100Gb QSFP28 Options
 +------------------------+-------------+----------------------------------------------------------------------------------+
 
 
-.. Note:: For 100GBASE-LR4 (QSFP28): Only the OPT-0052 optic is compatible with the BX520 blade, OPT-0039 is not compatible with the BX520 blade. For the BX110 blade, both the OPT-0039 and OPT-0052 options are compatible. The OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with the VELOS BX110 blade, but the default optics for 100G LR4 VELOS BX110 blade is OPT-0052.
+.. Note:: For 100GBASE-LR4 (QSFP28): Only the OPT-0052 optic is compatible with the BX520 blade, OPT-0039 is not compatible with the BX520 blade. For the BX110 blade, both the OPT-0039 and OPT-0052 options are compatible. The OPT-0039 QSFP28 LR4 used in VIPRION/iSeries are compatible with the VELOS BX110 blade, but the default optic for 100G LR4 VELOS BX110 blade is OPT-0052.
 
 BX520 100Gb QSFP28 Options
 --------------------------
