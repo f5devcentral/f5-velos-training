@@ -238,7 +238,7 @@ BX110 100Gb QSFP28 Options
 BX520 100Gb QSFP28 Options
 --------------------------
 
-The 100Gb optics below are supported on the BX520 blade. Not the 100Gb port on the BX520 does not support breakout to lower speeds (4 x 25Gb) and also does not support the 40Gb option on the 40/100Gb SR BIDI optic.
+The 100Gb optics below are supported on the BX520 blade. Note that the 100Gb port on the BX520 does not support breakout to lower speeds (4 x 25Gb) and also does not support the 40Gb option on the 40/100Gb SR BIDI optic.
 
 +------------------+---------------+-----------------------------------------------------------------------------------+
 | 100G-SR4         | OPT-0031-01   | TRANSCEIVER, QSFP28, 100G-SR4, 850NM, 100M, MMF, MPO-12 UPC, DDM                  |
