@@ -78,11 +78,13 @@ Tenant Deployments
 Securing / Hardening F5OS on VELOS
 ----------------------------------
 
-`VLAN Tagging for the MAnagement Port via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#vlan-tagging-for-the-management-port-via-api>`_
+`VLAN Tagging for the Management Port via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#vlan-tagging-for-the-management-port-via-api>`_
 
 `Adding Allow List Entries via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#adding-allow-list-entries-via-api>`_
 
 `Front Panel LCD Security via API <https://clouddocs.f5networks.net/training/community/velos-training/html/velos_security.html#front-panel-lcd-security-via-api>`_
+
+`Setting the Password Hashing Algorithm via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#setting-the-password-hashing-algorithm-via-api>`_
 
 `Managing Device Certificates, Keys, CSRs, and CAs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#managing-device-certificates-keys-csrs-and-cas-via-api>`_
 
