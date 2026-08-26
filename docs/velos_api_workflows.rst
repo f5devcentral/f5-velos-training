@@ -194,27 +194,29 @@ Monitoring
 
 `System Inventory / Components from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-inventory-components-from-the-api>`_
 
+`API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
+
+`Chassis Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#chassis-inventory-from-the-api>`_
+
+`LCD Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#lcd-inventory-from-the-api>`_
+
+`Fantray Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#fantray-inventory-from-the-api>`_
+
+`Power Supply Controller Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#power-supply-controller-inventory-from-the-api>`_
+
+`Power Supply Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#power-supply-status-inventory-the-api>`_
+
+`Blade Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#blade-inventory-from-the-api>`_
+
+`System Controller 1 & 2 Status from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-controller-1-2-status-from-the-api>`_
+
 `System Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-alerts-via-api>`_
+
+`API Monitoring of the Layer2 Switch Fabric on the System Controllers <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-the-layer2-switch-fabric-on-the-system-controllers>`_
 
 `API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
 
 `API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
-
-`Chassis Inventory from the API <>`_
-
-`LCD Inventory from the API <>`_
-
-`Fantray Inventory from the API <>`_
-
-`Power Supply Controller Inventory from the API <>`_
-
-`Power Supply Inventory from the API <>`_
-
-`Blade Inventory from the API <>`_
-
-`System Controller 1 & 2 Status from the API <>`_
-
-`<>`_
 
 
 
