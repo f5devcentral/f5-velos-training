@@ -223,8 +223,8 @@ A combined output of all the commands above can be output by a single command to
 System Inventory / Components from the API
 ------------------------------------------
 
-Chassis Status
---------------
+Chassis Status from the API
+---------------------------
 
 The overall chassis status can be queried via the following API command:
 
@@ -258,8 +258,8 @@ The body of the response will look similar to the output below.
     }
 
 
-LCD Status
-----------
+LCD Status from the API
+-----------------------
 
 The chassis LCD panel status can be queried via the following API command:
 
@@ -288,8 +288,8 @@ The body of the response will look similar to the output below.
     }
 
 
-Fantray Status
---------------
+Fantray Status from the API
+---------------------------
 
 The chassis fantray status can be queried via the following API command:
 
@@ -319,8 +319,8 @@ The body of the response will look similar to the output below.
         ]
     }
 
-Power Supply Controller Status
-------------------------------
+Power Supply Controller Status from the API
+-------------------------------------------
 
 There are two power supply controllers in the CX410 chassis. They can each be queried via the following API call. Substitute psu-controller-2 for the second controller status:
 
@@ -350,8 +350,8 @@ The body of the response will look similar to the output below.
         ]
     }
 
-Power Supply Status
--------------------
+Power Supply Status from the API
+---------------------------------
 
 The CX410 chassis can have up to 4 individual power supplies installed. Each can be queried via the following API command. Substitute psu-1, psu-2, psu-3, or psu-4 at the end of the API call:
 
@@ -379,8 +379,8 @@ The body of the response will look similar to the output below.
         ]
     }
 
-Blade Status
-------------
+Blade Status from the API
+-------------------------
 
 There can be up to 8 blades installed in the CX410 chassis. Each one can be queried by changing the blade number at the end:
 
@@ -414,8 +414,8 @@ The body of the response will look similar to the output below.
     }
 
 
-System Controller 1 & 2 Status
-------------------------------
+System Controller 1 & 2 Status from the API
+-------------------------------------------
 
 There are 2 redundant system controllers in the CX410 chassis. Each one can be queried using the following API call. Substitute controller=2 to query the second system controller: 
 
