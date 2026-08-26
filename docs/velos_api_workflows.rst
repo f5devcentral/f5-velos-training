@@ -200,6 +200,23 @@ Monitoring
 
 `API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
 
+`Chassis Inventory from the API <>`_
+
+`LCD Inventory from the API <>`_
+
+`Fantray Inventory from the API <>`_
+
+`Power Supply Controller Inventory from the API <>`_
+
+`Power Supply Inventory from the API <>`_
+
+`Blade Inventory from the API <>`_
+
+`System Controller 1 & 2 Status from the API <>`_
+
+`<>`_
+
+
 
 VELOS F5OS-A SNMP Monitoring and Alerting
 -----------------------------------------

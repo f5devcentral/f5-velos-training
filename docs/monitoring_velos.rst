@@ -223,7 +223,7 @@ A combined output of all the commands above can be output by a single command to
 System Inventory / Components from the API
 ------------------------------------------
 
-Chassis Status from the API
+Chassis Inventory from the API
 ---------------------------
 
 The overall chassis status can be queried via the following API command:
@@ -258,7 +258,7 @@ The body of the response will look similar to the output below.
     }
 
 
-LCD Status from the API
+LCD Inventory from the API
 -----------------------
 
 The chassis LCD panel status can be queried via the following API command:
@@ -288,7 +288,7 @@ The body of the response will look similar to the output below.
     }
 
 
-Fantray Status from the API
+Fantray Inventory from the API
 ---------------------------
 
 The chassis fantray status can be queried via the following API command:
@@ -319,7 +319,7 @@ The body of the response will look similar to the output below.
         ]
     }
 
-Power Supply Controller Status from the API
+Power Supply Controller Inventory from the API
 -------------------------------------------
 
 There are two power supply controllers in the CX410 chassis. They can each be queried via the following API call. Substitute psu-controller-2 for the second controller status:
@@ -350,7 +350,7 @@ The body of the response will look similar to the output below.
         ]
     }
 
-Power Supply Status from the API
+Power Supply Status Inventory the API
 ---------------------------------
 
 The CX410 chassis can have up to 4 individual power supplies installed. Each can be queried via the following API command. Substitute psu-1, psu-2, psu-3, or psu-4 at the end of the API call:
@@ -379,7 +379,7 @@ The body of the response will look similar to the output below.
         ]
     }
 
-Blade Status from the API
+Blade Inventory from the API
 -------------------------
 
 There can be up to 8 blades installed in the CX410 chassis. Each one can be queried by changing the blade number at the end:
