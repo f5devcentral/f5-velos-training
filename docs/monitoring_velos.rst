@@ -4263,7 +4263,7 @@ The body of the response will look similar to the output below.
     }
 
 
-Link Aggregation Status of System Controllers
+Link Aggregation Status of System Controllers from the API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following API call will list the status of all backplane LACP interfaces, as well as front panel management port lacp interfaces:
@@ -4781,6 +4781,1977 @@ From the System Controller CLI you may also view the System Controller and indiv
     ServiceCatalogInstall    Done    
     etcdInstall              Done    
 
+---------------------------
+Monitoring VELOS Components
+---------------------------
+
+Monitoring VELOS Chassis Status via API
+--------------------------------------------
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=chassis
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "chassis",
+                "config": {
+                    "name": "chassis"
+                },
+                "state": {
+                    "description": "CloudScale Viprion CX410",
+                    "serial-no": "chs600032s",
+                    "part-no": "400-0087-02 REV 6",
+                    "empty": false,
+                    "f5-platform:nebs": {
+                        "capable": false,
+                        "enabled": false
+                    }
+                },
+                "f5-platform:psu": {
+                    "state": {
+                        "redundancy-mode": "no-redundancy",
+                        "severity": "warning"
+                    },
+                    "config": {
+                        "redundancy-mode": "no-redundancy",
+                        "severity": "warning"
+                    }
+                }
+            }
+        ]
+    }
+
+Monitoring VELOS Controller Status via API
+--------------------------------------------
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=controller-1
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "controller-1",
+                "config": {
+                    "name": "controller-1"
+                },
+                "state": {
+                    "description": "CloudScale Viprion SX410",
+                    "serial-no": "bld422584s",
+                    "part-no": "SUB-0881-00 REV B",
+                    "empty": false,
+                    "f5-platform:tpm-integrity-status": "Valid",
+                    "f5-platform:nebs": {
+                        "capable": true,
+                        "enabled": false
+                    },
+                    "f5-platform:file-systems": {
+                        "file-system": [
+                            {
+                                "area": "platform/sysroot",
+                                "category": "F5OS System",
+                                "total": "353835896832",
+                                "free": "233832402944",
+                                "used": "102002380800",
+                                "used-percent": 30
+                            },
+                            {
+                                "area": "platform/images",
+                                "category": "F5OS Images",
+                                "total": "270494859264",
+                                "free": "182400954368",
+                                "used": "74326732800",
+                                "used-percent": 28
+                            },
+                            {
+                                "area": "partition2/config",
+                                "category": "F5OS System",
+                                "total": "10726932480",
+                                "free": "10492076032",
+                                "used": "234856448",
+                                "used-percent": 2
+                            },
+                            {
+                                "area": "partition2/images",
+                                "category": "F5OS Partition Images",
+                                "total": "16095641600",
+                                "free": "12324638720",
+                                "used": "3771002880",
+                                "used-percent": 23
+                            },
+                            {
+                                "area": "partition2/shared",
+                                "category": "F5OS Partition",
+                                "total": "10726932480",
+                                "free": "10682204160",
+                                "used": "44728320",
+                                "used-percent": 0
+                            },
+                            {
+                                "area": "partition3/config",
+                                "category": "F5OS System",
+                                "total": "10726932480",
+                                "free": "10499624960",
+                                "used": "227307520",
+                                "used-percent": 2
+                            },
+                            {
+                                "area": "partition3/images",
+                                "category": "F5OS Partition Images",
+                                "total": "16095641600",
+                                "free": "12324638720",
+                                "used": "3771002880",
+                                "used-percent": 23
+                            },
+                            {
+                                "area": "partition3/shared",
+                                "category": "F5OS Partition",
+                                "total": "10726932480",
+                                "free": "10682204160",
+                                "used": "44728320",
+                                "used-percent": 0
+                            }
+                        ]
+                    },
+                    "f5-platform:memory": {
+                        "total": "33397862400",
+                        "available": "25480728576",
+                        "free": "745287680",
+                        "used-percent": 23,
+                        "platform-total": "33397862400",
+                        "platform-used": "12087713792",
+                        "platform-used-percent": 36
+                    },
+                    "f5-platform:temperature": {
+                        "current": "27.2",
+                        "average": "27.1",
+                        "minimum": "25.7",
+                        "maximum": "29.0"
+                    },
+                    "f5-platform:disk-data": {
+                        "stats": [
+                            {
+                                "disk-data-name": "available",
+                                "disk-data-value": "233832509440"
+                            },
+                            {
+                                "disk-data-name": "capacity",
+                                "disk-data-value": "353835896832"
+                            },
+                            {
+                                "disk-data-name": "used",
+                                "disk-data-value": "102002274304"
+                            }
+                        ]
+                    }
+                },
+                "properties": {
+                    "property": [
+                        {
+                            "name": "fw-version-bios",
+                            "config": {
+                                "name": "fw-version-bios"
+                            },
+                            "state": {
+                                "value": "2.03.175.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-bios-me",
+                            "config": {
+                                "name": "fw-version-bios-me"
+                            },
+                            "state": {
+                                "value": "4.0.4.705",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-cpld",
+                            "config": {
+                                "name": "fw-version-cpld"
+                            },
+                            "state": {
+                                "value": "01.03.0A",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-drive",
+                            "config": {
+                                "name": "fw-version-drive"
+                            },
+                            "state": {
+                                "value": "EDA7602Q",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lcd-app",
+                            "config": {
+                                "name": "fw-version-lcd-app"
+                            },
+                            "state": {
+                                "value": "3.00.144.00.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lcd-bootloader",
+                            "config": {
+                                "name": "fw-version-lcd-bootloader"
+                            },
+                            "state": {
+                                "value": "2.01.109.00.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lop-app",
+                            "config": {
+                                "name": "fw-version-lop-app"
+                            },
+                            "state": {
+                                "value": "2.01.1283.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lop-bootloader",
+                            "config": {
+                                "name": "fw-version-lop-bootloader"
+                            },
+                            "state": {
+                                "value": "1.02.1019.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-sirr",
+                            "config": {
+                                "name": "fw-version-sirr"
+                            },
+                            "state": {
+                                "value": "1.1.99",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vfc-app-fanCtrl1",
+                            "config": {
+                                "name": "fw-version-vfc-app-fanCtrl1"
+                            },
+                            "state": {
+                                "value": "2.00.1008.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vfc-bootloader-fanCtrl1",
+                            "config": {
+                                "name": "fw-version-vfc-bootloader-fanCtrl1"
+                            },
+                            "state": {
+                                "value": "1.02.798.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-app-psuCtrl1",
+                            "config": {
+                                "name": "fw-version-vpc-app-psuCtrl1"
+                            },
+                            "state": {
+                                "value": "2.00.875.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-app-psuCtrl2",
+                            "config": {
+                                "name": "fw-version-vpc-app-psuCtrl2"
+                            },
+                            "state": {
+                                "value": "2.00.875.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-bootloader-psuCtrl1",
+                            "config": {
+                                "name": "fw-version-vpc-bootloader-psuCtrl1"
+                            },
+                            "state": {
+                                "value": "1.02.669.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-bootloader-psuCtrl2",
+                            "config": {
+                                "name": "fw-version-vpc-bootloader-psuCtrl2"
+                            },
+                            "state": {
+                                "value": "1.02.669.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        }
+                    ]
+                },
+                "storage": {
+                    "state": {
+                        "f5-platform:disks": {
+                            "disk": [
+                                {
+                                    "disk-name": "nvme0n1",
+                                    "state": {
+                                        "model": "SAMSUNG MZ1LB960HAJQ-00007",
+                                        "vendor": "Samsung",
+                                        "version": "EDA7602Q",
+                                        "serial-no": "S435NE0MA00234",
+                                        "size": "683.00GB",
+                                        "type": "nvme",
+                                        "disk-io": {
+                                            "total-iops": "0",
+                                            "read-iops": "1565157",
+                                            "read-merged": "664508",
+                                            "read-bytes": "16619667456",
+                                            "read-latency-ms": "555713",
+                                            "write-iops": "502634370",
+                                            "write-merged": "383883211",
+                                            "write-bytes": "4484072824320",
+                                            "write-latency-ms": "19297968",
+                                            "read-iops-per-sec": "0",
+                                            "read-bytes-per-sec": "0",
+                                            "write-iops-per-sec": "240",
+                                            "write-bytes-per-sec": "2046857"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "cpu": {
+                    "state": {
+                        "f5-platform:processors": {
+                            "processor": [
+                                {
+                                    "cpu-index": 1,
+                                    "state": {
+                                        "cachesize": "2048(KB)",
+                                        "core-cnt": "8",
+                                        "freq": "2200.000(MHz)",
+                                        "stepping": "1",
+                                        "thread-cnt": "8",
+                                        "modelname": "Intel(R) Atom(TM) CPU C3758 @ 2.20GHz"
+                                    }
+                                }
+                            ]
+                        },
+                        "f5-platform:cpu-utilization": {
+                            "thread": "cpu",
+                            "current": 38,
+                            "five-second-avg": 36,
+                            "one-minute-avg": 25,
+                            "five-minute-avg": 27
+                        },
+                        "f5-platform:cpu-threads": {
+                            "cpu-thread": [
+                                {
+                                    "thread-index": 0,
+                                    "thread": "cpu0",
+                                    "current": 40,
+                                    "five-second-avg": 36,
+                                    "one-minute-avg": 24,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 1,
+                                    "thread": "cpu1",
+                                    "current": 31,
+                                    "five-second-avg": 36,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 27
+                                },
+                                {
+                                    "thread-index": 2,
+                                    "thread": "cpu2",
+                                    "current": 33,
+                                    "five-second-avg": 35,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 27
+                                },
+                                {
+                                    "thread-index": 3,
+                                    "thread": "cpu3",
+                                    "current": 42,
+                                    "five-second-avg": 39,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 4,
+                                    "thread": "cpu4",
+                                    "current": 46,
+                                    "five-second-avg": 39,
+                                    "one-minute-avg": 24,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 5,
+                                    "thread": "cpu5",
+                                    "current": 36,
+                                    "five-second-avg": 36,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 27
+                                },
+                                {
+                                    "thread-index": 6,
+                                    "thread": "cpu6",
+                                    "current": 33,
+                                    "five-second-avg": 30,
+                                    "one-minute-avg": 23,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 7,
+                                    "thread": "cpu7",
+                                    "current": 45,
+                                    "five-second-avg": 35,
+                                    "one-minute-avg": 26,
+                                    "five-minute-avg": 27
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        ]
+    }
+
+Monitoring VELOS Component Platform Status via API
+--------------------------------------------
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:components": {
+            "component": [
+                {
+                    "name": "blade-1",
+                    "config": {
+                        "name": "blade-1"
+                    },
+                    "state": {
+                        "description": "CloudScale Viprion BX110",
+                        "serial-no": "bld424551s",
+                        "part-no": "400-0086-02 REV 2",
+                        "empty": false,
+                        "f5-platform:nebs": {
+                            "capable": true,
+                            "enabled": false
+                        }
+                    },
+                    "properties": {
+                        "property": [
+                            {
+                                "name": "fw-version-bios",
+                                "config": {
+                                    "name": "fw-version-bios"
+                                },
+                                "state": {
+                                    "value": "3.00.230.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-bios-me",
+                                "config": {
+                                    "name": "fw-version-bios-me"
+                                },
+                                "state": {
+                                    "value": "4.0.4.800",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-cpld",
+                                "config": {
+                                    "name": "fw-version-cpld"
+                                },
+                                "state": {
+                                    "value": "05.04.00",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-drive-nvme0n1",
+                                "config": {
+                                    "name": "fw-version-drive-nvme0n1"
+                                },
+                                "state": {
+                                    "value": "EDA7602Q",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-app",
+                                "config": {
+                                    "name": "fw-version-lop-app"
+                                },
+                                "state": {
+                                    "value": "2.00.1100.0.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-bootloader",
+                                "config": {
+                                    "name": "fw-version-lop-bootloader"
+                                },
+                                "state": {
+                                    "value": "1.02.868.0.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-sirr",
+                                "config": {
+                                    "name": "fw-version-sirr"
+                                },
+                                "state": {
+                                    "value": "1.1.99",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "blade-2",
+                    "config": {
+                        "name": "blade-2"
+                    },
+                    "state": {
+                        "description": "CloudScale Viprion BX110",
+                        "serial-no": "bld422435s",
+                        "part-no": "400-0086-02 REV 2",
+                        "empty": false,
+                        "f5-platform:nebs": {
+                            "capable": true,
+                            "enabled": false
+                        }
+                    },
+                    "properties": {
+                        "property": [
+                            {
+                                "name": "fw-version-bios",
+                                "config": {
+                                    "name": "fw-version-bios"
+                                },
+                                "state": {
+                                    "value": "3.00.230.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-bios-me",
+                                "config": {
+                                    "name": "fw-version-bios-me"
+                                },
+                                "state": {
+                                    "value": "4.0.4.800",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-cpld",
+                                "config": {
+                                    "name": "fw-version-cpld"
+                                },
+                                "state": {
+                                    "value": "05.04.00",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-drive-nvme0n1",
+                                "config": {
+                                    "name": "fw-version-drive-nvme0n1"
+                                },
+                                "state": {
+                                    "value": "EDA7602Q",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-app",
+                                "config": {
+                                    "name": "fw-version-lop-app"
+                                },
+                                "state": {
+                                    "value": "2.00.1100.0.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-bootloader",
+                                "config": {
+                                    "name": "fw-version-lop-bootloader"
+                                },
+                                "state": {
+                                    "value": "1.02.868.0.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-sirr",
+                                "config": {
+                                    "name": "fw-version-sirr"
+                                },
+                                "state": {
+                                    "value": "1.1.99",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "blade-3",
+                    "config": {
+                        "name": "blade-3"
+                    },
+                    "state": {
+                        "description": "CloudScale Viprion BX110",
+                        "serial-no": "bld422573s",
+                        "part-no": "400-0086-02 REV 2",
+                        "empty": false,
+                        "f5-platform:nebs": {
+                            "capable": true,
+                            "enabled": false
+                        }
+                    },
+                    "properties": {
+                        "property": [
+                            {
+                                "name": "fw-version-bios",
+                                "config": {
+                                    "name": "fw-version-bios"
+                                },
+                                "state": {
+                                    "value": "3.00.230.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-bios-me",
+                                "config": {
+                                    "name": "fw-version-bios-me"
+                                },
+                                "state": {
+                                    "value": "4.0.4.800",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-cpld",
+                                "config": {
+                                    "name": "fw-version-cpld"
+                                },
+                                "state": {
+                                    "value": "05.04.00",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-drive-nvme0n1",
+                                "config": {
+                                    "name": "fw-version-drive-nvme0n1"
+                                },
+                                "state": {
+                                    "value": "EDA7602Q",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-app",
+                                "config": {
+                                    "name": "fw-version-lop-app"
+                                },
+                                "state": {
+                                    "value": "2.00.1100.0.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-bootloader",
+                                "config": {
+                                    "name": "fw-version-lop-bootloader"
+                                },
+                                "state": {
+                                    "value": "1.02.868.0.1",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-sirr",
+                                "config": {
+                                    "name": "fw-version-sirr"
+                                },
+                                "state": {
+                                    "value": "1.1.99",
+                                    "configurable": false,
+                                    "f5-platform:update-status": "none"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "blade-4",
+                    "config": {
+                        "name": "blade-4"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "blade-5",
+                    "config": {
+                        "name": "blade-5"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "blade-6",
+                    "config": {
+                        "name": "blade-6"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "blade-7",
+                    "config": {
+                        "name": "blade-7"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "blade-8",
+                    "config": {
+                        "name": "blade-8"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "chassis",
+                    "config": {
+                        "name": "chassis"
+                    },
+                    "state": {
+                        "description": "CloudScale Viprion CX410",
+                        "serial-no": "chs600032s",
+                        "part-no": "400-0087-02 REV 6",
+                        "empty": false,
+                        "f5-platform:nebs": {
+                            "capable": false,
+                            "enabled": false
+                        }
+                    },
+                    "f5-platform:psu": {
+                        "state": {
+                            "redundancy-mode": "no-redundancy",
+                            "severity": "warning"
+                        },
+                        "config": {
+                            "redundancy-mode": "no-redundancy",
+                            "severity": "warning"
+                        }
+                    }
+                },
+                {
+                    "name": "controller-1",
+                    "config": {
+                        "name": "controller-1"
+                    },
+                    "state": {
+                        "description": "CloudScale Viprion SX410",
+                        "serial-no": "bld422584s",
+                        "part-no": "SUB-0881-00 REV B",
+                        "empty": false,
+                        "f5-platform:tpm-integrity-status": "Valid",
+                        "f5-platform:nebs": {
+                            "capable": true,
+                            "enabled": false
+                        },
+                        "f5-platform:file-systems": {
+                            "file-system": [
+                                {
+                                    "area": "platform/sysroot",
+                                    "category": "F5OS System",
+                                    "total": "353835896832",
+                                    "free": "233831534592",
+                                    "used": "102003249152",
+                                    "used-percent": 30
+                                },
+                                {
+                                    "area": "platform/images",
+                                    "category": "F5OS Images",
+                                    "total": "270494859264",
+                                    "free": "182400954368",
+                                    "used": "74326732800",
+                                    "used-percent": 28
+                                },
+                                {
+                                    "area": "partition2/config",
+                                    "category": "F5OS System",
+                                    "total": "10726932480",
+                                    "free": "10492096512",
+                                    "used": "234835968",
+                                    "used-percent": 2
+                                },
+                                {
+                                    "area": "partition2/images",
+                                    "category": "F5OS Partition Images",
+                                    "total": "16095641600",
+                                    "free": "12324638720",
+                                    "used": "3771002880",
+                                    "used-percent": 23
+                                },
+                                {
+                                    "area": "partition2/shared",
+                                    "category": "F5OS Partition",
+                                    "total": "10726932480",
+                                    "free": "10682204160",
+                                    "used": "44728320",
+                                    "used-percent": 0
+                                },
+                                {
+                                    "area": "partition3/config",
+                                    "category": "F5OS System",
+                                    "total": "10726932480",
+                                    "free": "10499620864",
+                                    "used": "227311616",
+                                    "used-percent": 2
+                                },
+                                {
+                                    "area": "partition3/images",
+                                    "category": "F5OS Partition Images",
+                                    "total": "16095641600",
+                                    "free": "12324638720",
+                                    "used": "3771002880",
+                                    "used-percent": 23
+                                },
+                                {
+                                    "area": "partition3/shared",
+                                    "category": "F5OS Partition",
+                                    "total": "10726932480",
+                                    "free": "10682204160",
+                                    "used": "44728320",
+                                    "used-percent": 0
+                                }
+                            ]
+                        },
+                        "f5-platform:memory": {
+                            "total": "33397862400",
+                            "available": "25474383872",
+                            "free": "737255424",
+                            "used-percent": 23,
+                            "platform-total": "33397862400",
+                            "platform-used": "12094328832",
+                            "platform-used-percent": 36
+                        },
+                        "f5-platform:temperature": {
+                            "current": "27.1",
+                            "average": "27.1",
+                            "minimum": "25.7",
+                            "maximum": "29.0"
+                        },
+                        "f5-platform:disk-data": {
+                            "stats": [
+                                {
+                                    "disk-data-name": "available",
+                                    "disk-data-value": "233831534592"
+                                },
+                                {
+                                    "disk-data-name": "capacity",
+                                    "disk-data-value": "353835896832"
+                                },
+                                {
+                                    "disk-data-name": "used",
+                                    "disk-data-value": "102003249152"
+                                }
+                            ]
+                        }
+                    },
+                    "properties": {
+                        "property": [
+                            {
+                                "name": "fw-version-bios",
+                                "config": {
+                                    "name": "fw-version-bios"
+                                },
+                                "state": {
+                                    "value": "2.03.175.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-bios-me",
+                                "config": {
+                                    "name": "fw-version-bios-me"
+                                },
+                                "state": {
+                                    "value": "4.0.4.705",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-cpld",
+                                "config": {
+                                    "name": "fw-version-cpld"
+                                },
+                                "state": {
+                                    "value": "01.03.0A",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-drive",
+                                "config": {
+                                    "name": "fw-version-drive"
+                                },
+                                "state": {
+                                    "value": "EDA7602Q",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lcd-app",
+                                "config": {
+                                    "name": "fw-version-lcd-app"
+                                },
+                                "state": {
+                                    "value": "3.00.144.00.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lcd-bootloader",
+                                "config": {
+                                    "name": "fw-version-lcd-bootloader"
+                                },
+                                "state": {
+                                    "value": "2.01.109.00.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-app",
+                                "config": {
+                                    "name": "fw-version-lop-app"
+                                },
+                                "state": {
+                                    "value": "2.01.1283.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-bootloader",
+                                "config": {
+                                    "name": "fw-version-lop-bootloader"
+                                },
+                                "state": {
+                                    "value": "1.02.1019.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-sirr",
+                                "config": {
+                                    "name": "fw-version-sirr"
+                                },
+                                "state": {
+                                    "value": "1.1.99",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vfc-app-fanCtrl1",
+                                "config": {
+                                    "name": "fw-version-vfc-app-fanCtrl1"
+                                },
+                                "state": {
+                                    "value": "2.00.1008.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vfc-bootloader-fanCtrl1",
+                                "config": {
+                                    "name": "fw-version-vfc-bootloader-fanCtrl1"
+                                },
+                                "state": {
+                                    "value": "1.02.798.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-app-psuCtrl1",
+                                "config": {
+                                    "name": "fw-version-vpc-app-psuCtrl1"
+                                },
+                                "state": {
+                                    "value": "2.00.875.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-app-psuCtrl2",
+                                "config": {
+                                    "name": "fw-version-vpc-app-psuCtrl2"
+                                },
+                                "state": {
+                                    "value": "2.00.875.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-bootloader-psuCtrl1",
+                                "config": {
+                                    "name": "fw-version-vpc-bootloader-psuCtrl1"
+                                },
+                                "state": {
+                                    "value": "1.02.669.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-bootloader-psuCtrl2",
+                                "config": {
+                                    "name": "fw-version-vpc-bootloader-psuCtrl2"
+                                },
+                                "state": {
+                                    "value": "1.02.669.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            }
+                        ]
+                    },
+                    "storage": {
+                        "state": {
+                            "f5-platform:disks": {
+                                "disk": [
+                                    {
+                                        "disk-name": "nvme0n1",
+                                        "state": {
+                                            "model": "SAMSUNG MZ1LB960HAJQ-00007",
+                                            "vendor": "Samsung",
+                                            "version": "EDA7602Q",
+                                            "serial-no": "S435NE0MA00234",
+                                            "size": "683.00GB",
+                                            "type": "nvme",
+                                            "disk-io": {
+                                                "total-iops": "0",
+                                                "read-iops": "1565157",
+                                                "read-merged": "664508",
+                                                "read-bytes": "16619667456",
+                                                "read-latency-ms": "555713",
+                                                "write-iops": "502666553",
+                                                "write-merged": "383907046",
+                                                "write-bytes": "4484356748800",
+                                                "write-latency-ms": "19299100",
+                                                "read-iops-per-sec": "0",
+                                                "read-bytes-per-sec": "0",
+                                                "write-iops-per-sec": "360",
+                                                "write-bytes-per-sec": "2629548"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "cpu": {
+                        "state": {
+                            "f5-platform:processors": {
+                                "processor": [
+                                    {
+                                        "cpu-index": 1,
+                                        "state": {
+                                            "cachesize": "2048(KB)",
+                                            "core-cnt": "8",
+                                            "freq": "2200.000(MHz)",
+                                            "stepping": "1",
+                                            "thread-cnt": "8",
+                                            "modelname": "Intel(R) Atom(TM) CPU C3758 @ 2.20GHz"
+                                        }
+                                    }
+                                ]
+                            },
+                            "f5-platform:cpu-utilization": {
+                                "thread": "cpu",
+                                "current": 28,
+                                "five-second-avg": 26,
+                                "one-minute-avg": 24,
+                                "five-minute-avg": 26
+                            },
+                            "f5-platform:cpu-threads": {
+                                "cpu-thread": [
+                                    {
+                                        "thread-index": 0,
+                                        "thread": "cpu0",
+                                        "current": 19,
+                                        "five-second-avg": 27,
+                                        "one-minute-avg": 24,
+                                        "five-minute-avg": 26
+                                    },
+                                    {
+                                        "thread-index": 1,
+                                        "thread": "cpu1",
+                                        "current": 32,
+                                        "five-second-avg": 26,
+                                        "one-minute-avg": 26,
+                                        "five-minute-avg": 27
+                                    },
+                                    {
+                                        "thread-index": 2,
+                                        "thread": "cpu2",
+                                        "current": 38,
+                                        "five-second-avg": 27,
+                                        "one-minute-avg": 23,
+                                        "five-minute-avg": 26
+                                    },
+                                    {
+                                        "thread-index": 3,
+                                        "thread": "cpu3",
+                                        "current": 16,
+                                        "five-second-avg": 23,
+                                        "one-minute-avg": 23,
+                                        "five-minute-avg": 26
+                                    },
+                                    {
+                                        "thread-index": 4,
+                                        "thread": "cpu4",
+                                        "current": 24,
+                                        "five-second-avg": 27,
+                                        "one-minute-avg": 23,
+                                        "five-minute-avg": 26
+                                    },
+                                    {
+                                        "thread-index": 5,
+                                        "thread": "cpu5",
+                                        "current": 43,
+                                        "five-second-avg": 26,
+                                        "one-minute-avg": 26,
+                                        "five-minute-avg": 27
+                                    },
+                                    {
+                                        "thread-index": 6,
+                                        "thread": "cpu6",
+                                        "current": 22,
+                                        "five-second-avg": 25,
+                                        "one-minute-avg": 22,
+                                        "five-minute-avg": 25
+                                    },
+                                    {
+                                        "thread-index": 7,
+                                        "thread": "cpu7",
+                                        "current": 29,
+                                        "five-second-avg": 25,
+                                        "one-minute-avg": 24,
+                                        "five-minute-avg": 27
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "controller-2",
+                    "config": {
+                        "name": "controller-2"
+                    },
+                    "state": {
+                        "description": "CloudScale Viprion SX410",
+                        "serial-no": "bld424548s",
+                        "part-no": "SUB-0881-00 REV B",
+                        "empty": false,
+                        "f5-platform:tpm-integrity-status": "Valid",
+                        "f5-platform:nebs": {
+                            "capable": true,
+                            "enabled": false
+                        },
+                        "f5-platform:file-systems": {
+                            "file-system": [
+                                {
+                                    "area": "platform/sysroot",
+                                    "category": "F5OS System",
+                                    "total": "353835896832",
+                                    "free": "232129888256",
+                                    "used": "103704895488",
+                                    "used-percent": 30
+                                },
+                                {
+                                    "area": "platform/images",
+                                    "category": "F5OS Images",
+                                    "total": "270494859264",
+                                    "free": "173605605376",
+                                    "used": "83122081792",
+                                    "used-percent": 32
+                                },
+                                {
+                                    "area": "/var/roothome/etcd3mount",
+                                    "category": "F5OS System",
+                                    "total": "5196181504",
+                                    "free": "4514873344",
+                                    "used": "396107776",
+                                    "used-percent": 8
+                                },
+                                {
+                                    "area": "partition2/config",
+                                    "category": "F5OS System",
+                                    "total": "10726932480",
+                                    "free": "10520436736",
+                                    "used": "206495744",
+                                    "used-percent": 1
+                                },
+                                {
+                                    "area": "partition2/images",
+                                    "category": "F5OS Partition Images",
+                                    "total": "16095641600",
+                                    "free": "12324638720",
+                                    "used": "3771002880",
+                                    "used-percent": 23
+                                },
+                                {
+                                    "area": "partition2/shared",
+                                    "category": "F5OS Partition",
+                                    "total": "10726932480",
+                                    "free": "10682204160",
+                                    "used": "44728320",
+                                    "used-percent": 0
+                                },
+                                {
+                                    "area": "partition3/config",
+                                    "category": "F5OS System",
+                                    "total": "10726932480",
+                                    "free": "10527416320",
+                                    "used": "199516160",
+                                    "used-percent": 1
+                                },
+                                {
+                                    "area": "partition3/images",
+                                    "category": "F5OS Partition Images",
+                                    "total": "16095641600",
+                                    "free": "12324638720",
+                                    "used": "3771002880",
+                                    "used-percent": 23
+                                },
+                                {
+                                    "area": "partition3/shared",
+                                    "category": "F5OS Partition",
+                                    "total": "10726932480",
+                                    "free": "10682204160",
+                                    "used": "44728320",
+                                    "used-percent": 0
+                                }
+                            ]
+                        },
+                        "f5-platform:memory": {
+                            "total": "33397866496",
+                            "available": "25015001088",
+                            "free": "490733568",
+                            "used-percent": 25,
+                            "platform-total": "33397866496",
+                            "platform-used": "11680473088",
+                            "platform-used-percent": 35
+                        },
+                        "f5-platform:temperature": {
+                            "current": "27.6",
+                            "average": "27.4",
+                            "minimum": "25.9",
+                            "maximum": "28.8"
+                        },
+                        "f5-platform:disk-data": {
+                            "stats": [
+                                {
+                                    "disk-data-name": "available",
+                                    "disk-data-value": "232130322432"
+                                },
+                                {
+                                    "disk-data-name": "capacity",
+                                    "disk-data-value": "353835896832"
+                                },
+                                {
+                                    "disk-data-name": "used",
+                                    "disk-data-value": "103704461312"
+                                }
+                            ]
+                        }
+                    },
+                    "properties": {
+                        "property": [
+                            {
+                                "name": "fw-version-bios",
+                                "config": {
+                                    "name": "fw-version-bios"
+                                },
+                                "state": {
+                                    "value": "2.03.175.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-bios-me",
+                                "config": {
+                                    "name": "fw-version-bios-me"
+                                },
+                                "state": {
+                                    "value": "4.0.4.705",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-cpld",
+                                "config": {
+                                    "name": "fw-version-cpld"
+                                },
+                                "state": {
+                                    "value": "01.03.0A",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-drive",
+                                "config": {
+                                    "name": "fw-version-drive"
+                                },
+                                "state": {
+                                    "value": "EDA7602Q",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lcd-app",
+                                "config": {
+                                    "name": "fw-version-lcd-app"
+                                },
+                                "state": {
+                                    "value": "3.00.144.00.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lcd-bootloader",
+                                "config": {
+                                    "name": "fw-version-lcd-bootloader"
+                                },
+                                "state": {
+                                    "value": "2.01.109.00.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-app",
+                                "config": {
+                                    "name": "fw-version-lop-app"
+                                },
+                                "state": {
+                                    "value": "2.01.1283.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-lop-bootloader",
+                                "config": {
+                                    "name": "fw-version-lop-bootloader"
+                                },
+                                "state": {
+                                    "value": "1.02.1019.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-sirr",
+                                "config": {
+                                    "name": "fw-version-sirr"
+                                },
+                                "state": {
+                                    "value": "1.1.99",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vfc-app-fanCtrl1",
+                                "config": {
+                                    "name": "fw-version-vfc-app-fanCtrl1"
+                                },
+                                "state": {
+                                    "value": "2.00.1008.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vfc-bootloader-fanCtrl1",
+                                "config": {
+                                    "name": "fw-version-vfc-bootloader-fanCtrl1"
+                                },
+                                "state": {
+                                    "value": "1.02.798.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-app-psuCtrl1",
+                                "config": {
+                                    "name": "fw-version-vpc-app-psuCtrl1"
+                                },
+                                "state": {
+                                    "value": "2.00.875.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-app-psuCtrl2",
+                                "config": {
+                                    "name": "fw-version-vpc-app-psuCtrl2"
+                                },
+                                "state": {
+                                    "value": "2.00.875.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-bootloader-psuCtrl1",
+                                "config": {
+                                    "name": "fw-version-vpc-bootloader-psuCtrl1"
+                                },
+                                "state": {
+                                    "value": "1.02.669.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            },
+                            {
+                                "name": "fw-version-vpc-bootloader-psuCtrl2",
+                                "config": {
+                                    "name": "fw-version-vpc-bootloader-psuCtrl2"
+                                },
+                                "state": {
+                                    "value": "1.02.669.0.1",
+                                    "f5-platform:update-status": "none"
+                                }
+                            }
+                        ]
+                    },
+                    "storage": {
+                        "state": {
+                            "f5-platform:disks": {
+                                "disk": [
+                                    {
+                                        "disk-name": "nvme0n1",
+                                        "state": {
+                                            "model": "SAMSUNG MZ1LB960HAJQ-00007",
+                                            "vendor": "Samsung",
+                                            "version": "EDA7602Q",
+                                            "serial-no": "S435NE0MA00209",
+                                            "size": "683.00GB",
+                                            "type": "nvme",
+                                            "disk-io": {
+                                                "total-iops": "0",
+                                                "read-iops": "1680343",
+                                                "read-merged": "1138227",
+                                                "read-bytes": "22058972160",
+                                                "read-latency-ms": "466285",
+                                                "write-iops": "646894011",
+                                                "write-merged": "488592072",
+                                                "write-bytes": "6097242719232",
+                                                "write-latency-ms": "27061976",
+                                                "read-iops-per-sec": "0",
+                                                "read-bytes-per-sec": "0",
+                                                "write-iops-per-sec": "352",
+                                                "write-bytes-per-sec": "2974605"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "cpu": {
+                        "state": {
+                            "f5-platform:processors": {
+                                "processor": [
+                                    {
+                                        "cpu-index": 1,
+                                        "state": {
+                                            "cachesize": "2048(KB)",
+                                            "core-cnt": "8",
+                                            "freq": "2200.000(MHz)",
+                                            "stepping": "1",
+                                            "thread-cnt": "8",
+                                            "modelname": "Intel(R) Atom(TM) CPU C3758 @ 2.20GHz"
+                                        }
+                                    }
+                                ]
+                            },
+                            "f5-platform:cpu-utilization": {
+                                "thread": "cpu",
+                                "current": 45,
+                                "five-second-avg": 40,
+                                "one-minute-avg": 43,
+                                "five-minute-avg": 43
+                            },
+                            "f5-platform:cpu-threads": {
+                                "cpu-thread": [
+                                    {
+                                        "thread-index": 0,
+                                        "thread": "cpu0",
+                                        "current": 48,
+                                        "five-second-avg": 41,
+                                        "one-minute-avg": 44,
+                                        "five-minute-avg": 42
+                                    },
+                                    {
+                                        "thread-index": 1,
+                                        "thread": "cpu1",
+                                        "current": 48,
+                                        "five-second-avg": 40,
+                                        "one-minute-avg": 43,
+                                        "five-minute-avg": 42
+                                    },
+                                    {
+                                        "thread-index": 2,
+                                        "thread": "cpu2",
+                                        "current": 54,
+                                        "five-second-avg": 40,
+                                        "one-minute-avg": 42,
+                                        "five-minute-avg": 42
+                                    },
+                                    {
+                                        "thread-index": 3,
+                                        "thread": "cpu3",
+                                        "current": 39,
+                                        "five-second-avg": 39,
+                                        "one-minute-avg": 43,
+                                        "five-minute-avg": 43
+                                    },
+                                    {
+                                        "thread-index": 4,
+                                        "thread": "cpu4",
+                                        "current": 42,
+                                        "five-second-avg": 39,
+                                        "one-minute-avg": 43,
+                                        "five-minute-avg": 43
+                                    },
+                                    {
+                                        "thread-index": 5,
+                                        "thread": "cpu5",
+                                        "current": 51,
+                                        "five-second-avg": 43,
+                                        "one-minute-avg": 43,
+                                        "five-minute-avg": 44
+                                    },
+                                    {
+                                        "thread-index": 6,
+                                        "thread": "cpu6",
+                                        "current": 34,
+                                        "five-second-avg": 42,
+                                        "one-minute-avg": 43,
+                                        "five-minute-avg": 43
+                                    },
+                                    {
+                                        "thread-index": 7,
+                                        "thread": "cpu7",
+                                        "current": 44,
+                                        "five-second-avg": 32,
+                                        "one-minute-avg": 42,
+                                        "five-minute-avg": 42
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "fantray-1",
+                    "config": {
+                        "name": "fantray-1"
+                    },
+                    "state": {
+                        "firmware-version": "1.02.798.0.1",
+                        "software-version": "2.00.1008.0.1",
+                        "serial-no": "sub0772g006w",
+                        "part-no": "SUB-0772-05 REV B",
+                        "empty": false
+                    },
+                    "properties": {
+                        "f5-platform:fantray-state": {
+                            "fantray-temperature": "34.0",
+                            "inlet-fan-1-speed": 6775,
+                            "inlet-fan-2-speed": 6714,
+                            "inlet-fan-3-speed": 6729,
+                            "exhaust-fan-1-speed": 6740,
+                            "exhaust-fan-2-speed": 6726,
+                            "exhaust-fan-3-speed": 6759
+                        }
+                    }
+                },
+                {
+                    "name": "lcd",
+                    "config": {
+                        "name": "lcd",
+                        "f5-platform-lcd:mode": "secure"
+                    },
+                    "state": {
+                        "serial-no": "sub0811g002h",
+                        "part-no": "SUB-0811-02 REV B",
+                        "empty": false,
+                        "f5-platform-lcd:mode": "secure"
+                    }
+                },
+                {
+                    "name": "psu-1",
+                    "config": {
+                        "name": "psu-1"
+                    },
+                    "state": {
+                        "serial-no": "19331BPJ0075",
+                        "part-no": "PWR-0366-00",
+                        "empty": false
+                    },
+                    "properties": {
+                        "f5-platform:psu-state": {
+                            "psu-current-in": "3.156",
+                            "psu-current-out": "48.687",
+                            "psu-power-in": "640.0",
+                            "psu-power-out": "600.0",
+                            "psu-voltage-in": "203.75",
+                            "psu-voltage-out": "12.327",
+                            "psu-temperature-1": "25.0",
+                            "psu-temperature-2": "40.5",
+                            "psu-temperature-3": "37.2",
+                            "psu-fan-1-speed": 7552,
+                            "psu-fan-2-speed": 7136
+                        }
+                    }
+                },
+                {
+                    "name": "psu-2",
+                    "config": {
+                        "name": "psu-2"
+                    },
+                    "state": {
+                        "serial-no": "19332BPJ0129",
+                        "part-no": "PWR-0366-00",
+                        "empty": false
+                    },
+                    "properties": {
+                        "f5-platform:psu-state": {
+                            "psu-current-in": "3.281",
+                            "psu-current-out": "50.875",
+                            "psu-power-in": "670.0",
+                            "psu-power-out": "627.0",
+                            "psu-voltage-in": "204.0",
+                            "psu-voltage-out": "12.321",
+                            "psu-temperature-1": "24.7",
+                            "psu-temperature-2": "41.0",
+                            "psu-temperature-3": "36.2",
+                            "psu-fan-1-speed": 7392,
+                            "psu-fan-2-speed": 7040
+                        }
+                    }
+                },
+                {
+                    "name": "psu-3",
+                    "config": {
+                        "name": "psu-3"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "psu-4",
+                    "config": {
+                        "name": "psu-4"
+                    },
+                    "state": {
+                        "serial-no": "Not Available",
+                        "part-no": "Not Available",
+                        "empty": true
+                    }
+                },
+                {
+                    "name": "psu-controller-1",
+                    "config": {
+                        "name": "psu-controller-1"
+                    },
+                    "state": {
+                        "firmware-version": "1.02.669.0.1",
+                        "software-version": "2.00.875.0.1",
+                        "serial-no": "sub0759g003u",
+                        "part-no": "SUB-0759-04 REV A",
+                        "empty": false
+                    }
+                },
+                {
+                    "name": "psu-controller-2",
+                    "config": {
+                        "name": "psu-controller-2"
+                    },
+                    "state": {
+                        "firmware-version": "1.02.669.0.1",
+                        "software-version": "2.00.875.0.1",
+                        "serial-no": "sub0759g003z",
+                        "part-no": "SUB-0759-04 REV A",
+                        "empty": false
+                    }
+                }
+            ]
+        }
+    }
 
 
 
+
+Monitoring VELOS Power Supply Status via API
+--------------------------------------------
+
+.. code-block:: bash
+
+    GET 
+
+.. code-block:: json
+
+Monitoring VELOS Fan Tray Status via API
+-----------------------------------------
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=fantray-1
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "fantray-1",
+                "config": {
+                    "name": "fantray-1"
+                },
+                "state": {
+                    "firmware-version": "1.02.798.0.1",
+                    "software-version": "2.00.1008.0.1",
+                    "serial-no": "sub0772g006w",
+                    "part-no": "SUB-0772-05 REV B",
+                    "empty": false
+                },
+                "properties": {
+                    "f5-platform:fantray-state": {
+                        "fantray-temperature": "34.0",
+                        "inlet-fan-1-speed": 6775,
+                        "inlet-fan-2-speed": 6746,
+                        "inlet-fan-3-speed": 6750,
+                        "exhaust-fan-1-speed": 6730,
+                        "exhaust-fan-2-speed": 6732,
+                        "exhaust-fan-3-speed": 6795
+                    }
+                }
+            }
+        ]
+    }
+
+Monitoring VELOS LCD Status via API
+-----------------------------------------
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=lcd
+
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "lcd",
+                "config": {
+                    "name": "lcd",
+                    "f5-platform-lcd:mode": "secure"
+                },
+                "state": {
+                    "serial-no": "sub0811g002h",
+                    "part-no": "SUB-0811-02 REV B",
+                    "empty": false,
+                    "f5-platform-lcd:mode": "secure"
+                }
+            }
+        ]
+    }
+
+
+Monitoring VELOS Blade Status via API
+-----------------------------------------
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=blade-1
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "blade-1",
+                "config": {
+                    "name": "blade-1"
+                },
+                "state": {
+                    "description": "CloudScale Viprion BX110",
+                    "serial-no": "bld424551s",
+                    "part-no": "400-0086-02 REV 2",
+                    "empty": false,
+                    "f5-platform:nebs": {
+                        "capable": true,
+                        "enabled": false
+                    }
+                },
+                "properties": {
+                    "property": [
+                        {
+                            "name": "fw-version-bios",
+                            "config": {
+                                "name": "fw-version-bios"
+                            },
+                            "state": {
+                                "value": "3.00.230.1",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-bios-me",
+                            "config": {
+                                "name": "fw-version-bios-me"
+                            },
+                            "state": {
+                                "value": "4.0.4.800",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-cpld",
+                            "config": {
+                                "name": "fw-version-cpld"
+                            },
+                            "state": {
+                                "value": "05.04.00",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-drive-nvme0n1",
+                            "config": {
+                                "name": "fw-version-drive-nvme0n1"
+                            },
+                            "state": {
+                                "value": "EDA7602Q",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lop-app",
+                            "config": {
+                                "name": "fw-version-lop-app"
+                            },
+                            "state": {
+                                "value": "2.00.1100.0.1",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lop-bootloader",
+                            "config": {
+                                "name": "fw-version-lop-bootloader"
+                            },
+                            "state": {
+                                "value": "1.02.868.0.1",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-sirr",
+                            "config": {
+                                "name": "fw-version-sirr"
+                            },
+                            "state": {
+                                "value": "1.1.99",
+                                "configurable": false,
+                                "f5-platform:update-status": "none"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
