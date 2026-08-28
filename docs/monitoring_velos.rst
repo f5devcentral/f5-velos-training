@@ -4809,7 +4809,7 @@ For each blade, controller installed in the system, you'll see descrription, ser
                         "name": "blade-1"
                     },
                     "state": {
-                        "description": "CloudScale Viprion BX110",
+                        "description": "VELOS BX110",
                         "serial-no": "bld424551s",
                         "part-no": "400-0086-02 REV 2",
                         "empty": false,
@@ -4906,7 +4906,7 @@ For each blade, controller installed in the system, you'll see descrription, ser
                         "name": "blade-2"
                     },
                     "state": {
-                        "description": "CloudScale Viprion BX110",
+                        "description": "VELOS BX110",
                         "serial-no": "bld422435s",
                         "part-no": "400-0086-02 REV 2",
                         "empty": false,
@@ -5003,7 +5003,7 @@ For each blade, controller installed in the system, you'll see descrription, ser
                         "name": "blade-3"
                     },
                     "state": {
-                        "description": "CloudScale Viprion BX110",
+                        "description": "VELOS BX110",
                         "serial-no": "bld422573s",
                         "part-no": "400-0086-02 REV 2",
                         "empty": false,
@@ -5155,7 +5155,7 @@ For each blade, controller installed in the system, you'll see descrription, ser
                         "name": "chassis"
                     },
                     "state": {
-                        "description": "CloudScale Viprion CX410",
+                        "description": "VELOS CX410",
                         "serial-no": "chs600032s",
                         "part-no": "400-0087-02 REV 6",
                         "empty": false,
@@ -5181,7 +5181,7 @@ For each blade, controller installed in the system, you'll see descrription, ser
                         "name": "controller-1"
                     },
                     "state": {
-                        "description": "CloudScale Viprion SX410",
+                        "description": "VELOS SX410",
                         "serial-no": "bld422584s",
                         "part-no": "SUB-0881-00 REV B",
                         "empty": false,
@@ -5579,7 +5579,7 @@ For each blade, controller installed in the system, you'll see descrription, ser
                         "name": "controller-2"
                     },
                     "state": {
-                        "description": "CloudScale Viprion SX410",
+                        "description": "VELOS SX410",
                         "serial-no": "bld424548s",
                         "part-no": "SUB-0881-00 REV B",
                         "empty": false,
@@ -6142,7 +6142,7 @@ In the output, you'll see the chassis description, serial number, part number, a
                     "name": "chassis"
                 },
                 "state": {
-                    "description": "CloudScale Viprion CX410",
+                    "description": "VELOS CX410",
                     "serial-no": "chs600032s",
                     "part-no": "400-0087-02 REV 6",
                     "empty": false,
@@ -6186,7 +6186,7 @@ In the output, you'll see the controller description, serial number, part number
                     "name": "controller-1"
                 },
                 "state": {
-                    "description": "CloudScale Viprion SX410",
+                    "description": "VELOS SX410",
                     "serial-no": "bld422584s",
                     "part-no": "SUB-0881-00 REV B",
                     "empty": false,
@@ -6752,7 +6752,7 @@ In the output you'll see the blade description, serial number, part numbers, NEB
                     "name": "blade-1"
                 },
                 "state": {
-                    "description": "CloudScale Viprion BX110",
+                    "description": "VELOS BX110",
                     "serial-no": "bld424551s",
                     "part-no": "400-0086-02 REV 2",
                     "empty": false,
