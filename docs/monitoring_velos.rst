@@ -6915,7 +6915,7 @@ In the output you can see the total power available, requested, and allocated fo
     }
 
 
-Monitoring VELOS Chassis Base MAC Adresses via API
+Monitoring VELOS Chassis Base MAC Addresses via API
 ------------------------------------------------------
 
 You can monitor the base MAC addresses and tiehr assingment using the following API call.

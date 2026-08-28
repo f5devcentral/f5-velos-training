@@ -218,7 +218,25 @@ Monitoring
 
 `API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
 
+`Monitoring VELOS Component Platform Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-component-platform-status-via-api>`_
 
+`Monitoring VELOS Chassis Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-status-via-api>`_
+
+`Monitoring VELOS Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
+
+`Monitoring VELOS Power Supply Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
+
+`Monitoring VELOS Power Supply Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-power-supply-controller-status-via-api>`_
+
+`Monitoring VELOS Fan Tray Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-fan-tray-status-via-api>`_
+
+`Monitoring VELOS LCD Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-lcd-status-via-api>`_
+
+`Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-blade-status-via-api>`_
+
+`Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-and-blade-power-levels-via-api>`_
+
+`Monitoring VELOS Chassis Base MAC Addresses via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-base-mac-adresses-via-api>`_
 
 VELOS F5OS-A SNMP Monitoring and Alerting
 -----------------------------------------
