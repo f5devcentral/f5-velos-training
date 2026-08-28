@@ -4785,464 +4785,18 @@ From the System Controller CLI you may also view the System Controller and indiv
 Monitoring VELOS Components
 ---------------------------
 
-Monitoring VELOS Chassis Status via API
---------------------------------------------
-
-.. code-block:: bash
-
-    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=chassis
-
-.. code-block:: json
-
-    {
-        "openconfig-platform:component": [
-            {
-                "name": "chassis",
-                "config": {
-                    "name": "chassis"
-                },
-                "state": {
-                    "description": "CloudScale Viprion CX410",
-                    "serial-no": "chs600032s",
-                    "part-no": "400-0087-02 REV 6",
-                    "empty": false,
-                    "f5-platform:nebs": {
-                        "capable": false,
-                        "enabled": false
-                    }
-                },
-                "f5-platform:psu": {
-                    "state": {
-                        "redundancy-mode": "no-redundancy",
-                        "severity": "warning"
-                    },
-                    "config": {
-                        "redundancy-mode": "no-redundancy",
-                        "severity": "warning"
-                    }
-                }
-            }
-        ]
-    }
-
-Monitoring VELOS Controller Status via API
---------------------------------------------
-
-.. code-block:: bash
-
-    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=controller-1
-
-.. code-block:: json
-
-    {
-        "openconfig-platform:component": [
-            {
-                "name": "controller-1",
-                "config": {
-                    "name": "controller-1"
-                },
-                "state": {
-                    "description": "CloudScale Viprion SX410",
-                    "serial-no": "bld422584s",
-                    "part-no": "SUB-0881-00 REV B",
-                    "empty": false,
-                    "f5-platform:tpm-integrity-status": "Valid",
-                    "f5-platform:nebs": {
-                        "capable": true,
-                        "enabled": false
-                    },
-                    "f5-platform:file-systems": {
-                        "file-system": [
-                            {
-                                "area": "platform/sysroot",
-                                "category": "F5OS System",
-                                "total": "353835896832",
-                                "free": "233832402944",
-                                "used": "102002380800",
-                                "used-percent": 30
-                            },
-                            {
-                                "area": "platform/images",
-                                "category": "F5OS Images",
-                                "total": "270494859264",
-                                "free": "182400954368",
-                                "used": "74326732800",
-                                "used-percent": 28
-                            },
-                            {
-                                "area": "partition2/config",
-                                "category": "F5OS System",
-                                "total": "10726932480",
-                                "free": "10492076032",
-                                "used": "234856448",
-                                "used-percent": 2
-                            },
-                            {
-                                "area": "partition2/images",
-                                "category": "F5OS Partition Images",
-                                "total": "16095641600",
-                                "free": "12324638720",
-                                "used": "3771002880",
-                                "used-percent": 23
-                            },
-                            {
-                                "area": "partition2/shared",
-                                "category": "F5OS Partition",
-                                "total": "10726932480",
-                                "free": "10682204160",
-                                "used": "44728320",
-                                "used-percent": 0
-                            },
-                            {
-                                "area": "partition3/config",
-                                "category": "F5OS System",
-                                "total": "10726932480",
-                                "free": "10499624960",
-                                "used": "227307520",
-                                "used-percent": 2
-                            },
-                            {
-                                "area": "partition3/images",
-                                "category": "F5OS Partition Images",
-                                "total": "16095641600",
-                                "free": "12324638720",
-                                "used": "3771002880",
-                                "used-percent": 23
-                            },
-                            {
-                                "area": "partition3/shared",
-                                "category": "F5OS Partition",
-                                "total": "10726932480",
-                                "free": "10682204160",
-                                "used": "44728320",
-                                "used-percent": 0
-                            }
-                        ]
-                    },
-                    "f5-platform:memory": {
-                        "total": "33397862400",
-                        "available": "25480728576",
-                        "free": "745287680",
-                        "used-percent": 23,
-                        "platform-total": "33397862400",
-                        "platform-used": "12087713792",
-                        "platform-used-percent": 36
-                    },
-                    "f5-platform:temperature": {
-                        "current": "27.2",
-                        "average": "27.1",
-                        "minimum": "25.7",
-                        "maximum": "29.0"
-                    },
-                    "f5-platform:disk-data": {
-                        "stats": [
-                            {
-                                "disk-data-name": "available",
-                                "disk-data-value": "233832509440"
-                            },
-                            {
-                                "disk-data-name": "capacity",
-                                "disk-data-value": "353835896832"
-                            },
-                            {
-                                "disk-data-name": "used",
-                                "disk-data-value": "102002274304"
-                            }
-                        ]
-                    }
-                },
-                "properties": {
-                    "property": [
-                        {
-                            "name": "fw-version-bios",
-                            "config": {
-                                "name": "fw-version-bios"
-                            },
-                            "state": {
-                                "value": "2.03.175.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-bios-me",
-                            "config": {
-                                "name": "fw-version-bios-me"
-                            },
-                            "state": {
-                                "value": "4.0.4.705",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-cpld",
-                            "config": {
-                                "name": "fw-version-cpld"
-                            },
-                            "state": {
-                                "value": "01.03.0A",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-drive",
-                            "config": {
-                                "name": "fw-version-drive"
-                            },
-                            "state": {
-                                "value": "EDA7602Q",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-lcd-app",
-                            "config": {
-                                "name": "fw-version-lcd-app"
-                            },
-                            "state": {
-                                "value": "3.00.144.00.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-lcd-bootloader",
-                            "config": {
-                                "name": "fw-version-lcd-bootloader"
-                            },
-                            "state": {
-                                "value": "2.01.109.00.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-lop-app",
-                            "config": {
-                                "name": "fw-version-lop-app"
-                            },
-                            "state": {
-                                "value": "2.01.1283.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-lop-bootloader",
-                            "config": {
-                                "name": "fw-version-lop-bootloader"
-                            },
-                            "state": {
-                                "value": "1.02.1019.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-sirr",
-                            "config": {
-                                "name": "fw-version-sirr"
-                            },
-                            "state": {
-                                "value": "1.1.99",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-vfc-app-fanCtrl1",
-                            "config": {
-                                "name": "fw-version-vfc-app-fanCtrl1"
-                            },
-                            "state": {
-                                "value": "2.00.1008.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-vfc-bootloader-fanCtrl1",
-                            "config": {
-                                "name": "fw-version-vfc-bootloader-fanCtrl1"
-                            },
-                            "state": {
-                                "value": "1.02.798.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-vpc-app-psuCtrl1",
-                            "config": {
-                                "name": "fw-version-vpc-app-psuCtrl1"
-                            },
-                            "state": {
-                                "value": "2.00.875.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-vpc-app-psuCtrl2",
-                            "config": {
-                                "name": "fw-version-vpc-app-psuCtrl2"
-                            },
-                            "state": {
-                                "value": "2.00.875.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-vpc-bootloader-psuCtrl1",
-                            "config": {
-                                "name": "fw-version-vpc-bootloader-psuCtrl1"
-                            },
-                            "state": {
-                                "value": "1.02.669.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        },
-                        {
-                            "name": "fw-version-vpc-bootloader-psuCtrl2",
-                            "config": {
-                                "name": "fw-version-vpc-bootloader-psuCtrl2"
-                            },
-                            "state": {
-                                "value": "1.02.669.0.1",
-                                "f5-platform:update-status": "none"
-                            }
-                        }
-                    ]
-                },
-                "storage": {
-                    "state": {
-                        "f5-platform:disks": {
-                            "disk": [
-                                {
-                                    "disk-name": "nvme0n1",
-                                    "state": {
-                                        "model": "SAMSUNG MZ1LB960HAJQ-00007",
-                                        "vendor": "Samsung",
-                                        "version": "EDA7602Q",
-                                        "serial-no": "S435NE0MA00234",
-                                        "size": "683.00GB",
-                                        "type": "nvme",
-                                        "disk-io": {
-                                            "total-iops": "0",
-                                            "read-iops": "1565157",
-                                            "read-merged": "664508",
-                                            "read-bytes": "16619667456",
-                                            "read-latency-ms": "555713",
-                                            "write-iops": "502634370",
-                                            "write-merged": "383883211",
-                                            "write-bytes": "4484072824320",
-                                            "write-latency-ms": "19297968",
-                                            "read-iops-per-sec": "0",
-                                            "read-bytes-per-sec": "0",
-                                            "write-iops-per-sec": "240",
-                                            "write-bytes-per-sec": "2046857"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                "cpu": {
-                    "state": {
-                        "f5-platform:processors": {
-                            "processor": [
-                                {
-                                    "cpu-index": 1,
-                                    "state": {
-                                        "cachesize": "2048(KB)",
-                                        "core-cnt": "8",
-                                        "freq": "2200.000(MHz)",
-                                        "stepping": "1",
-                                        "thread-cnt": "8",
-                                        "modelname": "Intel(R) Atom(TM) CPU C3758 @ 2.20GHz"
-                                    }
-                                }
-                            ]
-                        },
-                        "f5-platform:cpu-utilization": {
-                            "thread": "cpu",
-                            "current": 38,
-                            "five-second-avg": 36,
-                            "one-minute-avg": 25,
-                            "five-minute-avg": 27
-                        },
-                        "f5-platform:cpu-threads": {
-                            "cpu-thread": [
-                                {
-                                    "thread-index": 0,
-                                    "thread": "cpu0",
-                                    "current": 40,
-                                    "five-second-avg": 36,
-                                    "one-minute-avg": 24,
-                                    "five-minute-avg": 26
-                                },
-                                {
-                                    "thread-index": 1,
-                                    "thread": "cpu1",
-                                    "current": 31,
-                                    "five-second-avg": 36,
-                                    "one-minute-avg": 25,
-                                    "five-minute-avg": 27
-                                },
-                                {
-                                    "thread-index": 2,
-                                    "thread": "cpu2",
-                                    "current": 33,
-                                    "five-second-avg": 35,
-                                    "one-minute-avg": 25,
-                                    "five-minute-avg": 27
-                                },
-                                {
-                                    "thread-index": 3,
-                                    "thread": "cpu3",
-                                    "current": 42,
-                                    "five-second-avg": 39,
-                                    "one-minute-avg": 25,
-                                    "five-minute-avg": 26
-                                },
-                                {
-                                    "thread-index": 4,
-                                    "thread": "cpu4",
-                                    "current": 46,
-                                    "five-second-avg": 39,
-                                    "one-minute-avg": 24,
-                                    "five-minute-avg": 26
-                                },
-                                {
-                                    "thread-index": 5,
-                                    "thread": "cpu5",
-                                    "current": 36,
-                                    "five-second-avg": 36,
-                                    "one-minute-avg": 25,
-                                    "five-minute-avg": 27
-                                },
-                                {
-                                    "thread-index": 6,
-                                    "thread": "cpu6",
-                                    "current": 33,
-                                    "five-second-avg": 30,
-                                    "one-minute-avg": 23,
-                                    "five-minute-avg": 26
-                                },
-                                {
-                                    "thread-index": 7,
-                                    "thread": "cpu7",
-                                    "current": 45,
-                                    "five-second-avg": 35,
-                                    "one-minute-avg": 26,
-                                    "five-minute-avg": 27
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        ]
-    }
+This section will cover monitoring VELOS componenents.
 
 Monitoring VELOS Component Platform Status via API
 --------------------------------------------
 
+You can get the status of the VELOS chassis components using the following API call. This will combine that status of all of the componenets into a single API call. These can also be broken out into more targeted API calls for specific compoenents which are also covered later in this section. 
+
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components
+
+For each blade, controller installed in the system, you'll see descrription, serial number, part number, and NEBS state. You'll also see detailed blade filesystem information, CPU, memory, and storage stats and temperature information. You can also monitor the various firmware update status and versions. 
 
 .. code-block:: json
 
@@ -6567,23 +6121,553 @@ Monitoring VELOS Component Platform Status via API
     }
 
 
+Monitoring VELOS Chassis Status via API
+--------------------------------------------
+
+You can get the status of the VELOS chassis via API by using the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=chassis
+
+In the output, you'll see the chassis description, serial number, part number, and NEBS status. You'll aslo see the current PSU state.
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "chassis",
+                "config": {
+                    "name": "chassis"
+                },
+                "state": {
+                    "description": "CloudScale Viprion CX410",
+                    "serial-no": "chs600032s",
+                    "part-no": "400-0087-02 REV 6",
+                    "empty": false,
+                    "f5-platform:nebs": {
+                        "capable": false,
+                        "enabled": false
+                    }
+                },
+                "f5-platform:psu": {
+                    "state": {
+                        "redundancy-mode": "no-redundancy",
+                        "severity": "warning"
+                    },
+                    "config": {
+                        "redundancy-mode": "no-redundancy",
+                        "severity": "warning"
+                    }
+                }
+            }
+        ]
+    }
+
+Monitoring VELOS Controller Status via API
+--------------------------------------------
+
+The API call below will query a specific system controller. You can replace **component=controller-1** at the end of the API call with **component=controller-2** to see the second controller status.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=controller-1
+
+In the output, you'll see the controller description, serial number, part number, NEBS and TPM status. You'll also see detailed controller filesystem information, CPU, memory, and storage stats and temperature information. You can also monitor the various firmware update status and versions. 
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "controller-1",
+                "config": {
+                    "name": "controller-1"
+                },
+                "state": {
+                    "description": "CloudScale Viprion SX410",
+                    "serial-no": "bld422584s",
+                    "part-no": "SUB-0881-00 REV B",
+                    "empty": false,
+                    "f5-platform:tpm-integrity-status": "Valid",
+                    "f5-platform:nebs": {
+                        "capable": true,
+                        "enabled": false
+                    },
+                    "f5-platform:file-systems": {
+                        "file-system": [
+                            {
+                                "area": "platform/sysroot",
+                                "category": "F5OS System",
+                                "total": "353835896832",
+                                "free": "233832402944",
+                                "used": "102002380800",
+                                "used-percent": 30
+                            },
+                            {
+                                "area": "platform/images",
+                                "category": "F5OS Images",
+                                "total": "270494859264",
+                                "free": "182400954368",
+                                "used": "74326732800",
+                                "used-percent": 28
+                            },
+                            {
+                                "area": "partition2/config",
+                                "category": "F5OS System",
+                                "total": "10726932480",
+                                "free": "10492076032",
+                                "used": "234856448",
+                                "used-percent": 2
+                            },
+                            {
+                                "area": "partition2/images",
+                                "category": "F5OS Partition Images",
+                                "total": "16095641600",
+                                "free": "12324638720",
+                                "used": "3771002880",
+                                "used-percent": 23
+                            },
+                            {
+                                "area": "partition2/shared",
+                                "category": "F5OS Partition",
+                                "total": "10726932480",
+                                "free": "10682204160",
+                                "used": "44728320",
+                                "used-percent": 0
+                            },
+                            {
+                                "area": "partition3/config",
+                                "category": "F5OS System",
+                                "total": "10726932480",
+                                "free": "10499624960",
+                                "used": "227307520",
+                                "used-percent": 2
+                            },
+                            {
+                                "area": "partition3/images",
+                                "category": "F5OS Partition Images",
+                                "total": "16095641600",
+                                "free": "12324638720",
+                                "used": "3771002880",
+                                "used-percent": 23
+                            },
+                            {
+                                "area": "partition3/shared",
+                                "category": "F5OS Partition",
+                                "total": "10726932480",
+                                "free": "10682204160",
+                                "used": "44728320",
+                                "used-percent": 0
+                            }
+                        ]
+                    },
+                    "f5-platform:memory": {
+                        "total": "33397862400",
+                        "available": "25480728576",
+                        "free": "745287680",
+                        "used-percent": 23,
+                        "platform-total": "33397862400",
+                        "platform-used": "12087713792",
+                        "platform-used-percent": 36
+                    },
+                    "f5-platform:temperature": {
+                        "current": "27.2",
+                        "average": "27.1",
+                        "minimum": "25.7",
+                        "maximum": "29.0"
+                    },
+                    "f5-platform:disk-data": {
+                        "stats": [
+                            {
+                                "disk-data-name": "available",
+                                "disk-data-value": "233832509440"
+                            },
+                            {
+                                "disk-data-name": "capacity",
+                                "disk-data-value": "353835896832"
+                            },
+                            {
+                                "disk-data-name": "used",
+                                "disk-data-value": "102002274304"
+                            }
+                        ]
+                    }
+                },
+                "properties": {
+                    "property": [
+                        {
+                            "name": "fw-version-bios",
+                            "config": {
+                                "name": "fw-version-bios"
+                            },
+                            "state": {
+                                "value": "2.03.175.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-bios-me",
+                            "config": {
+                                "name": "fw-version-bios-me"
+                            },
+                            "state": {
+                                "value": "4.0.4.705",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-cpld",
+                            "config": {
+                                "name": "fw-version-cpld"
+                            },
+                            "state": {
+                                "value": "01.03.0A",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-drive",
+                            "config": {
+                                "name": "fw-version-drive"
+                            },
+                            "state": {
+                                "value": "EDA7602Q",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lcd-app",
+                            "config": {
+                                "name": "fw-version-lcd-app"
+                            },
+                            "state": {
+                                "value": "3.00.144.00.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lcd-bootloader",
+                            "config": {
+                                "name": "fw-version-lcd-bootloader"
+                            },
+                            "state": {
+                                "value": "2.01.109.00.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lop-app",
+                            "config": {
+                                "name": "fw-version-lop-app"
+                            },
+                            "state": {
+                                "value": "2.01.1283.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-lop-bootloader",
+                            "config": {
+                                "name": "fw-version-lop-bootloader"
+                            },
+                            "state": {
+                                "value": "1.02.1019.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-sirr",
+                            "config": {
+                                "name": "fw-version-sirr"
+                            },
+                            "state": {
+                                "value": "1.1.99",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vfc-app-fanCtrl1",
+                            "config": {
+                                "name": "fw-version-vfc-app-fanCtrl1"
+                            },
+                            "state": {
+                                "value": "2.00.1008.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vfc-bootloader-fanCtrl1",
+                            "config": {
+                                "name": "fw-version-vfc-bootloader-fanCtrl1"
+                            },
+                            "state": {
+                                "value": "1.02.798.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-app-psuCtrl1",
+                            "config": {
+                                "name": "fw-version-vpc-app-psuCtrl1"
+                            },
+                            "state": {
+                                "value": "2.00.875.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-app-psuCtrl2",
+                            "config": {
+                                "name": "fw-version-vpc-app-psuCtrl2"
+                            },
+                            "state": {
+                                "value": "2.00.875.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-bootloader-psuCtrl1",
+                            "config": {
+                                "name": "fw-version-vpc-bootloader-psuCtrl1"
+                            },
+                            "state": {
+                                "value": "1.02.669.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        },
+                        {
+                            "name": "fw-version-vpc-bootloader-psuCtrl2",
+                            "config": {
+                                "name": "fw-version-vpc-bootloader-psuCtrl2"
+                            },
+                            "state": {
+                                "value": "1.02.669.0.1",
+                                "f5-platform:update-status": "none"
+                            }
+                        }
+                    ]
+                },
+                "storage": {
+                    "state": {
+                        "f5-platform:disks": {
+                            "disk": [
+                                {
+                                    "disk-name": "nvme0n1",
+                                    "state": {
+                                        "model": "SAMSUNG MZ1LB960HAJQ-00007",
+                                        "vendor": "Samsung",
+                                        "version": "EDA7602Q",
+                                        "serial-no": "S435NE0MA00234",
+                                        "size": "683.00GB",
+                                        "type": "nvme",
+                                        "disk-io": {
+                                            "total-iops": "0",
+                                            "read-iops": "1565157",
+                                            "read-merged": "664508",
+                                            "read-bytes": "16619667456",
+                                            "read-latency-ms": "555713",
+                                            "write-iops": "502634370",
+                                            "write-merged": "383883211",
+                                            "write-bytes": "4484072824320",
+                                            "write-latency-ms": "19297968",
+                                            "read-iops-per-sec": "0",
+                                            "read-bytes-per-sec": "0",
+                                            "write-iops-per-sec": "240",
+                                            "write-bytes-per-sec": "2046857"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "cpu": {
+                    "state": {
+                        "f5-platform:processors": {
+                            "processor": [
+                                {
+                                    "cpu-index": 1,
+                                    "state": {
+                                        "cachesize": "2048(KB)",
+                                        "core-cnt": "8",
+                                        "freq": "2200.000(MHz)",
+                                        "stepping": "1",
+                                        "thread-cnt": "8",
+                                        "modelname": "Intel(R) Atom(TM) CPU C3758 @ 2.20GHz"
+                                    }
+                                }
+                            ]
+                        },
+                        "f5-platform:cpu-utilization": {
+                            "thread": "cpu",
+                            "current": 38,
+                            "five-second-avg": 36,
+                            "one-minute-avg": 25,
+                            "five-minute-avg": 27
+                        },
+                        "f5-platform:cpu-threads": {
+                            "cpu-thread": [
+                                {
+                                    "thread-index": 0,
+                                    "thread": "cpu0",
+                                    "current": 40,
+                                    "five-second-avg": 36,
+                                    "one-minute-avg": 24,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 1,
+                                    "thread": "cpu1",
+                                    "current": 31,
+                                    "five-second-avg": 36,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 27
+                                },
+                                {
+                                    "thread-index": 2,
+                                    "thread": "cpu2",
+                                    "current": 33,
+                                    "five-second-avg": 35,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 27
+                                },
+                                {
+                                    "thread-index": 3,
+                                    "thread": "cpu3",
+                                    "current": 42,
+                                    "five-second-avg": 39,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 4,
+                                    "thread": "cpu4",
+                                    "current": 46,
+                                    "five-second-avg": 39,
+                                    "one-minute-avg": 24,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 5,
+                                    "thread": "cpu5",
+                                    "current": 36,
+                                    "five-second-avg": 36,
+                                    "one-minute-avg": 25,
+                                    "five-minute-avg": 27
+                                },
+                                {
+                                    "thread-index": 6,
+                                    "thread": "cpu6",
+                                    "current": 33,
+                                    "five-second-avg": 30,
+                                    "one-minute-avg": 23,
+                                    "five-minute-avg": 26
+                                },
+                                {
+                                    "thread-index": 7,
+                                    "thread": "cpu7",
+                                    "current": 45,
+                                    "five-second-avg": 35,
+                                    "one-minute-avg": 26,
+                                    "five-minute-avg": 27
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        ]
+    }
 
 
 Monitoring VELOS Power Supply Status via API
 --------------------------------------------
 
+You can monitor any power supply within the VELOS chassis. You can replace **component=psu-1** at the end of the API call with **component=psu-2** or any other psu number to monitor any specific PSU status.
+
 .. code-block:: bash
 
-    GET 
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=psu-1
+
+In the output you'll see the PSU serial number, part number, and state. The state will include current, power, voltage, temperature and fan speed of each power supply.
 
 .. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "psu-1",
+                "config": {
+                    "name": "psu-1"
+                },
+                "state": {
+                    "serial-no": "19331BPJ0075",
+                    "part-no": "PWR-0366-00",
+                    "empty": false
+                },
+                "properties": {
+                    "f5-platform:psu-state": {
+                        "psu-current-in": "3.113",
+                        "psu-current-out": "48.187",
+                        "psu-power-in": "627.0",
+                        "psu-power-out": "594.0",
+                        "psu-voltage-in": "204.0",
+                        "psu-voltage-out": "12.324",
+                        "psu-temperature-1": "25.0",
+                        "psu-temperature-2": "39.7",
+                        "psu-temperature-3": "36.5",
+                        "psu-fan-1-speed": 7552,
+                        "psu-fan-2-speed": 6976
+                    }
+                }
+            }
+        ]
+    }
+
+Monitoring VELOS Power Supply Controller Status via API
+------------------------------------------------------
+
+Each VELOS chasis has multiple power supply controllers that are fully redundant. In the CX410 chassis there are two psu-controllers, and in the CX1610 chassis there are 4 psu controllers. You can monitor their status with the following API call. You can replace **component=psu-controller-1** at the end of the API call with **component=psu-controller-2** or replace it with whichever psu-contrller number you wish to monitor. 
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=psu-controller-1
+
+In the output you'll see the firmware and software versions, serial number, part number and **empty** state which indicates if the psu-controller is installed.
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "psu-controller-1",
+                "config": {
+                    "name": "psu-controller-1"
+                },
+                "state": {
+                    "firmware-version": "1.02.669.0.1",
+                    "software-version": "2.00.875.0.1",
+                    "serial-no": "sub0759g003u",
+                    "part-no": "SUB-0759-04 REV A",
+                    "empty": false
+                }
+            }
+        ]
+    }
+
 
 Monitoring VELOS Fan Tray Status via API
 -----------------------------------------
 
+Each VELOS chassis has one or more fantrays for cooling. The CX410 chassis has a single fan tray, and the CX1610 chassis four fan trays. You can monitor each fan tray with the API call below. You can replace **component=fantray-1** at the end of the API call with **component=fantray-2** to see the second controller status.
+
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=fantray-1
+
+In the output you'll see the firmware and software versions, serial number, part number and **empty** state which indicates if the fantray is installed. It will also display the fantray temperature, inlet fan speeds, and exhaust fan speeds. 
 
 .. code-block:: json
 
@@ -6619,10 +6703,13 @@ Monitoring VELOS Fan Tray Status via API
 Monitoring VELOS LCD Status via API
 -----------------------------------------
 
+Each VELOS chassis has an LCD for initial configuration, alarms, ans basic monitoring. You can check the health of the LCD with the following API call.
+
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=lcd
 
+In the output you'll see the serial number, part number, lcd mode, and empty status.
 
 .. code-block:: json
 
@@ -6648,10 +6735,13 @@ Monitoring VELOS LCD Status via API
 Monitoring VELOS Blade Status via API
 -----------------------------------------
 
+Each VELOS chassis can have multiple dataplane blades installed. The CX410 chassis supports up to eight BX110 blades, or four BX520 blades. The CX1610 chassis can support up to sixteen BX520 blades. You can monitor each blade with the API call below. You can replace **component=blade-1** at the end of the API call with **component=blade-2** or whichever number blade you wish to monitor.
+
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=blade-1
 
+In the output you'll see the blade description, serial number, part numbers, NEBS stats, and empty status. You'll also see the blades firmware status.
 .. code-block:: json
 
     {
@@ -6754,4 +6844,304 @@ Monitoring VELOS Blade Status via API
                 }
             }
         ]
+    }
+
+Monitoring VELOS Chassis and Blade Power Levels via API
+------------------------------------------------------
+
+You can monitor the power levels of each blade in the VELOS chasis using the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-blade-power:blade-power
+
+In the output you can see the total power available, requested, and allocated for all the blades, and then you can see per blade stats showing requested and allocated power as well as the power state.
+
+.. code-block:: json
+
+    {
+        "f5-system-blade-power:blade-power": {
+            "total": {
+                "available": 4555,
+                "requested": 1170,
+                "allocated": 1170
+            },
+            "allocation": [
+                {
+                    "slot-num": 1,
+                    "requested-power": 390,
+                    "allocated-power": 390,
+                    "power-state": "on"
+                },
+                {
+                    "slot-num": 2,
+                    "requested-power": 390,
+                    "allocated-power": 390,
+                    "power-state": "on"
+                },
+                {
+                    "slot-num": 3,
+                    "requested-power": 390,
+                    "allocated-power": 390,
+                    "power-state": "on"
+                },
+                {
+                    "slot-num": 4,
+                    "requested-power": 0,
+                    "allocated-power": 0
+                },
+                {
+                    "slot-num": 5,
+                    "requested-power": 0,
+                    "allocated-power": 0
+                },
+                {
+                    "slot-num": 6,
+                    "requested-power": 0,
+                    "allocated-power": 0
+                },
+                {
+                    "slot-num": 7,
+                    "requested-power": 0,
+                    "allocated-power": 0
+                },
+                {
+                    "slot-num": 8,
+                    "requested-power": 0,
+                    "allocated-power": 0
+                }
+            ]
+        }
+    }
+
+
+Monitoring VELOS Chassis Base MAC Adresses via API
+------------------------------------------------------
+
+You can monitor the base MAC addresses and tiehr assingment using the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-chassis-macs:chassis-macs
+
+In the output you'll see the base MAC address and how MAC addresses get alocated to the partitions. 
+
+.. code-block:: json
+
+    {
+        "f5-system-chassis-macs:chassis-macs": {
+            "base": "0094a18ed000",
+            "partitions": {
+                "partition": [
+                    {
+                        "identifier": 2,
+                        "uuid": "91262b92-7496-43c9-a98e-7813b75a6c61",
+                        "macs": {
+                            "mac": [
+                                {
+                                    "offset": 8,
+                                    "mac-address": "00:94:a1:8e:d0:08"
+                                },
+                                {
+                                    "offset": 9,
+                                    "mac-address": "00:94:a1:8e:d0:09"
+                                },
+                                {
+                                    "offset": 10,
+                                    "mac-address": "00:94:a1:8e:d0:0a"
+                                },
+                                {
+                                    "offset": 11,
+                                    "mac-address": "00:94:a1:8e:d0:0b"
+                                },
+                                {
+                                    "offset": 12,
+                                    "mac-address": "00:94:a1:8e:d0:0c"
+                                },
+                                {
+                                    "offset": 13,
+                                    "mac-address": "00:94:a1:8e:d0:0d"
+                                },
+                                {
+                                    "offset": 14,
+                                    "mac-address": "00:94:a1:8e:d0:0e"
+                                },
+                                {
+                                    "offset": 15,
+                                    "mac-address": "00:94:a1:8e:d0:0f"
+                                },
+                                {
+                                    "offset": 16,
+                                    "mac-address": "00:94:a1:8e:d0:10"
+                                },
+                                {
+                                    "offset": 17,
+                                    "mac-address": "00:94:a1:8e:d0:11"
+                                },
+                                {
+                                    "offset": 18,
+                                    "mac-address": "00:94:a1:8e:d0:12"
+                                },
+                                {
+                                    "offset": 19,
+                                    "mac-address": "00:94:a1:8e:d0:13"
+                                },
+                                {
+                                    "offset": 20,
+                                    "mac-address": "00:94:a1:8e:d0:14"
+                                },
+                                {
+                                    "offset": 21,
+                                    "mac-address": "00:94:a1:8e:d0:15"
+                                },
+                                {
+                                    "offset": 22,
+                                    "mac-address": "00:94:a1:8e:d0:16"
+                                },
+                                {
+                                    "offset": 23,
+                                    "mac-address": "00:94:a1:8e:d0:17"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "identifier": 3,
+                        "uuid": "05114867-6370-426c-99e6-2e0b29125c64",
+                        "macs": {
+                            "mac": [
+                                {
+                                    "offset": 24,
+                                    "mac-address": "00:94:a1:8e:d0:18"
+                                },
+                                {
+                                    "offset": 25,
+                                    "mac-address": "00:94:a1:8e:d0:19"
+                                },
+                                {
+                                    "offset": 26,
+                                    "mac-address": "00:94:a1:8e:d0:1a"
+                                },
+                                {
+                                    "offset": 27,
+                                    "mac-address": "00:94:a1:8e:d0:1b"
+                                },
+                                {
+                                    "offset": 136,
+                                    "mac-address": "00:94:a1:8e:d0:88"
+                                },
+                                {
+                                    "offset": 137,
+                                    "mac-address": "00:94:a1:8e:d0:89"
+                                },
+                                {
+                                    "offset": 138,
+                                    "mac-address": "00:94:a1:8e:d0:8a"
+                                },
+                                {
+                                    "offset": 139,
+                                    "mac-address": "00:94:a1:8e:d0:8b"
+                                },
+                                {
+                                    "offset": 140,
+                                    "mac-address": "00:94:a1:8e:d0:8c"
+                                },
+                                {
+                                    "offset": 141,
+                                    "mac-address": "00:94:a1:8e:d0:8d"
+                                },
+                                {
+                                    "offset": 142,
+                                    "mac-address": "00:94:a1:8e:d0:8e"
+                                },
+                                {
+                                    "offset": 143,
+                                    "mac-address": "00:94:a1:8e:d0:8f"
+                                },
+                                {
+                                    "offset": 144,
+                                    "mac-address": "00:94:a1:8e:d0:90"
+                                },
+                                {
+                                    "offset": 145,
+                                    "mac-address": "00:94:a1:8e:d0:91"
+                                },
+                                {
+                                    "offset": 146,
+                                    "mac-address": "00:94:a1:8e:d0:92"
+                                },
+                                {
+                                    "offset": 147,
+                                    "mac-address": "00:94:a1:8e:d0:93"
+                                },
+                                {
+                                    "offset": 148,
+                                    "mac-address": "00:94:a1:8e:d0:94"
+                                },
+                                {
+                                    "offset": 149,
+                                    "mac-address": "00:94:a1:8e:d0:95"
+                                },
+                                {
+                                    "offset": 150,
+                                    "mac-address": "00:94:a1:8e:d0:96"
+                                },
+                                {
+                                    "offset": 151,
+                                    "mac-address": "00:94:a1:8e:d0:97"
+                                },
+                                {
+                                    "offset": 152,
+                                    "mac-address": "00:94:a1:8e:d0:98"
+                                },
+                                {
+                                    "offset": 153,
+                                    "mac-address": "00:94:a1:8e:d0:99"
+                                },
+                                {
+                                    "offset": 154,
+                                    "mac-address": "00:94:a1:8e:d0:9a"
+                                },
+                                {
+                                    "offset": 155,
+                                    "mac-address": "00:94:a1:8e:d0:9b"
+                                },
+                                {
+                                    "offset": 264,
+                                    "mac-address": "00:94:a1:8e:d1:08"
+                                },
+                                {
+                                    "offset": 265,
+                                    "mac-address": "00:94:a1:8e:d1:09"
+                                },
+                                {
+                                    "offset": 266,
+                                    "mac-address": "00:94:a1:8e:d1:0a"
+                                },
+                                {
+                                    "offset": 267,
+                                    "mac-address": "00:94:a1:8e:d1:0b"
+                                },
+                                {
+                                    "offset": 268,
+                                    "mac-address": "00:94:a1:8e:d1:0c"
+                                },
+                                {
+                                    "offset": 269,
+                                    "mac-address": "00:94:a1:8e:d1:0d"
+                                },
+                                {
+                                    "offset": 270,
+                                    "mac-address": "00:94:a1:8e:d1:0e"
+                                },
+                                {
+                                    "offset": 271,
+                                    "mac-address": "00:94:a1:8e:d1:0f"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
     }
