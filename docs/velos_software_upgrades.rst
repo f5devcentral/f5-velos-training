@@ -95,9 +95,9 @@ You can alternatively copy the controller and partition images into the floating
 
 .. code-block:: bash
 
-    root@xubuntu-vm# scp F5OS-C-1.2.1-10781.CONTROLLER.iso root@10.255.0.147:/var/import/staging/.
+    prompt# scp F5OS-C-1.2.1-10781.CONTROLLER.iso root@10.255.0.147:/var/import/staging/.
 
-    root@xubuntu-vm# scp F5OS-C-1.2.1-10781.PARTITION.iso root@10.255.0.147:/var/import/staging/.
+    prompt# scp F5OS-C-1.2.1-10781.PARTITION.iso root@10.255.0.147:/var/import/staging/.
 
 
 Uploading Controller and Partition Images from a Remote Server via the API
@@ -448,7 +448,7 @@ In the system controller CLI you can use the **show image** command to see the c
     1.6.0-12952  2           ready   2023-05-31  3.14GB  false  -                      
     1.8.0-19782  2           ready   2024-11-22  3.10GB  false  LTS                    
     1.8.2-28324  2           ready   2025-10-15  4.69GB  false  EHF-1                  
-    2.0.0-22925  2           ready   2026-05-20  4.95GB  true   -      Devlopment  3   
+    2.0.0-22925  2           ready   2026-05-20  4.95GB  true   -      Development  3   
                                                                     Production  2   
                                                                     default     1   
 
@@ -671,7 +671,7 @@ You’ll now be able perform either a **bundled** or **unbundled** software upgr
   :align: center
   :scale: 70%
 
-A warning will be displayed after uoi hit Save asking you to confirm.
+A warning will be displayed asking you to confirm after you hit Save.
 
 .. image:: images/velos_software_upgrades/image8b.png
   :align: center
@@ -793,7 +793,7 @@ In the system controller CLI you can use the **show image** command to see the c
     1.6.0-12952  1           ready   2023-05-31  3.14GB  false  -                      
     1.8.0-19782  1           ready   2024-11-22  3.10GB  false  LTS                    
     1.8.2-28324  1           ready   2025-10-15  4.69GB  false  EHF-1                  
-    2.0.0-22925  1           ready   2026-05-20  4.95GB  true   -      Devlopment  3   
+    2.0.0-22925  1           ready   2026-05-20  4.95GB  true   -      Development  3   
                                                                     default     1   
     2.0.0-25885  1           ready   2026-07-08  5.00GB  true   HR-1   Production  2   
 
@@ -823,7 +823,7 @@ In the system controller CLI you can use the **show image** command to see the c
     1.6.0-12952  2           ready   2023-05-31  3.14GB  false  -                      
     1.8.0-19782  2           ready   2024-11-22  3.10GB  false  LTS                    
     1.8.2-28324  2           ready   2025-10-15  4.69GB  false  EHF-1                  
-    2.0.0-22925  2           ready   2026-05-20  4.95GB  true   -      Devlopment  3   
+    2.0.0-22925  2           ready   2026-05-20  4.95GB  true   -      Development  3   
                                                                     default     1   
     2.0.0-25885  2           ready   2026-07-08  5.00GB  true   HR-1   Production  2   
 
@@ -835,7 +835,7 @@ You can enter **config** mode and check the version using the **partitions parti
 
 .. code-block:: bash
 
-    velos-1-gsa-2-active(config)# partitions partition Devlopment check-version iso-version 2.0.0-25885 
+    velos-1-gsa-2-active(config)# partitions partition Development check-version iso-version 2.0.0-25885 
     result Partition upgrade compatibility check succeeded.
     Estimated time: 8 minutes
     Reboot(s): 1 for each blade
@@ -846,7 +846,7 @@ Once the check version has been done, you can then run the **set-version** which
 
 .. code-block:: bash
 
-    velos-1-gsa-2-active(config)# partitions partition Devlopment set-version iso-version 2.0.0-25885  
+    velos-1-gsa-2-active(config)# partitions partition Development set-version iso-version 2.0.0-25885  
     Partition database compatibility check succeeded.
     Changing running partition software version will interrupt tenant operation and data plane traffic.
     Estimated time: 8 minutes
@@ -867,7 +867,7 @@ You can then monitor the partition install status using the **show partitions in
     none        -   -            -            -            -            -            -           
     default     1   2.0.0-22925  2.0.0-22925  2.0.0-22925  2.0.0-22925  success      -           
     Production  2   2.0.0-25885  2.0.0-25885  2.0.0-25885  2.0.0-25885  success      -           
-    Devlopment  3   2.0.0-22925  2.0.0-22925  2.0.0-25885  2.0.0-25885  in-progress  1           
+    Development  3   2.0.0-22925  2.0.0-22925  2.0.0-25885  2.0.0-25885  in-progress  1           
 
     velos-1-gsa-2-active# 
 
@@ -883,7 +883,7 @@ It will then go through various states as the upgrade progresses.
     none        -   -            -            -            -            -               -           
     default     1   2.0.0-22925  2.0.0-22925  2.0.0-22925  2.0.0-22925  success         -           
     Production  2   2.0.0-25885  2.0.0-25885  2.0.0-25885  2.0.0-25885  success         -           
-    Devlopment  3   2.0.0-22925  2.0.0-22925  2.0.0-25885  2.0.0-25885  switching-role  1           
+    Development  3   2.0.0-22925  2.0.0-22925  2.0.0-25885  2.0.0-25885  switching-role  1           
 
     velos-1-gsa-2-active#
 
@@ -899,7 +899,7 @@ When completed, the install status will show **success**.
     none        -   -            -            -            -            -        -           
     default     1   2.0.0-22925  2.0.0-22925  2.0.0-22925  2.0.0-22925  success  -           
     Production  2   2.0.0-25885  2.0.0-25885  2.0.0-25885  2.0.0-25885  success  -           
-    Devlopment  3   2.0.0-25885  2.0.0-25885  2.0.0-25885  2.0.0-25885  success  -           
+    Development  3   2.0.0-25885  2.0.0-25885  2.0.0-25885  2.0.0-25885  success  -           
 
     velos-1-gsa-2-active#   
 

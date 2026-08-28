@@ -33,7 +33,7 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 VLAN Tagging for the Management Port via CLI
 --------------------------------------------
 
-To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object using the **mgmt-vlans** CLI command on the system controller. In the example below, a tagged VLAN using the VLAN tag 500 is added. You must ensure you coordinate making VLAN tagging changes to the upstream switch, otherwise you may be locked out of the system. It is best to make these changes vai the console port, so that network changes do not disrupt management access
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object using the **mgmt-vlans** CLI command on the system controller. In the example below, a tagged VLAN using the VLAN tag 500 is added. You must ensure you coordinate making VLAN tagging changes to the upstream switch, otherwise you may be locked out of the system. It is best to make these changes via the console port, so that network changes do not disrupt management access
 
 .. code-block:: bash
 
@@ -644,7 +644,7 @@ Note that the hash key can be used to check and compare the status of the primar
 Password Hashing Algorithm
 ==========================
 
-Some environments require a different password hashing algorithm than the default sha512, and have requested support for Bcrypt/blowfish as the standard encryption for passwords stored on F5OS. this has been added as an option in F5OS 2.0. If enabled, the existing user passwords hashed by the old algorithm are unaffected. Only new passwords that come after the configuration change will be encrypted by theÂ  newly chosen algorithm. Existing users' access privileges into the system will not be affected and users will not see any difference in their authentication experience. The F5OS system administrators can enforce password changes when a need arises to apply the new algorithm for all users
+Some environments require a different password hashing algorithm than the default sha512 and have requested support for Bcrypt/blowfish as the standard encryption for passwords stored on F5OS. this has been added as an option in F5OS 2.0. If enabled, the existing user passwords hashed by the old algorithm are unaffected. Only new passwords that come after the configuration change will be encrypted by the newly chosen algorithm. Existing users' access privileges into the system will not be affected and users will not see any difference in their authentication experience. The F5OS system administrators can enforce password changes when a need arises to apply the new algorithm for all users
 
 Setting the Password Hashing Algorithm via CLI
 ----------------------------------------------
@@ -897,7 +897,7 @@ If you choose the **Store TLS** option of **False** then the certificate details
   :align: center
   :scale: 100%
 
-You can then use the **Edit Certificate* options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
+You can then use the **Edit Certificate** options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
 
 .. image:: images/velos_security/imagecert5.png
   :align: center
@@ -1402,7 +1402,7 @@ When logging in as the user with the **user** role assigned, the configuration m
     autowizard           - Automatically query for mandatory elements
     clear                - Clear parameter
     commit               - Confirm a pending commit
-    complete-on-space    - Enable/disable completion on spac
+    complete-on-space    - Enable/disable completion on space
 
 The **user** role will also prevent the user from running **file** operations from the CLI.
 
@@ -2976,7 +2976,7 @@ The **deny-root-ssh** mode when enabled restricts root access over SSH. However,
 +----------------+----------------------+-------------------+
 
 
-For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if the token lifetime is set fort two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
+For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if the token lifetime is set for two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
 
 
 Configuring SSH and CLI Timeouts & Deny Root SSH Settings via CLI
@@ -3557,7 +3557,7 @@ When basic authentication is enabled, a client will be allowed to obtain an auth
 
 .. code-block:: bash
 
-    jprompt% curl -i -sku admin:admin -H "Content-Type: application/yang-data+json"  https://172.22.50.9:8888/restconf/data/openconfig-system:system/config
+    prompt% curl -i -sku admin:admin -H "Content-Type: application/yang-data+json"  https://172.22.50.9:8888/restconf/data/openconfig-system:system/config
     HTTP/1.1 200 OK
     Date: Mon, 03 Mar 2025 22:46:02 GMT
     Server: Apache
@@ -3693,7 +3693,7 @@ You may configure the local password policy to ensure secure passwords are utili
 - **Unlock Time** - Time (seconds) before a locked account is automatically unlocked.
 - **Warn Age** - Number of days before the password expires to start warning the user.
 
-In addition the password hashing algoithm is also configurable, as well as the number of rounrds the hashing algorithm will use:
+In addition, the password hashing algorithm is also configurable, as well as the number of rounds the hashing algorithm will use:
 
 - **Password Hashing Algorithm** - sha512 or blowfish. A hash based on the Blowfish block cipher, modified to have an extra-expensive key schedule. 
 
@@ -3731,7 +3731,7 @@ Local Password Policies can be set in the CLI using the **system aaa password-po
     warn-age               Number of days before the password expires to start warning the user.
     velos-1-gsa-1-active(config)#
 
-You can also configure the password hashing algorithm for the system. Any passwoerds stored within the system are encrypted with either sha512 or blowfish hashing algorithms. You can also configurwe the number of rounds for the hashin algorithms.
+You can also configure the password hashing algorithm for the system. Any passwords stored within the system are encrypted with either sha512 or blowfish hashing algorithms. You can also configure the number of rounds for the hashing algorithms.
 
 .. code-block:: bash
 
@@ -3746,7 +3746,7 @@ You can also configure the password hashing algorithm for the system. Any passwo
                 algorithms, not just this entry)
     velos-1-gsa-1-active(config)#
 
-You can configure the login policy parmeters using the **system aaa login-policy config** command.
+You can configure the login policy parameters using the **system aaa login-policy config** command.
 
 .. code-block:: bash
 
@@ -4610,7 +4610,7 @@ Before you can log in to the webUI using client certificate authentication, you 
 Configuring Client Certificate Authentication via webUI
 -------------------------------------------------------
 
-Although you can enable client certificate authentication via the webUI, you must upload or create your certificate via the CLI or API first. Otherwise, you will end up being locked out of the webUI, until the full configuraton is completed.
+Although you can enable client certificate authentication via the webUI, you must upload or create your certificate via the CLI or API first. Otherwise, you will end up being locked out of the webUI, until the full configuration is completed.
 
 See the section above about configuration of the certificate before moving on. If you have loaded a certificate, then you can enable client certificate authentication via the webUI as seen below.
 

@@ -4116,7 +4116,7 @@ drive-capacity-fault
 +------------------+------------------------------------------------------------------------------------+
 | EVENT            | Drive usage exceeded 97%, used={{.usedPercent}}%                                   |
 |                  |                                                                                    |
-|                  | Drive usage with in range, used={{.usedPercent}}%                                  |
+|                  | Drive usage within range, used={{.usedPercent}}%                                  |
 |                  |                                                                                    |
 |                  | Example:                                                                           |
 |                  |                                                                                    |
@@ -4161,7 +4161,7 @@ You can view the current utilization by issuing the command **show cluster nodes
 
     green-partition-chassis1-gsa-2#
 
-To get a further breakdown showing the growth rate and percenatge used, enter the **show cluster nodes node <blade-#> state disk-usage** command. In the example below, you can see that the current utilization of **/sysroot** is 5% and the **disk-usage status** is **in-range**.
+To get a further breakdown showing the growth rate and percentage used, enter the **show cluster nodes node <blade-#> state disk-usage** command. In the example below, you can see that the current utilization of **/sysroot** is 5% and the **disk-usage status** is **in-range**.
 
 .. code-block:: bash
 
@@ -4210,7 +4210,7 @@ The system will monitor the storage utilization of the VELOS disks and warn if t
 - drive-capacity:warning-limit  - Drive Usage exceeded 85%
 
 
-In the example below, the default **disk-usage-threshold** paremeters have been lowered to artificially generate a trap condition.
+In the example below, the default **disk-usage-threshold** parameters have been lowered to artificially generate a trap condition.
 
 .. code-block:: bash
 
@@ -4791,7 +4791,7 @@ module-communication-error
 
 SNMP traps will be generated for components being present or removed using the **module-present** traps. As an example, blades being inserted (present) or removed will generate traps. If the LCD panel is present or removed, or if the PeerCc (Peer Chassis Controller) is present or removed. These type of traps only provide informational/event messages **alertEffect=2** as they are indicating the presence or removal of a module or part. It does not indicate a failure. 
 
-Failures are tracked with **module-communication-error** traps as seen in some fo the examples below.
+Failures are tracked with **module-communication-error** traps as seen in some of the examples below.
 
 
 
@@ -5419,7 +5419,7 @@ Within each system controller you can view the current mac-allocation status acr
     velos-1-gsa-1-active# 
 
 
-The command **show system chassis-macs** will show which MAC addresses have been allocated, and wether or not they have been allocated as single MAC addresses, or blocks.
+The command **show system chassis-macs** will show which MAC addresses have been allocated, and whether or not they have been allocated as single MAC addresses, or blocks.
 
 .. code-block:: bash
 
@@ -6378,7 +6378,7 @@ Below is an example of the rx-pwr ddm monitoring. There is a low warn threshold 
     state ddm rx-pwr high-threshold alarm 3.4   <-- Will trigger SNMP Trap for High Alarm
     state ddm rx-pwr high-threshold warn 2.4    <-- Will trigger SNMP Trap for High Warn
 
-Prior to F5OS 2.0 there was a single SNMP trap to signify HiAlarm, HiWarn, LoAlarm, and LoWarn state for each of the following txPwr, rxPwr, txBias, ddmTemp, and ddmVcc. This proved to be insufficent because two possible states could be true at the same time, especially for optics using multi-lane. There was no way to clear certain alarms when multiple conditions were met because of this. In F5OS 2.0 and later, more granular traps have been introduced for each of the following txPwr, rxPwr, txBias, ddmTemp, and ddmVcc to address this problem. The table below shows the new SNMP traps that are introdcued on the right, and the old deprecated traps on the left. You should reload the new 2.0 SNMP MIBs into yor SNMP manager or trap receiver to pick up these new changes. 
+Prior to F5OS 2.0 there was a single SNMP trap to signify HiAlarm, HiWarn, LoAlarm, and LoWarn state for each of the following txPwr, rxPwr, txBias, ddmTemp, and ddmVcc. This proved to be insufficient because two possible states could be true at the same time, especially for optics using multi-lane. There was no way to clear certain alarms when multiple conditions were met because of this. In F5OS 2.0 and later, more granular traps have been introduced for each of the following txPwr, rxPwr, txBias, ddmTemp, and ddmVcc to address this problem. The table below shows the new SNMP traps that are introduced on the right, and the old deprecated traps on the left. You should reload the new 2.0 SNMP MIBs into your SNMP manager or trap receiver to pick up these new changes. 
 
 +----------------------------+-------------------------------------+
 | Traps Prior to version 2.0 | New Traps with Version 2.0 or later |

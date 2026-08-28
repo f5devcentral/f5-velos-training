@@ -9,7 +9,7 @@ There are three main points of management within the VELOS chassis: the **system
   :scale: 90%
 
 
-Additionally, they each run their own version of software; tenants are able to run specific versions of TMOS which have been approved to run on the VELOS platform, and system controllers and chassis partitions each have their own version of F5OS software. Different versions of BIG-IP tenants can run side-by-side within the VELOS chassis, and support for different sized tenants, mixed configurations, and cross blade support is fully supported and works similar to how vCMP worked in VIPRION. The supported BIG-IP/TMOS versions along with their supported F5OS versions for the various VELOS platforms can be found here:
+Additionally, they each run their own version of software; tenants can run specific versions of TMOS which have been approved to run on the VELOS platform, and system controllers and chassis partitions each have their own version of F5OS software. Different versions of BIG-IP tenants can run side-by-side within the VELOS chassis, and support for different sized tenants, mixed configurations, and cross blade support is fully supported and works similar to how vCMP worked in VIPRION. The supported BIG-IP/TMOS versions along with their supported F5OS versions for the various VELOS platforms can be found here:
 
 `K86001294: F5OS hardware/software support matrix <https://my.f5.com/manage/s/article/K86001294>`_
 

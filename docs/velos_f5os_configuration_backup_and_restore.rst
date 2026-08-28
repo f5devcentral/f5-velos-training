@@ -374,7 +374,7 @@ To download a specific config file, use the following API call.
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
 
-For the **Headers** secion of the Postman request be sure to add the following headers:
+For the **Headers** section of the Postman request be sure to add the following headers:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/config-headers.png
   :align: center

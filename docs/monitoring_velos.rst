@@ -153,7 +153,7 @@ High level system controller status can be obtained by using the **show componen
     6      cpu6  35       34      40      43      
     7      cpu7  42       45      40      44      
 
-High level fantray status can be obtained by using the **show components component <fantray-#>** command:
+High level fan tray status can be obtained by using the **show components component <fantray-#>** command:
 
 .. code-block:: bash
 
@@ -288,10 +288,10 @@ The body of the response will look similar to the output below.
     }
 
 
-Fantray Inventory from the API
+Fan Tray Inventory from the API
 ---------------------------
 
-The chassis fantray status can be queried via the following API command:
+The chassis fan tray status can be queried via the following API command:
 
 .. code-block:: bash
 
@@ -952,7 +952,7 @@ There is a CLI command to monitor all the internal and external ports and LAGs o
     ethernet state counters out-8021q-frames 0
 
 
-The **show lacp** CLI command will show both external LAG interfaces if the management ports are bonded together, and internal LAG’s to each slot. In the output below there are 3 blades installed in slots 1-3. They will be labeled **cplagg_1.<slot#>**. The **mgmt_aggr** is a name provided by the admin when the LAG for the external management ports were configured. This name will be different depending on what the admin chooses for a name.
+The **show lacp** CLI command will show both external LAG interfaces if the management ports are bonded together, and internal LAG’s to each slot. In the output below there are 3 blades installed in slots 1-3. They will be labeled **cplagg_1.<slot#>**. The name **mgmt_aggr** was provided by the admin when the LAG for the external management ports were configured. This name will be different depending on what the admin chooses for a name.
 
 .. code-block:: bash
 
@@ -6130,7 +6130,7 @@ You can get the status of the VELOS chassis via API by using the following API c
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=chassis
 
-In the output, you'll see the chassis description, serial number, part number, and NEBS status. You'll aslo see the current PSU state.
+In the output, you'll see the chassis description, serial number, part number, and NEBS status. You'll also see the current PSU state.
 
 .. code-block:: json
 
@@ -6629,7 +6629,7 @@ In the output you'll see the PSU serial number, part number, and state. The stat
 Monitoring VELOS Power Supply Controller Status via API
 ------------------------------------------------------
 
-Each VELOS chasis has multiple power supply controllers that are fully redundant. In the CX410 chassis there are two psu-controllers, and in the CX1610 chassis there are 4 psu controllers. You can monitor their status with the following API call. You can replace **component=psu-controller-1** at the end of the API call with **component=psu-controller-2** or replace it with whichever psu-contrller number you wish to monitor. 
+Each VELOS chassis has multiple power supply controllers that are fully redundant. In the CX410 chassis there are two psu-controllers, and in the CX1610 chassis there are 4 psu controllers. You can monitor their status with the following API call. You can replace **component=psu-controller-1** at the end of the API call with **component=psu-controller-2** or replace it with whichever psu-controller number you wish to monitor. 
 
 .. code-block:: bash
 
@@ -6661,13 +6661,13 @@ In the output you'll see the firmware and software versions, serial number, part
 Monitoring VELOS Fan Tray Status via API
 -----------------------------------------
 
-Each VELOS chassis has one or more fantrays for cooling. The CX410 chassis has a single fan tray, and the CX1610 chassis four fan trays. You can monitor each fan tray with the API call below. You can replace **component=fantray-1** at the end of the API call with **component=fantray-2** to see the second controller status.
+Each VELOS chassis has one or more fan trays for cooling. The CX410 chassis has a single fan tray, and the CX1610 chassis four fan trays. You can monitor each fan tray with the API call below. You can replace **component=fantray-1** at the end of the API call with **component=fantray-2** to see the second controller status.
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=fantray-1
 
-In the output you'll see the firmware and software versions, serial number, part number and **empty** state which indicates if the fantray is installed. It will also display the fantray temperature, inlet fan speeds, and exhaust fan speeds. 
+In the output you'll see the firmware and software versions, serial number, part number and **empty** state which indicates if the fan tray is installed. It will also display the fan tray temperature, inlet fan speeds, and exhaust fan speeds. 
 
 .. code-block:: json
 
@@ -6703,7 +6703,7 @@ In the output you'll see the firmware and software versions, serial number, part
 Monitoring VELOS LCD Status via API
 -----------------------------------------
 
-Each VELOS chassis has an LCD for initial configuration, alarms, ans basic monitoring. You can check the health of the LCD with the following API call.
+Each VELOS chassis has an LCD for initial configuration, alarms, and basic monitoring. You can check the health of the LCD with the following API call.
 
 .. code-block:: bash
 
@@ -6735,13 +6735,14 @@ In the output you'll see the serial number, part number, lcd mode, and empty sta
 Monitoring VELOS Blade Status via API
 -----------------------------------------
 
-Each VELOS chassis can have multiple dataplane blades installed. The CX410 chassis supports up to eight BX110 blades, or four BX520 blades. The CX1610 chassis can support up to sixteen BX520 blades. You can monitor each blade with the API call below. You can replace **component=blade-1** at the end of the API call with **component=blade-2** or whichever number blade you wish to monitor.
+Each VELOS chassis can have multiple data plane blades installed. The CX410 chassis supports up to eight BX110 blades, or four BX520 blades. The CX1610 chassis can support up to sixteen BX520 blades. You can monitor each blade with the API call below. You can replace **component=blade-1** at the end of the API call with **component=blade-2** or whichever number blade you wish to monitor.
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=blade-1
 
 In the output you'll see the blade description, serial number, part numbers, NEBS stats, and empty status. You'll also see the blades firmware status.
+
 .. code-block:: json
 
     {
@@ -6849,7 +6850,7 @@ In the output you'll see the blade description, serial number, part numbers, NEB
 Monitoring VELOS Chassis and Blade Power Levels via API
 ------------------------------------------------------
 
-You can monitor the power levels of each blade in the VELOS chasis using the following API call.
+You can monitor the power levels of each blade in the VELOS chassis using the following API call.
 
 .. code-block:: bash
 
@@ -6918,13 +6919,13 @@ In the output you can see the total power available, requested, and allocated fo
 Monitoring VELOS Chassis Base MAC Addresses via API
 ------------------------------------------------------
 
-You can monitor the base MAC addresses and tiehr assingment using the following API call.
+You can monitor the base MAC addresses and their assignment using the following API call.
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-chassis-macs:chassis-macs
 
-In the output you'll see the base MAC address and how MAC addresses get alocated to the partitions. 
+In the output you'll see the base MAC address and how MAC addresses get allocated to the partitions. 
 
 .. code-block:: json
 

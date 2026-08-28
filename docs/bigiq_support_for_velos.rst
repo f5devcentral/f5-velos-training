@@ -138,7 +138,7 @@ Below is an example of a scheduled backup where VELOS and/or rSeries devices can
   :align: center
   :scale: 70%
 
-If a restore of the F5OS layer needs to occur, this is not facilitated from BIG-IQ. You will need to download the saved backup you wish to restore for F5OS from the BIG-IQ system, and then follow the restoration procedures as outlined in the article below.
+If a restore of the F5OS layer needs to occur, this is not facilitated from BIG-IQ. You will need to download the saved backup you wish to restore for F5OS from the BIG-IQ system and then follow the restoration procedures as outlined in the article below.
 
 `K50135154: Back up and restore the F5OS-C configuration on a VELOS system <https://my.f5.com/manage/s/article/K50135154>`_
 

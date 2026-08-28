@@ -1716,7 +1716,7 @@ You’ll then see a summary of all 3 partitions, each with a unique **partition 
   :align: center
   :scale: 100%
 
-Its possible the indisvidual blades may need to load updated software and possibly firmware. You'll be able to monitor the upgrade status in this screen.
+It's possible the individual blades may need to load updated software and possibly firmware. You'll be able to monitor the upgrade status in this screen.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image20a.png
   :align: center
@@ -1729,7 +1729,7 @@ Eventually, the **Node Status** should show **Complete**, and you'll see the **I
   :scale: 100%
 
 
-If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to. Hyperlinnks will also be displayed for the WebUI of each chassis partition's managment interface. You can click on any of the links to log directly into the chassis partition.
+If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to. Hyperlinks will also be displayed for the WebUI of each chassis partition's management interface. You can click on any of the links to log directly into the chassis partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image21.png
   :align: center
@@ -2692,7 +2692,7 @@ The Import/Export utility requires an external HTTPS server to copy to/from. A p
 System Monitoring -> Foreground Diagnostics
 -------------------------------------------
 
-Foregound Diagnostics provide admins with the ability to assess, validate, and troubleshoot hardware and service health in a live production environment, minimizing downtime. Specifcally, you can:
+Foreground Diagnostics provide admins with the ability to assess, validate, and troubleshoot hardware and service health in a live production environment, minimizing downtime. Specifically, you can:
 
 - **Evaluate system health while active**: Run diagnostic tests without the need for rebooting, even while tenants are actively processing traffic (although some may impact performance).
 - **Subsystem-specific insights**: Identify root causes of performance issues and more quickly help determine the need to start the RMA process for components like drives, sensors, memory, blades, PSUs, LCDs, and fan-trays.
@@ -2709,7 +2709,7 @@ Foregound Diagnostics provide admins with the ability to assess, validate, and t
 System Monitoring -> Log Settings
 -------------------------------
 
-Under **System Monitoring > Log Settings** you may add remote log servers for the F5OS system controllers, specify if the system hostname should be included in the remote logs, and setup certifcates, keys, and CAs for secure logging.
+Under **System Monitoring > Log Settings** you may add remote log servers for the F5OS system controllers, specify if the system hostname should be included in the remote logs, and setup certificates, keys, and CAs for secure logging.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image30.png
   :align: center
@@ -2793,7 +2793,7 @@ System Monitoring -> Telemetry
 ------------------------------
 
 
-In addtion to syslog, and SNMP, F5OS supports Open Telemetry (Otel) to export analytics and logs to external management platforms. OpenTelemetry streamlines observability in distributed systems through standardized APIs, libraries, and tools for collecting telemetry data, including traces, metrics, and logs.
+In addition to syslog, and SNMP, F5OS supports Open Telemetry (Otel) to export analytics and logs to external management platforms. OpenTelemetry streamlines observability in distributed systems through standardized APIs, libraries, and tools for collecting telemetry data, including traces, metrics, and logs.
 
 F5OS OpenTelemetry enables the efficient collection of streaming metrics and logs in a structured format from the F5OS product to display in your observability platform. The F5OS supports gRPC endpoints and each OpenTelemetry Line Protocol (OTLP) endpoint is provided with the ability to toggle instrument-based filtering. 
 
@@ -2818,7 +2818,7 @@ More details on configuring OpenTelemetry on F5OS can be found here:
   :align: center
   :scale: 70% 
 
-Below is an exqmple of the OTel setup:
+Below is an example of the OTel setup:
 
 .. image:: images/initial_setup_of_velos_system_controllers/otel2.png
   :align: center
@@ -2842,7 +2842,7 @@ System controller status, HA state, and software upgrades are managed via the **
 
 An administrator can failover from one system controller to the other and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
 
-Any upgrade that is initiated will update rolling upgrade by default, meaning the standby is upgraded first, and then a reboot is initiated of the stnadby controller. Once the standby system controllers come active, a failover will be initiated moving services to the newly upgraded controller. At that point the upgrade process is initiated on the former active controller. 
+Any upgrade that is initiated will update rolling upgrade by default, meaning the standby is upgraded first, and then a reboot is initiated of the standby controller. Once the standby system controllers come active, a failover will be initiated moving services to the newly upgraded controller. At that point the upgrade process is initiated on the former active controller. 
 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image28.png
@@ -2863,7 +2863,7 @@ External **DNS Lookup Servers** and **Search Domains** can be configured. This w
 System Settings -> General
 --------------------------
 
-The **System Settings > General** page displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partition, and you can reboot eaither system controller from this page. You can also configure the system hostname, Login Banner, and Message of the Day as well as other properties.
+The **System Settings > General** page displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partition, and you can reboot either system controller from this page. You can also configure the system hostname, Login Banner, and Message of the Day as well as other properties.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image43.png
   :align: center
@@ -2887,7 +2887,7 @@ Licenses can be applied via CLI, webUI, or API. A base registration key and opti
 System Settings -> Management Interfaces
 -----------------------------------------
 
-Under **System Settings**, you can view/edit both the floating and static IP addresses for the system controllers. Starting in F5OS version 1.8.x you can also add VLAN tagging to the out of band mangement ports that will in turn map to controller IPs, chassis partitions IPs, and TMOS tenant IPs. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
+Under **System Settings**, you can view/edit both the floating and static IP addresses for the system controllers. Starting in F5OS version 1.8.x you can also add VLAN tagging to the out of band management ports that will in turn map to controller IPs, chassis partitions IPs, and TMOS tenant IPs. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image22.png
   :align: center
@@ -2908,13 +2908,13 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 System Settings -> System Security
 -------------------------------------
 
-Access to specific services running on the system controller F5OS layer can be restricted to certain IP addresses and/or subnets via the **Systems Settings > Security** page. The **Allowed IP Addresses** section will allow the admin to restrict who can access the F5OS layer. Here an administrator can also set the securit complaince mode for Common Criteria. Shell and LCD Access allows Appliance mode to be enabled or disable at the controller level, as well as denying root access over SSH, and enabling superuser bash access. Finally, there is an option to configure the LCD mode. Login policies can be set and max sessions can be configured for both SSH and RESTCONF.
+Access to specific services running on the system controller F5OS layer can be restricted to certain IP addresses and/or subnets via the **Systems Settings > Security** page. The **Allowed IP Addresses** section will allow the admin to restrict who can access the F5OS layer. Here an administrator can also set the security compliance mode for Common Criteria. Shell and LCD Access allows Appliance mode to be enabled or disable at the controller level, as well as denying root access over SSH, and enabling superuser bash access. Finally, there is an option to configure the LCD mode. Login policies can be set and max sessions can be configured for both SSH and RESTCONF.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image34.png
   :align: center
   :scale: 70% 
 
-In the **Services** section, httpd ciphersuites, and protocol can be configured as well as sshd ciphers, KEX algorithms, MAC algorithms and Hosy Key Algorithms. You may also configure CLI and SSH idel timeout values. in ther **iHealth Configuration** section, you may add Credentials and Proxy Server informatio to allow the system controllers to communicate directly to the iHealth service (if desired).
+In the **Services** section, httpd ciphersuites, and protocol can be configured as well as sshd ciphers, KEX algorithms, MAC algorithms and Hosy Key Algorithms. You may also configure CLI and SSH idle timeout values. in the **iHealth Configuration** section, you may add Credentials and Proxy Server information to allow the system controllers to communicate directly to the iHealth service (if desired).
 
 .. image:: images/initial_setup_of_velos_system_controllers/image34a.png
   :align: center
@@ -2935,7 +2935,7 @@ Under the **System Settings > Time Settings** page Network Time Protocol servers
 Authentication & Access -> Authentication Settings
 --------------------------------------------------
 
-Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP, RADIUS, or TACACS+. On this page you can setup remote authentication using LDAP, RADIUS, or TACACS. You can also disable Basic Authenitcation, and configure a Token Lifetime. Client certificate authentication can be anabled, and OCSP Configuration can be modified. 
+Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP, RADIUS, or TACACS+. On this page you can setup remote authentication using LDAP, RADIUS, or TACACS. You can also disable Basic Authentication and configure a Token Lifetime. Client certificate authentication can be enabled, and OCSP Configuration can be modified. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image44.png
   :align: center
