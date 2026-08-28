@@ -234,7 +234,7 @@ Monitoring
 
 `Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-blade-status-via-api>`_
 
-`Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-and-blade-power-levels-via-api>`_
+`Monitoring VELOS Chassis and Blade Power Levels via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-and-blade-power-levels-via-api>`_
 
 `Monitoring VELOS Chassis Base MAC Addresses via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-base-mac-adresses-via-api>`_
 
