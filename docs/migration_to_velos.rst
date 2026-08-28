@@ -2,7 +2,7 @@
 Migration to VELOS
 ==================
 
-F5 understands migrating configurations to new platforms can be a challenge and weâ€™ve developed tooling that will help customers migrate existing BIG-IP configurations into VELOS tenants. Originally, F5 promoted the F5 BIG-IP Journeys application that assisted with migrating UCS based configurations from older platforms such as iSeries/VIPRION to current TMOS versions running as tenants on the rSeries/VELOS platforms.
+F5 understands migrating configurations to new platforms can be a challenge and we've developed tooling that will help customers migrate existing BIG-IP configurations into VELOS tenants. Originally, F5 promoted the F5 BIG-IP Journeys application that assisted with migrating UCS based configurations from older platforms such as iSeries/VIPRION to current TMOS versions running as tenants on the rSeries/VELOS platforms.
 
 The Journeys tool was originally hosted on GitHub but has now been moved to downloads.f5.com. It can still be used for migrations to specific supported TMOS versions, but it is being phased out for migrations to newer TMOS versions in favor of the platform-migrate utility. More details about the changes can be found in the following solution article.
 
