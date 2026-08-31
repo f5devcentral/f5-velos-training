@@ -63952,3 +63952,388 @@ This will provide a much smaller output, where you can drill down into a specifi
             }
         ]
     }
+
+
+------------------------------------------------
+Filter to Get a Summary of System Health via API
+------------------------------------------------
+
+
+You can filter the above output in many ways. Below is an example of how to only get the system health data for a specific component. In this case lcd, or psu-1. This will still result in a lot of data output in the response:
+
+This example will get the health of the lcd.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-health:health/f5-system-health:components/f5-system-health:component=lcd
+
+This example will get the health of the psu-1.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-system-health:health/f5-system-health:components/f5-system-health:component=psu-1
+
+To get a further summarized high level system health status that is easier to consume:
+
+.. code-block:: bash
+
+    GET https://{{rseries_appliance1_ip}}:8888/restconf/data/openconfig-system:system/f5-system-health:health/f5-system-health:components/f5-system-health:component=blade-1/hardware=blade%2Fhardware%2Fcpu
+
+
+This will provide a much smaller output, where you can drill down into a specific area of system health can be determined very quickly:
+
+.. code-block:: bash
+
+    {
+        "f5-system-health:hardware": [
+            {
+                "key": "blade/hardware/cpu",
+                "state": {
+                    "name": "CPU",
+                    "health": "ok",
+                    "severity": "info"
+                },
+                "attributes": {
+                    "attribute": [
+                        {
+                            "name": "cpu:state:fatal-error-fault",
+                            "description": "Fatal error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "cpu:state:fivr-fault",
+                            "description": "FIVR Fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "cpu:state:hw-correctable-error-fault",
+                            "description": "Hardware correctable error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "cpu:state:internal-error-fault",
+                            "description": "Internal unrecoverable error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "cpu:state:machine-check-error",
+                            "description": "Machine check error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:08-07:00"
+                        },
+                        {
+                            "name": "cpu:state:non-fatal-error-fault",
+                            "description": "Non-fatal error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "cpu:state:processor-hot-fault",
+                            "description": "Processor hot Fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "cpu:state:thermal-trip-fault",
+                            "description": "Thermal Trip Fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:power-domain:cpu:1.05v-pch-aux",
+                            "description": "+1.05V PCH AUX power fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:power-domain:cpu:1.0v-pch-pcvv-aux",
+                            "description": "+1.0V PCH PVNN AUX power fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:power-domain:cpu:1.1v-cpu-pvccio",
+                            "description": "+1.1V CPU PVCCIO power fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:power-domain:cpu:1.1v-cpu-pvsa",
+                            "description": "+1.1V CPU PVSA power fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:power-domain:cpu:1.8v-cpu-pvccin",
+                            "description": "+1.8V CPU PVCCIN power fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:power-domain:cpu:1.8v-pch-aux",
+                            "description": "+1.8V PCH AUX power fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:sensor:temperature:cpu",
+                            "description": "CPU (C)",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "58",
+                            "updatedAt": "2026-08-31T06:45:04-07:00"
+                        },
+                        {
+                            "name": "l4s:sensor:temperature:cputctldelta",
+                            "description": "CPU TCTL-Delta (C)",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "-22",
+                            "updatedAt": "2026-08-31T06:45:04-07:00"
+                        },
+                        {
+                            "name": "l4s:thermal-fault:cpu:pch",
+                            "description": "CPU PCH Hot thermal fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "l4s:thermal-fault:cpu:pvccin-vr",
+                            "description": "CPU PVCCIN VR Hot thermal fault",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:invalid-address",
+                            "description": "RAS Extlog invalid address event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:master-abort",
+                            "description": "RAS Extlog master abort event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:memory-sparing",
+                            "description": "RAS Extlog memory sparing event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:mirror-broken",
+                            "description": "RAS Extlog mirror broken event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:multi-bit-ecc",
+                            "description": "RAS Extlog mullti-bit ECC event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:multi-symbol-chipkill-ecc",
+                            "description": "RAS Extlog multi-symbol chipkill ECC event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:no-error",
+                            "description": "RAS Extlog no error event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:parity-error",
+                            "description": "RAS Extlog parity error event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:physical-memory-map-out-event",
+                            "description": "RAS Extlog physical memory map-out event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:scrub-corrected-error",
+                            "description": "RAS Extlog scrub corrected error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:scrub-uncorrected-error",
+                            "description": "RAS Extlog scrub uncorrected error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:single-bit-ecc",
+                            "description": "RAS Extlog single-bit ECC event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:single-symbol-chipkill-ecc",
+                            "description": "RAS Extlog single-symbol chipkill ECC event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:target-abort",
+                            "description": "RAS Extlog target abort event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:unknown",
+                            "description": "RAS Extlog unknown event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:unknown-type",
+                            "description": "RAS Extlog unknown type",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:extlog:watchdog-timeout",
+                            "description": "RAS Extlog watchdog timeout event",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-14T07:35:01-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:address-command-error",
+                            "description": "RAS MCE address/Command error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:generic-undefined-request",
+                            "description": "RAS MCE generic undefined request",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:memory-read-error",
+                            "description": "RAS MCE memory read error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:memory-scrubbing-error",
+                            "description": "RAS MCE memory scrubbing error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:memory-write-error",
+                            "description": "RAS MCE memory write error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:processor-temp-throttling",
+                            "description": "RAS MCE processor temperature throttling",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        },
+                        {
+                            "name": "rasdaemon:mce:unknown-event",
+                            "description": "RAS MCE unknown error",
+                            "health": "ok",
+                            "severity": "info",
+                            "value": "0",
+                            "updatedAt": "2026-08-31T06:45:02-07:00"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+   
