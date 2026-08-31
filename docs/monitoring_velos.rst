@@ -7594,10 +7594,7 @@ The body of the response will look similar to the output below.
                         }
                     },
 
-Alerting and Logging for the Layer2 Switch Fabric on the System Controllers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-API Monitoring of Chassis Cluster Status from the System Controller
+Monitoring of Chassis Cluster Status from the System Controller via API
 -------------------------------------------------------------------
 
 .. code-block:: bash
