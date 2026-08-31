@@ -1620,6 +1620,57 @@ Below is an example output from a VELOS system:
       }
   }
 
+-----------------
+Deleting a Tenant
+-----------------
+
+If you need to delete a tenant, it can be removed from the F5OS CLI, webUI, or API.
+
+Deleting a Tenant via the CLI
+-----------------------------
+
+To delete a tenant from the CLI, enter **config** mode and then enter the command **no tenants tenant <tenant-name>**. You will then need to issue the **commit** command for the change to take effect. You can then verify that the tenant has been deleted by using the **show tenants** command.
+
+.. code-block:: bash
+
+
+    production-1(config)# no tenants tenant tenant1 
+    production-1(config)# commit
+    The following warnings were generated:
+    'tenants': Tenant tenant1 virtual-disk will be deleted
+    Proceed? [yes,no] yes
+    Commit complete.
+    production-1(config)# exit
+    production-1# show tenants 
+    % No entries found.
+    production-1# 
+
+
+Deleting a Tenant via the webUI
+-----------------------------
+
+To delete a tenant from the webUI, go to the **Tenant Management > Tenant Deployments** page. Select the check box next to the tenant you wish to remove, and then click the **Delete** button.
+
+.. image:: images/velos_deploying_a_tenant/image88.png
+  :align: center
+  :scale: 50%
+
+You will be prompted before confirming the delete:  
+
+.. image:: images/velos_deploying_a_tenant/image89.png
+  :align: center
+  :scale: 60%   
+
+Deleting a Tenant via the API
+-----------------------------
+
+To delete a tenant from the API, issue the following **DELETE** API call.
+
+.. code-block:: bash
+
+    DELETE https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{velos_bigip_tenant1_name}}
+
+There is no need to enter anything in the payload of the API call. This should delete the specified tenant.
 
 
 
