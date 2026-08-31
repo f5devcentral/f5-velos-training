@@ -4187,7 +4187,28 @@ Each slot also has a separate backplane connection to each system controller for
 
 .. code-block:: bash
 
+    syscon-2-active# show interfaces interface */1.* state oper-status
+        OPER    
+    NAME   STATUS  
+    ---------------
+    1/1.1  UP      
+    1/1.2  UP      
+    1/1.3  UP      
+    1/1.4  DOWN    
+    1/1.5  DOWN    
+    1/1.6  DOWN    
+    1/1.7  DOWN    
+    1/1.8  DOWN    
+    2/1.1  UP      
+    2/1.2  UP      
+    2/1.3  UP      
+    2/1.4  DOWN    
+    2/1.5  DOWN    
+    2/1.6  DOWN    
+    2/1.7  DOWN    
+    2/1.8  DOWN    
 
+    syscon-2-active# 
 
 .. image:: images/monitoring_velos/sx410_controlpath_numbering.png
   :align: center
