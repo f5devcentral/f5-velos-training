@@ -4100,13 +4100,15 @@ Monitoring the Layer2 Switch Fabric on the System Controllers
 
 This section will outline what status should and can be monitored for the Layer2 switch fabric function on the system controllers. Administrators will want to monitor the internal and external interfaces and LAGs for both status and to view stats to understand current utilization. They will be looking to understand what the utilization of each port is and how is traffic balanced between the two switch fabrics on the system controllers. This section will detail what sort of monitoring is currently supported via CLI, webUI, API, and SNMP, and will also detail any altering, logging, or SNMP traps that are available.
 
-Before getting into what monitoring is supported, it is important to understand how things connect and their labeling. The diagram below provides the internal interface numbering on the system controllers so that an admin can monitor the status and statistics of each interface. This will give them visibility into the traffic distribution across the backplane and dual switch fabrics.  Link Aggregation is configured on the blade side of the connection, but not on the system controller side. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/3.1** and one to system controller 2 interface **2/3.1**, the numbering follows the same logic for other slots:
+Before getting into what monitoring is supported, it is important to understand how things connect and their labeling. The diagram below provides the internal interface numbering on the system controllers so that an admin can monitor the status and statistics of each interface. This will give them visibility into the traffic distribution across the backplane and dual switch fabrics.  Link Aggregation is configured on the blade side of the connection, but not on the system controller side. Note that the blade in slot 1 will have two data plane connections, one to system controller 1 interface **1/3.1** and one to system controller 2 interface **2/3.1**, the numbering follows the same logic for other slots. 
+
+The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 3 for data plane connections, and finally the last digit is the actual interface nunmber on the controller specified in the first digit.
 
 .. image:: images/monitoring_velos/image6.png
   :align: center
   :scale: 70%
 
-There are also separate control plane connections to each blade which are also put into Link Aggregation Group. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/1.1** and one to system controller 2 interface **2/1.1**, the numbering follows the same logic for other slots:
+There are also separate control plane connections from each controller to each slot, which are also put into Link Aggregation Group. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/1.1** and one to system controller 2 interface **2/1.1**, the numbering follows the same logic for other slots. The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 1 for control plane connections, and finally the last digit is the actual interface nunmber on the controller specified in the first digit.
 
 .. image:: images/monitoring_velos/image7.png
   :align: center
