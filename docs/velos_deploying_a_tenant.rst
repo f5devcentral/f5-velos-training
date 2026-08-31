@@ -1670,7 +1670,7 @@ To delete a tenant from the API, issue the following **DELETE** API call.
 
     DELETE https://{{velos_chassis1_chassis_partition1_ip}}:8888/restconf/data/f5-tenants:tenants/tenant={{velos_bigip_tenant1_name}}
 
-There is no need to enter anything in the payload of the API call. This should delete the specified tenant.
+There is no need to enter anything in the payload of the API call. This will delete the specified tenant.
 
 
 

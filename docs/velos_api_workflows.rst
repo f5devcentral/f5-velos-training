@@ -75,6 +75,8 @@ Tenant Deployments
 
 `Expanding a Tenant Across Blades via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#expanding-a-tenant-across-blades-via-api>`_
 
+`Deleting a Tenant via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#deleting-a-tenant-via-the-api>`_
+
 Securing / Hardening F5OS on VELOS
 ----------------------------------
 
@@ -82,7 +84,7 @@ Securing / Hardening F5OS on VELOS
 
 `Adding Allow List Entries via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#adding-allow-list-entries-via-api>`_
 
-`Front Panel LCD Security via API <https://clouddocs.f5networks.net/training/community/velos-training/html/velos_security.html#front-panel-lcd-security-via-api>`_
+`Front Panel LCD Security via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#front-panel-lcd-security-via-api>`_
 
 `Setting the Password Hashing Algorithm via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#setting-the-password-hashing-algorithm-via-api>`_
 
