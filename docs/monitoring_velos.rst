@@ -1089,157 +1089,6 @@ High level blade status can be obtained by using the **show components component
     syscon-1-active# 
 
 
-------------------------------------------
-System Inventory / Components from the CLI
-------------------------------------------
-
-High level chassis status can be obtained by using the **show components component chassis** command:
-
-.. code-block:: bash
-
-    syscon-1-active# show components component chassis 
-    components component chassis
-    state description "VELOS CX410"
-    state serial-no chs600032s
-    state part-no "400-0087-02 REV 6"
-    state empty false
-    state nebs capable false
-    state nebs disabled
-
-
-
-High level system controller status can be obtained by using the **show components component <controller-#>** command. There are two system controllers within each chassis 1 & 2.
-
-.. code-block:: bash
-
-    syscon-1-active# show components component blade-1
-    components component blade-1
-    state description "VELOS BX110"
-    state serial-no bld422435s
-    state part-no "400-0086-02 REV 2"
-    state empty false
-    state nebs capable true
-    state nebs enabled
-    syscon-1-active# 
-    syscon-1-active# show components component controller-1
-    components component controller-1
-    state description    "VELOS SX410"
-    state serial-no      bld422584s
-    state part-no        "SUB-0881-00 REV B"
-    state empty          false
-    state tpm-integrity-status Valid
-    state nebs capable true
-    state nebs disabled
-    state memory available 25662590976
-    state memory free 13351870464
-    state memory used-percent 24
-    state temperature current 23.9
-    state temperature average 25.2
-    state temperature minimum 22.5
-    state temperature maximum 28.0
-                                                                        UPDATE  
-    NAME                                NAME  VALUE          CONFIGURABLE  STATUS  
-    -------------------------------------------------------------------------------
-    fw-version-bios                     -     1.03.006.1     false         none    
-    fw-version-bios-me                  -     4.0.4.211      false         none    
-    fw-version-cpld                     -     01.03.0A       false         none    
-    fw-version-lcd-app                  -     2.02.113.00.1  false         none    
-    fw-version-lcd-bootloader           -     2.01.109.00.1  false         none    
-    fw-version-lop-app                  -     1.00.1067.0.1  false         none    
-    fw-version-lop-bootloader           -     1.02.1019.0.1  false         none    
-    fw-version-vfc-app-fanCtrl1         -     1.00.824.0.1   false         none    
-    fw-version-vfc-bootloader-fanCtrl1  -     1.02.798.0.1   false         none    
-    fw-version-vpc-app-psuCtrl1         -     1.00.694.0.1   false         none    
-    fw-version-vpc-app-psuCtrl2         -     1.00.694.0.1   false         none    
-    fw-version-vpc-bootloader-psuCtrl1  -     1.02.669.0.1   false         none    
-    fw-version-vpc-bootloader-psuCtrl2  -     1.02.669.0.1   false         none    
-
-                                                                                                                                READ                           WRITE    
-    DISK                                                                                    PERCENT  TOTAL  READ  READ    READ   LATENCY  WRITE  WRITE   WRITE  LATENCY  
-    NAME     MODEL                       VENDOR   VERSION   SERIAL NO       SIZE      TYPE  USED     IOPS   IOPS  MERGED  BYTES  MS       IOPS   MERGED  BYTES  MS       
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    nvme0n1  SAMSUNG MZ1LB960HAJQ-00007  Samsung  EDA7502Q  S435NE0MA00234  683.00GB  nvme  -        -      -     -       -      -        -      -       -      -        
-    sda      USB 3.0                     PNY      FD                        57.00GB   usb   -        -      -     -       -      -        -      -       -      -        
-
-    cpu state cpu-utilization core cpu
-    cpu state cpu-utilization current 46
-    cpu state cpu-utilization five-second-avg 42
-    cpu state cpu-utilization one-minute-avg 41
-    cpu state cpu-utilization five-minute-avg 44
-    CPU               CORE                           THREAD                                         
-    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                              
-    ------------------------------------------------------------------------------------------------
-    1      2048(KB)   8     2200.000(MHz)  1         8       Intel(R) Atom(TM) CPU C3758 @ 2.20GHz  
-
-                        FIVE    ONE     FIVE    
-    CORE                  SECOND  MINUTE  MINUTE  
-    INDEX  CORE  CURRENT  AVG     AVG     AVG     
-    ----------------------------------------------
-    0      cpu0  65       51      42      44      
-    1      cpu1  44       38      40      43      
-    2      cpu2  51       38      42      43      
-    3      cpu3  33       39      42      44      
-    4      cpu4  40       38      41      43      
-    5      cpu5  60       50      45      47      
-    6      cpu6  35       34      40      43      
-    7      cpu7  42       45      40      44      
-
-High level fan tray status can be obtained by using the **show components component <fantray-#>** command:
-
-.. code-block:: bash
-
-    syscon-1-active# show components component fantray-1 
-    components component fantray-1
-    state firmware-version 1.02.798.0.1
-    state software-version 1.00.824.0.1
-    state serial-no  sub0772g002f
-    state part-no    "SUB-0772-04 REV A"
-    state empty      false
-
-High level power supply status can be obtained by using the **show components component <psu-#>** command:
-
-.. code-block:: bash
-
-    syscon-1-active# show components component psu-1
-    components component psu-1
-    state serial-no 19331BPJ0075
-    state part-no SPAFFIV-07
-    state empty false
-
-
-
-High level chassis LCD status can be obtained by using the **show components component lcd** command:
-
-.. code-block:: bash
-
-    syscon-1-active# show components component lcd 
-    components component lcd
-    state serial-no sub0811g002h
-    state part-no "SUB-0811-02 REV B"
-    state empty false
-
-A combined output of all the commands above can be output by a single command to get the complete inventory of the chassis by truncating the commands above to just **show components**:
-
-.. code-block:: bash
-
-    syscon-1-active# show components 
-    components component blade-1
-    state description "VELOS BX110"
-    state serial-no bld422435s
-    state part-no "400-0086-02 REV 2"
-    state empty false
-    state nebs capable true
-    state nebs enabled
-    components component blade-2
-    state description "VELOS BX110"
-    state serial-no bld424551s
-    state part-no "400-0086-02 REV 2"
-    state empty false
-    state nebs capable true
-    state nebs enabled
-    ...
-
-
 -----------------------------------------------------
 Hardware and System Component Monitoring from the webUI
 -----------------------------------------------------
@@ -4190,7 +4039,9 @@ The body of the response will look similar to the output below.
                 {
                     "log": "65543 controller-2 aom-fault EVENT NA \"No LOP Runtime fault detected: LOP is not receiving health reports from all installed VFC cards\" \"2021-03-05 04:48:14.605590242 UTC\""
                 },
-
+-----------------------------------
+Monitoring System Controller Health
+-----------------------------------
 
 System Controller Monitoring via CLI
 ------------------------------------
@@ -4246,6 +4097,8 @@ To see if the Openshift cluster is up and running use the **show cluster** comma
     19     2021-02-06 18:21:58.312127 -  Openshift cluster is NOT ready.                               
     20     2021-02-06 18:22:19.060573 -  Openshift cluster is ready.                              
 
+System Controller Monitoring via webUI
+------------------------------------
 
 In the webUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the other and perform controller software upgrades. 
 
@@ -4271,7 +4124,11 @@ Active alarms & events can be viewed form the system controllers **System Settin
   :align: center
   :scale: 70%
 
+System Controller Monitoring via API
+------------------------------------
 
+
+-------------------------------------------------------------
 Monitoring the Layer2 Switch Fabric on the System Controllers
 -------------------------------------------------------------
 
@@ -4295,8 +4152,8 @@ Those ports will be joined together in a LAG (Link Aggregation) bundle on the sy
   :align: center
   :scale: 70%
 
-CLI Monitoring of the Layer2 Switch Fabric on the System Controllers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Monitoring of the Layer2 Switch Fabric on the System Controllers via CLI
+------------------------------------------------------------------------
 
 There is a CLI command to monitor all the internal and external ports and LAGs on the dual system controllers as well as the out-of-band management ports. Below is a command to view the stats for one of the backplane ports of the system controller:
 
@@ -4371,13 +4228,13 @@ The **show lacp** CLI command will show both external LAG interfaces if the mana
 
     syscon-1-active# 
 
-webUI Monitoring of the Layer2 Switch Fabric on the System Controllers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Monitoring of the Layer2 Switch Fabric on the System Controllers via webUI
+------------------------------------------------------------------------
 
 In the current release there is no backplane interface or LAG monitoring in the system controller webUI. You’ll need to use the CLI or API to get stats/status of the backplane ports or external management ports.
 
-API Monitoring of the Layer2 Switch Fabric on the System Controllers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Monitoring of the Layer2 Switch Fabric on the System Controllers via API
+-------------------------------------------------------------------------
 
 The following API command will show all system controller Ethernet interfaces and link aggregation (both internal and external) as well as out-of-band management Interfaces.
 
@@ -7658,7 +7515,7 @@ The body of the response will look similar to the output below.
 
 
 Link Aggregation Status of System Controllers from the API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------------------------------
 
 The following API call will list the status of all backplane LACP interfaces, as well as front panel management port lacp interfaces:
 
