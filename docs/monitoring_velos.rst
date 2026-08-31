@@ -4154,6 +4154,29 @@ The 100Gb data plane backplane connections always start with: **<controller numb
 
 .. code-block:: bash
 
+    syscon-2-active# show interfaces interface */3.* state oper-status
+        OPER    
+    NAME   STATUS  
+    ---------------
+    1/3.1  UP      
+    1/3.2  UP      
+    1/3.3  UP      
+    1/3.4  DOWN    
+    1/3.5  DOWN    
+    1/3.6  DOWN    
+    1/3.7  DOWN    
+    1/3.8  DOWN    
+    2/3.1  UP      
+    2/3.2  UP      
+    2/3.3  UP      
+    2/3.4  DOWN    
+    2/3.5  DOWN    
+    2/3.6  DOWN    
+    2/3.7  DOWN    
+    2/3.8  DOWN    
+
+    syscon-2-active#
+
 The output is explained in more detail with the following graphic. In this case, there are three BX110 blades installed in slots 1-3 and the rest of the slots are empty. Each controller has a connection to each slot, and only the slots with a blade installed will show an **UP** status.
 
 .. image:: images/monitoring_velos/dataplane_status.png
