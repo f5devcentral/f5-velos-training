@@ -31,6 +31,987 @@ The same format is used when pointing directly to the IP address of a Chassis Pa
 
     $ curl -k https://<Chassis-Partition-IP>:8888/restconf/yang-library-version --header 'Accept: application/yang-data+json' -u admin:<password>
  
+Hardware and System Component Monitoring
+========================================
+
+-----------------------------------------------------
+Hardware and System Component Monitoring from the CLI
+-----------------------------------------------------
+
+
+Show Components from the CLI
+-----------------------------
+
+High level appliance status can be obtained by using the **show components** command within the system controller layer, this will include all the subsystems:
+
+.. code-block:: bash
+
+    syscon-2-active# show components 
+    components component blade-1
+    state description "VELOS BX110"
+    state serial-no bld424551s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs disabled
+                                                                UPDATE  
+    NAME                       NAME  VALUE          CONFIGURABLE  STATUS  
+    ----------------------------------------------------------------------
+    fw-version-bios            -     3.00.230.1     false         none    
+    fw-version-bios-me         -     4.0.4.800      false         none    
+    fw-version-cpld            -     05.04.00       false         none    
+    fw-version-drive-nvme0n1   -     EDA7602Q       false         none    
+    fw-version-lop-app         -     2.00.1100.0.1  false         none    
+    fw-version-lop-bootloader  -     1.02.868.0.1   false         none    
+    fw-version-sirr            -     1.1.99         false         none    
+
+    components component blade-2
+    state description "VELOS BX110"
+    state serial-no bld422435s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs disabled
+                                                                UPDATE  
+    NAME                       NAME  VALUE          CONFIGURABLE  STATUS  
+    ----------------------------------------------------------------------
+    fw-version-bios            -     3.00.230.1     false         none    
+    fw-version-bios-me         -     4.0.4.800      false         none    
+    fw-version-cpld            -     05.04.00       false         none    
+    fw-version-drive-nvme0n1   -     EDA7602Q       false         none    
+    fw-version-lop-app         -     2.00.1100.0.1  false         none    
+    fw-version-lop-bootloader  -     1.02.868.0.1   false         none    
+    fw-version-sirr            -     1.1.99         false         none    
+
+    components component blade-3
+    state description "VELOS BX110"
+    state serial-no bld422573s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs disabled
+                                                                UPDATE  
+    NAME                       NAME  VALUE          CONFIGURABLE  STATUS  
+    ----------------------------------------------------------------------
+    fw-version-bios            -     3.00.230.1     false         none    
+    fw-version-bios-me         -     4.0.4.800      false         none    
+    fw-version-cpld            -     05.04.00       false         none    
+    fw-version-drive-nvme0n1   -     EDA7602Q       false         none    
+    fw-version-lop-app         -     2.00.1100.0.1  false         none    
+    fw-version-lop-bootloader  -     1.02.868.0.1   false         none    
+    fw-version-sirr            -     1.1.99         false         none    
+
+    components component blade-4
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-5
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-6
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-7
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-8
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component chassis
+    psu state redundancy-mode no-redundancy
+    psu state severity warning
+    state description "VELOS CX410"
+    state serial-no chs600032s
+    state part-no "400-0087-02 REV 6"
+    state empty false
+    state nebs capable false
+    state nebs disabled
+    components component controller-1
+    state description    "VELOS SX410"
+    state serial-no      bld422584s
+    state part-no        "SUB-0881-00 REV B"
+    state empty          false
+    state tpm-integrity-status Valid
+    state nebs capable true
+    state nebs disabled
+    state memory total    33397862400
+    state memory available 25323266048
+    state memory free     350519296
+    state memory used-percent 24
+    state memory platform-total 33397862400
+    state memory platform-used 13531021312
+    state memory platform-used-percent 40
+    state temperature current 26.1
+    state temperature average 26.0
+    state temperature minimum 25.4
+    state temperature maximum 26.8
+                                                                                        USED     
+    AREA               CATEGORY               TOTAL         FREE          USED          PERCENT  
+    ---------------------------------------------------------------------------------------------
+    platform/sysroot   F5OS System            353835896832  233888256000  101946527744  30       
+    platform/images    F5OS Images            270494859264  182400954368  74326732800   28       
+    partition2/config  F5OS System            10726932480   10488057856   238874624     2        
+    partition2/images  F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition2/shared  F5OS Partition         10726932480   10682204160   44728320      0        
+    partition3/config  F5OS System            10726932480   10492542976   234389504     2        
+    partition3/images  F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition3/shared  F5OS Partition         10726932480   10682204160   44728320      0        
+
+    DISK DATA  DISK DATA     
+    NAME       VALUE         
+    -------------------------
+    available  233888489472  
+    capacity   353835896832  
+    used       101946294272  
+
+                                                                        UPDATE  
+    NAME                                NAME  VALUE          CONFIGURABLE  STATUS  
+    -------------------------------------------------------------------------------
+    fw-version-bios                     -     2.03.175.1     -             none    
+    fw-version-bios-me                  -     4.0.4.705      -             none    
+    fw-version-cpld                     -     01.03.0A       -             none    
+    fw-version-drive                    -     EDA7602Q       -             none    
+    fw-version-lcd-app                  -     3.00.144.00.1  -             none    
+    fw-version-lcd-bootloader           -     2.01.109.00.1  -             none    
+    fw-version-lop-app                  -     2.01.1283.0.1  -             none    
+    fw-version-lop-bootloader           -     1.02.1019.0.1  -             none    
+    fw-version-sirr                     -     1.1.99         -             none    
+    fw-version-vfc-app-fanCtrl1         -     2.00.1008.0.1  -             none    
+    fw-version-vfc-bootloader-fanCtrl1  -     1.02.798.0.1   -             none    
+    fw-version-vpc-app-psuCtrl1         -     2.00.875.0.1   -             none    
+    fw-version-vpc-app-psuCtrl2         -     2.00.875.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl1  -     1.02.669.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl2  -     1.02.669.0.1   -             none    
+
+    storage state disks disk nvme0n1
+    state model "SAMSUNG MZ1LB960HAJQ-00007"
+    state vendor Samsung
+    state version EDA7602Q
+    state serial-no S435NE0MA00234
+    state size 683.00GB
+    state type nvme
+    state disk-io total-iops 0
+    state disk-io read-iops 1568593
+    state disk-io read-merged 676230
+    state disk-io read-bytes 16736022528
+    state disk-io read-latency-ms 556414
+    state disk-io write-iops 647798528
+    state disk-io write-merged 493710808
+    state disk-io write-bytes 5791047771136
+    state disk-io write-latency-ms 24729715
+    state disk-io read-iops-per-sec 0
+    state disk-io read-bytes-per-sec 0
+    state disk-io write-iops-per-sec 607
+    state disk-io write-bytes-per-sec 5971174
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 30
+    cpu state cpu-utilization five-second-avg 29
+    cpu state cpu-utilization one-minute-avg 26
+    cpu state cpu-utilization five-minute-avg 27
+    CPU               CORE                           THREAD                                         
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                              
+    ------------------------------------------------------------------------------------------------
+    1      2048(KB)   8     2200.000(MHz)  1         8       Intel(R) Atom(TM) CPU C3758 @ 2.20GHz  
+
+                            FIVE    ONE     FIVE    
+    THREAD                   SECOND  MINUTE  MINUTE  
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     
+    -------------------------------------------------
+    0       cpu0    25       28      26      26      
+    1       cpu1    29       22      27      28      
+    2       cpu2    23       21      25      28      
+    3       cpu3    36       30      25      25      
+    4       cpu4    24       31      27      26      
+    5       cpu5    25       31      23      27      
+    6       cpu6    25       25      25      25      
+    7       cpu7    54       39      28      26      
+
+    components component controller-2
+    state description    "VELOS SX410"
+    state serial-no      bld424548s
+    state part-no        "SUB-0881-00 REV B"
+    state empty          false
+    state tpm-integrity-status Valid
+    state nebs capable true
+    state nebs disabled
+    state memory total    33397866496
+    state memory available 24884887552
+    state memory free     617697280
+    state memory used-percent 25
+    state memory platform-total 33397866496
+    state memory platform-used 12755918848
+    state memory platform-used-percent 38
+    state temperature current 26.3
+    state temperature average 26.3
+    state temperature minimum 25.8
+    state temperature maximum 27.1
+                                                                                            USED     
+    AREA                      CATEGORY               TOTAL         FREE          USED          PERCENT  
+    ----------------------------------------------------------------------------------------------------
+    platform/sysroot          F5OS System            353835896832  232491298816  103343484928  30       
+    platform/images           F5OS Images            270494859264  173605605376  83122081792   32       
+    /var/roothome/etcd3mount  F5OS System            5196181504    4515459072    395522048     8        
+    partition2/config         F5OS System            10726932480   10516099072   210833408     1        
+    partition2/images         F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition2/shared         F5OS Partition         10726932480   10682204160   44728320      0        
+    partition3/config         F5OS System            10726932480   10523664384   203268096     1        
+    partition3/images         F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition3/shared         F5OS Partition         10726932480   10682204160   44728320      0        
+
+    DISK DATA  DISK DATA     
+    NAME       VALUE         
+    -------------------------
+    available  232491298816  
+    capacity   353835896832  
+    used       103343484928  
+
+                                                                        UPDATE  
+    NAME                                NAME  VALUE          CONFIGURABLE  STATUS  
+    -------------------------------------------------------------------------------
+    fw-version-bios                     -     2.03.175.1     -             none    
+    fw-version-bios-me                  -     4.0.4.705      -             none    
+    fw-version-cpld                     -     01.03.0A       -             none    
+    fw-version-drive                    -     EDA7602Q       -             none    
+    fw-version-lcd-app                  -     3.00.144.00.1  -             none    
+    fw-version-lcd-bootloader           -     2.01.109.00.1  -             none    
+    fw-version-lop-app                  -     2.01.1283.0.1  -             none    
+    fw-version-lop-bootloader           -     1.02.1019.0.1  -             none    
+    fw-version-sirr                     -     1.1.99         -             none    
+    fw-version-vfc-app-fanCtrl1         -     2.00.1008.0.1  -             none    
+    fw-version-vfc-bootloader-fanCtrl1  -     1.02.798.0.1   -             none    
+    fw-version-vpc-app-psuCtrl1         -     2.00.875.0.1   -             none    
+    fw-version-vpc-app-psuCtrl2         -     2.00.875.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl1  -     1.02.669.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl2  -     1.02.669.0.1   -             none    
+
+    storage state disks disk nvme0n1
+    state model "SAMSUNG MZ1LB960HAJQ-00007"
+    state vendor Samsung
+    state version EDA7602Q
+    state serial-no S435NE0MA00209
+    state size 683.00GB
+    state type nvme
+    state disk-io total-iops 0
+    state disk-io read-iops 1701730
+    state disk-io read-merged 1138403
+    state disk-io read-bytes 22318736384
+    state disk-io read-latency-ms 469065
+    state disk-io write-iops 813156586
+    state disk-io write-merged 610730877
+    state disk-io write-bytes 7674623405568
+    state disk-io write-latency-ms 33913847
+    state disk-io read-iops-per-sec 0
+    state disk-io read-bytes-per-sec 819
+    state disk-io write-iops-per-sec 298
+    state disk-io write-bytes-per-sec 2761801
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 44
+    cpu state cpu-utilization five-second-avg 33
+    cpu state cpu-utilization one-minute-avg 41
+    cpu state cpu-utilization five-minute-avg 42
+    CPU               CORE                           THREAD                                         
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                              
+    ------------------------------------------------------------------------------------------------
+    1      2048(KB)   8     2200.000(MHz)  1         8       Intel(R) Atom(TM) CPU C3758 @ 2.20GHz  
+
+                            FIVE    ONE     FIVE    
+    THREAD                   SECOND  MINUTE  MINUTE  
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     
+    -------------------------------------------------
+    0       cpu0    43       27      39      42      
+    1       cpu1    67       35      41      42      
+    2       cpu2    39       29      41      42      
+    3       cpu3    54       38      43      42      
+    4       cpu4    32       33      41      42      
+    5       cpu5    37       40      43      43      
+    6       cpu6    39       34      42      41      
+    7       cpu7    37       32      40      42      
+
+    components component fantray-1
+    state firmware-version 1.02.798.0.1
+    state software-version 2.00.1008.0.1
+    state serial-no  sub0772g006w
+    state part-no    "SUB-0772-05 REV B"
+    state empty      false
+    properties fantray-state fantray-temperature 33.0
+    properties fantray-state inlet-fan-1-speed 6773
+    properties fantray-state inlet-fan-2-speed 6737
+    properties fantray-state inlet-fan-3-speed 6723
+    properties fantray-state exhaust-fan-1-speed 6732
+    properties fantray-state exhaust-fan-2-speed 6721
+    properties fantray-state exhaust-fan-3-speed 6795
+    components component lcd
+    state serial-no sub0811g002h
+    state part-no "SUB-0811-02 REV B"
+    state empty false
+    state mode secure
+    components component psu-1
+    state serial-no 19331BPJ0075
+    state part-no PWR-0366-00
+    state empty false
+    properties psu-state psu-current-in 3.117
+    properties psu-state psu-current-out 48.687
+    properties psu-state psu-power-in 631.0
+    properties psu-state psu-power-out 600.0
+    properties psu-state psu-voltage-in 204.0
+    properties psu-state psu-voltage-out 12.325
+    properties psu-state psu-temperature-1 24.2
+    properties psu-state psu-temperature-2 39.5
+    properties psu-state psu-temperature-3 36.5
+    properties psu-state psu-fan-1-speed 7456
+    properties psu-state psu-fan-2-speed 7008
+    components component psu-2
+    state serial-no 19332BPJ0129
+    state part-no PWR-0366-00
+    state empty false
+    properties psu-state psu-current-in 3.226
+    properties psu-state psu-current-out 50.5
+    properties psu-state psu-power-in 651.0
+    properties psu-state psu-power-out 622.0
+    properties psu-state psu-voltage-in 204.0
+    properties psu-state psu-voltage-out 12.3219
+    properties psu-state psu-temperature-1 24.0
+    properties psu-state psu-temperature-2 39.7
+    properties psu-state psu-temperature-3 35.5
+    properties psu-state psu-fan-1-speed 7360
+    properties psu-state psu-fan-2-speed 7008
+    components component psu-3
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component psu-4
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component psu-controller-1
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003u
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    components component psu-controller-2
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003z
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    syscon-2-active# 
+
+Show Component State Only from the CLI
+--------------------------------------
+
+If you just want the state and not all the details you can run the command **show components component state**:
+
+.. code-block:: bash
+
+    syscon-2-active# show components component state
+    components component blade-1
+    state description "VELOS BX110"
+    state serial-no bld424551s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs disabled
+    components component blade-2
+    state description "VELOS BX110"
+    state serial-no bld422435s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs disabled
+    components component blade-3
+    state description "VELOS BX110"
+    state serial-no bld422573s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs disabled
+    components component blade-4
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-5
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-6
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-7
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component blade-8
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component chassis
+    state description "VELOS CX410"
+    state serial-no chs600032s
+    state part-no "400-0087-02 REV 6"
+    state empty false
+    state nebs capable false
+    state nebs disabled
+    components component controller-1
+    state description    "VELOS SX410"
+    state serial-no      bld422584s
+    state part-no        "SUB-0881-00 REV B"
+    state empty          false
+    state tpm-integrity-status Valid
+    state nebs capable true
+    state nebs disabled
+    state memory total    33397862400
+    state memory available 25295560704
+    state memory free     319311872
+    state memory used-percent 24
+    state memory platform-total 33397862400
+    state memory platform-used 13559164928
+    state memory platform-used-percent 40
+    state temperature current 26.2
+    state temperature average 26.0
+    state temperature minimum 25.4
+    state temperature maximum 26.8
+                                                                                        USED     
+    AREA               CATEGORY               TOTAL         FREE          USED          PERCENT  
+    ---------------------------------------------------------------------------------------------
+    platform/sysroot   F5OS System            353835896832  233887080448  101947703296  30       
+    platform/images    F5OS Images            270494859264  182400954368  74326732800   28       
+    partition2/config  F5OS System            10726932480   10487996416   238936064     2        
+    partition2/images  F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition2/shared  F5OS Partition         10726932480   10682204160   44728320      0        
+    partition3/config  F5OS System            10726932480   10492538880   234393600     2        
+    partition3/images  F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition3/shared  F5OS Partition         10726932480   10682204160   44728320      0        
+
+    DISK DATA  DISK DATA     
+    NAME       VALUE         
+    -------------------------
+    available  233887293440  
+    capacity   353835896832  
+    used       101947490304  
+
+    components component controller-2
+    state description    "VELOS SX410"
+    state serial-no      bld424548s
+    state part-no        "SUB-0881-00 REV B"
+    state empty          false
+    state tpm-integrity-status Valid
+    state nebs capable true
+    state nebs disabled
+    state memory total    33397866496
+    state memory available 24858370048
+    state memory free     582602752
+    state memory used-percent 25
+    state memory platform-total 33397866496
+    state memory platform-used 12782718976
+    state memory platform-used-percent 38
+    state temperature current 26.3
+    state temperature average 26.3
+    state temperature minimum 25.8
+    state temperature maximum 27.0
+                                                                                            USED     
+    AREA                      CATEGORY               TOTAL         FREE          USED          PERCENT  
+    ----------------------------------------------------------------------------------------------------
+    platform/sysroot          F5OS System            353835896832  232488927232  103345856512  30       
+    platform/images           F5OS Images            270494859264  173605605376  83122081792   32       
+    /var/roothome/etcd3mount  F5OS System            5196181504    4515459072    395522048     8        
+    partition2/config         F5OS System            10726932480   10516013056   210919424     1        
+    partition2/images         F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition2/shared         F5OS Partition         10726932480   10682204160   44728320      0        
+    partition3/config         F5OS System            10726932480   10523660288   203272192     1        
+    partition3/images         F5OS Partition Images  16095641600   12324638720   3771002880    23       
+    partition3/shared         F5OS Partition         10726932480   10682204160   44728320      0        
+
+    DISK DATA  DISK DATA     
+    NAME       VALUE         
+    -------------------------
+    available  232488927232  
+    capacity   353835896832  
+    used       103345856512  
+
+    components component fantray-1
+    state firmware-version 1.02.798.0.1
+    state software-version 2.00.1008.0.1
+    state serial-no  sub0772g006w
+    state part-no    "SUB-0772-05 REV B"
+    state empty      false
+    components component lcd
+    state serial-no sub0811g002h
+    state part-no "SUB-0811-02 REV B"
+    state empty false
+    state mode secure
+    components component psu-1
+    state serial-no 19331BPJ0075
+    state part-no PWR-0366-00
+    state empty false
+    components component psu-2
+    state serial-no 19332BPJ0129
+    state part-no PWR-0366-00
+    state empty false
+    components component psu-3
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component psu-4
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component psu-controller-1
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003u
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    components component psu-controller-2
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003z
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    syscon-2-active#
+
+Show Component Properties from the CLI
+----------------------------------------
+
+This command shows the firmware version of the various subsystems, along with the fan tray and power supply info:
+
+.. code-block:: bash
+
+    syscon-2-active# show components component properties 
+                                                                UPDATE  
+    NAME                       NAME  VALUE          CONFIGURABLE  STATUS  
+    ----------------------------------------------------------------------
+    fw-version-bios            -     3.00.230.1     false         none    
+    fw-version-bios-me         -     4.0.4.800      false         none    
+    fw-version-cpld            -     05.04.00       false         none    
+    fw-version-drive-nvme0n1   -     EDA7602Q       false         none    
+    fw-version-lop-app         -     2.00.1100.0.1  false         none    
+    fw-version-lop-bootloader  -     1.02.868.0.1   false         none    
+    fw-version-sirr            -     1.1.99         false         none    
+
+                                                                UPDATE  
+    NAME                       NAME  VALUE          CONFIGURABLE  STATUS  
+    ----------------------------------------------------------------------
+    fw-version-bios            -     3.00.230.1     false         none    
+    fw-version-bios-me         -     4.0.4.800      false         none    
+    fw-version-cpld            -     05.04.00       false         none    
+    fw-version-drive-nvme0n1   -     EDA7602Q       false         none    
+    fw-version-lop-app         -     2.00.1100.0.1  false         none    
+    fw-version-lop-bootloader  -     1.02.868.0.1   false         none    
+    fw-version-sirr            -     1.1.99         false         none    
+
+                                                                UPDATE  
+    NAME                       NAME  VALUE          CONFIGURABLE  STATUS  
+    ----------------------------------------------------------------------
+    fw-version-bios            -     3.00.230.1     false         none    
+    fw-version-bios-me         -     4.0.4.800      false         none    
+    fw-version-cpld            -     05.04.00       false         none    
+    fw-version-drive-nvme0n1   -     EDA7602Q       false         none    
+    fw-version-lop-app         -     2.00.1100.0.1  false         none    
+    fw-version-lop-bootloader  -     1.02.868.0.1   false         none    
+    fw-version-sirr            -     1.1.99         false         none    
+
+                                                                        UPDATE  
+    NAME                                NAME  VALUE          CONFIGURABLE  STATUS  
+    -------------------------------------------------------------------------------
+    fw-version-bios                     -     2.03.175.1     -             none    
+    fw-version-bios-me                  -     4.0.4.705      -             none    
+    fw-version-cpld                     -     01.03.0A       -             none    
+    fw-version-drive                    -     EDA7602Q       -             none    
+    fw-version-lcd-app                  -     3.00.144.00.1  -             none    
+    fw-version-lcd-bootloader           -     2.01.109.00.1  -             none    
+    fw-version-lop-app                  -     2.01.1283.0.1  -             none    
+    fw-version-lop-bootloader           -     1.02.1019.0.1  -             none    
+    fw-version-sirr                     -     1.1.99         -             none    
+    fw-version-vfc-app-fanCtrl1         -     2.00.1008.0.1  -             none    
+    fw-version-vfc-bootloader-fanCtrl1  -     1.02.798.0.1   -             none    
+    fw-version-vpc-app-psuCtrl1         -     2.00.875.0.1   -             none    
+    fw-version-vpc-app-psuCtrl2         -     2.00.875.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl1  -     1.02.669.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl2  -     1.02.669.0.1   -             none    
+
+                                                                        UPDATE  
+    NAME                                NAME  VALUE          CONFIGURABLE  STATUS  
+    -------------------------------------------------------------------------------
+    fw-version-bios                     -     2.03.175.1     -             none    
+    fw-version-bios-me                  -     4.0.4.705      -             none    
+    fw-version-cpld                     -     01.03.0A       -             none    
+    fw-version-drive                    -     EDA7602Q       -             none    
+    fw-version-lcd-app                  -     3.00.144.00.1  -             none    
+    fw-version-lcd-bootloader           -     2.01.109.00.1  -             none    
+    fw-version-lop-app                  -     2.01.1283.0.1  -             none    
+    fw-version-lop-bootloader           -     1.02.1019.0.1  -             none    
+    fw-version-sirr                     -     1.1.99         -             none    
+    fw-version-vfc-app-fanCtrl1         -     2.00.1008.0.1  -             none    
+    fw-version-vfc-bootloader-fanCtrl1  -     1.02.798.0.1   -             none    
+    fw-version-vpc-app-psuCtrl1         -     2.00.875.0.1   -             none    
+    fw-version-vpc-app-psuCtrl2         -     2.00.875.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl1  -     1.02.669.0.1   -             none    
+    fw-version-vpc-bootloader-psuCtrl2  -     1.02.669.0.1   -             none    
+
+    components component fantray-1
+    properties fantray-state fantray-temperature 33.0
+    properties fantray-state inlet-fan-1-speed 6773
+    properties fantray-state inlet-fan-2-speed 6746
+    properties fantray-state inlet-fan-3-speed 6718
+    properties fantray-state exhaust-fan-1-speed 6730
+    properties fantray-state exhaust-fan-2-speed 6758
+    properties fantray-state exhaust-fan-3-speed 6785
+    components component psu-1
+    properties psu-state psu-current-in 3.152
+    properties psu-state psu-current-out 49.125
+    properties psu-state psu-power-in 645.0
+    properties psu-state psu-power-out 605.0
+    properties psu-state psu-voltage-in 204.0
+    properties psu-state psu-voltage-out 12.324
+    properties psu-state psu-temperature-1 24.0
+    properties psu-state psu-temperature-2 39.5
+    properties psu-state psu-temperature-3 36.2
+    properties psu-state psu-fan-1-speed 7488
+    properties psu-state psu-fan-2-speed 6912
+    components component psu-2
+    properties psu-state psu-current-in 3.238
+    properties psu-state psu-current-out 51.0
+    properties psu-state psu-power-in 658.0
+    properties psu-state psu-power-out 628.0
+    properties psu-state psu-voltage-in 204.25
+    properties psu-state psu-voltage-out 12.321
+    properties psu-state psu-temperature-1 24.0
+    properties psu-state psu-temperature-2 39.7
+    properties psu-state psu-temperature-3 35.5
+    properties psu-state psu-fan-1-speed 7392
+    properties psu-state psu-fan-2-speed 6976
+    syscon-2-active#
+
+
+Show Power Supply Status from the CLI
+--------------------------------------
+
+Or you can view individual subsystems. High level power supply status can be obtained by using the **show components component <psu-#>** command:
+
+.. code-block:: bash
+
+    syscon-2-active#  show components component psu-1
+    components component psu-1
+    state serial-no 19331BPJ0075
+    state part-no PWR-0366-00
+    state empty false
+    properties psu-state psu-current-in 3.14
+    properties psu-state psu-current-out 49.125
+    properties psu-state psu-power-in 643.0
+    properties psu-state psu-power-out 605.0
+    properties psu-state psu-voltage-in 204.0
+    properties psu-state psu-voltage-out 12.324
+    properties psu-state psu-temperature-1 24.2
+    properties psu-state psu-temperature-2 39.5
+    properties psu-state psu-temperature-3 36.5
+    properties psu-state psu-fan-1-speed 7488
+    properties psu-state psu-fan-2-speed 6944
+    syscon-2-active#
+
+
+You could also use an asterisk to display all psu's and psu controllers. Use the command **show components component psu-***.
+
+
+.. code-block:: bash
+
+    syscon-2-active# show components component psu-*     
+    components component psu-1
+    state serial-no 19331BPJ0075
+    state part-no PWR-0366-00
+    state empty false
+    properties psu-state psu-current-in 3.125
+    properties psu-state psu-current-out 48.937
+    properties psu-state psu-power-in 635.0
+    properties psu-state psu-power-out 604.0
+    properties psu-state psu-voltage-in 204.0
+    properties psu-state psu-voltage-out 12.325
+    properties psu-state psu-temperature-1 24.5
+    properties psu-state psu-temperature-2 39.5
+    properties psu-state psu-temperature-3 36.5
+    properties psu-state psu-fan-1-speed 7520
+    properties psu-state psu-fan-2-speed 6976
+    components component psu-2
+    state serial-no 19332BPJ0129
+    state part-no PWR-0366-00
+    state empty false
+    properties psu-state psu-current-in 3.234
+    properties psu-state psu-current-out 50.75
+    properties psu-state psu-power-in 673.0
+    properties psu-state psu-power-out 625.0
+    properties psu-state psu-voltage-in 204.25
+    properties psu-state psu-voltage-out 12.321
+    properties psu-state psu-temperature-1 24.2
+    properties psu-state psu-temperature-2 39.7
+    properties psu-state psu-temperature-3 35.5
+    properties psu-state psu-fan-1-speed 7392
+    properties psu-state psu-fan-2-speed 6944
+    components component psu-3
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component psu-4
+    state serial-no "Not Available"
+    state part-no "Not Available"
+    state empty true
+    components component psu-controller-1
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003u
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    components component psu-controller-2
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003z
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    syscon-2-active# 
+
+High level power supply stats can be obtained by using the **show components component psu-* properties** command:
+
+.. code-block:: bash
+
+    syscon-2-active# show components component psu-* properties 
+    components component psu-1
+    properties psu-state psu-current-in 3.097
+    properties psu-state psu-current-out 48.5
+    properties psu-state psu-power-in 635.0
+    properties psu-state psu-power-out 598.0
+    properties psu-state psu-voltage-in 203.75
+    properties psu-state psu-voltage-out 12.325
+    properties psu-state psu-temperature-1 24.2
+    properties psu-state psu-temperature-2 39.5
+    properties psu-state psu-temperature-3 36.5
+    properties psu-state psu-fan-1-speed 7392
+    properties psu-state psu-fan-2-speed 6944
+    components component psu-2
+    properties psu-state psu-current-in 3.253
+    properties psu-state psu-current-out 50.5
+    properties psu-state psu-power-in 657.0
+    properties psu-state psu-power-out 622.0
+    properties psu-state psu-voltage-in 204.25
+    properties psu-state psu-voltage-out 12.321
+    properties psu-state psu-temperature-1 23.7
+    properties psu-state psu-temperature-2 39.7
+    properties psu-state psu-temperature-3 35.5
+    properties psu-state psu-fan-1-speed 7392
+    properties psu-state psu-fan-2-speed 7008
+    syscon-2-active#
+
+Show LCD Status from the CLI
+--------------------------------------
+
+High level chassis LCD status can be obtained by using the **show components component lcd** command:
+
+.. code-block:: bash
+
+    syscon-2-active# show components component lcd
+    components component lcd
+    state serial-no sub0811g002h
+    state part-no "SUB-0811-02 REV B"
+    state empty false
+    state mode secure
+    syscon-2-active#
+
+
+Show CPU Status from the CLI
+--------------------------------------
+
+You can view stats on the system controller CPU and basic utilization with the command **show components component cpu**:
+
+.. code-block:: bash
+
+    syscon-2-active# show components component cpu
+    components component controller-1
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 18
+    cpu state cpu-utilization five-second-avg 22
+    cpu state cpu-utilization one-minute-avg 29
+    cpu state cpu-utilization five-minute-avg 27
+    CPU               CORE                           THREAD                                         
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                              
+    ------------------------------------------------------------------------------------------------
+    1      2048(KB)   8     2200.000(MHz)  1         8       Intel(R) Atom(TM) CPU C3758 @ 2.20GHz  
+
+                            FIVE    ONE     FIVE    
+    THREAD                   SECOND  MINUTE  MINUTE  
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     
+    -------------------------------------------------
+    0       cpu0    19       22      28      27      
+    1       cpu1    13       20      31      27      
+    2       cpu2    11       18      28      27      
+    3       cpu3    15       27      29      26      
+    4       cpu4    16       25      28      26      
+    5       cpu5    15       23      29      27      
+    6       cpu6    13       19      28      26      
+    7       cpu7    39       25      30      26      
+
+    components component controller-2
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 44
+    cpu state cpu-utilization five-second-avg 47
+    cpu state cpu-utilization one-minute-avg 42
+    cpu state cpu-utilization five-minute-avg 42
+    CPU               CORE                           THREAD                                         
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                              
+    ------------------------------------------------------------------------------------------------
+    1      2048(KB)   8     2200.000(MHz)  1         8       Intel(R) Atom(TM) CPU C3758 @ 2.20GHz  
+
+                            FIVE    ONE     FIVE    
+    THREAD                   SECOND  MINUTE  MINUTE  
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     
+    -------------------------------------------------
+    0       cpu0    33       44      45      44      
+    1       cpu1    52       50      42      41      
+    2       cpu2    47       46      44      42      
+    3       cpu3    40       40      42      41      
+    4       cpu4    41       45      42      43      
+    5       cpu5    45       49      41      42      
+    6       cpu6    41       48      41      41      
+    7       cpu7    56       56      42      42      
+
+    syscon-2-active#
+
+
+You may also run this within a partition to see the CPU's running on the blades within the chassis partition. In the example below, there are 2 BX110 blades within the production chassis partition. 
+
+.. code-block:: bash
+
+    production-1# show components component cpu
+    components component blade-1
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 6
+    cpu state cpu-utilization five-second-avg 6
+    cpu state cpu-utilization one-minute-avg 6
+    cpu state cpu-utilization five-minute-avg 6
+    cpu state cpu-utilization used-by ""
+    CPU               CORE                           THREAD                                           
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                                
+    --------------------------------------------------------------------------------------------------
+    0      19712(KB)  14    2448.979(MHz)  4         28      Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz  
+
+                            FIVE    ONE     FIVE                     
+    THREAD                   SECOND  MINUTE  MINUTE                   
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     USED BY          
+    ------------------------------------------------------------------
+    0       cpu0    5        2       2       3       F5OS             
+    1       cpu1    14       12      12      12      tenant2          
+    2       cpu2    6        4       3       3       F5OS             
+    3       cpu3    3        3       2       3       F5OS             
+    4       cpu4    23       31      35      36      tenant1          
+    5       cpu5    4        2       3       3       F5OS             
+    6       cpu6    2        4       3       3       F5OS             
+    7       cpu7    6        2       2       2       F5OS             
+    8       cpu8    8        14      18      20      tenant2          
+    9       cpu9    7        4       3       2       F5OS             
+    10      cpu10   4        3       2       2       F5OS             
+    11      cpu11   2        2       2       2       F5OS Data Mover  
+    12      cpu12   3        2       2       2       F5OS Data Mover  
+    13      cpu13   1        1       2       2       F5OS Data Mover  
+    14      cpu14   6        3       2       2       F5OS             
+    15      cpu15   15       22      20      21      tenant2          
+    16      cpu16   4        3       2       2       F5OS             
+    17      cpu17   10       5       2       3       F5OS             
+    18      cpu18   9        10      12      12      tenant1          
+    19      cpu19   13       4       3       3       F5OS             
+    20      cpu20   3        4       3       3       F5OS             
+    21      cpu21   5        3       3       3       F5OS             
+    22      cpu22   10       10      10      10      tenant2          
+    23      cpu23   2        3       3       3       F5OS             
+    24      cpu24   8        3       3       2       F5OS             
+    25      cpu25   0        0       1       1       F5OS Dedicated   
+    26      cpu26   0        0       1       1       F5OS Dedicated   
+    27      cpu27   1        1       1       1       F5OS Dedicated   
+
+    components component blade-2
+    cpu state cpu-utilization thread cpu
+    cpu state cpu-utilization current 6
+    cpu state cpu-utilization five-second-avg 5
+    cpu state cpu-utilization one-minute-avg 6
+    cpu state cpu-utilization five-minute-avg 6
+    cpu state cpu-utilization used-by ""
+    CPU               CORE                           THREAD                                           
+    INDEX  CACHESIZE  CNT   FREQ           STEPPING  CNT     MODELNAME                                
+    --------------------------------------------------------------------------------------------------
+    0      19712(KB)  14    1900.000(MHz)  4         28      Intel(R) Xeon(R) D-2177NT CPU @ 1.90GHz  
+
+                            FIVE    ONE     FIVE                     
+    THREAD                   SECOND  MINUTE  MINUTE                   
+    INDEX   THREAD  CURRENT  AVG     AVG     AVG     USED BY          
+    ------------------------------------------------------------------
+    0       cpu0    0        1       2       2       F5OS             
+    1       cpu1    1        1       3       2       F5OS             
+    2       cpu2    16       13      10      10      tenant2          
+    3       cpu3    34       29      39      40      tenant1          
+    4       cpu4    0        1       3       3       F5OS             
+    5       cpu5    2        2       3       2       F5OS             
+    6       cpu6    4        1       2       3       F5OS             
+    7       cpu7    1        1       2       2       F5OS             
+    8       cpu8    2        2       2       2       F5OS             
+    9       cpu9    6        1       2       2       F5OS             
+    10      cpu10   16       13      10      10      tenant2          
+    11      cpu11   2        3       2       2       F5OS Data Mover  
+    12      cpu12   3        2       2       2       F5OS Data Mover  
+    13      cpu13   3        3       2       2       F5OS Data Mover  
+    14      cpu14   1        1       2       2       F5OS             
+    15      cpu15   1        1       2       2       F5OS             
+    16      cpu16   29       17      22      21      tenant2          
+    17      cpu17   10       11      12      14      tenant1          
+    18      cpu18   4        1       2       2       F5OS             
+    19      cpu19   2        3       2       2       F5OS             
+    20      cpu20   0        1       2       2       F5OS             
+    21      cpu21   1        2       3       2       F5OS             
+    22      cpu22   1        1       2       2       F5OS             
+    23      cpu23   1        1       2       2       F5OS             
+    24      cpu24   39       24      23      21      tenant2          
+    25      cpu25   0        0       0       1       F5OS Dedicated   
+    26      cpu26   0        0       1       1       F5OS Dedicated   
+    27      cpu27   0        1       1       1       F5OS Dedicated   
+
+    production-1#    
+
+Show Storage Status from the CLI
+--------------------------------------
+
+You can view stats on the storage subsystems within the VELOS chassis. Below is an example of the disks within the system controllers.
+
+.. code-block:: bash
+
+    syscon-2-active# show components component storage | tab
+                                                                                                                                                                                                        READ  READ   WRITE           
+                                                                                                                                                READ                                          WRITE     IOPS  BYTES  IOPS   WRITE    
+                DISK                                                                                    TOTAL  READ     READ                  LATENCY  WRITE      WRITE                     LATENCY   PER   PER    PER    BYTES    
+    NAME          NAME     MODEL                       VENDOR   VERSION   SERIAL NO       SIZE      TYPE  IOPS   IOPS     MERGED   READ BYTES   MS       IOPS       MERGED     WRITE BYTES    MS        SEC   SEC    SEC    PER SEC  
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    controller-1  nvme0n1  SAMSUNG MZ1LB960HAJQ-00007  Samsung  EDA7602Q  S435NE0MA00234  683.00GB  nvme  0      1568600  676230   16736055296  556415   648294513  494080748  5795456132608  24748093  0     0      326    2487071  
+    controller-2  nvme0n1  SAMSUNG MZ1LB960HAJQ-00007  Samsung  EDA7602Q  S435NE0MA00209  683.00GB  nvme  0      1702424  1139159  22324675584  469211   813718692  611136304  7679875763712  33936279  0     0      522    4922562  
+
+    syscon-2-active#
+
+You may also run the same command within a chassis partition to see the disks installed on each blade within the partition.
+
+.. code-block:: bash
+
+    production-1# show components component storage | tab
+                                                                                                                                                                                                READ  READ    WRITE           
+                                                                                                                                        READ                                          WRITE     IOPS  BYTES   IOPS   WRITE    
+            DISK                                                                                    TOTAL  READ     READ                 LATENCY  WRITE      WRITE                     LATENCY   PER   PER     PER    BYTES    
+    NAME     NAME     MODEL                       VENDOR   VERSION   SERIAL NO       SIZE      TYPE  IOPS   IOPS     MERGED  READ BYTES   MS       IOPS       MERGED     WRITE BYTES    MS        SEC   SEC     SEC    PER SEC  
+    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    blade-1  nvme0n1  SAMSUNG MZ1LB960HAJQ-00007  Samsung  EDA7602Q  S435NE0MA00227  683.00GB  nvme  0      2257741  422     90820914688  589992   163436302  163013684  2180921189376  16295645  2     60769   88     1046244  
+    blade-2  nvme0n1  SAMSUNG MZ1LB960HAJQ-00007  Samsung  EDA7602Q  S435NE0MA02828  683.00GB  nvme  0      1386266  267     54210973696  341221   163243958  147017285  1781346844672  15535372  5     109109  105    986232   
+
+    production-1#
+
+
+
+
 
 
 Chassis Level and System Component Monitoring
