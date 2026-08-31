@@ -804,6 +804,67 @@ High level power supply stats can be obtained by using the **show components com
     properties psu-state psu-fan-2-speed 7008
     syscon-2-active#
 
+
+Show Power Supply Controller Status from the CLI
+--------------------------------------
+
+
+High level power supply controller status can be obtained by using the **show components component <psu-controller-#>** command. There are two Power Supply Controllers within each CX410 chassis, and four Power Supply Controllers within each CX1610 chassis
+
+.. code-block:: bash
+
+    syscon-1-active# show components component psu-controller-1
+    components component psu-controller-1
+    state firmware-version 1.02.669.0.1
+    state software-version 1.00.694.0.1
+    state serial-no  sub0759g003u
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+
+If you'd like to view all psu controllers in the chassis, leverage the asterisk in place of the psu-controller number as seen below. In the example below a CX410 chassis has 2 psu-controllers.
+
+.. code-block:: bash
+
+    syscon-2-active# show components component psu-controller-*
+    components component psu-controller-1
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003u
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    components component psu-controller-2
+    state firmware-version 1.02.669.0.1
+    state software-version 2.00.875.0.1
+    state serial-no  sub0759g003z
+    state part-no    "SUB-0759-04 REV A"
+    state empty      false
+    syscon-2-active#
+
+
+Show Fan Tray Status from the CLI
+--------------------------------------
+
+Below is an example of the **show components component fantray-1** command. In the CX410 chassis there is only one fan tray. In the CX1610 chassis there are four fan trays. You can substitute the fan tray number you are interested in monitoring.
+
+.. code-block:: bash
+
+    syscon-2-active# show components component fantray-1 
+    components component fantray-1
+    state firmware-version 1.02.798.0.1
+    state software-version 2.00.1008.0.1
+    state serial-no  sub0772g006w
+    state part-no    "SUB-0772-05 REV B"
+    state empty      false
+    properties fantray-state fantray-temperature 33.0
+    properties fantray-state inlet-fan-1-speed 6773
+    properties fantray-state inlet-fan-2-speed 6737
+    properties fantray-state inlet-fan-3-speed 6717
+    properties fantray-state exhaust-fan-1-speed 6764
+    properties fantray-state exhaust-fan-2-speed 6721
+    properties fantray-state exhaust-fan-3-speed 6788
+    syscon-2-active#
+
+
 Show LCD Status from the CLI
 --------------------------------------
 
@@ -1010,6 +1071,24 @@ You may also run the same command within a chassis partition to see the disks in
     production-1#
 
 
+Show Blade Status from the CLI
+--------------------------------------
+
+High level blade status can be obtained by using the **show components component <blade-#>** command:
+
+.. code-block:: bash
+
+    syscon-1-active# show components component blade-1
+    components component blade-1
+    state description "VELOS BX110"
+    state serial-no bld422435s
+    state part-no "400-0086-02 REV 2"
+    state empty false
+    state nebs capable true
+    state nebs enabled
+    syscon-1-active# 
+
+
 ------------------------------------------
 System Inventory / Components from the CLI
 ------------------------------------------
@@ -1027,19 +1106,7 @@ High level chassis status can be obtained by using the **show components compone
     state nebs capable false
     state nebs disabled
 
-High level blade status can be obtained by using the **show components component <blade-#>** command:
 
-.. code-block:: bash
-
-    syscon-1-active# show components component blade-1
-    components component blade-1
-    state description "VELOS BX110"
-    state serial-no bld422435s
-    state part-no "400-0086-02 REV 2"
-    state empty false
-    state nebs capable true
-    state nebs enabled
-    syscon-1-active# 
 
 High level system controller status can be obtained by using the **show components component <controller-#>** command. There are two system controllers within each chassis 1 & 2.
 
@@ -1140,17 +1207,6 @@ High level power supply status can be obtained by using the **show components co
     state empty false
 
 
-High level power supply controller status can be obtained by using the **show components component <psu-controller-#>** command. There are two Power Supply Controllers on the chassis 1 and 2.
-
-.. code-block:: bash
-
-    syscon-1-active# show components component psu-controller-1
-    components component psu-controller-1
-    state firmware-version 1.02.669.0.1
-    state software-version 1.00.694.0.1
-    state serial-no  sub0759g003u
-    state part-no    "SUB-0759-04 REV A"
-    state empty      false
 
 High level chassis LCD status can be obtained by using the **show components component lcd** command:
 
@@ -8118,8 +8174,4 @@ From the System Controller CLI you may also view the System Controller and indiv
     Prerequisites            Done    
     ServiceCatalogInstall    Done    
     etcdInstall              Done    
-
----------------------------
-Monitoring VELOS Components
----------------------------
 
