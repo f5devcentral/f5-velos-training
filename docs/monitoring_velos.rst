@@ -7859,7 +7859,7 @@ The body of the response will look similar to the output below.
     }
 
 
-API Monitoring of Chassis Partitions from the System Controller
+Monitoring of Chassis Partitions from the System Controller via API
 ---------------------------------------------------------------
 
 .. code-block:: bash
@@ -7918,8 +7918,8 @@ The body of the response will look similar to the output below.
         }
     }
 
-webUI Monitoring of Chassis Partitions from the System Controller
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Monitoring of Chassis Partitions from the System Controller via webUI
+---------------------------------------------------------------------
 
 Within the Dahsboard section of thw webUI is a **Partition Overview** which shows how blades are assgined to chassis partitions, their management IP addresses, and their operational state.
 
@@ -7935,8 +7935,8 @@ The webUI screen below shows Chassis Partition visualization/configuration. An a
   :align: center
   :scale: 70%
 
-CLI Monitoring of Chassis Partitions from the System Controller
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Monitoring of Chassis Partitions from the System Controller via CLI
+-------------------------------------------------------------------
 
 The CLI command show partitions will show the current chassis partitions ID’s and their status on each system controller:
 
