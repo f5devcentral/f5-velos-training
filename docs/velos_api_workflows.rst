@@ -190,6 +190,7 @@ Monitoring VELOS Health & Alert Status
 
 `Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
 
+`Filter to Get a Summary of System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#filter-to-get-a-summary-of-system-health-via-api>`_
 
 Monitoring
 ----------
