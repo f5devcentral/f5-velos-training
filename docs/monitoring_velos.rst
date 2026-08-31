@@ -4002,49 +4002,16 @@ The last section of this output shows CPU state and stats. There are 8 CPU cores
         ]
     }
 
---------------------------------------------------
-System Alerting and Logging
---------------------------------------------------
-
-From the system controller webUI there is a high-level status and alerting of any faults for the chassis level components.
-
-.. image:: images/monitoring_velos/image2.png
-  :align: center
-  :scale: 70%
+-------------------------
+Monitoring VELOS Services
+-------------------------
 
 
-System Alerts via API
----------------------
-
-Recent system level alerts can be accessed via the API. 
-
-.. code-block:: bash
-
-    GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-system:system/f5-event-log:events
-
-The body of the response will look similar to the output below.
-
-.. code-block:: json
-
-
-    {
-        "f5-event-log:events": {
-            "event": [
-                {
-                    "log": "65543 controller-2 aom-fault EVENT NA \"LOP Runtime fault detected: LOP is not receiving health reports from all installed VFC cards\" \"2021-03-05 04:48:14.485125925 UTC\""
-                },
-                {
-                    "log": "65543 controller-2 aom-fault CLEAR ERROR \"Fault detected in the AOM\" \"2021-03-05 04:48:14.605547335 UTC\""
-                },
-                {
-                    "log": "65543 controller-2 aom-fault EVENT NA \"No LOP Runtime fault detected: LOP is not receiving health reports from all installed VFC cards\" \"2021-03-05 04:48:14.605590242 UTC\""
-                },
------------------------------------
 Monitoring System Controller Health
 -----------------------------------
 
-System Controller Monitoring via CLI
-------------------------------------
+Monitoring System Controller Health via CLI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To see if the Openshift cluster is up and running use the **show cluster** command. You should see status for each installed blade and controller in the **Ready** state. Each section under **Stage Name** should show a **Status** of **Done**. During the bootup process you can monitor the status of the individual stages. The most recent Openshift logs are displayed, and you can determine if the chassis is healthy or having issues.
 
@@ -4097,8 +4064,8 @@ To see if the Openshift cluster is up and running use the **show cluster** comma
     19     2021-02-06 18:21:58.312127 -  Openshift cluster is NOT ready.                               
     20     2021-02-06 18:22:19.060573 -  Openshift cluster is ready.                              
 
-System Controller Monitoring via webUI
-------------------------------------
+Monitoring System Controller Haelth via webUI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the webUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the other and perform controller software upgrades. 
 
@@ -4124,11 +4091,10 @@ Active alarms & events can be viewed form the system controllers **System Settin
   :align: center
   :scale: 70%
 
-System Controller Monitoring via API
-------------------------------------
+System Controller Monitoring Health via API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
--------------------------------------------------------------
 Monitoring the Layer2 Switch Fabric on the System Controllers
 -------------------------------------------------------------
 
@@ -4153,7 +4119,7 @@ Those ports will be joined together in a LAG (Link Aggregation) bundle on the sy
   :scale: 70%
 
 Monitoring of the Layer2 Switch Fabric on the System Controllers via CLI
-------------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There is a CLI command to monitor all the internal and external ports and LAGs on the dual system controllers as well as the out-of-band management ports. Below is a command to view the stats for one of the backplane ports of the system controller:
 
@@ -4229,12 +4195,12 @@ The **show lacp** CLI command will show both external LAG interfaces if the mana
     syscon-1-active# 
 
 Monitoring of the Layer2 Switch Fabric on the System Controllers via webUI
-------------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the current release there is no backplane interface or LAG monitoring in the system controller webUI. You’ll need to use the CLI or API to get stats/status of the backplane ports or external management ports.
 
 Monitoring of the Layer2 Switch Fabric on the System Controllers via API
--------------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following API command will show all system controller Ethernet interfaces and link aggregation (both internal and external) as well as out-of-band management Interfaces.
 
@@ -7513,9 +7479,11 @@ The body of the response will look similar to the output below.
         }
     }
 
+Monitoring Link Aggregation Status of System Controllers
+--------------------------------------------------------
 
 Link Aggregation Status of System Controllers from the API
-----------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following API call will list the status of all backplane LACP interfaces, as well as front panel management port lacp interfaces:
 
@@ -7594,8 +7562,11 @@ The body of the response will look similar to the output below.
                         }
                     },
 
+Monitoring of Chassis Cluster Status from the System Controller
+---------------------------------------------------------------
+
 Monitoring of Chassis Cluster Status from the System Controller via API
--------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -7855,9 +7826,11 @@ The body of the response will look similar to the output below.
         }
     }
 
+Monitoring of Chassis Partitions from the System Controller
+-----------------------------------------------------------
 
 Monitoring of Chassis Partitions from the System Controller via API
----------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -7916,7 +7889,7 @@ The body of the response will look similar to the output below.
     }
 
 Monitoring of Chassis Partitions from the System Controller via webUI
----------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Within the Dahsboard section of thw webUI is a **Partition Overview** which shows how blades are assgined to chassis partitions, their management IP addresses, and their operational state.
 
@@ -7933,7 +7906,7 @@ The webUI screen below shows Chassis Partition visualization/configuration. An a
   :scale: 70%
 
 Monitoring of Chassis Partitions from the System Controller via CLI
--------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The CLI command show partitions will show the current chassis partitions ID’s and their status on each system controller:
 
@@ -8029,3 +8002,43 @@ From the System Controller CLI you may also view the System Controller and indiv
     ServiceCatalogInstall    Done    
     etcdInstall              Done    
 
+
+
+
+--------------------------------------------------
+System Alerting and Logging
+--------------------------------------------------
+
+From the system controller webUI there is a high-level status and alerting of any faults for the chassis level components.
+
+.. image:: images/monitoring_velos/image2.png
+  :align: center
+  :scale: 70%
+
+
+System Alerts via API
+---------------------
+
+Recent system level alerts can be accessed via the API. 
+
+.. code-block:: bash
+
+    GET https://{{System-Controller-IP}}:8888/restconf/data/openconfig-system:system/f5-event-log:events
+
+The body of the response will look similar to the output below.
+
+.. code-block:: json
+
+
+    {
+        "f5-event-log:events": {
+            "event": [
+                {
+                    "log": "65543 controller-2 aom-fault EVENT NA \"LOP Runtime fault detected: LOP is not receiving health reports from all installed VFC cards\" \"2021-03-05 04:48:14.485125925 UTC\""
+                },
+                {
+                    "log": "65543 controller-2 aom-fault CLEAR ERROR \"Fault detected in the AOM\" \"2021-03-05 04:48:14.605547335 UTC\""
+                },
+                {
+                    "log": "65543 controller-2 aom-fault EVENT NA \"No LOP Runtime fault detected: LOP is not receiving health reports from all installed VFC cards\" \"2021-03-05 04:48:14.605590242 UTC\""
+                },
