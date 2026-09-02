@@ -4108,6 +4108,34 @@ The first digit represents which controller the interface is attached to (contro
   :align: center
   :scale: 70%
 
+The same chassis and system controllers can also interconnect BX520 blades as seen as the diagram below.
+
+.. image:: images/monitoring_velos/velos_cx410_backplane_bx520.png
+  :align: center
+  :scale: 70%
+
+For the CX1610 chassis the dual sysytem controllers are larger and connect more slots and have more bandwidth per slot compared to the CX410 chassis. The CX1610 chassis only supports the BX520 blades, the BX110 blades are not suppported in this chassis. Below is a depection of the dual system controllers acting as a central redundant switch fabric with BX520 blades installed in the CX1610 chassis.
+
+.. image:: images/monitoring_velos/velos_cx1610_backplane_bx520.png
+  :align: center
+  :scale: 70%
+
+The diagram below shows the internal data plane interface numbering on the two system controllers within the CX410 chassis.
+
+.. image:: images/monitoring_velos/sx410_datapath_numbering.png
+  :align: center
+  :scale: 70%
+
+For the larger CX1610 chassis, the diagrams below show the data plane port numbering on the dual system controllers.
+
+.. image:: images/monitoring_velos/velos_cx1610-controller1-dataplane.png
+  :align: center
+  :scale: 70%
+
+.. image:: images/monitoring_velos/velos_cx1610-controller2-dataplane.png
+  :align: center
+  :scale: 70%
+
 There are also separate control plane connections from each controller to each slot, which are also put into Link Aggregation Group. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/1.1** and one to system controller 2 interface **2/1.1**, the numbering follows the same logic for other slots. The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 1 for control plane connections, and finally the last digit is the actual interface nunmber on the controller specified in the first digit.
 
 .. image:: images/monitoring_velos/image7.png
@@ -4131,26 +4159,10 @@ Below is a depection of the dual system controllers acting as a central redundan
   :align: center
   :scale: 70%
 
-The same chassis and system controllers can also interconnect BX520 blades as seen as the diagram below.
 
-.. image:: images/monitoring_velos/velos_cx410_backplane_bx520.png
-  :align: center
-  :scale: 70%
+There is a CLI command to monitor all the internal and external ports and LAGs on the dual system controllers as well as the out-of-band management ports. 
 
-For the CX1610 chassis the dual sysytem controllers are larger and connect more slots and have more bandwidth per slot compared to the CX410 chassis. The CX1610 chassis only supports the BX520 blades, the BX110 blades are not suppported in this chassis. Below is a depection of the dual system controllers acting as a central redundant switch fabric with BX520 blades installed in the CX1610 chassis.
-
-.. image:: images/monitoring_velos/velos_cx1610_backplane_bx520.png
-  :align: center
-  :scale: 70%
-
-There is a CLI command to monitor all the internal and external ports and LAGs on the dual system controllers as well as the out-of-band management ports. The diagram below shows the internal and external interface numbering
-
-.. image:: images/monitoring_velos/sx410_datapath_numbering.png
-  :align: center
-  :scale: 70%
-
-There are two system controllers, and each controller has a single 100Gb connection to each slot.
-The 100Gb data plane backplane connections always start with: **<controller number>/ 3.<slot number>**. As an example, **1/3.1** is controller one’s connection to slot1, while **2/3.1** is controller two’s connection to slot 1. To view just the internal data plane connection status, issue the folllowing command: **show interfaces interface */3.* state oper-status**.
+There are two system controllers, and each controller has a single 100Gb connection to each slot. The 100Gb data plane backplane connections always start with: **<controller number>/ 3.<slot number>**. As an example, **1/3.1** is controller one’s connection to slot1, while **2/3.1** is controller two’s connection to slot 1. To view just the internal data plane connection status, issue the folllowing command: **show interfaces interface */3.* state oper-status**.
 
 .. code-block:: bash
 
@@ -4219,7 +4231,6 @@ The output is explained in more detail with the following graphic. In this case,
 .. image:: images/monitoring_velos/dataplane_status.png
   :align: center
   :scale: 70%
-
 
 Below is a command to view the complete stats for one of the backplane ports of the system controller:
 
