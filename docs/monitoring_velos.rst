@@ -4148,17 +4148,14 @@ Those ports will be joined together in a LAG (Link Aggregation) bundle on the sy
   :align: center
   :scale: 70%
 
-Monitoring of the Layer2 Switch Fabric on the System Controllers via CLI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are two different VELOS chassis models: the CX410 and CX1610. Each has a unique model of system controller (SX410 and SX1610) with different numbers of internal backplane connections to each slot in the chassis. It is important to understand the different port functions and numbering when trying to diagnose a problem or monitor the utilization of the different backplane links.
-
-Below is a depection of the dual system controllers acting as a central redundant switch fabric with BX110 blades installed in the CX410 chassis.
-
-.. image:: images/monitoring_velos/velos_cx410_backplane.png
+.. image:: images/monitoring_velos/sx410_controlpath_numbering.png
   :align: center
   :scale: 70%
 
+
+Monitoring of the Layer2 Switch Fabric on the System Controllers via CLI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There is a CLI command to monitor all the internal and external ports and LAGs on the dual system controllers as well as the out-of-band management ports. 
 
@@ -4221,10 +4218,6 @@ Each slot also has a separate backplane connection to each system controller for
     2/1.8  DOWN    
 
     syscon-2-active# 
-
-.. image:: images/monitoring_velos/sx410_controlpath_numbering.png
-  :align: center
-  :scale: 70%
 
 The output is explained in more detail with the following graphic. In this case, there are three BX110 blades installed in slots 1-3 and the rest of the slots are empty. Each controller has a control plane data plane connection to each slot, and only the slots with a blade installed will show an **UP** status.
 
