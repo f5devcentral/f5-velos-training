@@ -4148,11 +4148,21 @@ Those ports will be joined together in a LAG (Link Aggregation) bundle on the sy
   :align: center
   :scale: 70%
 
+he diagram below shows the internal control plane interface numbering on the two system controllers within the CX410 chassis.
 
 .. image:: images/monitoring_velos/sx410_controlpath_numbering.png
   :align: center
   :scale: 70%
 
+For the larger CX1610 chassis, the diagrams below show the control plane port numbering on the dual system controllers.
+
+.. image:: images/monitoring_velos/velos_cx1610-controller1-controlplane.png
+  :align: center
+  :scale: 70%
+
+.. image:: images/monitoring_velos/velos_cx1610-controller2-controlplane.png
+  :align: center
+  :scale: 70%
 
 Monitoring of the Layer2 Switch Fabric on the System Controllers via CLI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
