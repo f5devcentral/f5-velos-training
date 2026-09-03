@@ -4148,7 +4148,7 @@ Those ports will be joined together in a LAG (Link Aggregation) bundle on the sy
   :align: center
   :scale: 70%
 
-he diagram below shows the internal control plane interface numbering on the two system controllers within the CX410 chassis.
+The diagram below shows the internal control plane interface numbering on the two system controllers within the CX410 chassis.
 
 .. image:: images/monitoring_velos/sx410_controlpath_numbering.png
   :align: center
