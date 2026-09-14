@@ -127,7 +127,7 @@ For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP
 
 
 .. image:: images/velos_networking/image11a.png
-  :width: 45%
+  :width: 55%
 
 .. image:: images/velos_networking/image11b.png
   :width: 35%
