@@ -4619,10 +4619,12 @@ See the section above about configuration of the certificate before moving on. I
   :scale: 70% 
 
 
-**More Details to Come**
 
 Configuring Client Certificate Authentication via API
 -----------------------------------------------------
+
+
+**More Details to Come**
 
 Proxy Server Configuration
 ==========================

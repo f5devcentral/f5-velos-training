@@ -35,7 +35,7 @@ Initial Setup of System Controllers
 
 `Configure System Settings DNS From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-dns-from-the-api>`_
 
-`Configure System Settings NTP & Timezone From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-ntp-timezone-from-the-api>`_
+`Configure System Settings NTP & Timezone From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-ntp-time-zone-from-the-api>`_
 
 `Configure System Settings SYSLOG From the API <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#configure-system-settings-syslog-from-the-api>`_
 
@@ -158,7 +158,7 @@ F5OS-C Backup and Restore
 
 `Restoring the System Controller from a Database Backup via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-the-system-controller-from-a-database-backup-via-api>`_
 
-`Rebooting Blades from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html>`_
+`Rebooting Blades from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#rebooting-blades-from-the-api>`_
 
 `Importing Archived Chassis Partition Configs from a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-from-a-remote-server-via-api>`_
 
@@ -195,9 +195,23 @@ Monitoring VELOS Health & Alert Status
 Monitoring
 ----------
 
-`System Inventory / Components from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-inventory-components-from-the-api>`_
+`Hardware and System Component Monitoring from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#hardware-and-system-component-monitoring-from-the-api>`_
 
-`API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
+`Monitoring VELOS Component Platform Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-component-platform-status-via-api>`_
+
+`Monitoring VELOS Chassis Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-status-via-api>`_
+
+`Monitoring VELOS Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
+
+`Monitoring VELOS Fan Tray Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-fan-tray-status-via-api>`_
+
+`Monitoring VELOS LCD Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-lcd-status-via-api>`_
+
+`Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-blade-status-via-api>`_
+
+`Monitoring VELOS Chassis and Blade Power Levels via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-and-blade-power-levels-via-api>`_
+
+`Monitoring VELOS Chassis Base MAC Addresses via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-base-mac-addresses-via-api>`_
 
 `Chassis Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#chassis-inventory-from-the-api>`_
 
@@ -213,33 +227,18 @@ Monitoring
 
 `System Controller 1 & 2 Status from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-controller-1-2-status-from-the-api>`_
 
+`Monitoring System Controller Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-system-controller-health-via-api>`_
+
+`Monitoring of the Layer2 Switch Fabric on the System Controllers via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-of-the-layer2-switch-fabric-on-the-system-controllers-via-api>`_
+
+`Link Aggregation Status of System Controllers from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#link-aggregation-status-of-system-controllers-from-the-api>`_
+
+`Monitoring of Chassis Cluster Status from the System Controller via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-of-chassis-cluster-status-from-the-system-controller-via-api>`_
+
+`Monitoring of Chassis Partitions from the System Controller via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-of-chassis-partitions-from-the-system-controller-via-api>`_
+
 `System Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-alerts-via-api>`_
 
-`API Monitoring of the Layer2 Switch Fabric on the System Controllers <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-the-layer2-switch-fabric-on-the-system-controllers>`_
-
-`API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
-
-`API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
-
-`Monitoring VELOS Component Platform Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-component-platform-status-via-api>`_
-
-`Monitoring VELOS Chassis Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-status-via-api>`_
-
-`Monitoring VELOS Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
-
-`Monitoring VELOS Power Supply Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
-
-`Monitoring VELOS Power Supply Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-power-supply-controller-status-via-api>`_
-
-`Monitoring VELOS Fan Tray Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-fan-tray-status-via-api>`_
-
-`Monitoring VELOS LCD Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-lcd-status-via-api>`_
-
-`Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-blade-status-via-api>`_
-
-`Monitoring VELOS Chassis and Blade Power Levels via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-and-blade-power-levels-via-api>`_
-
-`Monitoring VELOS Chassis Base MAC Addresses via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-base-mac-adresses-via-api>`_
 
 VELOS F5OS-A SNMP Monitoring and Alerting
 -----------------------------------------

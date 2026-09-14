@@ -21,6 +21,7 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 
 .. image:: images/velos_networking/tagged-vlans.png
   :align: center
+  :scale: 100%
 
 Below is an example deployment; where each system controller has its own unique IP address, and an administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured, and that IP address will follow the active system controller, so that an admin using the F5OS API, CLI, or webUI can always connect to the active system controller. Note, the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
@@ -74,7 +75,7 @@ Isolation at the network level is also enforced via the centralized switch fabri
 
 .. image:: images/velos_networking/image5.png
   :align: center
-
+  :scale: 80%
 
 When chassis partitions are created, the administrator will assign one or more blades, which are then isolated from all other blades in the chassis. The centralized switch fabrics are automatically configured with port based VLANs and VLAN tagging to enforce network isolation between chassis partitions. The diagrams below provide a visual of how this is enforced.
 
@@ -127,9 +128,11 @@ For the BX520 blade there are two physical ports (1.0 & 2.0). Port 1.0 is a QSFP
 
 .. image:: images/velos_networking/image11a.png
   :width: 45%
+  :scale: 70%
 
 .. image:: images/velos_networking/image11b.png
-  :width: 35%
+  :width: 45%
+  :scale: 70%
 
 .. image:: images/velos_networking/image11c.png
   :align: center

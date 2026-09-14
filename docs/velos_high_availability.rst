@@ -27,7 +27,7 @@ The second function the system controllers perform is the management of the cont
 
 .. image:: images/velos_high_availability/image2.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 You may view the current high availability status in the dashboard of the system controller webUI. It will show which controller is primary and standby, as well as other system information related to the system controllers.
 
@@ -119,7 +119,7 @@ Below is an example of a “SuperVIP” tenant that spans all 8 blades. Each sys
 
 .. image:: images/velos_high_availability/image10.png
   :align: center
-  :scale: 70%
+  :scale: 90%
 
 Inside the tenant, one **Cluster Member IP Address** will need to be configured for each blade. If using IPv4 & IPv6 (dual stack management) then **Alternate Management** & **Cluster Member IP addresses** can be configured.
 
