@@ -1103,18 +1103,18 @@ In the system controller webUI there is a **System Inventory** page under the **
 Hardware and System Component Monitoring from the API
 -----------------------------------------------------
 
-This section will cover monitoring VELOS componenents.
+This section will cover monitoring VELOS components.
 
 Monitoring VELOS Component Platform Status via API
 --------------------------------------------
 
-You can get the status of the VELOS chassis components using the following API call. This will combine that status of all of the componenets into a single API call. These can also be broken out into more targeted API calls for specific compoenents which are also covered later in this section. 
+You can get the status of the VELOS chassis components using the following API call. This will combine that status of all of the components into a single API call. These can also be broken out into more targeted API calls for specific components which are also covered later in this section. 
 
 .. code-block:: bash
 
     GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components
 
-For each blade, controller installed in the system, you'll see descrription, serial number, part number, and NEBS state. You'll also see detailed blade filesystem information, CPU, memory, and storage stats and temperature information. You can also monitor the various firmware update status and versions. 
+For each blade, controller installed in the system, you'll see description, serial number, part number, and NEBS state. You'll also see detailed blade filesystem information, CPU, memory, and storage stats and temperature information. You can also monitor the various firmware update status and versions. 
 
 .. code-block:: json
 
@@ -4064,7 +4064,7 @@ To see if the Openshift cluster is up and running use the **show cluster** comma
     19     2021-02-06 18:21:58.312127 -  Openshift cluster is NOT ready.                               
     20     2021-02-06 18:22:19.060573 -  Openshift cluster is ready.                              
 
-Monitoring System Controller Haelth via webUI
+Monitoring System Controller Health via webUI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the webUI a high-level status of the system controller HA state, and the ability to force a failover can be done from the **System Settings -> Controller Management** screen. Here you can see system controller 1 & 2 status, and role. You can optionally configure the type of failover with either auto (recommended) or Preferred node.  You can also force a failover from one system controller to the other and perform controller software upgrades. 
@@ -4102,7 +4102,7 @@ This section will outline what status should and can be monitored for the Layer2
 
 Before getting into what monitoring is supported, it is important to understand how things connect and their labeling. The diagram below provides the internal interface numbering on the system controllers so that an admin can monitor the status and statistics of each interface. This will give them visibility into the traffic distribution across the backplane and dual switch fabrics.  Link Aggregation is configured on the blade side of the connection, but not on the system controller side. Note that the blade in slot 1 will have two data plane connections, one to system controller 1 interface **1/3.1** and one to system controller 2 interface **2/3.1**, the numbering follows the same logic for other slots. 
 
-The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 3 for data plane connections, and finally the last digit is the actual interface nunmber on the controller specified in the first digit.
+The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 3 for data plane connections, and finally the last digit is the actual interface number on the controller specified in the first digit.
 
 .. image:: images/monitoring_velos/image6.png
   :align: center
@@ -4114,7 +4114,7 @@ The same chassis and system controllers can also interconnect BX520 blades as se
   :align: center
   :scale: 70%
 
-For the CX1610 chassis the dual sysytem controllers are larger and connect more slots and have more bandwidth per slot compared to the CX410 chassis. The CX1610 chassis only supports the BX520 blades, the BX110 blades are not suppported in this chassis. Below is a depection of the dual system controllers acting as a central redundant switch fabric with BX520 blades installed in the CX1610 chassis.
+For the CX1610 chassis the dual system controllers are larger and connect more slots and have more bandwidth per slot compared to the CX410 chassis. The CX1610 chassis only supports the BX520 blades, the BX110 blades are not supported in this chassis. Below is a depiction of the dual system controllers acting as a central redundant switch fabric with BX520 blades installed in the CX1610 chassis.
 
 .. image:: images/monitoring_velos/velos_cx1610_backplane_bx520.png
   :align: center
@@ -4136,13 +4136,13 @@ For the larger CX1610 chassis, the diagrams below show the data plane port numbe
   :align: center
   :scale: 70%
 
-There are also separate control plane connections from each controller to each slot, which are also put into Link Aggregation Group. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/1.1** and one to system controller 2 interface **2/1.1**, the numbering follows the same logic for other slots. The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 1 for control plane connections, and finally the last digit is the actual interface nunmber on the controller specified in the first digit.
+There are also separate control plane connections from each controller to each slot, which are also put into Link Aggregation Group. Note that the blade in slot 1 will have two connections, one to system controller 1 interface **1/1.1** and one to system controller 2 interface **2/1.1**, the numbering follows the same logic for other slots. The first digit represents which controller the interface is attached to (controller-1 or controller-2). The second digit will always be 1 for control plane connections, and finally the last digit is the actual interface number on the controller specified in the first digit.
 
 .. image:: images/monitoring_velos/image7.png
   :align: center
   :scale: 70%
 
-Those ports will be joined together in a LAG (Link Aggregation) bundle on the system controller side. Note the LAG connecting to slot 1 is labeled **cplagg_1.1**, slot2 is labeled **cplagg_1.2** etc…:
+Those ports will be joined together in a LAG (Link Aggregation) bundle on the system controller side. Note the LAG connecting to slot 1 is labeled **cplagg_1.1**, slot2 is labeled **cplagg_1.2** etc.
 
 .. image:: images/monitoring_velos/image8.png
   :align: center
@@ -4169,7 +4169,7 @@ Monitoring of the Layer2 Switch Fabric on the System Controllers via CLI
 
 There is a CLI command to monitor all the internal and external ports and LAGs on the dual system controllers as well as the out-of-band management ports. 
 
-There are two system controllers, and each controller has a single 100Gb connection to each slot. The 100Gb data plane backplane connections always start with: **<controller number>/ 3.<slot number>**. As an example, **1/3.1** is controller one’s connection to slot1, while **2/3.1** is controller two’s connection to slot 1. To view just the internal data plane connection status, issue the folllowing command: **show interfaces interface */3.* state oper-status**.
+There are two system controllers, and each controller has a single 100Gb connection to each slot. The 100Gb data plane backplane connections always start with: **<controller number>/ 3.<slot number>**. As an example, **1/3.1** is controller one’s connection to slot1, while **2/3.1** is controller two’s connection to slot 1. To view just the internal data plane connection status, issue the following command: **show interfaces interface */3.* state oper-status**.
 
 .. code-block:: bash
 
@@ -4202,7 +4202,7 @@ The output is explained in more detail with the following graphic. In this case,
   :align: center
   :scale: 70%
 
-Each slot also has a separate backplane connection to each system controller for control plane traffic. The 10Gb control plane backplane connections always start with: **<controller number>/ 1.<slot number>**. As an example, **1/1.1** is controller one’s control plane connection to slot1, while **2/1.1** is controller two’s control plane connection to slot 1. To view just the internal control plane connection status, issue the folllowing command: **show interfaces interface */1.* state oper-status**.
+Each slot also has a separate backplane connection to each system controller for control plane traffic. The 10Gb control plane backplane connections always start with: **<controller number>/ 1.<slot number>**. As an example, **1/1.1** is controller one’s control plane connection to slot1, while **2/1.1** is controller two’s control plane connection to slot 1. To view just the internal control plane connection status, issue the following command: **show interfaces interface */1.* state oper-status**.
 
 .. code-block:: bash
 
