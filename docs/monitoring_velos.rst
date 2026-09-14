@@ -4091,7 +4091,7 @@ Active alarms & events can be viewed form the system controllers **System Settin
   :align: center
   :scale: 70%
 
- Monitoring System Controller Health via API
+Monitoring System Controller Health via API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To see if the Openshift/K3s cluster is up and running use the API request below. 
