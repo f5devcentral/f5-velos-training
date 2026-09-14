@@ -4091,8 +4091,267 @@ Active alarms & events can be viewed form the system controllers **System Settin
   :align: center
   :scale: 70%
 
-System Controller Monitoring Health via API
+ Monitoring System Controller Health via API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To see if the Openshift/K3s cluster is up and running use the API request below. 
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-chassis-cluster:cluster
+
+You should see status for each installed blade and controller in the **Ready** state. Each section under **Stage Name** should show a **Status** of **Done**. During the bootup process you can monitor the status of the individual stages. The most recent Openshift/K3s logs are displayed, and you can determine if the chassis is healthy or having issues.
+
+.. code-block:: json
+
+    {
+        "f5-chassis-cluster:cluster": {
+            "nodes": {
+                "node": [
+                    {
+                        "name": "blade-1",
+                        "status": "Ready",
+                        "time-created": "2026-06-08T17:10:03Z",
+                        "roles": "compute",
+                        "info": {
+                            "cpu": 22,
+                            "pods": 500,
+                            "memory": "26215232Ki",
+                            "hugepages": "102460Mi",
+                            "memory-usage": "9%",
+                            "cpu-usage": ""
+                        }
+                    },
+                    {
+                        "name": "blade-2",
+                        "status": "Ready",
+                        "time-created": "2026-06-08T18:00:12Z",
+                        "roles": "compute",
+                        "info": {
+                            "cpu": 22,
+                            "pods": 500,
+                            "memory": "26215232Ki",
+                            "hugepages": "102460Mi",
+                            "memory-usage": "9%",
+                            "cpu-usage": ""
+                        }
+                    },
+                    {
+                        "name": "blade-3",
+                        "status": "Ready",
+                        "time-created": "2026-06-08T18:00:12Z",
+                        "roles": "compute",
+                        "info": {
+                            "cpu": 22,
+                            "pods": 500,
+                            "memory": "26215240Ki",
+                            "hugepages": "102460Mi",
+                            "memory-usage": "10%",
+                            "cpu-usage": ""
+                        }
+                    },
+                    {
+                        "name": "controller-1",
+                        "status": "Ready",
+                        "time-created": "2026-06-08T16:40:37Z",
+                        "roles": "control-plane,etcd"
+                    },
+                    {
+                        "name": "controller-2",
+                        "status": "Ready",
+                        "time-created": "2026-06-08T16:01:27Z",
+                        "roles": "control-plane,etcd"
+                    }
+                ]
+            },
+            "install-progress": {
+                "install-progress": [
+                    {
+                        "stage-name": "ClusterDeployment",
+                        "status": "done",
+                        "timestamp": "2026-08-07 16:01:27+00:00",
+                        "version": "Not Available",
+                        "description": "Cluster deployment is successful."
+                    },
+                    {
+                        "stage-name": "EtcdInstall",
+                        "status": "done",
+                        "timestamp": "2026-08-10 14:58:10+00:00",
+                        "version": "Not Applicable",
+                        "description": "Third etcd container launched on active CC."
+                    },
+                    {
+                        "stage-name": "K3SClusterInstall",
+                        "status": "done",
+                        "timestamp": "2026-08-07 16:02:31+00:00",
+                        "version": "1.34.3_50",
+                        "description": "K3s installation/verification is successful on both active and stand-by CC."
+                    },
+                    {
+                        "stage-name": "KubevirtInstall",
+                        "status": "done",
+                        "timestamp": "2026-08-07 16:02:54+00:00",
+                        "version": "1.6.3_120",
+                        "description": "Kubevirt pods are installed successfully."
+                    },
+                    {
+                        "stage-name": "MultusInstall",
+                        "status": "done",
+                        "timestamp": "2026-06-08 10:48:38-07:00",
+                        "version": "4.2.3_11",
+                        "description": "Multus installation/verification is successful in cluster."
+                    }
+                ]
+            },
+            "orchestration-manager": {
+                "cluster-initialized": true,
+                "cluster-ready": true,
+                "active-node": "controller-2.chassis.local",
+                "etcd-ha-initialized": true,
+                "etcd-ha-running": true,
+                "multus-status": "healthy",
+                "kubevirt-status": "healthy",
+                "controller-status": [
+                    {
+                        "index": 1,
+                        "name": "controller-1.chassis.local",
+                        "inserted": true,
+                        "in-cluster": true,
+                        "ready-cluster": true,
+                        "able-to-ping": true,
+                        "able-to-ssh": true,
+                        "state": "In Cluster"
+                    },
+                    {
+                        "index": 2,
+                        "name": "controller-2.chassis.local",
+                        "inserted": true,
+                        "in-cluster": true,
+                        "ready-cluster": true,
+                        "able-to-ping": true,
+                        "able-to-ssh": true,
+                        "state": "In Cluster"
+                    }
+                ],
+                "blade-status": [
+                    {
+                        "index": 1,
+                        "name": "blade-1.chassis.local",
+                        "inserted": true,
+                        "in-cluster": true,
+                        "ready-cluster": true,
+                        "able-to-ping": true,
+                        "able-to-ssh": true,
+                        "state": "In Cluster",
+                        "partition-label": "partition-2"
+                    },
+                    {
+                        "index": 2,
+                        "name": "blade-2.chassis.local",
+                        "inserted": true,
+                        "in-cluster": true,
+                        "ready-cluster": true,
+                        "able-to-ping": true,
+                        "able-to-ssh": true,
+                        "state": "In Cluster",
+                        "partition-label": "partition-2"
+                    },
+                    {
+                        "index": 3,
+                        "name": "blade-3.chassis.local",
+                        "inserted": true,
+                        "in-cluster": true,
+                        "ready-cluster": true,
+                        "able-to-ping": true,
+                        "able-to-ssh": true,
+                        "state": "In Cluster",
+                        "partition-label": "partition-3"
+                    }
+                ]
+            },
+            "cluster-status": {
+                "summary-status": "K3S cluster is healthy, and all controllers and blades are ready.",
+                "cluster-status": [
+                    {
+                        "status": "2026-08-14 06:48:03.709975-07:00 -  Can now ping blade blade-3.chassis.local (100.65.3.3)."
+                    },
+                    {
+                        "status": "2026-08-14 06:48:30.936760-07:00 -  Successfully SSH'd to blade blade-3.chassis.local."
+                    },
+                    {
+                        "status": "2026-08-14 06:48:36.757164-07:00 -  Blade 1 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 06:48:53.764758-07:00 -  Blade 2 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 06:49:26.154104-07:00 -  Blade 3 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 06:57:10.127456-07:00 -  Blade 1 is NOT ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 06:57:10.127542-07:00 -  Blade 2 is NOT ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 06:57:40.222660-07:00 -  Blade 3 is NOT ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:00:26.257292-07:00 -  Blade 1 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:00:26.257488-07:00 -  Blade 2 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:00:41.623693-07:00 -  Blade 3 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:25:52.865689-07:00 -  Blade 3 is NOT ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:29:04.251305-07:00 -  Blade 3 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:31:42.105910-07:00 -  Failed to SSH to blade blade-1.chassis.local."
+                    },
+                    {
+                        "status": "2026-08-14 07:31:49.006265-07:00 -  Failed to SSH to blade blade-2.chassis.local."
+                    },
+                    {
+                        "status": "2026-08-14 07:31:56.323011-07:00 -  Blade 1 is NOT ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:31:56.323164-07:00 -  Blade 2 is NOT ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:33:46.887525-07:00 -  Cannot ping blade blade-1.chassis.local (100.65.3.1) [1]."
+                    },
+                    {
+                        "status": "2026-08-14 07:33:48.926633-07:00 -  Cannot ping blade blade-2.chassis.local (100.65.3.2) [1]."
+                    },
+                    {
+                        "status": "2026-08-14 07:34:09.006289-07:00 -  Can now ping blade blade-1.chassis.local (100.65.3.1)."
+                    },
+                    {
+                        "status": "2026-08-14 07:34:10.655722-07:00 -  Can now ping blade blade-2.chassis.local (100.65.3.2)."
+                    },
+                    {
+                        "status": "2026-08-14 07:34:56.990739-07:00 -  Successfully SSH'd to blade blade-1.chassis.local."
+                    },
+                    {
+                        "status": "2026-08-14 07:34:57.400998-07:00 -  Successfully SSH'd to blade blade-2.chassis.local."
+                    },
+                    {
+                        "status": "2026-08-14 07:35:04.763672-07:00 -  Blade 1 is ready in K3S cluster."
+                    },
+                    {
+                        "status": "2026-08-14 07:35:04.763751-07:00 -  Blade 2 is ready in K3S cluster."
+                    }
+                ]
+            }
+        }
+    }
+
 
 
 Monitoring the Layer2 Switch Fabric on the System Controllers
