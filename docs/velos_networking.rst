@@ -21,6 +21,7 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 
 .. image:: images/velos_networking/tagged-vlans.png
   :align: center
+  :scale: 80%
 
 Below is an example deployment; where each system controller has its own unique IP address, and an administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured, and that IP address will follow the active system controller, so that an admin using the F5OS API, CLI, or webUI can always connect to the active system controller. Note, the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
@@ -74,7 +75,7 @@ Isolation at the network level is also enforced via the centralized switch fabri
 
 .. image:: images/velos_networking/image5.png
   :align: center
-
+  :scale: 80%
 
 When chassis partitions are created, the administrator will assign one or more blades, which are then isolated from all other blades in the chassis. The centralized switch fabrics are automatically configured with port based VLANs and VLAN tagging to enforce network isolation between chassis partitions. The diagrams below provide a visual of how this is enforced.
 
@@ -108,7 +109,7 @@ The portgroup component is used to control the mode of the physical port. This c
   :width: 45%
 
 .. image:: images/velos_networking/image10.png
-  :width: 45%
+  :width: 35%
 
 In releases prior to F5OS-C 1.5.1 both ports on a BX110 blade must be configured for the same mode, both ports must be either 100GB, 40GB, 4 x 25GB, or 4 x 10GB; there was no support for mixing modes on the same blade. You could have different options across different blades within the same chassis partition, but within a single blade, the ports had to be the same. F5OS-C 1.5.1 introduced more flexible options for port group configurations within the same blade. The table below shows the new heterogeneous port modes that were introduced in F5OS-C 1.5.1.
 
