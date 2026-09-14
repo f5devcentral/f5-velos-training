@@ -227,7 +227,7 @@ Monitoring
 
 `System Controller 1 & 2 Status from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-controller-1-2-status-from-the-api>`_
 
-`Monitoring System Controller Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-controller-monitoring-health-via-api>`_
+`Monitoring System Controller Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-system-controller-health-via-api>`_
 
 `Monitoring of the Layer2 Switch Fabric on the System Controllers via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-of-the-layer2-switch-fabric-on-the-system-controllers-via-api>`_
 
