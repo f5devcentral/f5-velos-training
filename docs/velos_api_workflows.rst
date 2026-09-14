@@ -217,7 +217,7 @@ Monitoring
 
 `LCD Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#lcd-inventory-from-the-api>`_
 
-`Fantray Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#fantray-inventory-from-the-api>`_
+`Fantray Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#fan-tray-inventory-from-the-api>`_
 
 `Power Supply Controller Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#power-supply-controller-inventory-from-the-api>`_
 
