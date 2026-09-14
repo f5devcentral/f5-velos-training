@@ -71,14 +71,14 @@ VELOS systems ship with a default internal RFC6598 address space of 100.64.0.0/1
 
 .. code-block:: bash
 
-  syscon-2-active# show system network 
+  velos-1-gsa-1-active# show system network 
   system network state configured-network-range-type RFC6598
   system network state configured-network-range 100.64.0.0/12
   system network state configured-chassis-id 1
   system network state active-network-range-type RFC6598
   system network state active-network-range 100.64.0.0/12
   system network state active-chassis-id 1
-  syscon-2-active# 
+  velos-1-gsa-1-active# 
 
 This address range never leaves the inside of the chassis and will not interfere with any communication outside the VELOS chassis. There can however be address collisions if a device trying to manage VELOS via the out-of-band management port falls within this range, or an external management device or service falls within this range and communicates with VELOS over its out-of-band networking. This may result in VELOS not able to communicate with those devices.
 
@@ -88,18 +88,18 @@ If there is the potential for conflict with external devices that fall within th
 
 .. code-block:: bash
 
-  syscon-2# config
-  syscon-2-active(config)# system network config network-range-type RFC <Hit Tab>
+  velos-1-gsa-1-active# config
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC <Hit Tab>
   Possible completions:
     RFC1918   VELOS system uses 10.[0-15]/12 as specified by RFC1918
     RFC6598   VELOS system uses 100.64/10 as specified by RFC6598
-  syscon-2-active(config)# system network config network-range-type RFC1918
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC1918
 
 If changing to one of the RFC1918 address spaces, you will need to choose from one of 16 prefix ranges as seen below. You should ensure that this will not overlap with current address space deployed within the environment:
 
 .. code-block:: bash
 
-  syscon-2-active(config)# system network config network-range-type RFC1918 prefix ?
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC1918 prefix ?
   Description: 
   The network prefix index is used to select the range of IP addresses
   used internally within the chassis.  The network prefix should be
@@ -125,8 +125,8 @@ If changing to one of the RFC1918 address spaces, you will need to choose from o
   15                         10.[240-255].0.0/12
   Possible completions:
     <unsignedByte, 0 .. 15>[0]
-  syscon-2-active(config)# system network config network-range-type RFC1918 prefix 15
-    syscon-2-active(config)# commit
+  velos-1-gsa-1-active(config)# system network config network-range-type RFC1918 prefix 15
+  velos-1-gsa-1-active(config)# commit
   Commit complete.
 
 **Note: This change will not take effect until the chassis is power cycled. A complete power cycle is required in order to convert existing internal address space to the new address space, a reboot of individual chassis components is not sufficient.**
@@ -205,17 +205,38 @@ You likely setup the IP addressing via the setup wizard, but if you need to alte
 
 .. code-block:: bash
 
-  syscon-2-active(config)# system mgmt-ip config ipv4 controller-1 address 10.10.10.212
-  syscon-2-active(config)# system mgmt-ip config ipv4 controller-2 address 10.10.10.213
-  syscon-2-active(config)# system mgmt-ip config ipv4 floating address 10.10.10.214
-  syscon-2-active(config)# system mgmt-ip config ipv4 prefix-length 24
-  syscon-2-active(config)# system mgmt-ip config ipv4 gateway 10.10.10.1
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 controller-1 address 10.10.10.212
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 controller-2 address 10.10.10.213
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 floating address 10.10.10.214
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 prefix-length 24
+  velos-1-gsa-1-active(config)# system mgmt-ip config ipv4 gateway 10.10.10.1
 
 To make these changes active, you must commit the changes. No configuration changes are executed until the commit command is issued. 
 
 .. code-block:: bash
 
   syscon-2-active(config)# commit
+
+Prior to F5OS 2.0, only a single default gateway was configurable for the out-of-band management port from the F5OS layer. Multiple static routes can now be added starting with the F5OS 2.0 version. This is useful if you have services that F5OS relies on or needs to communicate with such as DNS, NTP, Syslog or SNMP services that are behind different routers.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system routes route 10.10.10.0/24 config gateway 172.22.50.62 description "route for DNS"
+    velos-1-gsa-1-active(config)# system routes route 10.10.20.0/24 config gateway 172.22.50.61 description "route for NTP"
+    velos-1-gsa-1-active(config)# commit
+
+You may then view the routes with the following command:
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active# show system routes 
+    NETWORK        GATEWAY       DESCRIPTION    
+    --------------------------------------------
+    10.10.10.0/24  172.22.50.62  route for DNS  
+    10.10.20.0/24  172.22.50.61  route for NTP  
+
+    velos-1-gsa-1-active#
+
 
 Now that the out-of-band addresses and routing are configured, you can attempt to access the system controller webUI via the floating IP address that has been defined. The floating IP address should always be used to monitor and configure the system as it will always follow the active controller. Using the static IP addresses is best saved for diagnosing a problem, as the secondary controller will not allow config changes to be made, and monitoring may be limited when in standby state. After logging into the floating IP address, you should see a page like the one below. 
 
@@ -226,11 +247,15 @@ Now that the out-of-band addresses and routing are configured, you can attempt t
 IP Address Assignment & Routing via WebUI
 -----------------------------------------
 
-You may alter the configuration of the system controllers out-of-band interfaces via the **Network Settings > Management Interfaces** page in the WebUI. Here you can enable or disable DHCP, configure IPv4/IPv6 static and floating IP addresses, gateway and prefix as well as link aggregation parameters.
+You may alter the configuration of the system controllers out-of-band interfaces via the **System Settings > Management Interfaces** page in the WebUI. Here you can enable or disable DHCP, configure IPv4/IPv6 static and floating IP addresses, gateway and prefix as well as link aggregation parameters.
 
-.. image:: images/initial_setup_of_velos_system_controllers/image2.png
+You can also configure the two controllers management ports to be aggregated into a Link Aggregation Group (LAG), and optionally specify Management VLANs if you would like to use 802.1Q VLAN tagging for the management network. This would allow controllers, chassis partitions, and tenants to be put onto unique tagged VLANs. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt.png
   :align: center
   :scale: 70%
+
+If you would like to leverage 802.1Q VLAN tagging you must first setup **Management VLANs** which then can be referenced when editing the **Management IP Addresses**.
 
 IP Address Assignment & Routing via API
 -----------------------------------------
@@ -439,11 +464,19 @@ Interface Aggregation for System Controllers via WebUI
 
 Beware that changing from unaggregated to aggregated needs to be coordinated with the configuration of the upstream management switch. Management access will be disconnected while making this change. It is a good idea to have a console connection to your system controllers available when making this change.
 
-Go to the **Network Settings -> Management Interfaces** page in the WebUI to change the configuration to use link aggregation.
+Go to the **System Settings -> Management Interfaces** page in the WebUI to change the configuration to use link aggregation. In the **Link Aggregation** section click the Edit button on the right hand side.
 
-.. image:: images/initial_setup_of_velos_system_controllers/webui-controllers.png
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag.png
   :align: center
-  :scale: 50%
+  :scale: 70%
+
+Here you can edit the enable or disable the LAG configuration, add a LAG type, LACP mode, and Name of the interface.
+
+.. image:: images/initial_setup_of_velos_system_controllers/ip_mgmt_lag2.png
+  :align: center
+  :scale: 70%
+
+
 
 
 
@@ -879,7 +912,7 @@ In the system controller F5OS CLI, enter config mode. DNS, logging, and NTP can 
 Configure System Settings (DNS, NTP, Logging) From the WebUI
 ----------------------------------------
 
-You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **Network Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
+You can configure the DNS and Time settings from the webUI if preferred. DNS is configured under **System Settings > DNS**. Here you can add DNS lookup servers, and optional search domains. This will be needed for the VELOS chassis to resolve hostnames that may be used for external services like; licensing, ntp, authentication servers, or to reach iHealth for qkview uploads.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image4.png
   :align: center
@@ -891,7 +924,7 @@ Configuring Network Time Protocol is highly recommended, so that the VELOS syste
   :align: center
   :scale: 70%
 
-It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Settings > Log Settings** screen. Here, you can configure remote servers, the logging facility, and severity levels. 
+It’s also a good idea to have the VELOS system controllers send logs to an external syslog server. This can be configured in the **System Monitoring > Log Settings** screen. Here, you can configure remote servers, the logging facility, and severity levels. 
 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image6.png
@@ -1108,10 +1141,14 @@ Licensing via webUI
 Licensing is accessible under the **System Settings > Licensing** page. **Automatic** will require proper routing and DNS connectivity to the Internet to reach F5’s licensing server. If it is not possible to reach the licensing server, use the **Manual** method.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image7.png
-  :width: 45%
+  :align: center
+  :scale: 70%
+
+You can also add Proxy information if your environment requires a proxy to reach the Internet for Automatic licensing.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image8.png
-  :width: 45%
+  :align: center
+  :scale: 70%
 
 You can activate and display the current license in the webUI, CLI or API. 
 
@@ -1649,7 +1686,7 @@ For this configuration, you will remove slots 1, 2, and 3 from the **default** c
   :align: center
   :scale: 70%
 
-You can then click on the slots in the graphic that you want to remove (slots 1, 2, and 3), and they will change from dark blue to light blue. Also note; the **Selected Slots** will remove these slots from the default partition as indicated by **4,5,6,7,8**. Click **Save** to complete removing slots 1-3 from the default partition.
+In the Edit screen, remove (slots 1, 2, and 3) from the Default chassis partition. Click **Save** to complete removing slots 1-3 from the default partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image14.png
   :align: center
@@ -1661,31 +1698,51 @@ The slots will turn white, indicating they are not currently assigned to any cha
   :align: center
   :scale: 70%
 
-Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. In the graphic click on slots 1 & 2 and they should turn grey, then select **Create**. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. Finally, select a **Partition Image** which defines the F5OS-C software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS-C controller and partition images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
+Next, create a new chassis partition that includes slots 1 & 2, and it will be named **Production**. Select the **Create** option in the upper right. The partition name must start with a letter, and cannot contain any special characters, only alpha-numeric characters are allowed. Fill in the **Name, IP Address, Prefix Length,** and **Gateway** fields. 
 
-.. image:: images/initial_setup_of_velos_system_controllers/image16.png
+
+.. image:: images/initial_setup_of_velos_system_controllers/image15a.png
   :align: center
   :scale: 80%
 
-Change the partition state to **Enabled**. You can monitor the chassis partition status; it will go from **Disabled**, to **Starting**, to **Running**. 
+Finally, select a **Partition Image** which defines the F5OS software release for the chassis partition. If there are no releases to choose from you must upload a valid chassis **partition image** into the system controller. You may download F5OS controller and partition images from downloads.f5.com. When done click **Save** to create the new chassis partition.  
 
-.. image:: images/initial_setup_of_velos_system_controllers/image18.png
+.. image:: images/initial_setup_of_velos_system_controllers/image15b.png
   :align: center
   :scale: 80%
 
-Next, repeat the process and create another chassis partition for slot3 naming it **Development**, and supply and IP address, prefix, and gateway along with a partition F5OS-C image to run
+You can monitor the chassis partition status; it will go from **Starting** to **Running**. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image15c.png
+  :align: center
+  :scale: 80%
+
+Next, repeat the process and create another chassis partition for slot3 naming it **Development**, and supply and IP address, prefix, and gateway along with a partition F5OS image to run. You should see a status similar to the one below.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image19.png
   :align: center
   :scale: 80%
 
-You’ll then see a summary of all 3 partitions, each with a unique **partition ID**, along with their **Operational State**.
+You’ll then see a summary of all 3 partitions, each with a unique **partition ID**, along with their **Operational State**. For F5OS 2.0 and later you can click on the **View** option next to any chassis partition to see more detailed status.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image20.png
   :align: center
   :scale: 100%
 
-If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to:
+It's possible the individual blades may need to load updated software and possibly firmware. You'll be able to monitor the upgrade status in this screen.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image20a.png
+  :align: center
+  :scale: 100%
+
+Eventually, the **Node Status** should show **Complete**, and you'll see the **Install Status** show **Success*.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image20b.png
+  :align: center
+  :scale: 100%
+
+
+If you click on the **Dashboard**, you’ll see a graphical representation that has slots color coded based on the partition they are assigned to. Hyperlinks will also be displayed for the WebUI of each chassis partition's management interface. You can click on any of the links to log directly into the chassis partition.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image21.png
   :align: center
@@ -2590,33 +2647,12 @@ System Controller Configuration Options
 
 Once the minimum parameters have been setup, you can go back and review or edit various settings for the system controllers. Below is a review of the current webUI options that are available with the system controller F5OS configuration. Other options are available within the F5OS chassis partition interfaces and are covered in a later section. 
 
------------------------------------------
-Network Settings -> Management Interfaces
------------------------------------------
-
-Under **Network Settings**, you can view/edit both the floating and static IP addresses for the system controllers. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
-
-**NOTE: For the initial 1.1.x versions of F5OS-C only IPv4 IP addressing was available for the F5OS platform layer. IPv4/IPv6 dual stack support has since been added in the F5OS 1.2.x release. This limitation was only for the F5OS-C platform layer v1.1.x versions, BIG-IP tenants are capable of IPv4/v6 dual stack management, even with older F5OS software.** 
-
-.. image:: images/initial_setup_of_velos_system_controllers/image22.png
-  :align: center
-  :scale: 70%
-
------------------------
-Network Settings -> DNS
------------------------
-
-External **DNS Lookup Servers** and **Search Domains** can be configured. This will be required for things like automatic license activation, NTP server domain resolution, and iHealth integration and it is recommended to be configured. 
-
-.. image:: images/initial_setup_of_velos_system_controllers/image23.png
-  :align: center
-  :scale: 70%
 
 ---------------------------------------
 Software Management -> Partition Images
 ---------------------------------------
 
-Each chassis partition will require an F5OS-C software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS-C partition images are available on downloads.f5.com.
+Each chassis partition will require an F5OS software release to be specified when enabled. You may also upgrade chassis partitions as needed. Chassis partition releases are loaded into the system controllers via the **Software Management > Partition Images** webUI page. F5OS partition images are available on downloads.f5.com.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image24.png
   :align: center
@@ -2626,66 +2662,34 @@ Each chassis partition will require an F5OS-C software release to be specified w
 Software Management -> Controller Images
 ----------------------------------------
 
-System controllers also run a unique F5OS-C software version and have a separate ISO from the chassis partitions. Both system controllers will need to run the same SW version. You can upload or import new F5OS-C controller images via the **Software Management > Controller Images** webUI screen.
+System controllers also run a unique F5OS software version and have a separate ISO from the chassis partitions. Both system controllers will need to run the same SW version. You can upload or import new F5OS controller images via the **Software Management > Controller Images** webUI screen.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image25.png
   :align: center
   :scale: 70%
 
+
 ----------------------------------
-System Settings -> Alarms & Events
+System Monitoring -> Alarms & Events
 ----------------------------------
 
-Alarms and Events can be viewed via the **System Settings > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including those that have cleared. Each event should have different assertions to both **Raise** and **Clear** alarms. 
+Alarms and Events can be viewed via the **System Monitoring > Alarms & Events** webUI page. You may optionally choose different severity levels to see more or less events. The **Alarms** section displays events that are currently active, while the Events section displays historical events including those that have cleared. Each event should have different assertions to both **Raise** and **Clear** alarms. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image26.png
   :align: center
   :scale: 70%
 
-You may also change timeframe to see historical events, and optionally refresh the screen via the controls on the right-hand side of the page:
+You may also change severity or timeframe to see historical events, and optionally refresh the screen via the controls on the right-hand side of the page:
 
 .. image:: images/initial_setup_of_velos_system_controllers/image27.png
   :align: center
 
-----------------------------------------
-System Settings -> Controller Management
-----------------------------------------
-
-System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a Kubernetes control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
-
-An administrator can failover from one system controller to the other and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
-
-**NOTE: The initial v1.1.x F5OS-C versions did not support rolling upgrades for the system controllers. Any upgrade that is initiated will update both controllers in parallel which will result in an outage for the entire chassis. A proper outage window should be planned for any upgrades, and updating the standby chassis first is recommended if possible. Rolling upgrade support for the system controllers was added to the 1.2.x release of F5OS-C. Once the system controllers are starting from a 1.2.x release, rolling upgrades are supported.** 
-
-.. image:: images/initial_setup_of_velos_system_controllers/image28.png
-  :align: center
-  :scale: 70% 
-
------------------------------------
-System Settings -> System Inventory
------------------------------------
-
-The **System Settings > System Inventory** page provides status, part numbers and serial numbers for the different physical components including controllers, blades, fan trays, power supply controller units, power supplies, and LCD.
-
-.. image:: images/initial_setup_of_velos_system_controllers/image29.png
-  :align: center
-  :scale: 70% 
-
--------------------------------
-System Settings -> Log Settings
--------------------------------
-
-Under **System Settings > Log Settings** you may add remote log servers for the F5OS system controllers. You can also specify the **Software Component Log Levels** which may be useful when troubleshooting specific issues.
-
-.. image:: images/initial_setup_of_velos_system_controllers/image30.png
-  :align: center
-  :scale: 70% 
 
 ---------------------------------
-System Settings -> File Utilities
+System Monitoring -> File Utilities
 ---------------------------------
 
-The **System Settings > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from the various log directories log can be exported, cores and qkviews can be exported from diags/shared and system controller and chassis partition software images can be imported into import/staging.
+The **System Monitoring > File Utilities** page allows for importing or exporting specific types of files to and from the system controllers. Logs from the various log directories log can be exported, cores and qkviews can be exported from diags/shared and system controller and chassis partition software images can be imported into import/staging.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image31.png
   :align: center
@@ -2697,41 +2701,60 @@ The Import/Export utility requires an external HTTPS server to copy to/from. A p
   :align: center
   :scale: 70% 
 
---------------------------------
-System Settings -> Time Settings
---------------------------------
+-------------------------------------------
+System Monitoring -> Foreground Diagnostics
+-------------------------------------------
 
-Under the **System Settings > Time Settings** page Network Time Protocol servers can be added so that the system controller time sources are sync’d to a reliable time source. The Time Zone may also be set.
+Foreground Diagnostics provide admins with the ability to assess, validate, and troubleshoot hardware and service health in a live production environment, minimizing downtime. Specifically, you can:
 
-.. image:: images/initial_setup_of_velos_system_controllers/image33.png
+- **Evaluate system health while active**: Run diagnostic tests without the need for rebooting, even while tenants are actively processing traffic (although some may impact performance).
+- **Subsystem-specific insights**: Identify root causes of performance issues and more quickly help determine the need to start the RMA process for components like drives, sensors, memory, blades, PSUs, LCDs, and fan-trays.
+- **Data path validation**: Investigate link statuses, error counters, switch stats, and connectivity faults within the data path to analyze tenant impacts.
+- **Execution History**: Access detailed history of diagnostic test results to identify patterns of subsystem performance over time.
+
+
+.. image:: images/initial_setup_of_velos_system_controllers/foreground-diags.png
+  :align: center
+  :scale: 70% 
+
+
+-------------------------------
+System Monitoring -> Log Settings
+-------------------------------
+
+Under **System Monitoring > Log Settings** you may add remote log servers for the F5OS system controllers, specify if the system hostname should be included in the remote logs, and setup certificates, keys, and CAs for secure logging.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image30.png
+  :align: center
+  :scale: 70% 
+
+You can also specify the **Software Component Log Levels** which may be useful when troubleshooting specific issues.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image30a.png
   :align: center
   :scale: 70% 
 
 -------------------------------------
-System Settings -> System Security
+System Monitoring -> SNMP
 -------------------------------------
 
-Access to specific services running on the system controller F5OS layer can be restricted to certain IP addresses and/or subnets via the **Systems Settings > Security** page. The **Allowed IP Addresses** section will allow the admin to restrict who can access the F5OS layer. Here an administrator can also but F5OS into appliance mode, which will disable bash/root access on the controllers. Other security related parameters such as httpd and sshd cipher suites as well as the CLI idle timeout can be set on this page.
-
-.. image:: images/initial_setup_of_velos_system_controllers/image34.png
-  :align: center
-  :scale: 70% 
-
--------------------------------------
-System Settings -> SNMP Configuration
--------------------------------------
-
-SNMP **Communities**, **Users**, and **Targets** can be setup on the **System Settings -> SNMP Configuration** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
+SNMP **Properties**, **Communities**, **Users**, and **Targets** can be setup on the **System Monitoring -> SNMP** page. Here, an admin can enable access for SNMP monitoring of the system through either communities for SNMPv1/v2c, or through users for SNMPv3. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/snmp.png
   :align: center
   :scale: 70% 
 
----------------------------------
-Diagnostics -> System Reports
----------------------------------
+In addition, remote SNMP Trap receiver locations can be enabled for alerting. 
 
-The **Diagnostics > System Reports** page allows an admin to generate QKViews and optionally upload them to iHealth. 
+.. image:: images/initial_setup_of_velos_system_controllers/snmp2.png
+  :align: center
+  :scale: 70% 
+
+-----------------------------------
+System Monitoring -> System Reports
+-----------------------------------
+
+The **System Monitoring > System Reports** page allows an admin to generate QKViews and optionally upload them to iHealth. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image35.png
   :align: center
@@ -2743,41 +2766,122 @@ To generate a QKView click on the button in the upper right-hand corner. It will
   :align: center
   :scale: 70% 
 
+You will be prompted for a File Name, Timeout Value, Max File Size, and Max Core Size. There is also an option to exclude cores.
+
 .. image:: images/initial_setup_of_velos_system_controllers/image37.png
   :align: center
   :scale: 70% 
 
-Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**. Your iHealth credentials will automatically fill in if entered them previously and be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
+Once the QKView is generated, you can click the checkbox next to it, and then select **Upload to iHealth**.
 
 .. image:: images/initial_setup_of_velos_system_controllers/image38.png
   :align: center
   :scale: 70% 
 
-If you would like to store iHealth credentials within the configuration you may do so via the system controller CLI. Enter **config** mode and then use the **system diagnostics ihealth config** command to configure a username and password.
+Your iHealth credentials will automatically fill in if entered them previously and can be cleared if you want to use another account, you can optionally add an **F5 Support Case Number** and **Description**.
 
-.. code-block:: bash
+.. image:: images/initial_setup_of_velos_system_controllers/image38a.png
+  :align: center
+  :scale: 70% 
 
-  syscon-1-active(config)# system diagnostics ihealth config ?
-  Possible completions:
-    authserver   Server for Authentication server of iHealth ex:- https://api.f5.com/auth/pub/sso/login/ihealth-api
-    password     password to login to iHealth
-    server       Server for iHealth ex:- https://ihealth-api.f5.com/qkview-analyzer/api/qkviews?visible_in_webUI=True
-    username     username to login to iHealth
-  syscon-1-active(config)# system diagnostics ihealth config 
+If you would like to permanently store iHealth credentials within the configuration you may do so via the **System Settings -> System Security -> iHealth Configuration**. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image38b.png
+  :align: center
+  :scale: 70% 
+
+
+-----------------------------------
+System Monitoring -> System Inventory
+-----------------------------------
+
+The **System Monitoring > System Inventory** page provides status, part numbers and serial numbers for the different physical components including controllers, blades, fan trays, power supply controller units, power supplies, and LCD.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image29.png
+  :align: center
+  :scale: 70% 
+
+------------------------------
+System Monitoring -> Telemetry
+------------------------------
+
+
+In addition to syslog, and SNMP, F5OS supports Open Telemetry (Otel) to export analytics and logs to external management platforms. OpenTelemetry streamlines observability in distributed systems through standardized APIs, libraries, and tools for collecting telemetry data, including traces, metrics, and logs.
+
+F5OS OpenTelemetry enables the efficient collection of streaming metrics and logs in a structured format from the F5OS product to display in your observability platform. The F5OS supports gRPC endpoints and each OpenTelemetry Line Protocol (OTLP) endpoint is provided with the ability to toggle instrument-based filtering. 
+
+`OpenTelemetry Open Source Site <https://opentelemetry.io/>`_
+
+- Front-Panel interface counters
+- CPU/Memory/Disk utilization metrics
+- Optic DDM metrics
+- BIG-IP tenant utilization metrics: Memory, Disk, CPU, Interface
+- Platform Hardware sensors, such as temperature and fan speeds.
+- You can use the OpenTelemetry ‘log’ API for Platform-log and ConfD event-log.
+- Data-Path: Metrics related to the flow of data, specifically those that track the data’s movement in and out of the F5OS platform layer for each tenant.
+- Tmstat tables exported as metrics.
+- File-system metrics.
+
+More details on configuring OpenTelemetry on F5OS can be found here:
+
+`OpenTelemetry Overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-system-monitoring.html#opentelemetry-overview>`_
+
+
+.. image:: images/initial_setup_of_velos_system_controllers/otel.png
+  :align: center
+  :scale: 70% 
+
+Below is an example of the OTel setup:
+
+.. image:: images/initial_setup_of_velos_system_controllers/otel2.png
+  :align: center
+  :scale: 70% 
 
 ---------------------------------------
 System Settings -> Configuration Backup
 ---------------------------------------
 
-You may backup the confd configuration databases for the system controller via the webUI. The backups can then be copied off-box using the file utilities webUI option. Currently the webUI does not support the restoration of confd backups, this must be done via the CLI or API. 
+You may backup the confd configuration databases for the system controller via the **System Settings -> Configuration Backup** page. The backups can then be Downloaded or exported form the system. Currently the webUI does not support the restoration of confd backups, this must be done via the CLI or API. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image39.png
   :align: center
   :scale: 70% 
 
-.. image:: images/initial_setup_of_velos_system_controllers/image40.png
+----------------------------------------
+System Settings -> Controller Management
+----------------------------------------
+
+System controller status, HA state, and software upgrades are managed via the **System Settings > Controller Management** webUI page. The **High Availability Status** refers to the Kubernetes control plane status which operates in an Active / Standby manner. Only one controller will be active from a Kubernetes control plane perspective. This does not reflect the status of the layer2 switch fabric on the controllers which operates in an active/active mode.
+
+An administrator can failover from one system controller to the other and also perform software upgrades to the controllers as needed. You may perform a bundled upgrade which combines both the OS and F5 service components, or they can be upgraded independently. An upgrade which includes the **OS**, will be more disruptive timewise vs. an upgrade that only updates the F5 **services**. F5 support would recommend which type of upgrade may be needed for a particular fix, or feature. Ideally F5 expects to have to update the OS less frequently in the long term than the F5 Services. Currently, F5 is recommending upgrades using the full ISO vs. separate OS and service upgrades.
+
+Any upgrade that is initiated will update rolling upgrade by default, meaning the standby is upgraded first, and then a reboot is initiated of the standby controller. Once the standby system controllers come active, a failover will be initiated moving services to the newly upgraded controller. At that point the upgrade process is initiated on the former active controller. 
+
+
+.. image:: images/initial_setup_of_velos_system_controllers/image28.png
   :align: center
   :scale: 70% 
+
+-----------------------
+System Settings -> DNS
+-----------------------
+
+External **DNS Lookup Servers** and **Search Domains** can be configured. This will be required for things like automatic license activation, NTP server domain resolution, and iHealth integration and it is recommended to be configured. 
+
+.. image:: images/initial_setup_of_velos_system_controllers/image23.png
+  :align: center
+  :scale: 70%
+
+--------------------------
+System Settings -> General
+--------------------------
+
+The **System Settings > General** page displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partition, and you can reboot either system controller from this page. You can also configure the system hostname, Login Banner, and Message of the Day as well as other properties.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image43.png
+  :align: center
+  :scale: 70% 
+
 
 ----------------------------
 System Settings -> Licensing
@@ -2791,42 +2895,76 @@ Licenses can be applied via CLI, webUI, or API. A base registration key and opti
   :align: center
   :scale: 70% 
 
-------------------------------------------
-System Settings -> Software Install Status
-------------------------------------------
 
-The **System Settings -> Software Install Status** is used to verify and observe software updates of the system controllers and the chassis partitions. You can view the various stages of the install process.
+-----------------------------------------
+System Settings -> Management Interfaces
+-----------------------------------------
 
-.. image:: images/initial_setup_of_velos_system_controllers/image42.png
+Under **System Settings**, you can view/edit both the floating and static IP addresses for the system controllers. Starting in F5OS version 1.8.x you can also add VLAN tagging to the out of band management ports that will in turn map to controller IPs, chassis partitions IPs, and TMOS tenant IPs. If you would prefer to use DHCP for automatic assignment of these addresses, this may also be configured. You may also choose to configure Link Aggregation for the two out-of-band management interfaces for added redundancy. The LAG will consist of the out-of-band management interface from each controller. The LAG on the system controllers have been designed to appear as a single device, so you can connect them to the same switch/LAG, or to a VPC where the LAG is across multiple switches that logically appear as one switch.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image22.png
+  :align: center
+  :scale: 70%
+
+
+-----------------------------------
+System Settings -> Management VLANs
+-----------------------------------
+
+In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band management ports on VELOS. This new option allows for system controllers, chassis partitions and tenants to be assigned to specific VLANs. This will allow for greater separation on the management VLAN which in previous releases had to be a single shared VLAN. The external ports are configured with specific tagged or untagged VLANs and then those VLANs are presented to the system controllers, partitions, and tenants as untagged, meaning no special configuration is needed to convert to tagged management VLANs inside tenants.
+
+.. image:: images/initial_setup_of_velos_system_controllers/mgmt-vlans.png
+  :align: center
+  :scale: 70%
+
+-------------------------------------
+System Settings -> System Security
+-------------------------------------
+
+Access to specific services running on the system controller F5OS layer can be restricted to certain IP addresses and/or subnets via the **Systems Settings > Security** page. The **Allowed IP Addresses** section will allow the admin to restrict who can access the F5OS layer. Here an administrator can also set the security compliance mode for Common Criteria. Shell and LCD Access allows Appliance mode to be enabled or disable at the controller level, as well as denying root access over SSH, and enabling superuser bash access. Finally, there is an option to configure the LCD mode. Login policies can be set and max sessions can be configured for both SSH and RESTCONF.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image34.png
   :align: center
   :scale: 70% 
 
---------------------------
-System Settings -> General
---------------------------
+In the **Services** section, httpd ciphersuites, and protocol can be configured as well as sshd ciphers, KEX algorithms, MAC algorithms and Hosy Key Algorithms. You may also configure CLI and SSH idle timeout values. in the **iHealth Configuration** section, you may add Credentials and Proxy Server information to allow the system controllers to communicate directly to the iHealth service (if desired).
 
-The **System Settings > General** page allows you to configure Appliance mode for the system controllers. Appliance mode is a security feature where all root and bash shell access are disabled. A user will only be able to utilize the F5OS CLI when Appliance mode is enabled. The page also displays the Systems Operation and Status which includes the Base OS and Service Versions currently running on the system controllers as well as the chassis partitions. You can also configure the system hostname, and as of F5OS-C 1.4.0 and later a **Login Banner** and Message of the Day **MOTD Banner** are supported.
-
-.. image:: images/initial_setup_of_velos_system_controllers/image43.png
+.. image:: images/initial_setup_of_velos_system_controllers/image34a.png
   :align: center
   :scale: 70% 
 
 --------------------------------
-User Management -> Auth Settings
+System Settings -> Time Settings
 --------------------------------
 
-Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP, RADIUS, or TACACS+. 
+Under the **System Settings > Time Settings** page Network Time Protocol servers can be added so that the system controller time sources are sync’d to a reliable time source. The Time Zone may also be set.
+
+.. image:: images/initial_setup_of_velos_system_controllers/image33.png
+  :align: center
+  :scale: 70% 
+
+
+--------------------------------------------------
+Authentication & Access -> Authentication Settings
+--------------------------------------------------
+
+Each layer of F5OS has its own user and authentication management. This allows for a separate set of users that have access to the system controllers, and each chassis partition. You may define local users and/or remote authentication via LDAP, RADIUS, or TACACS+. On this page you can setup remote authentication using LDAP, RADIUS, or TACACS. You can also disable Basic Authentication and configure a Token Lifetime. Client certificate authentication can be enabled, and OCSP Configuration can be modified. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image44.png
   :align: center
   :scale: 70% 
 
+ Lastly, Password Configuration can be altered to set various password policies.
 
---------------------------------
-User Management -> Server Groups
---------------------------------
+.. image:: images/initial_setup_of_velos_system_controllers/image44a.png
+  :align: center
+  :scale: 70% 
 
-You may define Server Groups which are collections of remote auth servers that the VELOS platform layer will use to authenticate against. LDAP, RADIUS, and TACACS+ are supported. For LDAP you may choose to authenticate of TCP or SSL. You can configure the remote host’s IP address and port. 
+----------------------------------------
+Authentication & Access -> Server Groups
+----------------------------------------
+
+You may define Server Groups which are collections of remote auth servers that the VELOS platform layer will use to authenticate against. LDAP, RADIUS, and TACACS+ are supported. For LDAP you may choose to authenticate over TCP or SSL. You can configure the remote host’s IP address and port. 
 
 .. image:: images/initial_setup_of_velos_system_controllers/image46.png
   :align: center
@@ -2844,9 +2982,19 @@ You may define Server Groups which are collections of remote auth servers that t
   :align: center
   :scale: 70%   
 
-------------------------
-User Management -> Users
-------------------------
+--------------------------------------------
+Authentication & Access -> TLS Configuration
+--------------------------------------------
+
+On this page you can create a device certificate for the system controller F5OS layer, configure client certificate verification, CA bundles, and Certificate Revocation Lists.
+
+.. image:: images/initial_setup_of_velos_system_controllers/tls.png
+  :align: center
+  :scale: 70%
+
+----------------------------------------
+Authentication & Access -> Users & Roles
+----------------------------------------
 
 Local Users may be defined, passwords set or changed and then assigned to specific roles (Admin or Operator). An account may also be locked, and that may be changed here.
 

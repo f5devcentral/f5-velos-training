@@ -17,6 +17,7 @@ This allows customers to run a secure/locked-down out-of-band management network
 
 .. image:: images/velos_security/image1.png
   :align: center
+  :scale: 70%
 
 Out-of-Band Management Network
 ==============================
@@ -27,6 +28,327 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 
 .. image:: images/velos_networking/tagged-vlans.png
   :align: center
+
+
+VLAN Tagging for the Management Port via CLI
+--------------------------------------------
+
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object using the **mgmt-vlans** CLI command on the system controller. In the example below, a tagged VLAN using the VLAN tag 500 is added. You must ensure you coordinate making VLAN tagging changes to the upstream switch, otherwise you may be locked out of the system. It is best to make these changes via the console port, so that network changes do not disrupt management access
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# mgmt-vlans mgmt-vlan 500 config mgmt-vlan-tag 500 name mgmt-vlan-500
+    velos-1-gsa-2-active(config-mgmt-vlan-500)# commit
+    % No modifications to commit.
+    velos-1-gsa-2-active(config-mgmt-vlan-500)#
+
+You may add tagged or untagged VLANs, and also VLAN ranges:
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# mgmt-vlans mgmt-vlan ?
+    Possible completions:
+    <Configured mgmt vlan tag>  500  range  untagged
+    velos-1-gsa-2-active(config)#
+
+Once the mgmt-vlan object is created it can be added to the **mgmt-ip** configuration. This will make the system controllers accessible via a tagged VLAN ID 500.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active(config)# system mgmt-ip config mgmt-vlan 500
+    velos-1-gsa-2-active(config)# commit
+    Commit complete.
+    velos-1-gsa-2-active(config)# 
+
+You may view the mgmt-ip configuration using the **show running-config system mgmt-ip** command: or optionally the **show system mgmt-ip** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show running-config system mgmt-ip
+    system mgmt-ip config dhcp-enabled false
+    system mgmt-ip config ipv4 controller-1 address 172.22.50.7
+    system mgmt-ip config ipv4 controller-2 address 172.22.50.8
+    system mgmt-ip config ipv4 floating address 172.22.50.9
+    system mgmt-ip config ipv4 prefix-length 26
+    system mgmt-ip config ipv4 gateway 172.22.50.62
+    system mgmt-ip config ipv6 controller-1 address ::
+    system mgmt-ip config ipv6 controller-2 address ::
+    system mgmt-ip config ipv6 floating address ::
+    system mgmt-ip config ipv6 prefix-length 0
+    system mgmt-ip config ipv6 gateway ::
+    system mgmt-ip config mgmt-vlan 500
+    velos-1-gsa-2-active#
+
+or optionally the **show system mgmt-ip** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show system mgmt-ip 
+    system mgmt-ip state floating ipv4-address 172.22.50.9
+    system mgmt-ip state floating ipv6-address ::
+    system mgmt-ip state floating mac-address 00:94:a1:8e:d0:7c
+    system mgmt-ip state mgmt-vlan 500
+    system mgmt-ip state fixed-addresses fixed-address 1
+    ipv4-address       172.22.50.7
+    ipv4-prefix-length 26
+    ipv4-gateway       172.22.50.62
+    ipv6-address       ::
+    ipv6-prefix-length 0
+    ipv6-gateway       ::
+    mac-address        00:94:a1:8e:d0:7d
+    system mgmt-ip state fixed-addresses fixed-address 2
+    ipv4-address       172.22.50.8
+    ipv4-prefix-length 26
+    ipv4-gateway       172.22.50.62
+    ipv6-address       ::
+    ipv6-prefix-length 0
+    ipv6-gateway       ::
+    mac-address        00:94:a1:8e:d0:7e
+    velos-1-gsa-2-active#
+
+If you would like to view the **mgmt-vlan** object configuration use the **show mgmt-vlans** command:
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# show mgmt-vlans 
+    MGMT      MGMT                     
+    VLAN TAG  VLAN TAG  NAME           
+    -----------------------------------
+    untagged  untagged  mgmt-untagged  
+    500       500       mgmt-vlan-500  
+
+    velos-1-gsa-2-active# 
+
+
+
+VLAN Tagging for the Management Port via WebUI
+--------------------------------------------
+
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object under the **System Settings > Management VLANs** page. Click the **Add** button in the upper right-hand corner to add a new mgmt-vlan.
+
+.. image:: images/velos_security/mgmt-vlans-webui.png
+  :align: center 
+  :scale: 50% 
+
+In the example below, a tagged VLAN using the VLAN tag 500 is added. 
+
+.. image:: images/velos_security/mgmt-vlans-webui2.png
+  :align: center
+  :scale: 50% 
+
+Once the mgmt-vlan object is created it can be added to the **System Settings > Management Interface** configuration. Click the **Edit** button in the upper right-hand corner. 
+
+.. image:: images/velos_security/mgmt-interface.png
+  :align: center
+  :scale: 50% 
+
+Under the **Management VLAN** section, select the VLAN that you configured in the previous step.
+
+.. image:: images/velos_security/mgmt-interface2.png
+  :align: center
+  :scale: 50% 
+
+VLAN Tagging for the Management Port via API
+--------------------------------------------
+
+To add 802.1Q VLAN tagging to the management port you must first create a **mgmt-vlan** object using the API. In the example below, a tagged VLAN using the VLAN tag 1112 is added. 
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
+
+In the body of the API request add the details of the mgmt-vlan you would like to create:
+
+.. code-block:: json
+
+    {
+        "mgmt-vlan": [
+            {
+                "mgmt-vlan-tag": 1112,
+                "config": {
+                    "mgmt-vlan-tag": 1112,
+                    "name": "mgmt-vlan-1112"
+                }
+            }
+        ]
+    }
+
+
+To view the current mgmt-vlan configuration, enter the following API request:
+
+.. code-block:: bash
+
+ GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-mgmt-vlan:mgmt-vlans
+
+The output will display all the configured mgmt-vlan objects along with their VLAN tag information.
+
+.. code-block:: json
+
+    {
+        "f5-mgmt-vlan:mgmt-vlans": {
+            "mgmt-vlan": [
+                {
+                    "mgmt-vlan-tag": "untagged",
+                    "config": {
+                        "mgmt-vlan-tag": "untagged",
+                        "name": "mgmt-untagged"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": "untagged",
+                        "name": "mgmt-untagged"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 500,
+                    "config": {
+                        "mgmt-vlan-tag": 500,
+                        "name": "mgmt-vlan-500"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 500,
+                        "name": "mgmt-vlan-500"
+                    }
+                },
+                {
+                    "mgmt-vlan-tag": 1112,
+                    "config": {
+                        "mgmt-vlan-tag": 1112,
+                        "name": "mgmt-vlan-1112"
+                    },
+                    "state": {
+                        "mgmt-vlan-tag": 1112,
+                        "name": "mgmt-vlan-1112"
+                    }
+                }
+            ]
+        }
+    }
+
+
+Once the mgmt-vlan object is defined with the proper VLAN ID, you can then assign it to the system management IP configuration.
+
+.. code-block:: bash
+
+    POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system
+
+In the body of the API request add the **mgmt-vlan** object:
+
+.. code-block:: json
+
+    {
+        "f5-mgmt-ip:mgmt-ip": {
+            "config": {
+                "dhcp-enabled": false,
+                "ipv4": {
+                    "controller-1": {
+                        "address": "172.22.50.7"
+                    },
+                    "controller-2": {
+                        "address": "172.22.50.8"
+                    },
+                    "floating": {
+                        "address": "172.22.50.9"
+                    },
+                    "prefix-length": 26,
+                    "gateway": "172.22.50.62"
+                },
+                "ipv6": {
+                    "controller-1": {
+                        "address": "::"
+                    },
+                    "controller-2": {
+                        "address": "::"
+                    },
+                    "floating": {
+                        "address": "::"
+                    },
+                    "prefix-length": 0,
+                    "gateway": "::"
+                },
+                "mgmt-vlan": 500
+            }
+        }
+    }
+
+
+To view the current system management IP configuration, enter the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/f5-mgmt-ip:mgmt-ip
+
+In the response below, you'll notice the configured management IP address, gateway, and prefix along with the **mgmt-vlan** configuration.
+
+.. code-block:: json
+
+    {
+        "f5-mgmt-ip:mgmt-ip": {
+            "config": {
+                "dhcp-enabled": false,
+                "ipv4": {
+                    "controller-1": {
+                        "address": "172.22.50.7"
+                    },
+                    "controller-2": {
+                        "address": "172.22.50.8"
+                    },
+                    "floating": {
+                        "address": "172.22.50.9"
+                    },
+                    "prefix-length": 26,
+                    "gateway": "172.22.50.62"
+                },
+                "ipv6": {
+                    "controller-1": {
+                        "address": "::"
+                    },
+                    "controller-2": {
+                        "address": "::"
+                    },
+                    "floating": {
+                        "address": "::"
+                    },
+                    "prefix-length": 0,
+                    "gateway": "::"
+                },
+                "mgmt-vlan": 500
+            },
+            "state": {
+                "fixed-addresses": {
+                    "fixed-address": [
+                        {
+                            "controller": 1,
+                            "ipv4-address": "172.22.50.7",
+                            "ipv4-prefix-length": 26,
+                            "ipv4-gateway": "172.22.50.62",
+                            "ipv6-address": "::",
+                            "ipv6-prefix-length": 0,
+                            "ipv6-gateway": "::",
+                            "mac-address": "00:94:a1:8e:d0:7d"
+                        },
+                        {
+                            "controller": 2,
+                            "ipv4-address": "172.22.50.8",
+                            "ipv4-prefix-length": 26,
+                            "ipv4-gateway": "172.22.50.62",
+                            "ipv6-address": "::",
+                            "ipv6-prefix-length": 0,
+                            "ipv6-gateway": "::",
+                            "mac-address": "00:94:a1:8e:d0:7e"
+                        }
+                    ]
+                },
+                "floating": {
+                    "ipv4-address": "172.22.50.9",
+                    "ipv6-address": "::",
+                    "mac-address": "00:94:a1:8e:d0:7c"
+                },
+                "mgmt-vlan": 500
+            }
+        }
+    }
+
+
 
 Allow List for F5OS Management
 ===============================
@@ -171,23 +493,104 @@ The output will show the previously configured allowed-ips.
 Adding Allow List Entries via webUI
 -----------------------------------
 
-You can configure the **Allow List** in the webUI starting with version F5OS-C 1.7.0 under the **System Settings** section. 
+You can configure the **Allow List** in the webUI under the **System Settings -> System Security** section. This can be configured on both the system controller and chassis partition layers. 
 
 .. image:: images/velos_security/image2.png
   :align: center
   :scale: 70%
 
-Below is an example of allowing any SNMP endpoint at 10.255.0.0 (prefix length of 24) to query the F5OS layer on port 161.
+Below is an example of allowing any SNMP endpoint at 172.22.50.57 (prefix length of 32) to query the F5OS layer on port 161.
 
 .. image:: images/velos_security/image3.png
   :align: center
   :scale: 70%
 
-In later versions, the allow list configuration is now under the **System Settings -> System Security** page.
 
-.. image:: images/velos_security/system-security-allow.png
+Front Panel LCD Security
+========================
+
+The LCD panel on the front of the VELOS system can be used for initial configuration, checking health status, and viewing alarms. For environments that require Common Criteria security posture a new **Secure** mode for the LCD panel has been added in F5OS 2.0. It omits customer data and restricts access to allow only management and setup options. The functionality of the Status and Alarm LEDs is not affected by Secure Mode. 
+
+Front Panel LCD Security via CLI
+--------------------------------
+
+The LCD is put into "Secure Mode" via a configuration option in ConfD. In the example below you can see there are three modes for the lcd panel: **disabled**, **secure**, and **standard**. For Common Criteria environments set the config mode to **secure**.
+
+
+.. code-block:: bash
+
+    syscon-2-active(config)# components component lcd config mode ?
+    Possible completions:
+    [standard]
+    disabled   LCD screen does not allow access to any options. Nothing is shown except an image to indicate it's disabled.
+    secure     LCD screen only allows access to management and setup options. No customer data is shown.
+    standard   LCD screen allows access to all options.
+    syscon-2-active(config)# components component lcd config mode secure 
+    syscon-2-active(config-component-lcd)# commit
+    Commit complete.
+    syscon-2-active(config-component-lcd)# 
+
+Front Panel LCD Security via WebUI
+--------------------------------
+
+The LCD is put into "Secure Mode" via a configuration option in the WebUI. Navigate to the **System Settings** -> **System Security** page, and the edit the **Shell & LCD Access** section. 
+
+.. image:: images/velos_security/secure-lcd.png
   :align: center
   :scale: 70%
+
+Front Panel LCD Security via API
+--------------------------------
+
+The LCD is put into "Secure Mode" via a configuration option in the F5OS API. In the example below you can see there are three modes for the lcd panel: **disabled**, **secure**, and **standard**. For Common Criteria environments set the config mode to **secure**. To view the LCD status via API, use the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=lcd
+
+You'll see the **f5-platform-lcd:mode**.
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "lcd",
+                "config": {
+                    "name": "lcd",
+                    "f5-platform-lcd:mode": "secure"
+                },
+                "state": {
+                    "serial-no": "sub0811g002h",
+                    "part-no": "SUB-0811-02 REV B",
+                    "empty": false,
+                    "f5-platform-lcd:mode": "secure"
+                }
+            }
+        ]
+    }
+
+To set the mode via API, use the following API call:
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-platform:components/component=lcd
+
+In the body of the API call, set the lcd mode to **secure**:
+
+.. code-block:: json
+
+    {
+        "openconfig-platform:component": [
+            {
+                "name": "lcd",
+                "config": {
+                    "name": "lcd",
+                    "f5-platform-lcd:mode": "secure"
+                }
+            }
+        ]
+    }
 
 Setting F5OS Primary Key
 ======================== 
@@ -238,13 +641,98 @@ Note that the hash key can be used to check and compare the status of the primar
     system aaa primary-key state status NONE
     syscon-2-active#
 
+Password Hashing Algorithm
+==========================
+
+Some environments require a different password hashing algorithm than the default sha512 and have requested support for Bcrypt/blowfish as the standard encryption for passwords stored on F5OS. this has been added as an option in F5OS 2.0. If enabled, the existing user passwords hashed by the old algorithm are unaffected. Only new passwords that come after the configuration change will be encrypted by the newly chosen algorithm. Existing users' access privileges into the system will not be affected and users will not see any difference in their authentication experience. The F5OS system administrators can enforce password changes when a need arises to apply the new algorithm for all users
+
+Setting the Password Hashing Algorithm via CLI
+----------------------------------------------
+
+The **system aaa authentication password-hashing-algorithm config algorithm** command will allow you to select **sha512** or **blowfish** hashing algorithms.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config algorithm ?
+    Possible completions:
+    blowfish   blowfish (min: 4, max: 15, default: 5)
+    sha512     sha512 (min: 1000, max: 999999999, default: 5000) - Note: Any algorithm change requires resetting existing passwords (applies to all algorithms, not just this entry)
+    velos-1-gsa-1-active(config)#
+    
+    
+With blowfish you can select either **4**, **5**, or **15** rounds.   
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config algorithm blowfish rounds ?
+    Possible completions:
+    4    
+    5    Note: Any rounds change requires resetting existing passwords (applies to all values, not just this entry)
+    15   
+    velos-1-gsa-1-active(config)#
+
+Setting the Password Hashing Algorithm via webUI
+----------------------------------------------
+
+Navigate to **Authentication & Access** -> **Authentication Settings** page, and the edit the **Password Configuration** section to change the password hashing algorithm.
+
+.. image:: images/velos_security/blowfish-webui.png
+  :align: center
+  :scale: 50%
+
+Setting the Password Hashing Algorithm via API
+----------------------------------------------
+
+You can set the password hashing algorithm via the API. You can set the **algorithm** to either **sha512** which is the default, or **blowfish** as well as specify the number of **rounds**.
+ 
+
+.. code-block:: bash
+
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-openconfig-aaa-password-hashing:password-hashing-algorithm
+
+In the body of the API call, set the appropriate algorithm.
+
+.. code-block:: json
+
+    {
+        "f5-openconfig-aaa-password-hashing:password-hashing-algorithm": {
+            "config": {
+                "algorithm": "blowfish",
+                "rounds": 5
+            }
+        }
+    }
+
+You may then query the current configuration using the following API GET call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-openconfig-aaa-password-hashing:password-hashing-algorithm
+
+The output should look similar to the example below.
+
+.. code-block:: json
+
+    {
+        "f5-openconfig-aaa-password-hashing:password-hashing-algorithm": {
+            "config": {
+                "algorithm": "blowfish",
+                "rounds": 5
+            },
+            "state": {
+                "algorithm": "blowfish",
+                "rounds": 5
+            }
+        }
+    }
+
 
 Certificates for Device Management
 ==================================
 
 F5OS supports TLS device certificates and keys to secure connections to the management interface. You can either create a self-signed certificate or load your own certificates and keys into the system. In F5OS-C 1.6.0 an admin can now optionally enter a passphrase with the encrypted private key. More details can be found in the link below.
 
-`VELOS Certificate Management Overview <https://techdocs.f5.com/en-us/velos-1-5-0/velos-systems-administration-configuration/title-system-settings.html#cert-mgmt-overview>`_
+`VELOS Certificate Management Overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-auth-access.html#transport-layer-security-tls-configuration-overview>`_
 
 
 Managing Device Certificates, Keys, CSRs, and CAs via CLI
@@ -254,17 +742,17 @@ By default, F5OS uses a self-signed certificate and key for device management. I
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls true key-passphrase 
+    velos-1-gsa-1-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls true key-passphrase 
     Value for 'key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 
 The **store-tls** option when set to **true**, stores the private key and self-signed certificate in the system instead of returning the values only in the CLI output. If you would prefer to have the keys returned in the CLI output and not stored in the system, then set **store-tls false** as seen below.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls false key-passphrase
+    velos-1-gsa-1-active(config)# system aaa tls create-self-signed-cert name jim email jim@f5.com city Boston region MA country US organization F5 unit Sales version 1 days-valid 365 key-type encrypted-ecdsa curve-name secp384r1 store-tls false key-passphrase
     Value for 'key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-key-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     key-response 
@@ -293,7 +781,7 @@ The **store-tls** option when set to **true**, stores the private key and self-s
     PgIwMeuPVPB3kmata305fN7XGI+vu9bbKU2SUBXV55YRF5qGmyURLZJr8/tMkRlB
     Z5lL
     -----END CERTIFICATE-----
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 
 The management interface will now use the self-signed certificate you just created. You can verify by connecting to the F5OS management interface via a browser and then examining the certificate.
@@ -307,7 +795,7 @@ To create a Certificate Signing Request (CSR) via the CLI use the **system aaa t
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls create-csr name r10900-1.f5demo.net email jim@f5.com city Boston country US organization F5 region MA unit Sales version 1 
+    velos-1-gsa-1-active(config)# system aaa tls create-csr name r10900-1.f5demo.net email jim@f5.com city Boston country US organization F5 region MA unit Sales version 1 
     response 
     -----BEGIN CERTIFICATE REQUEST-----
     MIIBejCCAQECAQEwgYExHDAaBgNVBAMME3IxMDkwMC0xLmY1ZGVtby5uZXQxCzAJ
@@ -319,33 +807,33 @@ To create a Certificate Signing Request (CSR) via the CLI use the **system aaa t
     Rg3ncd7B2U/7Fcclilv/xgUqVS9eXdkTZSqXiCIz4Ff7pOWwpkqHRBx5iLICMF0C
     tpSmmQVOSRYU98q8JJ0HClZ+8eTan2fotaKvYyzYMrge5cl0w6J7dnFZwLdmYA==
     -----END CERTIFICATE REQUEST-----
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 
 To create a CA bundle via the CLI use the **system aaa tls ca-bundle** command.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls ca-bundles ca-bundle ?
+    velos-1-gsa-1-active(config)# system aaa tls ca-bundles ca-bundle ?
     Possible completions:
     <Reference to configured name of the CA Bundle.>
-    syscon-2-active(config)#  
+    velos-1-gsa-1-active(config)#  
 
 
 To create a Client Revocation List (CRL) via the CLI issue the following command.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system aaa tls crls crl ?
+    velos-1-gsa-1-active(config)# system aaa tls crls crl ?
     Possible completions:
     <Reference to configured name of the CRL.>
-    syscon-2-active(config)# system aaa tls crls crl
+    velos-1-gsa-1-active(config)# system aaa tls crls crl
 
 You can display the current certificate, keys, and passphrases using the CLI command **show system aaa tls**.
 
 .. code-block:: bash
 
-    syscon-2-active# show system aaa tls
+    velos-1-gsa-1-active# show system aaa tls
     system aaa tls state certificate Certificate:
                                         Data:
                                             Version: 1 (0x0)
@@ -380,7 +868,7 @@ You can display the current certificate, keys, and passphrases using the CLI com
                                     
     system aaa tls state verify-client false
     system aaa tls state verify-client-depth 1
-    syscon-2-active# 
+    velos-1-gsa-1-active# 
 
 
 
@@ -399,13 +887,17 @@ The screen below shows the options when creating a self-signed certificate.
   :align: center
   :scale: 100%
 
+.. image:: images/velos_security/imagecert3a.png
+  :align: center
+  :scale: 100%
+
 If you choose the **Store TLS** option of **False** then the certificate details will be displayed, and you will be given the option to copy them to the clipboard. If you want to store them on the system, then set the **Store TLS** option to **True**.
 
 .. image:: images/velos_security/imagecert4.png
   :align: center
   :scale: 100%
 
-You can then use the **Show** options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
+You can then use the **Edit Certificate** options to display the current certificate, key, and details. Paste the text into the respective text boxes to add a certificate. TLS Key Passphrase is only required if TLS Key is in encrypted format. 
 
 .. image:: images/velos_security/imagecert5.png
   :align: center
@@ -432,6 +924,8 @@ When you install an SSL certificate on the system, you also install a certificat
 .. image:: images/velos_security/imageca1.png
   :align: center
   :scale: 100%
+
+You can also configure a Certificate Revocation List if desired.
 
 Managing Device Certificates, Keys, CSRs, and CAs via API
 -------------------------------------
@@ -537,18 +1031,18 @@ Appliance mode can be enabled or disabled via the CLI using the command **system
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system appliance-mode config enabled 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system appliance-mode config enabled 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 To display the current status.
 
 .. code-block:: bash
 
-    syscon-2-active# show system appliance-mode 
+    velos-1-gsa-1-active# show system appliance-mode 
     system appliance-mode state enabled
-    syscon-2-active#
+    velos-1-gsa-1-active#
 
 If you then try to login as root, you will get a permission denied error. You can still login as admin to gain access to the F5OS CLI.
 
@@ -556,19 +1050,19 @@ To disable appliance mode.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system appliance-mode config disabled 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system appliance-mode config disabled 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 Enabling Appliance Mode via the webUI
 ------------------------------------- 
 
-Appliance mode can be enabled or disabled via the webUI under the **System Settings -> General** page in both the system controller webUI and the chassis partition webUI.
+Appliance mode can be enabled or disabled via the webUI under the **System Settings -> System Security** page in both the system controller webUI and the chassis partition webUI.
 
 .. image:: images/velos_security/image4.png
   :align: center
-  :scale: 50%
+  :scale: 90%
 
 
 Enabling Appliance Mode via the API
@@ -908,7 +1402,7 @@ When logging in as the user with the **user** role assigned, the configuration m
     autowizard           - Automatically query for mandatory elements
     clear                - Clear parameter
     commit               - Confirm a pending commit
-    complete-on-space    - Enable/disable completion on spac
+    complete-on-space    - Enable/disable completion on space
 
 The **user** role will also prevent the user from running **file** operations from the CLI.
 
@@ -1497,18 +1991,968 @@ If you choose to use the LDAP Group mapping, then you must disable the unix attr
 Superuser Role via API using Named Groups on LDAP/Active Directory
 ------------------------------------------------------------------
 
-Coming Soon!
+
+Within the API you can map the superuser role to a remote LDAP group. Send the following API GET call to view the current authentication roles:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:roles
+
+In the output, you'll see all the configured users and roles on the system.
+
+.. code-block:: json
+
+    {
+        "f5-system-aaa:roles": {
+            "role": [
+                {
+                    "rolename": "admin",
+                    "config": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "description": "Unrestricted read/write access."
+                    },
+                    "state": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Unrestricted read/write access."
+                    }
+                },
+                {
+                    "rolename": "operator",
+                    "config": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "description": "Read-only access to system level data."
+                    },
+                    "state": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to system level data."
+                    }
+                },
+                {
+                    "rolename": "partition_1",
+                    "config": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "description": "Provides console access for partition-1."
+                    },
+                    "state": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-1."
+                    }
+                },
+                {
+                    "rolename": "partition_2",
+                    "config": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "description": "Provides console access for partition-2."
+                    },
+                    "state": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-2."
+                    }
+                },
+                {
+                    "rolename": "partition_3",
+                    "config": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "description": "Provides console access for partition-3."
+                    },
+                    "state": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-3."
+                    }
+                },
+                {
+                    "rolename": "partition_4",
+                    "config": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "description": "Provides console access for partition-4."
+                    },
+                    "state": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-4."
+                    }
+                },
+                {
+                    "rolename": "partition_5",
+                    "config": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "description": "Provides console access for partition-5."
+                    },
+                    "state": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-5."
+                    }
+                },
+                {
+                    "rolename": "partition_6",
+                    "config": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "description": "Provides console access for partition-6."
+                    },
+                    "state": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-6."
+                    }
+                },
+                {
+                    "rolename": "partition_7",
+                    "config": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "description": "Provides console access for partition-7."
+                    },
+                    "state": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-7."
+                    }
+                },
+                {
+                    "rolename": "partition_8",
+                    "config": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "description": "Provides console access for partition-8."
+                    },
+                    "state": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-8."
+                    }
+                },
+                {
+                    "rolename": "resource-admin",
+                    "config": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    },
+                    "state": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    }
+                },
+                {
+                    "rolename": "superuser",
+                    "config": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    },
+                    "state": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    }
+                },
+                {
+                    "rolename": "ts_admin",
+                    "config": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "description": "Provides admin access to the terminal server (TS)."
+                    },
+                    "state": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides admin access to the terminal server (TS)."
+                    }
+                },
+                {
+                    "rolename": "user",
+                    "config": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "description": "Read-only access to non-sensitive system level data."
+                    },
+                    "state": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to non-sensitive system level data."
+                    }
+                }
+            ]
+        }
+    }
+
+
+
+
+
+The API also supports the assignment of the superuser role to any user.
+
+To view the current user roles:
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication
+
+The output will look similar to the response below. Note, the **superuser** role.
+
+.. code-block:: bash
+
+
+    {
+        "f5-system-aaa:roles": {
+            "role": [
+                {
+                    "rolename": "admin",
+                    "config": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "description": "Unrestricted read/write access."
+                    },
+                    "state": {
+                        "rolename": "admin",
+                        "gid": 9000,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Unrestricted read/write access."
+                    }
+                },
+                {
+                    "rolename": "operator",
+                    "config": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "description": "Read-only access to system level data."
+                    },
+                    "state": {
+                        "rolename": "operator",
+                        "gid": 9001,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to system level data."
+                    }
+                },
+                {
+                    "rolename": "partition_1",
+                    "config": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "description": "Provides console access for partition-1."
+                    },
+                    "state": {
+                        "rolename": "partition_1",
+                        "gid": 9101,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-1."
+                    }
+                },
+                {
+                    "rolename": "partition_2",
+                    "config": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "description": "Provides console access for partition-2."
+                    },
+                    "state": {
+                        "rolename": "partition_2",
+                        "gid": 9102,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-2."
+                    }
+                },
+                {
+                    "rolename": "partition_3",
+                    "config": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "description": "Provides console access for partition-3."
+                    },
+                    "state": {
+                        "rolename": "partition_3",
+                        "gid": 9103,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-3."
+                    }
+                },
+                {
+                    "rolename": "partition_4",
+                    "config": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "description": "Provides console access for partition-4."
+                    },
+                    "state": {
+                        "rolename": "partition_4",
+                        "gid": 9104,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-4."
+                    }
+                },
+                {
+                    "rolename": "partition_5",
+                    "config": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "description": "Provides console access for partition-5."
+                    },
+                    "state": {
+                        "rolename": "partition_5",
+                        "gid": 9105,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-5."
+                    }
+                },
+                {
+                    "rolename": "partition_6",
+                    "config": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "description": "Provides console access for partition-6."
+                    },
+                    "state": {
+                        "rolename": "partition_6",
+                        "gid": 9106,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-6."
+                    }
+                },
+                {
+                    "rolename": "partition_7",
+                    "config": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "description": "Provides console access for partition-7."
+                    },
+                    "state": {
+                        "rolename": "partition_7",
+                        "gid": 9107,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-7."
+                    }
+                },
+                {
+                    "rolename": "partition_8",
+                    "config": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "description": "Provides console access for partition-8."
+                    },
+                    "state": {
+                        "rolename": "partition_8",
+                        "gid": 9108,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides console access for partition-8."
+                    }
+                },
+                {
+                    "rolename": "resource-admin",
+                    "config": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    },
+                    "state": {
+                        "rolename": "resource-admin",
+                        "gid": 9003,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Restricted read/write access. No access to modify authentication configuration."
+                    }
+                },
+                {
+                    "rolename": "superuser",
+                    "config": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    },
+                    "state": {
+                        "rolename": "superuser",
+                        "gid": 9004,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Sudo privileges and Bash access to the system (if enabled)."
+                    }
+                },
+                {
+                    "rolename": "ts_admin",
+                    "config": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "description": "Provides admin access to the terminal server (TS)."
+                    },
+                    "state": {
+                        "rolename": "ts_admin",
+                        "gid": 9100,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Provides admin access to the terminal server (TS)."
+                    }
+                },
+                {
+                    "rolename": "user",
+                    "config": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "description": "Read-only access to non-sensitive system level data."
+                    },
+                    "state": {
+                        "rolename": "user",
+                        "gid": 9002,
+                        "remote-gid": "-",
+                        "ldap-group": "-",
+                        "description": "Read-only access to non-sensitive system level data."
+                    }
+                }
+            ]
+        }
+    }
+
+
+To see the current user accounts on the system.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/authentication/f5-system-aaa:users
+
+The response will detail all the configured user accounts on the system.
+
+.. code-block:: bash
+
+
+    {
+        "f5-system-aaa:users": {
+            "user": [
+                {
+                    "username": "admin",
+                    "config": {
+                        "username": "admin",
+                        "last-change": 19769,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "admin",
+                        "last-change": 19769,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 10
+                    }
+                },
+                {
+                    "username": "guest-user2",
+                    "config": {
+                        "username": "guest-user2",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "guest-user2",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "res-admin",
+                    "config": {
+                        "username": "res-admin",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "res-admin",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "res-admin-user",
+                    "config": {
+                        "username": "res-admin-user",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "res-admin-user",
+                        "last-change": 20150,
+                        "expiry-date": "-1",
+                        "role": "resource-admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "root",
+                    "config": {
+                        "username": "root",
+                        "last-change": 19825,
+                        "expiry-date": "-1",
+                        "role": "root",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "username": "root",
+                        "last-change": 19825,
+                        "expiry-date": "-1",
+                        "role": "root",
+                        "expiry-status": "enabled",
+                        "tally-count": 10
+                    }
+                },
+                {
+                    "username": "student1",
+                    "config": {
+                        "username": "student1",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student1",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student10",
+                    "config": {
+                        "username": "student10",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student10",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student11",
+                    "config": {
+                        "username": "student11",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student11",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student12",
+                    "config": {
+                        "username": "student12",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student12",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student2",
+                    "config": {
+                        "username": "student2",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student2",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student3",
+                    "config": {
+                        "username": "student3",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student3",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student4",
+                    "config": {
+                        "username": "student4",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student4",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student5",
+                    "config": {
+                        "username": "student5",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student5",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student6",
+                    "config": {
+                        "username": "student6",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student6",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student7",
+                    "config": {
+                        "username": "student7",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student7",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student8",
+                    "config": {
+                        "username": "student8",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student8",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "student9",
+                    "config": {
+                        "username": "student9",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "student9",
+                        "last-change": 19996,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "testuser",
+                    "config": {
+                        "username": "testuser",
+                        "last-change": 19592,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "testuser",
+                        "last-change": 19592,
+                        "expiry-date": "-1",
+                        "role": "admin",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                },
+                {
+                    "username": "user1",
+                    "config": {
+                        "username": "user1",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled"
+                    },
+                    "state": {
+                        "authorized-keys": "-",
+                        "username": "user1",
+                        "last-change": 20655,
+                        "expiry-date": "-1",
+                        "role": "user",
+                        "expiry-status": "enabled",
+                        "tally-count": 0
+                    }
+                }
+            ]
+        }
+    }
+
+
+
+To create a new user and assign it to the **superuser** role, use the following API call.
+
+.. code-block:: bash
+    
+    PATCH https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa
+
+
+In the body of the API call add the username and role as seen below.
+
+.. code-block:: bash
+
+    {
+        "openconfig-system:aaa": {
+            "authentication": {
+                "f5-system-aaa:users": {
+                    "user": [
+                        {
+                            "username": "super-user1",
+                            "config": {
+                                "role": "superuser"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
 
 Session Timeouts, Token Lifetime, and Deny Root over SSH
 =========================================================
 
-The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
+Idle timeouts were configurable in previous releases, but the configuration only applied to the current session and was not persistent. F5OS-A 1.3.0 added the ability to configure persistent idle timeouts for F5OS for both the CLI and webUI. The F5OS CLI timeout is configured under system settings and is controlled via the **idle-timeout** option. This will logout idle sessions to the F5OS CLI whether they are logged in from the console or over SSH.
 
-A new sshd-idle-timeout option has been added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence when connecting directly to the confd CLI as admin or another confd user. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn’t apply to console sessions.
- 
-For SSH sessions connecting using root or super-user access direct to the bash shell, then the idle-timeout does not apply, as that only applies to sessions to the confd CLI. If a root or super-user connects directly to the bash shell then only the ssh-idle-timeout applies. If that user then issues an su admin command to access the confd CLI or uses f5sh commands from the bash shell, then the idle-timeout setting will apply for the confd CLI session, the user will then be timed out of confd back to the bash shell, and then the ssh-idle-timeout setting would dictate how long before the bash sessions times out.
+In F5OS-A 1.4.0, a new **sshd-idle-timeout** option was added that will control idle-timeouts for both root sessions to the bash shell over SSH, as well as F5OS CLI sessions over SSH. When the idle-timeout and sshd-idle-timeout are both configured, the shorter interval should take precedence when connecting directly to the confd CLI as admin or another confd user. As an example, if the idle-timeout is configured for three minutes, but the sshd-idle-timeout is set to 2 minutes, then an idle connection that is connected over SSH will disconnect in two minutes, which is the shorter of the two configured options. An idle connection to the F5OS CLI over the console will disconnect in three minutes, because the sshd-idle-timeout doesn't apply to console sessions. 
 
-There is one case that is not covered by either of the above idle-timeout settings until version F5OS-C 1.8.0. When connecting over the console to the bash shell as root, neither of these settings will disconnect an idle session in previous releases. Only console connections to the F5OS CLI are covered via the idle-timeout setting. In F5OS-C 1.8.0 the new **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
+For SSH sessions connecting using root or super-user access direct to the bash shell, then the idle-timeout does not apply, as that only applies to sessions to the F5OS confd CLI. If a root or super-user connects directly to the bash shell then only the ssh-idle-timeout applies. If that user then issues an su admin command to access the confd CLI or uses f5sh commands from the bash shell, then the idle-timeout setting will apply for the confd CLI session, the user will then be timed out of confd back to the bash shell, and then the sshd-idle-timeout setting would dictate how long before the bash sessions times out.
+
+To demonstrate the interaction between the **idle-timeout** and the **sshd-idle-timeout**, testing was done on F5OS 2.0 with different logins (root and admin) using both console and ssh access. In the first test, the idle-timeout is set for 30 seconds, and the sshd-idle-timeout is set for 60 seconds. 
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system settings config idle-timeout 30
+    velos-1-gsa-1-active(config)# system settings config sshd-idle-timeout 60
+    velos-1-gsa-1-active(config)# commit
+    Commit complete.
+    velos-1-gsa-1-active(config)#
+
+Below are the observed results and conclusions from the first test.
+
+
+- Timeout observed on Console port for root account logged into bash = 60 seconds
+- Timeout observed on Console port for admin account logged into F5OS Confd CLI = 30 seconds
+- Timeout observed on Console port for root account logged into bash, then issue su admin to F5OS Confd CLI = 30 seconds logged out of F5OS confd CLI and dropped to bash, then 60 seconds later logged out of bash
+- Timeout observed on root ssh access to bash = 60 seconds
+- Timeout observed on admin ssh access to F5OS confd CLI = 30 seconds 
+- Timeout observed on ssh access for root account logged into bash, then issue su admin to F5OS Confd CLI = 30 seconds logged out of F5OS confd CLI and dropped to bash, then 60 seconds later logged out of bash
+
+Below are the conclusions from the first test that explain the interaction between the two idle timeout settings:
+
+
+For Console connections:
+
+- When logging in as root to the console, the sshd-idle-timeout controls the timeout from bash ( 60 seconds)
+- When logging in as admin to the console, the idle-timeout controls the timeout from F5OS Confd CLI (30 seconds)
+- When logging in as root to the console and then performing an su admin to access F5OS Confd CLI
+    - The idle-timeout controls how long the F5OS Confd CLI session will be timed-out (30 seconds)
+    - The session will timeout and return to the bash shell
+    - The sshd-idle-timeout will control how long before the bash session times out ( 60 seconds)
+
+For SSH sessions:
+
+- When logging in as root over SSH, the sshd-idle-timeout controls the timeout from bash ( 60 seconds)
+- When logging in as admin over SSH, the idle-timeout controls the timeout from F5OS Confd CLI (30 seconds)
+- When logging in as root to the console and then performing an su admin to access F5OS Confd CLI
+    - The idle-timeout controls how long the F5OS Confd CLI session will be timed-out (30 seconds)
+    - The session will timeout and return to the bash shell
+    - The sshd-idle-timeout will control how long before the bash session times out ( 60 seconds)
+
+
+In the second test, the idle-timeout is set for 60 seconds, and the sshd-idle-timeout is set for 30 seconds. 
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system settings config idle-timeout 60 
+    velos-1-gsa-1-active(config)# system settings config sshd-idle-timeout 30 
+    velos-1-gsa-1-active(config)# commit
+    Commit complete.
+    velos-1-gsa-1-active(config)#
+
+Below are the observed results and conclusions from the second test.
+
+- Timeout observed on Console port for root account logged into bash = 30 seconds
+- Timeout observed on Console port for admin account logged into F5OS Confd CLI = 60
+- Timeout observed on Console port for root account logged into bash, then issue su admin to F5OS Confd CLI = 60 seconds logged out of F5OS confd CLI and dropped to bash, then 30 seconds later logged out of bash.
+- Timeout observed on root ssh access to bash = 30 seconds
+- Timeout observed on admin ssh access to F5OS confd CLI = 60 seconds
+- Timeout observed on ssh access for root account logged into bash, then issue su admin to F5OS Confd CLI = 60 seconds logged out of F5OS confd CLI and dropped to bash, then 30 seconds later logged out of bash.
+
+Below are the conclusions from the second test that explain the interaction between the two idle timeout settings:
+
+For Console connections:
+
+- When logging in as root to the console, the sshd-idle-timeout controls the timeout from bash ( 30 seconds)
+- When logging in as admin to the console, the idle-timeout controls the timeout from F5OS Confd CLI (60 seconds)
+- When logging in as root to the console and then performing an su admin to access F5OS Confd CLI
+    - The idle-timeout controls how long the F5OS Confd CLI session will be timed-out (60 seconds)
+    - The session will timeout and return to the bash shell
+    - The sshd-idle-timeout will control how long before the bash session times out ( 30 seconds)
+
+For SSH sessions:
+
+- When logging in as root over SSH, the sshd-idle-timeout controls the timeout from bash ( 30 seconds)
+- When logging in as admin over SSH, the idle-timeout controls the timeout from F5OS Confd CLI (60 seconds)
+- When logging in as root to the console and then performing an su admin to access confd
+    - The idle-timeout controls the timeout from F5OS Confd CLI (60 seconds)
+    - The sshd-idle-timeout will control how long before the bash session times out ( 30 seconds)
+
+The **deny-root-ssh** mode when enabled restricts root access over SSH. However, root users can still access the system through the system’s console interface as long as appliance-mode is disabled. If appliance-mode is enabled it overrides this setting, and no root access is allowed via SSH or console. The table below provides more details on the behavior of the setting in conjunction with the appliance mode setting.
 
 +-----------------------------------------------------------+
 |                Appliance-mode = Disabled                  |
@@ -1532,7 +2976,8 @@ There is one case that is not covered by either of the above idle-timeout settin
 +----------------+----------------------+-------------------+
 
 
-For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if we set the token lifetime to two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire, and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
+For the webUI, a token-based timeout is now configurable under the **system aaa** settings. The default RESTCONF token lifetime is 15 minutes and can be configured for a maximum of 1440 minutes. RESTCONF token will be automatically renewed when the token’s lifetime is less than one-third of its original token lifetime. For example, if the token lifetime is set for two minutes, it will be renewed and a new token will be generated, when the token’s lifetime is less than one-third of its original lifetime, that is, anytime between 80 to 120 seconds. However, if a new RESTCONF request is not received within the buffer time (80 to 120 seconds), the token will expire and you will be logged out of the session. The RESTCONF token will be renewed up to five times, after that the token will not be renewed and you will need to log back in to the system.
+
 
 Configuring SSH and CLI Timeouts & Deny Root SSH Settings via CLI
 ----------------------------------------------------------------
@@ -1666,15 +3111,20 @@ The output should look similar to the example below.
 
 
 Configuring SSH and CLI Timeouts & Deny Root SSH Settings via webUI
--------------------------------------------------------------------
+------------------------------------------
 
+The CLI and SSH timeouts and deny-root-ssh settings are all configurable in the webUI. The **deny-root-ssh** option can be configured in the **Shell Access** section of the **System Settings -> System Security** page.
 
-
-The CLI timeout and deny-root-ssh settings are both configurable in the webUI. SSH timeouts are not currently configurable via the webUI. The deny-root-ssh and CLI timeout options can be configured in the **System Settings -> System Security** page.
-
-.. image:: images/velos_security/cli-timeout.png
+.. image:: images/velos_security/deny-root-ssh-webui.png
   :align: center
   :scale: 70%
+
+The CLI and SSH timeouts are configurable under the **Services** section of the **System Settings -> System Security** page.
+
+.. image:: images/velos_security/cli-ssh-timeouts.png
+  :align: center
+  :scale: 70%
+
 
 
 Token Lifetime via CLI
@@ -2085,6 +3535,7 @@ With basic authentication enabled (default setting), you can make any API call u
   :align: center
   :scale: 70%
 
+
 While basic auth is enabled, any API call using username/password will complete successfully. After disabling basic auth, any attempt to access an API endpoint other than the root URI using basic auth will fail with a message similar to the one below indicating **access denied**.
 
 .. code-block:: json
@@ -2106,7 +3557,7 @@ When basic authentication is enabled, a client will be allowed to obtain an auth
 
 .. code-block:: bash
 
-    jprompt% curl -i -sku admin:admin -H "Content-Type: application/yang-data+json"  https://172.22.50.9:8888/restconf/data/openconfig-system:system/config
+    prompt% curl -i -sku admin:admin -H "Content-Type: application/yang-data+json"  https://172.22.50.9:8888/restconf/data/openconfig-system:system/config
     HTTP/1.1 200 OK
     Date: Mon, 03 Mar 2025 22:46:02 GMT
     Server: Apache
@@ -2222,18 +3673,34 @@ Setting Password Policies
 
 You may configure the local password policy to ensure secure passwords are utilized, re-use is minimized, and to limit the amount of failures/retries. Below are some of the settings that can be set.
 
-- **Minimum Password Length** - For Minimum Length, specify the minimum number of characters (6 to 255) required for a valid password.
-- **Password Required Characters** - For Required Characters, specify the minimum number of Numeric, Uppercase, Lowercase, and Special characters that are required in a valid password.
-- **New/Old Password Differential** - For New/Old Password Differential, specify the number of character changes in the new password that differentiate it from the old password. The default value is 8.
-- **Disallow Username** - For Disallow Username, set to True to check whether the name of the user in forward or reversed form is contained in the password. The default value is False.
 - **Apply Password Policy to Root Account** - For Apply Password Policy to Root Account, set to True to use the same password policy for the root account. The default value is True.
-- **Maximum Password Retries** - For Maximum Password Retries, specify the number of times that a user can try to create an acceptable password. The default value is 3.
-- **Maximum Login Attempts** - For Maximum Login Attempts, specify the number of times a user can attempt to log in before the account is temporarily suspended. The default value is 10; 0 means no limit.
-- **Lockout Duration** - For Lockout Duration, specify the duration, in seconds, an account is locked out. The default value is 60.
 - **Maximum Password Age** - For Max Password Age, specify the number of days after which the password will expire after being changed. 0 means never expires.
+- **Maximum Class Repeat** - Reject passwords with this many repeating upper/lowercase letters, digits or special characters such as '!@#$%' in the password.
+- **Maximum Letter Repeat** -
+- **Maximum Login Failures** - For Maximum Login Attempts, specify the number of times a user can attempt to log in before the account is temporarily suspended. The default value is 10; 0 means no limit.
+- **Minimum Days** - Number of days the user must wait before changing their password again.
+- **Minimum Length** - Minimum length of a new password.
+- **Reject Username** - Reject passwords that contain the username.
+- **Remember** - Number of previous user passwords that will be saved in the system.
+- **Required Differences** - Required number of differences between the old and new passwords.
+- **Required Lower Case** - Required number of lowercase characters in password.
+- **Required Numeric** - Required number of numeric digits in password.
+- **Required Special** - Required number of 'special' characters in password.
+- **Required Uppercase** - Required number of uppercase character in password.
+- **Maximum Password Retries** - For Maximum Password Retries, specify the number of times that a user can try to create an acceptable password. The default value is 3.
+- **Root lockout** - Enable lockout of root users.
+- **Root Unlock Time** - Time (seconds) before the root account is automatically unlocked.
+- **Unlock Time** - Time (seconds) before a locked account is automatically unlocked.
+- **Warn Age** - Number of days before the password expires to start warning the user.
 
-Setting Password Policies via CLI
----------------------------------
+In addition, the password hashing algorithm is also configurable, as well as the number of rounds the hashing algorithm will use:
+
+- **Password Hashing Algorithm** - sha512 or blowfish. A hash based on the Blowfish block cipher, modified to have an extra-expensive key schedule. 
+
+
+Setting Password Policies and Login Policies via CLI
+----------------------------------------------------
+
 
 Local Password Policies can be set in the CLI using the **system aaa password-policy config** command. Adding a question mark after the command will show all the configurable options. Be sure to commit after making any changes.
 
@@ -2243,12 +3710,15 @@ Local Password Policies can be set in the CLI using the **system aaa password-po
     Possible completions:
     apply-to-root          Apply password policy to administrators when setting passwords for other user accounts.
     max-age                Number of days after which the user will have to change the password.
-    max-class-repeat       Reject passwords with this many repeating upper/lowercase letters, digits or special characters such as '!@#$%' in the password.
+    max-class-repeat       Reject passwords with this many repeating upper/lowercase letters, digits or special characters such as '!@#$%' in the
+                            password.
     max-letter-repeat      Reject passwords with this many repeating lower-case letters in the password.
     max-login-failures     Number of unsuccessful login attempts allowed before lockout.
     max-sequence-repeat    Reject passwords with this many repeating upper/lowercase letters or digits in the password.
+    min-days               Number of days the user must wait before changing their password again.
     min-length             Minimum length of a new password.
     reject-username        Reject passwords that contain the username.
+    remember               Number of previous user passwords that will be saved in the system.
     required-differences   Required number of differences between the old and new passwords.
     required-lowercase     Required number of lowercase characters in password.
     required-numeric       Required number of numeric digits in password.
@@ -2258,9 +3728,37 @@ Local Password Policies can be set in the CLI using the **system aaa password-po
     root-lockout           Enable lockout of root users.
     root-unlock-time       Time (seconds) before the root account is automatically unlocked.
     unlock-time            Time (seconds) before a locked account is automatically unlocked.
+    warn-age               Number of days before the password expires to start warning the user.
     velos-1-gsa-1-active(config)#
 
-Setting Password Policies via webUI
+You can also configure the password hashing algorithm for the system. Any passwords stored within the system are encrypted with either sha512 or blowfish hashing algorithms. You can also configure the number of rounds for the hashing algorithms.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config ?
+    Possible completions:
+    algorithm   Password hashing algorithm name (e.g., sha512, blowfish)
+    rounds      Number of rounds for the hashing algorithm
+    velos-1-gsa-1-active(config)# system aaa authentication password-hashing-algorithm config algorithm ?
+    Possible completions:
+    blowfish   blowfish (min: 4, max: 15, default: 5)
+    sha512     sha512 (min: 1000, max: 999999999, default: 5000) - Note: Any algorithm change requires resetting existing passwords (applies to all
+                algorithms, not just this entry)
+    velos-1-gsa-1-active(config)#
+
+You can configure the login policy parameters using the **system aaa login-policy config** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system aaa login-policy config ?
+    Possible completions:
+    admin-role-limit             Enable/disable session limits to apply to admin group users.
+    restconf-max-session-limit   Maximum number of concurrent GUI sessions.
+    ssh-max-session-limit        Maximum number of concurrent ssh sessions.
+    velos-1-gsa-1-active(config)# system aaa login-policy config 
+
+
+Setting Password Policies and Login Policies via webUI
 ---------------------------------
 
 Local Password Policies can be set in the **User Management -> Authentication Settings** page in the webUI.
@@ -2268,6 +3766,14 @@ Local Password Policies can be set in the **User Management -> Authentication Se
 .. image:: images/velos_security/passwordpolicy1.png
   :align: center
   :scale: 70%
+
+You can then configure the current login policy parameters: admin-role-limit, restconf-max-session-list, and ssh-max-session-limit.
+
+.. image:: images/velos_security/login-policy-webui.png
+  :align: center
+  :scale: 70%
+
+  
 
 Setting Password Policies via API
 ---------------------------------
@@ -2290,18 +3796,72 @@ The JSON output will reflect the current settings.
                 "required-uppercase": 0,
                 "required-lowercase": 0,
                 "required-special": 0,
-                "required-differences": 8,
+                "max-letter-repeat": 0,
+                "max-sequence-repeat": 0,
+                "max-class-repeat": 0,
+                "required-differences": 0,
                 "reject-username": false,
-                "apply-to-root": true,
+                "apply-to-root": false,
                 "retries": 3,
                 "max-login-failures": 10,
                 "unlock-time": 60,
                 "root-lockout": true,
                 "root-unlock-time": 60,
-                "max-age": 0
+                "max-age": 0,
+                "remember": 0,
+                "warn-age": 0,
+                "min-days": 0
+            },
+            "state": {
+                "min-length": 6,
+                "required-numeric": 0,
+                "required-uppercase": 0,
+                "required-lowercase": 0,
+                "required-special": 0,
+                "max-letter-repeat": 0,
+                "max-sequence-repeat": 0,
+                "max-class-repeat": 0,
+                "required-differences": 0,
+                "reject-username": false,
+                "apply-to-root": false,
+                "retries": 3,
+                "max-login-failures": 10,
+                "unlock-time": 60,
+                "root-lockout": true,
+                "root-unlock-time": 60,
+                "max-age": 0,
+                "remember": 0,
+                "warn-age": 0,
+                "min-days": 0
             }
         }
     }
+
+To view the current login policy settings, use the following API call.
+
+.. code-block:: bash
+
+    GET https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/openconfig-system:system/aaa/f5-openconfig-aaa-login-policy:login-policy
+
+You can then see the current login policy parameters: admin-role-limit, restconf-max-session-list, and ssh-max-session-limit.
+
+.. code-block:: json
+
+    {
+        "f5-openconfig-aaa-login-policy:login-policy": {
+            "config": {
+                "admin-role-limit": false,
+                "restconf-max-session-limit": 0,
+                "ssh-max-session-limit": 0
+            },
+            "state": {
+                "admin-role-limit": false,
+                "restconf-max-session-limit": 0,
+                "ssh-max-session-limit": 0
+            }
+        }
+    }
+    
 
 To change any of the password policy parameters, use the following API GET call.
 
@@ -2454,30 +4014,30 @@ Enter config mode and use the command **system config login-banner** to configur
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system config login-banner "This is a restricted resource. Unauthorized access is prohibited. Please disconnect now if you are not authorized." 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system config login-banner "This is a restricted resource. Unauthorized access is prohibited. Please disconnect now if you are not authorized." 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 Enter config mode and use the command **system config motd-banner** to configure the Message of the Day banner via the CLI. You must commit the change afterwards.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system config motd-banner "Welcome to the GSA VELOS Chassis1, do not make any changes to configuration without a ticket." 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system config motd-banner "Welcome to the GSA VELOS Chassis1, do not make any changes to configuration without a ticket." 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)#
+    velos-1-gsa-1-active(config)#
 
 To display both settings, use the **show system state** command.
 
 .. code-block:: bash
 
-    syscon-2-active# show system state 
+    velos-1-gsa-1-active# show system state 
     system state hostname velos-chassis1.f5demo.net
     system state login-banner This is a restricted resource. Unauthorized access is prohibited. Please disconnect now if you are not authorized.
     system state motd-banner Welcome to the GSA VELOS Chassis1, do not make any changes to configuration without a ticket.
     system state current-datetime "2023-03-29 22:24:29-04:00"
-    syscon-2-active# 
+    velos-1-gsa-1-active# 
 
 
 
@@ -2585,24 +4145,24 @@ To enable NTP authentication use the **system ntp config enable-ntp-auth true** 
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system ntp config enable-ntp-auth true 
-    syscon-2-active(config)# commit
+    velos-1-gsa-1-active(config)# system ntp config enable-ntp-auth true 
+    velos-1-gsa-1-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-1-active(config)# 
 
 Next, you'll need to add keys for NTP Authentication
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system ntp ntp-keys ntp-key 11 config key-id 11 key-type F5_NTP_AUTH_SHA1 key-value HEX:E27611234BB5E7CDFC8A8ACE55B567FC5CA7C890
+    velos-1-gsa-1-active(config)# system ntp ntp-keys ntp-key 11 config key-id 11 key-type F5_NTP_AUTH_SHA1 key-value HEX:E27611234BB5E7CDFC8A8ACE55B567FC5CA7C890
 
 The key ID, key type, and key value on this client system must match the server exactly. Lastly, you'll need to associate the key with an NTP server using the configured key-id above.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system ntp servers server 10.255.0.139
-    syscon-2-active(config-server-10.255.0.139)# config key-id 11
-    syscon-2-active(config-server-10.255.0.139)# 
+    velos-1-gsa-1-active(config)# system ntp servers server 10.255.0.139
+    velos-1-gsa-1-active(config-server-10.255.0.139)# config key-id 11
+    velos-1-gsa-1-active(config-server-10.255.0.139)# 
 
 Enabling NTP Authentication via webUI
 -------------------------------------
@@ -2845,6 +4405,18 @@ You may configure which host-key-algorithms F5OS will use for the sshd service b
     [  [ ssh-rsa ]
     velos-1-gsa-1-active(config)# system security services service sshd config host-key-algorithms
 
+
+F5OS 2.0 allows for configuration of ciphers by TLS version (TLS1.2 or TLS1.3) for the https daemon:
+
+.. code-block:: bash
+
+    velos-1-gsa-1-active(config)# system security services service httpd config security-protocols ?
+    Description: User specified security encryption protocol.
+    Possible completions:
+    TLSv1.2  TLSv1.3  [
+    velos-1-gsa-1-active(config)#
+
+
 Configuring Management Ciphers via webUI
 --------------------------------------
 
@@ -2854,9 +4426,11 @@ You can configure which ciphers are used when connecting to the F5OS management 
   :align: center
   :scale: 70%  
 
+For F5OS 2.0 you can now configure different TLS versions such as TLS1.2 or TLS1.3 for httpd access. There is more granular access to individual ciphers if needed. For sshd you can configure sshd ciphers, sshd KEX Algorithms, sshd MAC Algorithms and sshd Host Key Algorithms.
 
-
-
+.. image:: images/velos_security/security-ciphers2.png
+  :align: center
+  :scale: 70%  
 
 Configuring Management Ciphers via API
 --------------------------------------
@@ -3029,14 +4603,14 @@ Configuring Client Certificate Authentication via CLI
 
 Before you can log in to the webUI using client certificate authentication, you must have configured client certificate authentication from the CLI and imported the certificate to your browser. 
 
-`SSH public key authentication overview <https://techdocs.f5.com/en-us/velos-1-8-0/velos-systems-administration-configuration/title-auth-access.html#ssh-public-key-auth-overview>'_
+`SSH public key authentication overview <https://techdocs.f5.com/en-us/f5os-2-0-0/velos-systems-administration-configuration/title-auth-access.html#ssh-public-key-authentication-overview>`_
 
 
 
 Configuring Client Certificate Authentication via webUI
 -------------------------------------------------------
 
-Although you can enable client certificate authentication via the webUI, you must upload or create your certificate via the CLI or API first. Otherwise, you will end up being locked out of the webUI, until the full configuraton is completed.
+Although you can enable client certificate authentication via the webUI, you must upload or create your certificate via the CLI or API first. Otherwise, you will end up being locked out of the webUI, until the full configuration is completed.
 
 See the section above about configuration of the certificate before moving on. If you have loaded a certificate, then you can enable client certificate authentication via the webUI as seen below.
 
@@ -3079,13 +4653,13 @@ In F5OS-C 1.8.0 the system licensing command has been extended to accept proxy c
 Proxy Server via webUI for Licensing and Qkview Uploads to iHealth
 ----------------------------------------------------------------
 
-To add a proxy server for iHealth uploads via the webUI, go to the **Diagnostics -> iHealth Configuration** page. 
+To add a proxy server for iHealth uploads via the webUI, go to the **System Settings -> System Security -> iHealth Configuration** page. 
 
 .. image:: images/velos_security/imageproxy1.png
   :align: center
   :scale: 90%  
 
-To add a proxy server for license activation via the webUI, go to the **System Settings -> Licensing** page. 
+To add a proxy server for license activation via the webUI, go to the **System Settings -> Licensing** page. When you attempt to activate or reactivate the license via the automatic method, you will be prompted for Proxy configuration.  
 
 .. image:: images/velos_security/proxy-licensing.png
   :align: center
@@ -4031,7 +5605,7 @@ Inside the audit directory you can then select the audit.log and then either **D
   :align: center
   :scale: 90%
 
-You can also select the **log/system** path to download the system audit.log.
+You can also select the **log/controller** path to download the system audit.log.
 
 .. image:: images/velos_security/imageaudit3.png
   :align: center

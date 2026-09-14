@@ -75,10 +75,18 @@ Tenant Deployments
 
 `Expanding a Tenant Across Blades via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#expanding-a-tenant-across-blades-via-api>`_
 
+`Deleting a Tenant via the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_deploying_a_tenant.html#deleting-a-tenant-via-the-api>`_
+
 Securing / Hardening F5OS on VELOS
 ----------------------------------
 
+`VLAN Tagging for the Management Port via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#vlan-tagging-for-the-management-port-via-api>`_
+
 `Adding Allow List Entries via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#adding-allow-list-entries-via-api>`_
+
+`Front Panel LCD Security via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#front-panel-lcd-security-via-api>`_
+
+`Setting the Password Hashing Algorithm via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#setting-the-password-hashing-algorithm-via-api>`_
 
 `Managing Device Certificates, Keys, CSRs, and CAs via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_security.html#managing-device-certificates-keys-csrs-and-cas-via-api>`_
 
@@ -150,11 +158,11 @@ F5OS-C Backup and Restore
 
 `Restoring the System Controller from a Database Backup via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-the-system-controller-from-a-database-backup-via-api>`_
 
-`Importing Archived Chassis Partition Configs form a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-form-a-remote-server-via-api>`_
+`Rebooting Blades from the API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html>`_
 
-`Uploading Archived Chassis Partition Configs form a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-archived-chassis-partition-configs-form-a-client-machine-via-api>`_
+`Importing Archived Chassis Partition Configs from a Remote Server via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#importing-archived-chassis-partition-configs-from-a-remote-server-via-api>`_
 
-`Uploading System Controller Backups from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-system-controller-backups-from-a-client-machine-via-api>`_
+`Uploading Archived Chassis Partition Configs from a Client Machine via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#uploading-archived-chassis-partition-configs-from-a-client-machine-via-api>`_
 
 `Restoring Chassis Partitions from Database Backups via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_f5os_configuration_backup_and_restore.html#restoring-chassis-partitions-from-database-backups-via-api>`_
 
@@ -174,13 +182,6 @@ Diagnostics
 
 `TCPDUMP Download to Client via API <https://clouddocs.f5.com/training/community/velos-training/html/velos_diagnostics.html#tcpdump-download-to-client-via-api>`_
 
-Health
-------
-
-`Checking Active Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-active-alerts-via-api>`_
-
-`Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
-
 
 Monitoring VELOS Health & Alert Status
 ---------------------------------------
@@ -189,20 +190,56 @@ Monitoring VELOS Health & Alert Status
 
 `Checking System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#checking-system-health-via-api>`_
 
-
-
+`Filter to Get a Summary of System Health via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos_health_status.html#filter-to-get-a-summary-of-system-health-via-api>`_
 
 Monitoring
 ----------
 
 `System Inventory / Components from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-inventory-components-from-the-api>`_
 
+`API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
+
+`Chassis Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#chassis-inventory-from-the-api>`_
+
+`LCD Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#lcd-inventory-from-the-api>`_
+
+`Fantray Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#fantray-inventory-from-the-api>`_
+
+`Power Supply Controller Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#power-supply-controller-inventory-from-the-api>`_
+
+`Power Supply Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#power-supply-status-inventory-the-api>`_
+
+`Blade Inventory from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#blade-inventory-from-the-api>`_
+
+`System Controller 1 & 2 Status from the API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-controller-1-2-status-from-the-api>`_
+
 `System Alerts via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#system-alerts-via-api>`_
+
+`API Monitoring of the Layer2 Switch Fabric on the System Controllers <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-the-layer2-switch-fabric-on-the-system-controllers>`_
 
 `API Monitoring of Chassis Cluster Status from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-cluster-status-from-the-system-controller>`_
 
 `API Monitoring of Chassis Partitions from the System Controller <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#api-monitoring-of-chassis-partitions-from-the-system-controller>`_
 
+`Monitoring VELOS Component Platform Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-component-platform-status-via-api>`_
+
+`Monitoring VELOS Chassis Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-status-via-api>`_
+
+`Monitoring VELOS Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
+
+`Monitoring VELOS Power Supply Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-controller-status-via-api>`_
+
+`Monitoring VELOS Power Supply Controller Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-power-supply-controller-status-via-api>`_
+
+`Monitoring VELOS Fan Tray Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-fan-tray-status-via-api>`_
+
+`Monitoring VELOS LCD Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-lcd-status-via-api>`_
+
+`Monitoring VELOS Blade Status via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-blade-status-via-api>`_
+
+`Monitoring VELOS Chassis and Blade Power Levels via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-and-blade-power-levels-via-api>`_
+
+`Monitoring VELOS Chassis Base MAC Addresses via API <https://clouddocs.f5.com/training/community/velos-training/html/monitoring_velos.html#monitoring-velos-chassis-base-mac-adresses-via-api>`_
 
 VELOS F5OS-A SNMP Monitoring and Alerting
 -----------------------------------------

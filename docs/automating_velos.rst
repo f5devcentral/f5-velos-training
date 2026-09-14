@@ -2,6 +2,16 @@
 Automating F5OS on VELOS 
 ===========================================
 
+The F5OS RESTCONF/NETCONF programmability interface is based on standard OpenConfig YANG data models.  F5OS leverages these OpenConfig schemas and extends them with F5-specific namespaces to manage hardware, network, and software images. For certain fields (e.g., openconfig-if-ethernet:port-speed), valid values are defined externally in the OpenConfig YANG repositories, not within F5 documentation. For reference, see the official OpenConfig YANG model repositories:
+
+`openconfig/public: Repository for publishing OpenConfig models, documentation, and other material developed by the OpenConfig operators group. <https://github.com/openconfig/public>`_
+
+and
+
+`Vendor-neutral, model-driven network management designed by users <https://www.openconfig.net/>`_
+
+
+
 Since F5OS is an API first architecture, everything is automatable at the F5OS layer. There are F5OS API's for every function, and the GUI and CLI are built on top of the API. API reference materials are published on clouddocs.f5.com in addition to the most common API workflows. In addition, Terraform providers and Ansible collections are also available for F5OS, and more functionality is being added with each release of those packages.
 
 If you want to see what API functions are available, you can view the API reference documentation for the specific F5OS version you are running. As you can see, VELOS / F5OS-C have its own API reference pages and F5OS-A / rSeries have similar pages, most of the API calls are common except for those that are specific to the platform.
@@ -30,6 +40,22 @@ Ansible collections have been created for F5OS for some of the more common tasks
 
 `F5OS modules Ansible collection <https://clouddocs.f5.com/products/orchestration/ansible/devel/f5os/F5OS-index.html>`_
 
+F5 Professional Services F5OS Ansible Collection
+================================================
+
+Ansible collections have been created for F5OS for some of the more common tasks. The Ansible modules contributed to the F5 DevCentral community by F5 Professional Services. Additional API workflows are constantly being added to the collections.
+
+
+`F5 Professional Services F5OS modules Ansible collection <https://f5devcentral.github.io/f5-ps-ansible/>`_
+
+
+Migration Ansible Collection
+============================
+
+In addition to the Journeys tool and the platform-migrate utility, there is a migration based Ansible collection that can be leveraged to both setup F5OS on a target rSeries system, and migrate a configuration into an F5OS based TMOS tenant:
+
+`Modernizing F5 Platforms with Ansible <https://community.f5.com/kb/technicalarticles/modernizing-f5-platforms-with-ansible/341973>`_
+
 F5OS Terraform Provider
 =======================
 
@@ -39,7 +65,8 @@ Terraform providers have been created for F5OS for some of the more common tasks
 
 The github location of the Terraform provider files is at the following location.
 
-`Terraform Provider F5OS v1.3.0 <https://github.com/F5Networks/terraform-provider-F5OS/releases>`_
+`Terraform Provider F5OS v1.4.0 <https://github.com/F5Networks/terraform-provider-F5OS/releases>`_
+
 
 Getting Started with F5OS Automation
 ====================================

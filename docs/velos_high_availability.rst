@@ -251,7 +251,7 @@ Consider the same number of blades, but instead of terminating the LAG on blade1
 
 Adding two highspeed (100Gb or 40Gb) ports from each blade to the LAG can be done, but if the LAG is already configured to span to another blade, it may be considered overkill (especially for the 100Gb case) because each BX110 blade is rated for a maximum of 95Gb, so adding an additional port is not going to increase performance. If running lower speed ports this may be desired to drive more aggregate throughput into each blade.
 
-For the BX520 blade only a single 400Gb port is supported on each blade. In an environment that is purely 400Gb Ethernet, you'd require at least 4 BX520 blades in order to have enough ports for full redundancy if you want to dedicate links for HA connectivity. You'd have 2 x 400Gb in a LAG for in-band connectivity and then another 2 x 400Gb LAG for HA connectivity. A better option would be to utilize the additional 100Gb ports on the BX520 blades for HA connectivity between chassis or to run the HA VLANs over the in-band LAGs to reduce the number of blades/ports required if the environment didn't require the performance of 4 blades.  
+For the BX520 blade only a single 400Gb port is supported on each blade. In an environment that is purely 400Gb Ethernet, you'd require at least 4 BX520 blades to have enough ports for full redundancy if you want to dedicate links for HA connectivity. You'd have 2 x 400Gb in a LAG for in-band connectivity and then another 2 x 400Gb LAG for HA connectivity. A better option would be to utilize the additional 100Gb ports on the BX520 blades for HA connectivity between chassis or to run the HA VLANs over the in-band LAGs to reduce the number of blades/ports required if the environment didn't require the performance of 4 blades.  
 
 Mirroring Considerations
 ------------------------
@@ -273,7 +273,7 @@ The proper way to deploy, is to configure HA heartbeats over the management inte
 `K37361453: Configuring network failover for redundant VIPRION systems (13.x - 16.x) <https://my.f5.com/manage/s/article/K37361453>`_
 
 
-Unfortunately, this may be more difficult than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must also configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step, and if it not set up properly, stability of the HA environment will rely solely on the stability of the HA VLAN.
+Unfortunately, this may be more difficult than it seems for BIG-IP tenants that span multiple slots/blades in VELOS. You must make sure that each slot has an individual management address, and you must also configure either management multicast (and make sure it works), or a mesh of unicast management addresses. Many customers overlook this step, and if it is not set up properly, stability of the HA environment will rely solely on the stability of the HA VLAN.
 
 The example below shows a BIG-IP tenant configured on VELOS. For a single slot tenant (a tenant that only utilizes one slot/blade), you only need to configure the single management IP address. If a VELOS tenant spans more than one blade, then you must configure a separate cluster member IP address for each slot/blade that the tenant will run on. You cannot reuse these IP addresses within other tenants; they must have their own unique cluster member IP addresses if they span more than one blade. While spanning a tenant across blades may provide some level of local redundancy, it does require additional configuration and IP addressing and may also cause additional strain on the control plane process (MCPD), as it will need to replicate between blades. These should be considered before finalizing a design for the tenants.
 
@@ -281,7 +281,7 @@ The example below shows a BIG-IP tenant configured on VELOS. For a single slot t
   :align: center
   :scale: 60%  
 
-The diagram below shows the configuration of multiple HA heartbeat paths. One is **Multicast**, configured on the out-of-band network via the management port on the VELOS system controllers, and the other is **Unicast**, configured on the in-band network Self-IP on the tenant. As outlined in (K37361453), having both options defined is critical in order to have tenant HA working properly.
+The diagram below shows the configuration of multiple HA heartbeat paths. One is **Multicast**, configured on the out-of-band network via the management port on the VELOS system controllers, and the other is **Unicast**, configured on the in-band network Self-IP on the tenant. As outlined in (K37361453), having both options defined is critical to have tenant HA work properly.
 
 .. image:: images/velos_high_availability/image22.png
   :align: center

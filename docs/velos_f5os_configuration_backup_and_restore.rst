@@ -60,35 +60,31 @@ You should periodically change the primary key for additional security. If doing
 
 .. code-block:: bash
 
-    syscon-1-active(config)# system aaa primary-key set passphrase               
+    velos-1-gsa-2-active(config)# system aaa primary-key set passphrase 
     Value for 'passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-passphrase' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'salt' (<string, min: 6 chars, max: 255 chars>): **************
     Value for 'confirm-salt' (<string, min: 6 chars, max: 255 chars>): **************
     response Info: Key migration is initiated. Use 'show system aaa primary-key state status' to get status
 
-    syscon-1-active(config)#
+    velos-1-gsa-2-active(config)#
 
 You can view the status of the primary-key being set with the **show system aaa primary-key state status** CLI command.
 
 .. code-block:: bash
-
-    syscon-1-active# show system aaa primary-key state status
-    system aaa primary-key state status "IN_PROGRESS        Initiated: Tue Apr  9 19:46:14 2024"
     
-    syscon-1-active# show system aaa primary-key state status
-    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
-    syscon-1-active# 
+    velos-1-gsa-2-active# show system aaa primary-key state status
+    system aaa primary-key state status "COMPLETE        Initiated: Thu Jul 23 08:06:21 PDT 2026"
+    velos-1-gsa-2-active# 
 
 Note that the hash key can be used to check and compare the status of the primary-key on both the source and the replacement devices if restoring to a different device. To view the current primary-key hash, issue the following CLI command.
 
 .. code-block:: bash
 
-    syscon-1-active# show system aaa primary-key state
-    system aaa primary-key state hash aNSWX6Xl8+dFx94JMRbySD/d/AJ8RarqJ+fedD#57bDxRF0cTgGFcZvMY415eDeAJjZlXp1qGuKI7CDmxNrnhw==
-    system aaa primary-key state status "COMPLETE        Initiated: Tue Apr  9 19:46:14 2024"
-    syscon-1-active#
-
+    velos-1-gsa-2-active# show system aaa primary-key state
+    system aaa primary-key state hash iNSWX6Xl8+dFx94JMRbySD/d/AJ8RarqJ+feU3b9vXGDxRF0qTgGFcZvMY4UeDeAJjZlXp1qGuKI7CDmxNrnhw==
+    system aaa primary-key state status "COMPLETE        Initiated: Thu Jul 23 08:06:21 PDT 2026"
+    velos-1-gsa-2-active# 
 
 Backing Up the System Controller Database
 =========================================
@@ -96,40 +92,52 @@ Backing Up the System Controller Database
 Backing Up the System Controller Database via CLI
 -------------------------------------------------
 
-You can back up the system controller configuration database using the **system database config-backup** command when in **config** mode. The file will be saved in the path of **/configs** automatically. You can then list the contents of that directory to ensure the file is there using the **file list path** command.
+You can back up the system controller configuration database using the **system database config-backup** command when in **config** mode. The file will be saved in the path of **/configs** automatically. 
 
 .. code-block:: bash
 
-    syscon-1-active# config
-    Entering configuration mode terminal
-    syscon-1-active(config)# system database config-backup name GSA-Daily_GSA-VELOS-1_20230328070500
-    response Succeeded.
-    syscon-1-active(config)# exit 
+    velos-1-gsa-2-active(config)# system database config-backup name velos1-controller-backup-test-07-23-26
+    response Database config-backup successful. "configs/velos1-controller-backup-test-07-23-26" is saved.
+    velos-1-gsa-2-active(config)#
 
 
-    syscon-1-active# file list path configs/
+You can then list the contents of that directory to ensure the file is there using the **file list path** command.
+
+.. code-block:: bash
+
+    velos-1-gsa-2-active# file list path configs/
     entries {
         name GSA-Daily_GSA-VELOS-1_20230328070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230329070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
+    entries {
+        name velos1-controller-backup-test-07-23-26
+        date Thu Jul 23 15:08:59 UTC 2026
+        size 101KB
+    }
+    velos-1-gsa-2-active#
 
 
 Backing Up the System Controller Database via webUI
 ---------------------------------------------------
 
-Using the system controller webUI you can backup the ConfD configuration database using the **System Settings -> Configuration Backup** page. Click the **Create** button and provide a name for the backup file.
+Using the system controller webUI you can backup the ConfD configuration database using the **System Settings -> Configuration Backup** page. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image1.png
-   :width: 45%
+  :align: center
+  :scale: 70%
+
+Click the **Create** button and provide a name for the backup file.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image2.png
-   :width: 45%
+  :align: center
+  :scale: 70%
  
 
 Backing Up the System Controller Database via API
@@ -160,7 +168,7 @@ Once the database backup has been completed, you should copy the file to an exte
 Copying System Controller Database Backup to an External Location via webUI
 ---------------------------------------------------------------------------
 
-In the webUI use the **System Settings -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files from your local browser. 
+In the webUI use the **System Monitoring -> File Utilities** page and from the dropdown select **configs** to see the previously saved backup file. Here you can **Import** or **Export**, as well as **Upload** and **Download** configuration files. Note that the Import and Export options to transfer files requires an external HTTPS server, while the Upload and Download options will move files from your local browser. 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image3.png
   :align: center
@@ -170,7 +178,7 @@ In the webUI use the **System Settings -> File Utilities** page and from the dro
   :align: center
   :scale: 70%
 
-Additionally, you can **Download** individual files from within the **System Settings -> Configuration Backup** page starting with F5OS-C 1.8.0.
+Additionally, you can **Download** individual files from within the **System Monitoring -> Configuration Backup** page starting with F5OS-C 1.8.0.
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/config-download.png
   :align: center
@@ -183,32 +191,43 @@ To transfer a file using the CLI use the **file list** command to see the conten
 
 .. code-block:: bash
 
-    syscon-1-active# file list path configs/
+    velos-1-gsa-2-active# file list path configs/
     entries {
         name GSA-Daily_GSA-VELOS-1_20230328070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230329070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 69KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230330070500
-        date Thu Jan 25 03:53:06 UTC 2024
+        date Wed Jul 22 22:42:03 UTC 2026
         size 71KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230331070500
-        date Fri Mar 31 14:05:06 UTC 2023
+        date Wed Jul 22 22:42:03 UTC 2026
         size 71KB
     }
     entries {
         name GSA-Daily_GSA-VELOS-1_20230402070500
-        date Sun Apr  2 14:05:16 UTC 2023
+        date Wed Jul 22 22:42:03 UTC 2026
         size 71KB
     }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230403070500
+        date Wed Jul 22 22:42:03 UTC 2026
+        size 71KB
+    }
+    entries {
+        name GSA-Daily_GSA-VELOS-1_20230404070500
+        date Wed Jul 22 22:42:03 UTC 2026
+        size 71KB
+    }
+
 
 
 
@@ -216,10 +235,11 @@ To transfer the file from the CLI you can use the **file export** command. The o
 
 .. code-block:: bash
 
-    syscon-1-active# file export local-file configs/GSA-Daily_GSA-VELOS-1_20230328070500 remote-host 10.255.0.142 remote-file /upload/upload.php username corpuser insecure 
-    Value for 'password' (<string>): ********
+    velos-1-gsa-2-active# file export local-file configs/GSA-Daily_GSA-VELOS-1_20230328070500 remote-host 172.22.50.57 remote-file /upload/ipload.php username corpuser insecure 
+    Value for 'password' (<string>): **************
     result File transfer is initiated.(configs/GSA-Daily_GSA-VELOS-1_20230328070500)
-    syscon-1-active#
+    operation-id EXPORT-QXM52YMr
+    velos-1-gsa-2-active#
 
 To check on status of the export use the **file transfer-status** command:
 
@@ -354,7 +374,7 @@ To download a specific config file, use the following API call.
     POST https://{{velos_chassis1_system_controller_ip}}:8888/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download
 
 
-For the **Headers** secion of the Postman request be sure to add the following headers:
+For the **Headers** section of the Postman request be sure to add the following headers:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/config-headers.png
   :align: center
@@ -386,42 +406,40 @@ Log directly into the chassis partition Production's management IP address and e
 
 .. code-block:: bash
 
-    syscon-2-active# config
+    production-2# config
     Entering configuration mode terminal
-    syscon-2-active(config)# system database config-backup name chassis-partition-production-02-15-2024
-    response Database backup successful. configs/chassis-partition-production-02-15-2024 is saved.
-    syscon-2-active(config)# exit
+    production-2(config)# system database config-backup name chassis-partition-production-08-06-2026
+    result Database backup successful. "configs/chassis-partition-production-08-06-2026" is saved.
+    production-2(config)# 
 
+.. code-block:: bash
 
-
-    syscon-2-active# file list path configs/chassis-partition-production-02-15-2024 
+    production-2(config)# file list path configs/chassis-partition-production-08-06-2026 
     entries {
-        name chassis-partition-production-02-15-2024
-        date Fri Feb 16 00:27:51 UTC 2024
-        size 64KB
+        name chassis-partition-production-08-06-2026
+        date Thu Aug  6 17:20:59 UTC 2026
+        size 51KB
     }
-    syscon-2-active# 
+    production-2(config)#
 
 
 Log directly into the chassis partition development's management IP address and enter **config** mode. Use the **system database config-backup** command to save a copy of the chassis partitions config database. Then list the file using the **file list** command.
 
 .. code-block:: bash
 
-    syscon-2-active# config
-    Entering configuration mode terminal
-    syscon-2-active(config)# system database config-backup name chassis-partition-production-02-15-2024
-    response Database backup successful. configs/chassis-partition-production-02-15-2024 is saved.
-    syscon-2-active(config)# exit
+    Development2-1(config)# system database config-backup name chassis-partition-Development-8-6-2026
+    result Database backup successful. "configs/chassis-partition-Development-8-6-2026" is saved.
+    Development2-1(config)#
 
-    
-       
-    syscon-2-active# file list path configs/chassis-partition-production-02-15-2024 
+.. code-block:: bash
+
+    Development2-1(config)# file list path configs/chassis-partition-Development-8-6-2026 
     entries {
-        name chassis-partition-production-02-15-2024
-        date Fri Feb 16 00:27:51 UTC 2024
-        size 64KB
+        name chassis-partition-Development-8-6-2026
+        date Thu Aug  6 17:04:58 UTC 2026
+        size 36KB
     }
-    syscon-2-active# 
+    Development2-1(config)#
 
 
 Backing Up Chassis Partition Databases via webUI
@@ -462,7 +480,7 @@ Copy the chassis partition backup files to a location outside of VELOS. The file
 Export Backup From the Chassis Partition webUI
 ----------------------------------------------
 
-You can copy the backup file out of the chassis partition using the **Systems Settings > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, you should see a copy of the file created there:
+You can copy the backup file out of the chassis partition using the **Systems Monitoring > File Utilities** menu in the webUI. Use the Base Directory drop down menu to select **configs** directory, you should see a copy of the file created there:
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image6.png
   :align: center
@@ -746,66 +764,105 @@ For the Development chassis partition:
 
 .. code-block:: bash
 
-    Development-1# config
-    Development-1(config)# system database reset-to-default proceed  
+    Development2-2# config
+    Entering configuration mode terminal
+    Development2-2(config)# system database reset-to-default proceed 
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    Development-1(config)# 
-    System message at 2021-03-02 22:51:54...
-    Commit performed by admin via tcp using cli.
-    Development-1(config)# 
+    Development2-2(config)#
 
 
 For the Production chassis partition:
 
 .. code-block:: bash
 
-    Production-1# config 
+    production-2# config
     Entering configuration mode terminal
-    Production-1(config)# system database reset-to-default proceed 
+    production-2(config)# system database reset-to-default proceed 
     Value for 'proceed' [no,yes]: yes
     result Database reset-to-default successful.
-    Production-1(config)# 
-    System message at 2021-03-02 23:01:50...
-    Commit performed by admin via tcp using cli.
-    Production-1(config)# 
+    Production-2(config)#
 
 Once the partition configurations have been cleared, you’ll need to login to the system controller CLI via the floating IP address. You’ll need to put all slots back into the **none** partition and **commit** the changes. This will allow the partitions to be deleted in the next step.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# slots slot 1-3 partition none
-    syscon-2-active(config-slot-1-3)# commit 
+    velos-1-gsa-2-active# config
+    Entering configuration mode terminal
+    velos-1-gsa-2-active(config)# slots slot 1-3 partition none 
+    velos-1-gsa-2-active(config-slot-1-3)# commit
     Commit complete.
-    syscon-2-active(config-slot-1-3)#
+    velos-1-gsa-2-active(config-slot-1-3)#
 
 
-Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **Development**.
+Then remove the partitions from the system controller. In this case we will remove the chassis partitions called **Production** and **Development2**.
 
 .. code-block:: bash
 
-    syscon-2-active(config)# no partitions partition Production 
-    syscon-2-active(config)# no partitions partition Development 
-    syscon-2-active(config)# commit 
+    velos-1-gsa-2-active(config)# no partitions partition Development2 
+    velos-1-gsa-2-active(config)# no partitions partition Production 
+    velos-1-gsa-2-active(config)# commit
     Commit complete.
-    syscon-2-active(config)# 
+    velos-1-gsa-2-active(config)#
 
 
-For the final step, reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default.
+For the final step, reset the system controllers ConfD database. This will essentially wipe out all partitions and all of the system controller configuration essentially setting it back to factory default. Your connection to the controller will then be terminated. You will need direct console access to both system controllers to reconfigure them.
 
 
 .. code-block:: bash
 
-    syscon-2-active(config)# system database config reset-default-config true
-    syscon-2-active(config)# commit
+    velos-1-gsa-2-active(config)# system database config reset-default-config true
+    velos-1-gsa-2-active(config)# commit
+    Commit complete.
+    velos-1-gsa-2-active(config)# Connection to 172.22.50.9 closed.
 
-Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode and then issue the **system reboot controllers controller standby** command, this will reboot the standby controller first. Run the same command again but this time reboot the **active** controller immediately after resetting the primary controller. You don't want any sort of long pause (minutes) between the resets. Ideally these commands should be run back-to-back.
+You'll then use the console connections to each controller to login in using the default username/password of **admin/admin**, and you'll then be prompted to change the password. In the case below is an example of logging into the standby controller and setting the new username/password. This will be replicated to the active controller, so you'll only need to do this once.
 
 .. code-block:: bash
 
-    syscon-1-active(config)# system reboot controllers controller standby
+    controller-1 login: login: 
+    Rocky Linux 8.10 (Green Obsidian)
+    Kernel 4.18.0-553.123.1.f5.1.1.14.el8_10.x86_64 on an x86_64
 
-    syscon-1-active(config)# system reboot controllers controller active
+    controller-1 login: admin
+    Password: 
+    You are required to change your password immediately (administrator enforced)
+    Current password: 
+    New password: 
+    Retype new password: 
+    Last failed login: Fri Aug  7 14:11:04 UTC 2026 on ttyS0
+    There was 1 failed login attempt since the last successful login.
+    Last login: Wed Jul 22 22:37:14 from 172.18.105.149
+    Welcome to the F5OS System Controller Management CLI
+    admin connected from 127.0.0.1 using console on syscon-1-standby
+    syscon-1-standby#
+
+Since you cannot make configuration changes on the standby controller, login into the active system controller via the console using the new username and password.
+
+.. code-block:: bash
+
+    controller-2 login: adminlogin: 
+    Rocky Linux 8.10 (Green Obsidian)
+    Kernel 4.18.0-553.123.1.f5.1.1.14.el8_10.x86_64 on an x86_64
+
+    controller-2 login: admin
+    Password: 
+    Last failed login: Fri Aug  7 14:10:48 UTC 2026 on ttyS0
+    There was 1 failed login attempt since the last successful login.
+    Last login: Fri Aug  7 14:08:07 from 172.18.3.102
+    Welcome to the F5OS System Controller Management CLI
+    admin connected from 127.0.0.1 using console on syscon-2-active
+    syscon-2-active# 
+
+Once this has been committed, both controllers need to be rebooted manually and in quick succession of each other. Login to the active controller and enter **config** mode and then issue the **system reboot controllers controllers** command, this will reboot both the standby and active controllers simultaneously. You should then see both controllers going through their boot sequence via their respective console ports.
+
+.. code-block:: bash
+
+
+    syscon-2-active(config)# system reboot controllers 
+    Really want to reboot the system controller? Datapath and management connectivity to system would be disrupted. [no,yes] yes
+    result Reboot trigger successful on system controllers
+    syscon-2-active(config)#
 
 The system controllers should reboot, and their configurations will be completely wiped clean. You will need to login via the console / CLI to restore out-of-band networking connectivity, and then the previously archived configurations can be copied back and restored.
 
@@ -960,7 +1017,40 @@ Logout of the system and login as root using the new password you just created f
 
 To transfer files into the system controller you’ll have to manually configure the out-of-band networking first. In the case below the system controller out-of-band ethernet ports were aggregated into a LAG before the system was reset. This needs to be recreated, and then static and floating out-of-band IP addresses are assigned as well as a prefix length and gateway.
 
+First, configure the interface for the management interface LAG. It will be given a name of **mgmt-aggr**.
+
 .. code-block:: bash
+
+
+    syscon-2-active(config)# interfaces interface mgmt-aggr config name mgmt-aggr type ieee8023adLag description "LAG for MGMT ports"
+    syscon-2-active(config-interface-mgmt-aggr)#
+
+Next, configure the lacp interfaces and assign the mgmt-aggr to it and set the LACP mode ACTIVE.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# lacp interfaces interface mgmt-aggr config name mgmt-aggr lacp-mode ACTIVE 
+    syscon-2-active(config-interface-mgmt-aggr)# exit
+    syscon-2-active(config)#
+
+
+Then assign both VELOS controller mgmt interfaces to the mgmt-aggr LAG that was created.
+
+.. code-block:: bash
+
+    syscon-2-active(config)# interfaces interface 1/mgmt0 
+    syscon-2-active(config-interface-1/mgmt0)# config name 1/mgmt0
+    syscon-2-active(config-interface-1/mgmt0)# config type ethernetCsmacd
+    syscon-2-active(config-interface-1/mgmt0)# ethernet config aggregate-id mgmt-aggr 
+    syscon-2-active(config-interface-1/mgmt0)# exit
+    syscon-2-active(config)# interfaces interface 2/mgmt0
+    syscon-2-active(config-interface-2/mgmt0)# config name 2/mgmt0
+    syscon-2-active(config-interface-2/mgmt0)# config type ethernetCsmacd 
+    syscon-2-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr
+    syscon-2-active(config-interface-2/mgmt0)# exit
+    syscon-2-active(config)# 
+
+
 
     syscon-1-active# config
     syscon-1-active(config)# interfaces interface mgmt-aggr
@@ -982,11 +1072,11 @@ To transfer files into the system controller you’ll have to manually configure
     syscon-1-active(config-interface-2/mgmt0)# config type ethernetCsmacd 
     syscon-1-active(config-interface-2/mgmt0)# ethernet config aggregate-id mgmt-aggr
     syscon-1-active(config-interface-2/mgmt0)# 
-    syscon-1-active(config)# system mgmt-ip config ipv4 controller-1 address 10.255.0.145
-    syscon-1-active(config)# system mgmt-ip config ipv4 controller-2 address 10.255.0.146
-    syscon-1-active(config)# system mgmt-ip config ipv4 floating address 10.255.0.147
-    syscon-1-active(config)# system mgmt-ip config ipv4 gateway 10.255.0.1
-    syscon-1-active(config)# system mgmt-ip config ipv4 prefix-length 24
+    syscon-1-active(config)# system mgmt-ip config ipv4 controller-1 address 172.22.50.7
+    syscon-1-active(config)# system mgmt-ip config ipv4 controller-2 address 172.22.50.8
+    syscon-1-active(config)# system mgmt-ip config ipv4 floating address 172.22.50.9
+    syscon-1-active(config)# system mgmt-ip config ipv4 gateway 172.22.50.62
+    syscon-1-active(config)# system mgmt-ip config ipv4 prefix-length 26
     syscon-1-active(config)# commit 
     Commit complete.
 
@@ -1204,6 +1294,14 @@ Restoring the System Controller from a Database Backup via webUI
 ----------------------------------------------------------------
 
 Currently there is no webUI support for restoration of the ConfD database, so you’ll need to use either the CLI or API to restore the system controller’s database. 
+
+
+Re-Installing the license
+=========================
+
+After the controller database has been fully restored, you'll need to re-apply the license to the system. See the following for details:
+
+`Licensing the VELOS Chassis <https://clouddocs.f5.com/training/community/velos-training/html/initial_setup_of_velos_system_controllers.html#licensing-the-velos-chassis>`_
 
 Rebooting Blades 
 ================
@@ -1559,7 +1657,7 @@ Repeat this process for each chassis partition in the system.
     }
     development-1# 
 
-Importing Archived Chassis Partition Configs form a Remote Server via API
+Importing Archived Chassis Partition Configs from a Remote Server via API
 -------------------------------------------------------------------------
 
 Archived ConfD database backups can be imported from a remote HTTPS, SFTP, or SCP server via the following API call to the chassis partition IP addresses. Each chassis partition will need to have its own archived database imported so that it may be restored:
@@ -1619,7 +1717,7 @@ In the body of the API call, enter the remote server credentials and connectivit
     }
 
 
-Uploading Archived Chassis Partition Configs form a Client Machine via API
+Uploading Archived Chassis Partition Configs from a Client Machine via API
 -------------------------------------------------------------------------
 
 Post the following API call to the chassis partition IP address to upload the archived ConfD backup file from a client machine to the configs directory on the chassis partition.
@@ -1692,29 +1790,35 @@ To restore a configuration database backup within a chassis partition, use the *
 
 .. code-block:: bash
 
-    Production-1(config)# system database config-restore name Production-DB-BACKUP2021-09-10
+    Production-1(config)# system database config-restore name chassis-partition-prod-backup-08-07-2026 
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
-    result Database config-restore successful.
-    Production-1(config)# 
-    System message at 2021-09-15 03:25:53...
-    Commit performed by admin via tcp using cli.
-    Production-1(config)# 
+
+    Validation warnings encountered during config-restore.
+
+    VLAN, LAG, FDB, L2 protocols configuration is lost for the interfaces corresponding to the changed portgroups. Blade(s) 1 2 will reboot.
+
+    Proceed? [yes/no]: yes
+    result Database config-restore successful. "configs/chassis-partition-prod-backup-08-07-2026" is loaded.
+    production-1(config)#
 
 
-    Development-1(config)# system database config-restore name development-DB-BACKUP2021-09-10
+    Development2-1(config)# system database config-restore name chassis-partition-dev-backup-08-07-2026 
     A clean configuration is required before restoring to a previous configuration.
     Please perform a reset-to-default operation if you have not done so already.
     Proceed? [yes/no]: yes
-    result Database config-restore successful.
-    Development-1(config)# 
-    System message at 2021-09-15 03:23:50...
-    Commit performed by admin via tcp using cli.
-    Development-1(config)# 
+
+    Validation warnings encountered during config-restore.
+
+    VLAN, LAG, FDB, L2 protocols configuration is lost for the interfaces corresponding to the changed portgroups. Blade(s) 3 will reboot.
+
+    Proceed? [yes/no]: yes
+    result Database config-restore successful. "configs/chassis-partition-dev-backup-08-07-2026" is loaded.
+    Development2-1(config)# 
 
 
-The tenant is properly restored and deployed; however, its status is pending waiting on image:
+The tenants are properly restored and deployed; however, its status is **Pending** waiting on image:
 
 
 .. image:: images/velos_f5os_configuration_backup_and_restore/image14.png
