@@ -21,7 +21,7 @@ In F5OS-C 1.8.0, 802.1Q VLAN tagging support was added for the out-of-band manag
 
 .. image:: images/velos_networking/tagged-vlans.png
   :align: center
-  :scale: 80%
+  :scale: 90%
 
 Below is an example deployment; where each system controller has its own unique IP address, and an administrator can connect to either system controller (active/standby) directly, but the standby will be in a read-only mode. It is recommended that a floating IP address be configured, and that IP address will follow the active system controller, so that an admin using the F5OS API, CLI, or webUI can always connect to the active system controller. Note, the individual interfaces on each system controller can be bonded together into a single LAG for added redundancy.
 
