@@ -106,7 +106,7 @@ The portgroup component is used to control the mode of the physical port. This c
 
 
 .. image:: images/velos_networking/image9.png
-  :width: 45%
+  :width: 55%
 
 .. image:: images/velos_networking/image10.png
   :width: 35%
